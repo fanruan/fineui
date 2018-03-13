@@ -1455,6 +1455,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .x-icon.b-font {
   margin: auto;
+  width: 100%;
 }
 .bi-file {
   opacity: 0;

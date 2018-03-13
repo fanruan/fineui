@@ -111,8 +111,8 @@ module.exports = function (grunt) {
             },
 
             fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js", "ui/js/index.js"],
-                dest: "dist/fineui.js"
+                src: ["dist/_fineui.min.js", "src/base/formula/formulaeditor.js"],
+                dest: "dist/fineui.min.js"
             },
 
             fineuiCss: {
@@ -199,7 +199,23 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
-                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
+                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "src/third/**/*.js",
+                        "src/base/formula/config.js",
+                        "src/base/pane.js",
+                        "src/base/single/single.js",
+                        "src/base/single/text.js",
+                        "src/base/single/button/button.basic.js",
+                        "src/base/single/button/button.node.js",
+                        "src/base/single/tip/tip.js",
+                        "src/base/combination/group.button.js",
+                        "src/base/combination/tree.button.js",
+                        "src/base/combination/map.button.js",
+                        "src/base/tree/treeview.js",
+                        "src/base/tree/asynctree.js",
+                        "src/base/tree/parttree.js",
+                        "src/base/**/*.js",
+                        "!src/base/formula/formulaeditor.js",
+                        "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js"]
                 }
             }
         },
@@ -254,4 +270,5 @@ module.exports = function (grunt) {
 
     grunt.registerTask("default", ["less", "concat", "watch"]);
     grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
+    grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
 };

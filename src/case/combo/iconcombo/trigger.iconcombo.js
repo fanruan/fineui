@@ -11,8 +11,8 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 25,
-            height: 25,
+            width: 28,
+            height: 24,
             isShowDown: true,
             value: ""
         });
@@ -30,7 +30,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width,
+            width: o.width - 12,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -41,7 +41,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: 8,
+            height: o.height,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
