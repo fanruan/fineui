@@ -26110,9 +26110,9 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 
                 function doBe (run) {
                     if (run === true) {
-                        item.doHighLight.apply(item, args);
+                        item.doHighLight && item.doHighLight.apply(item, args);
                     } else {
-                        item.unHighLight.apply(item, args);
+                        item.unHighLight && item.unHighLight.apply(item, args);
                     }
                 }
 
@@ -26122,7 +26122,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
                     doBe(rule);
                 }
             } else {
-                item.doBehavior.apply(item, args);
+                item.doBehavior && item.doBehavior.apply(item, args);
             }
         });
     }
@@ -26150,12 +26150,12 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         BI.each(items, function (i, item) {
             if(item instanceof BI.Single) {
                 if (o.rule(item.getValue(), item)) {
-                    item.doRedMark.apply(item, args);
+                    item.doRedMark && item.doRedMark.apply(item, args);
                 } else {
-                    item.unRedMark.apply(item, args);
+                    item.doRedMark && item.unRedMark.apply(item, args);
                 }
             } else {
-                item.doBehavior.apply(item, args);
+                item.doBehavior && item.doBehavior.apply(item, args);
             }
         });
     }
@@ -71005,7 +71005,8 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -71186,7 +71187,8 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if(type ===  BI.Events.CLICK) {
@@ -71266,7 +71268,8 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -71554,7 +71557,8 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -71744,7 +71748,8 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -71847,7 +71852,8 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -91625,6 +91631,11 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button_tree",
                 chooseType: BI.Selection.Single,
+                behaviors: {
+                    redmark: function () {
+                        return true;
+                    }
+                },
                 layouts: [{
                     type: "bi.vertical"
                 }]
@@ -91638,8 +91649,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    populate: function (nodes) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
+    populate: function (nodes, keyword) {
+        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0), keyword);
     },
 
     setValue: function (v) {
@@ -91767,7 +91778,8 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -91850,7 +91862,8 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -91933,7 +91946,8 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -92015,7 +92029,8 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -92040,14 +92055,6 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });
-    },
-
-    doRedMark: function () {
-        this.item.doRedMark.apply(this.item, arguments);
-    },
-
-    unRedMark: function () {
-        this.item.unRedMark.apply(this.item, arguments);
     },
 
     doHighLight: function () {
@@ -92111,7 +92118,8 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -92136,14 +92144,6 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });
-    },
-
-    doRedMark: function () {
-        this.item.doRedMark.apply(this.item, arguments);
-    },
-
-    unRedMark: function () {
-        this.item.unRedMark.apply(this.item, arguments);
     },
 
     doHighLight: function () {
@@ -92207,7 +92207,8 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -92232,14 +92233,6 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });
-    },
-
-    doRedMark: function () {
-        this.item.doRedMark.apply(this.item, arguments);
-    },
-
-    unRedMark: function () {
-        this.item.unRedMark.apply(this.item, arguments);
     },
 
     doHighLight: function () {

@@ -23,9 +23,9 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 
                 function doBe (run) {
                     if (run === true) {
-                        item.doHighLight.apply(item, args);
+                        item.doHighLight && item.doHighLight.apply(item, args);
                     } else {
-                        item.unHighLight.apply(item, args);
+                        item.unHighLight && item.unHighLight.apply(item, args);
                     }
                 }
 
@@ -35,7 +35,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
                     doBe(rule);
                 }
             } else {
-                item.doBehavior.apply(item, args);
+                item.doBehavior && item.doBehavior.apply(item, args);
             }
         });
     }
