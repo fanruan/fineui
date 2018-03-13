@@ -55,7 +55,11 @@ BI.Popover = BI.inherit(BI.Widget, {
                             el: {
                                 type: "bi.absolute",
                                 items: [{
-                                    el: BI.createWidget(o.header),
+                                    el: BI.isPlainObject(o.header) ? BI.createWidget(o.header) : {
+                                        type: "bi.label",
+                                        height: 36,
+                                        text: o.header
+                                    },
                                     left: 10,
                                     top: 0,
                                     right: 0,
