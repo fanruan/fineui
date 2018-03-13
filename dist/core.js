@@ -26110,9 +26110,9 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
 
                 function doBe (run) {
                     if (run === true) {
-                        item.doHighLight.apply(item, args);
+                        item.doHighLight && item.doHighLight.apply(item, args);
                     } else {
-                        item.unHighLight.apply(item, args);
+                        item.unHighLight && item.unHighLight.apply(item, args);
                     }
                 }
 
@@ -26122,7 +26122,7 @@ BI.HighlightBehavior = BI.inherit(BI.Behavior, {
                     doBe(rule);
                 }
             } else {
-                item.doBehavior.apply(item, args);
+                item.doBehavior && item.doBehavior.apply(item, args);
             }
         });
     }
@@ -26150,12 +26150,12 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         BI.each(items, function (i, item) {
             if(item instanceof BI.Single) {
                 if (o.rule(item.getValue(), item)) {
-                    item.doRedMark.apply(item, args);
+                    item.doRedMark && item.doRedMark.apply(item, args);
                 } else {
-                    item.unRedMark.apply(item, args);
+                    item.doRedMark && item.unRedMark.apply(item, args);
                 }
             } else {
-                item.doBehavior.apply(item, args);
+                item.doBehavior && item.doBehavior.apply(item, args);
             }
         });
     }

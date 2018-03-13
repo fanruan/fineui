@@ -32,7 +32,8 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
@@ -57,14 +58,6 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             columnSize: BI.makeArray(o.layer, 13),
             items: [items]
         });
-    },
-
-    doRedMark: function () {
-        this.item.doRedMark.apply(this.item, arguments);
-    },
-
-    unRedMark: function () {
-        this.item.unRedMark.apply(this.item, arguments);
     },
 
     doHighLight: function () {
