@@ -704,7 +704,9 @@ BI.Table = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        this.populate(this.options.items);
+        if (this.options.items.length > 0 || this.options.header.length > 0) {
+            this.populate(this.options.items);
+        }
     },
 
     setColumnSize: function (columnSize) {
