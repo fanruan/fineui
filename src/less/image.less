@@ -18,137 +18,112 @@
   _background: none;
 }
 
-.icon(@class, @iconPath, @top:0px, @left:0px) {
+// 默认icon
+.icon(@class, @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, -@top, -@left);
+        .imagePath(@iconPath);
       }
     }
   }
 }
 
-.icon_hover(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+// 有悬浮效果的icon
+.icon_hover(@class, @iconPath, @hoverPath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -@left);
-      }
-    }
-    &:hover .x-icon,
-    &.hover .x-icon,
-    &:active .x-icon,
-    &.active .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -(@left + @distance));
-      &.hack {
-        .imagePath(@iconPath, -@top, -(@left + @distance));
-      }
-    }
-    &.disabled .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -@left);
-      &.hack {
-        .imagePath(@iconPath, -@top, -@left);
-      }
-    }
-  }
-}
-
-.icon_active(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
-  .@{class} {
-    & .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -@left);
-      &.hack {
-        .imagePath(@iconPath, -@top, -@left);
-      }
-    }
-    &:active .x-icon,
-    &.active .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -(@left + @distance));
-      &.hack {
-        .imagePath(@iconPath, -@top, -(@left + @distance));
-      }
-    }
-    &.disabled .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -@left);
-      &.hack {
-        .imagePath(@iconPath, -@top, -@left);
-      }
-    }
-  }
-}
-
-.icon_hover_active(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
-  .@{class} {
-    & .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -@left);
-      &.hack {
-        .imagePath(@iconPath, -@top, -@left);
+        .imagePath(@iconPath, 0, 0);
       }
     }
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -(@left+@distance));
+      .image2xPath(@hoverPath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -(@left+@distance));
-      }
-    }
-
-    &:active .x-icon,
-    &.active .x-icon {
-      display: block;
-      .image2xPath(@iconPath, -@top, -(@left+@distance*2));
-      &.hack {
-        .imagePath(@iconPath, -@top, -(@left+@distance*2));
+        .imagePath(@hoverPath, 0, 0);
       }
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -@left);
+        .imagePath(@iconPath, 0, 0);
       }
     }
   }
 }
 
-.icon_select(@class, @iconPath, @top:0px, @left:0px, @distance: 20) {
+// 有悬浮、激活(选中)的icon
+.icon_hover_active(@class, @iconPath, @hoverPath: @iconPath, @activePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -@left);
+        .imagePath(@iconPath, 0, 0);
       }
     }
+    &:hover .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
+    }
+    &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -(@left+@distance));
+      .image2xPath(@activePath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -(@left+@distance));
+        .imagePath(@activePath, 0, 0);
       }
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath, -@top, -@left);
+      .image2xPath(@iconPath, 0, 0);
       &.hack {
-        .imagePath(@iconPath, -@top, -@left);
+        .imagePath(@iconPath, 0, 0);
       }
     }
   }
 }
 
-.icon_custom(@class, @iconPath, @disablePath:none) {
+// 有悬浮、选中的icon
+.icon_select(@class, @iconPath, @selectPath: @iconPath) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath);
+      &.hack {
+        .imagePath(@iconPath);
+      }
+    }
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@selectPath);
+      &.hack {
+        .imagePath(@selectPath);
+      }
+    }
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@iconPath);
+      &.hack {
+        .imagePath(@iconPath);
+      }
+    }
+  }
+}
+
+// 可自定义默认和灰化状态
+.icon_custom(@class, @iconPath, @disablePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -168,6 +143,7 @@
   }
 }
 
+//可自定义默认、悬浮、灰化状态
 .icon_custom(@class, @iconPath, @hoverPath, @disablePath) when not (@disablePath = none) {
   .@{class} {
     & .x-icon {
@@ -197,6 +173,7 @@
   }
 }
 
+// 可自定义默认、悬浮、激活(选中)、灰化状态
 .icon_custom(@class, @iconPath, @hoverPath, @activePath, @disablePath) when not (@disablePath = none) {
   .@{class} {
     & .x-icon {
@@ -235,7 +212,54 @@
   }
 }
 
-.icon_custom(@class, @iconPath, @hoverPath:none, @activePath:none, @disablePath:none, @activeDisablePath:none) when not (@activeDisablePath = none) {
+// 可自定义默认、悬浮、激活、选中、灰化状态
+.icon_custom(@class, @iconPath, @hoverPath, @activePath, @selectedPath, @disablePath) when not (@disablePath = none) {
+  .@{class} {
+    & .x-icon {
+      display: block;
+      .image2xPath(@iconPath, 0, 0);
+      &.hack {
+        .imagePath(@iconPath, 0, 0);
+      }
+    }
+
+    &:hover .x-icon,
+    &.hover .x-icon {
+      display: block;
+      .image2xPath(@hoverPath, 0, 0);
+      &.hack {
+        .imagePath(@hoverPath, 0, 0);
+      }
+    }
+
+    &:active .x-icon {
+      display: block;
+      .image2xPath(@activePath, 0, 0);
+      &.hack {
+        .imagePath(@activePath, 0, 0);
+      }
+    }
+
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@selectedPath, 0, 0);
+      &.hack {
+        .imagePath(@selectedPath, 0, 0);
+      }
+    }
+
+    &.disabled .x-icon {
+      display: block;
+      .image2xPath(@disablePath, 0, 0);
+      &.hack {
+        .imagePath(@disablePath, 0, 0);
+      }
+    }
+  }
+}
+
+// 可自定义默认、悬浮、激活、选中、灰化、激活状态灰化状态
+.icon_custom(@class, @iconPath, @hoverPath, @activePath, @selectPath, @disablePath, @activeDisablePath) when not (@activeDisablePath = none) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -253,14 +277,22 @@
       }
     }
 
-    &:active .x-icon,
-    &.active .x-icon {
+    &:active .x-icon {
       display: block;
       .image2xPath(@activePath, 0, 0);
       &.hack {
         .imagePath(@activePath, 0, 0);
       }
     }
+
+    &.active .x-icon {
+      display: block;
+      .image2xPath(@selectPath, 0, 0);
+      &.hack {
+        .imagePath(@selectPath, 0, 0);
+      }
+    }
+
     &.disabled .x-icon {
       display: block;
       .image2xPath(@disablePath, 0, 0);
@@ -278,101 +310,11 @@
   }
 }
 
-.icon_custom_hover(@class, @iconPath, @hoverPath:none) {
-  .@{class} {
-    & .x-icon {
-      display: block;
-      .image2xPath(@iconPath, 0, 0);
-      &.hack {
-        .imagePath(@iconPath, 0, 0);
-      }
-    }
-    &:hover .x-icon,
-    &.hover .x-icon {
-      display: block;
-      .image2xPath(@hoverPath, 0, 0);
-      &.hack {
-        .imagePath(@hoverPath, 0, 0);
-      }
-    }
-    &.disabled .x-icon {
-      display: block;
-      .image2xPath(@iconPath, 0, 0);
-      &.hack {
-        .imagePath(@iconPath, 0, 0);
-      }
-    }
-  }
-}
-
-.icon_custom_hover_active(@class, @iconPath, @hoverPath:none, @activePath) {
-  .@{class} {
-    & .x-icon {
-      display: block;
-      .image2xPath(@iconPath, 0, 0);
-      &.hack {
-        .imagePath(@iconPath, 0, 0);
-      }
-    }
-    &:hover .x-icon,
-    &.hover .x-icon {
-      display: block;
-      .image2xPath(@hoverPath, 0, 0);
-      &.hack {
-        .imagePath(@hoverPath, 0, 0);
-      }
-    }
-    &:active .x-icon,
-    &.active .x-icon {
-      display: block;
-      .image2xPath(@activePath, 0, 0);
-      &.hack {
-        .imagePath(@activePath, 0, 0);
-      }
-    }
-    &.disabled .x-icon {
-      display: block;
-      .image2xPath(@iconPath, 0, 0);
-      &.hack {
-        .imagePath(@iconPath, 0, 0);
-      }
-    }
-  }
-}
-
-.icon_custom_select(@class, @iconPath, @selectPath, @disablePath: @iconPath) {
-  .@{class} {
-    & .x-icon {
-      display: block;
-      .image2xPath(@iconPath, 0, 0);
-      &.hack {
-        .imagePath(@iconPath, 0, 0);
-      }
-    }
-    &.active .x-icon {
-      display: block;
-      .image2xPath(@selectPath, 0, 0);
-      &.hack {
-        .imagePath(@selectPath, 0, 0);
-      }
-    }
-    &.disabled .x-icon {
-      display: block;
-      .image2xPath(@disablePath, 0, 0);
-      &.hack {
-        .imagePath(@disablePath, 0, 0);
-      }
-    }
-  }
-}
-
-//
 @color-bi-font-native: inherit;
-//active
 @color-bi-font-hover: inherit;
-//hover
 @color-bi-font-active: #3f8ce8;
 
+// 默认font
 .font(@class,@content, @color: @color-bi-font-native) {
   @fc: "\@{content}";
   .@{class} {
@@ -390,6 +332,7 @@
   }
 }
 
+// 有悬浮效果的font
 .font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover) {
   @fc: "\@{content}";
   .@{class} {
@@ -404,6 +347,35 @@
     &.hover .b-font:before {
       content: @fc;
       color: @color-hover;
+    }
+    &.disabled .b-font:before {
+      content: @fc;
+      color: @color-native;
+    }
+  }
+}
+
+// 有默认、激活(选中)的font
+.font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
+  @fc: "\@{content}";
+  .@{class} {
+    & .b-font {
+      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
+    }
+    & .b-font:before {
+      content: @fc;
+      color: @color-native;
+    }
+    &:hover .b-font:before,
+    &.hover .b-font:before {
+      content: @fc;
+      color: @color-hover;
+    }
+
+    &:active .b-font:before,
+    &.active .b-font:before {
+      content: @fc;
+      color: @color-active;
     }
     &.disabled .b-font:before {
       content: @fc;
@@ -427,41 +399,13 @@
       content: @fc;
       color: @color-hover;
     }
-    &.active .b-font:before {
-      content: @fc;
-      color: @color-selected;
-    }
     &:active .b-font:before {
       content: @fc;
       color: @color-active;
     }
-    &.disabled .b-font:before {
-      content: @fc;
-      color: @color-native;
-    }
-  }
-}
-
-.font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
-  @fc: "\@{content}";
-  .@{class} {
-    & .b-font {
-      *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
-    }
-    & .b-font:before {
-      content: @fc;
-      color: @color-native;
-    }
-    &:hover .b-font:before,
-    &.hover .b-font:before {
-      content: @fc;
-      color: @color-hover;
-    }
-
-    &:active .b-font:before,
     &.active .b-font:before {
       content: @fc;
-      color: @color-active;
+      color: @color-selected;
     }
     &.disabled .b-font:before {
       content: @fc;

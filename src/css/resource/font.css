@@ -2,6 +2,7 @@
   font-family: 'bi';
   src: url('font/iconfont.eot');
   src: url('font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('font/iconfont.woff') format('woff'), /* chrome、firefox */ url('font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('font/iconfont.svg#svgFontName') format('svg');
+  
   /*  iOS 4.1- */
 }
 .b-font {
@@ -205,13 +206,13 @@
   content: "\e762";
   color: #999999;
 }
-.dot-e-font.active .b-font:before {
-  content: "\e762";
-  color: #1a1a1a;
-}
 .dot-e-font:active .b-font:before {
   content: "\e762";
   color: #3685f2;
+}
+.dot-e-font.active .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e762";
@@ -277,11 +278,11 @@
   content: "\e70c";
   color: inherit;
 }
-.pull-right-e-font.active .b-font:before {
+.pull-right-e-font:active .b-font:before {
   content: "\e70c";
   color: #3f8ce8;
 }
-.pull-right-e-font:active .b-font:before {
+.pull-right-e-font.active .b-font:before {
   content: "\e70c";
   color: #3f8ce8;
 }
@@ -349,11 +350,11 @@
   content: "\e6bd";
   color: inherit;
 }
-.copy-e-font.active .b-font:before {
+.copy-e-font:active .b-font:before {
   content: "\e6bd";
   color: #3f8ce8;
 }
-.copy-e-font:active .b-font:before {
+.copy-e-font.active .b-font:before {
   content: "\e6bd";
   color: #3f8ce8;
 }
@@ -421,11 +422,11 @@
   content: "\e6cf";
   color: inherit;
 }
-.check-mark-e-font.active .b-font:before {
+.check-mark-e-font:active .b-font:before {
   content: "\e6cf";
   color: #3f8ce8;
 }
-.check-mark-e-font:active .b-font:before {
+.check-mark-e-font.active .b-font:before {
   content: "\e6cf";
   color: #3f8ce8;
 }
