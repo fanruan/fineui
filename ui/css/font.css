@@ -205,13 +205,13 @@
   content: "\e762";
   color: #999999;
 }
-.dot-e-font.active .b-font:before {
-  content: "\e762";
-  color: #1a1a1a;
-}
 .dot-e-font:active .b-font:before {
   content: "\e762";
   color: #3685f2;
+}
+.dot-e-font.active .b-font:before {
+  content: "\e762";
+  color: #1a1a1a;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e762";
@@ -277,11 +277,11 @@
   content: "\e70c";
   color: inherit;
 }
-.pull-right-e-font.active .b-font:before {
+.pull-right-e-font:active .b-font:before {
   content: "\e70c";
   color: #3f8ce8;
 }
-.pull-right-e-font:active .b-font:before {
+.pull-right-e-font.active .b-font:before {
   content: "\e70c";
   color: #3f8ce8;
 }
@@ -349,11 +349,11 @@
   content: "\e6bd";
   color: inherit;
 }
-.copy-e-font.active .b-font:before {
+.copy-e-font:active .b-font:before {
   content: "\e6bd";
   color: #3f8ce8;
 }
-.copy-e-font:active .b-font:before {
+.copy-e-font.active .b-font:before {
   content: "\e6bd";
   color: #3f8ce8;
 }
@@ -421,11 +421,11 @@
   content: "\e6cf";
   color: inherit;
 }
-.check-mark-e-font.active .b-font:before {
+.check-mark-e-font:active .b-font:before {
   content: "\e6cf";
   color: #3f8ce8;
 }
-.check-mark-e-font:active .b-font:before {
+.check-mark-e-font.active .b-font:before {
   content: "\e6cf";
   color: #3f8ce8;
 }
