@@ -6738,11 +6738,6 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button_tree",
                 chooseType: BI.Selection.Single,
-                behaviors: {
-                    redmark: function () {
-                        return true;
-                    }
-                },
                 layouts: [{
                     type: "bi.vertical"
                 }]
@@ -6756,8 +6751,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
-    populate: function (nodes, keyword) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0), keyword);
+    populate: function (nodes) {
+        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
     },
 
     setValue: function (v) {
