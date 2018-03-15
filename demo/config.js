@@ -1,7 +1,3 @@
-Demo = {
-    version: 1.0
-};
-
 Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG).concat(Demo.CATEGORY_CONFIG);
 
 Demo.CONSTANTS = {
