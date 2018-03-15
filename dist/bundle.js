@@ -104997,7 +104997,6 @@ BI.i18n = {
     "BI-Multi_Date_Quarter_Next": "个季度后",
     "BI-Basic_October": "十月",
     "BI-Basic_Simple_Friday": "五",
-    "BI-Primary_Key": "主键",
     "BI-Basic_Save": "保存",
     "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
     "BI-Previous_Page": "上一页",
@@ -105034,6 +105033,5 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "四",
     "BI-Multi_Date_Year_Prev": "年前",
     "BI-Tiao_Data": "条数据",
-    "BI-Basic_Italic": "斜体",
-    "BI-Basic_Union_Relation": "联合关联"
+    "BI-Basic_Italic": "斜体"
 };
