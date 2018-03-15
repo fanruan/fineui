@@ -2535,7 +2535,7 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
             type: "bi.sign_editor",
             cls: "bi-border",
             validationChecker: function (v) {
-                return v != "a";
+                return v != "abc";
             },
             watermark: "可以设置标记的输入框",
             text: "这是一个标记，点击它即可进行输入"
