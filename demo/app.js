@@ -1,3 +1,6 @@
+Demo = {
+    version: 1.0
+};
 $(function () {
     var ref;
     var AppRouter = BI.inherit(BI.Router, {
