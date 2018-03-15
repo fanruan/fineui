@@ -97,6 +97,7 @@ BI.Input = BI.inherit(BI.Single, {
             self._isEditing = false;
             self._start = false;
             if (self.isValid()) {
+                self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
             }
@@ -236,7 +237,7 @@ BI.Input = BI.inherit(BI.Single, {
             this._checkValidationOnValueChange();
             this._defaultState();
             if (this.isValid()) {
-                this._lastSubmitValue = this.getValue();
+                this._lastValidValue = this._lastSubmitValue = this.getValue();
             }
         }, this));
     },
@@ -256,7 +257,6 @@ BI.Input = BI.inherit(BI.Single, {
     _setValid: function () {
         BI.Input.superclass._setValid.apply(this, arguments);
         if (this.isValid()) {
-            this._lastValidValue = this.getValue();
             this.element.removeClass("bi-input-error");
             this.fireEvent(BI.Input.EVENT_VALID, BI.trim(this.getValue()), this);
         } else {
