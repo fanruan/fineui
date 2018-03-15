@@ -259,7 +259,7 @@
 }
 
 // 可自定义默认、悬浮、激活、选中、灰化、激活状态灰化状态
-.icon_custom(@class, @iconPath, @hoverPath, @activePath, @selectPath, @disablePath, @activeDisablePath) when not (@activeDisablePath = none) {
+.icon_custom(@class, @iconPath, @hoverPath, @activePath, @selectedPath, @disablePath, @activeDisablePath) when not (@activeDisablePath = none) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -287,9 +287,9 @@
 
     &.active .x-icon {
       display: block;
-      .image2xPath(@selectPath, 0, 0);
+      .image2xPath(@selectedPath, 0, 0);
       &.hack {
-        .imagePath(@selectPath, 0, 0);
+        .imagePath(@selectedPath, 0, 0);
       }
     }
 
