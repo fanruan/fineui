@@ -125,7 +125,7 @@ module.exports = function (grunt) {
                 dest: "dist/config.js"
             },
             demoJs: {
-                src: ["demo/app.js", "demo/js/**/*.js", " demo/config.js"],
+                src: ["demo/config.js", "demo/app.js", "demo/js/**/*.js"],
                 dest: "dist/demo.js"
             },
             demoCss: {
