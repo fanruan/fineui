@@ -1,6 +1,3 @@
-if (!window.BI) {
-    window.BI = {};
-}
 BI.servletURL = "";
 BI.resourceURL = "resource/";
 BI.i18n = {
