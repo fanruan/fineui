@@ -2,6 +2,7 @@
     if (!window.BI) {
         window.BI = {};
     }
+
     function isEmpty (value) {
         // 判断是否为空值
         var result = value === "" || value === null || value === undefined;
@@ -291,7 +292,7 @@
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return (text == null) ? '' : String(text).replace(/&/g, '&amp;').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\s/g, '&nbsp;');
+        return (text == null) ? "" : String(text).replace(/&/g, "&amp;").replace(/\"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\s/g, "&nbsp;");
     };
     // html decode
     BI.htmlDecode = function (text) {
@@ -340,8 +341,8 @@
                     }
                     c = b.charCodeAt();
                     return "\\u00" +
-                            Math.floor(c / 16).toString(16) +
-                            (c % 16).toString(16);
+                        Math.floor(c / 16).toString(16) +
+                        (c % 16).toString(16);
                 }) + "\"";
             }
             return "\"" + s + "\"";
@@ -417,7 +418,7 @@
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text): window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -504,6 +505,70 @@
         // ¤ - 货币格式
         text = text.replace(/¤/g, "￥");
         return text;
+    };
+
+    /**
+     * 将Java提供的日期格式字符串装换为JS识别的日期格式字符串
+     * @class FR.parseFmt
+     * @param fmt 日期格式
+     * @returns {String}
+     */
+    BI.parseFmt = function (fmt) {
+        if (!fmt) {
+            return "";
+        }
+        //日期
+        fmt = String(fmt)
+        //年
+            .replace(/y{4,}/g, "%Y")//yyyy的时候替换为Y
+            .replace(/y{2}/g, "%y")//yy的时候替换为y
+            //月
+            .replace(/M{4,}/g, "%b")//MMMM的时候替换为b，八
+            .replace(/M{3}/g, "%B")//MMM的时候替换为M，八月
+            .replace(/M{2}/g, "%X")//MM的时候替换为X，08
+            .replace(/M{1}/g, "%x")//M的时候替换为x，8
+            .replace(/a{1}/g, "%p");
+        //天
+        if (new RegExp("d{2,}", "g").test(fmt)) {
+            fmt = fmt.replace(/d{2,}/g, "%d");//dd的时候替换为d
+        } else {
+            fmt = fmt.replace(/d{1}/g, "%e");//d的时候替换为j
+        }
+        //时
+        if (new RegExp("h{2,}", "g").test(fmt)) {//12小时制
+            fmt = fmt.replace(/h{2,}/g, "%I");
+        } else {
+            fmt = fmt.replace(/h{1}/g, "%I");
+        }
+        if (new RegExp("H{2,}", "g").test(fmt)) {//24小时制
+            fmt = fmt.replace(/H{2,}/g, "%H");
+        } else {
+            fmt = fmt.replace(/H{1}/g, "%H");
+        }
+        fmt = fmt.replace(/m{2,}/g, "%M")//分
+        //秒
+            .replace(/s{2,}/g, "%S");
+
+        return fmt;
+    };
+
+    /**
+     * 把字符串按照对应的格式转化成日期对象
+     *
+     *      @example
+     *      var result = FR.str2Date('2013-12-12', 'yyyy-MM-dd');//Thu Dec 12 2013 00:00:00 GMT+0800
+     *
+     * @class FR.str2Date
+     * @param str 字符串
+     * @param format 日期格式
+     * @returns {*}
+     */
+    BI.str2Date = function (str, format) {
+        if (typeof str != "string" || typeof format != "string") {
+            return null;
+        }
+        var fmt = BI.parseFmt(format);
+        return BI.parseDateTime(str, fmt);
     };
 
     /**
@@ -636,8 +701,6 @@
             return parseInt(str);
         }
         return parseFloat(str);
-
-
     };
 
     BI.object2Date = function (obj) {
@@ -679,7 +742,7 @@
                 return dt;
             }
         }
-        dt = BI.str2Date(str, "HH:mm:ss");
+        dt = BI.parseDateTime(str, "HH:mm:ss");
         if (!isInvalidDate(dt)) {
             return dt;
         }
