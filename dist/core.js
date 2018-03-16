@@ -31910,7 +31910,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        var widget = BI.createWidget(cardItem);
+        var widget = BI.createWidget(cardItem, this);
         widget.element.css({
             position: "relative",
             top: "0",
