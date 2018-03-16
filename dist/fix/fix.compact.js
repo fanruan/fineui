@@ -23,7 +23,7 @@
     var targetStack = [];
 
     function pushTarget (_target) {
-        if (target) targetStack.push(target)
+        if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
@@ -35,7 +35,7 @@
     var contextStack = [];
 
     function pushContext (_context) {
-        if (context) contextStack.push(context)
+        if (context) contextStack.push(context);
         Fix.Model.context = context = _context;
     }
 
@@ -61,7 +61,10 @@
     };
 
     function findStore (widget) {
-        var p = widget;
+        if (target != null) {
+            return target;
+        }
+        var p = widget || context;
         while (p) {
             if (p.store || p.__cacheStore) {
                 break;
@@ -94,7 +97,7 @@
         var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
-            var store = findStore(this.options.element || context);
+            var store = findStore(this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
