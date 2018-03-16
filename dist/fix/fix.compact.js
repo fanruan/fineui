@@ -69,7 +69,7 @@
             p = p._parent || (p.options && p.options.element);
         }
         if (p) {
-            widget.__cacheStore = p.store;
+            widget.__cacheStore = p.store || p.__cacheStore;
             return p.__cacheStore || p.store;
         }
     }
@@ -141,6 +141,7 @@
             this.store._parent && (this.store._parent = null);
             this.store = null;
         }
+        delete this.__cacheStore;
     };
 
     _.each(["_mount"], function (name) {
