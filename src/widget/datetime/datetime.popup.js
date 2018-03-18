@@ -6,7 +6,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-time-popup",
             width: 268,
-            height: 290
+            height: 374
         });
     },
     _init: function () {

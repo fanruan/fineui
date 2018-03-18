@@ -8,7 +8,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-date-picker bi-background",
-            height: 25,
+            height: 40,
             min: "1900-01-01", // 最小日期
             max: "2099-12-31" // 最大日期
         });
@@ -93,7 +93,10 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             type: "bi.htape",
             element: this,
             items: [{
-                el: this.left,
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.left]
+                },
                 width: 25
             }, {
                 type: "bi.center_adapt",
@@ -103,7 +106,10 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                     items: [this.year, this.month]
                 }]
             }, {
-                el: this.right,
+                el: {
+                    type: "bi.center_adapt",
+                    items: [this.right]
+                },
                 width: 25
             }]
         });

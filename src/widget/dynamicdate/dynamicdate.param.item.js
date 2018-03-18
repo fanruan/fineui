@@ -1,0 +1,107 @@
+BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-dynamic-date-param-item",
+        dateType: BI.DynamicDateCard.TYPE.YEAR,
+        value: 0,
+        offset: 0,
+        height: 24
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.htape",
+            items: [{
+                el: {
+                    type: "bi.sign_editor",
+                    cls: "bi-border",
+                    height: 24,
+                    validationChecker: function (v) {
+                        return BI.isNaturalNumber(v);
+                    },
+                    value: o.value,
+                    ref: function () {
+                        self.editor = this;
+                    },
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CONFIRM,
+                        action: function () {
+                            self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
+                        }
+                    }]
+                },
+                width: 60
+            }, {
+                type: "bi.label",
+                height: 24,
+                text: this._getText()
+            }, {
+                el: {
+                    type: "bi.text_value_combo",
+                    height: 24,
+                    items: [{
+                        text: BI.i18nText("BI-Basic_Front"),
+                        value: 0
+                    }, {
+                        text: BI.i18nText("BI-Basic_Behind"),
+                        value: 1
+                    }],
+                    ref: function () {
+                        self.offsetCombo = this;
+                    },
+                    value: o.offset,
+                    listeners: [{
+                        eventName: BI.TextValueCombo.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
+                        }
+                    }]
+                },
+                width: 148
+            }]
+        };
+    },
+
+    _getText: function () {
+        var text = "";
+        switch (this.options.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                text = BI.i18nText("BI-Basic_Year");
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                text = BI.i18nText("BI-Basic_Quarter");
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                text = BI.i18nText("BI-Basic_Month");
+                break;
+            case BI.DynamicDateCard.TYPE.WEEK:
+                text = BI.i18nText("BI-Basic_Week");
+                break;
+            case BI.DynamicDateCard.TYPE.DAY:
+            default:
+                text = BI.i18nText("BI-Basic_Day");
+                break;
+        }
+        return text;
+    },
+
+    setValue: function (v) {
+        v = v || {};
+        v.value = v.value || 0;
+        v.offset = v.offset || 0;
+        this.editor.setValue(v.value);
+        this.offsetCombo.setValue(v.offset);
+    },
+
+    getValue: function () {
+        return {
+            dateType: this.options.dateType,
+            value: this.editor.getValue(),
+            offset: this.offsetCombo.getValue()[0]
+        };
+    }
+
+});
+BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);

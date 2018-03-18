@@ -67,7 +67,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     _createCombo: function (v) {
         var self = this;
         var combo = BI.createWidget({
-            type: "bi.multidate_combo",
+            type: "bi.dynamic_date_combo",
             value: v
         });
         combo.on(BI.MultiDateCombo.EVENT_ERROR, function () {

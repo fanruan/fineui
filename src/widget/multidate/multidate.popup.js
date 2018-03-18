@@ -24,8 +24,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiDatePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multidate-popup",
-            width: 268,
-            height: 260
+            height: 344
         });
     },
     _init: function () {
