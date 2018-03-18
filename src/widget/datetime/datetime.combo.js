@@ -68,7 +68,6 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             adjustLength: this.constants.comboAdjustHeight,
             popup: {
                 el: this.popup,
-                maxHeight: this.constants.popupHeight,
                 width: this.constants.popupWidth,
                 stopPropagation: false
             }

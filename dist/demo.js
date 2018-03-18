@@ -12122,6 +12122,17 @@ Demo.Date = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             vgap: 10,
             items: [{
+                type: "bi.dynamic_date_combo",
+                ref: function () {
+                    self.datecombo = this;
+                },
+                width: 300,
+                value: {
+                    year: 2018,
+                    month: 1,
+                    day: 23
+                }
+            }, {
                 type: "bi.multidate_combo",
                 ref: function () {
                     self.datecombo = this;
@@ -14112,13 +14123,19 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                 },
                 value: {
                     start: {
-                        type: 1,
-                        value: 2
+                        type: 2,
+                        value: {
+                            year: -1,
+                            position: 2
+                        }
                     },
                     end: {
-                        year: 2018,
-                        month: 0,
-                        day: 12
+                        type: 1,
+                        value: {
+                            year: 2018,
+                            month: 0,
+                            day: 12
+                        }
                     }
                 },
                 width: 300

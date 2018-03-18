@@ -1663,14 +1663,19 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var items = BI.map(Date._SDN.slice(0, 7), function (i, value) {
             return {
                 type: "bi.label",
-                height: 25,
+                height: 24,
                 text: value
             };
         });
         var title = BI.createWidget({
             type: "bi.button_group",
-            height: 25,
-            items: items
+            height: 44,
+            items: items,
+            layouts: [{
+                type: "bi.center",
+                hgap: 10,
+                vgap: 10
+            }]
         });
         var days = this._dateCreator(o.year, o.month, o.day);
         items = [];
@@ -1690,7 +1695,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 25,
+                    height: 24,
                     value: o.year + "-" + o.month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
                     // selected: td.currentDay
@@ -1705,7 +1710,9 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: 25
+                rowSize: 24,
+                hgap: 10,
+                vgap: 10
             }))]
         });
         this.days.on(BI.Controller.EVENT_CHANGE, function () {
