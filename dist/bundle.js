@@ -87508,7 +87508,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                     text: BI.i18nText("BI-Basic_Year"),
                     value: BI.DynamicDateCard.TYPE.YEAR
                 }, {
-                    text: BI.i18nText("BI-Basic_Quarter"),
+                    text: BI.i18nText("BI-Basic_Single_Quarter"),
                     value: BI.DynamicDateCard.TYPE.QUARTER
                 }, {
                     text: BI.i18nText("BI-Basic_Month"),
@@ -88120,7 +88120,7 @@ BI.extend(BI.DynamicDateCombo, {
                 text = BI.i18nText("BI-Basic_Year");
                 break;
             case BI.DynamicDateCard.TYPE.QUARTER:
-                text = BI.i18nText("BI-Basic_Quarter");
+                text = BI.i18nText("BI-Basic_Single_Quarter");
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
                 text = BI.i18nText("BI-Basic_Month");
@@ -88522,7 +88522,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
         if(BI.isNotNull(obj.quarter)) {
-            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
+            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
         if(BI.isNotNull(obj.month)) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
