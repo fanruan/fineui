@@ -70,7 +70,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 text = BI.i18nText("BI-Basic_Year");
                 break;
             case BI.DynamicDateCard.TYPE.QUARTER:
-                text = BI.i18nText("BI-Basic_Quarter");
+                text = BI.i18nText("BI-Basic_Single_Quarter");
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
                 text = BI.i18nText("BI-Basic_Month");

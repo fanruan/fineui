@@ -3030,7 +3030,6 @@ BI.extend(BI.DynamicDateCard, {
 
     setValue: function (v) {
         this.storeValue = v;
-        this.popup.setValue(v);
         this.trigger.setValue(v);
         this._checkDynamicValue(v);
     },
