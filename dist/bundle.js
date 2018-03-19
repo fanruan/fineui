@@ -88022,7 +88022,6 @@ BI.extend(BI.DynamicDateCard, {
 
     setValue: function (v) {
         this.storeValue = v;
-        this.popup.setValue(v);
         this.trigger.setValue(v);
         this._checkDynamicValue(v);
     },
@@ -106279,5 +106278,26 @@ BI.i18n = {
     "BI-Basic_Simple_Thursday": "四",
     "BI-Multi_Date_Year_Prev": "年前",
     "BI-Tiao_Data": "条数据",
-    "BI-Basic_Italic": "斜体"
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Dynamic_Title": "动态时间",
+    "BI-Basic_Year": "年",
+    "BI-Basic_Quarter": "季",
+    "BI-Basic_Month": "月",
+    "BI-Basic_Week": "周",
+    "BI-Basic_Day": "天",
+    "BI-Basic_Work_Day": "工作日",
+    "BI-Basic_Front": "前",
+    "BI-Basic_Behind": "后",
+    "BI-Basic_Empty": "空",
+    "BI-Basic_Month_End": "月末",
+    "BI-Basic_Month_Begin": "月初",
+    "BI-Basic_Year_End": "年末",
+    "BI-Basic_Year_Begin": "年初",
+    "BI-Basic_Quarter_End": "季末",
+    "BI-Basic_Quarter_Begin": "季初",
+    "BI-Basic_Week_End": "周末",
+    "BI-Basic_Week_Begin": "周初",
+    "BI-Basic_Current_Day": "当天",
+    "BI-Basic_Begin_Start": "初",
+    "BI-Basic_End_Stop": "末"
 };
