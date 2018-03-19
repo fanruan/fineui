@@ -148,7 +148,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
         if(BI.isNotNull(obj.quarter)) {
-            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
+            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
         if(BI.isNotNull(obj.month)) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);

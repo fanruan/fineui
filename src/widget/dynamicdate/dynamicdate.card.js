@@ -28,7 +28,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     text: BI.i18nText("BI-Basic_Year"),
                     value: BI.DynamicDateCard.TYPE.YEAR
                 }, {
-                    text: BI.i18nText("BI-Basic_Quarter"),
+                    text: BI.i18nText("BI-Basic_Single_Quarter"),
                     value: BI.DynamicDateCard.TYPE.QUARTER
                 }, {
                     text: BI.i18nText("BI-Basic_Month"),
