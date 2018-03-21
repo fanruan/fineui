@@ -7,7 +7,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     props: {
-        extraCls: "bi-year-quarter-trigger bi-border",
+        extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24
@@ -62,7 +62,10 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(isYear ? v : BI.getDate().getFullYear(), isYear ? 1 : v, 1, o.min, o.max)[0]);
+                if(isYear) {
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                }
+                return v === "" || ((v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -70,6 +73,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             errorText: function (v) {
                 return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
             },
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true
@@ -136,7 +140,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         if(BI.isNotNull(obj.year)) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.quarter)) {
+        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Year") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -146,7 +150,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(date.getQuarter());
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     setValue: function (v) {

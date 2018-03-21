@@ -68,6 +68,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
                     action: function () {
+                        self.selectedYear = self.yearPicker.getValue();
                         self.selectedQuarter = this.getValue()[0];
                         self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
                     }

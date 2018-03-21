@@ -1,7 +1,7 @@
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo",
+        baseCls: "bi-year-combo bi-border",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -46,7 +46,6 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -99,11 +98,52 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW);
         });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            ref: function () {
+                self.comboWrapper = this;
+            },
+            items: [{
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-change-h-font",
+                    width: 24,
+                    height: 24,
+                    ref: function () {
+                        self.changeIcon = this;
+                    }
+                },
+                width: 30
+            }, this.combo]
+        });
+        this._checkDynamicValue(o.value);
+    },
+
+    _checkDynamicValue: function (v) {
+        var type = null;
+        if (BI.isNotNull(v)) {
+            type = v.type;
+        }
+        switch (type) {
+            case BI.DynamicYearCombo.Dynamic:
+                this.changeIcon.setVisible(true);
+                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.resize();
+                break;
+            default:
+                this.comboWrapper.attr("items")[0].width = 0;
+                this.comboWrapper.resize();
+                this.changeIcon.setVisible(false);
+                break;
+        }
     },
 
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
+        this._checkDynamicValue(v);
     },
 
     getValue: function () {

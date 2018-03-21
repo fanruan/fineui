@@ -24,6 +24,13 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.editor = this;
                     },
+                    errorText: function (v) {
+                        if(BI.isEmptyString(v)) {
+                            return BI.i18nText("BI-Basic_Input_Can_Not_Null");
+                        }
+                        return BI.i18nText("BI-Please_Input_Positive_Integer");
+                    },
+                    allowBlank: false,
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {

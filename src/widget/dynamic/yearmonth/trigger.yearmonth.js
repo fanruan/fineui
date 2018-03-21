@@ -7,7 +7,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     },
 
     props: {
-        extraCls: "bi-year-month-trigger bi-border",
+        extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24
@@ -62,11 +62,15 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(isYear ? v : BI.getDate().getFullYear(), isYear ? 1 : v, 1, o.min, o.max)[0]);
+                if(isYear) {
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                }
+                return v === "" || ((v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
             },
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
                 return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
             },
@@ -136,7 +140,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         if(BI.isNotNull(obj.year)) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.month)) {
+        if(BI.isNotNull(obj.month) && obj.month !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Year") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -146,7 +150,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.monthEditor.setValue(date.getMonth() + 1);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     setValue: function (v) {
