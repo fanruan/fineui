@@ -80551,7 +80551,109 @@ BI.Panel = BI.inherit(BI.Widget, {
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel", BI.Panel);/**
+BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
+
+    props: {
+        extraCls: "bi-line-segment-button bi-list-item-effect",
+        once: true,
+        readonly: true,
+        hgap: 10,
+        height: 25
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        return [{
+            type: "bi.label",
+            text: o.text,
+            height: o.height,
+            value: o.value,
+            hgap: o.hgap,
+            ref: function () {
+                self.text = this;
+            }
+        }, {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "line-segment-button-line",
+                    height: 3,
+                    ref: function () {
+                        self.line = this;
+                    }
+                },
+                left: 0,
+                right: 0,
+                bottom: 0
+            }]
+        }];
+    },
+
+    setSelected: function (v) {
+        BI.LinearSegmentButton.superclass.setSelected.apply(this, arguments);
+        if (v) {
+            this.line.element.addClass("bi-high-light-background");
+        } else {
+            this.line.element.removeClass("bi-high-light-background");
+        }
+    },
+
+    setText: function (text) {
+        this.text.setText(text);
+    }
+});
+BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-linear-segment bi-border-bottom",
+        items: [],
+        height: 29
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.button_group",
+            items: BI.createItems(o.items, {
+                type: "bi.linear_segment_button",
+                height: o.height - 1
+            }),
+            layout: [{
+                type: "bi.center"
+            }],
+            listeners: [{
+                eventName: "__EVENT_CHANGE__",
+                action: function () {
+                    self.fireEvent("__EVENT_CHANGE__", arguments);
+                }
+            }, {
+                eventName: "EVENT_CHANGE",
+                action: function () {
+                    self.fireEvent("EVENT_CHANGE");
+                }
+            }],
+            ref: function () {
+                self.buttonGroup = this;
+            }
+        };
+    },
+
+    setValue: function (v) {
+        this.buttonGroup.setValue(v);
+    },
+
+    setEnabledValue: function (v) {
+        this.buttonGroup.setEnabledValue(v);
+    },
+
+
+    getValue: function () {
+        return this.buttonGroup.getValue();
+    }
+});
+BI.shortcut("bi.linear_segment", BI.LinearSegment);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
@@ -89230,7 +89332,8 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
             type: "bi.vtape",
             items: [{
                 el: {
-                    type: "bi.button_group",
+                    type: "bi.linear_segment",
+                    cls: "bi-border-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -89239,12 +89342,8 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                         text: BI.i18nText("BI-Basic_Dynamic_Title"),
                         value: BI.DynamicDatePane.Dynamic
                     }], {
-                        textAlign: "center",
-                        cls: "bi-list-item-active"
+                        textAlign: "center"
                     }),
-                    layouts: [{
-                        type: "bi.center"
-                    }],
                     listeners: [{
                         eventName: BI.ButtonGroup.EVENT_CHANGE,
                         action: function () {
@@ -89799,6 +89898,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                 self.dateTab = this;
             },
             tab: {
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -89807,12 +89908,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
                     value: BI.DynamicYearCombo.Dynamic
                 }], {
-                    textAlign: "center",
-                    cls: "bi-list-item-active"
-                }),
-                layouts: [{
-                    type: "bi.center"
-                }]
+                    textAlign: "center"
+                })
             },
             cardCreator: function (v) {
                 switch (v) {
@@ -90454,6 +90551,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 self.dateTab = this;
             },
             tab: {
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -90462,12 +90561,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
                     value: BI.DynamicYearCombo.Dynamic
                 }], {
-                    textAlign: "center",
-                    cls: "bi-list-item-active"
-                }),
-                layouts: [{
-                    type: "bi.center"
-                }]
+                    textAlign: "center"
+                })
             },
             cardCreator: function (v) {
                 switch (v) {
@@ -91135,6 +91230,8 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                 self.dateTab = this;
             },
             tab: {
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -91143,12 +91240,8 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
                     value: BI.DynamicYearQuarterCombo.Dynamic
                 }], {
-                    textAlign: "center",
-                    cls: "bi-list-item-active"
-                }),
-                layouts: [{
-                    type: "bi.center"
-                }]
+                    textAlign: "center"
+                })
             },
             cardCreator: function (v) {
                 switch (v) {
@@ -92237,7 +92330,8 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                 self.dateTab = this;
             },
             tab: {
-                cls: "bi-multidate-popup-tab bi-border-bottom",
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -92246,12 +92340,8 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
                     value: BI.DynamicDateCombo.Dynamic
                 }], {
-                    textAlign: "center",
-                    cls: "bi-list-item-active"
-                }),
-                layouts: [{
-                    type: "bi.center"
-                }]
+                    textAlign: "center"
+                })
             },
             cardCreator: function (v) {
                 switch (v) {
@@ -95273,7 +95363,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         this.dateTab = BI.createWidget({
             type: "bi.tab",
             tab: {
-                cls: "bi-multidate-popup-tab bi-border-bottom",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),

@@ -96,6 +96,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 self.dateTab = this;
             },
             tab: {
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -104,12 +106,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
                     value: BI.DynamicYearCombo.Dynamic
                 }], {
-                    textAlign: "center",
-                    cls: "bi-list-item-active"
-                }),
-                layouts: [{
-                    type: "bi.center"
-                }]
+                    textAlign: "center"
+                })
             },
             cardCreator: function (v) {
                 switch (v) {
