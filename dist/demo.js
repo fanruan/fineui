@@ -9317,15 +9317,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
         var maskBackgroundColor = this.maskBackgroundColor.getValue();
 
         this._setStyle({
-            "#wrapper.bi-background, #wrapper .bi-background": {
+            "body.bi-background, body .bi-background": {
                 "background-color": backgroundColor,
                 color: fontColor
             },
-            "#wrapper .bi-card": {
+            "body .bi-card": {
                 "background-color": cardBackgroundColor,
                 color: fontColor
             },
-            "#wrapper .bi-tips": {
+            "body .bi-tips": {
                 color: grayFontColor
             },
             "div::-webkit-scrollbar,.scrollbar-layout-main": {
@@ -9357,23 +9357,23 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 "background-color": selectBackgroundColor + "!important",
                 color: selectFontColor + "!important"
             },
-            ".bi-button": {
+            "body .bi-button.button-common": {
                 "background-color": button1BackgroundColor,
                 "border-color": button1BackgroundColor
             },
-            ".bi-button.button-success": {
+            "body .bi-button.button-success": {
                 "background-color": button2BackgroundColor,
                 "border-color": button2BackgroundColor
             },
-            ".bi-button.button-warning": {
+            "body .bi-button.button-warning": {
                 "background-color": button3BackgroundColor,
                 "border-color": button3BackgroundColor
             },
-            ".bi-button.button-ignore": {
+            "body .bi-button.button-ignore": {
                 "background-color": button4BackgroundColor
             },
             // 以下是分割线颜色
-            "#wrapper .bi-border,#wrapper .bi-border-top,#wrapper .bi-border-bottom,#wrapper .bi-border-left,#wrapper .bi-border-right": {
+            "body .bi-border,body .bi-border-top,#wrapper .bi-border-bottom,body .bi-border-left,body .bi-border-right": {
                 "border-color": slitColor
             },
             ".bi-collection-table-cell": {
