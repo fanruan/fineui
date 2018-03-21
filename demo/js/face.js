@@ -73,7 +73,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                 self.activeFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试激活状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -87,7 +95,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                 self.selectFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试选中状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -97,11 +113,19 @@ Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("灰色字体颜色(用于Card2)："), this._createColorPicker(function () {
+            items: [this._createLabel("tip提示字体颜色："), this._createColorPicker(function () {
                 self.grayFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.icon_text_item",
+                    cls: "bi-tips copy-font",
+                    height: 40,
+                    text: "测试提示文字"
+                }
+            }]
         };
     },
 
@@ -127,26 +151,17 @@ Demo.Face = BI.inherit(BI.Widget, {
         };
     },
 
-    _createCard1BackgroundConfig: function () {
+    _createCardBackgroundConfig: function () {
         var self = this;
         return {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("Card1背景颜色："), this._createColorPicker(function () {
+            items: [this._createLabel("Card背景颜色："), this._createColorPicker(function () {
                 self.cardBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
             })]
-        };
-    },
-    _createCard2BackgroundConfig: function () {
-        var self = this;
-        return {
-            type: "bi.htape",
-            cls: "config-item bi-border-bottom",
-            height: 40,
-            items: [this._createLabel("Card2背景颜色：无颜色")]
         };
     },
 
@@ -160,7 +175,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                 self.hoverBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试悬浮状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -174,7 +197,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                 self.activeBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试激活状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -188,7 +219,15 @@ Demo.Face = BI.inherit(BI.Widget, {
                 self.selectBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试选中状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -198,7 +237,7 @@ Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("分割线颜色(只对左边的表格有效)："), this._createColorPicker(function () {
+            items: [this._createLabel("分割线颜色："), this._createColorPicker(function () {
                 self.slitColor = this;
             }, function () {
                 self._runGlobalStyle();
@@ -211,13 +250,12 @@ Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [this._createLabel("--通用配色--"),
                 this._createBackgroundConfig(),
+                this._createCardBackgroundConfig(),
                 this._createFontConfig(),
                 this._createActiveFontConfig(),
                 this._createSelectFontConfig(),
                 this._createGrayFontConfig(),
                 this._createDisableFontConfig(),
-                this._createCard1BackgroundConfig(),
-                this._createCard2BackgroundConfig(),
                 this._createHoverBackgroundColor(),
                 this._createActiveBackgroundColor(),
                 this._createSelectBackgroundColor(),
@@ -568,7 +606,8 @@ Demo.Face = BI.inherit(BI.Widget, {
                 color: fontColor
             },
             "#wrapper .bi-card": {
-                "background-color": cardBackgroundColor
+                "background-color": cardBackgroundColor,
+                color: fontColor
             },
             "#wrapper .bi-tips": {
                 color: grayFontColor
@@ -616,6 +655,10 @@ Demo.Face = BI.inherit(BI.Widget, {
             },
             ".bi-button.button-ignore": {
                 "background-color": button4BackgroundColor
+            },
+            // 以下是分割线颜色
+            "#wrapper .bi-border,#wrapper .bi-border-top,#wrapper .bi-border-bottom,#wrapper .bi-border-left,#wrapper .bi-border-right": {
+                "border-color": slitColor
             },
             ".bi-collection-table-cell": {
                 "border-right-color": slitColor,

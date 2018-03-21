@@ -31,28 +31,6 @@ Demo.Preview = BI.inherit(BI.Widget, {
             cls: "preview-background",
             items: [{
                 el: {
-                    type: "bi.left",
-                    cls: "preview-header bi-tips",
-                    height: 40,
-                    items: [{
-                        type: "bi.label",
-                        height: 40,
-                        text: "Card2",
-                        hgap: 10,
-                        textAlign: "left"
-                    }, {
-                        type: "bi.icon_text_item",
-                        cls: "filter-font",
-                        text: "测试图标",
-                        width: 100,
-                        height: 40
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 60
-            }, {
-                el: {
                     type: "bi.vtape",
                     cls: "preview-card bi-card",
                     items: [{
@@ -60,7 +38,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
                             type: "bi.label",
                             cls: "preview-title bi-border-bottom",
                             height: 40,
-                            text: "Card1",
+                            text: "Card",
                             hgap: 10,
                             textAlign: "left"
                         },
@@ -92,7 +70,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
                 },
                 left: 60,
                 right: 60,
-                top: 160,
+                top: 60,
                 bottom: 60
             }]
         };
