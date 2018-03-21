@@ -145,5 +145,6 @@ BI.i18n = {
     "BI-Basic_Current_Month": "本月",
     "BI-Basic_Current_Quarter": "本季度",
     "BI-Basic_Year_Month": "年月",
-    "BI-Basic_Year_Quarter": "年季度"
+    "BI-Basic_Year_Quarter": "年季度",
+    "BI-Basic_Input_Can_Not_Null": "输入框不能为空"
 };

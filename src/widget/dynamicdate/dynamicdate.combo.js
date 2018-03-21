@@ -22,6 +22,17 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         return {
             type: "bi.htape",
             items: [{
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-change-h-font",
+                    width: 24,
+                    height: 24,
+                    ref: function () {
+                        self.changeIcon = this;
+                    }
+                },
+                width: 30
+            }, {
                 type: "bi.absolute",
                 items: [{
                     el: {
@@ -184,19 +195,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         }]
                     },
                     top: 0,
-                    left: 0
+                    right: 0
                 }]
-            }, {
-                el: {
-                    type: "bi.icon_button",
-                    cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
-                    ref: function () {
-                        self.changeIcon = this;
-                    }
-                },
-                width: 30
             }],
             ref: function (_ref) {
                 self.comboWrapper = _ref;
@@ -216,11 +216,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[1].width = 30;
+                this.comboWrapper.attr("items")[0].width = 30;
                 this.comboWrapper.resize();
                 break;
             default:
-                this.comboWrapper.attr("items")[1].width = 0;
+                this.comboWrapper.attr("items")[0].width = 0;
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;

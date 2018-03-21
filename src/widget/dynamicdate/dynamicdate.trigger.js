@@ -91,10 +91,10 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             type: "bi.htape",
             element: this,
             items: [{
+                el: this.editor
+            }, {
                 el: BI.createWidget(),
                 width: 30
-            }, {
-                el: this.editor
             }]
         });
         this.setValue(o.value);
