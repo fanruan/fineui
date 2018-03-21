@@ -121,7 +121,7 @@ BI.i18n = {
     "BI-Basic_Italic": "斜体",
     "BI-Basic_Dynamic_Title": "动态时间",
     "BI-Basic_Year": "年",
-    "BI-Basic_Quarter": "季",
+    "BI-Basic_Single_Quarter": "季",
     "BI-Basic_Month": "月",
     "BI-Basic_Week": "周",
     "BI-Basic_Day": "天",
@@ -139,5 +139,11 @@ BI.i18n = {
     "BI-Basic_Week_Begin": "周初",
     "BI-Basic_Current_Day": "当天",
     "BI-Basic_Begin_Start": "初",
-    "BI-Basic_End_Stop": "末"
+    "BI-Basic_End_Stop": "末",
+    "BI-Basic_Current_Year": "今年",
+    "BI-Basic_Year_Fen": "年份",
+    "BI-Basic_Current_Month": "本月",
+    "BI-Basic_Current_Quarter": "本季度",
+    "BI-Basic_Year_Month": "年月",
+    "BI-Basic_Year_Quarter": "年季度"
 };

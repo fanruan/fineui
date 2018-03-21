@@ -11,14 +11,17 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.year_month_combo",
+                type: "bi.dynamic_year_month_combo",
                 ref: function (_ref) {
                     self.widget = _ref;
                 },
                 width: 300,
-                value:{
-                    year: 2018,
-                    month: 0
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 0
+                    }
                 }
             }, {
                 type: "bi.button",

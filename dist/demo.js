@@ -12087,11 +12087,14 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                     cls: "layout-bg2",
                     text: "bi.date_pane"
                 }, {
-                    type: "bi.date_pane",
-                    selectedTime: {
-                        year: 2017,
-                        month: 11,
-                        day: 11
+                    type: "bi.dynamic_date_pane",
+                    value: {
+                        type: 1,
+                        value: {
+                            year: 2017,
+                            month: 11,
+                            day: 11
+                        }
                     },
                     ref: function (_ref) {
                         self.datepane = _ref;
@@ -14424,13 +14427,19 @@ Demo.Year = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.horizontal_auto",
+            vgap: 10,
             items: [{
-                type: "bi.year_combo",
+                type: "bi.dynamic_year_combo",
                 width: 300,
                 ref: function () {
                     self.yearcombo = this;
                 },
-                value: 2017
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2017
+                    }
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -14464,14 +14473,17 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.year_month_combo",
+                type: "bi.dynamic_year_month_combo",
                 ref: function (_ref) {
                     self.widget = _ref;
                 },
                 width: 300,
-                value:{
-                    year: 2018,
-                    month: 0
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 0
+                    }
                 }
             }, {
                 type: "bi.button",
@@ -14508,7 +14520,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.year_quarter_combo",
+                type: "bi.dynamic_year_quarter_combo",
                 width: 300,
                 ref: function (_ref) {
                     self.widget = _ref;
@@ -14516,8 +14528,11 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
                 yearBehaviors: {},
                 quarterBehaviors: {},
                 value: {
-                    year: 2018,
-                    quarter: 1
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        quarter: 1
+                    }
                 }
             }, {
                 type: "bi.button",

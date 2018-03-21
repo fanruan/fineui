@@ -14,11 +14,14 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                     cls: "layout-bg2",
                     text: "bi.date_pane"
                 }, {
-                    type: "bi.date_pane",
-                    selectedTime: {
-                        year: 2017,
-                        month: 11,
-                        day: 11
+                    type: "bi.dynamic_date_pane",
+                    value: {
+                        type: 1,
+                        value: {
+                            year: 2017,
+                            month: 11,
+                            day: 11
+                        }
                     },
                     ref: function (_ref) {
                         self.datepane = _ref;
