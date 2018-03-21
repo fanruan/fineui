@@ -1,9 +1,9 @@
 /**
  * Created by zcf on 2017/2/20.
  */
-BI.DatePaneWidget = BI.inherit(BI.Widget, {
+BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        var conf = BI.DatePaneWidget.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.StaticDatePaneCard.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-date-pane",
             min: "1900-01-01", // 最小日期
@@ -12,7 +12,7 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
         });
     },
     _init: function () {
-        BI.DatePaneWidget.superclass._init.apply(this, arguments);
+        BI.StaticDatePaneCard.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
         this.today = BI.getDate();
@@ -111,4 +111,4 @@ BI.DatePaneWidget = BI.inherit(BI.Widget, {
     }
 
 });
-BI.shortcut("bi.date_pane", BI.DatePaneWidget);
+BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);

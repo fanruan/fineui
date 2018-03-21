@@ -9,13 +9,19 @@ Demo.Year = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.horizontal_auto",
+            vgap: 10,
             items: [{
-                type: "bi.year_combo",
+                type: "bi.dynamic_year_combo",
                 width: 300,
                 ref: function () {
                     self.yearcombo = this;
                 },
-                value: 2017
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2017
+                    }
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",

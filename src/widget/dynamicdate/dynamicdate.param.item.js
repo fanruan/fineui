@@ -16,7 +16,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.sign_editor",
                     cls: "bi-border",
-                    height: 24,
+                    height: 22,
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v);
                     },
@@ -33,32 +33,32 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 },
                 width: 60
             }, {
-                type: "bi.label",
-                height: 24,
-                text: this._getText()
-            }, {
                 el: {
-                    type: "bi.text_value_combo",
+                    type: "bi.label",
                     height: 24,
-                    items: [{
-                        text: BI.i18nText("BI-Basic_Front"),
-                        value: 0
-                    }, {
-                        text: BI.i18nText("BI-Basic_Behind"),
-                        value: 1
-                    }],
-                    ref: function () {
-                        self.offsetCombo = this;
-                    },
-                    value: o.offset,
-                    listeners: [{
-                        eventName: BI.TextValueCombo.EVENT_CHANGE,
-                        action: function () {
-                            self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
-                        }
-                    }]
+                    text: this._getText()
                 },
-                width: 148
+                width: 20
+            }, {
+                type: "bi.text_value_combo",
+                height: 24,
+                items: [{
+                    text: BI.i18nText("BI-Basic_Front"),
+                    value: 0
+                }, {
+                    text: BI.i18nText("BI-Basic_Behind"),
+                    value: 1
+                }],
+                ref: function () {
+                    self.offsetCombo = this;
+                },
+                value: o.offset,
+                listeners: [{
+                    eventName: BI.TextValueCombo.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
+                    }
+                }]
             }]
         };
     },
