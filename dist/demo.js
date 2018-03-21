@@ -8789,7 +8789,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 self.activeFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试激活状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -8803,7 +8811,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 self.selectFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试选中状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -8813,11 +8829,19 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("灰色字体颜色(用于Card2)："), this._createColorPicker(function () {
+            items: [this._createLabel("tip提示字体颜色："), this._createColorPicker(function () {
                 self.grayFontColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.icon_text_item",
+                    cls: "bi-tips copy-font",
+                    height: 40,
+                    text: "测试提示文字"
+                }
+            }]
         };
     },
 
@@ -8843,26 +8867,17 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
         };
     },
 
-    _createCard1BackgroundConfig: function () {
+    _createCardBackgroundConfig: function () {
         var self = this;
         return {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("Card1背景颜色："), this._createColorPicker(function () {
+            items: [this._createLabel("Card背景颜色："), this._createColorPicker(function () {
                 self.cardBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
             })]
-        };
-    },
-    _createCard2BackgroundConfig: function () {
-        var self = this;
-        return {
-            type: "bi.htape",
-            cls: "config-item bi-border-bottom",
-            height: 40,
-            items: [this._createLabel("Card2背景颜色：无颜色")]
         };
     },
 
@@ -8876,7 +8891,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 self.hoverBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试悬浮状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -8890,7 +8913,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 self.activeBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试激活状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -8904,7 +8935,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 self.selectBackgroundColor = this;
             }, function () {
                 self._runGlobalStyle();
-            })]
+            }), {
+                width: 100,
+                el: {
+                    type: "bi.text_button",
+                    cls: "bi-list-item-active",
+                    text: "测试选中状态",
+                    forceCenter: true
+                }
+            }]
         };
     },
 
@@ -8914,7 +8953,7 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.htape",
             cls: "config-item bi-border-bottom",
             height: 40,
-            items: [this._createLabel("分割线颜色(只对左边的表格有效)："), this._createColorPicker(function () {
+            items: [this._createLabel("分割线颜色："), this._createColorPicker(function () {
                 self.slitColor = this;
             }, function () {
                 self._runGlobalStyle();
@@ -8927,13 +8966,12 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [this._createLabel("--通用配色--"),
                 this._createBackgroundConfig(),
+                this._createCardBackgroundConfig(),
                 this._createFontConfig(),
                 this._createActiveFontConfig(),
                 this._createSelectFontConfig(),
                 this._createGrayFontConfig(),
                 this._createDisableFontConfig(),
-                this._createCard1BackgroundConfig(),
-                this._createCard2BackgroundConfig(),
                 this._createHoverBackgroundColor(),
                 this._createActiveBackgroundColor(),
                 this._createSelectBackgroundColor(),
@@ -9279,14 +9317,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
         var maskBackgroundColor = this.maskBackgroundColor.getValue();
 
         this._setStyle({
-            "#wrapper.bi-background, #wrapper .bi-background": {
+            "body.bi-background, body .bi-background": {
                 "background-color": backgroundColor,
                 color: fontColor
             },
-            "#wrapper .bi-card": {
-                "background-color": cardBackgroundColor
+            "body .bi-card": {
+                "background-color": cardBackgroundColor,
+                color: fontColor
             },
-            "#wrapper .bi-tips": {
+            "body .bi-tips": {
                 color: grayFontColor
             },
             "div::-webkit-scrollbar,.scrollbar-layout-main": {
@@ -9318,20 +9357,24 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 "background-color": selectBackgroundColor + "!important",
                 color: selectFontColor + "!important"
             },
-            ".bi-button": {
+            "body .bi-button.button-common": {
                 "background-color": button1BackgroundColor,
                 "border-color": button1BackgroundColor
             },
-            ".bi-button.button-success": {
+            "body .bi-button.button-success": {
                 "background-color": button2BackgroundColor,
                 "border-color": button2BackgroundColor
             },
-            ".bi-button.button-warning": {
+            "body .bi-button.button-warning": {
                 "background-color": button3BackgroundColor,
                 "border-color": button3BackgroundColor
             },
-            ".bi-button.button-ignore": {
+            "body .bi-button.button-ignore": {
                 "background-color": button4BackgroundColor
+            },
+            // 以下是分割线颜色
+            "body .bi-border,body .bi-border-top,#wrapper .bi-border-bottom,body .bi-border-left,body .bi-border-right": {
+                "border-color": slitColor
             },
             ".bi-collection-table-cell": {
                 "border-right-color": slitColor,
@@ -11593,28 +11636,6 @@ BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
             cls: "preview-background",
             items: [{
                 el: {
-                    type: "bi.left",
-                    cls: "preview-header bi-tips",
-                    height: 40,
-                    items: [{
-                        type: "bi.label",
-                        height: 40,
-                        text: "Card2",
-                        hgap: 10,
-                        textAlign: "left"
-                    }, {
-                        type: "bi.icon_text_item",
-                        cls: "filter-font",
-                        text: "测试图标",
-                        width: 100,
-                        height: 40
-                    }]
-                },
-                left: 60,
-                right: 60,
-                top: 60
-            }, {
-                el: {
                     type: "bi.vtape",
                     cls: "preview-card bi-card",
                     items: [{
@@ -11622,7 +11643,7 @@ BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
                             type: "bi.label",
                             cls: "preview-title bi-border-bottom",
                             height: 40,
-                            text: "Card1",
+                            text: "Card",
                             hgap: 10,
                             textAlign: "left"
                         },
@@ -11654,7 +11675,7 @@ BI.shortcut("demo.north", Demo.North);Demo.Preview = BI.inherit(BI.Widget, {
                 },
                 left: 60,
                 right: 60,
-                top: 160,
+                top: 60,
                 bottom: 60
             }]
         };

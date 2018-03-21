@@ -357,15 +357,8 @@ textarea {
   }
 }
 
-//极简
+//极简,hover文字高亮一下
 .bi-list-item-simple {
-  color: @color-bi-text-tips;
-  & .bi-input {
-    color: @color-bi-text-tips;
-  }
-  & .bi-textarea {
-    color: @color-bi-text-tips;
-  }
   &:hover, &.hover {
     color: @color-bi-text-highlight;
     & .bi-input {
@@ -391,7 +384,7 @@ textarea {
   }
 }
 
-//文字active时变化
+// 只有文字在hover和active时变化
 .bi-list-item-effect {
   &:hover {
     color: @color-bi-text-black;
@@ -623,7 +616,7 @@ textarea {
   }
 }
 
-//有选中效果
+// 激活和选中时背景高亮
 .bi-list-item-select {
   &:hover, &.hover {
     color: @color-bi-text-black;

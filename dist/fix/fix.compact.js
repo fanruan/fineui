@@ -64,7 +64,8 @@
         if (target != null) {
             return target;
         }
-        var p = widget || context;
+        widget = widget || context;
+        var p = widget;
         while (p) {
             if (p.store || p.__cacheStore) {
                 break;
