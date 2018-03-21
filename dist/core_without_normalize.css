@@ -309,15 +309,6 @@ textarea {
 .bi-list-item-border.active {
   border: 1px solid #178cdf;
 }
-.bi-list-item-simple {
-  color: #c4c9d1;
-}
-.bi-list-item-simple .bi-input {
-  color: #c4c9d1;
-}
-.bi-list-item-simple .bi-textarea {
-  color: #c4c9d1;
-}
 .bi-list-item-simple:hover,
 .bi-list-item-simple.hover {
   color: #3685f2;
