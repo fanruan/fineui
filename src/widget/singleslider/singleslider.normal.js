@@ -123,7 +123,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
