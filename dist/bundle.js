@@ -90198,6 +90198,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
                     action: function () {
+                        self.selectedYear = self.yearPicker.getValue();
                         self.selectedMonth = this.getValue()[0];
                         self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
                     }
@@ -90885,6 +90886,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
                     action: function () {
+                        self.selectedYear = self.yearPicker.getValue();
                         self.selectedQuarter = this.getValue()[0];
                         self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
                     }
