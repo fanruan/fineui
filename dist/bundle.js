@@ -50814,31 +50814,30 @@ BI.Popover = BI.inherit(BI.Widget, {
     },
     render: function () {
         var self = this, o = this.options;
-        this.element.draggable && this.element.draggable({
-            handle: ".bi-message-title",
-            drag: function (e, ui) {
-                var W = $("body").width(), H = $("body").height();
-                if (ui.position.left + o.width > W) {
-                    ui.position.left = W - o.width;
-                }
-                if (ui.position.top + o.height > H) {
-                    ui.position.top = H - o.height;
-                }
-                if (ui.position.left < 0) {
-                    ui.position.left = 0;
-                }
-                if (ui.position.top < 0) {
-                    ui.position.top = 0;
-                }
-                // BI-12134 没有什么特别好的方法
-                BI.Resizers._resize();
-            }
-        });
+        this.startX = 0;
+        this.startY = 0;
+        this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
+            var size = self._calculateSize();
+            var W = $("body").width(), H = $("body").height();
+            self.startX += deltaX;
+            self.startY += deltaY;
+            self.element.css({
+                left: BI.clamp(self.startX, 0, W - size.width) + "px",
+                top: BI.clamp(self.startY, 0, H - size.height) + "px"
+            });
+            // BI-12134 没有什么特别好的方法
+            BI.Resizers._resize();
+        }, function () {
+            self.tracker.releaseMouseMoves();
+        }, window);
         var items = {
             north: {
                 el: {
                     type: "bi.border",
                     cls: "bi-message-title bi-background",
+                    ref: function (_ref) {
+                        self.dragger = _ref;
+                    },
                     items: {
                         center: {
                             el: {
@@ -50909,6 +50908,16 @@ BI.Popover = BI.inherit(BI.Widget, {
             width: size.width,
             height: size.height
         };
+    },
+
+    mounted: function () {
+        var self = this;
+        this.dragger.element.mousedown(function (e) {
+            var pos = self.element.offset();
+            self.startX = pos.left;
+            self.startY = pos.top;
+            self.tracker.captureMouseMoves(e);
+        });
     },
 
     _calculateSize: function () {
@@ -93839,7 +93848,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -94053,7 +94062,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return this.calculation.accurateMultiplication(reduceValue, Math.pow(10, -this.precision));
         }
         return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
-        
+
     },
 
     _getPercentByValue: function (v) {
@@ -94083,7 +94092,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         }
         arr = pre.split(".");
         return arr.length > 1 ? arr[1].length : 0;
-        
+
     },
 
     _assertValue: function (value) {
@@ -94101,7 +94110,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return {min: this.valueOne, max: this.valueTwo};
         }
         return {min: this.valueTwo, max: this.valueOne};
-        
+
     },
 
     setMinAndMax: function (v) {
@@ -106712,7 +106721,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -106844,7 +106853,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
-        
+
     },
 
     populate: function () {
@@ -107023,7 +107032,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -107288,7 +107297,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;

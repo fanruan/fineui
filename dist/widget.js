@@ -7279,7 +7279,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -7493,7 +7493,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return this.calculation.accurateMultiplication(reduceValue, Math.pow(10, -this.precision));
         }
         return BI.parseFloat(this.calculation.accurateAddition(div, this.min).toFixed(this.precision));
-        
+
     },
 
     _getPercentByValue: function (v) {
@@ -7523,7 +7523,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         }
         arr = pre.split(".");
         return arr.length > 1 ? arr[1].length : 0;
-        
+
     },
 
     _assertValue: function (value) {
@@ -7541,7 +7541,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return {min: this.valueOne, max: this.valueTwo};
         }
         return {min: this.valueTwo, max: this.valueOne};
-        
+
     },
 
     setMinAndMax: function (v) {
@@ -20152,7 +20152,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -20284,7 +20284,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
-        
+
     },
 
     populate: function () {
@@ -20463,7 +20463,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -20728,7 +20728,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;

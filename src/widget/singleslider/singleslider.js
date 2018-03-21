@@ -176,7 +176,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
-        }, document);
+        }, window);
         widget.element.on("mousedown", function (event) {
             if(!widget.isEnabled()) {
                 return;
@@ -308,7 +308,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
-        
+
     },
 
     populate: function () {
