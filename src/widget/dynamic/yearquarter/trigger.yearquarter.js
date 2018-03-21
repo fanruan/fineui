@@ -140,7 +140,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         if(BI.isNotNull(obj.year)) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.quarter)) {
+        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Year") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -150,7 +150,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(date.getQuarter());
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     setValue: function (v) {

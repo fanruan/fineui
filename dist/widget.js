@@ -3470,7 +3470,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -3480,7 +3480,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         var dateStr = date.print("%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
     
     setValue: function (v) {
@@ -4210,7 +4210,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         if(BI.isNotNull(obj.year)) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.month)) {
+        if(BI.isNotNull(obj.month) && obj.month !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Year") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -4220,7 +4220,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.monthEditor.setValue(date.getMonth() + 1);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     setValue: function (v) {
@@ -4933,7 +4933,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         if(BI.isNotNull(obj.year)) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.quarter)) {
+        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Year") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -4943,7 +4943,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(date.getQuarter());
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     setValue: function (v) {
@@ -6071,32 +6071,32 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         var dateStr = date.print("%Y-%x-%e");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.quarter)) {
+        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.month)) {
+        if(BI.isNotNull(obj.month) && obj.month !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
         }
-        if(BI.isNotNull(obj.week)) {
+        if(BI.isNotNull(obj.week) && obj.week !== 0) {
             value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
         }
-        if(BI.isNotNull(obj.day)) {
+        if(BI.isNotNull(obj.day) && obj.day !== 0) {
             value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
         }
-        if(BI.isNotNull(obj.workDay)) {
+        if(BI.isNotNull(obj.workDay) && obj.workDay !== 0) {
             value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
 
-        function getPositionText(baseText, position) {
+        function getPositionText (baseText, position) {
             switch (position) {
                 case BI.DynamicDateCard.OFFSET.BEGIN:
                     return baseText + BI.i18nText("BI-Basic_Begin_Start");

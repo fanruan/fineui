@@ -93,7 +93,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -103,7 +103,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         var dateStr = date.print("%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
     
     setValue: function (v) {
