@@ -84,7 +84,6 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicYearQuarterCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },

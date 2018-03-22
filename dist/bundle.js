@@ -89688,7 +89688,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 25
+        height: 24
     },
 
     _init: function () {
@@ -89798,7 +89798,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, this.combo]
         });
         this._checkDynamicValue(o.value);
@@ -89812,7 +89812,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
         switch (type) {
             case BI.DynamicYearCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -89934,7 +89934,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicYearCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
@@ -90383,14 +90382,14 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
+BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
         baseCls: "bi-year-month-combo  bi-border",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 25
+        height: 24
     },
 
     _init: function () {
@@ -90411,6 +90410,10 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
             if (self.combo.isViewVisible()) {
@@ -90418,6 +90421,9 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
             }
             self.storeValue = self.trigger.getValue();
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
+        });
+        this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_FOCUS);
         });
 
         this.combo = BI.createWidget({
@@ -90491,7 +90497,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, this.combo]
         });
         this._checkDynamicValue(o.value);
@@ -90505,7 +90511,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
         switch (type) {
             case BI.DynamicYearMonthCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -90516,6 +90522,10 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
         }
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -90524,9 +90534,16 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.trigger.getKey();
     }
 
 });
+BI.DynamicYearMonthCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearMonthCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearMonthCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.dynamic_year_month_combo", BI.DynamicYearMonthCombo);
@@ -90627,7 +90644,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicYearCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
@@ -90855,6 +90871,15 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_ERROR);
         });
+        editor.on(BI.SignEditor.EVENT_VALID, function () {
+            var year = self.yearEditor.getValue();
+            var month = self.monthEditor.getValue();
+            if(BI.isNotEmptyString(year) && BI.isNotEmptyString(month)) {
+                if(BI.isPositiveInteger(year) && month >= 1 && month <= 12 && !BI.checkDateVoid(year, month, 1, o.min, o.max)[0]) {
+                    self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_VALID);
+                }
+            }
+        });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
                 self._autoSwitch(editor.getValue());
@@ -90923,8 +90948,13 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     }
 });
+BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";
@@ -91120,7 +91150,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 25
+        height: 24
     },
 
     _init: function () {
@@ -91221,7 +91251,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, this.combo]
         });
         this._checkDynamicValue(o.value);
@@ -91235,7 +91265,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
         switch (type) {
             case BI.DynamicYearQuarterCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -91350,7 +91380,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicYearQuarterCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
@@ -92050,7 +92079,7 @@ BI.extend(BI.DynamicDateCard, {
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -92235,7 +92264,7 @@ BI.extend(BI.DynamicDateCard, {
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -108571,7 +108600,186 @@ BI.YearMonthCombo = BI.inherit(BI.Widget, {
 });
 BI.YearMonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.YearMonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.year_month_combo", BI.YearMonthCombo);/**
+BI.shortcut("bi.year_month_combo", BI.YearMonthCombo);BI.YearMonthInterval = BI.inherit(BI.Single, {
+    constants: {
+        height: 25,
+        width: 25,
+        lgap: 15,
+        offset: -15,
+        timeErrorCls: "time-error",
+        DATE_MIN_VALUE: "1900-01-01",
+        DATE_MAX_VALUE: "2099-12-31"
+    },
+
+    props: {
+        extraCls: "bi-year-month-interval"
+    },
+
+    _init: function () {
+        var self = this, o = this.options;
+        BI.YearMonthInterval.superclass._init.apply(this, arguments);
+
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
+        this.label = BI.createWidget({
+            type: "bi.label",
+            height: this.constants.height,
+            width: this.constants.width,
+            text: "-"
+        });
+        BI.createWidget({
+            element: self,
+            type: "bi.center",
+            hgap: 15,
+            height: this.constants.height,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: self.left,
+                    left: this.constants.offset,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: self.right,
+                    left: 0,
+                    right: this.constants.offset,
+                    top: 0,
+                    bottom: 0
+                }]
+            }]
+        });
+        BI.createWidget({
+            type: "bi.horizontal_auto",
+            element: this,
+            items: [
+                self.label
+            ]
+        });
+    },
+
+    _createCombo: function (v) {
+        var self = this;
+        var combo = BI.createWidget({
+            type: "bi.dynamic_year_month_combo",
+            value: v
+        });
+        combo.on(BI.DynamicYearMonthCombo.EVENT_ERROR, function () {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+            self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+        });
+
+        combo.on(BI.DynamicYearMonthCombo.EVENT_VALID, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                    offsetStyle: "center"
+                });
+                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+            } else {
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+            }
+        });
+
+        combo.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                    offsetStyle: "center"
+                });
+                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+            } else {
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+            }
+        });
+
+        combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.left.hideView();
+            self.right.hideView();
+        });
+
+        combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+            }else{
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.YearMonthInterval.EVENT_CHANGE);
+            }
+        });
+        return combo;
+    },
+
+
+    _dateCheck: function (date) {
+        return BI.parseDateTime(date, "%Y-%x").print("%Y-%x") === date || BI.parseDateTime(date, "%Y-%X").print("%Y-%X") === date;
+    },
+
+
+    // 判是否在最大最小之间
+    _checkVoid: function (obj) {
+        return !BI.checkDateVoid(obj.year, obj.month, 1, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+    },
+
+    // 判格式合法
+    _check: function (smallDate, bigDate) {
+        var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
+        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
+            year: smallObj[0],
+            month: smallObj[1],
+            day: 1
+        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
+            year: bigObj[0],
+            month: bigObj[1],
+            day: 1
+        });
+    },
+
+    _compare: function (smallDate, bigDate) {
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X").print("%Y-%X");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X").print("%Y-%X");
+        return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
+    },
+    _setTitle: function (v) {
+        this.left.setTitle(v);
+        this.right.setTitle(v);
+        this.label.setTitle(v);
+    },
+    _clearTitle: function () {
+        this.left.setTitle("");
+        this.right.setTitle("");
+        this.label.setTitle("");
+    },
+    setValue: function (date) {
+        date = date || {};
+        this.left.setValue(date.start);
+        this.right.setValue(date.end);
+    },
+    getValue: function () {
+        return {start: this.left.getValue(), end: this.right.getValue()};
+    }
+});
+BI.YearMonthInterval.EVENT_VALID = "EVENT_VALID";
+BI.YearMonthInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);/**
  * 年份 + 月份下拉框
  *
  * @class BI.YearQuarterCombo

@@ -5,7 +5,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 25
+        height: 24
     },
 
     _init: function () {
@@ -106,7 +106,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, this.combo]
         });
         this._checkDynamicValue(o.value);
@@ -120,7 +120,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         switch (type) {
             case BI.DynamicYearQuarterCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:

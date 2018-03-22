@@ -5853,6 +5853,10 @@ Demo.FIX_CONFIG = [{
     text: "bi.time_interval",
     value: "demo.time_interval"
 }, {
+    pId: 412,
+    text: "bi.year_month_interval",
+    value: "demo.year_month_interval"
+}, {
     pId: 4,
     id: 413,
     text: "数值区间控件"
@@ -14512,7 +14516,51 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);/**
+BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);Demo.YearMonthInterval = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.year_month_interval",
+                ref: function (_ref) {
+                    self.interval = _ref;
+                },
+                value: {
+                    start: {
+                        type: 2,
+                        value: {
+                            year: -1,
+                            month: 1
+                        }
+                    },
+                    end: {
+                        type: 1,
+                        value: {
+                            year: 2018,
+                            month: 0
+                        }
+                    }
+                },
+                width: 400
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.interval.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        };
+    }
+});
+
+BI.shortcut("demo.year_month_interval", Demo.YearMonthInterval);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
