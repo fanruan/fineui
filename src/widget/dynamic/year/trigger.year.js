@@ -8,7 +8,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.DynamicYearTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-year-trigger bi-border",
+            extraCls: "bi-year-trigger",
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             height: 24
@@ -28,6 +28,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             },
             hgap: c.hgap,
             vgap: c.vgap,
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             errorText: function (v) {
                 return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
@@ -69,32 +70,30 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         BI.createWidget({
             element: this,
             type: "bi.htape",
-            items: [
-                {
-                    el: this.editor
-                }, {
-                    el: {
-                        type: "bi.text_button",
-                        baseCls: "bi-trigger-year-text",
-                        text: BI.i18nText("BI-Multi_Date_Year"),
-                        width: o.height
-                    },
+            items: [{
+                el: this.editor
+            }, {
+                el: {
+                    type: "bi.text_button",
+                    baseCls: "bi-trigger-year-text",
+                    text: BI.i18nText("BI-Multi_Date_Year"),
                     width: o.height
-                }, {
-                    el: {
-                        type: "bi.trigger_icon_button",
-                        width: o.height
-                    },
+                },
+                width: o.height
+            }, {
+                el: {
+                    type: "bi.trigger_icon_button",
                     width: o.height
-                }
-            ]
+                },
+                width: o.height
+            }]
         });
         this.setValue(o.value);
     },
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -104,7 +103,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         var dateStr = date.print("%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(text + ":" + dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
     
     setValue: function (v) {
@@ -123,6 +122,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
                 break;
             case BI.DynamicDateCombo.Static:
             default:
+                value = value || {};
                 this.editor.setState(value.year);
                 this.editor.setValue(value.year);
                 this.editor.setTitle(value.year);

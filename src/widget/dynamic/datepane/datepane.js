@@ -10,7 +10,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             items: [{
                 el: {
-                    type: "bi.button_group",
+                    type: "bi.linear_segment",
+                    cls: "bi-border-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -19,12 +20,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         text: BI.i18nText("BI-Basic_Dynamic_Title"),
                         value: BI.DynamicDatePane.Dynamic
                     }], {
-                        textAlign: "center",
-                        cls: "bi-list-item-active"
+                        textAlign: "center"
                     }),
-                    layouts: [{
-                        type: "bi.center"
-                    }],
                     listeners: [{
                         eventName: BI.ButtonGroup.EVENT_CHANGE,
                         action: function () {

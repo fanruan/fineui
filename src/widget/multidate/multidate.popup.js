@@ -64,7 +64,7 @@ BI.MultiDatePopup = BI.inherit(BI.Widget, {
         this.dateTab = BI.createWidget({
             type: "bi.tab",
             tab: {
-                cls: "bi-multidate-popup-tab bi-border-bottom",
+                cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),
