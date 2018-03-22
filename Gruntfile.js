@@ -101,7 +101,7 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ["dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
+                src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
                 dest: "dist/bundle.js"
             },
 
@@ -199,7 +199,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
-                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/fix/fix.compact.js", "src/third/**/*.js",
+                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
                         "src/base/formula/config.js",
                         "src/base/pane.js",
                         "src/base/single/single.js",
@@ -215,7 +215,7 @@ module.exports = function (grunt) {
                         "src/base/tree/parttree.js",
                         "src/base/**/*.js",
                         "!src/base/formula/formulaeditor.js",
-                        "dist/case.js", "dist/widget.js", "dist/router.js", "ui/js/**/*.js"]
+                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js"]
                 }
             }
         },

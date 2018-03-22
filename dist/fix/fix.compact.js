@@ -93,15 +93,13 @@
         return result;
     };
 
-    $(function () {
-        var populate = BI.Loader.prototype.populate;
-        BI.Loader.prototype.populate = function () {
-            pushContext(this);
-            var result = populate.apply(this, arguments);
-            popContext();
-            return result;
-        };
-    });
+    var populate = BI.Loader.prototype.populate;
+    BI.Loader.prototype.populate = function () {
+        pushContext(this);
+        var result = populate.apply(this, arguments);
+        popContext();
+        return result;
+    };
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
