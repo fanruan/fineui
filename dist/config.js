@@ -1,4 +1,3 @@
-BI.servletURL = "";
 BI.resourceURL = "resource/";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",

@@ -36972,7 +36972,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
                 + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + "?op=" + self.options.op + "&cmd=" + self.options.cmd + "&" + param;
+            return "&" + param;
         }
 
         function beforeExpand (treeId, treeNode) {
@@ -36985,7 +36985,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             }
             BI.Msg.toast("Please Wait。", "warning");
             return false;
-            
+
         }
 
         function onAsyncSuccess (event, treeId, treeNode, msg) {
@@ -37021,7 +37021,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                // treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
@@ -54736,8 +54735,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     // enable again the submit button/element
                 }, 1000);
             };
-            _wrap.url = o.url ? o.url : BI.servletURL
-                + "?op=fr_attach&cmd=ah_upload";
+            _wrap.url = o.url;
             _wrap.fileType = o.accept;   // 文件类型限制
             _wrap.attach_array = [];
             _wrap.attach_names = [];
@@ -110380,8 +110378,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     // Create the default BI.history.
     BI.history = new History;
-}());BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
-BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
+}());BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",

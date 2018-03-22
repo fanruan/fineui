@@ -473,8 +473,7 @@
                     // enable again the submit button/element
                 }, 1000);
             };
-            _wrap.url = o.url ? o.url : BI.servletURL
-                + "?op=fr_attach&cmd=ah_upload";
+            _wrap.url = o.url;
             _wrap.fileType = o.accept;   // 文件类型限制
             _wrap.attach_array = [];
             _wrap.attach_names = [];

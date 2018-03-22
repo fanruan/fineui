@@ -114,7 +114,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
                 + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + "?op=" + self.options.op + "&cmd=" + self.options.cmd + "&" + param;
+            return "&" + param;
         }
 
         function beforeExpand (treeId, treeNode) {
@@ -127,7 +127,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             }
             BI.Msg.toast("Please Wait。", "warning");
             return false;
-            
+
         }
 
         function onAsyncSuccess (event, treeId, treeNode, msg) {
@@ -163,7 +163,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                // treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
