@@ -19435,9 +19435,15 @@ if (!window.BI) {
             return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
         },
 
-        createWidgets: function (items, options) {
+        createWidgets: function (items, options, context) {
             if (!BI.isArray(items)) {
                 throw new Error("cannot create Widgets");
+            }
+            if (BI.isWidget(options)) {
+                context = options;
+                options = {};
+            } else {
+                options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -35368,6 +35374,16 @@ Data.Source = BISource = {
         pushed && popContext();
         return result;
     };
+
+    $(function () {
+        var populate = BI.Loader.prototype.populate;
+        BI.Loader.prototype.populate = function () {
+            pushContext(this);
+            var result = populate.apply(this, arguments);
+            popContext();
+            return result;
+        };
+    });
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
