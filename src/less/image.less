@@ -32,71 +32,71 @@
 }
 
 // 有悬浮效果的icon
-.icon_hover(@class, @iconPath, @hoverPath: @iconPath) {
+.icon_hover(@class, @iconPath, @hoverPath: @iconPath, @disablePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
 }
 
 // 有悬浮、激活(选中)的icon
-.icon_hover_active(@class, @iconPath, @hoverPath: @iconPath, @activePath: @iconPath) {
+.icon_hover_active(@class, @iconPath, @hoverPath: @iconPath, @activePath: @iconPath, @disablePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .image2xPath(@activePath, 0, 0);
+      .image2xPath(@activePath);
       &.hack {
-        .imagePath(@activePath, 0, 0);
+        .imagePath(@activePath);
       }
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
 }
 
-// 有悬浮、选中的icon
-.icon_select(@class, @iconPath, @selectPath: @iconPath) {
+// 只有有选中的icon
+.icon_select(@class, @iconPath, @selectPath: @iconPath, @disablePath: @iconPath) {
   .@{class} {
     & .x-icon {
       display: block;
@@ -114,9 +114,9 @@
     }
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@iconPath);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@iconPath);
+        .imagePath(@disablePath);
       }
     }
   }
@@ -127,17 +127,17 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
 
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
@@ -148,26 +148,26 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
 
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
 
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
@@ -178,35 +178,35 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
 
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
 
     &:active .x-icon,
     &.active .x-icon {
       display: block;
-      .image2xPath(@activePath, 0, 0);
+      .image2xPath(@activePath);
       &.hack {
-        .imagePath(@activePath, 0, 0);
+        .imagePath(@activePath);
       }
     }
 
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
@@ -217,42 +217,42 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
 
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
 
     &:active .x-icon {
       display: block;
-      .image2xPath(@activePath, 0, 0);
+      .image2xPath(@activePath);
       &.hack {
-        .imagePath(@activePath, 0, 0);
+        .imagePath(@activePath);
       }
     }
 
     &.active .x-icon {
       display: block;
-      .image2xPath(@selectedPath, 0, 0);
+      .image2xPath(@selectedPath);
       &.hack {
-        .imagePath(@selectedPath, 0, 0);
+        .imagePath(@selectedPath);
       }
     }
 
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
   }
@@ -263,48 +263,48 @@
   .@{class} {
     & .x-icon {
       display: block;
-      .image2xPath(@iconPath, 0, 0);
+      .image2xPath(@iconPath);
       &.hack {
-        .imagePath(@iconPath, 0, 0);
+        .imagePath(@iconPath);
       }
     }
     &:hover .x-icon,
     &.hover .x-icon {
       display: block;
-      .image2xPath(@hoverPath, 0, 0);
+      .image2xPath(@hoverPath);
       &.hack {
-        .imagePath(@hoverPath, 0, 0);
+        .imagePath(@hoverPath);
       }
     }
 
     &:active .x-icon {
       display: block;
-      .image2xPath(@activePath, 0, 0);
+      .image2xPath(@activePath);
       &.hack {
-        .imagePath(@activePath, 0, 0);
+        .imagePath(@activePath);
       }
     }
 
     &.active .x-icon {
       display: block;
-      .image2xPath(@selectedPath, 0, 0);
+      .image2xPath(@selectedPath);
       &.hack {
-        .imagePath(@selectedPath, 0, 0);
+        .imagePath(@selectedPath);
       }
     }
 
     &.disabled .x-icon {
       display: block;
-      .image2xPath(@disablePath, 0, 0);
+      .image2xPath(@disablePath);
       &.hack {
-        .imagePath(@disablePath, 0, 0);
+        .imagePath(@disablePath);
       }
     }
     &.disabled.active .x-icon {
       display: block;
-      .image2xPath(@activeDisablePath, 0, 0);
+      .image2xPath(@activeDisablePath);
       &.hack {
-        .imagePath(@activeDisablePath, 0, 0);
+        .imagePath(@activeDisablePath);
       }
     }
   }

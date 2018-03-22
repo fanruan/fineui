@@ -76207,15 +76207,20 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.B = Ws[2];
 
         this.none = BI.createWidget({
-            type: "bi.checkbox",
+            type: "bi.icon_button",
+            cls: "auto-color-icon",
+            width: 16,
+            height: 16,
+            iconWidth: 16,
+            iconHeight: 16,
             title: BI.i18nText("BI-Basic_Auto")
         });
-        this.none.on(BI.Checkbox.EVENT_CHANGE, function () {
+        this.none.on(BI.IconButton.EVENT_CHANGE, function () {
             if (this.isSelected()) {
                 self.lastColor = self.getValue();
                 self.setValue("");
             } else {
-                self.setValue(self.lastColor || "#000000");
+                self.setValue(self.lastColor || "#ffffff");
             }
             if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
                 self.colorShow.element.css("background-color", self.getValue());
@@ -76224,15 +76229,23 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
 
         this.transparent = BI.createWidget({
-            type: "bi.checkbox",
+            type: "bi.icon_button",
+            cls: "trans-color-icon",
+            width: 16,
+            height: 16,
+            iconWidth: 16,
+            iconHeight: 16,
             title: BI.i18nText("BI-Transparent_Color")
         });
-        this.transparent.on(BI.Checkbox.EVENT_CHANGE, function () {
+        this.transparent.on(BI.IconButton.EVENT_CHANGE, function () {
             if (this.isSelected()) {
                 self.lastColor = self.getValue();
                 self.setValue("transparent");
             } else {
-                self.setValue(self.lastColor || "#000000");
+                if (self.lastColor === "transparent") {
+                    self.lastColor = "";
+                }
+                self.setValue(self.lastColor || "#ffffff");
             }
             if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
                 self.colorShow.element.css("background-color", self.getValue());
@@ -76283,10 +76296,21 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    _showPreColor: function (color) {
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background");
+        } else {
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
+        }
+    },
+
     setValue: function (color) {
         if (color === "transparent") {
             this.transparent.setSelected(true);
             this.none.setSelected(false);
+            this._showPreColor("transparent");
             this.R.setValue("");
             this.G.setValue("");
             this.B.setValue("");
@@ -76299,7 +76323,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             this.none.setSelected(false);
         }
         this.transparent.setSelected(false);
-        this.colorShow.element.css("background-color", color);
+        this._showPreColor(color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
         this.G.setValue(BI.isNull(json.g) ? "" : json.g);
