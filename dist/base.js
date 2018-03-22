@@ -34238,12 +34238,13 @@ BI.CustomTree = BI.inherit(BI.Widget, {
             if (BI.isNotEmptyArray(node.children) || node.isParent === true) {
                 var item = BI.extend({
                     type: "bi.expander",
-                    el: {},
+                    el: {
+                        value: node.value
+                    },
                     popup: {type: "bi.custom_tree"}
                 }, BI.deepClone(o.expander), {
                     id: node.id,
-                    pId: node.pId,
-                    value: node.value
+                    pId: node.pId
                 });
                 var el = BI.stripEL(node);
                 if (!BI.isWidget(el)) {
