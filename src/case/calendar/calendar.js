@@ -14,7 +14,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             year: 2015,
-            month: 7,  // 7表示八月
+            month: 8,
             day: 25
         });
     },
@@ -32,18 +32,23 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var MD = Date._MD.slice(0);
         MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
+        // 日期所在月第一天
         De.setFullYear(log.ymd[0], log.ymd[1], 1);
+        // 是周几
         log.FDay = De.getDay();
 
+        // 当前月页第一天是几号
         log.PDay = MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
         log.NDay = 1;
 
         var items = [];
         BI.each(BI.range(42), function (i) {
             var td = {}, YY = log.ymd[0], MM = log.ymd[1] + 1, DD;
+            // 上个月的日期
             if (i < log.FDay) {
                 td.lastMonth = true;
                 DD = i + log.PDay;
+                // 上一年
                 MM === 1 && (YY -= 1);
                 MM = MM === 1 ? 12 : MM - 1;
             } else if (i >= log.FDay && i < log.FDay + MD[log.ymd[1]]) {
@@ -86,7 +91,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 vgap: 10
             }]
         });
-        var days = this._dateCreator(o.year, o.month, o.day);
+        var days = this._dateCreator(o.year, o.month - 1, o.day);
         items = [];
         items.push(days.slice(0, 7));
         items.push(days.slice(7, 14));

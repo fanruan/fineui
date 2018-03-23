@@ -25,7 +25,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 1,
+                        month: 2,
                         day: 23
                     }
                 }
@@ -46,7 +46,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 1,
+                        month: 2,
                         day: 23
                     }
                 }

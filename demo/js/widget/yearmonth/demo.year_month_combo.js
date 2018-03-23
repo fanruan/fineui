@@ -20,7 +20,7 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 0
+                        month: 1
                     }
                 }
             }, {
@@ -32,12 +32,12 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                 width: 300
             }, {
                 type: "bi.button",
-                text: "setVlaue '2017-12'",
+                text: "setValue '2017-12'",
                 width: 300,
                 handler: function () {
                     self.widget.setValue({
                         year: 2017,
-                        month: 11
+                        month: 12
                     });
                 }
             }],

@@ -1,72 +1,152 @@
-/**
- * 年份 + 月份下拉框
- *
- * @class BI.YearQuarterCombo
- * @extends BI.Widget
- */
-BI.YearQuarterCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.YearQuarterCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-year-quarter-combo",
-            yearBehaviors: {},
-            quarterBehaviors: {},
-            height: 25
-        });
+BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-year-quarter-combo bi-border",
+        behaviors: {},
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        height: 24
     },
+
     _init: function () {
-        BI.YearQuarterCombo.superclass._init.apply(this, arguments);
+        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
-        o.value = o.value || {};
-
-        this.year = BI.createWidget({
-            type: "bi.year_combo",
-            behaviors: o.yearBehaviors,
-            value: o.value.year
+        this.storeValue = o.value;
+        this.trigger = BI.createWidget({
+            type: "bi.dynamic_year_quarter_trigger",
+            min: o.min,
+            max: o.max,
+            value: o.value || ""
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_START, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_STOP, function () {
+            self.combo.showView();
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_ERROR, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
+            if (self.combo.isViewVisible()) {
+                return;
+            }
+            self.storeValue = self.trigger.getValue();
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
         });
 
-        this.quarter = BI.createWidget({
-            type: "bi.quarter_combo",
-            behaviors: o.quarterBehaviors,
-            value: o.value.quarter
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            isNeedAdjustHeight: false,
+            isNeedAdjustWidth: false,
+            el: this.trigger,
+            popup: {
+                minWidth: 85,
+                stopPropagation: false,
+                el: {
+                    type: "bi.dynamic_year_quarter_popup",
+                    ref: function () {
+                        self.popup = this;
+                    },
+                    listeners: [{
+                        eventName: BI.DynamicYearQuarterPopup.EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(self.popup.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearQuarterPopup.BUTTON_CLEAR_EVENT_CHANGE,
+                        action: function () {
+                            self.setValue();
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE,
+                        action: function () {
+                            var date = BI.getDate();
+                            self.setValue({year: date.getFullYear()});
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(self.popup.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
+                        }
+                    }],
+                    behaviors: o.behaviors,
+                    min: o.min,
+                    max: o.max
+                },
+                value: o.value || ""
+            }
         });
-
-        this.year.on(BI.YearCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
-        });
-        this.year.on(BI.YearCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
-        });
-
-        this.quarter.on(BI.QuarterCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.YearQuarterCombo.EVENT_CONFIRM);
-        });
-        this.quarter.on(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setValue(self.storeValue);
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
-            type: "bi.center",
+            type: "bi.htape",
             element: this,
-            hgap: 5,
-            items: [this.year, this.quarter]
+            ref: function () {
+                self.comboWrapper = this;
+            },
+            items: [{
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-change-h-font",
+                    width: 24,
+                    height: 24,
+                    ref: function () {
+                        self.changeIcon = this;
+                    }
+                },
+                width: 24
+            }, this.combo]
         });
+        this._checkDynamicValue(o.value);
+    },
 
+    _checkDynamicValue: function (v) {
+        var type = null;
+        if (BI.isNotNull(v)) {
+            type = v.type;
+        }
+        switch (type) {
+            case BI.DynamicYearQuarterCombo.Dynamic:
+                this.changeIcon.setVisible(true);
+                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.resize();
+                break;
+            default:
+                this.comboWrapper.attr("items")[0].width = 0;
+                this.comboWrapper.resize();
+                this.changeIcon.setVisible(false);
+                break;
+        }
     },
 
     setValue: function (v) {
-        v = v || {};
-        this.quarter.setValue(v.quarter);
-        this.year.setValue(v.year);
+        this.storeValue = v;
+        this.trigger.setValue(v);
+        this._checkDynamicValue(v);
     },
 
     getValue: function () {
-        return {
-            year: this.year.getValue(),
-            quarter: this.quarter.getValue()
-        };
+        return this.storeValue;
     }
+
 });
-BI.YearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.YearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.year_quarter_combo", BI.YearQuarterCombo);
+BI.DynamicYearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.shortcut("bi.dynamic_year_quarter_combo", BI.DynamicYearQuarterCombo);
+
+BI.extend(BI.DynamicYearQuarterCombo, {
+    Static: 1,
+    Dynamic: 2
+});

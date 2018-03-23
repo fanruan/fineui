@@ -12,7 +12,8 @@ Demo.ClearEditor = BI.inherit(BI.Widget, {
                 type: "bi.clear_editor",
                 cls: "bi-border",
                 width: 300,
-                watermark: "这个是带清除按钮的"
+                watermark: "这个是带清除按钮的",
+                value: 123
             }],
             vgap: 20
         };

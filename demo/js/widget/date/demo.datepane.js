@@ -19,7 +19,7 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 11
                         }
                     },
@@ -39,7 +39,7 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 11,
                             hour: 12,
                             minute: 12,
@@ -62,7 +62,7 @@ Demo.DatePane = BI.inherit(BI.Widget, {
                     handler: function () {
                         self.datepane.setValue({
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 31
                         });
                     }

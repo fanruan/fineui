@@ -69,7 +69,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1] - 1,
+                        month: date[1],
                         day: date[2] | 0,
                         hour: date[3] | 0,
                         minute: date[4] | 0,
@@ -201,7 +201,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = value.year + "-" + (value.month + 1) + "-" + value.day + " " +
+                    var dateStr = value.year + "-" + (value.month) + "-" + value.day + " " +
                         (value.hour || "00") + ":" + (value.minute || "00") + ":" + (value.second || "00");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);

@@ -29,7 +29,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             if (self._month === 0) {
                 self.setValue({
                     year: self.year.getValue() - 1,
-                    month: 11
+                    month: 12
                 });
             } else {
                 self.setValue({
@@ -121,14 +121,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._month === 0 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 1 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._month === 11 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 12 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
         this.right.setEnable(valid);
         return valid;
     },

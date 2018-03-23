@@ -1,58 +1,51 @@
-/**
- * 年份下拉框
- *
- * Created by GUY on 2015/8/28.
- * @class BI.YearCombo
- * @extends BI.Widget
- */
-BI.YearCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.YearCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-year-combo",
-            behaviors: {},
-            min: "1900-01-01", // 最小日期
-            max: "2099-12-31", // 最大日期
-            height: 25
-        });
+BI.DynamicYearCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-year-combo bi-border",
+        behaviors: {},
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        height: 24
     },
+
     _init: function () {
-        BI.YearCombo.superclass._init.apply(this, arguments);
+        BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.storeValue = "";
+        this.storeValue = o.value;
         this.trigger = BI.createWidget({
-            type: "bi.year_trigger",
+            type: "bi.dynamic_year_trigger",
             min: o.min,
             max: o.max,
             value: o.value || ""
         });
-        this.trigger.on(BI.YearTrigger.EVENT_FOCUS, function () {
-            self.storeValue = this.getKey();
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
+            self.storeTriggerValue = this.getKey();
         });
-        this.trigger.on(BI.YearTrigger.EVENT_START, function () {
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });
-        this.trigger.on(BI.YearTrigger.EVENT_STOP, function () {
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_STOP, function () {
             self.combo.showView();
         });
-        this.trigger.on(BI.YearTrigger.EVENT_ERROR, function () {
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });
-        this.trigger.on(BI.YearTrigger.EVENT_CONFIRM, function () {
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_CONFIRM, function () {
             if (self.combo.isViewVisible()) {
                 return;
             }
-            if (this.getKey() && this.getKey() !== self.storeValue) {
-                self.setValue(this.getKey());
+            if (this.getKey() && this.getKey() !== self.storeTriggerValue) {
+                self.storeValue = self.trigger.getValue();
+                self.setValue(self.storeValue);
             } else if (!this.getKey()) {
+                self.storeValue = null;
                 self.setValue();
             }
-            self.fireEvent(BI.YearCombo.EVENT_CONFIRM);
+            self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
         });
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            element: this,
-            destroyWhenHide: true,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -60,16 +53,38 @@ BI.YearCombo = BI.inherit(BI.Widget, {
                 minWidth: 85,
                 stopPropagation: false,
                 el: {
-                    type: "bi.year_popup",
+                    type: "bi.dynamic_year_popup",
                     ref: function () {
                         self.popup = this;
                     },
                     listeners: [{
-                        eventName: BI.YearPopup.EVENT_CHANGE,
+                        eventName: BI.DynamicYearPopup.EVENT_CHANGE,
                         action: function () {
                             self.setValue(self.popup.getValue());
                             self.combo.hideView();
-                            self.fireEvent(BI.YearCombo.EVENT_CONFIRM);
+                            self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearPopup.BUTTON_CLEAR_EVENT_CHANGE,
+                        action: function () {
+                            self.setValue();
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE,
+                        action: function () {
+                            var date = BI.getDate();
+                            self.setValue({year: date.getFullYear()});
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(self.popup.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
                     }],
                     behaviors: o.behaviors,
@@ -80,30 +95,67 @@ BI.YearCombo = BI.inherit(BI.Widget, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            var value = self.trigger.getKey();
-            if (BI.isNotNull(value)) {
-                self.popup.setValue(value);
-            } else if (!value && value !== self.storeValue) {
-                self.popup.setValue(self.storeValue);
-            } else {
-                self.setValue();
-            }
-            self.fireEvent(BI.YearCombo.EVENT_BEFORE_POPUPVIEW);
+            self.popup.setValue(self.storeValue);
+            self.fireEvent(BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW);
         });
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            ref: function () {
+                self.comboWrapper = this;
+            },
+            items: [{
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-change-h-font",
+                    width: 24,
+                    height: 24,
+                    ref: function () {
+                        self.changeIcon = this;
+                    }
+                },
+                width: 24
+            }, this.combo]
+        });
+        this._checkDynamicValue(o.value);
+    },
+
+    _checkDynamicValue: function (v) {
+        var type = null;
+        if (BI.isNotNull(v)) {
+            type = v.type;
+        }
+        switch (type) {
+            case BI.DynamicYearCombo.Dynamic:
+                this.changeIcon.setVisible(true);
+                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.resize();
+                break;
+            default:
+                this.comboWrapper.attr("items")[0].width = 0;
+                this.comboWrapper.resize();
+                this.changeIcon.setVisible(false);
+                break;
+        }
     },
 
     setValue: function (v) {
-        this.combo.setValue(v || "");
+        this.storeValue = v;
+        this.trigger.setValue(v);
+        this._checkDynamicValue(v);
     },
 
     getValue: function () {
-        if (BI.isNull(this.popup)) {
-            return this.options.value;
-        } else {
-            return this.popup.getValue();
-        }
+        return this.storeValue;
     }
+
 });
-BI.YearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.YearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.year_combo", BI.YearCombo);
+BI.DynamicYearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.shortcut("bi.dynamic_year_combo", BI.DynamicYearCombo);
+
+BI.extend(BI.DynamicYearCombo, {
+    Static: 1,
+    Dynamic: 2
+});

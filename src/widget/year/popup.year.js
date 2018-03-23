@@ -2,109 +2,205 @@
  * 年份展示面板
  *
  * Created by GUY on 2015/9/2.
- * @class BI.YearPopup
+ * @class BI.DynamicYearPopup
  * @extends BI.Trigger
  */
-BI.YearPopup = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.YearPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-year-popup",
-            behaviors: {},
-            min: "1900-01-01", // 最小日期
-            max: "2099-12-31" // 最大日期
-        });
+BI.DynamicYearPopup = BI.inherit(BI.Widget, {
+    constants: {
+        tabHeight: 30
     },
 
-    _createYearCalendar: function (v) {
-        var o = this.options, y = this._year;
-
-        var calendar = BI.createWidget({
-            type: "bi.year_calendar",
-            behaviors: o.behaviors,
-            min: o.min,
-            max: o.max,
-            logic: {
-                dynamic: true
-            },
-            year: y + v * 12
-        });
-        calendar.setValue(this._year);
-        return calendar;
+    props: {
+        baseCls: "bi-year-popup",
+        behaviors: {},
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期,
+        width: 180,
+        height: 240
     },
 
-    _init: function () {
-        BI.YearPopup.superclass._init.apply(this, arguments);
+    render: function () {
+        var self = this, opts = this.options;
+        this.storeValue = {type: BI.DynamicYearCombo.Static};
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: this._getTabJson()
+            }, {
+                el: {
+                    type: "bi.grid",
+                    items: [[{
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-border-top bi-high-light",
+                        shadow: true,
+                        text: BI.i18nText("BI-Basic_Clear"),
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicYearPopup.BUTTON_CLEAR_EVENT_CHANGE);
+                            }
+                        }]
+                    }, {
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-border-left bi-border-right bi-border-top",
+                        shadow: true,
+                        text: BI.i18nText("BI-Basic_Current_Year"),
+                        ref: function () {
+                            self.textButton = this;
+                        },
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE);
+                            }
+                        }]
+                    }, {
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-border-top bi-high-light",
+                        shadow: true,
+                        text: BI.i18nText("BI-Basic_OK"),
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE);
+                            }
+                        }]
+                    }]]
+                },
+                height: 24
+            }]
+        };
+    },
+
+    _setInnerValue: function () {
+        if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
+            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+            this.textButton.setEnable(true);
+        } else {
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            date = date.print("%Y");
+            this.textButton.setValue(date);
+            this.textButton.setEnable(false);
+        }
+    },
+
+    _getTabJson: function () {
         var self = this, o = this.options;
-
-        this.selectedYear = this._year = BI.getDate().getFullYear();
-
-        var backBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "pre-page-h-font",
-            width: 25,
-            height: 25,
-            value: -1
-        });
-
-        var preBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "next-page-h-font",
-            width: 25,
-            height: 25,
-            value: 1
-        });
-
-        this.navigation = BI.createWidget({
-            type: "bi.navigation",
-            element: this,
-            single: true,
-            logic: {
-                dynamic: true
+        return {
+            type: "bi.tab",
+            ref: function () {
+                self.dateTab = this;
             },
             tab: {
-                cls: "year-popup-navigation bi-high-light bi-border-top",
-                height: 25,
-                items: [backBtn, preBtn]
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
+                height: this.constants.tabHeight,
+                items: BI.createItems([{
+                    text: BI.i18nText("BI-Basic_Year_Fen"),
+                    value: BI.DynamicYearCombo.Static
+                }, {
+                    text: BI.i18nText("BI-Basic_Dynamic_Title"),
+                    value: BI.DynamicYearCombo.Dynamic
+                }], {
+                    textAlign: "center"
+                })
             },
-            cardCreator: BI.bind(this._createYearCalendar, this),
+            cardCreator: function (v) {
+                switch (v) {
+                    case BI.DynamicYearCombo.Dynamic:
+                        return {
+                            type: "bi.dynamic_year_card",
+                            listeners: [{
+                                eventName: "EVENT_CHANGE",
+                                action: function () {
+                                    self._setInnerValue(self.year, v);
+                                }
+                            }],
+                            ref: function () {
+                                self.dynamicPane = this;
+                            }
+                        };
+                    case BI.DynamicYearCombo.Static:
+                    default:
+                        return {
+                            type: "bi.static_year_card",
+                            behaviors: o.behaviors,
+                            min: self.options.min,
+                            max: self.options.max,
+                            listeners: [{
+                                eventName: BI.StaticYearCard.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicYearPopup.EVENT_CHANGE);
+                                }
+                            }],
+                            ref: function () {
+                                self.year = this;
+                            }
+                        };
+                }
+            },
+            listeners: [{
+                eventName: BI.Tab.EVENT_CHANGE,
+                action: function () {
+                    var v = self.dateTab.getSelect();
+                    switch (v) {
+                        case BI.DynamicYearCombo.Static:
+                            var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
+                            self.year.setValue({year: date.getFullYear()});
+                            self._setInnerValue();
+                            break;
+                        case BI.DynamicYearCombo.Dynamic:
+                        default:
+                            if(self.storeValue && self.storeValue.type === BI.DynamicYearCombo.Dynamic) {
+                                self.dynamicPane.setValue(self.storeValue.value);
+                            }else{
+                                self.dynamicPane.setValue({
+                                    year: 0
+                                });
+                            }
+                            self._setInnerValue();
+                            break;
+                    }
+                }
+            }]
+        };
+    },
 
-            afterCardShow: function () {
-                this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                backBtn.setEnable(!calendar.isFrontYear());
-                preBtn.setEnable(!calendar.isFinalYear());
-            }
-        });
-
-        this.navigation.on(BI.Navigation.EVENT_CHANGE, function () {
-            self.selectedYear = this.getValue();
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            self.fireEvent(BI.YearPopup.EVENT_CHANGE, self.selectedYear);
-        });
-
-        if(BI.isKey(o.value)){
-            this.setValue(o.value);
+    setValue: function (v) {
+        this.storeValue = v;
+        var self = this;
+        var type, value;
+        v = v || {};
+        type = v.type || BI.DynamicDateCombo.Static;
+        value = v.value || v;
+        this.dateTab.setSelect(type);
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                this.dynamicPane.setValue(value);
+                self._setInnerValue();
+                break;
+            case BI.DynamicDateCombo.Static:
+            default:
+                this.year.setValue(value);
+                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+                this.textButton.setEnable(true);
+                break;
         }
     },
 
     getValue: function () {
-        return this.selectedYear;
-    },
-
-    setValue: function (v) {
-        var o = this.options;
-        if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
-            v = BI.getDate().getFullYear();
-            this.selectedYear = "";
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue("");
-        } else {
-            this.selectedYear = v;
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue(v);
-        }
+        return {
+            type: this.dateTab.getSelect(),
+            value: this.dateTab.getValue()
+        };
     }
+
 });
-BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.year_popup", BI.YearPopup);
+BI.DynamicYearPopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
+BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
+BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
