@@ -89258,6 +89258,274 @@ BI.shortcut("bi.dynamic_date_pane", BI.DynamicDatePane);
 BI.extend(BI.DynamicDatePane, {
     Static: 1,
     Dynamic: 2
+});BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        var conf = BI.StaticDateTimePaneCard.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: "bi-date-time-pane",
+            min: "1900-01-01", // 最小日期
+            max: "2099-12-31", // 最大日期
+            selectedTime: null
+        });
+    },
+    _init: function () {
+        BI.StaticDateTimePaneCard.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.today = BI.getDate();
+        this._year = this.today.getFullYear();
+        this._month = this.today.getMonth();
+
+        this.selectedTime = o.selectedTime || {
+            year: this._year,
+            month: this._month
+        };
+
+        this.datePicker = BI.createWidget({
+            type: "bi.date_picker",
+            min: o.min,
+            max: o.max
+        });
+        this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
+            self.selectedTime = BI.extend(self.datePicker.getValue(), self.timeSelect.getValue());
+            self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+        });
+
+        this.calendar = BI.createWidget({
+            direction: "top",
+            logic: {
+                dynamic: false
+            },
+            type: "bi.navigation",
+            tab: this.datePicker,
+            cardCreator: BI.bind(this._createNav, this)
+        });
+        this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
+            self.selectedTime = BI.extend(self.calendar.getValue(), self.timeSelect.getValue());
+            self.calendar.empty();
+            self.setValue(self.selectedTime);
+            self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [this.calendar, {
+                el: {
+                    type: "bi.dynamic_date_time_select",
+                    ref: function () {
+                        self.timeSelect = this;
+                    }
+                },
+                height: 40
+            }]
+        });
+        this.setValue(o.selectedTime);
+
+    },
+
+    _createNav: function (v) {
+        var date = BI.Calendar.getDateJSONByPage(v);
+        var calendar = BI.createWidget({
+            type: "bi.calendar",
+            logic: {
+                dynamic: false
+            },
+            min: this.options.min,
+            max: this.options.max,
+            year: date.year,
+            month: date.month,
+            day: this.selectedTime.day
+        });
+        return calendar;
+    },
+
+    _getNewCurrentDate: function () {
+        var today = BI.getDate();
+        return {
+            year: today.getFullYear(),
+            month: today.getMonth()
+        };
+    },
+
+    _setCalenderValue: function (date) {
+        this.calendar.setSelect(BI.Calendar.getPageByDateJSON(date));
+        this.calendar.setValue(date);
+        this.selectedTime = BI.extend(date, this.timeSelect.getValue());
+    },
+
+    _setDatePicker: function (timeOb) {
+        if (BI.isNull(timeOb) || BI.isNull(timeOb.year) || BI.isNull(timeOb.month)) {
+            this.datePicker.setValue(this._getNewCurrentDate());
+        } else {
+            this.datePicker.setValue(timeOb);
+        }
+    },
+
+    _setCalendar: function (timeOb) {
+        if (BI.isNull(timeOb) || BI.isNull(timeOb.day)) {
+            this.calendar.empty();
+            this._setCalenderValue(this._getNewCurrentDate());
+        } else {
+            this._setCalenderValue(timeOb);
+        }
+    },
+
+    setValue: function (timeOb) {
+        timeOb = timeOb || {};
+        this._setDatePicker(timeOb);
+        this._setCalendar(timeOb);
+        this.timeSelect.setValue({
+            hour: timeOb.hour,
+            minute: timeOb.minute,
+            second: timeOb.second
+        });
+    },
+
+    getValue: function () {
+        return this.selectedTime;
+    }
+
+});
+BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-dynamic-date-pane"
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.vtape",
+            items: [{
+                el: {
+                    type: "bi.linear_segment",
+                    cls: "bi-border-bottom",
+                    height: 30,
+                    items: BI.createItems([{
+                        text: BI.i18nText("BI-Multi_Date_YMD"),
+                        value: BI.DynamicDateTimePane.Static
+                    }, {
+                        text: BI.i18nText("BI-Basic_Dynamic_Title"),
+                        value: BI.DynamicDateTimePane.Dynamic
+                    }], {
+                        textAlign: "center"
+                    }),
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            var value = this.getValue()[0];
+                            self.dateTab.setSelect(value);
+                            switch (value) {
+                                case BI.DynamicDateTimePane.Static:
+                                    var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
+                                    self.ymd.setValue({
+                                        year: date.getFullYear(),
+                                        month: date.getMonth(),
+                                        day: date.getDate()
+                                    });
+                                    break;
+                                case BI.DynamicDateTimePane.Dynamic:
+                                    self.dynamicPane.setValue({
+                                        year: 0
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }],
+                    ref: function () {
+                        self.switch = this;
+                    }
+                },
+                height: 30
+            }, {
+                type: "bi.tab",
+                ref: function () {
+                    self.dateTab = this;
+                },
+                showIndex: BI.DynamicDateTimePane.Static,
+                cardCreator: function (v) {
+                    switch (v) {
+                        case BI.DynamicDateTimePane.Static:
+                            return {
+                                type: "bi.static_date_time_pane_card",
+                                listeners: [{
+                                    eventName: "EVENT_CHANGE",
+                                    action: function () {
+                                        self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }],
+                                ref: function () {
+                                    self.ymd = this;
+                                }
+                            };
+                        case BI.DynamicDateTimePane.Dynamic:
+                        default:
+                            return {
+                                type: "bi.dynamic_date_card",
+                                listeners: [{
+                                    eventName: "EVENT_CHANGE",
+                                    action: function () {
+                                        self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }],
+                                ref: function () {
+                                    self.dynamicPane = this;
+                                }
+                            };
+                    }
+                }
+            }]
+        };
+    },
+
+    mounted: function () {
+        this.setValue(this.options.value);
+    },
+
+    _checkValueValid: function (value) {
+        return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    setValue: function (v) {
+        v = v || {};
+        var type = v.type || BI.DynamicDateTimePane.Static;
+        var value = v.value || v;
+        this.switch.setValue(type);
+        this.dateTab.setSelect(type);
+        switch (type) {
+            case BI.DynamicDateTimePane.Dynamic:
+                this.dynamicPane.setValue(value);
+                break;
+            case BI.DynamicDateTimePane.Static:
+            default:
+                if (this._checkValueValid(value)) {
+                    var date = BI.getDate();
+                    this.ymd.setValue({
+                        year: date.getFullYear(),
+                        month: date.getMonth()
+                    });
+                } else {
+                    this.ymd.setValue(value);
+                }
+                break;
+        }
+    },
+
+    getValue: function () {
+        return {
+            type: this.dateTab.getSelect(),
+            value: this.dateTab.getValue()
+        };
+    }
+});
+BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
+
+BI.extend(BI.DynamicDateTimePane, {
+    Static: 1,
+    Dynamic: 2
 });/**
  * 年份展示面板
  *
@@ -92656,7 +92924,895 @@ BI.DynamicDateTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
 BI.DynamicDateTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);/**
+BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
+    constants: {
+        popupHeight: 259,
+        popupWidth: 270,
+        comboAdjustHeight: 1,
+        border: 1,
+        DATE_MIN_VALUE: "1900-01-01",
+        DATE_MAX_VALUE: "2099-12-31"
+    },
+
+    props: {
+        baseCls: "bi-dynamic-date-combo bi-border",
+        height: 24
+    },
+
+
+    render: function () {
+        var self = this, opts = this.options;
+        this.storeTriggerValue = "";
+        var date = BI.getDate();
+        this.storeValue = opts.value;
+        return {
+            type: "bi.htape",
+            items: [{
+                el: {
+                    type: "bi.icon_button",
+                    cls: "bi-trigger-icon-button date-change-h-font",
+                    width: 24,
+                    height: 24,
+                    ref: function () {
+                        self.changeIcon = this;
+                    }
+                },
+                width: 24
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: {
+                        type: "bi.combo",
+                        ref: function () {
+                            self.combo = this;
+                        },
+                        toggle: false,
+                        isNeedAdjustHeight: false,
+                        isNeedAdjustWidth: false,
+                        el: {
+                            type: "bi.dynamic_date_time_trigger",
+                            min: this.constants.DATE_MIN_VALUE,
+                            max: this.constants.DATE_MAX_VALUE,
+                            value: opts.value,
+                            ref: function () {
+                                self.trigger = this;
+                            },
+                            listeners: [{
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN,
+                                action: function () {
+                                    if (self.combo.isViewVisible()) {
+                                        self.combo.hideView();
+                                    }
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
+                                action: function () {
+                                    if (!self.combo.isViewVisible()) {
+                                        self.combo.showView();
+                                    }
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_TRIGGER_CLICK,
+                                action: function () {
+                                    self.combo.toggle();
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_FOCUS,
+                                action: function () {
+                                    self.storeTriggerValue = self.trigger.getKey();
+                                    if (!self.combo.isViewVisible()) {
+                                        self.combo.showView();
+                                    }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_ERROR,
+                                action: function () {
+                                    self.storeValue = {
+                                        year: date.getFullYear(),
+                                        month: date.getMonth()
+                                    };
+                                    self.popup.setValue();
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_ERROR);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_VALID,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_VALID);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CHANGE);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_CONFIRM,
+                                action: function () {
+                                    if (self.combo.isViewVisible()) {
+                                        return;
+                                    }
+                                    var dateStore = self.storeTriggerValue;
+                                    var dateObj = self.trigger.getKey();
+                                    if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
+                                        self.storeValue = self.trigger.getValue();
+                                        self.setValue(self.trigger.getValue());
+                                    } else if (BI.isEmptyString(dateObj)) {
+                                        self.storeValue = null;
+                                        self.trigger.setValue();
+                                    }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                }
+                            }]
+                        },
+                        adjustLength: this.constants.comboAdjustHeight,
+                        popup: {
+                            el: {
+                                type: "bi.dynamic_date_time_popup",
+                                min: this.constants.DATE_MIN_VALUE,
+                                max: this.constants.DATE_MAX_VALUE,
+                                value: opts.value,
+                                ref: function () {
+                                    self.popup = this;
+                                },
+                                listeners: [{
+                                    eventName: BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE,
+                                    action: function () {
+                                        self.setValue();
+                                        self.combo.hideView();
+                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                    }
+                                }, {
+                                    eventName: BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE,
+                                    action: function () {
+                                        var date = BI.getDate();
+                                        self.setValue({
+                                            year: date.getFullYear(),
+                                            month: date.getMonth(),
+                                            day: date.getDate(),
+                                            hour: 0,
+                                            minute: 0,
+                                            second: 0
+                                        });
+                                        self.combo.hideView();
+                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                    }
+                                }, {
+                                    eventName: BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE,
+                                    action: function () {
+                                        self.setValue(self.popup.getValue());
+                                        self.combo.hideView();
+                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                    }
+                                }, {
+                                    eventName: BI.DynamicDateTimePopup.EVENT_CHANGE,
+                                    action: function () {
+                                        self.setValue(self.popup.getValue());
+                                        self.combo.hideView();
+                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
+                                    }
+                                }]
+                            },
+                            stopPropagation: false
+                        },
+                        listeners: [{
+                            eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                            action: function () {
+                                self.popup.setValue(self.storeValue);
+                                self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
+                            }
+                        }]
+                    },
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }, {
+                    el: {
+                        type: "bi.icon_button",
+                        cls: "bi-trigger-icon-button date-font",
+                        width: 24,
+                        height: 24,
+                        listeners: [{
+                            eventName: BI.IconButton.EVENT_CHANGE,
+                            action: function () {
+                                if (self.combo.isViewVisible()) {
+                                    self.combo.hideView();
+                                } else {
+                                    self.combo.showView();
+                                }
+                            }
+                        }]
+                    },
+                    top: 0,
+                    right: 0
+                }]
+            }],
+            ref: function (_ref) {
+                self.comboWrapper = _ref;
+            }
+        };
+    },
+
+    mounted: function () {
+        this._checkDynamicValue(this.options.value);
+    },
+
+    _checkDynamicValue: function (v) {
+        var type = null;
+        if (BI.isNotNull(v)) {
+            type = v.type;
+        }
+        switch (type) {
+            case BI.DynamicDateTimeCombo.Dynamic:
+                this.changeIcon.setVisible(true);
+                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.resize();
+                break;
+            default:
+                this.comboWrapper.attr("items")[0].width = 0;
+                this.comboWrapper.resize();
+                this.changeIcon.setVisible(false);
+                break;
+        }
+    },
+
+    setValue: function (v) {
+        this.storeValue = v;
+        this.trigger.setValue(v);
+        this._checkDynamicValue(v);
+    },
+    getValue: function () {
+        return this.storeValue;
+    },
+    getKey: function () {
+        return this.trigger.getKey();
+    },
+    hidePopupView: function () {
+        this.combo.hideView();
+    }
+});
+
+BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateTimeCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicDateTimeCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+
+BI.shortcut("bi.dynamic_date_time_combo", BI.DynamicDateTimeCombo);
+
+BI.extend(BI.DynamicDateTimeCombo, {
+    Static: 1,
+    Dynamic: 2
+});BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
+    constants: {
+        tabHeight: 30
+    },
+
+    props: {
+        baseCls: "bi-dynamic-date-time-popup",
+        width: 248,
+        height: 385
+    },
+
+    _init: function () {
+        BI.DynamicDateTimePopup.superclass._init.apply(this, arguments);
+        var self = this, opts = this.options;
+        this.storeValue = {type: BI.DynamicDateCombo.Static};
+        BI.createWidget({
+            element: this,
+            type: "bi.vtape",
+            items: [{
+                el: this._getTabJson()
+            }, {
+                el: {
+                    type: "bi.grid",
+                    items: [[{
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-high-light bi-border-top",
+                        shadow: true,
+                        text: BI.i18nText("BI-Basic_Clear"),
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE);
+                            }
+                        }]
+                    }, {
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-border-left bi-border-right bi-border-top",
+                        shadow: true,
+                        text: BI.i18nText("BI-Multi_Date_Today"),
+                        ref: function () {
+                            self.textButton = this;
+                        },
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE);
+                            }
+                        }]
+                    }, {
+                        type: "bi.text_button",
+                        forceCenter: true,
+                        cls: "bi-high-light bi-border-top",
+                        shadow: true,
+                        text: BI.i18nText("BI-Basic_OK"),
+                        listeners: [{
+                            eventName: BI.TextButton.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
+                            }
+                        }]
+                    }]]
+                },
+                height: 24
+            }]
+        });
+        this.setValue(opts.value);
+    },
+
+    _getTabJson: function () {
+        var self = this;
+        return {
+            type: "bi.tab",
+            showIndex: BI.DynamicDateCombo.Static,
+            ref: function () {
+                self.dateTab = this;
+            },
+            tab: {
+                type: "bi.linear_segment",
+                cls: "bi-border-bottom",
+                height: this.constants.tabHeight,
+                items: BI.createItems([{
+                    text: BI.i18nText("BI-Multi_Date_YMD"),
+                    value: BI.DynamicDateCombo.Static
+                }, {
+                    text: BI.i18nText("BI-Basic_Dynamic_Title"),
+                    value: BI.DynamicDateCombo.Dynamic
+                }], {
+                    textAlign: "center"
+                })
+            },
+            cardCreator: function (v) {
+                switch (v) {
+                    case BI.DynamicDateCombo.Dynamic:
+                        return {
+                            type: "bi.dynamic_date_card",
+                            listeners: [{
+                                eventName: "EVENT_CHANGE",
+                                action: function () {
+                                    self._setInnerValue(self.year, v);
+                                }
+                            }],
+                            ref: function () {
+                                self.dynamicPane = this;
+                            }
+                        };
+                    case BI.DynamicDateCombo.Static:
+                    default:
+                        return {
+                            type: "bi.vtape",
+                            items: [{
+                                type: "bi.date_calendar_popup",
+                                min: self.options.min,
+                                max: self.options.max,
+                                ref: function () {
+                                    self.ymd = this;
+                                }
+                            }, {
+                                el: {
+                                    type: "bi.dynamic_date_time_select",
+                                    ref: function () {
+                                        self.timeSelect = this;
+                                    },
+                                    listeners: [{
+                                        eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
+                                        action: function () {
+
+                                        }
+                                    }]
+                                },
+                                height: 40
+                            }]
+                        };
+                }
+            },
+            listeners: [{
+                eventName: BI.Tab.EVENT_CHANGE,
+                action: function () {
+                    var v = self.dateTab.getSelect();
+                    switch (v) {
+                        case BI.DynamicDateCombo.Static:
+                            var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
+                            self.ymd.setValue({
+                                year: date.getFullYear(),
+                                month: date.getMonth(),
+                                day: date.getDate()
+                            });
+                            self.timeSelect.setValue();
+                            self._setInnerValue();
+                            break;
+                        case BI.DynamicDateCombo.Dynamic:
+                        default:
+                            if(self.storeValue && self.storeValue.type === BI.DynamicDateCombo.Dynamic) {
+                                self.dynamicPane.setValue(self.storeValue.value);
+                            }else{
+                                self.dynamicPane.setValue({
+                                    year: 0
+                                });
+                            }
+                            self._setInnerValue();
+                            break;
+                    }
+                }
+            }]
+        };
+    },
+
+    _setInnerValue: function () {
+        if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
+            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.textButton.setEnable(true);
+        } else {
+            var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
+            date = date.print("%Y-%x-%e");
+            this.textButton.setValue(date);
+            this.textButton.setEnable(false);
+        }
+    },
+
+    _checkValueValid: function (value) {
+        return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    setValue: function (v) {
+        this.storeValue = v;
+        var self = this;
+        var type, value;
+        v = v || {};
+        type = v.type || BI.DynamicDateCombo.Static;
+        value = v.value || v;
+        this.dateTab.setSelect(type);
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                this.dynamicPane.setValue(value);
+                self._setInnerValue();
+                break;
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (this._checkValueValid(value)) {
+                    var date = BI.getDate();
+                    this.ymd.setValue({
+                        year: date.getFullYear(),
+                        month: date.getMonth(),
+                        day: date.getDate()
+                    });
+                    this.timeSelect.setValue();
+                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                } else {
+                    this.ymd.setValue(value);
+                    this.timeSelect.setValue({
+                        hour: value.hour,
+                        minute: value.minute,
+                        second: value.second
+                    });
+                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                }
+                this.textButton.setEnable(true);
+                break;
+        }
+    },
+
+    getValue: function () {
+        var type = this.dateTab.getSelect();
+        return {
+            type: type,
+            value: type === BI.DynamicDateTimeCombo.Static ? BI.extend(this.ymd.getValue(), this.timeSelect.getValue()) : this.dynamicPane.getValue()
+        };
+    }
+});
+BI.DynamicDateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
+BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
+BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-date-time-select bi-border-top"
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.center_adapt",
+            items: [{
+                type: "bi.vertical_adapt",
+                items: [{
+                    el: {
+                        type: "bi.number_editor",
+                        ref: function () {
+                            self.hour = this;
+                        },
+                        validationChecker: function (v) {
+                            return BI.isNaturalNumber(v) && BI.parseInt(v) < 24;
+                        },
+                        errorText: function () {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                        },
+                        listeners: [{
+                            eventName: BI.SignEditor.EVENT_CONFIRM,
+                            action: function () {
+                                this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                                self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
+                            }
+                        }, {
+                            eventName: BI.SignEditor.EVENT_CHANGE,
+                            action: function () {
+                                var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.HOUR);
+                                this.setValue(value);
+                            }
+                        }],
+                        width: 60,
+                        height: 24
+                    },
+                    lgap: 14
+                }, {
+                    type: "bi.label",
+                    text: ":",
+                    width: 20
+                }, {
+                    type: "bi.number_editor",
+                    ref: function () {
+                        self.minute = this;
+                    },
+                    validationChecker: function (v) {
+                        return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
+                    },
+                    errorText: function () {
+                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    },
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CONFIRM,
+                        action: function () {
+                            this.setValue(self._formatValueToDoubleDigit(this.getValue()), BI.DynamicDateTimeSelect.MINUTE);
+                            self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
+                        }
+                    }, {
+                        eventName: BI.SignEditor.EVENT_CHANGE,
+                        action: function () {
+                            var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.MINUTE);
+                            this.setValue(value);
+                        }
+                    }],
+                    width: 60,
+                    height: 24
+                }, {
+                    type: "bi.label",
+                    text: ":",
+                    width: 20
+                }, {
+                    type: "bi.number_editor",
+                    ref: function () {
+                        self.second = this;
+                    },
+                    validationChecker: function (v) {
+                        return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
+                    },
+                    errorText: function () {
+                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    },
+                    listeners: [{
+                        eventName: BI.SignEditor.EVENT_CONFIRM,
+                        action: function () {
+                            this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                            self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
+                        }
+                    }],
+                    width: 60,
+                    height: 24
+                }]
+            }]
+        };
+    },
+
+    _autoSwitch: function (v, type) {
+        var limit = 0;
+        var value = v;
+        switch (type) {
+            case BI.DynamicDateTimeSelect.HOUR:
+                limit = 2;
+                break;
+            case BI.DynamicDateTimeSelect.MINUTE:
+                limit = 6;
+                break;
+            default:
+                break;
+        }
+        if(v.length === 1 && BI.parseInt(v) > limit) {
+            value = "0" + value;
+        }
+        if (value.length === 2) {
+            type === BI.DynamicDateTimeSelect.HOUR ? this.minute.focus() : this.second.focus();
+        }
+        return value;
+    },
+
+    _formatValueToDoubleDigit: function (v) {
+        if(BI.isNull(v) || BI.isEmptyString(v)) {
+            v = 0;
+        }
+        var value = BI.parseInt(v);
+        if(value < 10) {
+            value = "0" + value;
+        }
+        return value;
+    },
+
+    _assertValue: function (v) {
+        v = v || {};
+        v.hour = this._formatValueToDoubleDigit(v.hour) || "00";
+        v.minute = this._formatValueToDoubleDigit(v.minute) || "00";
+        v.second = this._formatValueToDoubleDigit(v.second) || "00";
+        return v;
+    },
+
+    getValue: function () {
+        return {
+            hour: BI.parseInt(this.hour.getValue()),
+            minute: BI.parseInt(this.minute.getValue()),
+            second: BI.parseInt(this.second.getValue())
+        };
+    },
+
+    setValue: function (v) {
+        v = this._assertValue(v);
+        this.hour.setValue(v.hour);
+        this.minute.setValue(v.minute);
+        this.second.setValue(v.second);
+    }
+
+});
+BI.DynamicDateTimeSelect.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.dynamic_date_time_select", BI.DynamicDateTimeSelect);
+
+BI.extend(BI.DynamicDateTimeSelect, {
+    HOUR: 1,
+    MINUTE: 2
+});BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
+    _const: {
+        hgap: 4,
+        vgap: 2,
+        yearLength: 4,
+        yearMonthLength: 7
+    },
+
+    props: {
+        extraCls: "bi-date-time-trigger",
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        height: 24
+    },
+
+    _init: function () {
+        BI.DynamicDateTimeTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options, c = this._const;
+        this.editor = BI.createWidget({
+            type: "bi.sign_editor",
+            height: o.height,
+            validationChecker: function (v) {
+                var date = v.match(/\d+/g);
+                self._autoAppend(v, date);
+                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                    year: date[0],
+                    month: date[1],
+                    day: date[2]
+                });
+            },
+            quitChecker: function () {
+                return false;
+            },
+            hgap: c.hgap,
+            vgap: c.vgap,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            errorText: function () {
+                if (self.editor.isEditing()) {
+                    return BI.i18nText("BI-Basic_Date_Time_Error_Text");
+                }
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+            }
+        });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+        });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_FOCUS);
+        });
+        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_STOP);
+        });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_VALID);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_ERROR);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
+            var value = self.editor.getValue();
+            if (BI.isNotNull(value)) {
+                self.editor.setState(value);
+            }
+
+            if (BI.isNotEmptyString(value)) {
+                var date = value.split(/-|\s|:/);
+                self.storeValue = {
+                    type: BI.DynamicDateCombo.Static,
+                    value: {
+                        year: date[0] | 0,
+                        month: date[1] - 1,
+                        day: date[2] | 0,
+                        hour: date[3] | 0,
+                        minute: date[4] | 0,
+                        second: date[5] | 0
+                    }
+                };
+            }
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_CONFIRM);
+        });
+        this.editor.on(BI.SignEditor.EVENT_START, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_START);
+        });
+        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_CHANGE);
+        });
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [{
+                el: this.editor
+            }, {
+                el: BI.createWidget(),
+                width: 30
+            }]
+        });
+        this.setValue(o.value);
+    },
+    _dateCheck: function (date) {
+        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date ||
+
+            BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
+            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
+            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
+            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+    },
+    _checkVoid: function (obj) {
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
+    },
+    _autoAppend: function (v, dateObj) {
+        if (BI.isNotNull(dateObj) && BI.checkDateLegal(v)) {
+            switch (v.length) {
+                case this._const.yearLength:
+                    if (this._yearCheck(v)) {
+                        this.editor.setValue(v + "-");
+                    }
+                    break;
+                case this._const.yearMonthLength:
+                    if (this._monthCheck(v)) {
+                        this.editor.setValue(v + "-");
+                    }
+                    break;
+            }
+        }
+    },
+
+    _yearCheck: function (v) {
+        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+    },
+
+    _monthCheck: function (v) {
+        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
+        return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v && date >= this.options.min && date <= this.options.max;
+    },
+
+    _setInnerValue: function (date, text) {
+        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+        this.editor.setState(dateStr);
+        this.editor.setValue(dateStr);
+        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
+    },
+
+    _getText: function (obj) {
+        var value = "";
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+            value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
+        }
+        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
+            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
+        }
+        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+            value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
+        }
+        if(BI.isNotNull(obj.week) && obj.week !== 0) {
+            value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
+        }
+        if(BI.isNotNull(obj.day) && obj.day !== 0) {
+            value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
+        }
+        if(BI.isNotNull(obj.workDay) && obj.workDay !== 0) {
+            value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+        }
+        return value;
+
+        function getPositionText (baseText, position) {
+            switch (position) {
+                case BI.DynamicDateCard.OFFSET.BEGIN:
+                    return baseText + BI.i18nText("BI-Basic_Begin_Start");
+                case BI.DynamicDateCard.OFFSET.END:
+                    return baseText + BI.i18nText("BI-Basic_End_Stop");
+                case BI.DynamicDateCard.OFFSET.CURRENT:
+                default:
+                    return BI.i18nText("BI-Basic_Current_Day");
+            }
+        }
+    },
+
+    setValue: function (v) {
+        var type, value, self = this;
+        var date = BI.getDate();
+        this.storeValue = v;
+        if (BI.isNotNull(v)) {
+            type = v.type || BI.DynamicDateCombo.Static;
+            value = v.value || v;
+        }
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                date = BI.DynamicDateHelper.getCalculation(value);
+                this._setInnerValue(date, text);
+                break;
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    this.editor.setState("");
+                    this.editor.setValue("");
+                    this.setTitle("");
+                } else {
+                    var dateStr = value.year + "-" + (value.month + 1) + "-" + value.day + " " +
+                        (value.hour || "00") + ":" + (value.minute || "00") + ":" + (value.second || "00");
+                    this.editor.setState(dateStr);
+                    this.editor.setValue(dateStr);
+                    this.setTitle(dateStr);
+                }
+                break;
+        }
+    },
+
+    getKey: function () {
+        return this.editor.getValue();
+    },
+    getValue: function () {
+        return this.storeValue;
+    }
+
+});
+
+BI.DynamicDateTimeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateTimeTrigger.EVENT_START = "EVENT_START";
+BI.DynamicDateTimeTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicDateTimeTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.DynamicDateTimeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDateTimeTrigger.EVENT_VALID = "EVENT_VALID";
+BI.DynamicDateTimeTrigger.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicDateTimeTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
+BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);/**
  * Created by roy on 15/9/14.
  */
 BI.SearchEditor = BI.inherit(BI.Widget, {
@@ -101372,6 +102528,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    focus: function () {
+        this.editor.focus();
+    },
+
     // 微调
     _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
@@ -107817,6 +108977,184 @@ BI.shortcut("bi.switch_tree", BI.SwitchTree);
 /**
  * Created by Baron on 2015/10/19.
  */
+BI.DateInterval = BI.inherit(BI.Single, {
+    constants: {
+        height: 25,
+        width: 25,
+        lgap: 15,
+        offset: -15,
+        timeErrorCls: "time-error",
+        DATE_MIN_VALUE: "1900-01-01",
+        DATE_MAX_VALUE: "2099-12-31"
+    },
+    _defaultConfig: function () {
+        var conf = BI.DateInterval.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            extraCls: "bi-date-interval"
+        });
+    },
+    _init: function () {
+        var self = this, o = this.options;
+        BI.DateInterval.superclass._init.apply(this, arguments);
+
+        o.value = o.value || {};
+        this.left = this._createCombo(o.value.start);
+        this.right = this._createCombo(o.value.end);
+        this.label = BI.createWidget({
+            type: "bi.label",
+            height: this.constants.height,
+            width: this.constants.width,
+            text: "-"
+        });
+        BI.createWidget({
+            element: self,
+            type: "bi.center",
+            hgap: 15,
+            height: this.constants.height,
+            items: [{
+                type: "bi.absolute",
+                items: [{
+                    el: self.left,
+                    left: this.constants.offset,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
+            }, {
+                type: "bi.absolute",
+                items: [{
+                    el: self.right,
+                    left: 0,
+                    right: this.constants.offset,
+                    top: 0,
+                    bottom: 0
+                }]
+            }]
+        });
+        BI.createWidget({
+            type: "bi.horizontal_auto",
+            element: this,
+            items: [
+                self.label
+            ]
+        });
+    },
+
+    _createCombo: function (v) {
+        var self = this;
+        var combo = BI.createWidget({
+            type: "bi.dynamic_date_combo",
+            value: v
+        });
+        combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+            self.fireEvent(BI.DateInterval.EVENT_ERROR);
+        });
+
+        combo.on(BI.DynamicDateCombo.EVENT_VALID, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                    offsetStyle: "center"
+                });
+                self.fireEvent(BI.DateInterval.EVENT_ERROR);
+            } else {
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+            }
+        });
+
+        combo.on(BI.DynamicDateCombo.EVENT_FOCUS, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                    offsetStyle: "center"
+                });
+                self.fireEvent(BI.DateInterval.EVENT_ERROR);
+            } else {
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+            }
+        });
+
+        combo.on(BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.left.hidePopupView();
+            self.right.hidePopupView();
+        });
+
+        combo.on(BI.DynamicDateCombo.EVENT_CONFIRM, function () {
+            BI.Bubbles.hide("error");
+            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+                self.element.addClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.DateInterval.EVENT_ERROR);
+            }else{
+                self._clearTitle();
+                self.element.removeClass(self.constants.timeErrorCls);
+                self.fireEvent(BI.DateInterval.EVENT_CHANGE);
+            }
+        });
+        return combo;
+    },
+    _dateCheck: function (date) {
+        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
+            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
+            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
+            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+    },
+    _checkVoid: function (obj) {
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+    },
+    _check: function (smallDate, bigDate) {
+        var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
+        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
+            year: smallObj[0],
+            month: smallObj[1],
+            day: smallObj[2]
+        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
+            year: bigObj[0],
+            month: bigObj[1],
+            day: bigObj[2]
+        });
+    },
+    _compare: function (smallDate, bigDate) {
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
+    },
+    _setTitle: function (v) {
+        this.left.setTitle(v);
+        this.right.setTitle(v);
+        this.label.setTitle(v);
+    },
+    _clearTitle: function () {
+        this.left.setTitle("");
+        this.right.setTitle("");
+        this.label.setTitle("");
+    },
+    setValue: function (date) {
+        date = date || {};
+        this.left.setValue(date.start);
+        this.right.setValue(date.end);
+    },
+    getValue: function () {
+        return {start: this.left.getValue(), end: this.right.getValue()};
+    }
+});
+BI.DateInterval.EVENT_VALID = "EVENT_VALID";
+BI.DateInterval.EVENT_ERROR = "EVENT_ERROR";
+BI.DateInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.date_interval", BI.DateInterval);/**
+ * Created by Baron on 2015/10/19.
+ */
 BI.TimeInterval = BI.inherit(BI.Single, {
     constants: {
         height: 25,
@@ -107883,16 +109221,16 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     _createCombo: function (v) {
         var self = this;
         var combo = BI.createWidget({
-            type: "bi.dynamic_date_combo",
+            type: "bi.dynamic_date_time_combo",
             value: v
         });
-        combo.on(BI.MultiDateCombo.EVENT_ERROR, function () {
+        combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
             self._clearTitle();
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.TimeInterval.EVENT_ERROR);
         });
 
-        combo.on(BI.MultiDateCombo.EVENT_VALID, function () {
+        combo.on(BI.DynamicDateTimeCombo.EVENT_VALID, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -107908,7 +109246,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             }
         });
 
-        combo.on(BI.MultiDateCombo.EVENT_FOCUS, function () {
+        combo.on(BI.DynamicDateTimeCombo.EVENT_FOCUS, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -107924,11 +109262,11 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             }
         });
 
-        combo.on(BI.MultiDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+        combo.on(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW, function () {
             self.left.hidePopupView();
             self.right.hidePopupView();
         });
-        // combo.on(BI.MultiDateCombo.EVENT_CHANGE, function () {
+        // combo.on(BI.DynamicDateTimeCombo.EVENT_CHANGE, function () {
         //    BI.Bubbles.hide("error");
         //    var smallDate = self.left.getKey(), bigDate = self.right.getKey();
         //    if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -107944,7 +109282,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         //    }
         // });
 
-        combo.on(BI.MultiDateCombo.EVENT_CONFIRM, function () {
+        combo.on(BI.DynamicDateTimeCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
             if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
@@ -107960,7 +109298,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") == date || BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") == date || BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") == date || BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") == date;
+        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
+            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -107978,8 +109319,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
+        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -110762,5 +112103,7 @@ BI.i18n = {
     "BI-Basic_Current_Quarter": "本季度",
     "BI-Basic_Year_Month": "年月",
     "BI-Basic_Year_Quarter": "年季度",
-    "BI-Basic_Input_Can_Not_Null": "输入框不能为空"
+    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
+    "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
+    "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00"
 };

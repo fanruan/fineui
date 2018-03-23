@@ -12111,6 +12111,29 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                         BI.Msg.toast("date" + JSON.stringify(self.datepane.getValue()));
                     }
                 }, {
+                    type: "bi.dynamic_date_time_pane",
+                    value: {
+                        type: 1,
+                        value: {
+                            year: 2017,
+                            month: 11,
+                            day: 11,
+                            hour: 12,
+                            minute: 12,
+                            second: 12
+                        }
+                    },
+                    ref: function (_ref) {
+                        self.dateTimePane = _ref;
+                    },
+                    height: 340
+                }, {
+                    type: "bi.button",
+                    text: "getValue",
+                    handler: function () {
+                        BI.Msg.toast("date" + JSON.stringify(self.dateTimePane.getValue()));
+                    }
+                }, {
                     type: "bi.button",
                     text: "setValue '2017-12-31'",
                     handler: function () {
@@ -12148,7 +12171,7 @@ Demo.Date = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.horizontal_auto",
-            vgap: 10,
+            vgap: 20,
             items: [{
                 type: "bi.dynamic_date_combo",
                 ref: function () {
@@ -12156,31 +12179,44 @@ Demo.Date = BI.inherit(BI.Widget, {
                 },
                 width: 300,
                 value: {
-                    year: 2018,
-                    month: 1,
-                    day: 23
-                }
-            }, {
-                type: "bi.multidate_combo",
-                ref: function () {
-                    self.datecombo = this;
-                },
-                width: 300,
-                value: {
-                    year: 2018,
-                    month: 1,
-                    day: 23
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 1,
+                        day: 23
+                    }
                 }
             }, {
                 type: "bi.button",
-                text: "getVlaue",
+                text: "getValue",
                 width: 300,
                 handler: function () {
                     BI.Msg.alert("date", JSON.stringify(self.datecombo.getValue()));
                 }
             }, {
+                type: "bi.dynamic_date_time_combo",
+                ref: function () {
+                    self.datetimecombo = this;
+                },
+                width: 300,
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 1,
+                        day: 23
+                    }
+                }
+            }, {
                 type: "bi.button",
-                text: "setVlaue '2017-12-31'",
+                text: "getValue",
+                width: 300,
+                handler: function () {
+                    BI.Msg.alert("date", JSON.stringify(self.datetimecombo.getValue()));
+                }
+            }, {
+                type: "bi.button",
+                text: "setValue '2017-12-31'",
                 width: 300,
                 handler: function () {
                     self.datecombo.setValue({
@@ -14145,9 +14181,9 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
         return {
             type: "bi.horizontal_auto",
             items: [{
-                type: "bi.time_interval",
+                type: "bi.date_interval",
                 ref: function (_ref) {
-                    self.interval = _ref;
+                    self.dateInterval = _ref;
                 },
                 value: {
                     start: {
@@ -14169,7 +14205,37 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                 width: 300
             }, {
                 type: "bi.button",
-                text: "getVlaue",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.dateInterval.getValue()));
+                },
+                width: 300
+            }, {
+                type: "bi.time_interval",
+                ref: function (_ref) {
+                    self.interval = _ref;
+                },
+                value: {
+                    start: {
+                        type: 2,
+                        value: {
+                            year: -1,
+                            position: 2
+                        }
+                    },
+                    end: {
+                        type: 1,
+                        value: {
+                            year: 2018,
+                            month: 0,
+                            day: 12
+                        }
+                    }
+                },
+                width: 400
+            }, {
+                type: "bi.button",
+                text: "getValue",
                 handler: function () {
                     BI.Msg.toast(JSON.stringify(self.interval.getValue()));
                 },
