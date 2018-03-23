@@ -11086,7 +11086,7 @@ BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor bi-card",
+            baseCls: "bi-rich-editor",
             toolbar: {}
         });
     },

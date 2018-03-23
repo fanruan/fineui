@@ -14526,7 +14526,7 @@ BI.shortcut("bi.el", BI.EL);// CodeMirror, copyright (c) by Marijn Haverbeke and
 BI.FormulaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.FormulaEditor.superclass._defaultConfig.apply(), {
-            baseCls: "bi-formula-editor bi-card",
+            baseCls: "bi-formula-editor",
             watermark: "",
             value: "",
             fieldTextValueMap: {},
@@ -18708,7 +18708,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
-            baseCls: "bi-textarea-editor bi-card",
+            baseCls: "bi-textarea-editor",
             value: ""
         });
     },
