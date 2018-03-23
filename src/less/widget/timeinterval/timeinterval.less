@@ -1,10 +1,17 @@
 @import "../../index";
 
-.bi-param-time-interval{
-  &.time-error .bi-input{
-    color:@color-bi-text-failure
+.bi-time-interval{
+  & .bi-date-time-trigger{
+    .border-radius(2px);
   }
-  &.time-error .sign-editor-text{
-    color:@color-bi-text-failure
+  &.time-error {
+    & .bi-date-time-trigger{
+      & .bi-input{
+        color:@color-bi-text-failure
+      }
+      & .sign-editor-text{
+        color:@color-bi-text-failure
+      }
+    }
   }
 }

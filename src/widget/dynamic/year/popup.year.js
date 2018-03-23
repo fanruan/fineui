@@ -91,7 +91,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicYearCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
