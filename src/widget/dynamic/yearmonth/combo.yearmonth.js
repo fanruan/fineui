@@ -1,11 +1,11 @@
-BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
+BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
         baseCls: "bi-year-month-combo  bi-border",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 25
+        height: 24
     },
 
     _init: function () {
@@ -26,6 +26,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
             if (self.combo.isViewVisible()) {
@@ -33,6 +37,9 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
             }
             self.storeValue = self.trigger.getValue();
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
+        });
+        this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_FOCUS);
         });
 
         this.combo = BI.createWidget({
@@ -106,7 +113,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
                         self.changeIcon = this;
                     }
                 },
-                width: 30
+                width: 24
             }, this.combo]
         });
         this._checkDynamicValue(o.value);
@@ -120,7 +127,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
         switch (type) {
             case BI.DynamicYearMonthCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 30;
+                this.comboWrapper.attr("items")[0].width = 24;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -131,6 +138,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
         }
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -139,9 +150,16 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.trigger.getKey();
     }
 
 });
+BI.DynamicYearMonthCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearMonthCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearMonthCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.dynamic_year_month_combo", BI.DynamicYearMonthCombo);

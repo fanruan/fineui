@@ -112,7 +112,10 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return BI.uniq(this.tree.getValue());
+        return BI.filter(BI.uniq(this.tree.getValue()), function (idx, value) {
+            return BI.isNotNull(value);
+        });
+
     },
 
     getAllLeaves: function () {

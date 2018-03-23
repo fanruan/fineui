@@ -5853,6 +5853,10 @@ Demo.FIX_CONFIG = [{
     text: "bi.time_interval",
     value: "demo.time_interval"
 }, {
+    pId: 412,
+    text: "bi.year_month_interval",
+    value: "demo.year_month_interval"
+}, {
     pId: 4,
     id: 413,
     text: "数值区间控件"
@@ -14231,23 +14235,23 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
-        var tree = BI.createWidget({
+        this.tree = BI.createWidget({
             type: "bi.multilayer_single_level_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE),
-            value: "第五级文件1"
+            items: [],
+            value: "第二级文件1"
         });
 
         return {
             type: "bi.vtape",
             items: [{
-                el: tree
+                el: this.tree
             }, {
                 el: {
                     type: "bi.button",
                     height: 25,
                     text: "getValue",
                     handler: function () {
-                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
+                        BI.Msg.alert("", JSON.stringify(self.tree.getValue()));
                     }
                 },
                 height: 25
@@ -14257,7 +14261,7 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
                     height: 25,
                     text: "setValue (第二级文件1)",
                     handler: function () {
-                        tree.setValue(["第二级文件1"]);
+                        self.tree.setValue(["第二级文件1"]);
                     }
                 },
                 height: 25
@@ -14265,6 +14269,10 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             width: 500,
             hgap: 300
         };
+    },
+
+    mounted: function () {
+        this.tree.populate(BI.deepClone(Demo.CONSTANTS.TREE));
     }
 });
 
@@ -14508,7 +14516,51 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);/**
+BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);Demo.YearMonthInterval = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.year_month_interval",
+                ref: function (_ref) {
+                    self.interval = _ref;
+                },
+                value: {
+                    start: {
+                        type: 2,
+                        value: {
+                            year: -1,
+                            month: 1
+                        }
+                    },
+                    end: {
+                        type: 1,
+                        value: {
+                            year: 2018,
+                            month: 0
+                        }
+                    }
+                },
+                width: 400
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.interval.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        };
+    }
+});
+
+BI.shortcut("demo.year_month_interval", Demo.YearMonthInterval);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.YearQuarterCombo = BI.inherit(BI.Widget, {

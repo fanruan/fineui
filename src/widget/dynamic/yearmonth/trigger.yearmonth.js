@@ -113,6 +113,15 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_ERROR);
         });
+        editor.on(BI.SignEditor.EVENT_VALID, function () {
+            var year = self.yearEditor.getValue();
+            var month = self.monthEditor.getValue();
+            if(BI.isNotEmptyString(year) && BI.isNotEmptyString(month)) {
+                if(BI.isPositiveInteger(year) && month >= 1 && month <= 12 && !BI.checkDateVoid(year, month, 1, o.min, o.max)[0]) {
+                    self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_VALID);
+                }
+            }
+        });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
                 self._autoSwitch(editor.getValue());
@@ -181,8 +190,13 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     }
 });
+BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";
