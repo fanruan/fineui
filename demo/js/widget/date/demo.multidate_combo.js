@@ -14,7 +14,7 @@ Demo.Date = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.horizontal_auto",
-            vgap: 10,
+            vgap: 20,
             items: [{
                 type: "bi.dynamic_date_combo",
                 ref: function () {
@@ -22,31 +22,44 @@ Demo.Date = BI.inherit(BI.Widget, {
                 },
                 width: 300,
                 value: {
-                    year: 2018,
-                    month: 1,
-                    day: 23
-                }
-            }, {
-                type: "bi.multidate_combo",
-                ref: function () {
-                    self.datecombo = this;
-                },
-                width: 300,
-                value: {
-                    year: 2018,
-                    month: 1,
-                    day: 23
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 1,
+                        day: 23
+                    }
                 }
             }, {
                 type: "bi.button",
-                text: "getVlaue",
+                text: "getValue",
                 width: 300,
                 handler: function () {
                     BI.Msg.alert("date", JSON.stringify(self.datecombo.getValue()));
                 }
             }, {
+                type: "bi.dynamic_date_time_combo",
+                ref: function () {
+                    self.datetimecombo = this;
+                },
+                width: 300,
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 1,
+                        day: 23
+                    }
+                }
+            }, {
                 type: "bi.button",
-                text: "setVlaue '2017-12-31'",
+                text: "getValue",
+                width: 300,
+                handler: function () {
+                    BI.Msg.alert("date", JSON.stringify(self.datetimecombo.getValue()));
+                }
+            }, {
+                type: "bi.button",
+                text: "setValue '2017-12-31'",
                 width: 300,
                 handler: function () {
                     self.datecombo.setValue({

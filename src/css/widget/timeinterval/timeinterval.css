@@ -1,6 +1,11 @@
-.bi-time-interval.time-error .bi-input {
+.bi-time-interval .bi-date-time-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-time-interval.time-error .bi-date-time-trigger .bi-input {
   color: #ff4949;
 }
-.bi-time-interval.time-error .sign-editor-text {
+.bi-time-interval.time-error .bi-date-time-trigger .sign-editor-text {
   color: #ff4949;
 }
