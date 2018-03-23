@@ -1,17 +1,10 @@
-/**
- * 年月
- *
- * Created by GUY on 2015/9/2.
- * @class BI.DynamicYearMonthPopup
- * @extends BI.Trigger
- */
-BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
+BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30
     },
 
     props: {
-        baseCls: "bi-year-month-popup",
+        baseCls: "bi-year-quarter-popup",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
@@ -21,7 +14,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, opts = this.options;
-        this.storeValue = {type: BI.DynamicYearMonthCombo.Static};
+        this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
             type: "bi.vtape",
             items: [{
@@ -38,7 +31,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_CLEAR_EVENT_CHANGE);
+                                self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_CLEAR_EVENT_CHANGE);
                             }
                         }]
                     }, {
@@ -46,14 +39,14 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-border-top",
                         shadow: true,
-                        text: BI.i18nText("BI-Basic_Current_Month"),
+                        text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
                             self.textButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_lABEL_EVENT_CHANGE);
+                                self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE);
                             }
                         }]
                     }, {
@@ -65,7 +58,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
-                                self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
+                                self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
                     }]]
@@ -76,8 +69,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     },
 
     _setInnerValue: function () {
-        if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
+        if (this.dateTab.getSelect() === BI.DynamicYearQuarterCombo.Static) {
+            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
@@ -100,19 +93,19 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
-                    value: BI.DynamicYearCombo.Static
+                    value: BI.DynamicYearQuarterCombo.Static
                 }, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
-                    value: BI.DynamicYearCombo.Dynamic
+                    value: BI.DynamicYearQuarterCombo.Dynamic
                 }], {
                     textAlign: "center"
                 })
             },
             cardCreator: function (v) {
                 switch (v) {
-                    case BI.DynamicYearCombo.Dynamic:
+                    case BI.DynamicYearQuarterCombo.Dynamic:
                         return {
-                            type: "bi.dynamic_year_month_card",
+                            type: "bi.dynamic_year_quarter_card",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -123,17 +116,17 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                                 self.dynamicPane = this;
                             }
                         };
-                    case BI.DynamicYearCombo.Static:
+                    case BI.DynamicYearQuarterCombo.Static:
                     default:
                         return {
-                            type: "bi.static_year_month_card",
+                            type: "bi.static_year_quarter_card",
                             behaviors: o.behaviors,
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
-                                eventName: BI.YearCard.EVENT_CHANGE,
+                                eventName: BI.DynamicYearCard.EVENT_CHANGE,
                                 action: function () {
-                                    self.fireEvent(BI.DynamicYearMonthPopup.EVENT_CHANGE);
+                                    self.fireEvent(BI.DynamicYearQuarterPopup.EVENT_CHANGE);
                                 }
                             }],
                             ref: function () {
@@ -147,14 +140,14 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 action: function () {
                     var v = self.dateTab.getSelect();
                     switch (v) {
-                        case BI.DynamicYearCombo.Static:
+                        case BI.DynamicYearQuarterCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), month: date.getMonth()});
+                            self.year.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
                             self._setInnerValue();
                             break;
-                        case BI.DynamicYearCombo.Dynamic:
+                        case BI.DynamicYearQuarterCombo.Dynamic:
                         default:
-                            if(self.storeValue && self.storeValue.type === BI.DynamicYearCombo.Dynamic) {
+                            if(self.storeValue && self.storeValue.type === BI.DynamicYearQuarterCombo.Dynamic) {
                                 self.dynamicPane.setValue(self.storeValue.value);
                             }else{
                                 self.dynamicPane.setValue({
@@ -185,7 +178,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 this.year.setValue(value);
-                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
+                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
                 this.textButton.setEnable(true);
                 break;
         }
@@ -199,8 +192,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     }
 
 });
-BI.DynamicYearMonthPopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
-BI.DynamicYearMonthPopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
-BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
-BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
+BI.DynamicYearQuarterPopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
+BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
+BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
