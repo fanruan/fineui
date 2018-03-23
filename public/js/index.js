@@ -1,4 +1,3 @@
-BI.servletURL = "https://fanruan.coding.me/fineui/dist/";
 BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",

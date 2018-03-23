@@ -14,7 +14,7 @@ BI.A = BI.inherit(BI.Text, {
             href: "",
             target: "_blank",
             el: null,
-            element: "<a/>"
+            tagName: "a"
         });
     },
     _init: function () {

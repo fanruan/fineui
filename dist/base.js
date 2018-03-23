@@ -1711,7 +1711,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
                 + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
-            return BI.servletURL + "?op=" + self.options.op + "&cmd=" + self.options.cmd + "&" + param;
+            return "&" + param;
         }
 
         function beforeExpand (treeId, treeNode) {
@@ -1724,7 +1724,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             }
             BI.Msg.toast("Please Wait。", "warning");
             return false;
-            
+
         }
 
         function onAsyncSuccess (event, treeId, treeNode, msg) {
@@ -1760,7 +1760,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                // treeNode.icon = BI.servletURL +"?op=resource&resource=/com/fr/bi/web/css/base/third/ztree/img/loading.gif";
                 zTree.updateNode(treeNode);
             }
             zTree.reAsyncChildNodes(treeNode, reloadType, true);
@@ -16426,7 +16425,7 @@ BI.A = BI.inherit(BI.Text, {
             href: "",
             target: "_blank",
             el: null,
-            element: "<a/>"
+            tagName: "a"
         });
     },
     _init: function () {
@@ -19475,8 +19474,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     // enable again the submit button/element
                 }, 1000);
             };
-            _wrap.url = o.url ? o.url : BI.servletURL
-                + "?op=fr_attach&cmd=ah_upload";
+            _wrap.url = o.url;
             _wrap.fileType = o.accept;   // 文件类型限制
             _wrap.attach_array = [];
             _wrap.attach_names = [];
@@ -20422,7 +20420,8 @@ BI.Link = BI.inherit(BI.Label, {
     _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-link",
+            baseCls: (conf.baseCls || "") + " bi-link display-block",
+            tagName: "a",
             href: "",
             target: "_blank"
         });

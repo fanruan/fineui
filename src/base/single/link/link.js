@@ -7,7 +7,8 @@ BI.Link = BI.inherit(BI.Label, {
     _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-link",
+            baseCls: (conf.baseCls || "") + " bi-link display-block",
+            tagName: "a",
             href: "",
             target: "_blank"
         });

@@ -19435,9 +19435,15 @@ if (!window.BI) {
             return widget instanceof BI.Widget || (BI.View && widget instanceof BI.View);
         },
 
-        createWidgets: function (items, options) {
+        createWidgets: function (items, options, context) {
             if (!BI.isArray(items)) {
                 throw new Error("cannot create Widgets");
+            }
+            if (BI.isWidget(options)) {
+                context = options;
+                options = {};
+            } else {
+                options || (options = {});
             }
             return BI.map(BI.flatten(items), function (i, item) {
                 return BI.createWidget(item, BI.deepClone(options));
@@ -23235,28 +23241,7 @@ BI.IntegerBufferSet.prototype = {
             return array;
         }
     };
-})();window.BI = window.BI || {};
-
-_.extend(BI, {
-    $defaultImport: function (options, type) {
-        var config;
-        if (BI.isObject(options)) {
-            config = $.extend({
-                op: "resource",
-                path: null,
-                type: null,
-                must: false
-            }, options);
-            config.url = BI.servletURL + "?op=" + config.op + "&resource=" + config.path;
-        } else {
-            config = {
-                url: BI.servletURL + "?op=resource&resource=" + options,
-                type: arguments[1],
-                must: arguments[2]
-            };
-        }
-        this.$import(config.url, config.type, config.must);
-    },
+})();_.extend(BI, {
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady (src, must) {

@@ -6559,149 +6559,149 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .check-box-icon:hover .x-icon,
 .check-box-icon.hover .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon:hover .x-icon.hack,
 .check-box-icon.hover .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .check-box-icon:active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon:active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .check-box-icon.active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_active.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_active.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon.active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_active.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_active.png');
   _background: none;
 }
 .check-box-icon.disabled .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon.disabled .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable.png');
   _background: none;
 }
 .check-box-icon.disabled.active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable2.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable2.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/check_box_disable2.png');
   background-size: contain;
   _background: none;
 }
 .check-box-icon.disabled.active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable2.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable2.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/check_box_disable2.png');
   _background: none;
 }
 .radio-icon .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png');
   _background: none;
 }
 .radio-icon:hover .x-icon,
 .radio-icon.hover .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon:hover .x-icon.hack,
 .radio-icon.hover .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png');
   _background: none;
 }
 .radio-icon:active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_normal.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon:active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_normal.png');
   _background: none;
 }
 .radio-icon.active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_active.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_active.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon.active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_active.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_active.png');
   _background: none;
 }
 .radio-icon.disabled .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon.disabled .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable.png');
   _background: none;
 }
 .radio-icon.disabled.active .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable2.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable2.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/radio_disable2.png');
   background-size: contain;
   _background: none;
 }
 .radio-icon.disabled.active .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable2.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable2.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/radio_disable2.png');
   _background: none;
 }
@@ -6719,39 +6719,111 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .slider-icon .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png');
   background-size: contain;
   _background: none;
 }
 .slider-icon .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png');
   _background: none;
 }
 .slider-icon:hover .x-icon,
 .slider-icon.hover .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_active_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_active_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_active_small.png');
   background-size: contain;
   _background: none;
 }
 .slider-icon:hover .x-icon.hack,
 .slider-icon.hover .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_active_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_active_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_active_small.png');
   _background: none;
 }
 .slider-icon.disabled .x-icon {
   display: block;
-  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/slider_normal_small.png');
   background-size: contain;
   _background: none;
 }
 .slider-icon.disabled .x-icon.hack {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png') no-repeat 0 0;
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/slider_normal_small.png');
+  _background: none;
+}
+.auto-color-icon .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-icon .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_normal.png');
+  _background: none;
+}
+.auto-color-icon.active .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_select.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_select.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-icon.active .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_select.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_select.png');
+  _background: none;
+}
+.auto-color-icon.disabled .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/auto_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-icon.disabled .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/auto_disable.png');
+  _background: none;
+}
+.trans-color-icon .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-icon .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_normal.png');
+  _background: none;
+}
+.trans-color-icon.active .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_select.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_select.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-icon.active .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_select.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_select.png');
+  _background: none;
+}
+.trans-color-icon.disabled .x-icon {
+  display: block;
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/trans_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-icon.disabled .x-icon.hack {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/trans_disable.png');
   _background: none;
 }
