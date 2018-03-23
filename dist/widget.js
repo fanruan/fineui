@@ -468,7 +468,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     },
 
     setValue: function (v) {
-        this.trigger.setValue(v + 1);
+        this.trigger.setValue(v);
         this.popup.setValue(v);
     },
 
@@ -573,7 +573,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             if (self._month === 0) {
                 self.setValue({
                     year: self.year.getValue() - 1,
-                    month: 11
+                    month: 12
                 });
             } else {
                 self.setValue({
@@ -665,14 +665,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._month === 0 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 1 && this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._month === 11 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = !(this._month === 12 && this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
         this.right.setEnable(valid);
         return valid;
     },
@@ -3977,7 +3977,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                     var date = BI.getDate();
                     this.ymd.setValue({
                         year: date.getFullYear(),
-                        month: date.getMonth(),
+                        month: date.getMonth() + 1,
                         day: date.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
@@ -4072,7 +4072,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1] - 1,
+                        month: date[1],
                         day: date[2] | 0
                     }
                 };
@@ -4201,7 +4201,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = value.year + "-" + (value.month + 1) + "-" + value.day;
+                    var dateStr = value.year + "-" + (value.month) + "-" + value.day;
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                     this.setTitle(dateStr);
@@ -4691,7 +4691,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     var date = BI.getDate();
                     this.ymd.setValue({
                         year: date.getFullYear(),
-                        month: date.getMonth(),
+                        month: date.getMonth() + 1,
                         day: date.getDate()
                     });
                     this.timeSelect.setValue();
@@ -4956,7 +4956,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1] - 1,
+                        month: date[1],
                         day: date[2] | 0,
                         hour: date[3] | 0,
                         minute: date[4] | 0,
@@ -5088,7 +5088,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = value.year + "-" + (value.month + 1) + "-" + value.day + " " +
+                    var dateStr = value.year + "-" + (value.month) + "-" + value.day + " " +
                         (value.hour || "00") + ":" + (value.minute || "00") + ":" + (value.second || "00");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
@@ -7024,7 +7024,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         // 纵向排列月
-        var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
+        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
         items.push(month.slice(0, 2));
         items.push(month.slice(2, 4));
@@ -7044,7 +7044,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td + 1
+                    text: td
                 };
             });
         });
@@ -20365,7 +20365,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
 
     _createMonths: function () {
         // 纵向排列月
-        var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
+        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
         items.push(month.slice(0, 2));
         items.push(month.slice(2, 4));
@@ -20385,7 +20385,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td + 1
+                    text: td
                 };
             });
         });
@@ -21027,7 +21027,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
             case BI.DynamicDateCombo.Static:
             default:
                 value = value || {};
-                var month = BI.isNull(value.month) ? null : value.month + 1;
+                var month = BI.isNull(value.month) ? null : value.month;
                 this.yearEditor.setValue(value.year);
                 this.yearEditor.setTitle(value.year);
                 this.monthEditor.setValue(month);

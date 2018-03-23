@@ -189,7 +189,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     var date = BI.getDate();
                     this.ymd.setValue({
                         year: date.getFullYear(),
-                        month: date.getMonth(),
+                        month: date.getMonth() + 1,
                         day: date.getDate()
                     });
                     this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));

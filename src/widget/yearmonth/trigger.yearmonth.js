@@ -179,7 +179,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             case BI.DynamicDateCombo.Static:
             default:
                 value = value || {};
-                var month = BI.isNull(value.month) ? null : value.month + 1;
+                var month = BI.isNull(value.month) ? null : value.month;
                 this.yearEditor.setValue(value.year);
                 this.yearEditor.setTitle(value.year);
                 this.monthEditor.setValue(month);

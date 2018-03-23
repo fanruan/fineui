@@ -19,7 +19,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         // 纵向排列月
-        var month = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
+        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
         items.push(month.slice(0, 2));
         items.push(month.slice(2, 4));
@@ -39,7 +39,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td + 1
+                    text: td
                 };
             });
         });

@@ -12097,7 +12097,7 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 11
                         }
                     },
@@ -12117,7 +12117,7 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 11,
                             hour: 12,
                             minute: 12,
@@ -12140,7 +12140,7 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                     handler: function () {
                         self.datepane.setValue({
                             year: 2017,
-                            month: 11,
+                            month: 12,
                             day: 31
                         });
                     }
@@ -12183,7 +12183,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 1,
+                        month: 2,
                         day: 23
                     }
                 }
@@ -12204,7 +12204,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 1,
+                        month: 2,
                         day: 23
                     }
                 }
@@ -14557,7 +14557,7 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     type: 1,
                     value: {
                         year: 2018,
-                        month: 0
+                        month: 1
                     }
                 }
             }, {
@@ -14569,12 +14569,12 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                 width: 300
             }, {
                 type: "bi.button",
-                text: "setVlaue '2017-12'",
+                text: "setValue '2017-12'",
                 width: 300,
                 handler: function () {
                     self.widget.setValue({
                         year: 2017,
-                        month: 11
+                        month: 12
                     });
                 }
             }],
@@ -14609,7 +14609,7 @@ BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);Demo.YearMonthInterval
                         type: 1,
                         value: {
                             year: 2018,
-                            month: 0
+                            month: 1
                         }
                     }
                 },
