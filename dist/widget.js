@@ -7756,7 +7756,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this,
+            cls: "tree-view display-inline",
             expander: {
                 type: "bi.select_tree_expander",
                 isDefaultInit: o.isDefaultInit,
@@ -7784,6 +7784,13 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, arguments);
             }
         });
+
+        BI.createWidget({
+            type: "bi.adaptive",
+            element: this,
+            scrollable: true,
+            items: [this.tree]
+        })
     },
 
     populate: function (nodes) {
