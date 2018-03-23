@@ -78523,7 +78523,8 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             errorText: o.errorText,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
+            quitChecker: o.quitChecker,
+            value: o.value
         });
         this.clear = BI.createWidget({
             type: "bi.icon_button",
@@ -78607,7 +78608,11 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
             self.fireEvent(BI.ClearEditor.EVENT_STOP);
         });
 
-        this.clear.invisible();
+        if (BI.isKey(o.value)) {
+            this.clear.visible();
+        } else {
+            this.clear.invisible();
+        }
     },
 
     _checkClear: function () {
