@@ -82239,6 +82239,9 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             } else {
                 console.error("不支持此浏览器");
             }
+            if(o.readOnly) {
+                newInstance.disable();
+            }
             return newInstance;
         },
 
@@ -83048,7 +83051,8 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.nic_editor",
             width: o.width,
-            height: o.height
+            height: o.height,
+            readOnly: o.readOnly
         });
 
         this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
@@ -83059,6 +83063,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             toggle: false,
+            trigger: o.readOnly ? "" : "click",
             direction: "top,left",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
@@ -83076,6 +83081,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         });
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.RichEditor.EVENT_AFTER_HIDEVIEW);
         });
     },
 
@@ -83087,6 +83093,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         return this.editor.getValue();
     }
 });
+BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.rich_editor", BI.RichEditor);/**
  * 分段控件使用的button
