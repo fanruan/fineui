@@ -65,6 +65,10 @@
             // return false;
         },
 
+        focus: function () {
+            this.instance.focus();
+        },
+
         setValue: function (v) {
             this.instance.setContent(v);
         },
@@ -248,6 +252,10 @@
                 this.elm.element.addClass(prefix + "selected");
             }
             // return false;
+        },
+
+        focus: function () {
+            this.setFocus(this.elm.element[0]);
         },
 
         blur: function () {
