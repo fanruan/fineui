@@ -38,6 +38,9 @@
             } else {
                 console.error("不支持此浏览器");
             }
+            if(o.readOnly) {
+                newInstance.disable();
+            }
             return newInstance;
         },
 
