@@ -27,6 +27,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
+            value: opts.value,
             el: {
                 tipText: BI.i18nText("BI-No_Select"),
                 el: {

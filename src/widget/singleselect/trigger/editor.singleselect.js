@@ -25,7 +25,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             element: this,
             height: o.height,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowBlank: true
+            allowBlank: true,
+            value: o.value
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

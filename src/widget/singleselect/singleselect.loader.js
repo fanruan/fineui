@@ -83,7 +83,8 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             hasNext: function () {
                 return hasNext;
-            }
+            },
+            value: this.storeValue
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

@@ -11175,6 +11175,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 });
 BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.RichEditor.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.rich_editor", BI.RichEditor);/**
  * 分段控件使用的button
  *

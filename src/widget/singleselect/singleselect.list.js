@@ -36,7 +36,8 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
                 });
             },
             onLoaded: o.onLoaded,
-            hasNext: o.hasNext
+            hasNext: o.hasNext,
+            value: o.value
         });
     
         this.list.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {

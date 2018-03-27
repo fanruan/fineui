@@ -43,7 +43,8 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
                     callback(res);
                     self.setKeyword(o.keywordGetter());
                 }]);
-            }
+            },
+            value: o.value
         });
         this.loader.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

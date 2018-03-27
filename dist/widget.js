@@ -15604,6 +15604,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
+            value: opts.value,
             el: {
                 tipText: BI.i18nText("BI-No_Select"),
                 el: {
@@ -15776,7 +15777,8 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
                     callback(res);
                     self.setKeyword(o.keywordGetter());
                 }]);
-            }
+            },
+            value: o.value
         });
         this.loader.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -15852,7 +15854,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = "";
+        this.storeValue = o.value || "";
         // 标记正在请求数据
         this.requesting = false;
 
@@ -15877,7 +15879,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                     callback.apply(self, arguments);
                 });
-            }
+            },
+            value: this.storeValue
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
@@ -15973,7 +15976,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             },
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
-            }
+            },
+            value: o.value
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -16216,7 +16220,8 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
                 });
             },
             onLoaded: o.onLoaded,
-            hasNext: o.hasNext
+            hasNext: o.hasNext,
+            value: o.value
         });
     
         this.list.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
@@ -16395,7 +16400,8 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             hasNext: function () {
                 return hasNext;
-            }
+            },
+            value: this.storeValue
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -16488,7 +16494,8 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
             type: "bi.single_select_loader",
             itemsCreator: opts.itemsCreator,
             valueFormatter: opts.valueFormatter,
-            onLoaded: opts.onLoaded
+            onLoaded: opts.onLoaded,
+            value: opts.value
         });
 
         this.popupView = BI.createWidget({
@@ -16499,7 +16506,8 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
             maxHeight: opts.maxHeight,
             element: this,
             buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
-            el: this.loader
+            el: this.loader,
+            value: opts.value
         });
 
         this.popupView.on(BI.MultiPopupView.EVENT_CHANGE, function () {
@@ -16590,7 +16598,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             valueFormatter: o.valueFormatter,
             popup: {},
             adapter: o.adapter,
-            masker: o.masker
+            masker: o.masker,
+            value: o.value
         });
         this.searcher.on(BI.SingleSelectSearcher.EVENT_START, function () {
             self.fireEvent(BI.SingleSelectTrigger.EVENT_START);
@@ -16683,7 +16692,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             element: this,
             height: o.height,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowBlank: true
+            allowBlank: true,
+            value: o.value
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -16786,7 +16796,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
                     op.keyword = self.editor.getValue();
                     this.setKeyword(op.keyword);
                     o.itemsCreator(op, callback);
-                }
+                },
+                value: o.value
             }, o.popup),
 
             adapter: o.adapter,
@@ -16811,6 +16822,10 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
             var keywords = this.getKeywords();
             self.fireEvent(BI.SingleSelectSearcher.EVENT_SEARCHING, keywords);
         });
+
+        if(BI.isNotNull(o.value)){
+            this.setState(o.value);
+        }
     },
 
     adjustView: function () {

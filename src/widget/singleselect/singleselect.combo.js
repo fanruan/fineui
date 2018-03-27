@@ -22,7 +22,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = "";
+        this.storeValue = o.value || "";
         // 标记正在请求数据
         this.requesting = false;
 
@@ -47,7 +47,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                     callback.apply(self, arguments);
                 });
-            }
+            },
+            value: this.storeValue
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
@@ -143,7 +144,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             },
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
-            }
+            },
+            value: o.value
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
