@@ -19,11 +19,18 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.nic_editor",
             width: o.width,
             height: o.height,
-            readOnly: o.readOnly
-        });
-
-        this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+            readOnly: o.readOnly,
+            listeners: [{
+                eventName: BI.NicEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+                }
+            }, {
+                eventName: BI.NicEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.RichEditor.EVENT_FOCUS);
+                }
+            }]
         });
 
         this.combo = BI.createWidget({

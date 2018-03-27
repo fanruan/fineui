@@ -82284,6 +82284,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
+    BI.NicEditor.EVENT_FOCUS = "focus";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
     BI.shortcut("bi.nic_editor", BI.NicEditor);
 
@@ -82510,31 +82511,32 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         BI.RichEditorBackgroundChooserTrigger.superclass._init.apply(this, arguments);
         this.font = BI.createWidget({
             type: "bi.icon_button",
+            element: this,
             cls: "text-background-font"
         });
 
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-underline-font"
-        });
+        // this.underline = BI.createWidget({
+        //     type: "bi.icon_button",
+        //     cls: "text-color-underline-font"
+        // });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.font,
-                top: 2,
-                left: 2
-            }, {
-                el: this.underline,
-                top: 7,
-                left: 2
-            }]
-        });
+        // BI.createWidget({
+        //     type: "bi.absolute",
+        //     element: this,
+        //     items: [{
+        //         el: this.font,
+        //         top: 2,
+        //         left: 2
+        //     }, {
+        //         el: this.underline,
+        //         top: 7,
+        //         left: 2
+        //     }]
+        // });
     },
 
     setValue: function (color) {
-        this.underline.element.css("color", color);
+        this.font.element.css("color", color);
     },
 
     getValue: function () {
@@ -82828,31 +82830,32 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         BI.RichEditorColorChooserTrigger.superclass._init.apply(this, arguments);
         this.font = BI.createWidget({
             type: "bi.icon_button",
+            element: this,
             cls: "text-color-font"
         });
 
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-underline-font"
-        });
+        // this.underline = BI.createWidget({
+        //     type: "bi.icon_button",
+        //     cls: "text-color-underline-font"
+        // });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.font,
-                top: 2,
-                left: 2
-            }, {
-                el: this.underline,
-                top: 7,
-                left: 2
-            }]
-        });
+        // BI.createWidget({
+        //     type: "bi.absolute",
+        //     element: this,
+        //     items: [{
+        //         el: this.font,
+        //         top: 2,
+        //         left: 2
+        //     }, {
+        //         el: this.underline,
+        //         top: 7,
+        //         left: 2
+        //     }]
+        // });
     },
 
     setValue: function (color) {
-        this.underline.element.css("color", color);
+        this.font.element.css("color", color);
     },
 
     getValue: function () {
@@ -83060,11 +83063,18 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             type: "bi.nic_editor",
             width: o.width,
             height: o.height,
-            readOnly: o.readOnly
-        });
-
-        this.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+            readOnly: o.readOnly,
+            listeners: [{
+                eventName: BI.NicEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
+                }
+            }, {
+                eventName: BI.NicEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.RichEditor.EVENT_FOCUS);
+                }
+            }]
         });
 
         this.combo = BI.createWidget({

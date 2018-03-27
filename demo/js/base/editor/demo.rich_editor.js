@@ -3,6 +3,7 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
         baseCls: "demo-rich-editor"
     },
     render: function () {
+        var self = this;
         this.editor = BI.createWidget({
             type: "bi.rich_editor",
             cls: "mvc-border",
@@ -14,7 +15,13 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
             element: this,
             hgap: 30,
             vgap: 50,
-            items: [this.editor]
+            items: [this.editor, {
+                type: "bi.button",
+                text: "focus",
+                handler: function () {
+                    self.editor.focus();
+                }
+            }]
         });
     },
 
