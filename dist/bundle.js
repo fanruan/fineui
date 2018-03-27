@@ -82266,6 +82266,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             // return false;
         },
 
+        focus: function () {
+            this.instance.focus();
+        },
+
         setValue: function (v) {
             this.instance.setContent(v);
         },
@@ -82449,6 +82453,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 this.elm.element.addClass(prefix + "selected");
             }
             // return false;
+        },
+
+        focus: function () {
+            this.setFocus(this.elm.element[0]);
         },
 
         blur: function () {
@@ -83083,6 +83091,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.RichEditor.EVENT_AFTER_HIDEVIEW);
         });
+    },
+
+    focus: function () {
+        this.editor.focus();
     },
 
     setValue: function (v) {
