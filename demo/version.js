@@ -147,5 +147,13 @@ BI.i18n = {
     "BI-Basic_Year_Quarter": "年季度",
     "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
     "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
-    "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00"
+    "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00",
+    "BI-Basic_Or": "或",
+    "BI-Basic_And": "且",
+    "BI-Conf_Add_Formula": "添加公式",
+    "BI-Conf_Add_Condition": "添加条件",
+    "BI-Conf_Formula_And": "且公式条件",
+    "BI-Conf_Formula_Or": "或公式条件",
+    "BI-Conf_Condition_And": "且条件",
+    "BI-Conf_Condition_Or": "或条件"
 };
