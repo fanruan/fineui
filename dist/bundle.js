@@ -101036,12 +101036,12 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
             })
         });
         this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self._adjustColumns();
             self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
         });
         this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
             self._adjustColumns();
         });
+        this._adjustColumns();
     },
 
     // 是否有自适应调节的列，即列宽为""
@@ -101180,6 +101180,7 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
 
     populate: function (items, header) {
         this.table.populate(items, header);
+        this._adjustColumns();
     }
 });
 BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
