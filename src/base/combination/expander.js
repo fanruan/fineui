@@ -129,9 +129,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el, {
-            value: this.options.value
-        });
+        this.expander = BI.createWidget(this.options.el);
     },
 
     _assertPopupView: function () {

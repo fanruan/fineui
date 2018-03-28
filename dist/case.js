@@ -11130,6 +11130,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.NicEditor.EVENT_FOCUS,
                 action: function () {
+                    if(!self.combo.isViewVisible()) {
+                        self.combo.showView();
+                    }
                     self.fireEvent(BI.RichEditor.EVENT_FOCUS);
                 }
             }]

@@ -38876,9 +38876,7 @@ BI.Expander = BI.inherit(BI.Widget, {
     },
 
     _initExpander: function () {
-        this.expander = BI.createWidget(this.options.el, {
-            value: this.options.value
-        });
+        this.expander = BI.createWidget(this.options.el);
     },
 
     _assertPopupView: function () {
@@ -83072,6 +83070,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.NicEditor.EVENT_FOCUS,
                 action: function () {
+                    if(!self.combo.isViewVisible()) {
+                        self.combo.showView();
+                    }
                     self.fireEvent(BI.RichEditor.EVENT_FOCUS);
                 }
             }]
@@ -92794,7 +92795,7 @@ BI.extend(BI.AbstractFilterItem, {
 
         render: function () {
             var self = this, o = this.options;
-            var value = o.value, text = "";
+            var value = o.el.value, text = "";
             if (value === BI.Filter.FILTER_TYPE.AND) {
                 text = BI.i18nText("BI-Basic_And");
             } else {
