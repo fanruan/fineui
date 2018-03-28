@@ -6284,7 +6284,7 @@ BI.extend(BI.AbstractFilterItem, {
 
         render: function () {
             var self = this, o = this.options;
-            var value = o.value, text = "";
+            var value = o.el.value, text = "";
             if (value === BI.Filter.FILTER_TYPE.AND) {
                 text = BI.i18nText("BI-Basic_And");
             } else {
