@@ -83,6 +83,7 @@
     });
     BI.NicEditor.EVENT_SELECTED = "selected";
     BI.NicEditor.EVENT_BLUR = "blur";
+    BI.NicEditor.EVENT_FOCUS = "focus";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
     BI.shortcut("bi.nic_editor", BI.NicEditor);
 

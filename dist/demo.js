@@ -856,6 +856,7 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
         baseCls: "demo-rich-editor"
     },
     render: function () {
+        var self = this;
         this.editor = BI.createWidget({
             type: "bi.rich_editor",
             cls: "mvc-border",
@@ -867,7 +868,13 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
             element: this,
             hgap: 30,
             vgap: 50,
-            items: [this.editor]
+            items: [this.editor, {
+                type: "bi.button",
+                text: "focus",
+                handler: function () {
+                    self.editor.focus();
+                }
+            }]
         });
     },
 
@@ -5877,6 +5884,10 @@ Demo.FIX_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    id: 422,
+    text: "过滤Filter",
+    value: "demo.filter"
 }];Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
@@ -12555,7 +12566,71 @@ Demo.FileManager = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.file_manager", Demo.FileManager);/**
+BI.shortcut("demo.file_manager", Demo.FileManager);Demo.Filter = BI.inherit(BI.Widget, {
+    props: {},
+    _createFilter: function () {
+        var filter = BI.createWidget({
+            type: "bi.filter",
+            width: 600,
+            height: 300,
+            items: [{
+                id: "3beb41be9c67d80d",
+                value: 81,
+                children: [{
+                    id: 1,
+                    type: "bi.label",
+                    value: "节点1"
+                }, {
+                    id: "74cf470c15a7cb23",
+                    value: 80,
+                    children: [{
+                        id: 2,
+                        type: "bi.label",
+                        value: "节点2"
+                    }, {
+                        id: 3,
+                        type: "bi.label",
+                        value: "节点3"
+                    }]
+                }, {
+                    id: 4,
+                    type: "bi.label",
+                    value: "节点4"
+                }]
+            }],
+            itemCreator: function (item) {
+                if(item.value === BI.Filter.FILTER_TYPE.EMPTY_FORMULA || item.value === BI.Filter.FILTER_TYPE.EMPTY_CONDITION) {
+                    item.type = "bi.label";
+                    item.value = "这是一个新添的数据";
+                }
+            }
+        });
+
+        return filter;
+    },
+
+    render: function () {
+
+        var filter = this._createFilter();
+
+        return {
+            type: "bi.vertical",
+            hgap: 30,
+            vgap: 20,
+            items: [{
+                el: filter
+            }, {
+                type: "bi.button",
+                text: "过滤结构getValue()",
+                height: 30,
+                handler: function () {
+                    BI.Msg.alert("过滤结构", JSON.stringify(filter.getValue()));
+                }
+            }]
+        };
+    }
+});
+BI.shortcut("demo.filter", Demo.Filter);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -13117,7 +13192,8 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             width: 200,
             ref: function () {
                 self.SingleSelectCombo = this;
-            }
+            },
+            value: "柳州市针织总厂"
         });
 
         widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {

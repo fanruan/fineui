@@ -18,31 +18,32 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         BI.RichEditorBackgroundChooserTrigger.superclass._init.apply(this, arguments);
         this.font = BI.createWidget({
             type: "bi.icon_button",
+            element: this,
             cls: "text-background-font"
         });
 
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "text-color-underline-font"
-        });
+        // this.underline = BI.createWidget({
+        //     type: "bi.icon_button",
+        //     cls: "text-color-underline-font"
+        // });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.font,
-                top: 2,
-                left: 2
-            }, {
-                el: this.underline,
-                top: 7,
-                left: 2
-            }]
-        });
+        // BI.createWidget({
+        //     type: "bi.absolute",
+        //     element: this,
+        //     items: [{
+        //         el: this.font,
+        //         top: 2,
+        //         left: 2
+        //     }, {
+        //         el: this.underline,
+        //         top: 7,
+        //         left: 2
+        //     }]
+        // });
     },
 
     setValue: function (color) {
-        this.underline.element.css("color", color);
+        this.font.element.css("color", color);
     },
 
     getValue: function () {

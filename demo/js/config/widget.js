@@ -222,4 +222,8 @@ Demo.WIDGET_CONFIG = [{
     id: 420,
     text: "滚动sliders",
     value: "demo.slider"
+}, {
+    id: 422,
+    text: "过滤Filter",
+    value: "demo.filter"
 }];

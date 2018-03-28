@@ -14,7 +14,8 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             width: 200,
             ref: function () {
                 self.SingleSelectCombo = this;
-            }
+            },
+            value: "柳州市针织总厂"
         });
 
         widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
