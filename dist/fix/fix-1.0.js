@@ -1423,7 +1423,7 @@ BI.WRouter = BI.inherit(BI.Router, {
 
     get: function (fragment) {
         var result = null;
-        _.any(this.handlers, function (handler) {
+        _.some(this.handlers, function (handler) {
             if (handler.route.test(fragment)) {
                 result = handler.callback(fragment);
                 return true;
