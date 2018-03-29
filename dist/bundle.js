@@ -29214,17 +29214,18 @@ Date.prototype.getOffsetDate = function (offset) {
     return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
 
-Date.prototype.getAfterMulQuarter = function (n) {
+Date.prototype.getOffsetQuarter = function (n) {
     var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n * 3);
+    var day = dt.getDate();
+    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1).getMonthDays();
+    if (day > monthDay) {
+        day = monthDay;
+    }
+    dt.setDate(day);
+    dt.setMonth(dt.getMonth() + parseInt(n) * 3);
     return dt;
 };
-// 获得n个季度前的日期
-Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n * 3);
-    return dt;
-};
+
 // 得到本季度的起始月份
 Date.prototype.getQuarterStartMonth = function () {
     var quarterStartMonth = 0;
@@ -29251,16 +29252,6 @@ Date.prototype.getQuarterStartDate = function () {
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
     return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n | 0);
-    return dt;
-};
-Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n | 0);
-    return dt;
 };
 
 // 指定日期n个月之前或之后的日期
@@ -73708,7 +73699,7 @@ BI.extend(BI.Calendar, {
         var year = BI.getDate().getFullYear();
         var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
-        page += json.month - month;
+        page += json.month - 1 - month;
         return page;
     },
     getDateJSONByPage: function (v) {
@@ -73725,7 +73716,7 @@ BI.extend(BI.Calendar, {
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: BI.getDate().getFullYear() + year,
-            month: month
+            month: month + 1
         };
     }
 });
@@ -87822,12 +87813,12 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = BI.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = BI.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
@@ -87842,12 +87833,12 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = BI.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = BI.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
@@ -87998,8 +87989,19 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             max: o.max
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = self.datePicker.getValue();
+            var value = self.datePicker.getValue();
+            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var day = self.selectedTime.day || 0;
+            if (day > monthDay) {
+                day = monthDay;
+            }
+            self.selectedTime = {
+                year: value.year,
+                month: value.month,
+                day: day
+            };
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            self.calendar.setValue(self.selectedTime);
         });
 
         this.calendar = BI.createWidget({
@@ -89576,10 +89578,10 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getAfterMulQuarter(BI.parseInt(obj.quarter));
+                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getAfterMultiMonth(BI.parseInt(obj.month));
+                date = date.getOffsetMonth(BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
                 date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
