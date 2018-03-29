@@ -82291,7 +82291,6 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 scrollable: false
             });
             this.elm.element.css({
-                margin: "4px",
                 minHeight: (o.height - 8) + "px",
                 outline: "none"
             }).html(o.value);
@@ -82886,7 +82885,6 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
                 backgroundColor: backgroundColor,
                 color: BI.DOM.getContrastColor(backgroundColor)
             });
-            this.setValue("");
         });
     },
 
@@ -83074,7 +83072,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             element: this,
             toggle: false,
             trigger: o.readOnly ? "" : "click",
-            direction: "top,left",
+            direction: "top,right",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,
