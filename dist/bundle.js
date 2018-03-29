@@ -73708,7 +73708,7 @@ BI.extend(BI.Calendar, {
         var year = BI.getDate().getFullYear();
         var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
-        page += json.month - month;
+        page += json.month - 1 - month;
         return page;
     },
     getDateJSONByPage: function (v) {
@@ -73725,7 +73725,7 @@ BI.extend(BI.Calendar, {
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: BI.getDate().getFullYear() + year,
-            month: month
+            month: month + 1
         };
     }
 });
@@ -87998,8 +87998,19 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             max: o.max
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = self.datePicker.getValue();
+            var value = self.datePicker.getValue();
+            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var day = self.selectedTime.day || 0;
+            if (day > monthDay) {
+                day = monthDay;
+            }
+            self.selectedTime = {
+                year: value.year,
+                month: value.month,
+                day: day
+            };
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            self.calendar.setValue(self.selectedTime);
         });
 
         this.calendar = BI.createWidget({
