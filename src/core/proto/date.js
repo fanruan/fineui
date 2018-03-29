@@ -72,17 +72,18 @@ Date.prototype.getOffsetDate = function (offset) {
     return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
 
-Date.prototype.getAfterMulQuarter = function (n) {
+Date.prototype.getOffsetQuarter = function (n) {
     var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n * 3);
+    var day = dt.getDate();
+    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1).getMonthDays();
+    if (day > monthDay) {
+        day = monthDay;
+    }
+    dt.setDate(day);
+    dt.setMonth(dt.getMonth() + parseInt(n) * 3);
     return dt;
 };
-// 获得n个季度前的日期
-Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n * 3);
-    return dt;
-};
+
 // 得到本季度的起始月份
 Date.prototype.getQuarterStartMonth = function () {
     var quarterStartMonth = 0;
@@ -109,16 +110,6 @@ Date.prototype.getQuarterStartDate = function () {
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
     return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n | 0);
-    return dt;
-};
-Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n | 0);
-    return dt;
 };
 
 // 指定日期n个月之前或之后的日期
