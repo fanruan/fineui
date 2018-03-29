@@ -11,10 +11,10 @@
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getAfterMulQuarter(BI.parseInt(obj.quarter));
+                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getAfterMultiMonth(BI.parseInt(obj.month));
+                date = date.getOffsetMonth(BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
                 date = date.getOffsetDate(BI.parseInt(obj.week) * 7);

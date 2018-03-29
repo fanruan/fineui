@@ -170,12 +170,12 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = BI.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = BI.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
@@ -190,12 +190,12 @@ BI.DateTrigger = BI.inherit(BI.Trigger, {
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = BI.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = BI.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:

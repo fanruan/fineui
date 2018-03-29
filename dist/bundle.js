@@ -29214,17 +29214,18 @@ Date.prototype.getOffsetDate = function (offset) {
     return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
 };
 
-Date.prototype.getAfterMulQuarter = function (n) {
+Date.prototype.getOffsetQuarter = function (n) {
     var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n * 3);
+    var day = dt.getDate();
+    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1).getMonthDays();
+    if (day > monthDay) {
+        day = monthDay;
+    }
+    dt.setDate(day);
+    dt.setMonth(dt.getMonth() + parseInt(n) * 3);
     return dt;
 };
-// 获得n个季度前的日期
-Date.prototype.getBeforeMulQuarter = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n * 3);
-    return dt;
-};
+
 // 得到本季度的起始月份
 Date.prototype.getQuarterStartMonth = function () {
     var quarterStartMonth = 0;
@@ -29251,16 +29252,6 @@ Date.prototype.getQuarterStartDate = function () {
 Date.prototype.getQuarterEndDate = function () {
     var quarterEndMonth = this.getQuarterStartMonth() + 2;
     return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-Date.prototype.getAfterMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() + n | 0);
-    return dt;
-};
-Date.prototype.getBeforeMultiMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    dt.setMonth(dt.getMonth() - n | 0);
-    return dt;
 };
 
 // 指定日期n个月之前或之后的日期
@@ -73708,7 +73699,7 @@ BI.extend(BI.Calendar, {
         var year = BI.getDate().getFullYear();
         var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
-        page += json.month - month;
+        page += json.month - 1 - month;
         return page;
     },
     getDateJSONByPage: function (v) {
@@ -73725,7 +73716,7 @@ BI.extend(BI.Calendar, {
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: BI.getDate().getFullYear() + year,
-            month: month
+            month: month + 1
         };
     }
 });
@@ -87822,12 +87813,12 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_PREV];
-                date = BI.getDate().getBeforeMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_QUARTER_AFTER];
-                date = BI.getDate().getAfterMulQuarter(value);
+                date = BI.getDate().getOffsetQuarter(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_QUARTER_BEGIN:
@@ -87842,12 +87833,12 @@ BI.shortcut("bi.date_combo", BI.DateCombo);BI.DateTrigger = BI.inherit(BI.Trigge
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_PREV:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_PREV];
-                date = BI.getDate().getBeforeMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(-value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_AFTER:
                 var text = value + BI.DateTrigger.MULTI_DATE_SEGMENT_NUM[BI.DateTrigger.MULTI_DATE_MONTH_AFTER];
-                date = BI.getDate().getAfterMultiMonth(value);
+                date = BI.getDate().getOffsetMonth(value);
                 _setInnerValue(date, text);
                 break;
             case BI.DateTrigger.MULTI_DATE_MONTH_BEGIN:
@@ -87998,8 +87989,19 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             max: o.max
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = self.datePicker.getValue();
+            var value = self.datePicker.getValue();
+            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var day = self.selectedTime.day || 0;
+            if (day > monthDay) {
+                day = monthDay;
+            }
+            self.selectedTime = {
+                year: value.year,
+                month: value.month,
+                day: day
+            };
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            self.calendar.setValue(self.selectedTime);
         });
 
         this.calendar = BI.createWidget({
@@ -89576,10 +89578,10 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getAfterMulQuarter(BI.parseInt(obj.quarter));
+                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getAfterMultiMonth(BI.parseInt(obj.month));
+                date = date.getOffsetMonth(BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
                 date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
@@ -103968,6 +103970,334 @@ BI.SingleSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);/**
+ * @author: Teller
+ * @createdAt: 2018/3/28
+ * @Description
+*/
+BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-insert-list",
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn
+        });
+    },
+    _init: function () {
+        BI.SingleSelectInsertList.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        this.storeValue = {};
+
+        var assertShowValue = function () {
+            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            // self.trigger.setValue(self.storeValue);
+        };
+
+        this.adapter = BI.createWidget({
+            type: "bi.single_select_loader",
+            cls: "popup-single-select-list bi-border-left bi-border-right bi-border-bottom",
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            logic: {
+                dynamic: false
+            },
+            // onLoaded: o.onLoaded,
+            el: {}
+        });
+        this.adapter.on(BI.SingleSelectLoader.EVENT_CHANGE, function () {
+            self.storeValue = this.getValue();
+            assertShowValue();
+            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+        });
+
+        this.searcherPane = BI.createWidget({
+            type: "bi.single_select_search_pane",
+            cls: "bi-border-left bi-border-right bi-border-bottom",
+            valueFormatter: o.valueFormatter,
+            keywordGetter: function () {
+                return self.trigger.getKeyword();
+            },
+            itemsCreator: function (op, callback) {
+                op.keyword = self.trigger.getKeyword();
+                this.setKeyword(op.keyword);
+                o.itemsCreator(op, callback);
+            }
+        });
+        this.searcherPane.setVisible(false);
+
+        this.trigger = BI.createWidget({
+            type: "bi.searcher",
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback();
+            },
+            adapter: this.adapter,
+            popup: this.searcherPane,
+            height: 200,
+            masker: false,
+            listeners: [{
+                eventName: BI.Searcher.EVENT_START,
+                action: function () {
+                    self._showSearcherPane();
+                    self._setStartValue("");
+                    this.setValue(BI.deepClone(self.storeValue));
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_STOP,
+                action: function () {
+                    self._showAdapter();
+                    self._setStartValue("");
+                    self.adapter.setValue(self.storeValue);
+                    // 需要刷新回到初始界面，否则搜索的结果不能放在最前面
+                    self.adapter.populate();
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_PAUSE,
+                action: function () {
+                    var keyword = this.getKeyword();
+                    if (this.hasMatched()) {
+                        self._join({
+                            type: BI.Selection.Single,
+                            value: [keyword]
+                        }, function () {
+                            if (self.storeValue.type === BI.Selection.Single) {
+                                self.storeValue.value.pushDistinct(keyword);
+                            }
+                            self._showAdapter();
+                            self.adapter.setValue(self.storeValue);
+                            self._setStartValue(keyword);
+                            assertShowValue();
+                            self.adapter.populate();
+                            self._setStartValue("");
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                        });
+                    } else {
+                        if (self.storeValue.type === BI.Selection.Single) {
+                            self.storeValue.value.pushDistinct(keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Single) {
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_SEARCHING,
+                action: function () {
+                    var keywords = this.getKeyword();
+                    var last = BI.last(keywords);
+                    keywords = BI.initial(keywords || []);
+                    if (keywords.length > 0) {
+                        self._joinKeywords(keywords, function () {
+                            if (BI.isEndWithBlank(last)) {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                                self.adapter.populate();
+                                self._setStartValue("");
+                            } else {
+                                self.adapter.setValue(self.storeValue);
+                                assertShowValue();
+                            }
+                        });
+                    }
+                }
+            }, {
+                eventName: BI.Searcher.EVENT_CHANGE,
+                action: function (value, obj) {
+                    if (obj instanceof BI.MultiSelectBar) {
+                        self._joinAll(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                        });
+                    } else {
+                        self._join(this.getValue(), function () {
+                            assertShowValue();
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                        });
+                    }
+                }
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.trigger,
+                height: 24
+            }, {
+                el: this.adapter,
+                height: "fill"
+            }]
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.searcherPane,
+                top: 30,
+                bottom: 0,
+                left: 0,
+                right: 0
+            }]
+        });
+    },
+
+    _showAdapter: function () {
+        this.adapter.setVisible(true);
+        this.searcherPane.setVisible(false);
+    },
+
+    _showSearcherPane: function () {
+        this.searcherPane.setVisible(true);
+        this.adapter.setVisible(false);
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+    },
+
+    _assertValue: function (val) {
+        val || (val = {});
+        val.type || (val.type = BI.Selection.Single);
+        val.value || (val.value = []);
+    },
+
+    _makeMap: function (values) {
+        return BI.makeObject(values || []);
+    },
+
+    _joinKeywords: function (keywords, callback) {
+        var self = this, o = this.options;
+        this._assertValue(this.storeValue);
+        if (!this._allData) {
+            o.itemsCreator({
+                type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA
+            }, function (ob) {
+                self._allData = BI.map(ob.items, "value");
+                digest(self._allData);
+            });
+        } else {
+            digest(this._allData);
+        }
+
+        function digest (items) {
+            var selectedMap = self._makeMap(items);
+            BI.each(keywords, function (i, val) {
+                if (BI.isNotNull(selectedMap[val])) {
+                    self.storeValue.value[self.storeValue.type === BI.Selection.Single ? "pushDistinct" : "remove"](val);
+                }
+            });
+            callback();
+        }
+    },
+
+    _joinAll: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        o.itemsCreator({
+            type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA,
+            keyword: self.trigger.getKeyword()
+        }, function (ob) {
+            var items = BI.map(ob.items, "value");
+            if (self.storeValue.type === res.type) {
+                var change = false;
+                var map = self._makeMap(self.storeValue.value);
+                BI.each(items, function (i, v) {
+                    if (BI.isNotNull(map[v])) {
+                        change = true;
+                        delete map[v];
+                    }
+                });
+                change && (self.storeValue.value = BI.values(map));
+                callback();
+                return;
+            }
+            var selectedMap = self._makeMap(self.storeValue.value);
+            var notSelectedMap = self._makeMap(res.value);
+            var newItems = [];
+            BI.each(items, function (i, item) {
+                if (BI.isNotNull(selectedMap[items[i]])) {
+                    delete selectedMap[items[i]];
+                }
+                if (BI.isNull(notSelectedMap[items[i]])) {
+                    newItems.push(item);
+                }
+            });
+            self.storeValue.value = newItems.concat(BI.values(selectedMap));
+            callback();
+        });
+    },
+
+    _join: function (res, callback) {
+        var self = this, o = this.options;
+        this._assertValue(res);
+        this._assertValue(this.storeValue);
+        if (this.storeValue.type === res.type) {
+            var map = this._makeMap(this.storeValue.value);
+            BI.each(res.value, function (i, v) {
+                if (!map[v]) {
+                    self.storeValue.value.push(v);
+                    map[v] = v;
+                }
+            });
+            var change = false;
+            BI.each(res.assist, function (i, v) {
+                if (BI.isNotNull(map[v])) {
+                    change = true;
+                    delete map[v];
+                }
+            });
+            change && (this.storeValue.value = BI.values(map));
+            callback();
+            return;
+        }
+        this._joinAll(res, callback);
+    },
+
+    _setStartValue: function (value) {
+        this._startValue = value;
+        this.adapter.setStartValue(value);
+    },
+
+    isAllSelected: function () {
+        return this.adapter.isAllSelected();
+    },
+
+    resize: function () {
+        // this.trigger.getCounter().adjustView();
+        // this.trigger.adjustView();
+    },
+    setValue: function (v) {
+        this.storeValue = v || {};
+        this._assertValue(this.storeValue);
+        this.adapter.setValue(this.storeValue);
+        this.trigger.setValue(this.storeValue);
+    },
+
+    getValue: function () {
+        return BI.deepClone(this.storeValue);
+    },
+
+    populate: function () {
+        this._count = null;
+        this._allData = null;
+        this.adapter.populate.apply(this.adapter, arguments);
+        this.trigger.populate.apply(this.trigger, arguments);
+    }
+});
+
+BI.extend(BI.SingleSelectInsertList, {
+    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_ALL_DATA: -1
+});
+
+BI.SingleSelectInsertList.EVENT_CHANGE = "BI.SingleSelectInsertList.EVENT_CHANGE";
+BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
+/**
  * 单选输入框
  * Created by guy on 15/11/3.
  * @class BI.SingleSelectEditor

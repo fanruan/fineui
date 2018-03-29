@@ -177,7 +177,7 @@ BI.extend(BI.Calendar, {
         var year = BI.getDate().getFullYear();
         var month = BI.getDate().getMonth();
         var page = (json.year - year) * 12;
-        page += json.month - month;
+        page += json.month - 1 - month;
         return page;
     },
     getDateJSONByPage: function (v) {
@@ -194,7 +194,7 @@ BI.extend(BI.Calendar, {
         var month = page >= 0 ? (page % 12) : ((12 + page % 12) % 12);
         return {
             year: BI.getDate().getFullYear() + year,
-            month: month
+            month: month + 1
         };
     }
 });
