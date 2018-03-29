@@ -17648,9 +17648,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
     },
 
     _assertValue: function (val) {
-        val || (val = {});
-        val.type || (val.type = BI.Selection.Single);
-        val.value || (val.value = []);
+        val || (val = "");
     },
 
     _makeMap: function (values) {
@@ -17759,8 +17757,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
         // this.trigger.adjustView();
     },
     setValue: function (v) {
-        this.storeValue = v || {};
-        this._assertValue(this.storeValue);
+        this.storeValue = v || "";
         this.adapter.setValue(this.storeValue);
         this.trigger.setValue(this.storeValue);
     },
