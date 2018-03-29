@@ -859,7 +859,7 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
         var self = this;
         this.editor = BI.createWidget({
             type: "bi.rich_editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             width: 600,
             height: 400
         });

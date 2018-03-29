@@ -41,7 +41,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             element: this,
             toggle: false,
             trigger: o.readOnly ? "" : "click",
-            direction: "top,left",
+            direction: "top,right",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,

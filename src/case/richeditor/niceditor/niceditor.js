@@ -101,7 +101,6 @@
                 scrollable: false
             });
             this.elm.element.css({
-                margin: "4px",
                 minHeight: (o.height - 8) + "px",
                 outline: "none"
             }).html(o.value);
