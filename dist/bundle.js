@@ -89576,19 +89576,20 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getAfterMulQuarter(obj.quarter);
+                date = date.getAfterMulQuarter(BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getAfterMultiMonth(obj.month);
+                date = date.getAfterMultiMonth(BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
-                date = date.getOffsetDate(obj.week * 7);
+                date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
             }
             if (BI.isNotNull(obj.day)) {
-                date = date.getOffsetDate(obj.day);
+                date = date.getOffsetDate(BI.parseInt(obj.day));
             }
             if (BI.isNotNull(obj.workDay)) {
-                // todo 根据工作日做偏移
+                // todo 根据工作日做偏移 暂时按天偏移
+                date = date.getOffsetDate(BI.parseInt(obj.workDay));
             }
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
                 date = this.getBeginDate(date, obj);
