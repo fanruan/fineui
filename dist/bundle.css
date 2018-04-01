@@ -2996,6 +2996,11 @@ li.CodeMirror-hint-active {
 .bi-direction-pager .direction-pager-next {
   font-size: 16px;
 }
+.bi-rich-editor .rich-editor-param {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+}
 .bi-rich-editor-text-toolbar .text-toolbar-button {
   font-size: 16px;
 }

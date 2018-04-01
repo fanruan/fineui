@@ -1628,7 +1628,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                         }
                     }],
                     ref: function () {
-                        self.switch = this;
+                        self.switcher = this;
                     }
                 },
                 height: 30
@@ -2363,7 +2363,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
                         }
                     }],
                     ref: function () {
-                        self.switch = this;
+                        self.switcher = this;
                     }
                 },
                 height: 30
