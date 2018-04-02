@@ -6,20 +6,23 @@
  * @extends BI.Widget
  */
 BI.RichEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor",
-            toolbar: {}
-        });
+
+    props: {
+        baseCls: "bi-rich-editor",
+        toolbar: {},
+        readOnly: false
     },
-    _init: function () {
-        BI.RichEditor.superclass._init.apply(this, arguments);
+
+    render: function () {
         var self = this, o = this.options;
-        this.editor = BI.createWidget({
+        var editor = {
             type: "bi.nic_editor",
             width: o.width,
             height: o.height,
             readOnly: o.readOnly,
+            ref: function () {
+                self.editor = this;
+            },
             listeners: [{
                 eventName: BI.NicEditor.EVENT_BLUR,
                 action: function () {
@@ -28,23 +31,28 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.NicEditor.EVENT_FOCUS,
                 action: function () {
-                    if(!self.combo.isViewVisible()) {
+                    if (!o.readOnly && !self.combo.isViewVisible()) {
                         self.combo.showView();
                     }
                     self.fireEvent(BI.RichEditor.EVENT_FOCUS);
                 }
             }]
-        });
-
-        this.combo = BI.createWidget({
+        };
+        if(o.readOnly) {
+            return editor;
+        }
+        this.editor = BI.createWidget(editor);
+        return {
             type: "bi.combo",
-            element: this,
             toggle: false,
-            trigger: o.readOnly ? "" : "click",
+            trigger: "click",
             direction: "top,right",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             adjustLength: 1,
+            ref: function () {
+                self.combo = this;
+            },
             el: this.editor,
             popup: {
                 el: BI.extend({
@@ -54,12 +62,14 @@ BI.RichEditor = BI.inherit(BI.Widget, {
                 height: 30,
                 stopPropagation: true,
                 stopEvent: true
-            }
-        });
-
-        this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
-            self.fireEvent(BI.RichEditor.EVENT_AFTER_HIDEVIEW);
-        });
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
+                action: function () {
+                    self.fireEvent(BI.RichEditor.EVENT_AFTER_HIDEVIEW);
+                }
+            }]
+        };
     },
 
     focus: function () {

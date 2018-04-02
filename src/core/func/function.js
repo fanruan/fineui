@@ -306,17 +306,19 @@ BI.extend(BI.DOM, {
         $("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
         canvas.width = w;
-        canvas.height = 16;
+        canvas.height = 24;
         var ctx = canvas.getContext("2d");
-        ctx.font = "14px Georgia";
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText(param, 3, 14);
+        // ctx.fillStyle = "#EAF2FD";
+        ctx.font = "12px Georgia";
+        ctx.fillStyle = "#3D4D66";
+        ctx.textBaseline = "middle";
+        ctx.fillText(param, 6, 12);
         $(canvas).destroy();
         return {
             width: w,
-            height: 16,
+            height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: #3f8ce8; vertical-align: sub; margin: 0 3px;",
+            style: "background-color: #EAF2FD; vertical-align: sub; margin: 0 3px;",
             alt: param
         };
     }

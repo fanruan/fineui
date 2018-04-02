@@ -6,7 +6,11 @@
  */
 BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
-        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
+        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {
+            paramFormatter: function (v) {
+                return v;
+            }
+        });
     },
 
     _init: function () {
@@ -41,11 +45,11 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.instance;
         var image = new Image();
-        var attrs = BI.DOM.getImage(param);
+        var attrs = BI.DOM.getImage(o.paramFormatter(param));
         image.src = attrs.src;
         image.alt = param;
         image.style = attrs.style;
-
+        $(image).addClass("rich-editor-param");
         var sel = this._get$Sel();
         var wrapper = o.editor.instance.getElm().element;
         if (wrapper.find(sel).length <= 0) {
