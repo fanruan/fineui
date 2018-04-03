@@ -63,8 +63,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
-                        action: function(){
+                        action: function () {
                             self.trigger.stopEditing();
+                        }
+                    }, {
+                        eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                        action: function () {
+                            self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],
                     hideChecker: function (e) {
@@ -113,4 +118,5 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
