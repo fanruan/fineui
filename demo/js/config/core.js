@@ -173,6 +173,10 @@ Demo.CORE_CONFIG = [{
     text: "bi.searcher_view",
     value: "demo.searcher_view"
 }, {
+    pId: 10202,
+    text: "bi.popover",
+    value: "demo.popover"
+}, {
     pId: 1,
     text: "Widget",
     value: "demo.widget"

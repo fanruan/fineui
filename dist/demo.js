@@ -5156,6 +5156,10 @@ Demo.COMPONENT_CONFIG = [{
     text: "bi.searcher_view",
     value: "demo.searcher_view"
 }, {
+    pId: 10202,
+    text: "bi.popover",
+    value: "demo.popover"
+}, {
     pId: 1,
     text: "Widget",
     value: "demo.widget"
@@ -8130,7 +8134,101 @@ Demo.VtapeLayout = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Face = BI.inherit(BI.Widget, {
+BI.shortcut("demo.vtape", Demo.VtapeLayout);Demo.Popover = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+    render: function () {
+        var id = BI.UUID();
+        return {
+            type: "bi.vertical",
+            vgap: 10,
+            items: [{
+                type: "bi.text_button",
+                text: "点击弹出Popover(normal size)",
+                height: 30,
+                handler: function () {
+                    BI.APopovers.remove(id);
+                    BI.APopovers.create(id, {
+                        type: "bi.bar_popover",
+                        size: "big",
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.label",
+                            text: "这个是body"
+                        }
+                    }).open(id);
+                }
+            }, {
+                type: "bi.text_button",
+                text: "点击弹出Popover(small size)",
+                height: 30,
+                handler: function () {
+                    BI.APopovers.remove(id);
+                    BI.APopovers.create(id, {
+                        type: "bi.bar_popover",
+                        size: "small",
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.label",
+                            text: "这个是body"
+                        }
+                    }).open(id);
+                }
+            }, {
+                type: "bi.text_button",
+                text: "点击弹出Popover(big size)",
+                height: 30,
+                handler: function () {
+                    BI.APopovers.remove(id);
+                    BI.APopovers.create(id, {
+                        type: "bi.bar_popover",
+                        size: "big",
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.label",
+                            text: "这个是body"
+                        }
+                    }).open(id);
+                }
+            }, {
+                type: "bi.text_button",
+                text: "点击弹出Popover(custom)",
+                height: 30,
+                handler: function () {
+                    BI.APopovers.remove(id);
+                    BI.APopovers.create(id, {
+                        width: 400,
+                        height: 300,
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.label",
+                            text: "这个是body"
+                        },
+                        footer: {
+                            type: "bi.label",
+                            text: "这个是footer"
+                        }
+                    }).open(id);
+                }
+            }]
+        };
+    }
+});
+
+BI.shortcut("demo.popover", Demo.Popover);Demo.Face = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-face"
     },
