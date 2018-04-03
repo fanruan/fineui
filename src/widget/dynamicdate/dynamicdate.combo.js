@@ -86,7 +86,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                         year: date.getFullYear(),
                                         month: date.getMonth()
                                     };
-                                    self.popup.setValue();
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_ERROR);
                                 }
                             }, {
