@@ -5098,7 +5098,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour|| 0, value.minute || 0,
+                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
                         value.second || 0).print("%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
