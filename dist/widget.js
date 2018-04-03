@@ -3516,7 +3516,6 @@ BI.extend(BI.DynamicDateCard, {
                                         year: date.getFullYear(),
                                         month: date.getMonth()
                                     };
-                                    self.popup.setValue();
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_ERROR);
                                 }
                             }, {
@@ -4328,7 +4327,6 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                         year: date.getFullYear(),
                                         month: date.getMonth()
                                     };
-                                    self.popup.setValue();
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_ERROR);
                                 }
                             }, {
