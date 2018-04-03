@@ -100230,7 +100230,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 iconCls: "less-equal-font"
             }]
         });
-        if (o.closemin === true) {
+        if (o.closeMin === true) {
             this.smallCombo.setValue(1);
         } else {
             this.smallCombo.setValue(0);
@@ -100249,7 +100249,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 iconCls: "less-equal-font"
             }]
         });
-        if (o.closemax === true) {
+        if (o.closeMax === true) {
             this.bigCombo.setValue(1);
         } else {
             this.bigCombo.setValue(0);
@@ -100580,8 +100580,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.bigEditor.setValue("");
         }
 
-        if (!BI.isNull(data.closemin)) {
-            if (data.closemin === true) {
+        if (!BI.isNull(data.closeMin)) {
+            if (data.closeMin === true) {
                 combo_value = 1;
             } else {
                 combo_value = 0;
@@ -100589,8 +100589,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self.smallCombo.setValue(combo_value);
         }
 
-        if (!BI.isNull(data.closemax)) {
-            if (data.closemax === true) {
+        if (!BI.isNull(data.closeMax)) {
+            if (data.closeMax === true) {
                 combo_value = 1;
             } else {
                 combo_value = 0;
@@ -100605,15 +100605,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         value.min = self.smallEditor.getValue();
         value.max = self.bigEditor.getValue();
         if (minComboValue[0] === 0) {
-            value.closemin = false;
+            value.closeMin = false;
         } else {
-            value.closemin = true;
+            value.closeMin = true;
         }
 
         if (maxComboValue[0] === 0) {
-            value.closemax = false;
+            value.closeMax = false;
         } else {
-            value.closemax = true;
+            value.closeMax = true;
         }
         return value;
     }
