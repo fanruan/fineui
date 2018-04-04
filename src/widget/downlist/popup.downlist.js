@@ -75,7 +75,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
     _createChildren: function (items) {
         var self = this, result = [];
-        BI.each(items, function (i, it) {
+        // 不能修改populate进来的item的引用
+        BI.each(BI.deepClone(items), function (i, it) {
             var item_done = {
                 type: "bi.down_list_group",
                 items: []
