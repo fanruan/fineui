@@ -64,7 +64,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 width: 90,
                 height: 25,
                 handler: function () {
-                    combo.setValue(3);
+                    combo.setValue(11);
                 }
             }],
             vgap: 20

@@ -296,6 +296,13 @@
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
 }
+.bi-search-text-value-combo.combo-error .bi-search-text-value-trigger .bi-text-button {
+  color: #ff4949;
+}
+
+.bi-text-value-combo.combo-error .bi-select-text-trigger .bi-label {
+  color: #ff4949;
+}
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
 }
