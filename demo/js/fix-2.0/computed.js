@@ -7,7 +7,7 @@
             n: 'b'
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + "-计算属性"

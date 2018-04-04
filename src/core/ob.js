@@ -8,11 +8,11 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = $.extend(this._defaultConfig(config), props, config);
+    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
-$.extend(BI.OB.prototype, {
+_.extend(BI.OB.prototype, {
     props: {},
     init: null,
     destroyed: null,
@@ -29,24 +29,31 @@ $.extend(BI.OB.prototype, {
     _initListeners: function () {
         var self = this;
         if (this.options.listeners != null) {
-            $.each(this.options.listeners, function (i, lis) {
-                (lis.target ? lis.target : self)[lis.once ? 'once' : 'on']
-                (lis.eventName, _.bind(lis.action, self))
+            _.each(this.options.listeners, function (lis) {
+                (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
+                (lis.eventName, _.bind(lis.action, self));
             });
             delete this.options.listeners;
         }
     },
 
-    //获得一个当前对象的引用
+    // 获得一个当前对象的引用
     _initRef: function () {
         if (this.options.ref) {
             this.options.ref.call(this, this);
         }
     },
 
+    //释放当前对象
+    _purgeRef: function(){
+        if (this.options.ref) {
+            this.options.ref.call(null);
+        }
+    },
+
     _getEvents: function () {
-        if (!$.isArray(this.events)) {
-            this.events = []
+        if (!_.isArray(this.events)) {
+            this.events = [];
         }
         return this.events;
     },
@@ -59,7 +66,7 @@ $.extend(BI.OB.prototype, {
     on: function (eventName, fn) {
         eventName = eventName.toLowerCase();
         var fns = this._getEvents()[eventName];
-        if (!$.isArray(fns)) {
+        if (!_.isArray(fns)) {
             fns = [];
             this._getEvents()[eventName] = fns;
         }
@@ -86,18 +93,18 @@ $.extend(BI.OB.prototype, {
     un: function (eventName, fn) {
         eventName = eventName.toLowerCase();
 
-        /*alex:如果fn是null,就是把eventName上面所有方法都un掉*/
+        /* alex:如果fn是null,就是把eventName上面所有方法都un掉*/
         if (fn == null) {
             delete this._getEvents()[eventName];
         } else {
             var fns = this._getEvents()[eventName];
-            if ($.isArray(fns)) {
+            if (_.isArray(fns)) {
                 var newFns = [];
-                $.each(fns, function (idx, ifn) {
+                _.each(fns, function (ifn) {
                     if (ifn != fn) {
                         newFns.push(ifn);
                     }
-                })
+                });
                 this._getEvents()[eventName] = newFns;
             }
         }
@@ -106,7 +113,7 @@ $.extend(BI.OB.prototype, {
      * 清除观察者的所有事件绑定
      */
     purgeListeners: function () {
-        /*alex:清空events*/
+        /* alex:清空events*/
         this.events = [];
     },
     /**
@@ -139,6 +146,7 @@ $.extend(BI.OB.prototype, {
 
     destroy: function () {
         this.destroyed && this.destroyed();
+        this._purgeRef();
         this.purgeListeners();
     }
 });

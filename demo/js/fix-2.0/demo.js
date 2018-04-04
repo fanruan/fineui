@@ -7,7 +7,7 @@
             n: 0
         }]
     });
-    var Computed = BI.inherit(Fix.VM, {
+    var Computed = BI.inherit(Fix.Model, {
         computed: {
             b: function () {
                 return this.name + 1
@@ -18,7 +18,7 @@
         }
     })
 
-    var Store = BI.inherit(Fix.VM, {
+    var Store = BI.inherit(Fix.Model, {
         _init: function () {
             this.comp = new Computed(model);
         },

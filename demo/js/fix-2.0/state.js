@@ -1,5 +1,5 @@
 ;(function () {
-    var State = BI.inherit(Fix.VM, {
+    var State = BI.inherit(Fix.Model, {
         state: function () {
             return {
                 name: "原始属性"
