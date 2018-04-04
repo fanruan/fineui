@@ -14606,6 +14606,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 bottom: 0
             });
         }
+        if(BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     _checkWaterMark: function () {

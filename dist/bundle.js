@@ -49860,6 +49860,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 bottom: 0
             });
         }
+        if(BI.isNotNull(o.value)) {
+            this.setValue(o.value);
+        }
     },
 
     _checkWaterMark: function () {
@@ -77661,8 +77664,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
-                        action: function(){
+                        action: function () {
                             self.trigger.stopEditing();
+                        }
+                    }, {
+                        eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                        action: function () {
+                            self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],
                     hideChecker: function (e) {
@@ -77711,6 +77719,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
  * Created by Windy on 2018/2/5.
  */
@@ -89378,7 +89387,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
     _createChildren: function (items) {
         var self = this, result = [];
-        BI.each(items, function (i, it) {
+        // 不能修改populate进来的item的引用
+        BI.each(BI.deepClone(items), function (i, it) {
             var item_done = {
                 type: "bi.down_list_group",
                 items: []
@@ -91614,7 +91624,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour|| 0, value.minute || 0,
+                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
                         value.second || 0).print("%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);

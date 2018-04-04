@@ -2862,7 +2862,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
     _createChildren: function (items) {
         var self = this, result = [];
-        BI.each(items, function (i, it) {
+        // 不能修改populate进来的item的引用
+        BI.each(BI.deepClone(items), function (i, it) {
             var item_done = {
                 type: "bi.down_list_group",
                 items: []
@@ -5098,7 +5099,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                     this.setTitle("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour|| 0, value.minute || 0,
+                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
                         value.second || 0).print("%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
