@@ -7,7 +7,7 @@
 BI.TextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-text-value-combo",
+            baseCls: "bi-text-value-combo",
             height: 30,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
@@ -51,9 +51,24 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _checkError: function (v) {
+        if(BI.isNotNull(v)) {
+            v = BI.isArray(v) ? v : [v];
+            var result = BI.find(this.options.items, function (idx, item) {
+                return BI.contains(v, item.value);
+            });
+            if (BI.isNull(result)) {
+                this.element.removeClass("combo-error").addClass("combo-error");
+            } else {
+                this.element.removeClass("combo-error");
+            }
+        }
+    },
+
     setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);
+        this._checkError(v);
     },
 
     getValue: function () {

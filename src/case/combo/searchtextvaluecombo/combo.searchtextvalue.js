@@ -101,6 +101,20 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 bottom: 0,
                 top: 0
             }]
+        };
+    },
+
+    _checkError: function (v) {
+        if(BI.isNotNull(v)) {
+            v = BI.isArray(v) ? v : [v];
+            var result = BI.find(this.options.items, function (idx, item) {
+                return BI.contains(v, item.value);
+            });
+            if (BI.isNull(result)) {
+                this.element.removeClass("combo-error").addClass("combo-error");
+            } else {
+                this.element.removeClass("combo-error");
+            }
         }
     },
 
@@ -110,6 +124,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.combo.setValue(v);
+        this._checkError(v);
     },
 
     getValue: function () {
