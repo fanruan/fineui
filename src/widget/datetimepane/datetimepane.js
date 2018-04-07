@@ -104,7 +104,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         v = v || {};
         var type = v.type || BI.DynamicDateTimePane.Static;
         var value = v.value || v;
-        this.switch.setValue(type);
+        this.switcher.setValue(type);
         this.dateTab.setSelect(type);
         switch (type) {
             case BI.DynamicDateTimePane.Dynamic:
