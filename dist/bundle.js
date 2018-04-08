@@ -88240,7 +88240,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
         v = v || {};
         var type = v.type || BI.DynamicDateCombo.Static;
         var value = v.value || v;
-        this.switch.setValue(type);
+        this.switcher.setValue(type);
         this.dateTab.setSelect(type);
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
@@ -88975,7 +88975,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
         v = v || {};
         var type = v.type || BI.DynamicDateTimePane.Static;
         var value = v.value || v;
-        this.switch.setValue(type);
+        this.switcher.setValue(type);
         this.dateTab.setSelect(type);
         switch (type) {
             case BI.DynamicDateTimePane.Dynamic:
