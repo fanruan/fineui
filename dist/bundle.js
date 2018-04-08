@@ -25281,9 +25281,13 @@ BI.shortcut("bi.layout", BI.Layout);BI.Plugin = BI.Plugin || {};
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
     var _ConfigPlugin = {};
+    var _GlobalWidgetConfigFn, _GlobalObjectConfigFn;
     BI.extend(BI.Plugin, {
 
         getWidget: function (type, options) {
+            if (_GlobalWidgetConfigFn) {
+                _GlobalWidgetConfigFn(type, options);
+            }
             if (_ConfigPlugin[type]) {
                 for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
                     _ConfigPlugin[type][i](options);
@@ -25298,6 +25302,11 @@ BI.shortcut("bi.layout", BI.Layout);BI.Plugin = BI.Plugin || {};
                 }
             }
             return options;
+        },
+
+        config: function (widgetConfigFn, objectConfigFn) {
+            _GlobalWidgetConfigFn = widgetConfigFn;
+            _GlobalObjectConfigFn = objectConfigFn;
         },
 
         configWidget: function (type, fn) {
@@ -25322,6 +25331,9 @@ BI.shortcut("bi.layout", BI.Layout);BI.Plugin = BI.Plugin || {};
         },
 
         getObject: function (type, object) {
+            if (_GlobalObjectConfigFn) {
+                _GlobalObjectConfigFn(type, object);
+            }
             if (_ObjectPlugin[type]) {
                 var res;
                 for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
