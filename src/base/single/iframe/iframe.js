@@ -17,7 +17,7 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<iframe frameborder='0' src='" + o.src + "'>");
+        this.options.element = $("<iframe frameborder='0' allowfullscreen mozallowfullscreen webkitallowfullscreen src='" + o.src + "'>");
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
