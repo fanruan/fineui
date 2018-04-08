@@ -6,7 +6,7 @@
 BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectRadioItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-single-select-radio-item bi-list-item-active",
+            extraCls: "bi-single-select-radio-item",
             logic: {
                 dynamic: false
             },
