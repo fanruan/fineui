@@ -21217,24 +21217,102 @@ Date.parseDateTime = function (str, fmt) {
 };
 
 Date.getDate = function () {
-    var dt = new (Function.prototype.bind.apply(Date, BI.concat([null], [].slice.apply(arguments))))();
-    if(BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))){
-        var localTime = dt.getTime();
-        var localOffset = dt.getTimezoneOffset() * 60000; //获得当地时间偏移的毫秒数
-        var utc = localTime + localOffset; //utc即GMT时间标准时区
-        return new Date(utc + Date.timeZone);//+ Pool.timeZone.offset);
-    }else{
-        return dt;
+    var length = arguments.length;
+    var args = arguments;
+    var dt;
+    switch (length) {
+        // new Date()
+        case 0:
+            dt = new Date();
+            break;
+        // new Date(long)
+        case 1:
+            dt = new Date(args[0]);
+            break;
+        // new Date(year, month)
+        case 2:
+            dt = new Date(args[0], args[1]);
+            break;
+        // new Date(year, month, day)
+        case 3:
+            dt = new Date(args[0], args[1], args[2]);
+            break;
+        // new Date(year, month, day, hour)
+        case 4:
+            dt = new Date(args[0], args[1], args[2], args[3]);
+            break;
+        // new Date(year, month, day, hour, minute)
+        case 5:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+            break;
+        // new Date(year, month, day, hour, minute, second)
+        case 6:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+            break;
+        // new Date(year, month, day, hour, minute, second, millisecond)
+        case 7:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            break;
+        default:
+            dt = new Date();
+            break;
     }
+    if (BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
+        var localTime = dt.getTime();
+        var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+        var utc = localTime + localOffset; // utc即GMT时间标准时区
+        return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
+    }
+    return dt;
+
 };
 
 Date.getTime = function () {
-    var dt = Function.prototype.bind.apply(Date.getDate, BI.concat([null], [].slice.apply(arguments)))();
-    if(BI.isNotNull(Date.timeZone)){
-        return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
-    }else{
-        return dt.getTime();
+    var length = arguments.length;
+    var args = arguments;
+    var dt;
+    switch (length) {
+        // new Date()
+        case 0:
+            dt = new Date();
+            break;
+        // new Date(long)
+        case 1:
+            dt = new Date(args[0]);
+            break;
+        // new Date(year, month)
+        case 2:
+            dt = new Date(args[0], args[1]);
+            break;
+        // new Date(year, month, day)
+        case 3:
+            dt = new Date(args[0], args[1], args[2]);
+            break;
+        // new Date(year, month, day, hour)
+        case 4:
+            dt = new Date(args[0], args[1], args[2], args[3]);
+            break;
+        // new Date(year, month, day, hour, minute)
+        case 5:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4]);
+            break;
+        // new Date(year, month, day, hour, minute, second)
+        case 6:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5]);
+            break;
+        // new Date(year, month, day, hour, minute, second, millisecond)
+        case 7:
+            dt = new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+            break;
+        default:
+            dt = new Date();
+            break;
     }
+    if (BI.isNotNull(Date.timeZone)) {
+        return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+    }
+    return dt.getTime();
+
 };
 /*
  * 给jQuery.Event对象添加的工具方法
@@ -44443,7 +44521,7 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<iframe frameborder='0' src='" + o.src + "'>");
+        this.options.element = $("<iframe frameborder='0' allowfullscreen mozallowfullscreen webkitallowfullscreen src='" + o.src + "'>");
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
