@@ -10,6 +10,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-rich-editor-text-toolbar bi-background",
             buttons: [
+                {type: "bi.rich_editor_font_chooser"},
                 {type: "bi.rich_editor_size_chooser"},
                 {type: "bi.rich_editor_bold_button"},
                 {type: "bi.rich_editor_italic_button"},
