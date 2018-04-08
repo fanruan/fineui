@@ -72,6 +72,13 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         };
     },
 
+    mounted: function () {
+        var o = this.options;
+        if(BI.isNull(o.value)) {
+            this.editor.setValue(o.value);
+        }
+    },
+
     focus: function () {
         this.editor.focus();
     },

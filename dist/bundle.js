@@ -72264,7 +72264,7 @@ BI.shortcut("bi.single_select_item", BI.SingleSelectItem);/**
 BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectRadioItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-single-select-radio-item bi-list-item-active",
+            extraCls: "bi-single-select-radio-item",
             logic: {
                 dynamic: false
             },
@@ -83146,6 +83146,13 @@ BI.RichEditor = BI.inherit(BI.Widget, {
                 }
             }]
         };
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if(BI.isNull(o.value)) {
+            this.editor.setValue(o.value);
+        }
     },
 
     focus: function () {
