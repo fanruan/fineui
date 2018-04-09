@@ -5,7 +5,7 @@
 
 (function () {
     var _Shared = {};
-    Data.SharingPool = {
+    BI.SharingPool = {
         _Shared: _Shared,
         put: function (name, shared) {
             _Shared[name] = shared;

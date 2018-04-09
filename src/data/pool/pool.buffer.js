@@ -7,7 +7,7 @@
     var Buffer = {};
     var MODE = false;// 设置缓存模式为关闭
 
-    Data.BufferPool = {
+    BI.BufferPool = {
         put: function (name, cache) {
             if (BI.isNotNull(Buffer[name])) {
                 throw new Error("Buffer Pool has the key already!");
