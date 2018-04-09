@@ -155,5 +155,8 @@ BI.i18n = {
     "BI-Conf_Formula_And": "且公式条件",
     "BI-Conf_Formula_Or": "或公式条件",
     "BI-Conf_Condition_And": "且条件",
-    "BI-Conf_Condition_Or": "或条件"
+    "BI-Conf_Condition_Or": "或条件",
+    "BI-Microsoft_YaHei": "微软雅黑",
+    "BI-Apple_Light": "苹方-light",
+    "BI-Font_Family": "字体"
 };
