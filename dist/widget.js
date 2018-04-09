@@ -13709,6 +13709,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
+            isShowDown: false,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
                 iconCls: "less-font",
@@ -13727,6 +13728,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-big-combo bi-border",
+            isShowDown: false,
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",

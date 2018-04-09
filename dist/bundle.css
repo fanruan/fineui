@@ -5209,14 +5209,6 @@ ul.ztree.zTreeDragUL {
 .bi-year-month-interval.time-error .sign-editor-text {
   color: #ff4949;
 }
-html,
-button,
-input,
-select,
-textarea,
-* {
-  font-family: "Microsoft YaHei", "Hiragino Sans GB W3";
-}
 html {
   height: 100%;
   overflow: hidden;
