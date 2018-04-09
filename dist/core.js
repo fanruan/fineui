@@ -33843,13 +33843,15 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
  * 保存数据，将js里面用到的常量数据都分离
  *
  */
-BI.Data = Data = {};
+if (!window.Data) {
+    window.Data = {};
+}
 
 /**
  * 存放bi里面通用的一些常量
  * @type {{}}
  */
-Data.Constant = BICst = {};
+Data.Constant = {};
 /**
  * 缓冲池
  * @type {{Buffer: {}}}
@@ -33902,8 +33904,5 @@ Data.Constant = BICst = {};
         }
     };
 })();Data.Req = {
-
-};
-Data.Source = BISource = {
 
 };
