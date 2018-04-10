@@ -55,10 +55,26 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                         if(value.length !== 0) {
                             self.workDayBox.setSelected(false);
                         }
+
+                        var plainValue = {};
+                        BI.each(self.resultPane.getAllButtons(), function (idx, button) {
+                            var value = button.getValue();
+                            if(BI.isNotNull(value.dateType)) {
+                                plainValue[value.dateType] = {
+                                    value: value.value,
+                                    offset: value.offset
+                                };
+                            }
+                        });
                         self.resultPane.populate(self._getParamJson(BI.map(self.checkgroup.getValue(), function (idx, v) {
-                            return {
+                            var obj = {
                                 dateType: v
                             };
+                            if(BI.has(plainValue, v)) {
+                                obj.value = plainValue[v].value;
+                                obj.offset = plainValue[v].offset;
+                            }
+                            return obj;
                         })));
                         self.position = BI.DynamicDateCard.OFFSET.CURRENT;
                         self.fireEvent("EVENT_CHANGE");

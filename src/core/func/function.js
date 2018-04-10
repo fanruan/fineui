@@ -300,7 +300,7 @@ BI.extend(BI.DOM, {
         return this._scrollWidth;
     },
 
-    getImage: function (param) {
+    getImage: function (param, fillStyle, backgroundColor) {
         var image = new Image();
         var canvas = document.createElement("canvas");
         $("body").append(canvas);
@@ -310,15 +310,16 @@ BI.extend(BI.DOM, {
         var ctx = canvas.getContext("2d");
         // ctx.fillStyle = "#EAF2FD";
         ctx.font = "12px Georgia";
-        ctx.fillStyle = "#3D4D66";
+        ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6, 12);
         $(canvas).destroy();
+        var backColor = backgroundColor || "#EAF2FD";
         return {
             width: w,
             height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: #EAF2FD; vertical-align: sub; margin: 0 3px;",
+            style: "background-color: " + backColor + ";vertical-align: sub; margin: 0 3px;",
             alt: param
         };
     }

@@ -28471,7 +28471,7 @@ BI.extend(BI.DOM, {
         return this._scrollWidth;
     },
 
-    getImage: function (param) {
+    getImage: function (param, fillStyle, backgroundColor) {
         var image = new Image();
         var canvas = document.createElement("canvas");
         $("body").append(canvas);
@@ -28481,15 +28481,16 @@ BI.extend(BI.DOM, {
         var ctx = canvas.getContext("2d");
         // ctx.fillStyle = "#EAF2FD";
         ctx.font = "12px Georgia";
-        ctx.fillStyle = "#3D4D66";
+        ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6, 12);
         $(canvas).destroy();
+        var backColor = backgroundColor || "#EAF2FD";
         return {
             width: w,
             height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: #EAF2FD; vertical-align: sub; margin: 0 3px;",
+            style: "background-color: " + backColor + ";vertical-align: sub; margin: 0 3px;",
             alt: param
         };
     }
@@ -77224,7 +77225,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             adjustXOffset: 0,
             adjustYOffset: 0,
             offsetStyle: "left",
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            isShowDown: true
         });
     },
 
@@ -77240,7 +77242,8 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
-            value: o.value
+            value: o.value,
+            isShowDown: o.isShowDown
         });
         this.popup = BI.createWidget(o.popup, {
             type: "bi.icon_combo_popup",
@@ -77395,7 +77398,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.width - 12,
+            width: o.isShowDown ? o.width - 12 : o.width,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -89801,10 +89804,26 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                         if(value.length !== 0) {
                             self.workDayBox.setSelected(false);
                         }
+
+                        var plainValue = {};
+                        BI.each(self.resultPane.getAllButtons(), function (idx, button) {
+                            var value = button.getValue();
+                            if(BI.isNotNull(value.dateType)) {
+                                plainValue[value.dateType] = {
+                                    value: value.value,
+                                    offset: value.offset
+                                };
+                            }
+                        });
                         self.resultPane.populate(self._getParamJson(BI.map(self.checkgroup.getValue(), function (idx, v) {
-                            return {
+                            var obj = {
                                 dateType: v
                             };
+                            if(BI.has(plainValue, v)) {
+                                obj.value = plainValue[v].value;
+                                obj.offset = plainValue[v].offset;
+                            }
+                            return obj;
                         })));
                         self.position = BI.DynamicDateCard.OFFSET.CURRENT;
                         self.fireEvent("EVENT_CHANGE");
@@ -100337,6 +100356,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
+            isShowDown: false,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
                 iconCls: "less-font",
@@ -100355,6 +100375,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-big-combo bi-border",
+            isShowDown: false,
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
