@@ -68598,7 +68598,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24
-        })
+        });
     },
 
     _init: function () {
@@ -68622,7 +68622,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text bi-disabled",
+            cls: "state-editor-infinite-text",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Basic_Unrestricted"),
@@ -68706,6 +68706,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
+        if(BI.isNotNull(o.text)){
+            this.setState(o.text);
+        }
     },
 
     doRedMark: function () {
