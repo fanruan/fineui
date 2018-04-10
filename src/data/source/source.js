@@ -1,3 +1,0 @@
-Data.Source = BISource = {
-
-};

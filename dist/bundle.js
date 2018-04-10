@@ -33841,17 +33841,6 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
- * 保存数据，将js里面用到的常量数据都分离
- *
- */
-BI.Data = Data = {};
-
-/**
- * 存放bi里面通用的一些常量
- * @type {{}}
- */
-Data.Constant = BICst = {};
-/**
  * 缓冲池
  * @type {{Buffer: {}}}
  */
@@ -33860,7 +33849,7 @@ Data.Constant = BICst = {};
     var Buffer = {};
     var MODE = false;// 设置缓存模式为关闭
 
-    Data.BufferPool = {
+    BI.BufferPool = {
         put: function (name, cache) {
             if (BI.isNotNull(Buffer[name])) {
                 throw new Error("Buffer Pool has the key already!");
@@ -33879,7 +33868,7 @@ Data.Constant = BICst = {};
 
 (function () {
     var _Shared = {};
-    Data.SharingPool = {
+    BI.SharingPool = {
         _Shared: _Shared,
         put: function (name, shared) {
             _Shared[name] = shared;
@@ -33902,12 +33891,10 @@ Data.Constant = BICst = {};
             delete _Shared[key];
         }
     };
-})();Data.Req = {
+})();BI.Req = {
 
 };
-Data.Source = BISource = {
-
-};function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.Fix = global.Fix || {});

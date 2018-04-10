@@ -149,7 +149,6 @@
     "$": true,
     "WebUI": true,
     "BI": true,
-    "BICst": true,
     "Data": true,
     "Fix": true,
     "module": true
