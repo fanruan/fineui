@@ -3531,7 +3531,7 @@ BI.extend(BI.DynamicDateCard, {
                                 action: function () {
                                     self.storeValue = {
                                         year: date.getFullYear(),
-                                        month: date.getMonth()
+                                        month: date.getMonth() + 1
                                     };
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_ERROR);
                                 }
@@ -3587,7 +3587,7 @@ BI.extend(BI.DynamicDateCard, {
                                         var date = BI.getDate();
                                         self.setValue({
                                             year: date.getFullYear(),
-                                            month: date.getMonth(),
+                                            month: date.getMonth() + 1,
                                             day: date.getDate()
                                         });
                                         self.combo.hideView();
@@ -4348,7 +4348,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                 action: function () {
                                     self.storeValue = {
                                         year: date.getFullYear(),
-                                        month: date.getMonth()
+                                        month: date.getMonth() + 1
                                     };
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_ERROR);
                                 }
@@ -4404,7 +4404,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                         var date = BI.getDate();
                                         self.setValue({
                                             year: date.getFullYear(),
-                                            month: date.getMonth(),
+                                            month: date.getMonth() + 1,
                                             day: date.getDate(),
                                             hour: 0,
                                             minute: 0,
