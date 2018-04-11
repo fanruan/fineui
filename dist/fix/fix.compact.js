@@ -67,12 +67,15 @@
         widget = widget || context;
         var p = widget;
         while (p) {
-            if (p.store || p.__cacheStore) {
+            if (p instanceof Fix.Model || p.store || p.__cacheStore) {
                 break;
             }
             p = p._parent || (p.options && p.options.element);
         }
         if (p) {
+            if (p instanceof Fix.Model) {
+                return widget.__cacheStore = p;
+            }
             widget.__cacheStore = p.store || p.__cacheStore;
             return p.__cacheStore || p.store;
         }
@@ -106,7 +109,7 @@
         var self = this;
         var needPop = false;
         if (window.Fix && this._store) {
-            var store = findStore(this.options.element);
+            var store = findStore(this.options.context || this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
