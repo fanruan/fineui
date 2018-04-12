@@ -12257,7 +12257,7 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
                         eventName: BI.DateTimeCombo.EVENT_CONFIRM,
                         action: function () {
                             var value = this.getValue();
-                            var date = new Date(value.year, value.month, value.day, value.hour, value.minute, value.second);
+                            var date = new Date(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
                             var dateStr = date.print("%Y-%X-%d %H:%M:%S");
                             BI.Msg.alert("日期", dateStr);
                         }

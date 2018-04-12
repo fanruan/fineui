@@ -133,7 +133,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             date = BI.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
-                month: date.getMonth(),
+                month: date.getMonth() + 1,
                 day: date.getDate()
             });
             this.hour.setValue(date.getHours());
