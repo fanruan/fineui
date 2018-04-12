@@ -190,11 +190,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         };
 
-        Dep.prototype.notify = function notify() {
+        Dep.prototype.notify = function notify(options) {
             // stabilize the subscriber list first
             var subs = this.subs.slice();
             for (var i = 0, l = subs.length; i < l; i++) {
-                subs[i].update();
+                subs[i].update(options);
             }
         };
 
@@ -458,11 +458,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function notify(observer, key, dep) {
-        dep.notify();
+        dep.notify({ observer: observer, key: key });
         if (observer) {
             //触发a.*绑定的依赖
             _.each(observer._deps, function (dep) {
-                dep.notify();
+                dep.notify({ observer: observer, key: key });
             });
             //触发a.**绑定的依赖
             var parent = observer,
@@ -470,7 +470,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 route = key || "";
             while (parent) {
                 _.each(parent._scopeDeps, function (dep) {
-                    dep.notify();
+                    dep.notify({ observer: observer, key: key });
                 });
                 if (parent.parentKey != null) {
                     route = parent.parentKey + '.' + route;
@@ -481,7 +481,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             for (var _key2 in root._globalDeps) {
                 var reg = new RegExp(_key2);
                 if (reg.test(route)) {
-                    root._globalDeps[_key2].notify();
+                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
                 }
             }
         }
@@ -653,7 +653,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     function flushSchedulerQueue() {
         flushing = true;
         var watcher = void 0,
-            id = void 0;
+            id = void 0,
+            options = void 0;
 
         // Sort queue before flush.
         // This ensures that:
@@ -670,29 +671,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         // do not cache length because more watchers might be pushed
         // as we run existing watchers
         for (index = 0; index < queue.length; index++) {
-            watcher = queue[index];
+            watcher = queue[index].watcher;
+            options = queue[index].options;
             id = watcher.id;
             has[id] = null;
-            watcher.run();
+            watcher.run(options);
         }
 
         resetSchedulerState();
     }
 
-    function queueWatcher(watcher) {
+    function queueWatcher(watcher, options) {
         var id = watcher.id;
         if (has[id] == null) {
             has[id] = true;
             if (!flushing) {
-                queue.push(watcher);
+                queue.push({ watcher: watcher, options: options });
             } else {
                 // if already flushing, splice the watcher based on its id
                 // if already past its id, it will be run next immediately.
                 var i = queue.length - 1;
-                while (i > index && queue[i].id > watcher.id) {
+                while (i > index && queue[i].watcher.id > watcher.id) {
                     i--;
                 }
-                queue.splice(i + 1, 0, watcher);
+                queue.splice(i + 1, 0, { watcher: watcher, options: options });
             }
             // queue the flush
             if (!waiting) {
@@ -793,18 +795,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.newDeps.length = 0;
         };
 
-        Watcher.prototype.update = function update() {
+        Watcher.prototype.update = function update(options) {
             /* istanbul ignore else */
             if (this.lazy) {
                 this.dirty = true;
             } else if (this.sync) {
-                this.run();
+                this.run(options);
             } else {
-                queueWatcher(this);
+                queueWatcher(this, options);
             }
         };
 
-        Watcher.prototype.run = function run() {
+        Watcher.prototype.run = function run(options) {
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
@@ -817,11 +819,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     this.value = value;
                     if (this.user) {
                         // try {
-                        this.cb.call(this.vm, value, oldValue);
+                        this.cb.call(this.vm, value, oldValue, options);
                         // } catch (e) {
                         // }
                     } else {
-                        this.cb.call(this.vm, value, oldValue);
+                        this.cb.call(this.vm, value, oldValue, options);
                     }
                 }
             }
@@ -940,14 +942,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var fns = exps.slice();
         var complete = false,
             running = false;
-        var callback = function callback(index, newValue, oldValue) {
+        var callback = function callback(index, newValue, oldValue, options) {
             if (complete === true) {
                 return;
             }
             fns[index] = true;
             if (runBinaryFunction(fns)) {
                 complete = true;
-                cb(newValue, oldValue, index);
+                cb(newValue, oldValue, options);
             }
             if (!running) {
                 running = true;
@@ -985,8 +987,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, function (newValue, oldValue) {
-                    callback(i, newValue, oldValue);
+                }, function (newValue, oldValue, opt) {
+                    callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
                 });
                 watchers.push(function unwatchFn() {
                     w.teardown();
@@ -1026,8 +1028,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
                     return NaN;
-                }, function (newValue, oldValue) {
-                    callback(i, newValue, oldValue);
+                }, function (newValue, oldValue, opt) {
+                    callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
                 });
                 watchers.push(function unwatchFn() {
                     _w.teardown();
@@ -1035,8 +1037,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
                 return;
             }
-            var watcher = new Watcher(model, exp, function (newValue, oldValue) {
-                callback(i, newValue, oldValue);
+            var watcher = new Watcher(model, exp, function (newValue, oldValue, opt) {
+                callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
