@@ -34884,7 +34884,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     dep.depend();
                     return NaN;
                 }, function (newValue, oldValue, opt) {
-                    callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
+                    callback(i, newValue, oldValue, _.extend({ index: i }, opt));
                 });
                 watchers.push(function unwatchFn() {
                     w.teardown();
@@ -34925,7 +34925,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     _dep.depend();
                     return NaN;
                 }, function (newValue, oldValue, opt) {
-                    callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
+                    callback(i, newValue, oldValue, _.extend({ index: i }, opt));
                 });
                 watchers.push(function unwatchFn() {
                     _w.teardown();
@@ -34934,7 +34934,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return;
             }
             var watcher = new Watcher(model, exp, function (newValue, oldValue, opt) {
-                callback(i, newValue, oldValue, _.extend({ index: i, options: opt }));
+                callback(i, newValue, oldValue, _.extend({ index: i }, opt));
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
