@@ -1743,7 +1743,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         var date = BI.getDate();
         this.storeValue = BI.isNotNull(opts.value) ? opts.value : {
             year: date.getFullYear(),
-            month: date.getMonth(),
+            month: date.getMonth() + 1,
             day: date.getDate(),
             hour: date.getHours(),
             minute: date.getMinutes(),
@@ -1985,7 +1985,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             date = BI.getDate();
             this.dateCombo.setValue({
                 year: date.getFullYear(),
-                month: date.getMonth(),
+                month: date.getMonth() + 1,
                 day: date.getDate()
             });
             this.hour.setValue(date.getHours());
@@ -2176,7 +2176,7 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             value = BI.getDate();
             dateStr = value.print("%Y-%X-%d %H:%M:%S");
         } else {
-            var date = BI.getDate(value.year, value.month, value.day, value.hour, value.minute, value.second);
+            var date = BI.getDate(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
             dateStr = date.print("%Y-%X-%d %H:%M:%S");
 
         }
