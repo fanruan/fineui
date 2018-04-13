@@ -59,6 +59,18 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@{start}', endColorstr='@{end}', GradientType='0');
 }
 
+// toSide表示渐变的方向, 使用角度兼容性好一些
+.gradient(@toSide, @start, @end) when not (@toSide = none) {
+  background: @start; //不支持的用这个
+  background: -webkit-gradient(linear, 0 0, 0 100%, from(@start) to(@end)); /*old webkit*/
+  background: -webkit-linear-gradient(@toSide, @start, @end); /*new webkit*/
+  background: -moz-linear-gradient(@toSide, @start, @end); /*gecko*/
+  background: -ms-linear-gradient(@toSide, @start, @end); /*IE10 preview*/
+  background: -o-linear-gradient(@toSide, @start, @end); /*opera 11.10+*/
+  background: linear-gradient(@toSide, @start, @end); /*future CSS3 browsers*/
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@{start}', endColorstr='@{end}', GradientType='0');
+}
+
 .border-radius(@radius: 5px) {
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
