@@ -35184,6 +35184,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             initComputed(this, computed);
             initWatch(this, watch$$1);
             initMethods(this, actions);
+            this.created && this.created();
             if (this.$$model) {
                 return this.model;
             }
