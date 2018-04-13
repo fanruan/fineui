@@ -49819,11 +49819,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
-
-        if (BI.isKey(o.value)) {
-            self.setValue(o.value);
-        }
-
         if (BI.isKey(this.options.watermark)) {
             var self = this;
             this.watermark = BI.createWidget({
@@ -49862,6 +49857,11 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 bottom: 0
             });
         }
+
+    },
+
+    mounted: function () {
+        var o = this.options;
         if(BI.isNotNull(o.value)) {
             this.setValue(o.value);
         }
@@ -88407,10 +88407,6 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             self.setValue(self.storeValue);
             self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
-        });
-        this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
-            self.trigger.setValue(self.popup.getValue());
-            self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
         });
         this.combo = BI.createWidget({
             type: "bi.combo",
