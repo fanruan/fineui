@@ -95653,6 +95653,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         this.popup = BI.createWidget({
             type: "bi.multilayer_single_tree_popup",
             isDefaultInit: o.isDefaultInit,
+            itemsCreator: o.itemsCreator,
             items: o.items,
             value: o.value
         });
