@@ -14563,11 +14563,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
-
-        if (BI.isKey(o.value)) {
-            self.setValue(o.value);
-        }
-
         if (BI.isKey(this.options.watermark)) {
             var self = this;
             this.watermark = BI.createWidget({
@@ -14606,6 +14601,11 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 bottom: 0
             });
         }
+
+    },
+
+    mounted: function () {
+        var o = this.options;
         if(BI.isNotNull(o.value)) {
             this.setValue(o.value);
         }

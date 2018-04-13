@@ -55,10 +55,6 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
         });
-        this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
-            self.trigger.setValue(self.popup.getValue());
-            self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
-        });
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
