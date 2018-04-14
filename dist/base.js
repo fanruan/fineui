@@ -18174,11 +18174,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             items: [{
                 el: this.watermark,
                 top: 0,
-                left: 5
+                left: o.lineNumbers ? 5 : 30 + 5
             }]
         });
 
-        if (BI.isKey(o.value)) {
+        if (BI.isNumber(o.value) || BI.isString(o.value)) {
             BI.nextTick(function () {
                 self.setValue(o.value);
             });
