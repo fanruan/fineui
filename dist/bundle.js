@@ -50072,11 +50072,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
-
-        if (BI.isKey(o.value)) {
-            self.setValue(o.value);
-        }
-
         if (BI.isKey(this.options.watermark)) {
             var self = this;
             this.watermark = BI.createWidget({
@@ -50115,6 +50110,11 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                 bottom: 0
             });
         }
+
+    },
+
+    mounted: function () {
+        var o = this.options;
         if(BI.isNotNull(o.value)) {
             this.setValue(o.value);
         }
@@ -53611,6 +53611,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             watermark: "",
             lineHeight: 2,
             readOnly: false,
+            lineNumbers: false,
             // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
@@ -53623,7 +53624,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor = CodeMirror(this.element[0], {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false,
+            lineNumbers: o.lineNumbers,
             readOnly: o.readOnly,
             // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
@@ -53682,11 +53683,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             items: [{
                 el: this.watermark,
                 top: 0,
-                left: 5
+                left: o.lineNumbers ? 5 : 30 + 5
             }]
         });
 
-        if (BI.isKey(o.value)) {
+        if (BI.isNumber(o.value) || BI.isString(o.value)) {
             BI.nextTick(function () {
                 self.setValue(o.value);
             });
@@ -53776,7 +53777,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     focus: function () {
         this.editor.focus();
     },
-    
+
     blur: function () {
         this.editor.getInputField().blur();
     },
@@ -88660,10 +88661,6 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             self.setValue(self.storeValue);
             self.hidePopupView();
             self.fireEvent(BI.DateTimeCombo.EVENT_CONFIRM);
-        });
-        this.popup.on(BI.DateTimePopup.CALENDAR_EVENT_CHANGE, function () {
-            self.trigger.setValue(self.popup.getValue());
-            self.fireEvent(BI.DateTimeCombo.EVENT_CHANGE);
         });
         this.combo = BI.createWidget({
             type: "bi.combo",

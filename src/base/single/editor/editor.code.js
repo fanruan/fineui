@@ -12,6 +12,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             watermark: "",
             lineHeight: 2,
             readOnly: false,
+            lineNumbers: false,
             // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
@@ -24,7 +25,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         this.editor = CodeMirror(this.element[0], {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false,
+            lineNumbers: o.lineNumbers,
             readOnly: o.readOnly,
             // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
@@ -83,11 +84,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             items: [{
                 el: this.watermark,
                 top: 0,
-                left: 5
+                left: o.lineNumbers ? 5 : 30 + 5
             }]
         });
 
-        if (BI.isKey(o.value)) {
+        if (BI.isNumber(o.value) || BI.isString(o.value)) {
             BI.nextTick(function () {
                 self.setValue(o.value);
             });
@@ -177,7 +178,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     focus: function () {
         this.editor.focus();
     },
-    
+
     blur: function () {
         this.editor.getInputField().blur();
     },
