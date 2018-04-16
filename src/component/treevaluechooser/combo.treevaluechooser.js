@@ -27,6 +27,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             type: "bi.multi_tree_combo",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height
         });

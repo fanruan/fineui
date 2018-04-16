@@ -11,6 +11,19 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         });
     },
 
+    _valueFormatter: function (v) {
+        var text = v;
+        if (BI.isNotNull(this.items)) {
+            BI.some(this.items, function (i, item) {
+                if (item.value + "" === v) {
+                    text = item.text;
+                    return true;
+                }
+            });
+        }
+        return text;
+    },
+
     _initData: function (items) {
         this.items = items;
         var nodes = BI.Tree.treeFormat(items);
