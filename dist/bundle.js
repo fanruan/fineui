@@ -111319,6 +111319,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
                 needPop = true;
             }
             this.store = this._store();
+            this.store._widget = this;
             needPop && popTarget();
             needPop = false;
             pushTarget(this.store);
@@ -111358,6 +111359,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         this._watchers && (this._watchers = []);
         if (this.store) {
             this.store._parent && (this.store._parent = null);
+            this.store._widget && (this.store._widget = null);
             this.store = null;
         }
         delete this.__cacheStore;
