@@ -95,7 +95,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: self.yearEditor.getValue(),
-                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue - 1
+                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
                     }
                 };
             }

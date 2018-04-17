@@ -22125,7 +22125,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: self.yearEditor.getValue(),
-                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue - 1
+                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
                     }
                 };
             }
