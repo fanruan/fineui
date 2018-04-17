@@ -28800,11 +28800,13 @@ BI.extend(BI.DOM, {
     };
 
     var actions = {};
-    var globalAction;
+    var globalAction = [];
     BI.action = function (type, actionFn) {
         if (BI.isFunction(type)) {
-            globalAction = type;
-            return;
+            globalAction.push(type);
+            return function () {
+                BI.remove(globalAction, actionFn);
+            };
         }
         if (!actions[type]) {
             actions[type] = [];
@@ -28928,7 +28930,10 @@ BI.extend(BI.DOM, {
             });
         },
         runGlobalAction: function () {
-            globalAction && globalAction.apply(null, arguments);
+            var args = [].slice.call(arguments);
+            BI.each(globalAction, function (i, act) {
+                act.apply(null, args);
+            });
         }
     };
 })();
