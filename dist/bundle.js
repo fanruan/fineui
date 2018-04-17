@@ -72305,7 +72305,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 36
+                width: 16
             }, this.text)
         }))));
     },
@@ -83313,6 +83313,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
+            value: o.value,
             items: BI.createItems(o.items, {
                 type: "bi.segment_button",
                 height: o.height - 2,
