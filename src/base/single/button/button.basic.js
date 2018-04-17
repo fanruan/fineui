@@ -303,6 +303,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (o.action) {
                 BI.Actions.runAction(o.action, o);
             }
+            BI.Actions.runGlobalAction(o);
         }
     },
 

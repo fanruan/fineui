@@ -53,7 +53,12 @@
     };
 
     var actions = {};
+    var globalAction;
     BI.action = function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction = type;
+            return;
+        }
         if (!actions[type]) {
             actions[type] = [];
         }
@@ -114,7 +119,7 @@
                                     console.error(e);
                                 }
                             }
-                        }
+                        };
                     }(afns));
                 }
             }
@@ -174,6 +179,9 @@
             BI.each(actions[type], function (i, act) {
                 act(config);
             });
+        },
+        runGlobalAction: function () {
+            globalAction && globalAction.apply(null, arguments);
         }
     };
 })();

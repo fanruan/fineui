@@ -28800,7 +28800,12 @@ BI.extend(BI.DOM, {
     };
 
     var actions = {};
+    var globalAction;
     BI.action = function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction = type;
+            return;
+        }
         if (!actions[type]) {
             actions[type] = [];
         }
@@ -28861,7 +28866,7 @@ BI.extend(BI.DOM, {
                                     console.error(e);
                                 }
                             }
-                        }
+                        };
                     }(afns));
                 }
             }
@@ -28921,6 +28926,9 @@ BI.extend(BI.DOM, {
             BI.each(actions[type], function (i, act) {
                 act(config);
             });
+        },
+        runGlobalAction: function () {
+            globalAction && globalAction.apply(null, arguments);
         }
     };
 })();
@@ -36412,6 +36420,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             if (o.action) {
                 BI.Actions.runAction(o.action, o);
             }
+            BI.Actions.runGlobalAction(o);
         }
     },
 
