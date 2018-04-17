@@ -26,7 +26,8 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value === v) {
+                // 把value都换成字符串
+                if (item.value + "" === v) {
                     text = item.text;
                     return true;
                 }

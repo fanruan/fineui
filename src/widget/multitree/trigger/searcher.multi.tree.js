@@ -10,6 +10,9 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiTreeSearcher.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-searcher",
             itemsCreator: BI.emptyFn,
+            valueFormatter: function (v) {
+                return v;
+            },
             popup: {},
 
             adapter: null,
@@ -105,6 +108,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
     },
 
     setState: function (ob) {
+        var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = {});
         if (BI.isNumber(ob)) {
@@ -115,7 +119,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (name, children) {
                 var childNodes = getChildrenNode(children);
-                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
             });
             this.editor.setState(text);
         }
@@ -126,7 +130,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(ob, function (name, children) {
                 index++;
                 var childNodes = getChildrenNode(children);
-                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
             });
             return text;
         }

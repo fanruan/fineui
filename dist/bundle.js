@@ -72557,7 +72557,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 36
+                width: 16
             }, this.text)
         }))));
     },
@@ -83565,6 +83565,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
+            value: o.value,
             items: BI.createItems(o.items, {
                 type: "bi.segment_button",
                 height: o.height - 2,
@@ -99730,6 +99731,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
             height: 25
         });
     },
@@ -99747,6 +99749,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
                 offset: this.constants.offset
@@ -100225,6 +100228,9 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiTreeSearcher.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-searcher",
             itemsCreator: BI.emptyFn,
+            valueFormatter: function (v) {
+                return v;
+            },
             popup: {},
 
             adapter: null,
@@ -100320,6 +100326,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
     },
 
     setState: function (ob) {
+        var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = {});
         if (BI.isNumber(ob)) {
@@ -100330,7 +100337,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             var text = "";
             BI.each(ob.value, function (name, children) {
                 var childNodes = getChildrenNode(children);
-                text += name + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
             });
             this.editor.setState(text);
         }
@@ -100341,7 +100348,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(ob, function (name, children) {
                 index++;
                 var childNodes = getChildrenNode(children);
-                text += name + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
             });
             return text;
         }
@@ -110042,7 +110049,8 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value === v) {
+                // 把value都换成字符串
+                if (item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
@@ -110229,6 +110237,19 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
             items: null,
             itemsCreator: BI.emptyFn
         });
+    },
+
+    _valueFormatter: function (v) {
+        var text = v;
+        if (BI.isNotNull(this.items)) {
+            BI.some(this.items, function (i, item) {
+                if (item.value + "" === v) {
+                    text = item.text;
+                    return true;
+                }
+            });
+        }
+        return text;
     },
 
     _initData: function (items) {
@@ -110904,6 +110925,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             type: "bi.multi_tree_combo",
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height
         });
@@ -111004,7 +111026,8 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value === v) {
+                // 把value都换成字符串
+                if (item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
