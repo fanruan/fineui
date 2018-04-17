@@ -19,6 +19,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
             height: 25
         });
     },
@@ -36,6 +37,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
                 offset: this.constants.offset
