@@ -4162,6 +4162,15 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.match(/[\S]+/g);
+        if (BI.isEndWithBlank(val)) {
+            return keywords.concat([" "]);
+        }
+        return keywords;
+    },
+
     setValue: function (v) {
         this.editor.setValue(v);
         if (BI.isKey(v)) {
@@ -11196,7 +11205,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
-                    var keywords = this.getKeyword();
+                    var keywords = this.getKeywords();
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {
