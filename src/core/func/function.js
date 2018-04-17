@@ -301,7 +301,6 @@ BI.extend(BI.DOM, {
     },
 
     getImage: function (param, fillStyle, backgroundColor) {
-        var image = new Image();
         var canvas = document.createElement("canvas");
         $("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
@@ -319,8 +318,8 @@ BI.extend(BI.DOM, {
             width: w,
             height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: " + backColor + ";vertical-align: sub; margin: 0 3px;",
-            alt: param
+            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px;",
+            param: param
         };
     }
 });
