@@ -11373,6 +11373,7 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup = BI.createWidget({
             element: this,
             type: "bi.button_group",
+            value: o.value,
             items: BI.createItems(o.items, {
                 type: "bi.segment_button",
                 height: o.height - 2,
