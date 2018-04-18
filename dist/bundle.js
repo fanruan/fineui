@@ -73862,7 +73862,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getEndYear: function (year) {
-        return BI.YearCalendar.getStartYear(year) + BI.YearCalendar.INTERVAL;
+        return BI.YearCalendar.getStartYear(year) + BI.YearCalendar.INTERVAL - 1;
     },
 
     getPageByYear: function (year) {
@@ -90361,7 +90361,7 @@ BI.extend(BI.DynamicDateCombo, {
                     },
                     errorText: function (v) {
                         if(BI.isEmptyString(v)) {
-                            return BI.i18nText("BI-Basic_Input_Can_Not_Null");
+                            return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
                         return BI.i18nText("BI-Please_Input_Positive_Integer");
                     },
@@ -100652,6 +100652,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
+        w.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
+        });
     },
 
     _setComboValueChangedEvent: function (w) {
@@ -100672,6 +100675,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                     break;
                 default :
                     self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
+                    self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
                     self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         });
@@ -100774,6 +100778,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     }
 });
 BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberInterval.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);/**
@@ -108090,7 +108095,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 value = value || {};
                 this.editor.setState(value.year);
                 this.editor.setValue(value.year);
-                this.editor.setTitle(value.year);
+                this.setTitle(value.year);
                 break;
         }
     },
@@ -108285,11 +108290,10 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         obj.month = obj.month || 0;
         if (BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
             var year = BI.getDate().getFullYear();
-            var month = BI.getDate().getMonth();
             this.selectedYear = "";
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
-            this.month.setValue(month);
+            this.month.setValue();
         } else {
             this.selectedYear = BI.parseInt(obj.year);
             this.selectedMonth = BI.parseInt(obj.month);
@@ -108569,7 +108573,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
-                    text: BI.i18nText("BI-Basic_Year_Fen"),
+                    text: BI.i18nText("BI-Basic_Year_Month"),
                     value: BI.DynamicYearCombo.Static
                 }, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
@@ -108774,6 +108778,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                     }
                 };
             }
+            self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
         });
@@ -108821,11 +108826,11 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         if(BI.isNotNull(obj.month) && obj.month !== 0) {
-            value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Year") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+            value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
     },
@@ -108835,6 +108840,13 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         this.yearEditor.setValue(date.getFullYear());
         this.monthEditor.setValue(date.getMonth() + 1);
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
+    },
+
+    _getStaticTitle: function (value) {
+        value = value || {};
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
+        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : value.month;
+        return yearStr + monthStr;
     },
 
     setValue: function (v) {
@@ -108859,6 +108871,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 this.yearEditor.setTitle(value.year);
                 this.monthEditor.setValue(month);
                 this.monthEditor.setTitle(month);
+                this.setTitle(this._getStaticTitle(value));
                 break;
         }
     },
@@ -109225,11 +109238,10 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         obj.quarter = obj.quarter || 0;
         if (BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
             var year = BI.getDate().getFullYear();
-            var quarter = BI.getDate().getQuarter();
             this.selectedYear = "";
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
-            this.quarter.setValue(quarter);
+            this.quarter.setValue();
         } else {
             this.selectedYear = BI.parseInt(obj.year);
             this.selectedQuarter = BI.parseInt(obj.quarter);
@@ -109484,7 +109496,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                 cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
-                    text: BI.i18nText("BI-Basic_Year_Fen"),
+                    text: BI.i18nText("BI-Basic_Year_Quarter"),
                     value: BI.DynamicYearQuarterCombo.Static
                 }, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
@@ -109689,6 +109701,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                     }
                 };
             }
+            self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
         });
@@ -109725,13 +109738,20 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         }
     },
 
+    _getStaticTitle: function (value) {
+        value = value || {};
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
+        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : value.quarter;
+        return yearStr + quarterStr;
+    },
+
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
-            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Year") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
     },
@@ -109765,6 +109785,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                 this.yearEditor.setTitle(value.year);
                 this.quarterEditor.setValue(quarter);
                 this.quarterEditor.setTitle(quarter);
+                this.setTitle(this._getStaticTitle(value));
                 break;
         }
     },
@@ -111924,5 +111945,6 @@ BI.i18n = {
     "BI-Conf_Condition_Or": "或条件",
     "BI-Microsoft_YaHei": "微软雅黑",
     "BI-Apple_Light": "苹方-light",
-    "BI-Font_Family": "字体"
+    "BI-Font_Family": "字体",
+    "BI-Basic_Please_Input_Content": "请输入内容"
 };

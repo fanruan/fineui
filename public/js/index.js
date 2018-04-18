@@ -158,5 +158,6 @@ BI.i18n = {
     "BI-Conf_Condition_Or": "或条件",
     "BI-Microsoft_YaHei": "微软雅黑",
     "BI-Apple_Light": "苹方-light",
-    "BI-Font_Family": "字体"
+    "BI-Font_Family": "字体",
+    "BI-Basic_Please_Input_Content": "请输入内容"
 };

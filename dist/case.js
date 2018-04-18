@@ -1922,7 +1922,7 @@ BI.extend(BI.YearCalendar, {
     },
 
     getEndYear: function (year) {
-        return BI.YearCalendar.getStartYear(year) + BI.YearCalendar.INTERVAL;
+        return BI.YearCalendar.getStartYear(year) + BI.YearCalendar.INTERVAL - 1;
     },
 
     getPageByYear: function (year) {
