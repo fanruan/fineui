@@ -111394,8 +111394,8 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             "sortBy", "groupBy", "indexBy", "countBy", "partition",
             "keys", "allKeys", "values", "pairs", "invert",
             "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-            var old = BI[name];
-            BI[name] = function (obj, fn) {
+            var old = _[name];
+            _[name] = function (obj, fn) {
                 return typeof fn === "function" ? old(obj, function (key, value) {
                     if (!(key in Fix.$$skipArray)) {
                         return fn.apply(this, arguments);
@@ -111403,40 +111403,33 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
                 }) : old.apply(this, arguments);
             };
         });
-        BI.isEmpty = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length === 0;
-            }
-            return _.isEmpty(ob);
-        };
-        BI.keys = function (ob) {
-            var keys = _.keys(ob);
-            var nKeys = [];
-            for (var i = 0; i < keys.length; i++) {
-                if (!(keys[i] in Fix.$$skipArray)) {
-                    nKeys.push(keys[i]);
+
+        _.each(["isPlainObject"], function (name) {
+            var old = _[name];
+            _[name] = function (value) {
+                for (var key in value) {
+                    if (key in Fix.$$skipArray) {
+                        return true;
+                    }
                 }
-            }
-            return nKeys;
-        };
-        BI.values = function (ob) {
-            var keys = BI.keys(obj);
-            var length = keys.length;
-            var values = [];
-            for (var i = 0; i < length; i++) {
-                values[i] = obj[keys[i]];
-            }
-            return values;
-        };
-        BI.size = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length;
-            }
-            return _.size(ob);
-        };
-        BI.isEmptyObject = function (ob) {
-            return BI.size(ob) === 0;
-        };
+                return old(value);
+            };
+        });
+
+        _.each(["isEqual"], function (name) {
+            var old = _[name];
+            _[name] = function (value, other) {
+                return old(Fix.toJSON(value), Fix.toJSON(other));
+            };
+        });
+
+
+        _.each(["cloneDeep", "isEmpty", "size"], function (name) {
+            var old = _[name];
+            _[name] = function (value) {
+                return old(Fix.toJSON(value));
+            };
+        });
     }
     BI.watch = Fix.watch;
 }());(function () {

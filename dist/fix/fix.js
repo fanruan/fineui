@@ -548,7 +548,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 enumerable: true,
                 configurable: true,
                 get: function reactiveGetter() {
-                    var value = val;
+                    var value = childOb && childOb.model || val;
                     if (Dep.target) {
                         dep.depend();
                         if (childOb) {
@@ -561,7 +561,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return value;
                 },
                 set: function reactiveSetter(newVal) {
-                    var value = val;
+                    var value = childOb && childOb.model || val;
                     if (newVal === value || newVal !== newVal && value !== value) {
                         return;
                     }
@@ -1323,7 +1323,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             for (var i = 0, len = model.length; i < len; i++) {
                 result[i] = toJSON(model[i]);
             }
-        } else if (isPlainObject(model)) {
+        } else if (model && isPlainObject(model)) {
             result = {};
             for (var _key4 in model) {
                 if (!_.has($$skipArray, _key4)) {
