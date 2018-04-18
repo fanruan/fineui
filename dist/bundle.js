@@ -34708,7 +34708,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 enumerable: true,
                 configurable: true,
                 get: function reactiveGetter() {
-                    var value = childOb && childOb.model || val;
+                    var value = childOb ? childOb.model : val;
                     if (Dep.target) {
                         dep.depend();
                         if (childOb) {
@@ -34721,7 +34721,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return value;
                 },
                 set: function reactiveSetter(newVal) {
-                    var value = childOb && childOb.model || val;
+                    var value = childOb ? childOb.model : val;
                     if (newVal === value || newVal !== newVal && value !== value) {
                         return;
                     }
