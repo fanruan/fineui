@@ -2797,14 +2797,46 @@ BI.shortcut("demo.all_count_pager", Demo.Func);Demo.Func = BI.inherit(BI.Widget,
         baseCls: "demo-func"
     },
 
+    mounted: function () {
+        this.pager.populate();
+    },
+
     render: function () {
+        var self = this;
         BI.createWidget({
             type: "bi.vertical",
             hgap: 200,
             vgap: 50,
             element: this,
             items: [{
-                type: "bi.direction_pager"
+                type: "bi.direction_pager",
+                ref: function (_ref) {
+                    self.pager = _ref;
+                },
+                horizontal: {
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
+
+                    hasPrev: function (v) {
+                        return v > 1;
+                    },
+                    hasNext: function () {
+                        return true;
+                    },
+                    firstPage: 1
+                },
+                vertical: {
+                    pages: false, // 总页数
+                    curr: 1, // 初始化当前页， pages为数字时可用
+
+                    hasPrev: function (v) {
+                        return v > 1;
+                    },
+                    hasNext: function () {
+                        return true;
+                    },
+                    firstPage: 1
+                }
             }]
         });
     }
@@ -13646,6 +13678,7 @@ BI.shortcut("demo.slider", Demo.Slider);Demo.Func = BI.inherit(BI.Widget, {
             crossHeader: crossHeader,
             crossItems: crossItems
         });
+        table1.populate();
         // table1.populate(items, header, crossItems, crossHeader);
         BI.createWidget({
             type: "bi.absolute",

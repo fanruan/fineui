@@ -53,7 +53,14 @@
     };
 
     var actions = {};
+    var globalAction = [];
     BI.action = function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction.push(type);
+            return function () {
+                BI.remove(globalAction, actionFn);
+            };
+        }
         if (!actions[type]) {
             actions[type] = [];
         }
@@ -114,7 +121,7 @@
                                     console.error(e);
                                 }
                             }
-                        }
+                        };
                     }(afns));
                 }
             }
@@ -173,6 +180,12 @@
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
                 act(config);
+            });
+        },
+        runGlobalAction: function () {
+            var args = [].slice.call(arguments);
+            BI.each(globalAction, function (i, act) {
+                act.apply(null, args);
             });
         }
     };

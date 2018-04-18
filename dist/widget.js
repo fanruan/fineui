@@ -16696,7 +16696,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = o.value || "";
+        this.storeValue = o.value;
         // 标记正在请求数据
         this.requesting = false;
 
@@ -17002,7 +17002,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || "";
+        this.storeValue = v;
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
     },
@@ -17024,7 +17024,8 @@ BI.extend(BI.SingleSelectCombo, {
 
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);/**
+BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
+/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.

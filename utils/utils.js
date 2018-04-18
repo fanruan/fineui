@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -844,6 +844,20 @@
       }
     }
     return result;
+  }
+
+  /**
+   * Gets the value at `key`, unless `key` is "__proto__".
+   *
+   * @private
+   * @param {Object} object The object to query.
+   * @param {string} key The key of the property to get.
+   * @returns {*} Returns the property value.
+   */
+  function safeGet(object, key) {
+    return key == '__proto__'
+      ? undefined
+      : object[key];
   }
 
   /**
@@ -1859,6 +1873,22 @@
       }
     }
     return result;
+  }
+
+  /**
+   * This function is like `assignValue` except that it doesn't assign
+   * `undefined` values.
+   *
+   * @private
+   * @param {Object} object The object to modify.
+   * @param {string} key The key of the property to assign.
+   * @param {*} value The value to assign.
+   */
+  function assignMergeValue(object, key, value) {
+    if ((value !== undefined && !eq(object[key], value)) ||
+        (value === undefined && !(key in object))) {
+      baseAssignValue(object, key, value);
+    }
   }
 
   /**
@@ -2887,6 +2917,116 @@
         ? hasIn(object, path)
         : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
     };
+  }
+
+  /**
+   * The base implementation of `_.merge` without support for multiple sources.
+   *
+   * @private
+   * @param {Object} object The destination object.
+   * @param {Object} source The source object.
+   * @param {number} srcIndex The index of `source`.
+   * @param {Function} [customizer] The function to customize merged values.
+   * @param {Object} [stack] Tracks traversed source values and their merged
+   *  counterparts.
+   */
+  function baseMerge(object, source, srcIndex, customizer, stack) {
+    if (object === source) {
+      return;
+    }
+    baseFor(source, function(srcValue, key) {
+      if (isObject(srcValue)) {
+        stack || (stack = new Stack);
+        baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
+      }
+      else {
+        var newValue = customizer
+          ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
+          : undefined;
+
+        if (newValue === undefined) {
+          newValue = srcValue;
+        }
+        assignMergeValue(object, key, newValue);
+      }
+    }, keysIn);
+  }
+
+  /**
+   * A specialized version of `baseMerge` for arrays and objects which performs
+   * deep merges and tracks traversed objects enabling objects with circular
+   * references to be merged.
+   *
+   * @private
+   * @param {Object} object The destination object.
+   * @param {Object} source The source object.
+   * @param {string} key The key of the value to merge.
+   * @param {number} srcIndex The index of `source`.
+   * @param {Function} mergeFunc The function to merge values.
+   * @param {Function} [customizer] The function to customize assigned values.
+   * @param {Object} [stack] Tracks traversed source values and their merged
+   *  counterparts.
+   */
+  function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
+    var objValue = safeGet(object, key),
+        srcValue = safeGet(source, key),
+        stacked = stack.get(srcValue);
+
+    if (stacked) {
+      assignMergeValue(object, key, stacked);
+      return;
+    }
+    var newValue = customizer
+      ? customizer(objValue, srcValue, (key + ''), object, source, stack)
+      : undefined;
+
+    var isCommon = newValue === undefined;
+
+    if (isCommon) {
+      var isArr = isArray(srcValue),
+          isBuff = !isArr && isBuffer(srcValue),
+          isTyped = !isArr && !isBuff && isTypedArray(srcValue);
+
+      newValue = srcValue;
+      if (isArr || isBuff || isTyped) {
+        if (isArray(objValue)) {
+          newValue = objValue;
+        }
+        else if (isArrayLikeObject(objValue)) {
+          newValue = copyArray(objValue);
+        }
+        else if (isBuff) {
+          isCommon = false;
+          newValue = cloneBuffer(srcValue, true);
+        }
+        else if (isTyped) {
+          isCommon = false;
+          newValue = cloneTypedArray(srcValue, true);
+        }
+        else {
+          newValue = [];
+        }
+      }
+      else if (isPlainObject(srcValue) || isArguments(srcValue)) {
+        newValue = objValue;
+        if (isArguments(objValue)) {
+          newValue = toPlainObject(objValue);
+        }
+        else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+          newValue = initCloneObject(srcValue);
+        }
+      }
+      else {
+        isCommon = false;
+      }
+    }
+    if (isCommon) {
+      // Recursively merge objects and arrays (susceptible to call stack limits).
+      stack.set(srcValue, newValue);
+      mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
+      stack['delete'](srcValue);
+    }
+    assignMergeValue(object, key, newValue);
   }
 
   /**
@@ -4106,6 +4246,30 @@
     }
     var setter = data ? baseSetData : setData;
     return setWrapToString(setter(result, newData), func, bitmask);
+  }
+
+  /**
+   * Used by `_.defaultsDeep` to customize its `_.merge` use to merge source
+   * objects into destination objects that are passed thru.
+   *
+   * @private
+   * @param {*} objValue The destination value.
+   * @param {*} srcValue The source value.
+   * @param {string} key The key of the property to merge.
+   * @param {Object} object The parent object of `objValue`.
+   * @param {Object} source The parent object of `srcValue`.
+   * @param {Object} [stack] Tracks traversed source values and their merged
+   *  counterparts.
+   * @returns {*} Returns the value to assign.
+   */
+  function customDefaultsMerge(objValue, srcValue, key, object, source, stack) {
+    if (isObject(objValue) && isObject(srcValue)) {
+      // Recursively merge objects and arrays (susceptible to call stack limits).
+      stack.set(srcValue, objValue);
+      baseMerge(objValue, srcValue, undefined, customDefaultsMerge, stack);
+      stack['delete'](srcValue);
+    }
+    return objValue;
   }
 
   /**
@@ -8184,6 +8348,34 @@
   }
 
   /**
+   * Converts `value` to a plain object flattening inherited enumerable string
+   * keyed properties of `value` to own properties of the plain object.
+   *
+   * @static
+   * @memberOf _
+   * @since 3.0.0
+   * @category Lang
+   * @param {*} value The value to convert.
+   * @returns {Object} Returns the converted plain object.
+   * @example
+   *
+   * function Foo() {
+   *   this.b = 2;
+   * }
+   *
+   * Foo.prototype.c = 3;
+   *
+   * _.assign({ 'a': 1 }, new Foo);
+   * // => { 'a': 1, 'b': 2 }
+   *
+   * _.assign({ 'a': 1 }, _.toPlainObject(new Foo));
+   * // => { 'a': 1, 'b': 2, 'c': 3 }
+   */
+  function toPlainObject(value) {
+    return copyObject(value, keysIn(value));
+  }
+
+  /**
    * Converts `value` to a string. An empty string is returned for `null`
    * and `undefined` values. The sign of `-0` is preserved.
    *
@@ -8334,6 +8526,30 @@
     }
 
     return object;
+  });
+
+  /**
+   * This method is like `_.defaults` except that it recursively assigns
+   * default properties.
+   *
+   * **Note:** This method mutates `object`.
+   *
+   * @static
+   * @memberOf _
+   * @since 3.10.0
+   * @category Object
+   * @param {Object} object The destination object.
+   * @param {...Object} [sources] The source objects.
+   * @returns {Object} Returns `object`.
+   * @see _.defaults
+   * @example
+   *
+   * _.defaultsDeep({ 'a': { 'b': 2 } }, { 'a': { 'b': 1, 'c': 3 } });
+   * // => { 'a': { 'b': 2, 'c': 3 } }
+   */
+  var defaultsDeep = baseRest(function(args) {
+    args.push(undefined, customDefaultsMerge);
+    return apply(mergeWith, undefined, args);
   });
 
   /**
@@ -8629,6 +8845,41 @@
   function keysIn(object) {
     return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);
   }
+
+  /**
+   * This method is like `_.merge` except that it accepts `customizer` which
+   * is invoked to produce the merged values of the destination and source
+   * properties. If `customizer` returns `undefined`, merging is handled by the
+   * method instead. The `customizer` is invoked with six arguments:
+   * (objValue, srcValue, key, object, source, stack).
+   *
+   * **Note:** This method mutates `object`.
+   *
+   * @static
+   * @memberOf _
+   * @since 4.0.0
+   * @category Object
+   * @param {Object} object The destination object.
+   * @param {...Object} sources The source objects.
+   * @param {Function} customizer The function to customize assigned values.
+   * @returns {Object} Returns `object`.
+   * @example
+   *
+   * function customizer(objValue, srcValue) {
+   *   if (_.isArray(objValue)) {
+   *     return objValue.concat(srcValue);
+   *   }
+   * }
+   *
+   * var object = { 'a': [1], 'b': [2] };
+   * var other = { 'a': [3], 'b': [4] };
+   *
+   * _.mergeWith(object, other, customizer);
+   * // => { 'a': [1, 3], 'b': [2, 4] }
+   */
+  var mergeWith = createAssigner(function(object, source, srcIndex, customizer) {
+    baseMerge(object, source, srcIndex, customizer);
+  });
 
   /**
    * The opposite of `_.pick`; this method creates an object composed of the
@@ -9399,6 +9650,7 @@
   lodash.create = create;
   lodash.debounce = debounce;
   lodash.defaults = defaults;
+  lodash.defaultsDeep = defaultsDeep;
   lodash.defer = defer;
   lodash.delay = delay;
   lodash.difference = difference;
@@ -12987,7 +13239,14 @@ _.extend(BI.OB.prototype, {
     };
 
     var actions = {};
+    var globalAction = [];
     BI.action = function (type, actionFn) {
+        if (BI.isFunction(type)) {
+            globalAction.push(type);
+            return function () {
+                BI.remove(globalAction, actionFn);
+            };
+        }
         if (!actions[type]) {
             actions[type] = [];
         }
@@ -13048,7 +13307,7 @@ _.extend(BI.OB.prototype, {
                                     console.error(e);
                                 }
                             }
-                        }
+                        };
                     }(afns));
                 }
             }
@@ -13107,6 +13366,12 @@ _.extend(BI.OB.prototype, {
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
                 act(config);
+            });
+        },
+        runGlobalAction: function () {
+            var args = [].slice.call(arguments);
+            BI.each(globalAction, function (i, act) {
+                act.apply(null, args);
             });
         }
     };

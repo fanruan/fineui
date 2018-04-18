@@ -190,6 +190,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             crossHeader: crossHeader,
             crossItems: crossItems
         });
+        table1.populate();
         // table1.populate(items, header, crossItems, crossHeader);
         BI.createWidget({
             type: "bi.absolute",
