@@ -65,7 +65,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             self.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setValue(o.style);
+            self.setStyle(o.style);
         }
         this._checkWaterMark();
     },

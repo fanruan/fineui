@@ -84,7 +84,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             items: [{
                 el: this.watermark,
                 top: 0,
-                left: o.lineNumbers ? 5 : 30 + 5
+                left: o.lineNumbers ? 30 + 5 : 5
             }]
         });
 
@@ -92,6 +92,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             BI.nextTick(function () {
                 self.setValue(o.value);
             });
+        }
+
+        if (BI.isNotNull(o.style)) {
+            self.setStyle(o.style);
         }
     },
 
