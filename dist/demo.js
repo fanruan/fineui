@@ -12776,7 +12776,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_list",
+            type: "bi.multi_select_insert_list",
             ref: function (ref) {
                 self.list = ref;
             },
@@ -13022,7 +13022,7 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
     mounted: function () {
         var numerical = this.numerical;
         var label = this.label;
-        numerical.on(BI.NumberInterval.EVENT_CHANGE, function () {
+        numerical.on(BI.NumberInterval.EVENT_CONFIRM, function () {
             var temp = numerical.getValue();
             var res = "大于" + (temp.closemin ? "等于 " : " ") + temp.min + " 小于" + (temp.closemax ? "等于 " : " ") + temp.max;
             label.setValue(res);
@@ -14633,13 +14633,13 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
                     self.widget = _ref;
                 },
                 width: 300,
-                value: {
-                    type: 1,
-                    value: {
-                        year: 2018,
-                        month: 1
-                    }
-                }
+                // value: {
+                //     type: 1,
+                //     value: {
+                //         year: 2018,
+                //         month: 1
+                //     }
+                // }
             }, {
                 type: "bi.button",
                 text: "getValue",

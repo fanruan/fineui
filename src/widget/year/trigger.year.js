@@ -125,7 +125,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
                 value = value || {};
                 this.editor.setState(value.year);
                 this.editor.setValue(value.year);
-                this.editor.setTitle(value.year);
+                this.setTitle(value.year);
                 break;
         }
     },

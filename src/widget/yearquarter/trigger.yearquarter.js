@@ -99,6 +99,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                     }
                 };
             }
+            self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
         });
@@ -135,13 +136,20 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    _getStaticTitle: function (value) {
+        value = value || {};
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
+        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : value.quarter;
+        return yearStr + quarterStr;
+    },
+
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year)) {
+        if(BI.isNotNull(obj.year) && obj.year !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
-            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Year") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
+            value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
     },
@@ -175,6 +183,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 this.yearEditor.setTitle(value.year);
                 this.quarterEditor.setValue(quarter);
                 this.quarterEditor.setTitle(quarter);
+                this.setTitle(this._getStaticTitle(value));
                 break;
         }
     },

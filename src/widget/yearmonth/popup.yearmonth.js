@@ -99,7 +99,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 cls: "bi-border-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
-                    text: BI.i18nText("BI-Basic_Year_Fen"),
+                    text: BI.i18nText("BI-Basic_Year_Month"),
                     value: BI.DynamicYearCombo.Static
                 }, {
                     text: BI.i18nText("BI-Basic_Dynamic_Title"),
