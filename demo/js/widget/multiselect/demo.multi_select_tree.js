@@ -13,7 +13,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_list",
+            type: "bi.multi_select_insert_list",
             ref: function (ref) {
                 self.list = ref;
             },

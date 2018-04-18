@@ -402,6 +402,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
+        w.on(BI.Editor.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
+        });
     },
 
     _setComboValueChangedEvent: function (w) {
@@ -422,6 +425,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                     break;
                 default :
                     self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
+                    self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
                     self.fireEvent(BI.NumberInterval.EVENT_VALID);
             }
         });
@@ -524,6 +528,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     }
 });
 BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberInterval.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);

@@ -114,7 +114,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
                 action: function () {
-                    var keywords = this.getKeyword();
+                    var keywords = this.getKeywords();
                     var last = BI.last(keywords);
                     keywords = BI.initial(keywords || []);
                     if (keywords.length > 0) {

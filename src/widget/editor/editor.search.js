@@ -147,6 +147,15 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    getKeywords: function () {
+        var val = this.editor.getValue();
+        var keywords = val.match(/[\S]+/g);
+        if (BI.isEndWithBlank(val)) {
+            return keywords.concat([" "]);
+        }
+        return keywords;
+    },
+
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
     },

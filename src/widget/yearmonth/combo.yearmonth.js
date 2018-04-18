@@ -73,7 +73,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         eventName: BI.DynamicYearMonthPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({year: date.getFullYear()});
+                            self.setValue({year: date.getFullYear(), month: date.getMonth() + 1});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }

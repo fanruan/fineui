@@ -100,11 +100,10 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         obj.month = obj.month || 0;
         if (BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
             var year = BI.getDate().getFullYear();
-            var month = BI.getDate().getMonth();
             this.selectedYear = "";
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
-            this.month.setValue(month);
+            this.month.setValue();
         } else {
             this.selectedYear = BI.parseInt(obj.year);
             this.selectedMonth = BI.parseInt(obj.month);
