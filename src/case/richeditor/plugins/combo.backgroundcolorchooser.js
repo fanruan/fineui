@@ -33,6 +33,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
                 backgroundColor: backgroundColor,
                 color: BI.DOM.getContrastColor(backgroundColor)
             });
+            self.fireEvent("EVENT_CHANGE", backgroundColor);
         });
     },
 

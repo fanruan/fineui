@@ -4,23 +4,21 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
     },
     render: function () {
         var self = this;
-        this.editor = BI.createWidget({
-            type: "bi.rich_editor",
-            cls: "bi-border",
-            width: 600,
-            height: 400
-        });
         BI.createWidget({
-            type: "bi.vertical",
+            type: "bi.absolute",
             element: this,
-            hgap: 30,
-            vgap: 50,
-            items: [this.editor, {
-                type: "bi.button",
-                text: "focus",
-                handler: function () {
-                    self.editor.focus();
-                }
+            items: [{
+                el: {
+                    type: "bi.rich_editor",
+                    cls: "bi-border",
+                    ref: function () {
+                        self.editor = this;
+                    }
+                },
+                left: 10,
+                top: 10,
+                bottom: 10,
+                right: 10
             }]
         });
     },
@@ -30,6 +28,7 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
         var src = image.src;
         var style = image.style;
         this.editor.setValue("<div>这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据<img class=\"rich-editor-param\" width='" + image.width + "' height='" + image.height + "' src='" + src + "' style='" + style + "' /></div>");
+        this.editor.setBackColor("#aacf53");
     }
 });
 BI.shortcut("demo.rich_editor", Demo.RichEditor);

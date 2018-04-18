@@ -41,7 +41,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         if(o.readOnly) {
             return editor;
         }
-        this.editor = BI.createWidget(editor);
+        this.editor = BI.createWidget(BI.extend(editor, {
+            height: "100%"
+        }));
         return {
             type: "bi.combo",
             toggle: false,
@@ -85,6 +87,13 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.editor.setValue(v);
+    },
+
+    setBackColor: function (backgroundColor) {
+        this.editor.element.css({
+            backgroundColor: backgroundColor,
+            color: BI.DOM.getContrastColor(backgroundColor)
+        });
     },
 
     getValue: function () {
