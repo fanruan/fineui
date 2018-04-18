@@ -2029,6 +2029,21 @@ textarea {
   -o-align-items: stretch;
   align-items: stretch;
 }
+.bi-inline-center-adapt-layout:after {
+  display: inline-block;
+  width: 0;
+  min-height: 100%;
+  vertical-align: middle;
+  content: ' ';
+}
+
+.bi-inline-vertical-adapt-layout:after {
+  display: inline-block;
+  width: 0;
+  min-height: 100%;
+  vertical-align: middle;
+  content: ' ';
+}
 .bi-theme-dark {
   background-color: #191B2B;
   color: #cccccc;
