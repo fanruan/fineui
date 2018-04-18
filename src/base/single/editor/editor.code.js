@@ -93,6 +93,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                 self.setValue(o.value);
             });
         }
+
+        if (BI.isNotNull(o.style)) {
+            BI.nextTick(function () {
+                self.setStyle(o.style);
+            });
+        }
     },
 
     _setEnable: function (b) {

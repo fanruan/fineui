@@ -53705,6 +53705,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                 self.setValue(o.value);
             });
         }
+
+        if (BI.isNotNull(o.style)) {
+            BI.nextTick(function () {
+                self.setStyle(o.style);
+            });
+        }
     },
 
     _setEnable: function (b) {
@@ -54290,7 +54296,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             self.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setValue(o.style);
+            self.setStyle(o.style);
         }
         this._checkWaterMark();
     },
