@@ -26504,21 +26504,18 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
     // 注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
-        if (isSupportFlex) {
+        if (!BI.isIE() && isSupportFlex) {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         return ob;
         
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-        if (isSupportFlex && ob.items && ob.items.length <= 1) {
+        if (!BI.isIE() && isSupportFlex && ob.items && ob.items.length <= 1) {
             // 有滚动条的情况下需要用到flex_wrapper_center布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
                 // 不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend(ob, {type: "bi.flex_wrapper_center"});
-                }
-                return ob;
+                return BI.extend(ob, {type: "bi.flex_wrapper_center"});
             }
             return BI.extend(ob, {type: "bi.flex_center"});
         }
@@ -26526,14 +26523,11 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
-        if (isSupportFlex) {
+        if (!BI.isIE() && isSupportFlex) {
             // 有滚动条的情况下需要用到flex_wrapper_center布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
                 // 不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
-                }
-                return ob;
+                return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
             }
             return BI.extend(ob, {type: "bi.flex_vertical_center"});
         }
@@ -26541,14 +26535,11 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         
     });
     BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
-        if (isSupportFlex) {
+        if (!BI.isIE() && isSupportFlex) {
             // 有滚动条的情况下需要用到flex_wrapper_center布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
                 // 不是IE用flex_wrapper_center布局
-                if (!BI.isIE()) {
-                    return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
-                }
-                return ob;
+                return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
             }
             return BI.extend(ob, {type: "bi.flex_center"});
         }
@@ -31413,6 +31404,178 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);/**
+ * 内联布局
+ * @class BI.InlineCenterAdaptLayout
+ * @extends BI.Layout
+ *
+ * @cfg {JSON} options 配置属性
+ * @cfg {Number} [hgap=0] 水平间隙
+ * @cfg {Number} [vgap=0] 垂直间隙
+ */
+BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-inline-center-adapt-layout",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
+        this.element.css({
+            whiteSpace: "nowrap"
+        });
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item, length) {
+        var o = this.options;
+        if (!this.hasWidget(this.getName() + i)) {
+            var t = BI.createWidget(item);
+            t.element.css({
+                position: "relative"
+            });
+            var w = BI.createWidget({
+                type: "bi.horizontal_auto",
+                items: [t]
+            });
+            this.addWidget(this.getName() + i, w);
+        } else {
+            var w = this.getWidgetByName(this.getName() + i);
+        }
+        w.element.css({
+            position: "relative",
+            display: "inline-block",
+            "vertical-align": "middle",
+            "*display": "inline",
+            "*zoom": 1,
+            "min-width": 100 / length + "%"
+        });
+        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+            w.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+            });
+        }
+        return w;
+    },
+
+    resize: function () {
+        this.stroke(this.options.items);
+    },
+
+    addItem: function (item) {
+        throw new Error("不能添加元素");
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (item) {
+                self._addElement(i, item, items.length);
+            }
+        });
+    },
+
+    populate: function (items) {
+        BI.InlineCenterAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);/**
+ * 内联布局
+ * @class BI.InlineVerticalAdaptLayout
+ * @extends BI.Layout
+ *
+ * @cfg {JSON} options 配置属性
+ * @cfg {Number} [hgap=0] 水平间隙
+ * @cfg {Number} [vgap=0] 垂直间隙
+ */
+BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-inline-vertical-adapt-layout",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        this.element.css({
+            whiteSpace: "nowrap"
+        });
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item) {
+        var o = this.options;
+        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
+        w.element.css({
+            position: "relative",
+            display: "inline-block",
+            "vertical-align": "middle",
+            "*display": "inline",
+            "*zoom": 1
+        });
+        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+            w.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+            });
+        }
+        return w;
+    },
+
+    resize: function () {
+        this.stroke(this.options.items);
+    },
+
+    populate: function (items) {
+        BI.InlineVerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -33007,6 +33170,70 @@ BI.HorizontalCellLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);/**
+ * 内联布局
+ * @class BI.InlineLayout
+ * @extends BI.Layout
+ *
+ * @cfg {JSON} options 配置属性
+ * @cfg {Number} [hgap=0] 水平间隙
+ * @cfg {Number} [vgap=0] 垂直间隙
+ */
+BI.InlineLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-inline-layout",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        BI.InlineLayout.superclass.render.apply(this, arguments);
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item) {
+        var o = this.options;
+        var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
+        w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
+        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+            w.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+            });
+        }
+        return w;
+    },
+
+    resize: function () {
+        this.stroke(this.options.items);
+    },
+
+    populate: function (items) {
+        BI.InlineLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.inline", BI.InlineLayout);/**
  * 靠左对齐的自由浮动布局
  * @class BI.LatticeLayout
  * @extends BI.Layout
@@ -53699,11 +53926,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                 left: o.lineNumbers ? 5 : 30 + 5
             }]
         });
+    },
 
+    mounted: function () {
+        var o = this.options;
         if (BI.isNumber(o.value) || BI.isString(o.value)) {
-            BI.nextTick(function () {
-                self.setValue(o.value);
-            });
+            this.setValue(o.value);
         }
     },
 
@@ -83197,10 +83425,6 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var backgroundColor = this.getValue();
-            o.editor.element.css({
-                backgroundColor: backgroundColor,
-                color: BI.DOM.getContrastColor(backgroundColor)
-            });
             self.fireEvent("EVENT_CHANGE", backgroundColor);
         });
     },
@@ -83455,9 +83679,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         if(o.readOnly) {
             return editor;
         }
-        this.editor = BI.createWidget(BI.extend(editor, {
-            height: "100%"
-        }));
+        this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
             toggle: false,
@@ -83501,13 +83723,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.editor.setValue(v);
-    },
-
-    setBackColor: function (backgroundColor) {
-        this.editor.element.css({
-            backgroundColor: backgroundColor,
-            color: BI.DOM.getContrastColor(backgroundColor)
-        });
     },
 
     getValue: function () {

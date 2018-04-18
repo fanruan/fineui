@@ -87,11 +87,12 @@ BI.CodeEditor = BI.inherit(BI.Single, {
                 left: o.lineNumbers ? 5 : 30 + 5
             }]
         });
+    },
 
+    mounted: function () {
+        var o = this.options;
         if (BI.isNumber(o.value) || BI.isString(o.value)) {
-            BI.nextTick(function () {
-                self.setValue(o.value);
-            });
+            this.setValue(o.value);
         }
     },
 

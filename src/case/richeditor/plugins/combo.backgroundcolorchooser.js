@@ -29,10 +29,6 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var backgroundColor = this.getValue();
-            o.editor.element.css({
-                backgroundColor: backgroundColor,
-                color: BI.DOM.getContrastColor(backgroundColor)
-            });
             self.fireEvent("EVENT_CHANGE", backgroundColor);
         });
     },
