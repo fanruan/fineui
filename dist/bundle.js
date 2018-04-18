@@ -53935,7 +53935,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         }
 
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
     },
 
