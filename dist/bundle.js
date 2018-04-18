@@ -53923,7 +53923,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             items: [{
                 el: this.watermark,
                 top: 0,
-                left: o.lineNumbers ? 5 : 30 + 5
+                left: o.lineNumbers ? 30 + 5 : 5
             }]
         });
     },
@@ -53932,6 +53932,10 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var o = this.options;
         if (BI.isNumber(o.value) || BI.isString(o.value)) {
             this.setValue(o.value);
+        }
+
+        if (BI.isNotNull(o.style)) {
+            self.setStyle(o.style);
         }
     },
 
@@ -54518,7 +54522,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             self.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setValue(o.style);
+            self.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -111587,7 +111591,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
                 needPop = true;
             }
             this.store = this._store();
-            this.store && (this.store._widget = this);
+            this.store && this.store._widget = this;
             needPop && popTarget();
             needPop = false;
             pushTarget(this.store);
