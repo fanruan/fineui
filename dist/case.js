@@ -3656,7 +3656,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 },
                 stopPropagation: false,
-                minWidth: 202,
                 minWidth: 202
             },
             value: o.value
@@ -10993,10 +10992,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         });
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var backgroundColor = this.getValue();
-            o.editor.element.css({
-                backgroundColor: backgroundColor,
-                color: BI.DOM.getContrastColor(backgroundColor)
-            });
+            self.fireEvent("EVENT_CHANGE", backgroundColor);
         });
     },
 

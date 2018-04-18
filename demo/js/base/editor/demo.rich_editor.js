@@ -4,23 +4,49 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
     },
     render: function () {
         var self = this;
-        this.editor = BI.createWidget({
-            type: "bi.rich_editor",
-            cls: "bi-border",
-            width: 600,
-            height: 400
-        });
         BI.createWidget({
-            type: "bi.vertical",
+            type: "bi.absolute",
             element: this,
-            hgap: 30,
-            vgap: 50,
-            items: [this.editor, {
-                type: "bi.button",
-                text: "focus",
-                handler: function () {
-                    self.editor.focus();
-                }
+            items: [{
+                el: {
+                    type: "bi.rich_editor",
+                    height: "100%",
+                    cls: "bi-border",
+                    ref: function () {
+                        self.editor = this;
+                    },
+                    toolbar: {
+                        type: "bi.rich_editor_text_toolbar",
+                        buttons: [
+                            {type: "bi.rich_editor_font_chooser"},
+                            {type: "bi.rich_editor_size_chooser"},
+                            {type: "bi.rich_editor_bold_button"},
+                            {type: "bi.rich_editor_italic_button"},
+                            {type: "bi.rich_editor_underline_button"},
+                            {type: "bi.rich_editor_color_chooser"},
+                            {
+                                type: "bi.rich_editor_background_color_chooser",
+                                listeners: [{
+                                    eventName: "EVENT_CHANGE",
+                                    action: function (backgroundColor) {
+                                        self.editor.element.css({
+                                            backgroundColor: backgroundColor,
+                                            color: BI.DOM.getContrastColor(backgroundColor)
+                                        });
+                                    }
+                                }]
+                            },
+                            {type: "bi.rich_editor_align_left_button"},
+                            {type: "bi.rich_editor_align_center_button"},
+                            {type: "bi.rich_editor_align_right_button"},
+                            {type: "bi.rich_editor_param_button"}
+                        ]
+                    }
+                },
+                left: 10,
+                top: 10,
+                bottom: 10,
+                right: 10
             }]
         });
     },
