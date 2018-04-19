@@ -3,7 +3,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         hgap: 4,
         vgap: 2,
         yearLength: 4,
-        yearMonthLength: 7
+        yearMonthLength: 6,
+        yearFullMonthLength: 7
     },
 
     props: {
@@ -135,7 +136,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v && date >= this.options.min && date <= this.options.max;
+        return (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
+            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v) && date >= this.options.min && date <= this.options.max;
     },
 
     _setInnerValue: function (date, text) {
