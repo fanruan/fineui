@@ -6,10 +6,6 @@
  */
 BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
@@ -63,7 +59,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             return v[v.length - 1];
         }
         return "";
-        
+
     },
 
     getKeywords: function () {
