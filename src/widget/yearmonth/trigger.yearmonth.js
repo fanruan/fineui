@@ -1,9 +1,7 @@
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-        errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
+        vgap: 2
     },
 
     props: {
@@ -72,7 +70,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
+                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") :  BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             hgap: c.hgap,
             vgap: c.vgap,

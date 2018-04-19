@@ -9,8 +9,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        textWidth: 40,
-        errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
+        textWidth: 40
     },
 
     _defaultConfig: function () {
@@ -34,7 +33,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.QuarterTrigger.EVENT_FOCUS);

@@ -95067,8 +95067,7 @@ BI.shortcut("bi.month_popup", BI.MonthPopup);/**
 BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
+        vgap: 2
     },
 
     _defaultConfig: function () {
@@ -95092,7 +95091,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.MonthTrigger.EVENT_FOCUS);
@@ -98550,10 +98549,6 @@ BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);/**
  */
 BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-check-selected-button bi-high-light",
@@ -98582,7 +98577,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
         this.numberCounter.element.hover(function () {
             self.numberCounter.setTag(self.numberCounter.getText());
-            self.numberCounter.setText(self._const.checkSelected);
+            self.numberCounter.setText(BI.i18nText("BI-Check_Selected"));
         }, function () {
             self.numberCounter.setText(self.numberCounter.getTag());
         });
@@ -98628,10 +98623,6 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
  * @extends Widget
  */
 BI.MultiSelectEditor = BI.inherit(BI.Widget, {
-
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectEditor.superclass._defaultConfig.apply(this, arguments), {
@@ -98686,7 +98677,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             return v[v.length - 1];
         }
         return "";
-        
+
     },
 
     getKeywords: function () {
@@ -100420,10 +100411,6 @@ BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);/**
  */
 BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-check-selected-button",
@@ -100447,7 +100434,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
             cls: "trigger-check-selected",
             invisible: true,
             hgap: 4,
-            text: this._const.checkSelected,
+            text: BI.i18nText("BI-Check_Selected"),
             textAlign: "center",
             textHeight: 15
         });
@@ -102045,8 +102032,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
         vgap: 2,
-        textWidth: 40,
-        errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
+        textWidth: 40
     },
 
     _defaultConfig: function () {
@@ -102070,7 +102056,7 @@ BI.QuarterTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.QuarterTrigger.EVENT_FOCUS);
@@ -104986,10 +104972,6 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
  */
 BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
@@ -105043,7 +105025,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             return v[v.length - 1];
         }
         return "";
-        
+
     },
 
     getKeywords: function () {
@@ -108482,9 +108464,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-        errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
+        vgap: 2
     },
 
     _defaultConfig: function () {
@@ -108512,7 +108492,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
+                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
@@ -108586,7 +108566,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         this.editor.setValue(dateStr);
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
-    
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -109192,9 +109172,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-        errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
+        vgap: 2
     },
 
     props: {
@@ -109263,7 +109241,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
+                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") :  BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             hgap: c.hgap,
             vgap: c.vgap,
@@ -110116,9 +110094,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-        errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
+        vgap: 2
     },
 
     props: {
@@ -110186,7 +110162,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                 return false;
             },
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
+                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
