@@ -11406,10 +11406,6 @@ BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);/**
  */
 BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-check-selected-button bi-high-light",
@@ -11438,7 +11434,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
         this.numberCounter.element.hover(function () {
             self.numberCounter.setTag(self.numberCounter.getText());
-            self.numberCounter.setText(self._const.checkSelected);
+            self.numberCounter.setText(BI.i18nText("BI-Check_Selected"));
         }, function () {
             self.numberCounter.setText(self.numberCounter.getTag());
         });
