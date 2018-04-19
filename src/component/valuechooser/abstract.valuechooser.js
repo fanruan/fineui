@@ -58,9 +58,6 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            if (options.keyword) {
-                keywords.push(options.keyword);
-            }
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
                 items = search.match.concat(search.find);

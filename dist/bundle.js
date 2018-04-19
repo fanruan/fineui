@@ -98734,8 +98734,9 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                     return self.editor.getValue();
                 },
                 itemsCreator: function (op, callback) {
-                    op.keyword = self.editor.getValue();
-                    this.setKeyword(op.keyword);
+                    var keyword = self.editor.getValue();
+                    op.keywords = [keyword];
+                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 value: o.value
@@ -111332,9 +111333,6 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            if (options.keyword) {
-                keywords.push(options.keyword);
-            }
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
                 items = search.match.concat(search.find);
