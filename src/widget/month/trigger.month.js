@@ -8,8 +8,7 @@
 BI.MonthTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
+        vgap: 2
     },
 
     _defaultConfig: function () {
@@ -33,7 +32,7 @@ BI.MonthTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            errorText: c.errorText
+            errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.MonthTrigger.EVENT_FOCUS);

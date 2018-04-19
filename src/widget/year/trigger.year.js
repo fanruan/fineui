@@ -1,9 +1,7 @@
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
     _const: {
         hgap: 4,
-        vgap: 2,
-        errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-        errorTextInvalid: BI.i18nText("BI-Year_Trigger_Invalid_Text")
+        vgap: 2
     },
 
     _defaultConfig: function () {
@@ -31,7 +29,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? c.errorText : c.errorTextInvalid;
+                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
@@ -105,7 +103,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         this.editor.setValue(dateStr);
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
-    
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();

@@ -6,10 +6,6 @@
  */
 BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-check-selected-button",
@@ -33,7 +29,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
             cls: "trigger-check-selected",
             invisible: true,
             hgap: 4,
-            text: this._const.checkSelected,
+            text: BI.i18nText("BI-Check_Selected"),
             textAlign: "center",
             textHeight: 15
         });
