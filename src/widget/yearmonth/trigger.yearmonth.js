@@ -147,10 +147,10 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+        if(BI.isNotNull(obj.month) && BI.parseInt(obj.month) !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;

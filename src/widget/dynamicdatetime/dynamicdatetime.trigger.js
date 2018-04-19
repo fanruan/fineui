@@ -23,9 +23,9 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
-                    year: date[0],
-                    month: date[1],
-                    day: date[2]
+                    year: date[0] | 0,
+                    month: date[1] | 0,
+                    day: date[2] | 0
                 });
             },
             quitChecker: function () {
@@ -147,22 +147,22 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
+        if(BI.isNotNull(obj.quarter) && BI.parseInt(obj.quarter) !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+        if(BI.isNotNull(obj.month) && BI.parseInt(obj.month) !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
         }
-        if(BI.isNotNull(obj.week) && obj.week !== 0) {
+        if(BI.isNotNull(obj.week) && BI.parseInt(obj.week) !== 0) {
             value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
         }
-        if(BI.isNotNull(obj.day) && obj.day !== 0) {
+        if(BI.isNotNull(obj.day) && BI.parseInt(obj.day) !== 0) {
             value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
         }
-        if(BI.isNotNull(obj.workDay) && obj.workDay !== 0) {
+        if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
             value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
