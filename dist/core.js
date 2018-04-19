@@ -21706,7 +21706,7 @@ BI.Widget = BI.inherit(BI.OB, {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
-            throw ("shortcut:[" + xtype + "] has been registed");
+            console.error("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
     };
@@ -28740,7 +28740,7 @@ BI.extend(BI.DOM, {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            throw ("constant:[" + xtype + "] has been registed");
+            console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -28748,7 +28748,7 @@ BI.extend(BI.DOM, {
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            throw ("model:[" + xtype + "] has been registed");
+            console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -28756,7 +28756,7 @@ BI.extend(BI.DOM, {
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            throw ("store:[" + xtype + "] has been registed");
+            console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -28764,7 +28764,7 @@ BI.extend(BI.DOM, {
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            throw ("service:[" + xtype + "] has been registed");
+            console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -28772,7 +28772,7 @@ BI.extend(BI.DOM, {
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            throw ("provider:[" + xtype + "] has been registed");
+            console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -28917,13 +28917,21 @@ BI.extend(BI.DOM, {
     BI.Actions = {
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
-                act(config);
+                try {
+                    act(config);
+                } catch (e) {
+                    console.error(e);
+                }
             });
         },
         runGlobalAction: function () {
             var args = [].slice.call(arguments);
             BI.each(globalAction, function (i, act) {
-                act.apply(null, args);
+                try {
+                    act.apply(null, args);
+                } catch (e) {
+                    console.error(e);
+                }
             });
         }
     };

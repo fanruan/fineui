@@ -13188,7 +13188,7 @@ _.extend(BI.OB.prototype, {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            throw ("constant:[" + xtype + "] has been registed");
+            console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -13196,7 +13196,7 @@ _.extend(BI.OB.prototype, {
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            throw ("model:[" + xtype + "] has been registed");
+            console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -13204,7 +13204,7 @@ _.extend(BI.OB.prototype, {
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            throw ("store:[" + xtype + "] has been registed");
+            console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -13212,7 +13212,7 @@ _.extend(BI.OB.prototype, {
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            throw ("service:[" + xtype + "] has been registed");
+            console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -13220,7 +13220,7 @@ _.extend(BI.OB.prototype, {
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            throw ("provider:[" + xtype + "] has been registed");
+            console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -13365,13 +13365,21 @@ _.extend(BI.OB.prototype, {
     BI.Actions = {
         runAction: function (type, config) {
             BI.each(actions[type], function (i, act) {
-                act(config);
+                try {
+                    act(config);
+                } catch (e) {
+                    console.error(e);
+                }
             });
         },
         runGlobalAction: function () {
             var args = [].slice.call(arguments);
             BI.each(globalAction, function (i, act) {
-                act.apply(null, args);
+                try {
+                    act.apply(null, args);
+                } catch (e) {
+                    console.error(e);
+                }
             });
         }
     };
