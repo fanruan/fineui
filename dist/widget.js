@@ -11481,10 +11481,6 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
  */
 BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
-    _const: {
-        checkSelected: BI.i18nText("BI-Check_Selected")
-    },
-
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-editor",
@@ -11538,7 +11534,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             return v[v.length - 1];
         }
         return "";
-        
+
     },
 
     getKeywords: function () {
