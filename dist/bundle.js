@@ -111591,7 +111591,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
                 needPop = true;
             }
             this.store = this._store();
-            this.store && this.store._widget = this;
+            this.store && (this.store._widget = this);
             needPop && popTarget();
             needPop = false;
             pushTarget(this.store);
