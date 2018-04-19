@@ -132,7 +132,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                             self.ymd.setValue({
                                 year: date.getFullYear(),
-                                month: date.getMonth(),
+                                month: date.getMonth() + 1,
                                 day: date.getDate()
                             });
                             self._setInnerValue();

@@ -89946,7 +89946,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         this.singleValues = [];
         this.childValueMap = {};
         this.fatherValueMap = {};
-        var self = this, o = this.options, children = this._createChildren(o.items);
+        this.items = BI.deepClone(this.options.items);
+        var self = this, o = this.options, children = this._createChildren(this.items);
         this.popup = BI.createWidget({
             type: "bi.button_tree",
             items: BI.createItems(children,
@@ -89996,7 +89997,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     _createChildren: function (items) {
         var self = this, result = [];
         // 不能修改populate进来的item的引用
-        BI.each(BI.deepClone(items), function (i, it) {
+        BI.each(items, function (i, it) {
             var item_done = {
                 type: "bi.down_list_group",
                 items: []
@@ -90115,9 +90116,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _checkValues: function (values) {
-        var self = this, o = this.options;
         var value = [];
-        BI.each(o.items, function (idx, itemGroup) {
+        BI.each(this.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = BI.map(item.children, "value");
@@ -90150,17 +90150,17 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
-        var self = this;
-        self.childValueMap = {};
-        self.fatherValueMap = {};
-        self.singleValues = [];
-        var children = self._createChildren(items);
+        this.items = BI.deepClone(items);
+        this.childValueMap = {};
+        this.fatherValueMap = {};
+        this.singleValues = [];
+        var children = this._createChildren(this.items);
         var popupItem = BI.createItems(children,
             {}, {
                 adjustLength: -2
             }
         );
-        self.popup.populate(popupItem);
+        this.popup.populate(popupItem);
     },
 
     setValue: function (valueItem) {
@@ -90693,6 +90693,7 @@ BI.extend(BI.DynamicDateCard, {
                                         self.storeValue = null;
                                         self.trigger.setValue();
                                     }
+                                    self._checkDynamicValue(self.storeValue);
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                 }
                             }]
@@ -91081,7 +91082,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                             self.ymd.setValue({
                                 year: date.getFullYear(),
-                                month: date.getMonth(),
+                                month: date.getMonth() + 1,
                                 day: date.getDate()
                             });
                             self._setInnerValue();
@@ -91167,7 +91168,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         hgap: 4,
         vgap: 2,
         yearLength: 4,
-        yearMonthLength: 7
+        yearMonthLength: 6,
+        yearFullMonthLength: 7
     },
 
     props: {
@@ -91187,9 +91189,9 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
-                    year: date[0],
-                    month: date[1],
-                    day: date[2]
+                    year: date[0] | 0,
+                    month: date[1] | 0,
+                    day: date[2] | 0
                 });
             },
             quitChecker: function () {
@@ -91281,6 +91283,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     }
                     break;
                 case this._const.yearMonthLength:
+                case this._const.yearFullMonthLength:
                     if (this._monthCheck(v)) {
                         this.editor.setValue(v + "-");
                     }
@@ -91296,7 +91299,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v && date >= this.options.min && date <= this.options.max;
+        return (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
+            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v) && date >= this.options.min && date <= this.options.max;
     },
 
     _setInnerValue: function (date, text) {
@@ -91309,27 +91313,27 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     _getText: function (obj) {
         var value = "";
         var endText = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
             endText = getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
+        if(BI.isNotNull(obj.quarter) && BI.parseInt(obj.quarter) !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
             endText = getPositionText(BI.i18nText("BI-Basic_Single_Quarter"), obj.position);
         }
-        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+        if(BI.isNotNull(obj.month) && BI.parseInt(obj.month) !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
             endText = getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
         }
-        if(BI.isNotNull(obj.week) && obj.week !== 0) {
+        if(BI.isNotNull(obj.week) && BI.parseInt(obj.week) !== 0) {
             value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
             endText = getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
         }
-        if(BI.isNotNull(obj.day) && obj.day !== 0) {
+        if(BI.isNotNull(obj.day) && BI.parseInt(obj.day) !== 0) {
             value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
             endText = BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
         }
-        if(BI.isNotNull(obj.workDay) && obj.workDay !== 0) {
+        if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
             value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value + endText;
@@ -91510,6 +91514,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                         self.storeValue = null;
                                         self.trigger.setValue();
                                     }
+                                    self._checkDynamicValue(self.storeValue);
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                 }
                             }]
@@ -91799,7 +91804,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                             self.ymd.setValue({
                                 year: date.getFullYear(),
-                                month: date.getMonth(),
+                                month: date.getMonth() + 1,
                                 day: date.getDate()
                             });
                             self.timeSelect.setValue();
@@ -92056,7 +92061,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
         hgap: 4,
         vgap: 2,
         yearLength: 4,
-        yearMonthLength: 7
+        yearMonthLength: 6,
+        yearFullMonthLength: 7
     },
 
     props: {
@@ -92076,9 +92082,9 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
-                    year: date[0],
-                    month: date[1],
-                    day: date[2]
+                    year: date[0] | 0,
+                    month: date[1] | 0,
+                    day: date[2] | 0
                 });
             },
             quitChecker: function () {
@@ -92188,7 +92194,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v && date >= this.options.min && date <= this.options.max;
+        return (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
+            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v) && date >= this.options.min && date <= this.options.max;
     },
 
     _setInnerValue: function (date, text) {
@@ -92200,22 +92207,22 @@ BI.extend(BI.DynamicDateTimeSelect, {
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
+        if(BI.isNotNull(obj.quarter) && BI.parseInt(obj.quarter) !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Year"), obj.position);
         }
-        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+        if(BI.isNotNull(obj.month) && BI.parseInt(obj.month) !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Month"), obj.position);
         }
-        if(BI.isNotNull(obj.week) && obj.week !== 0) {
+        if(BI.isNotNull(obj.week) && BI.parseInt(obj.week) !== 0) {
             value += Math.abs(obj.week) + BI.i18nText("BI-Basic_Week") + (obj.week < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + getPositionText(BI.i18nText("BI-Basic_Week"), obj.position);
         }
-        if(BI.isNotNull(obj.day) && obj.day !== 0) {
+        if(BI.isNotNull(obj.day) && BI.parseInt(obj.day) !== 0) {
             value += Math.abs(obj.day) + BI.i18nText("BI-Basic_Day") + (obj.day < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind")) + BI.size(obj) === 1 ? getPositionText(BI.i18nText("BI-Basic_Month"), obj.position) : "";
         }
-        if(BI.isNotNull(obj.workDay) && obj.workDay !== 0) {
+        if(BI.isNotNull(obj.workDay) && BI.parseInt(obj.workDay) !== 0) {
             value += Math.abs(obj.workDay) + BI.i18nText("BI-Basic_Work_Day") + (obj.workDay < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -108131,6 +108138,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
                 self.storeValue = null;
                 self.setValue();
             }
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
         });
 
@@ -108546,7 +108554,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -108824,6 +108832,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
         });
         this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
@@ -109225,7 +109234,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -109307,10 +109316,10 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.month) && obj.month !== 0) {
+        if(BI.isNotNull(obj.month) && BI.parseInt(obj.month) !== 0) {
             value += Math.abs(obj.month) + BI.i18nText("BI-Basic_Month") + (obj.month < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;
@@ -109766,6 +109775,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
         });
 
@@ -109959,7 +109969,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x");
+            date = date.print("%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -110146,7 +110156,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -110226,10 +110236,10 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _getText: function (obj) {
         var value = "";
-        if(BI.isNotNull(obj.year) && obj.year !== 0) {
+        if(BI.isNotNull(obj.year) && BI.parseInt(obj.year) !== 0) {
             value += Math.abs(obj.year) + BI.i18nText("BI-Basic_Year") + (obj.year < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
-        if(BI.isNotNull(obj.quarter) && obj.quarter !== 0) {
+        if(BI.isNotNull(obj.quarter) && BI.parseInt(obj.quarter) !== 0) {
             value += Math.abs(obj.quarter) + BI.i18nText("BI-Basic_Single_Quarter") + (obj.quarter < 0 ? BI.i18nText("BI-Basic_Front") : BI.i18nText("BI-Basic_Behind"));
         }
         return value;

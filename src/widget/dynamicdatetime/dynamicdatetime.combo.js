@@ -113,6 +113,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                         self.storeValue = null;
                                         self.trigger.setValue();
                                     }
+                                    self._checkDynamicValue(self.storeValue);
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                 }
                             }]
