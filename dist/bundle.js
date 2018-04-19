@@ -91081,7 +91081,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                             self.ymd.setValue({
                                 year: date.getFullYear(),
-                                month: date.getMonth(),
+                                month: date.getMonth() + 1,
                                 day: date.getDate()
                             });
                             self._setInnerValue();
@@ -91799,7 +91799,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                             self.ymd.setValue({
                                 year: date.getFullYear(),
-                                month: date.getMonth(),
+                                month: date.getMonth() + 1,
                                 day: date.getDate()
                             });
                             self.timeSelect.setValue();
