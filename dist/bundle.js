@@ -89946,7 +89946,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         this.singleValues = [];
         this.childValueMap = {};
         this.fatherValueMap = {};
-        var self = this, o = this.options, children = this._createChildren(o.items);
+        this.items = BI.deepClone(this.options.items);
+        var self = this, o = this.options, children = this._createChildren(this.items);
         this.popup = BI.createWidget({
             type: "bi.button_tree",
             items: BI.createItems(children,
@@ -89996,7 +89997,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     _createChildren: function (items) {
         var self = this, result = [];
         // 不能修改populate进来的item的引用
-        BI.each(BI.deepClone(items), function (i, it) {
+        BI.each(items, function (i, it) {
             var item_done = {
                 type: "bi.down_list_group",
                 items: []
@@ -90115,9 +90116,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
     },
 
     _checkValues: function (values) {
-        var self = this, o = this.options;
         var value = [];
-        BI.each(o.items, function (idx, itemGroup) {
+        BI.each(this.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = BI.map(item.children, "value");
@@ -90150,17 +90150,17 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.DownListPopup.superclass.populate.apply(this, arguments);
-        var self = this;
-        self.childValueMap = {};
-        self.fatherValueMap = {};
-        self.singleValues = [];
-        var children = self._createChildren(items);
+        this.items = BI.deepClone(items);
+        this.childValueMap = {};
+        this.fatherValueMap = {};
+        this.singleValues = [];
+        var children = this._createChildren(this.items);
         var popupItem = BI.createItems(children,
             {}, {
                 adjustLength: -2
             }
         );
-        self.popup.populate(popupItem);
+        this.popup.populate(popupItem);
     },
 
     setValue: function (valueItem) {
@@ -109986,7 +109986,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x");
+            date = date.print("%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
