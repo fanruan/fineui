@@ -36,6 +36,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
         });
         this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {

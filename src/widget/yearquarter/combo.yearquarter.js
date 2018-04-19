@@ -32,6 +32,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
         });
 

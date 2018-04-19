@@ -3556,6 +3556,7 @@ BI.extend(BI.DynamicDateCard, {
                                         self.storeValue = null;
                                         self.trigger.setValue();
                                     }
+                                    self._checkDynamicValue(self.storeValue);
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                 }
                             }]
@@ -4373,6 +4374,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                         self.storeValue = null;
                                         self.trigger.setValue();
                                     }
+                                    self._checkDynamicValue(self.storeValue);
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                 }
                             }]
@@ -21012,6 +21014,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
                 self.storeValue = null;
                 self.setValue();
             }
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
         });
 
@@ -21707,6 +21710,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
         });
         this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
@@ -22651,6 +22655,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
                 return;
             }
             self.storeValue = self.trigger.getValue();
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_CONFIRM);
         });
 
