@@ -4050,9 +4050,9 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
-                    year: date[0],
-                    month: date[1],
-                    day: date[2]
+                    year: date[0] | 0,
+                    month: date[1] | 0,
+                    day: date[2] | 0
                 });
             },
             quitChecker: function () {
@@ -4939,9 +4939,9 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 var date = v.match(/\d+/g);
                 self._autoAppend(v, date);
                 return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
-                    year: date[0],
-                    month: date[1],
-                    day: date[2]
+                    year: date[0] | 0,
+                    month: date[1] | 0,
+                    day: date[2] | 0
                 });
             },
             quitChecker: function () {
@@ -22110,7 +22110,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -23033,7 +23033,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
