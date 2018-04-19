@@ -16,7 +16,7 @@
     "open": "0.0.5"
   },
   "scripts": {
-    "grunt": "grunt build",
+    "grunt": "grunt",
     "start": "node server.js",
     "uglify": "grunt min",
     "build": "grunt build"
