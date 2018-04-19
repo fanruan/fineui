@@ -111695,6 +111695,9 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         BI.isEmptyObject = function (ob) {
             return BI.size(ob) === 0;
         };
+        BI.deepClone = function (ob) {
+            return Fix.toJSON(ob);
+        };
     }
     BI.watch = Fix.watch;
 }());(function () {

@@ -219,6 +219,9 @@
         BI.isEmptyObject = function (ob) {
             return BI.size(ob) === 0;
         };
+        BI.deepClone = function (ob) {
+            return Fix.toJSON(ob);
+        };
     }
     BI.watch = Fix.watch;
 }());
