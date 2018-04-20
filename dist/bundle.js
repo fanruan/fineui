@@ -26508,7 +26508,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex && ob.items && ob.items.length <= 1) {
@@ -26520,7 +26520,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.flex_center"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex) {
@@ -26532,7 +26532,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.flex_vertical_center"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex) {
@@ -26544,7 +26544,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.flex_center"});
         }
         return ob;
-        
+
     });
     // 注册滚动条
     BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
@@ -26552,14 +26552,14 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.native_table_scrollbar"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
         if (BI.isIE9Below()) {
             return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
         }
         return ob;
-        
+
     });
 
     // 注册控件
@@ -26569,7 +26569,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.quick_grid_table"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.collection_table", function (ob) {
         // 非chrome下滚动条滑动效果不好，禁止掉
@@ -26577,7 +26577,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
             return BI.extend(ob, {type: "bi.quick_collection_table"});
         }
         return ob;
-        
+
     });
     // IE8下滚动条用原生的
     $(function () {
@@ -31465,24 +31465,24 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             "*zoom": 1,
             "min-width": 100 / length + "%"
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -31551,24 +31551,24 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             "*display": "inline",
             "*zoom": 1
         });
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
@@ -33209,24 +33209,24 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineLayout.superclass._addElement.apply(this, arguments);
         w.element.css({"position": "relative", display: "inline-block", "*display": "inline", "*zoom": 1});
-        if (o.hgap + o.lgap + (item.lgap || 0) > 0) {
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + "px"
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
-        if (o.hgap + o.rgap + (item.rgap || 0) > 0) {
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + "px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
             });
         }
-        if (o.vgap + o.tgap + (item.tgap || 0) > 0) {
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + "px"
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
             });
         }
-        if (o.vgap + o.bgap + (item.bgap || 0) > 0) {
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + "px"
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
             });
         }
         return w;
