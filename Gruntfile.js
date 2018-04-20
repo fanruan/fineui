@@ -257,6 +257,27 @@ module.exports = function (grunt) {
                     spanw: true,
                     interrupt: true
                 }
+            },
+            livereload: {
+                options: {
+                    livereload: "<%= connect.options.livereload %>"
+                },
+                files: ["src/**/*.js", "src/**/*.less"]
+            }
+        },
+        connect: {
+            options: {
+                port: 9000,
+                open: true,
+                livereload: 35729,
+                // Change this to '0.0.0.0' to access the server from outside
+                hostname: "localhost"
+            },
+            server: {
+                options: {
+                    port: 9001,
+                    base: "./dist"
+                }
             }
         }
     });
@@ -267,8 +288,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
+    grunt.loadNpmTasks("grunt-contrib-connect");
 
-    grunt.registerTask("default", ["less", "concat", "watch"]);
+    grunt.registerTask("default", ["less", "concat", "connect", "watch"]);
     grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
     grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
 };

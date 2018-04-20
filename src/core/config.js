@@ -7,7 +7,7 @@
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex && ob.items && ob.items.length <= 1) {
@@ -19,7 +19,7 @@
             return BI.extend(ob, {type: "bi.flex_center"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex) {
@@ -31,7 +31,7 @@
             return BI.extend(ob, {type: "bi.flex_vertical_center"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex) {
@@ -43,7 +43,7 @@
             return BI.extend(ob, {type: "bi.flex_center"});
         }
         return ob;
-        
+
     });
     // 注册滚动条
     BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
@@ -51,14 +51,14 @@
             return BI.extend(ob, {type: "bi.native_table_scrollbar"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
         if (BI.isIE9Below()) {
             return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
         }
         return ob;
-        
+
     });
 
     // 注册控件
@@ -68,7 +68,7 @@
             return BI.extend(ob, {type: "bi.quick_grid_table"});
         }
         return ob;
-        
+
     });
     BI.Plugin.registerWidget("bi.collection_table", function (ob) {
         // 非chrome下滚动条滑动效果不好，禁止掉
@@ -76,7 +76,7 @@
             return BI.extend(ob, {type: "bi.quick_collection_table"});
         }
         return ob;
-        
+
     });
     // IE8下滚动条用原生的
     $(function () {
