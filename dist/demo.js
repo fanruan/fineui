@@ -2068,7 +2068,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     combo = this;
                 },
                 text: "默认值",
-                value: 2,
+                value: 14,
                 width: 300,
                 items: [{
                     text: "ABC-1",
@@ -2186,7 +2186,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     combo = this;
                 },
                 text: "默认值",
-                value: 2,
+                value: 22,
                 width: 300,
                 items: [{
                     text: "MVC-1",
