@@ -1,6 +1,6 @@
 BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 25,
+        height: 26,
         width: 25,
         lgap: 15,
         offset: -15,
@@ -61,10 +61,17 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
-            value: v
+            behaviors: o.behaviors,
+            value: v,
+            listeners: [{
+                eventName: BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
         });
         combo.on(BI.DynamicYearMonthCombo.EVENT_ERROR, function () {
             self._clearTitle();
@@ -177,4 +184,5 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
 BI.YearMonthInterval.EVENT_VALID = "EVENT_VALID";
 BI.YearMonthInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
