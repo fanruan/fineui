@@ -26,7 +26,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             height: 25
         });
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (self._month === 0) {
+            if (self._month === 1) {
                 self.setValue({
                     year: self.year.getValue() - 1,
                     month: 12
@@ -50,7 +50,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         });
 
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
-            if (self._month === 11) {
+            if (self._month === 12) {
                 self.setValue({
                     year: self.year.getValue() + 1,
                     month: 0
