@@ -818,12 +818,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var oldValue = this.value;
                     this.value = value;
                     if (this.user) {
-                        // try {
-                        this.cb.call(this.vm, value, oldValue, options);
-                        // } catch (e) {
-                        // }
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     } else {
-                        this.cb.call(this.vm, value, oldValue, options);
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
