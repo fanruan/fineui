@@ -35389,7 +35389,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     w.teardown();
                     v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
@@ -35430,7 +35430,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     _w.teardown();
                     root._globalDeps && delete root._globalDeps[regStr];
