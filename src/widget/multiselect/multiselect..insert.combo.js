@@ -23,7 +23,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = {};
+        this.storeValue = o.value || {};
         // 标记正在请求数据
         this.requesting = false;
 

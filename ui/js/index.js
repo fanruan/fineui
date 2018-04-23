@@ -110,7 +110,7 @@ BI.i18n = {
     "BI-Transparent_Color": "透明",
     "BI-Basic_Simple_Monday": "一",
     "BI-Multi_Date_Year_End": "年末",
-    "BI-Time_Interval_Error_Text": "请保证前面时间小于/等于后面的时间",
+    "BI-Time_Interval_Error_Text": "请保证开始时间早于/等于结束时间",
     "BI-Basic_Time": "时间",
     "BI-Basic_OK": "确定",
     "BI-Basic_Sure": "确定",

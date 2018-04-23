@@ -12712,7 +12712,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_combo",
+            type: "bi.multi_select_insert_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
@@ -14304,7 +14304,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2018,
-                            month: 0,
+                            month: 1,
                             day: 12
                         }
                     }

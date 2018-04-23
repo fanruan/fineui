@@ -9,7 +9,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_combo",
+            type: "bi.multi_select_insert_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
