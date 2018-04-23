@@ -10045,7 +10045,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = {};
+        this.storeValue = o.value || {};
         // 标记正在请求数据
         this.requesting = false;
 
@@ -22269,7 +22269,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
     },
 
     getKey: function () {
-        return this.yearEditor.getState() + "-" + this.monthEditor.getState();
+        return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     }
 });
 BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
