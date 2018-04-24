@@ -752,7 +752,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } catch (e) {
                 // if (this.user) {
                 // } else {
-                throw e;
+                console.log(e);
                 // }
             } finally {
                 // "touch" every property so they are all tracked as
