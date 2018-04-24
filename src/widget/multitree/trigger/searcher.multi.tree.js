@@ -121,7 +121,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(ob.value, function (name, children) {
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
-                if (childNodes !== "") {
+                if (childNodes === "") {
                     count++;
                 }
             });
@@ -140,7 +140,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 index++;
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
-                if (childNodes !== "") {
+                if (childNodes === "") {
                     count++;
                 }
             });
