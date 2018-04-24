@@ -35213,12 +35213,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var oldValue = this.value;
                     this.value = value;
                     if (this.user) {
-                        // try {
-                        this.cb.call(this.vm, value, oldValue, options);
-                        // } catch (e) {
-                        // }
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     } else {
-                        this.cb.call(this.vm, value, oldValue, options);
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
@@ -35384,7 +35389,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     w.teardown();
                     v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
@@ -35425,7 +35430,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     _w.teardown();
                     root._globalDeps && delete root._globalDeps[regStr];
@@ -100620,6 +100625,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = {});
+        var count = 0;
         if (BI.isNumber(ob)) {
             this.editor.setState(ob);
         } else if (BI.size(ob.value) === 0) {
@@ -100629,8 +100635,16 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(ob.value, function (name, children) {
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                if (childNodes !== "") {
+                    count++;
+                }
             });
-            this.editor.setState(text);
+
+            if (count > 20) {
+                this.editor.setState(BI.Selection.Multi);
+            } else {
+                this.editor.setState(text);
+            }
         }
 
         function getChildrenNode (ob) {
@@ -100640,6 +100654,9 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 index++;
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                if (childNodes !== "") {
+                    count++;
+                }
             });
             return text;
         }

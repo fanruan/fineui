@@ -818,12 +818,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var oldValue = this.value;
                     this.value = value;
                     if (this.user) {
-                        // try {
-                        this.cb.call(this.vm, value, oldValue, options);
-                        // } catch (e) {
-                        // }
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     } else {
-                        this.cb.call(this.vm, value, oldValue, options);
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
@@ -989,7 +994,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     w.teardown();
                     v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
@@ -1030,7 +1035,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return NaN;
                 }, function (newValue, oldValue, opt) {
                     callback(i, newValue, oldValue, _.extend({ index: i }, opt));
-                });
+                }, options);
                 watchers.push(function unwatchFn() {
                     _w.teardown();
                     root._globalDeps && delete root._globalDeps[regStr];
