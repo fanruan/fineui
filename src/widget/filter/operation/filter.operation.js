@@ -13,7 +13,23 @@
             expander: {},
             items: [],
             selections: [BI.AbstractFilterItem.FILTER_OPERATION_CONDITION, BI.AbstractFilterItem.FILTER_OPERATION_FORMULA],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            constants: {
+                FORMULA_COMBO: [{
+                    text: BI.i18nText("BI-Conf_Formula_And"),
+                    value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
+                }, {
+                    text: BI.i18nText("BI-Conf_Formula_Or"),
+                    value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
+                }],
+                CONDITION_COMBO: [{
+                    text: BI.i18nText("BI-Conf_Condition_And"),
+                    value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
+                }, {
+                    text: BI.i18nText("BI-Conf_Condition_Or"),
+                    value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
+                }]
+            }
         },
 
         render: function () {
@@ -158,13 +174,13 @@
                     case BI.AbstractFilterItem.FILTER_OPERATION_FORMULA:
                         text = BI.i18nText("BI-Conf_Add_Formula");
                         cls = "filter-formula-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").FORMULA_COMBO;
+                        items = this.options.constants.FORMULA_COMBO;
                         break;
                     case BI.AbstractFilterItem.FILTER_OPERATION_CONDITION:
                     default:
                         text = BI.i18nText("BI-Conf_Add_Condition");
                         cls = "filter-condition-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").CONDITION_COMBO;
+                        items = this.options.constants.CONDITION_COMBO;
                         break;
                 }
 
