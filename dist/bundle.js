@@ -85546,6 +85546,9 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
+        this.checkbox.on(BI.Checkbox.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
+        });
         this.half.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
