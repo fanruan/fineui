@@ -132,10 +132,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var _resolve = void 0;
             callbacks.push(function () {
                 if (cb) {
-                    // try {
-                    cb.call(ctx);
-                    // } catch (e) {
-                    // }
+                    try {
+                        cb.call(ctx);
+                    } catch (e) {
+                        console.error(e);
+                    }
                 } else if (_resolve) {
                     _resolve(ctx);
                 }
@@ -752,7 +753,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } catch (e) {
                 // if (this.user) {
                 // } else {
-                console.log(e);
+                console.error(e);
                 // }
             } finally {
                 // "touch" every property so they are all tracked as
