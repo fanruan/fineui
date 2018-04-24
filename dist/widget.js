@@ -6716,28 +6716,33 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
 !(function () {
     var OPERATION_ADD_CONDITION = 0, OPERATION_ADD_ANDOR_CONDITION = 1;
     var FilterOperation = BI.inherit(BI.Widget, {
+        _defaultConfig: function () {
+            return BI.extend(FilterOperation.superclass._defaultConfig.apply(this, arguments), {
+                constants: {
+                    FORMULA_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Formula_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Formula_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
+                    }],
+                    CONDITION_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Condition_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Condition_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
+                    }]
+                }
+            });
+        },
+        
         props: {
             baseCls: "bi-filter-operation",
             expander: {},
             items: [],
             selections: [BI.AbstractFilterItem.FILTER_OPERATION_CONDITION, BI.AbstractFilterItem.FILTER_OPERATION_FORMULA],
-            itemsCreator: BI.emptyFn,
-            constants: {
-                FORMULA_COMBO: [{
-                    text: BI.i18nText("BI-Conf_Formula_And"),
-                    value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
-                }, {
-                    text: BI.i18nText("BI-Conf_Formula_Or"),
-                    value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
-                }],
-                CONDITION_COMBO: [{
-                    text: BI.i18nText("BI-Conf_Condition_And"),
-                    value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
-                }, {
-                    text: BI.i18nText("BI-Conf_Condition_Or"),
-                    value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
-                }]
-            }
+            itemsCreator: BI.emptyFn
         },
 
         render: function () {
