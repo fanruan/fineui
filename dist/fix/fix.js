@@ -1148,9 +1148,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (typeof cb === 'string') {
             cb = vm[cb];
         }
-        return watch(vm.model, keyOrFn, _.bind(cb, vm.$$model ? vm.model : vm), _.extend({
-            sync: true
-        }, options));
+        return watch(vm.model, keyOrFn, _.bind(cb, vm.$$model ? vm.model : vm), options);
     }
 
     function initMethods(vm, methods) {
