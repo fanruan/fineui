@@ -13094,6 +13094,22 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             },
             invisible: isSelect || !isHalfSelect
         });
+        this.text = BI.createWidget({
+            type: "bi.text_button",
+            stopPropagation: true,
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            textHeight: o.height,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            keyword: o.keyword,
+            value: o.value,
+            py: o.py,
+            handler: function () {
+                self.beforeClick();
+            }
+        });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
@@ -13103,23 +13119,17 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
+        this.text.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
+        });
         this.half.on(BI.HalfIconButton.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
         this.checkbox.on(BI.Checkbox.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py
+        this.text.on(BI.TextButton.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
         BI.createWidget({
             type: "bi.htape",
