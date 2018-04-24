@@ -41,6 +41,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                 self.storeValue = null;
                 self.setValue();
             }
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_CONFIRM);
         });
 

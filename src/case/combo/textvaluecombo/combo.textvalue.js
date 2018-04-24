@@ -49,6 +49,9 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if(BI.isKey(o.value)) {
+            this._checkError(o.value);
+        }
     },
 
     _checkError: function (v) {

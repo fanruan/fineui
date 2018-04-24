@@ -12,6 +12,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.storeValue = o.value;
+        this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_month_trigger",
             min: o.min,
@@ -35,10 +36,17 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             if (self.combo.isViewVisible()) {
                 return;
             }
-            self.storeValue = self.trigger.getValue();
+            var dateStore = self.storeTriggerValue;
+            var dateObj = self.trigger.getKey();
+            if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
+                self.storeValue = self.trigger.getValue();
+                self.setValue(self.trigger.getValue());
+            }
+            self._checkDynamicValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_CONFIRM);
         });
-        this.trigger.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
+        this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_FOCUS, function () {
+            self.storeTriggerValue = self.trigger.getKey();
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_FOCUS);
         });
 

@@ -5087,7 +5087,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}, {value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}]
+            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
     _init: function () {
@@ -5097,7 +5097,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         var o = this.options, self = this;
 
         var items = [];
-        BI.each(o.buttons.reverse(), function (i, buttonOpt) {
+        BI.each(o.buttons, function (i, buttonOpt) {
             if(BI.isWidget(buttonOpt)) {
                 items.push(buttonOpt);
             }else{
@@ -5770,6 +5770,13 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    mounted: function () {
+        var o = this.options;
+        if(BI.isKey(o.value)) {
+            this._checkError(o.value);
+        }
+    },
+
     _checkError: function (v) {
         if(BI.isNotNull(v)) {
             v = BI.isArray(v) ? v : [v];
@@ -6296,6 +6303,9 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 maxHeight: 300
             }
         });
+        if(BI.isKey(o.value)) {
+            this._checkError(o.value);
+        }
     },
 
     _checkError: function (v) {
