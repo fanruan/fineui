@@ -162,6 +162,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     getKey: function () {
         return this.trigger.getKey();
+    },
+
+    isValid: function () {
+        return this.trigger.isValid();
     }
 
 });

@@ -25,7 +25,9 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: BI.SignEditor.EVENT_CONFIRM,
                             action: function () {
-                                this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                                var value = this.getValue();
+                                self._checkHour(value);
+                                this.setValue(self._formatValueToDoubleDigit(value));
                                 self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                             }
                         }, {
@@ -57,7 +59,9 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {
-                            this.setValue(self._formatValueToDoubleDigit(this.getValue()), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = this.getValue();
+                            self._checkMinute(value);
+                            this.setValue(self._formatValueToDoubleDigit(value), BI.DynamicDateTimeSelect.MINUTE);
                             self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                         }
                     }, {
@@ -87,7 +91,9 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {
-                            this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                            var value = this.getValue();
+                            self._checkSecond(value);
+                            this.setValue(self._formatValueToDoubleDigit(value));
                             self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                         }
                     }],
@@ -98,6 +104,28 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkBorder: function (v) {
+        v = v || {};
+        this._checkHour(v.hour);
+        this._checkMinute(v.minute);
+        this._checkSecond(v.second);
+    },
+
+    _checkHour: function (value) {
+        this.hour.setDownEnable(BI.parseInt(value) > 0);
+        this.hour.setUpEnable(BI.parseInt(value) < 23);
+    },
+
+    _checkMinute: function (value) {
+        this.minute.setDownEnable(BI.parseInt(value) > 0);
+        this.minute.setUpEnable(BI.parseInt(value) < 59);
+    },
+
+    _checkSecond: function (value) {
+        this.second.setDownEnable(BI.parseInt(value) > 0);
+        this.second.setUpEnable(BI.parseInt(value) < 59);
+    },
+
     _autoSwitch: function (v, type) {
         var limit = 0;
         var value = v;
@@ -106,7 +134,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                 limit = 2;
                 break;
             case BI.DynamicDateTimeSelect.MINUTE:
-                limit = 6;
+                limit = 5;
                 break;
             default:
                 break;
@@ -152,6 +180,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
         this.hour.setValue(v.hour);
         this.minute.setValue(v.minute);
         this.second.setValue(v.second);
+        this._checkBorder(v);
     }
 
 });

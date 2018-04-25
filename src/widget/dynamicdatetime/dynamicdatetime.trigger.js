@@ -235,6 +235,10 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
     getValue: function () {
         return this.storeValue;
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
     }
 
 });
