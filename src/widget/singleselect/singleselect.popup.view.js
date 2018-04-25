@@ -30,29 +30,18 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
         });
 
         this.popupView = BI.createWidget({
-            type: "bi.multi_popup_view",
+            type: "bi.popup_view",
             stopPropagation: false,
             maxWidth: opts.maxWidth,
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
             el: this.loader,
             value: opts.value
         });
 
         this.popupView.on(BI.MultiPopupView.EVENT_CHANGE, function () {
             self.fireEvent(BI.SingleSelectPopupView.EVENT_CHANGE);
-        });
-        this.popupView.on(BI.MultiPopupView.EVENT_CLICK_TOOLBAR_BUTTON, function (index) {
-            switch (index) {
-                case 0:
-                    self.fireEvent(BI.SingleSelectPopupView.EVENT_CLICK_CLEAR);
-                    break;
-                case 1:
-                    self.fireEvent(BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM);
-                    break;
-            }
         });
     },
 
@@ -82,8 +71,6 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
-BI.SingleSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
 
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);

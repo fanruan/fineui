@@ -19,6 +19,9 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             max: o.max,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
+        });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });

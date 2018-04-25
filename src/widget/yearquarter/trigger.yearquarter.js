@@ -69,12 +69,15 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 return false;
             },
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true
+        });
+        editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN);
         });
         editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_FOCUS);
@@ -87,16 +90,14 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             if (BI.isNotNull(value)) {
                 editor.setValue(value);
             }
-            if (BI.isNotEmptyString(value)) {
-                var quarterValue = self.quarterEditor.getValue();
-                self.storeValue = {
-                    type: BI.DynamicYearQuarterCombo.Static,
-                    value: {
-                        year: self.yearEditor.getValue(),
-                        quarter: BI.isEmptyString(self.quarterEditor.getValue()) ? "" : quarterValue
-                    }
-                };
-            }
+            var quarterValue = self.quarterEditor.getValue();
+            self.storeValue = {
+                type: BI.DynamicYearQuarterCombo.Static,
+                value: {
+                    year: self.yearEditor.getValue(),
+                    quarter: BI.isEmptyString(self.quarterEditor.getValue()) ? "" : quarterValue
+                }
+            };
             self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
@@ -136,8 +137,8 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
-        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : value.quarter;
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
+        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : "-" + value.quarter;
         return yearStr + quarterStr;
     },
 
@@ -195,4 +196,5 @@ BI.DynamicYearQuarterTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearQuarterTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearQuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
