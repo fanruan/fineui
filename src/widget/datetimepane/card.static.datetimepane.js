@@ -14,7 +14,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
 
         this.today = BI.getDate();
         this._year = this.today.getFullYear();
-        this._month = this.today.getMonth();
+        this._month = this.today.getMonth() + 1;
 
         this.selectedTime = o.selectedTime || {
             year: this._year,
