@@ -18,7 +18,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this._year = BI.getDate().getFullYear();
-        this._month = BI.getDate().getMonth();
+        this._month = BI.getDate().getMonth() + 1;
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -53,7 +53,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             if (self._month === 12) {
                 self.setValue({
                     year: self.year.getValue() + 1,
-                    month: 0
+                    month: 1
                 });
             } else {
                 self.setValue({

@@ -84,7 +84,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         var today = BI.getDate();
         return {
             year: today.getFullYear(),
-            month: today.getMonth()
+            month: today.getMonth() + 1
         };
     },
 

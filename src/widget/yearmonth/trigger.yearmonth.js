@@ -201,6 +201,10 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
+    },
+
+    isValid: function () {
+        return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
 BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";

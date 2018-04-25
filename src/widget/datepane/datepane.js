@@ -116,7 +116,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                     var date = BI.getDate();
                     this.ymd.setValue({
                         year: date.getFullYear(),
-                        month: date.getMonth()
+                        month: date.getMonth() + 1
                     });
                 } else {
                     this.ymd.setValue(value);

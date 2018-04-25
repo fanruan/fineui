@@ -87709,7 +87709,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         BI.DatePicker.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this._year = BI.getDate().getFullYear();
-        this._month = BI.getDate().getMonth();
+        this._month = BI.getDate().getMonth() + 1;
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
@@ -87744,7 +87744,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             if (self._month === 12) {
                 self.setValue({
                     year: self.year.getValue() + 1,
-                    month: 0
+                    month: 1
                 });
             } else {
                 self.setValue({
@@ -88621,7 +88621,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
 
         this.today = BI.getDate();
         this._year = this.today.getFullYear();
-        this._month = this.today.getMonth();
+        this._month = this.today.getMonth() + 1;
 
         this.selectedTime = o.selectedTime || {
             year: this._year,
@@ -88689,7 +88689,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         var today = BI.getDate();
         return {
             year: today.getFullYear(),
-            month: today.getMonth()
+            month: today.getMonth() + 1
         };
     },
 
@@ -88844,7 +88844,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                     var date = BI.getDate();
                     this.ymd.setValue({
                         year: date.getFullYear(),
-                        month: date.getMonth()
+                        month: date.getMonth() + 1
                     });
                 } else {
                     this.ymd.setValue(value);
@@ -89414,7 +89414,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         var today = BI.getDate();
         return {
             year: today.getFullYear(),
-            month: today.getMonth()
+            month: today.getMonth() + 1
         };
     },
 
@@ -91665,6 +91665,10 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
     },
     hidePopupView: function () {
         this.combo.hideView();
+    },
+
+    isValid: function () {
+        return this.trigger.isValid();
     }
 });
 
@@ -91941,7 +91945,9 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         listeners: [{
                             eventName: BI.SignEditor.EVENT_CONFIRM,
                             action: function () {
-                                this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                                var value = this.getValue();
+                                self._checkHour(value);
+                                this.setValue(self._formatValueToDoubleDigit(value));
                                 self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                             }
                         }, {
@@ -91973,7 +91979,9 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {
-                            this.setValue(self._formatValueToDoubleDigit(this.getValue()), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = this.getValue();
+                            self._checkMinute(value);
+                            this.setValue(self._formatValueToDoubleDigit(value), BI.DynamicDateTimeSelect.MINUTE);
                             self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                         }
                     }, {
@@ -92003,7 +92011,9 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
                         action: function () {
-                            this.setValue(self._formatValueToDoubleDigit(this.getValue()));
+                            var value = this.getValue();
+                            self._checkSecond(value);
+                            this.setValue(self._formatValueToDoubleDigit(value));
                             self.fireEvent(BI.DynamicDateTimeSelect.EVENT_CONFIRM);
                         }
                     }],
@@ -92014,6 +92024,28 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
         };
     },
 
+    _checkBorder: function (v) {
+        v = v || {};
+        this._checkHour(v.hour);
+        this._checkMinute(v.minute);
+        this._checkSecond(v.second);
+    },
+
+    _checkHour: function (value) {
+        this.hour.setDownEnable(BI.parseInt(value) > 0);
+        this.hour.setUpEnable(BI.parseInt(value) < 23);
+    },
+
+    _checkMinute: function (value) {
+        this.minute.setDownEnable(BI.parseInt(value) > 0);
+        this.minute.setUpEnable(BI.parseInt(value) < 59);
+    },
+
+    _checkSecond: function (value) {
+        this.second.setDownEnable(BI.parseInt(value) > 0);
+        this.second.setUpEnable(BI.parseInt(value) < 59);
+    },
+
     _autoSwitch: function (v, type) {
         var limit = 0;
         var value = v;
@@ -92022,7 +92054,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                 limit = 2;
                 break;
             case BI.DynamicDateTimeSelect.MINUTE:
-                limit = 6;
+                limit = 5;
                 break;
             default:
                 break;
@@ -92068,6 +92100,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
         this.hour.setValue(v.hour);
         this.minute.setValue(v.minute);
         this.second.setValue(v.second);
+        this._checkBorder(v);
     }
 
 });
@@ -92314,6 +92347,10 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
     getValue: function () {
         return this.storeValue;
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
     }
 
 });
@@ -107800,7 +107837,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         combo.on(BI.DynamicDateTimeCombo.EVENT_VALID, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
@@ -107816,7 +107853,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         combo.on(BI.DynamicDateTimeCombo.EVENT_FOCUS, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
@@ -107833,26 +107870,11 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             self.left.hidePopupView();
             self.right.hidePopupView();
         });
-        // combo.on(BI.DynamicDateTimeCombo.EVENT_CHANGE, function () {
-        //    BI.Bubbles.hide("error");
-        //    var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-        //    if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
-        //        self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
-        //        self.element.addClass(self.constants.timeErrorCls);
-        //        BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
-        //            offsetStyle: "center"
-        //        });
-        //        self.fireEvent(BI.TimeInterval.EVENT_ERROR);
-        //    } else {
-        //        self._clearTitle();
-        //        self.element.removeClass(self.constants.timeErrorCls);
-        //    }
-        // });
 
         combo.on(BI.DynamicDateTimeCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 self.fireEvent(BI.TimeInterval.EVENT_ERROR);
@@ -108996,6 +109018,10 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
 
     getKey: function () {
         return this.trigger.getKey();
+    },
+
+    isValid: function () {
+        return this.trigger.isValid();
     }
 
 });
@@ -109417,6 +109443,10 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     getKey: function () {
         return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
+    },
+
+    isValid: function () {
+        return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
 BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
@@ -109509,7 +109539,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         combo.on(BI.DynamicYearMonthCombo.EVENT_VALID, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
@@ -109525,7 +109555,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         combo.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
@@ -109546,7 +109576,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
                 self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
                 self.element.addClass(self.constants.timeErrorCls);
                 self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
