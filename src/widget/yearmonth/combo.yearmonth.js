@@ -19,6 +19,9 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             max: o.max,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
+        });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
         });

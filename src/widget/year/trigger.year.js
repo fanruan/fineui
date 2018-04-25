@@ -28,8 +28,8 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
             vgap: c.vgap,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
-            errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+            errorText: function () {
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {

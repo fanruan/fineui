@@ -119,7 +119,8 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
                     break;
                 case this._const.yearMonthLength:
                 case this._const.yearFullMonthLength:
-                    if (this._monthCheck(v)) {
+                    var splitMonth = v.split("-")[1];
+                    if ((BI.isNotNull(splitMonth) && splitMonth.length === 2) || this._monthCheck(v)) {
                         this.editor.setValue(v + "-");
                     }
                     break;

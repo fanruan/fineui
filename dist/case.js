@@ -5288,8 +5288,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             adjustXOffset: 0,
             adjustYOffset: 0,
             offsetStyle: "left",
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            isShowDown: true
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
         });
     },
 
@@ -5305,8 +5304,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
-            value: o.value,
-            isShowDown: o.isShowDown
+            value: o.value
         });
         this.popup = BI.createWidget(o.popup, {
             type: "bi.icon_combo_popup",
@@ -5472,7 +5470,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: o.height,
+            height: 8,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);

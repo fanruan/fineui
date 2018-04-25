@@ -118,18 +118,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
+                            self._defaultState();
                         });
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM,
-                    action: function () {
-                        self._defaultState();
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CLEAR,
-                    action: function () {
-                        self.setValue();
-                        self._defaultState();
                     }
                 }],
                 itemsCreator: o.itemsCreator,

@@ -77737,8 +77737,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             adjustXOffset: 0,
             adjustYOffset: 0,
             offsetStyle: "left",
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            isShowDown: true
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
         });
     },
 
@@ -77754,8 +77753,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
-            value: o.value,
-            isShowDown: o.isShowDown
+            value: o.value
         });
         this.popup = BI.createWidget(o.popup, {
             type: "bi.icon_combo_popup",
@@ -77921,7 +77919,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             disableSelected: true,
             cls: "icon-combo-down-icon trigger-triangle-font",
             width: 12,
-            height: o.height,
+            height: 8,
             selected: BI.isNotEmptyString(iconCls)
         });
         this.down.setVisible(o.isShowDown);
@@ -90933,7 +90931,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     break;
                 case this._const.yearMonthLength:
                 case this._const.yearFullMonthLength:
-                    if (this._monthCheck(v)) {
+                    var splitMonth = v.split("-")[1];
+                    if ((BI.isNotNull(splitMonth) && splitMonth.length === 2) || this._monthCheck(v)) {
                         this.editor.setValue(v + "-");
                     }
                     break;
@@ -91872,7 +91871,9 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     }
                     break;
                 case this._const.yearMonthLength:
-                    if (this._monthCheck(v)) {
+                case this._const.yearFullMonthLength:
+                    var splitMonth = v.split("-")[1];
+                    if ((BI.isNotNull(splitMonth) && splitMonth.length === 2) || this._monthCheck(v)) {
                         this.editor.setValue(v + "-");
                     }
                     break;
@@ -100596,7 +100597,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
-            isShowDown: false,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
                 iconCls: "less-font",
@@ -100615,7 +100615,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-big-combo bi-border",
-            isShowDown: false,
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -103650,18 +103649,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
+                            self._defaultState();
                         });
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM,
-                    action: function () {
-                        self._defaultState();
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CLEAR,
-                    action: function () {
-                        self.setValue();
-                        self._defaultState();
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -104200,29 +104189,18 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
         });
 
         this.popupView = BI.createWidget({
-            type: "bi.multi_popup_view",
+            type: "bi.popup_view",
             stopPropagation: false,
             maxWidth: opts.maxWidth,
             minWidth: opts.minWidth,
             maxHeight: opts.maxHeight,
             element: this,
-            buttons: [BI.i18nText("BI-Basic_Clears"), BI.i18nText("BI-Basic_Sure")],
             el: this.loader,
             value: opts.value
         });
 
         this.popupView.on(BI.MultiPopupView.EVENT_CHANGE, function () {
             self.fireEvent(BI.SingleSelectPopupView.EVENT_CHANGE);
-        });
-        this.popupView.on(BI.MultiPopupView.EVENT_CLICK_TOOLBAR_BUTTON, function (index) {
-            switch (index) {
-                case 0:
-                    self.fireEvent(BI.SingleSelectPopupView.EVENT_CLICK_CLEAR);
-                    break;
-                case 1:
-                    self.fireEvent(BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM);
-                    break;
-            }
         });
     },
 
@@ -104252,8 +104230,6 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
-BI.SingleSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 
 
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);/**
@@ -105184,13 +105160,13 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.single_select_search_add_pane", BI.SingleSelectSearchPane);/**
  *
- * @class BI.SingleSelectCombo
+ * @class BI.SingleSelectInsertCombo
  * @extends BI.Single
  */
-BI.SingleSelectCombo = BI.inherit(BI.Single, {
+BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.SingleSelectCombo.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SingleSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
@@ -105199,7 +105175,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.SingleSelectCombo.superclass._init.apply(this, arguments);
+        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
         var assertShowValue = function () {
@@ -105301,18 +105277,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
+                            self._defaultState();
                         });
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM,
-                    action: function () {
-                        self._defaultState();
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CLEAR,
-                    action: function () {
-                        self.setValue();
-                        self._defaultState();
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -105344,7 +105310,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.SingleSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
             }
         });
 
@@ -105397,7 +105363,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(this.storeValue);
         this.requesting = true;
         o.itemsCreator({
-            type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
             var values = BI.map(ob.items, "value");
@@ -105420,7 +105386,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         o.itemsCreator({
-            type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
             var items = BI.map(ob.items, "value");
@@ -105457,7 +105423,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         if (!this._count) {
             o.itemsCreator({
-                type: BI.SingleSelectCombo.REQ_GET_DATA_LENGTH
+                type: BI.SingleSelectInsertCombo.REQ_GET_DATA_LENGTH
             }, function (res) {
                 self._count = res.count;
                 adjust();
@@ -105471,7 +105437,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SingleSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;
@@ -105525,14 +105491,14 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.extend(BI.SingleSelectCombo, {
+BI.extend(BI.SingleSelectInsertCombo, {
     REQ_GET_DATA_LENGTH: 0,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_add_combo", BI.SingleSelectCombo);/**
+BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
  *
  * 单选下拉框
  * @class BI.SingleSelectTrigger
@@ -108203,8 +108169,8 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
             vgap: c.vgap,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
-            errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+            errorText: function () {
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
@@ -108491,9 +108457,9 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         obj = obj || {};
         obj.year = obj.year || 0;
         obj.month = obj.month || 0;
-        if (BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
+        if (obj.year === 0 || obj.month === 0 || BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
             var year = BI.getDate().getFullYear();
-            this.selectedYear = "";
+            this.selectedYear = year;
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
             this.month.setValue();
@@ -108526,6 +108492,9 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearM
             min: o.min,
             max: o.max,
             value: o.value || ""
+        });
+        this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
@@ -108838,7 +108807,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     switch (v) {
                         case BI.DynamicYearCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), month: date.getMonth()});
+                            self.year.setValue({year: date.getFullYear(), month: date.getMonth() + 1});
                             self._setInnerValue();
                             break;
                         case BI.DynamicYearCombo.Dynamic:
@@ -108964,11 +108933,14 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") :  BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true
+        });
+        editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN);
         });
         editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_FOCUS);
@@ -108981,16 +108953,14 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
             if (BI.isNotNull(value)) {
                 editor.setValue(value);
             }
-            if (BI.isNotEmptyString(value)) {
-                var monthValue = self.monthEditor.getValue();
-                self.storeValue = {
-                    type: BI.DynamicDateCombo.Static,
-                    value: {
-                        year: self.yearEditor.getValue(),
-                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
-                    }
-                };
-            }
+            var monthValue = self.monthEditor.getValue();
+            self.storeValue = {
+                type: BI.DynamicDateCombo.Static,
+                value: {
+                    year: self.yearEditor.getValue(),
+                    month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
+                }
+            };
             self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
@@ -109057,8 +109027,8 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
-        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : value.month;
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
+        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : "-" + value.month;
         return yearStr + monthStr;
     },
 
@@ -109107,6 +109077,7 @@ BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearMonthTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearMonthTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
         height: 26,
@@ -109461,9 +109432,9 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         obj = obj || {};
         obj.year = obj.year || 0;
         obj.quarter = obj.quarter || 0;
-        if (BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
+        if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
             var year = BI.getDate().getFullYear();
-            this.selectedYear = "";
+            this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
             this.quarter.setValue();
@@ -109496,6 +109467,9 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
             min: o.min,
             max: o.max,
             value: o.value || ""
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
+            self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
@@ -109907,12 +109881,15 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                 return false;
             },
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true
+        });
+        editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN);
         });
         editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_FOCUS);
@@ -109925,16 +109902,14 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
             if (BI.isNotNull(value)) {
                 editor.setValue(value);
             }
-            if (BI.isNotEmptyString(value)) {
-                var quarterValue = self.quarterEditor.getValue();
-                self.storeValue = {
-                    type: BI.DynamicYearQuarterCombo.Static,
-                    value: {
-                        year: self.yearEditor.getValue(),
-                        quarter: BI.isEmptyString(self.quarterEditor.getValue()) ? "" : quarterValue
-                    }
-                };
-            }
+            var quarterValue = self.quarterEditor.getValue();
+            self.storeValue = {
+                type: BI.DynamicYearQuarterCombo.Static,
+                value: {
+                    year: self.yearEditor.getValue(),
+                    quarter: BI.isEmptyString(self.quarterEditor.getValue()) ? "" : quarterValue
+                }
+            };
             self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
@@ -109974,8 +109949,8 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
-        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : value.quarter;
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
+        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : "-" + value.quarter;
         return yearStr + quarterStr;
     },
 
@@ -110033,6 +110008,7 @@ BI.DynamicYearQuarterTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearQuarterTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearQuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑

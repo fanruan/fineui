@@ -1,12 +1,12 @@
 /**
  *
- * @class BI.SingleSelectCombo
+ * @class BI.SingleSelectInsertCombo
  * @extends BI.Single
  */
-BI.SingleSelectCombo = BI.inherit(BI.Single, {
+BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.SingleSelectCombo.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SingleSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
@@ -15,7 +15,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.SingleSelectCombo.superclass._init.apply(this, arguments);
+        BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
         var assertShowValue = function () {
@@ -117,18 +117,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
+                            self._defaultState();
                         });
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CONFIRM,
-                    action: function () {
-                        self._defaultState();
-                    }
-                }, {
-                    eventName: BI.SingleSelectPopupView.EVENT_CLICK_CLEAR,
-                    action: function () {
-                        self.setValue();
-                        self._defaultState();
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -160,7 +150,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.SingleSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
             }
         });
 
@@ -213,7 +203,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(this.storeValue);
         this.requesting = true;
         o.itemsCreator({
-            type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
             var values = BI.map(ob.items, "value");
@@ -236,7 +226,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         o.itemsCreator({
-            type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
             var items = BI.map(ob.items, "value");
@@ -273,7 +263,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         if (!this._count) {
             o.itemsCreator({
-                type: BI.SingleSelectCombo.REQ_GET_DATA_LENGTH
+                type: BI.SingleSelectInsertCombo.REQ_GET_DATA_LENGTH
             }, function (res) {
                 self._count = res.count;
                 adjust();
@@ -287,7 +277,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SingleSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;
@@ -341,11 +331,11 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.extend(BI.SingleSelectCombo, {
+BI.extend(BI.SingleSelectInsertCombo, {
     REQ_GET_DATA_LENGTH: 0,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_add_combo", BI.SingleSelectCombo);
+BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);

@@ -70,11 +70,14 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             },
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function (v) {
-                return !BI.isPositiveInteger(v) ? BI.i18nText("BI-Please_Input_Positive_Integer") :  BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             },
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true
+        });
+        editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN);
         });
         editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_FOCUS);
@@ -87,16 +90,14 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             if (BI.isNotNull(value)) {
                 editor.setValue(value);
             }
-            if (BI.isNotEmptyString(value)) {
-                var monthValue = self.monthEditor.getValue();
-                self.storeValue = {
-                    type: BI.DynamicDateCombo.Static,
-                    value: {
-                        year: self.yearEditor.getValue(),
-                        month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
-                    }
-                };
-            }
+            var monthValue = self.monthEditor.getValue();
+            self.storeValue = {
+                type: BI.DynamicDateCombo.Static,
+                value: {
+                    year: self.yearEditor.getValue(),
+                    month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
+                }
+            };
             self.setTitle(self._getStaticTitle(self.storeValue.value));
 
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
@@ -163,8 +164,8 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year + "-";
-        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : value.month;
+        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
+        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : "-" + value.month;
         return yearStr + monthStr;
     },
 
@@ -213,4 +214,5 @@ BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearMonthTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearMonthTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
