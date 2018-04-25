@@ -88767,7 +88767,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                                     var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
                                     self.ymd.setValue({
                                         year: date.getFullYear(),
-                                        month: date.getMonth(),
+                                        month: date.getMonth() + 1,
                                         day: date.getDate()
                                     });
                                     break;
