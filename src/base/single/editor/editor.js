@@ -107,7 +107,7 @@ BI.Editor = BI.inherit(BI.Single, {
             self.fireEvent(BI.Editor.EVENT_FOCUS, arguments);
         });
         this.editor.on(BI.Input.EVENT_BLUR, function () {
-            self.setErrorVisible(false);
+            self._setErrorVisible(false);
             self.element.removeClass("bi-editor-focus");
             self.fireEvent(BI.Editor.EVENT_BLUR, arguments);
         });
@@ -126,17 +126,17 @@ BI.Editor = BI.inherit(BI.Single, {
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
             self._checkWaterMark();
-            self.setErrorVisible(false);
+            self._setErrorVisible(false);
             self.fireEvent(BI.Editor.EVENT_VALID, arguments);
         });
         this.editor.on(BI.Input.EVENT_ERROR, function () {
             self._checkWaterMark();
             self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
-            self.setErrorVisible(self.isEditing());
+            self._setErrorVisible(self.isEditing());
         });
         this.editor.on(BI.Input.EVENT_RESTRICT, function () {
             self._checkWaterMark();
-            var tip = self.setErrorVisible(true);
+            var tip = self._setErrorVisible(true);
             tip && tip.element.fadeOut(100, function () {
                 tip.element.fadeIn(100);
             });
@@ -198,7 +198,7 @@ BI.Editor = BI.inherit(BI.Single, {
     },
 
     _checkError: function () {
-        this.setErrorVisible(this.isEnabled() && !this.isValid());
+        this._setErrorVisible(this.isEnabled() && !this.isValid());
         this._checkToolTip();
     },
 
@@ -219,7 +219,7 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.options.errorText;
     },
 
-    setErrorVisible: function (b) {
+    _setErrorVisible: function (b) {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
