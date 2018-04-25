@@ -6449,26 +6449,6 @@ BI.extend(BI.AbstractFilterItem, {
     });
     BI.shortcut("bi.filter_expander", FilterExpander);
 }());/**
- * Created by Urthur on 2017/12/21.
- */
-!(function () {
-    BI.constant("bi.constant.component.filter", {
-        FORMULA_COMBO: [{
-            text: BI.i18nText("BI-Conf_Formula_And"),
-            value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
-        }, {
-            text: BI.i18nText("BI-Conf_Formula_Or"),
-            value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
-        }],
-        CONDITION_COMBO: [{
-            text: BI.i18nText("BI-Conf_Condition_And"),
-            value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
-        }, {
-            text: BI.i18nText("BI-Conf_Condition_Or"),
-            value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
-        }]
-    });
-}());/**
  * 过滤
  *
  * Created by GUY on 2015/11/20.
@@ -6773,6 +6753,27 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
 !(function () {
     var OPERATION_ADD_CONDITION = 0, OPERATION_ADD_ANDOR_CONDITION = 1;
     var FilterOperation = BI.inherit(BI.Widget, {
+        _defaultConfig: function () {
+            return BI.extend(FilterOperation.superclass._defaultConfig.apply(this, arguments), {
+                constants: {
+                    FORMULA_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Formula_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Formula_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
+                    }],
+                    CONDITION_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Condition_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Condition_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
+                    }]
+                }
+            });
+        },
+        
         props: {
             baseCls: "bi-filter-operation",
             expander: {},
@@ -6923,13 +6924,13 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
                     case BI.AbstractFilterItem.FILTER_OPERATION_FORMULA:
                         text = BI.i18nText("BI-Conf_Add_Formula");
                         cls = "filter-formula-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").FORMULA_COMBO;
+                        items = this.options.constants.FORMULA_COMBO;
                         break;
                     case BI.AbstractFilterItem.FILTER_OPERATION_CONDITION:
                     default:
                         text = BI.i18nText("BI-Conf_Add_Condition");
                         cls = "filter-condition-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").CONDITION_COMBO;
+                        items = this.options.constants.CONDITION_COMBO;
                         break;
                 }
 
@@ -13510,6 +13511,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         var o = this.options;
         ob || (ob = {});
         ob.value || (ob.value = {});
+        var count = 0;
         if (BI.isNumber(ob)) {
             this.editor.setState(ob);
         } else if (BI.size(ob.value) === 0) {
@@ -13519,8 +13521,16 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             BI.each(ob.value, function (name, children) {
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
+                if (childNodes === "") {
+                    count++;
+                }
             });
-            this.editor.setState(text);
+
+            if (count > 20) {
+                this.editor.setState(BI.Selection.Multi);
+            } else {
+                this.editor.setState(text);
+            }
         }
 
         function getChildrenNode (ob) {
@@ -13530,6 +13540,9 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 index++;
                 var childNodes = getChildrenNode(children);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
+                if (childNodes === "") {
+                    count++;
+                }
             });
             return text;
         }

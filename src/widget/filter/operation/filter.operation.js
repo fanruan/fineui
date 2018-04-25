@@ -8,6 +8,27 @@
 !(function () {
     var OPERATION_ADD_CONDITION = 0, OPERATION_ADD_ANDOR_CONDITION = 1;
     var FilterOperation = BI.inherit(BI.Widget, {
+        _defaultConfig: function () {
+            return BI.extend(FilterOperation.superclass._defaultConfig.apply(this, arguments), {
+                constants: {
+                    FORMULA_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Formula_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Formula_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_FORMULA_OR
+                    }],
+                    CONDITION_COMBO: [{
+                        text: BI.i18nText("BI-Conf_Condition_And"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_AND
+                    }, {
+                        text: BI.i18nText("BI-Conf_Condition_Or"),
+                        value: BI.AbstractFilterItem.FILTER_OPERATION_CONDITION_OR
+                    }]
+                }
+            });
+        },
+        
         props: {
             baseCls: "bi-filter-operation",
             expander: {},
@@ -158,13 +179,13 @@
                     case BI.AbstractFilterItem.FILTER_OPERATION_FORMULA:
                         text = BI.i18nText("BI-Conf_Add_Formula");
                         cls = "filter-formula-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").FORMULA_COMBO;
+                        items = this.options.constants.FORMULA_COMBO;
                         break;
                     case BI.AbstractFilterItem.FILTER_OPERATION_CONDITION:
                     default:
                         text = BI.i18nText("BI-Conf_Add_Condition");
                         cls = "filter-condition-font";
-                        items = BI.Constants.getConstant("bi.constant.component.filter").CONDITION_COMBO;
+                        items = this.options.constants.CONDITION_COMBO;
                         break;
                 }
 
