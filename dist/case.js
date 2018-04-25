@@ -13094,26 +13094,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             },
             invisible: isSelect || !isHalfSelect
         });
-        this.text = BI.createWidget({
-            type: "bi.text_button",
-            stopPropagation: true,
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py,
-            handler: function () {
-                if (self.isHalfSelected()) {
-                    this.setSelected(true);
-                } else {
-                    this.setSelected(!this.isSelected());
-                }
-            }
-        });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
@@ -13123,17 +13103,23 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
-        this.text.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
-        });
         this.half.on(BI.HalfIconButton.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
         this.checkbox.on(BI.Checkbox.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
-        this.text.on(BI.TextButton.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
+        this.text = BI.createWidget({
+            type: "bi.label",
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            textHeight: o.height,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            keyword: o.keyword,
+            value: o.value,
+            py: o.py
         });
         BI.createWidget({
             type: "bi.htape",
@@ -13194,6 +13180,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
         this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
+    },
+
+    doClick: function () {
+        BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
+        if(this.isValid()) {
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+        }
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
