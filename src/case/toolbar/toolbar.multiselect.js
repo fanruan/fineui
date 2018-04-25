@@ -55,7 +55,11 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py,
             handler: function () {
-                self.beforeClick();
+                if (self.isHalfSelected()) {
+                    this.setSelected(true);
+                } else {
+                    this.setSelected(!this.isSelected());
+                }
             }
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function () {
