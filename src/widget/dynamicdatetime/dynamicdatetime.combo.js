@@ -243,6 +243,10 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
     hidePopupView: function () {
         this.combo.hideView();
+    },
+
+    isValid: function () {
+        return this.trigger.isValid();
     }
 });
 
