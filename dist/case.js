@@ -13180,6 +13180,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         var isAllChecked = this.options.isAllCheckedBySelectedValue.apply(this, arguments);
         this._setSelected(isAllChecked);
         !isAllChecked && this.setHalfSelected(this.options.isHalfCheckedBySelectedValue.apply(this, arguments));
+    },
+
+    doClick: function () {
+        BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
+        if(this.isValid()) {
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+        }
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
