@@ -87649,6 +87649,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             baseCls: "bi-year-combo",
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
+            behaviors: {},
             height: 25
         });
     },
@@ -87662,6 +87663,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
 
         this.popup = BI.createWidget({
             type: "bi.year_popup",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -87701,7 +87703,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.year_date_combo", BI.YearDateCombo);/**
+BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
+/**
  * Created by GUY on 2015/9/7.
  * @class BI.DatePicker
  * @extends BI.Widget
@@ -87865,6 +87868,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         var conf = BI.YearPicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-year-picker bi-background",
+            behaviors: {},
             height: 40,
             min: "1900-01-01", // 最小日期
             max: "2099-12-31" // 最大日期
@@ -87905,6 +87909,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
             min: o.min,
+            behaviors: o.behaviors,
             max: o.max
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
@@ -87965,7 +87970,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     }
 });
 BI.YearPicker.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.year_picker", BI.YearPicker);/**
+BI.shortcut("bi.year_picker", BI.YearPicker);
+/**
  * Created by GUY on 2015/9/7.
  * @class BI.DateCalendarPopup
  * @extends BI.Widget
@@ -108401,6 +108407,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 ref: function () {
                     self.yearPicker = this;
                 },
+                behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,
@@ -108472,7 +108479,8 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
+BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
+BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
         baseCls: "bi-year-month-combo  bi-border",
@@ -109384,6 +109392,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
                 ref: function () {
                     self.yearPicker = this;
                 },
+                behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,
@@ -109447,7 +109456,8 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
     }
 });
 BI.StaticYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
+BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
+BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-year-quarter-combo bi-border",
