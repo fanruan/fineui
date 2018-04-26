@@ -109392,6 +109392,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
                 ref: function () {
                     self.yearPicker = this;
                 },
+                behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,
@@ -109455,7 +109456,8 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
     }
 });
 BI.StaticYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
+BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
+BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-year-quarter-combo bi-border",
