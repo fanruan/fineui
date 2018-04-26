@@ -179,13 +179,13 @@
                     case BI.AbstractFilterItem.FILTER_OPERATION_FORMULA:
                         text = BI.i18nText("BI-Conf_Add_Formula");
                         cls = "filter-formula-font";
-                        items = this.options.constants.FORMULA_COMBO;
+                        items = self.options.constants.FORMULA_COMBO;
                         break;
                     case BI.AbstractFilterItem.FILTER_OPERATION_CONDITION:
                     default:
                         text = BI.i18nText("BI-Conf_Add_Condition");
                         cls = "filter-condition-font";
-                        items = this.options.constants.CONDITION_COMBO;
+                        items = self.options.constants.CONDITION_COMBO;
                         break;
                 }
 

@@ -74,6 +74,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
+            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
@@ -154,7 +155,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%x");
+        var dateStr = date.print("%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(date.getQuarter());
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
@@ -189,6 +190,10 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.yearEditor.getValue() + "-" + this.quarterEditor.getValue();
     }
 });
 BI.DynamicYearQuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";

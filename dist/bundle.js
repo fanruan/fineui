@@ -90882,7 +90882,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1],
+                        month: date[1] | 0,
                         day: date[2] | 0
                     }
                 };
@@ -91820,7 +91820,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1],
+                        month: date[1] | 0,
                         day: date[2] | 0,
                         hour: date[3] | 0,
                         minute: date[4] | 0,
@@ -93711,13 +93711,13 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
                     case BI.AbstractFilterItem.FILTER_OPERATION_FORMULA:
                         text = BI.i18nText("BI-Conf_Add_Formula");
                         cls = "filter-formula-font";
-                        items = this.options.constants.FORMULA_COMBO;
+                        items = self.options.constants.FORMULA_COMBO;
                         break;
                     case BI.AbstractFilterItem.FILTER_OPERATION_CONDITION:
                     default:
                         text = BI.i18nText("BI-Conf_Add_Condition");
                         cls = "filter-condition-font";
-                        items = this.options.constants.CONDITION_COMBO;
+                        items = self.options.constants.CONDITION_COMBO;
                         break;
                 }
 
@@ -109495,7 +109495,6 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);BI.DynamicY
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.trigger.getKey();
-            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_FOCUS);
         });
 
         this.combo = BI.createWidget({
@@ -109886,6 +109885,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: c.hgap,
             vgap: c.vgap,
+            title: "",
             allowBlank: true
         });
         editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
@@ -109966,7 +109966,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%x");
+        var dateStr = date.print("%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(date.getQuarter());
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
@@ -110001,6 +110001,10 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    getKey: function () {
+        return this.yearEditor.getValue() + "-" + this.quarterEditor.getValue();
     }
 });
 BI.DynamicYearQuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";
