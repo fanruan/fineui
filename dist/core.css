@@ -503,7 +503,6 @@ textarea {
   color: #242640;
 }
 .bi-z-index-mask {
-  color: #ffffff;
   background-color: rgba(26, 26, 26, 0.5);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#801a1a1a,endColorstr=#801a1a1a);
 }
