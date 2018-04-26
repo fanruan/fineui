@@ -42,6 +42,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.yearPicker = this;
                 },
+                behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,

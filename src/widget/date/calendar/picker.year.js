@@ -8,6 +8,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         var conf = BI.YearPicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: "bi-year-picker bi-background",
+            behaviors: {},
             height: 40,
             min: "1900-01-01", // 最小日期
             max: "2099-12-31" // 最大日期
@@ -48,6 +49,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
             min: o.min,
+            behaviors: o.behaviors,
             max: o.max
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
