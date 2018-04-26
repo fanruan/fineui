@@ -70,7 +70,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
                     type: BI.DynamicDateCombo.Static,
                     value: {
                         year: date[0] | 0,
-                        month: date[1],
+                        month: date[1] | 0,
                         day: date[2] | 0
                     }
                 };
