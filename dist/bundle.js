@@ -87649,6 +87649,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             baseCls: "bi-year-combo",
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
+            behaviors: {},
             height: 25
         });
     },
@@ -87662,6 +87663,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
 
         this.popup = BI.createWidget({
             type: "bi.year_popup",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -87701,7 +87703,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.year_date_combo", BI.YearDateCombo);/**
+BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
+/**
  * Created by GUY on 2015/9/7.
  * @class BI.DatePicker
  * @extends BI.Widget
