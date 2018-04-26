@@ -229,12 +229,6 @@ textarea {
   background-color: rgba(26, 26, 26, 0.5);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#801a1a1a,endColorstr=#801a1a1a);
 }
-.bi-z-index-mask .bi-input {
-  color: #ffffff;
-}
-.bi-z-index-mask .bi-textarea {
-  color: #ffffff;
-}
 .bi-list-item:hover,
 .bi-list-item.hover {
   color: #1a1a1a;
