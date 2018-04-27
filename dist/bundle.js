@@ -72791,9 +72791,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         this.radio = BI.createWidget({
             type: "bi.radio"
         });
-        this.radio.on(BI.Controller.EVENT_CHANGE, function (type) {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
         this.text = BI.createWidget({
             type: "bi.label",
             cls: "list-item-text",
@@ -97203,7 +97200,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 });
 
 BI.extend(BI.MultiSelectInsertCombo, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -97584,7 +97581,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 });
 
 BI.extend(BI.MultiSelectCombo, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -99007,7 +99004,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.MultiSelectInsertList, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -99351,7 +99348,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.MultiSelectList, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -103372,7 +103369,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_radio_item",
+            type: "bi.single_select_combo.item",
             logic: {
                 dynamic: false
             },
@@ -103631,6 +103628,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
             self.storeValue = this.getValue();
             assertShowValue();
+            self._defaultState();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -103879,6 +103877,73 @@ BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 /**
+ * guy
+ * 单选框item
+ * @type {*|void|Object}
+ */
+BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
+    _defaultConfig: function () {
+        return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-single-select-radio-item",
+            logic: {
+                dynamic: false
+            },
+            hgap: 10,
+            height: 25
+        });
+    },
+    _init: function () {
+        BI.SingleSelectComboItem.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.radio = BI.createWidget({
+            type: "bi.radio"
+        });
+        this.text = BI.createWidget({
+            type: "bi.label",
+            cls: "list-item-text",
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            textHeight: o.height,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            keyword: o.keyword,
+            value: o.value,
+            py: o.py
+        });
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection("left", {
+                type: "bi.center_adapt",
+                items: [this.radio],
+                width: 36
+            }, this.text)
+        }))));
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
+    },
+
+    doClick: function () {
+        BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
+        this.radio.setSelected(this.isSelected());
+    },
+
+    setSelected: function (v) {
+        BI.SingleSelectComboItem.superclass.setSelected.apply(this, arguments);
+        this.radio.setSelected(v);
+
+    }
+});
+
+BI.shortcut("bi.single_select_combo.item", BI.SingleSelectComboItem);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
@@ -104109,7 +104174,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_radio_item",
+            type: "bi.single_select_combo.item",
             logic: this.options.logic,
             height: 25,
             selected: false
@@ -105002,7 +105067,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_radio_item",
+            type: "bi.single_select_combo.item",
             logic: {
                 dynamic: false
             },
@@ -108465,7 +108530,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         obj.year = obj.year || 0;
         obj.month = obj.month || 0;
         if (obj.year === 0 || obj.month === 0 || BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
-            var year = BI.getDate().getFullYear();
+            var year = obj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
@@ -108566,7 +108631,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         eventName: BI.DynamicYearMonthPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({year: date.getFullYear(), month: date.getMonth() + 1});
+                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), month: date.getMonth() + 1}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -109079,7 +109144,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
-BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
+BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DynamicYearMonthTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";
@@ -109163,6 +109228,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         });
         combo.on(BI.DynamicYearMonthCombo.EVENT_ERROR, function () {
             self._clearTitle();
+            BI.Bubbles.hide("error");
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
         });
@@ -109442,7 +109508,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         obj.year = obj.year || 0;
         obj.quarter = obj.quarter || 0;
         if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
-            var year = BI.getDate().getFullYear();
+            var year = obj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
@@ -109538,7 +109604,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
+                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: date.getQuarter()}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }

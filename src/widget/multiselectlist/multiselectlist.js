@@ -337,7 +337,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.MultiSelectList, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 

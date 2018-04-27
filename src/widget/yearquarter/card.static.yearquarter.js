@@ -92,7 +92,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
         obj.year = obj.year || 0;
         obj.quarter = obj.quarter || 0;
         if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
-            var year = BI.getDate().getFullYear();
+            var year = obj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
