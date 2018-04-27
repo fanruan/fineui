@@ -13,7 +13,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
         BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        this.storeValue = {};
+        this.storeValue = o.value || {};
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
@@ -29,7 +29,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             // onLoaded: o.onLoaded,
-            el: {}
+            el: {},
+            value: o.value
         });
         this.adapter.on(BI.MultiSelectLoader.EVENT_CHANGE, function () {
             self.storeValue = this.getValue();
@@ -146,7 +147,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                         });
                     }
                 }
-            }]
+            }],
+            value: o.value
         });
 
         BI.createWidget({
