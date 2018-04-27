@@ -75,6 +75,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         });
         combo.on(BI.DynamicYearMonthCombo.EVENT_ERROR, function () {
             self._clearTitle();
+            BI.Bubbles.hide("error");
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
         });

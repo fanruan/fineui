@@ -3,9 +3,9 @@
  * 单选框item
  * @type {*|void|Object}
  */
-BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
+BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
-        return BI.extend(BI.SingleSelectRadioItem.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
             logic: {
                 dynamic: false
@@ -15,7 +15,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         });
     },
     _init: function () {
-        BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
+        BI.SingleSelectComboItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.radio = BI.createWidget({
             type: "bi.radio"
@@ -54,15 +54,15 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     },
 
     doClick: function () {
-        BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
+        BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
     },
 
     setSelected: function (v) {
-        BI.SingleSelectRadioItem.superclass.setSelected.apply(this, arguments);
+        BI.SingleSelectComboItem.superclass.setSelected.apply(this, arguments);
         this.radio.setSelected(v);
 
     }
 });
 
-BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
+BI.shortcut("bi.single_select_combo.item", BI.SingleSelectComboItem);

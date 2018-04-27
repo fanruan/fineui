@@ -96,7 +96,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_radio_item",
+            type: "bi.single_select_combo.item",
             logic: this.options.logic,
             height: 25,
             selected: false

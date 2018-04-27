@@ -208,7 +208,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
-BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_FOCUS";
+BI.DynamicYearMonthTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DynamicYearMonthTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearMonthTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearMonthTrigger.EVENT_START = "EVENT_START";

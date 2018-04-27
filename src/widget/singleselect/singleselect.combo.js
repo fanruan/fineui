@@ -94,6 +94,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
             self.storeValue = this.getValue();
             assertShowValue();
+            self._defaultState();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
