@@ -97203,7 +97203,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 });
 
 BI.extend(BI.MultiSelectInsertCombo, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -97584,7 +97584,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 });
 
 BI.extend(BI.MultiSelectCombo, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -99007,7 +99007,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.MultiSelectInsertList, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
@@ -99351,7 +99351,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 });
 
 BI.extend(BI.MultiSelectList, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 

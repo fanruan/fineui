@@ -350,7 +350,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 });
 
 BI.extend(BI.MultiSelectInsertCombo, {
-    REQ_GET_DATA_LENGTH: 0,
+    REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
