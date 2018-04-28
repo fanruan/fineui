@@ -12187,17 +12187,17 @@ BI.shortcut("demo.tips", Demo.Tips);Demo.DatePane = BI.inherit(BI.Widget, {
                     }
                 }, {
                     type: "bi.dynamic_date_time_pane",
-                    // value: {
-                    //     type: 1,
-                    //     value: {
-                    //         year: 2017,
-                    //         month: 12,
-                    //         day: 11,
-                    //         hour: 12,
-                    //         minute: 12,
-                    //         second: 12
-                    //     }
-                    // },
+                    value: {
+                        type: 1,
+                        value: {
+                            year: 2017,
+                            month: 12,
+                            day: 11,
+                            hour: 12,
+                            minute: 12,
+                            second: 12
+                        }
+                    },
                     ref: function (_ref) {
                         self.dateTimePane = _ref;
                     },

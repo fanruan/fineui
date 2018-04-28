@@ -72,6 +72,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
             self._clearTitle();
+            BI.Bubbles.hide("error");
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.DateInterval.EVENT_ERROR);
         });
