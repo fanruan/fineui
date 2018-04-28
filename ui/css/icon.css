@@ -460,30 +460,6 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png');
   _background: none;
 }
-.static-auto-color-icon .x-icon {
-  display: block;
-  background: url('resources?path=/com/fr/web/ui/images/2x/icon/auto_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/2x/icon/auto_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.static-auto-color-icon .x-icon.hack {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/auto_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/auto_normal.png');
-  _background: none;
-}
-.static-trans-color-icon .x-icon {
-  display: block;
-  background: url('resources?path=/com/fr/web/ui/images/2x/icon/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/2x/icon/trans_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.static-trans-color-icon .x-icon.hack {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/trans_normal.png');
-  _background: none;
-}
 .auto-color-icon .x-icon {
   display: block;
   background: url('resources?path=/com/fr/web/ui/images/2x/icon/auto_normal.png') no-repeat center center;

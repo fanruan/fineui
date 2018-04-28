@@ -4095,7 +4095,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                 ref: function (_ref) {
                     self.changeIcon = _ref;
                 },
-                iconCls: "static-auto-color-icon",
+                iconCls: "auto-color-icon",
                 width: 24,
                 iconWidth: 16,
                 iconHeight: 16
@@ -4147,13 +4147,13 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
             this.colorContainer.element.css("background-color", "");
             this.changeIcon.setVisible(true);
             this.label.setVisible(true);
-            this.changeIcon.setIcon("static-auto-color-icon");
+            this.changeIcon.setIcon("auto-color-icon");
             this.label.setText(BI.i18nText("BI-Basic_Auto"));
         } else if (color === "transparent") {
             this.colorContainer.element.css("background-color", "");
             this.changeIcon.setVisible(true);
             this.label.setVisible(true);
-            this.changeIcon.setIcon("static-trans-color-icon");
+            this.changeIcon.setIcon("trans-color-icon");
             this.label.setText(BI.i18nText("BI-Transparent_Color"));
         } else {
             this.colorContainer.element.css({"background-color": color});
