@@ -17,8 +17,8 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
-        var self = this;
-        this.editor = BI.createWidget({
+        var self = this, o = this.options;
+        this.editor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {

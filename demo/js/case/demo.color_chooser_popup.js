@@ -13,6 +13,13 @@ Demo.Func = BI.inherit(BI.Widget, {
                 },
                 left: 100,
                 top: 250
+            }, {
+                el: {
+                    type: "bi.simple_color_chooser_popup",
+                    cls: "bi-card"
+                },
+                left: 400,
+                top: 250
             }]
         };
     }
