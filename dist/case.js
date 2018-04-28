@@ -3552,8 +3552,8 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
-        var self = this;
-        this.editor = BI.createWidget({
+        var self = this, o = this.options;
+        this.editor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -3613,7 +3613,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
-            el: {}
+            value: ""
         });
     },
 
@@ -3625,8 +3625,10 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 1,
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
             el: BI.extend({
-                type: "bi.color_chooser_trigger",
+                type: o.width <= 30 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
@@ -3634,7 +3636,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 height: o.height
             }, o.el),
             popup: {
-                el: {
+                el: BI.extend({
                     type: "bi.color_chooser_popup",
                     ref: function (_ref) {
                         self.colorPicker = _ref;
@@ -3651,9 +3653,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                             self.combo.hideView();
                         }
                     }]
-                },
+                }, o.popup),
                 stopPropagation: false,
-                minWidth: 202
+                width: 202
             },
             value: o.value
         });
@@ -3718,7 +3720,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.colorEditor = BI.createWidget({
+        this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
             value: o.value
         });
@@ -3777,7 +3779,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         });
 
         this.customColorChooser = BI.createWidget({
-            type: "bi.custom_color_chooser"
+            type: "bi.custom_color_chooser",
+            editor: o.editor
         });
 
         var panel = BI.createWidget({
@@ -3902,6 +3905,108 @@ BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);/**
  * 选色控件
  *
  * Created by GUY on 2015/11/17.
+ * @class BI.SimpleColorChooserPopup
+ * @extends BI.Widget
+ */
+BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorChooserPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-chooser-popup"
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorChooserPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.popup = BI.createWidget({
+            type: "bi.color_chooser_popup",
+            value: o.value,
+            element: this,
+            editor: {
+                type: "bi.simple_color_picker_editor"
+            }
+        });
+        this.popup.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooserPopup.EVENT_CHANGE, arguments);
+        });
+        this.popup.on(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
+        });
+    },
+
+    setStoreColors: function (colors) {
+        this.popup.setStoreColors(colors);
+    },
+
+    setValue: function (color) {
+        this.popup.setValue(color);
+    },
+
+    getValue: function () {
+        return this.popup.getValue();
+    }
+});
+BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
+BI.SimpleColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
+BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);/**
+ * 简单选色控件，没有自动和透明
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.SimpleColorChooser
+ * @extends BI.Widget
+ */
+BI.SimpleColorChooser = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorChooser.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-simple-color-chooser",
+            value: "#ffffff"
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorChooser.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.combo = BI.createWidget({
+            type: "bi.color_chooser",
+            element: this,
+            value: o.value,
+            popup: {
+                type: "bi.simple_color_chooser_popup"
+            }
+        });
+        this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {
+            self.fireEvent(BI.SimpleColorChooser.EVENT_CHANGE, arguments);
+        });
+    },
+
+    isViewVisible: function () {
+        return this.combo.isViewVisible();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    showView: function () {
+        this.combo.showView();
+    },
+
+    setValue: function (color) {
+        this.combo.setValue(color);
+    },
+
+    getValue: function () {
+        return this.combo.getValue();
+    }
+});
+BI.SimpleColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
+BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
  * @class BI.ColorChooserTrigger
  * @extends BI.Trigger
  */
@@ -3945,7 +4050,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }]
         });
-        if (this.options.value) {
+        if (BI.isNotNull(this.options.value)) {
             this.setValue(this.options.value);
         }
     },
@@ -3963,6 +4068,102 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
 });
 BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);/**
+ * 选色控件
+ *
+ * Created by GUY on 2015/11/17.
+ * @class BI.LongColorChooserTrigger
+ * @extends BI.Trigger
+ */
+BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
+
+    _defaultConfig: function () {
+        var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            height: 30
+        });
+    },
+
+    _init: function () {
+        BI.LongColorChooserTrigger.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorContainer = BI.createWidget({
+            type: "bi.htape",
+            cls: "bi-card color-chooser-trigger-content",
+            items: [{
+                type: "bi.icon_change_button",
+                ref: function (_ref) {
+                    self.changeIcon = _ref;
+                },
+                iconCls: "static-auto-color-icon",
+                width: 24,
+                iconWidth: 16,
+                iconHeight: 16
+            }, {
+                el: {
+                    type: "bi.label",
+                    ref: function (_ref) {
+                        self.label = _ref;
+                    },
+                    textAlign: "left",
+                    hgap: 5,
+                    height: 24,
+                    text: BI.i18nText("BI-Basic_Auto")
+                }
+            }]
+        });
+
+        var down = BI.createWidget({
+            type: "bi.icon_button",
+            disableSelected: true,
+            cls: "icon-combo-down-icon trigger-triangle-font",
+            width: 12,
+            height: 8
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.colorContainer,
+                left: 3,
+                right: 3,
+                top: 3,
+                bottom: 3
+            }, {
+                el: down,
+                right: 3,
+                bottom: 3
+            }]
+        });
+        if (this.options.value) {
+            this.setValue(this.options.value);
+        }
+    },
+
+    setValue: function (color) {
+        BI.LongColorChooserTrigger.superclass.setValue.apply(this, arguments);
+        if (color === "") {
+            this.colorContainer.element.css("background-color", "");
+            this.changeIcon.setVisible(true);
+            this.label.setVisible(true);
+            this.changeIcon.setIcon("static-auto-color-icon");
+            this.label.setText(BI.i18nText("BI-Basic_Auto"));
+        } else if (color === "transparent") {
+            this.colorContainer.element.css("background-color", "");
+            this.changeIcon.setVisible(true);
+            this.label.setVisible(true);
+            this.changeIcon.setIcon("static-trans-color-icon");
+            this.label.setText(BI.i18nText("BI-Transparent_Color"));
+        } else {
+            this.colorContainer.element.css({"background-color": color});
+            this.changeIcon.setVisible(false);
+            this.label.setVisible(false);
+        }
+    }
+});
+BI.LongColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
+BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);/**
  * 简单选色控件按钮
  *
  * Created by GUY on 2015/11/16.
@@ -4404,6 +4605,113 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 });
 BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);/**
+ * 简单选色控件
+ *
+ * Created by GUY on 2015/11/16.
+ * @class BI.SimpleColorPickerEditor
+ * @extends BI.Widget
+ */
+BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-color-picker-editor",
+            // width: 200,
+            height: 20
+        });
+    },
+
+    _init: function () {
+        BI.SimpleColorPickerEditor.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.colorShow = BI.createWidget({
+            type: "bi.layout",
+            cls: "color-picker-editor-display bi-card",
+            height: 20
+        });
+        var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
+            type: "bi.label",
+            cls: "color-picker-editor-label",
+            width: 10,
+            height: 20
+        }));
+
+        var checker = function (v) {
+            return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
+        };
+        var Ws = BI.createWidgets([{}, {}, {}], {
+            type: "bi.small_text_editor",
+            cls: "color-picker-editor-input",
+            validationChecker: checker,
+            errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+            allowBlank: true,
+            value: 255,
+            width: 32,
+            height: 20
+        });
+        BI.each(Ws, function (i, w) {
+            w.on(BI.TextEditor.EVENT_CHANGE, function () {
+                if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                    self.colorShow.element.css("background-color", self.getValue());
+                    self.fireEvent(BI.SimpleColorPickerEditor.EVENT_CHANGE);
+                }
+            });
+        });
+        this.R = Ws[0];
+        this.G = Ws[1];
+        this.B = Ws[2];
+
+        BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [{
+                el: this.colorShow,
+                lgap: 5,
+                rgap: 5
+            }, {
+                el: RGB[0],
+                lgap: 10,
+                width: 16
+            }, {
+                el: this.R,
+                width: 36
+            }, {
+                el: RGB[1],
+                lgap: 10,
+                width: 16
+            }, {
+                el: this.G,
+                width: 36
+            }, {
+                el: RGB[2],
+                lgap: 10,
+                width: 16
+            }, {
+                el: this.B,
+                width: 36,
+                rgap: 10
+            }]
+        });
+    },
+
+    setValue: function (color) {
+        this.colorShow.element.css({"background-color": color});
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
+        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
+        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
+        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
+    },
+
+    getValue: function () {
+        return BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.R.getValue(),
+            g: this.G.getValue(),
+            b: this.B.getValue()
+        }));
+    }
+});
+BI.SimpleColorPickerEditor.EVENT_CHANGE = "SimpleColorPickerEditor.EVENT_CHANGE";
+BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);/**
  * 选色控件
  *
  * Created by GUY on 2015/11/16.

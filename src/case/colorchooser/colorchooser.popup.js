@@ -18,7 +18,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.colorEditor = BI.createWidget({
+        this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
             value: o.value
         });
@@ -77,7 +77,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         });
 
         this.customColorChooser = BI.createWidget({
-            type: "bi.custom_color_chooser"
+            type: "bi.custom_color_chooser",
+            editor: o.editor
         });
 
         var panel = BI.createWidget({

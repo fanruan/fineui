@@ -10,7 +10,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
-            el: {}
+            value: ""
         });
     },
 
@@ -22,8 +22,10 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 1,
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
             el: BI.extend({
-                type: "bi.color_chooser_trigger",
+                type: o.width <= 30 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
@@ -31,7 +33,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 height: o.height
             }, o.el),
             popup: {
-                el: {
+                el: BI.extend({
                     type: "bi.color_chooser_popup",
                     ref: function (_ref) {
                         self.colorPicker = _ref;
@@ -48,9 +50,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                             self.combo.hideView();
                         }
                     }]
-                },
+                }, o.popup),
                 stopPropagation: false,
-                minWidth: 202
+                width: 202
             },
             value: o.value
         });
