@@ -27,8 +27,20 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             max: o.max
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = BI.extend(self.datePicker.getValue(), self.timeSelect.getValue());
+            var value = self.datePicker.getValue();
+            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var day = self.selectedTime.day || 0;
+            if (day > monthDay) {
+                day = monthDay;
+            }
+            self.selectedTime = BI.extend(self.selectedTime, {
+                year: value.year,
+                month: value.month,
+                day: day
+            });
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            self.calendar.setValue(self.selectedTime);
+            self.fireEvent("EVENT_CHANGE");
         });
 
         this.calendar = BI.createWidget({
@@ -55,7 +67,13 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
                     type: "bi.dynamic_date_time_select",
                     ref: function () {
                         self.timeSelect = this;
-                    }
+                    },
+                    listeners: [{
+                        eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }]
                 },
                 height: 40
             }]
@@ -91,7 +109,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
     _setCalenderValue: function (date) {
         this.calendar.setSelect(BI.Calendar.getPageByDateJSON(date));
         this.calendar.setValue(date);
-        this.selectedTime = BI.extend(date, this.timeSelect.getValue());
+        this.selectedTime = BI.extend({}, this.timeSelect.getValue(), date);
     },
 
     _setDatePicker: function (timeOb) {

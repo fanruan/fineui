@@ -83082,10 +83082,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
-                items: [{
-                    type: "bi.layout",
-                    height: 1
-                }, this.instance = this.addInstance()]
+                items: [this.instance = this.addInstance()]
             });
         },
 
@@ -83093,7 +83090,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var o = this.options;
             var conf = {
                 ne: this,
-                height: o.height - 1,
+                height: o.height,
                 maxHeight: o.maxHeight ? o.maxHeight : null
             };
             if (this.element[0].contentEditable || !!window.opera) {
@@ -83164,7 +83161,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 scrollable: false
             });
             this.elm.element.css({
-                minHeight: (o.height - 8) + "px",
+                minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
                 outline: "none"
             }).html(o.value);
 
@@ -89305,8 +89302,20 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
             max: o.max
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
-            self.selectedTime = BI.extend(self.datePicker.getValue(), self.timeSelect.getValue());
+            var value = self.datePicker.getValue();
+            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var day = self.selectedTime.day || 0;
+            if (day > monthDay) {
+                day = monthDay;
+            }
+            self.selectedTime = BI.extend(self.selectedTime, {
+                year: value.year,
+                month: value.month,
+                day: day
+            });
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
+            self.calendar.setValue(self.selectedTime);
+            self.fireEvent("EVENT_CHANGE");
         });
 
         this.calendar = BI.createWidget({
@@ -89333,7 +89342,13 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                     type: "bi.dynamic_date_time_select",
                     ref: function () {
                         self.timeSelect = this;
-                    }
+                    },
+                    listeners: [{
+                        eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }]
                 },
                 height: 40
             }]
@@ -89369,7 +89384,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
     _setCalenderValue: function (date) {
         this.calendar.setSelect(BI.Calendar.getPageByDateJSON(date));
         this.calendar.setValue(date);
-        this.selectedTime = BI.extend(date, this.timeSelect.getValue());
+        this.selectedTime = BI.extend({}, this.timeSelect.getValue(), date);
     },
 
     _setDatePicker: function (timeOb) {
@@ -107655,6 +107670,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
             self._clearTitle();
+            BI.Bubbles.hide("error");
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.DateInterval.EVENT_ERROR);
         });
@@ -107833,6 +107849,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
             self._clearTitle();
+            BI.Bubbles.hide("error");
             self.element.removeClass(self.constants.timeErrorCls);
             self.fireEvent(BI.TimeInterval.EVENT_ERROR);
         });

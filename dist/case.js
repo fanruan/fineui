@@ -10633,10 +10633,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             BI.createWidget({
                 type: "bi.vertical",
                 element: this,
-                items: [{
-                    type: "bi.layout",
-                    height: 1
-                }, this.instance = this.addInstance()]
+                items: [this.instance = this.addInstance()]
             });
         },
 
@@ -10644,7 +10641,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var o = this.options;
             var conf = {
                 ne: this,
-                height: o.height - 1,
+                height: o.height,
                 maxHeight: o.maxHeight ? o.maxHeight : null
             };
             if (this.element[0].contentEditable || !!window.opera) {
@@ -10715,7 +10712,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 scrollable: false
             });
             this.elm.element.css({
-                minHeight: (o.height - 8) + "px",
+                minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
                 outline: "none"
             }).html(o.value);
 
