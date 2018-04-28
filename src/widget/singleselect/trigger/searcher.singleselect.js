@@ -44,8 +44,9 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
                     return self.editor.getValue();
                 },
                 itemsCreator: function (op, callback) {
-                    op.keyword = self.editor.getValue();
-                    this.setKeyword(op.keyword);
+                    var keyword = self.editor.getValue();
+                    op.keywords = [keyword];
+                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 value: o.value
