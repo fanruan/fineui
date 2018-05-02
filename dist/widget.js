@@ -17760,8 +17760,9 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
                     return self.editor.getValue();
                 },
                 itemsCreator: function (op, callback) {
-                    op.keyword = self.editor.getValue();
-                    this.setKeyword(op.keyword);
+                    var keyword = self.editor.getValue();
+                    op.keywords = [keyword];
+                    this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
                 value: o.value
@@ -17857,7 +17858,8 @@ BI.SingleSelectSearcher.EVENT_START = "EVENT_START";
 BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);/**
+BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
+/**
  * 单选加载数据搜索loader面板
  * Created by guy on 15/11/4.
  * @class BI.SingleSelectSearchLoader
