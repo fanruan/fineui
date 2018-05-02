@@ -35586,14 +35586,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var fns = exps.slice();
         var complete = false,
             running = false;
-        var callback = function callback(index, newValue, oldValue, options) {
+        var callback = function callback(index, newValue, oldValue, attrs) {
             if (complete === true) {
                 return;
             }
             fns[index] = true;
             if (runBinaryFunction(fns)) {
                 complete = true;
-                cb(newValue, oldValue, options);
+                cb(newValue, oldValue, attrs);
             }
             if (options && options.sync) {
                 complete = false;
@@ -35637,8 +35637,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var w = new Watcher(model, function () {
                     dep.depend();
                     return NaN;
-                }, function (newValue, oldValue, opt) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, opt));
+                }, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
                     w.teardown();
@@ -35678,8 +35678,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
                     return NaN;
-                }, function (newValue, oldValue, opt) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, opt));
+                }, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
                     _w.teardown();
@@ -35687,8 +35687,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 });
                 return;
             }
-            var watcher = new Watcher(model, exp, function (newValue, oldValue, opt) {
-                callback(i, newValue, oldValue, _.extend({ index: i }, opt));
+            var watcher = new Watcher(model, exp, function (newValue, oldValue, attrs) {
+                callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
             }, options);
             watchers.push(function unwatchFn() {
                 watcher.teardown();
