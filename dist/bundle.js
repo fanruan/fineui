@@ -86812,9 +86812,9 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.tree.stroke.apply(this.tree, arguments);
     },
 
-    populate: function (items) {
+    populate: function (items, keyword) {
         items = this._formatItems(BI.Tree.transformToTreeFormat(items), 0);
-        this.tree.populate(items, Array.prototype.slice.call(arguments, 0));
+        this.tree.populate(items, keyword);
     },
 
     setValue: function (v) {
