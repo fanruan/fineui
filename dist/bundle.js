@@ -35352,13 +35352,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 complete = true;
                 cb(newValue, oldValue, options);
             }
-            if (!running) {
-                running = true;
-                nextTick(function () {
-                    complete = false;
-                    running = false;
-                    fns = exps.slice();
-                });
+            if (options && options.sync) {
+                complete = false;
+                running = false;
+                fns = exps.slice();
+            } else {
+                if (!running) {
+                    running = true;
+                    nextTick(function () {
+                        complete = false;
+                        running = false;
+                        fns = exps.slice();
+                    });
+                }
             }
         };
         _.each(exps, function (exp, i) {
