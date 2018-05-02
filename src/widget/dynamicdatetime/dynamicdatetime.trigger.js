@@ -41,6 +41,25 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     return BI.i18nText("BI-Basic_Date_Time_Error_Text");
                 }
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+            },
+            title: function () {
+                var storeValue = self.storeValue || {};
+                var type = storeValue.type || BI.DynamicDateCombo.Static;
+                var value = storeValue.value;
+                switch (type) {
+                    case BI.DynamicDateCombo.Dynamic:
+                        var text = self._getText(value);
+                        var date = BI.DynamicDateHelper.getCalculation(value);
+                        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+                    case BI.DynamicDateCombo.Static:
+                    default:
+                        if (BI.isNull(value) || BI.isNull(value.day)) {
+                            return "";
+                        }
+                        return BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                            value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                }
             }
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
@@ -143,11 +162,10 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
-    _setInnerValue: function (date, text) {
+    _setInnerValue: function (date) {
         var dateStr = date.print("%Y-%x-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     _getText: function (obj) {
@@ -220,13 +238,11 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 if (BI.isNull(value) || BI.isNull(value.day)) {
                     this.editor.setState("");
                     this.editor.setValue("");
-                    this.setTitle("");
                 } else {
                     var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
                         value.second || 0).print("%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
-                    this.setTitle(dateStr);
                 }
                 break;
         }
