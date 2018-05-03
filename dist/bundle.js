@@ -83301,6 +83301,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         selected: function (e) {
+            console.log(123);
             var t = e.target;
             if (!t && !(t = this.selElm())) {
                 t = this.selElm();
@@ -99094,8 +99095,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keyword = self.trigger.getKeyword();
-                this.setKeyword(op.keyword);
+                op.keywords = [self.trigger.getKeyword()];
+                this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             }
         });
@@ -99277,7 +99278,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
         this._assertValue(res);
         o.itemsCreator({
             type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
-            keyword: self.trigger.getKeyword()
+            keywords: [self.trigger.getKeyword()]
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {
@@ -99422,8 +99423,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keyword = self.trigger.getKeyword();
-                this.setKeyword(op.keyword);
+                op.keywords = [self.trigger.getKeyword()];
+                this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             }
         });
@@ -99591,7 +99592,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
         this._assertValue(res);
         o.itemsCreator({
             type: BI.MultiSelectList.REQ_GET_ALL_DATA,
-            keyword: self.trigger.getKeyword()
+            keywords: [this.trigger.getKey()]
         }, function (ob) {
             var items = BI.map(ob.items, "value");
             if (self.storeValue.type === res.type) {

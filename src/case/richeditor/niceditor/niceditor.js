@@ -232,6 +232,7 @@
         },
 
         selected: function (e) {
+            console.log(123);
             var t = e.target;
             if (!t && !(t = this.selElm())) {
                 t = this.selElm();
