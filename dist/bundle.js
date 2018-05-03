@@ -104787,7 +104787,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
         BI.SingleSelectInsertList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        this.storeValue = o.value || {};
+        this.storeValue = o.value;
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
@@ -104909,18 +104909,9 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
                 }
             }, {
                 eventName: BI.Searcher.EVENT_CHANGE,
-                action: function (value, obj) {
-                    if (obj instanceof BI.MultiSelectBar) {
-                        self._joinAll(this.getValue(), function () {
-                            assertShowValue();
-                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                        });
-                    } else {
-                        self._join(this.getValue(), function () {
-                            assertShowValue();
-                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                        });
-                    }
+                action: function () {
+                    self.storeValue = this.getValue();
+                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
                 }
             }]
         });
