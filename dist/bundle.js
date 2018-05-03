@@ -54016,7 +54016,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     _analyzeContent: function (v) {
-        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]/g;
+        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]|\$[^\{]*[^\$\{]/g;
         return v.match(regx);
     },
 
