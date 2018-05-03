@@ -74720,7 +74720,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
 
 BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
  * Created by roy on 15/10/16.
- * 上箭头与下箭头切换的树节点
+ * 右与下箭头切换的树节点
  */
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
@@ -83544,7 +83544,6 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         selected: function (e) {
-            console.log(123);
             var t = e.target;
             if (!t && !(t = this.selElm())) {
                 t = this.selElm();
@@ -94406,6 +94405,28 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
     BI.shortcut("bi.filter_operation", FilterOperation);
 }());
 /**
+ * Created by Windy on 18/05/03.
+ * 上与下箭头切换的checkbox
+ */
+BI.ArrowTreeGroupNodeVerticalCheckbox = BI.inherit(BI.Trigger, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ArrowTreeGroupNodeVerticalCheckbox.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-arrow-group-node-vertical-checkbox"
+        });
+    },
+    _init: function () {
+        BI.ArrowTreeGroupNodeVerticalCheckbox.superclass._init.apply(this, arguments);
+    },
+    setSelected: function (v) {
+        BI.ArrowTreeGroupNodeVerticalCheckbox.superclass.setSelected.apply(this, arguments);
+        if(v) {
+            this.element.removeClass("solid-triangle-bottom-font").addClass("solid-triangle-top-font");
+        } else {
+            this.element.removeClass("solid-triangle-top-font").addClass("solid-triangle-bottom-font");
+        }
+    }
+});
+BI.shortcut("bi.arrow_group_node_vertical_checkbox", BI.ArrowTreeGroupNodeVerticalCheckbox);/**
  * @class BI.FilterPane
  * @extend BI.Widget
  * 过滤面板
@@ -108525,7 +108546,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
                         eventName: BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({year: date.getFullYear()});
+                            self.setValue({type: BI.DynamicYearCombo.Static, value: {year: date.getFullYear()}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
