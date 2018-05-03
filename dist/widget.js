@@ -17382,14 +17382,14 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
                 eventName: BI.Searcher.EVENT_START,
                 action: function () {
                     self._showSearcherPane();
-                    self._setStartValue("");
+                    self._setStartValue();
                     this.setValue(BI.deepClone(self.storeValue));
                 }
             }, {
                 eventName: BI.Searcher.EVENT_STOP,
                 action: function () {
                     self._showAdapter();
-                    self._setStartValue("");
+                    self._setStartValue();
                     self.adapter.setValue(self.storeValue);
                     // 需要刷新回到初始界面，否则搜索的结果不能放在最前面
                     self.adapter.populate();
@@ -17411,7 +17411,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
                             self._setStartValue(keyword);
                             assertShowValue();
                             self.adapter.populate();
-                            self._setStartValue("");
+                            self._setStartValue();
                             self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
                         });
                     } else {
@@ -17438,7 +17438,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                                 self.adapter.populate();
-                                self._setStartValue("");
+                                self._setStartValue();
                             } else {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
@@ -17493,9 +17493,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
         this.trigger.stopEditing();
     },
 
-    _assertValue: function (val) {
-        val || (val = "");
-    },
+    _assertValue: function () {},
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);
@@ -17603,7 +17601,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
         // this.trigger.adjustView();
     },
     setValue: function (v) {
-        this.storeValue = v || "";
+        this.storeValue = v;
         this.adapter.setValue(this.storeValue);
         this.trigger.setValue(this.storeValue);
     },
