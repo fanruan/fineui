@@ -76,7 +76,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({year: date.getFullYear()});
+                            self.setValue({type: BI.DynamicYearCombo.Static, value: {year: date.getFullYear()}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }

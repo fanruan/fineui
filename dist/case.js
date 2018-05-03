@@ -2022,7 +2022,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
 
 BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
  * Created by roy on 15/10/16.
- * 上箭头与下箭头切换的树节点
+ * 右与下箭头切换的树节点
  */
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {

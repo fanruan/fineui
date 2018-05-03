@@ -6031,6 +6031,38 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e6d7";
   color: inherit;
 }
+.solid-triangle-top-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
+}
+.solid-triangle-top-font .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.solid-triangle-top-font:hover .b-font:before,
+.solid-triangle-top-font.hover .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.solid-triangle-top-font.disabled .b-font:before {
+  content: "\e6d6";
+  color: inherit;
+}
+.solid-triangle-bottom-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
+}
+.solid-triangle-bottom-font .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.solid-triangle-bottom-font:hover .b-font:before,
+.solid-triangle-bottom-font.hover .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.solid-triangle-bottom-font.disabled .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
 .trigger-triangle-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64e;');
 }
