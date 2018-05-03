@@ -21924,20 +21924,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_STOP);
         });
         editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = editor.getValue();
-            if (BI.isNotNull(value)) {
-                editor.setValue(value);
-            }
-            var monthValue = self.monthEditor.getValue();
-            self.storeValue = {
-                type: BI.DynamicDateCombo.Static,
-                value: {
-                    year: self.yearEditor.getValue(),
-                    month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
-                }
-            };
-            self.setTitle(self._getStaticTitle(self.storeValue.value));
-
+            self._doEditorConfirm(editor);
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
         });
         editor.on(BI.SignEditor.EVENT_SPACE, function () {
@@ -21962,11 +21949,27 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
-                self._autoSwitch(editor.getValue());
+                self._autoSwitch(editor);
             }
         });
 
         return editor;
+    },
+
+    _doEditorConfirm: function (editor) {
+        var value = editor.getValue();
+        if (BI.isNotNull(value)) {
+            editor.setValue(value);
+        }
+        var monthValue = this.monthEditor.getValue();
+        this.storeValue = {
+            type: BI.DynamicDateCombo.Static,
+            value: {
+                year: this.yearEditor.getValue(),
+                month: BI.isEmptyString(this.monthEditor.getValue()) ? "" : monthValue
+            }
+        };
+        this.setTitle(this._getStaticTitle(this.storeValue.value));
     },
 
     _yearCheck: function (v) {
@@ -21974,9 +21977,12 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
-    _autoSwitch: function (v) {
+    _autoSwitch: function (editor) {
+        var v = editor.getValue();
         if (BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
+                this._doEditorConfirm(editor);
+                this.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
                 this.monthEditor.focus();
             }
         }
@@ -22876,20 +22882,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_STOP);
         });
         editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = editor.getValue();
-            if (BI.isNotNull(value)) {
-                editor.setValue(value);
-            }
-            var quarterValue = self.quarterEditor.getValue();
-            self.storeValue = {
-                type: BI.DynamicYearQuarterCombo.Static,
-                value: {
-                    year: self.yearEditor.getValue(),
-                    quarter: BI.isEmptyString(self.quarterEditor.getValue()) ? "" : quarterValue
-                }
-            };
-            self.setTitle(self._getStaticTitle(self.storeValue.value));
-
+            self._doEditorConfirm(editor);
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
         });
         editor.on(BI.SignEditor.EVENT_SPACE, function () {
@@ -22912,14 +22905,32 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         return editor;
     },
 
+    _doEditorConfirm: function (editor) {
+        var value = editor.getValue();
+        if (BI.isNotNull(value)) {
+            editor.setValue(value);
+        }
+        var quarterValue = this.quarterEditor.getValue();
+        this.storeValue = {
+            type: BI.DynamicYearQuarterCombo.Static,
+            value: {
+                year: this.yearEditor.getValue(),
+                quarter: BI.isEmptyString(this.quarterEditor.getValue()) ? "" : quarterValue
+            }
+        };
+        this.setTitle(this._getStaticTitle(this.storeValue.value));
+    },
+
     _yearCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
         return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
-    _autoSwitch: function (v) {
+    _autoSwitch: function (editor) {
+        var v = editor.getValue();
         if (BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
+                this._doEditorConfirm(editor);
                 this.quarterEditor.focus();
             }
         }
