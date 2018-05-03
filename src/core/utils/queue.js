@@ -44,15 +44,15 @@
         remove: function (v) {
             this.array.remove(v);
         },
-        
+
         splice: function () {
             this.array.splice.apply(this.array, arguments);
         },
-        
+
         slice: function () {
             this.array.slice.apply(this.array, arguments);
         },
-        
+
         size: function () {
             return this.array.length;
         },
@@ -83,7 +83,7 @@
         },
 
         clear: function () {
-            this.array.clear();
+            this.array.length = 0;
         }
     };
 })();
