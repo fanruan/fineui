@@ -71,6 +71,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
                         action: function () {
+                            self.selectedTime = BI.extend(self.calendar.getValue(), self.timeSelect.getValue());
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]

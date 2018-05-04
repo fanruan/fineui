@@ -89354,6 +89354,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                     listeners: [{
                         eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
                         action: function () {
+                            self.selectedTime = BI.extend(self.calendar.getValue(), self.timeSelect.getValue());
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
