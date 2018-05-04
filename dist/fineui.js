@@ -88715,6 +88715,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
+        v = BI.parseInt(v);
         if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
             v = BI.getDate().getFullYear();
             this.selectedYear = "";
@@ -95377,6 +95378,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        v = BI.parseInt(v);
         this.month.setValue([v]);
     }
 });
