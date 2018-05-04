@@ -77,6 +77,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        v = BI.parseInt(v);
         this.month.setValue([v]);
     }
 });

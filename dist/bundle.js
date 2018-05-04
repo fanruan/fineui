@@ -88472,6 +88472,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
+        v = BI.parseInt(v);
         if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
             v = BI.getDate().getFullYear();
             this.selectedYear = "";
@@ -89353,6 +89354,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                     listeners: [{
                         eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
                         action: function () {
+                            self.selectedTime = BI.extend(self.calendar.getValue(), self.timeSelect.getValue());
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -95134,6 +95136,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        v = BI.parseInt(v);
         this.month.setValue([v]);
     }
 });
