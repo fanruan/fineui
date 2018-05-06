@@ -54164,6 +54164,7 @@ BI.Editor = BI.inherit(BI.Single, {
             element: this,
             items: items
         });
+        this.element[0].tabIndex = -1;
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -83997,11 +83998,13 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             listeners: [{
                 eventName: BI.NicEditor.EVENT_BLUR,
                 action: function () {
+                    self.element.removeClass("bi-editor-focus");
                     self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
                 }
             }, {
                 eventName: BI.NicEditor.EVENT_FOCUS,
                 action: function () {
+                    self.element.addClass("bi-editor-focus");
                     if (!o.readOnly && !self.combo.isViewVisible()) {
                         self.combo.showView();
                     }
