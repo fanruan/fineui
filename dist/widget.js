@@ -18754,7 +18754,9 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         this.text = BI.createWidget({
             type: "bi.text_button",
             cls: "sign-editor-text",
-            title: o.title,
+            title: function () {
+                return self.getValue();
+            },
             warningTitle: o.warningTitle,
             tipType: o.tipType,
             textAlign: "left",
