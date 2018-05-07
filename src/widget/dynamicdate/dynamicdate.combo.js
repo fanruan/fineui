@@ -83,8 +83,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                 eventName: BI.DynamicDateTrigger.EVENT_ERROR,
                                 action: function () {
                                     self.storeValue = {
-                                        year: date.getFullYear(),
-                                        month: date.getMonth() + 1
+                                        type: BI.DynamicDateCombo.Static,
+                                        value: {
+                                            year: date.getFullYear(),
+                                            month: date.getMonth() + 1
+                                        }
                                     };
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_ERROR);
                                 }
@@ -140,9 +143,12 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                     action: function () {
                                         var date = BI.getDate();
                                         self.setValue({
-                                            year: date.getFullYear(),
-                                            month: date.getMonth() + 1,
-                                            day: date.getDate()
+                                            type: BI.DynamicDateCombo.Static,
+                                            value: {
+                                                year: date.getFullYear(),
+                                                month: date.getMonth() + 1,
+                                                day: date.getDate()
+                                            }
                                         });
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
