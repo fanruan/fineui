@@ -394,11 +394,18 @@ textarea {
 .bi-border {
   border: 1px solid #d4dadd;
 }
-.bi-border.bi-editor-focus {
+.bi-border.bi-nic-editor:hover,
+.bi-border.bi-rich-editor:hover,
+.bi-border.bi-nic-editor.hover,
+.bi-border.bi-rich-editor.hover {
   border: 1px solid #3685f2;
 }
-.bi-border.niceditor-focus {
+.bi-border.bi-rich-editor-focus,
+.bi-border.bi-nic-editor-focus {
   border: 1px solid #3685f2;
+  -webkit-box-shadow: 0 0 0 2px #3685f2;
+  -moz-box-shadow: 0 0 0 2px #3685f2;
+  box-shadow: 0 0 0 2px #3685f2;
 }
 .bi-theme-dark .bi-border {
   border: 1px solid #525466;

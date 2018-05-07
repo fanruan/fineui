@@ -79195,6 +79195,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
                 self.fireEvent(BI.TextValueComboPopup.EVENT_CHANGE, val, obj);
             }
         });
+        this.check();
 
         BI.createWidget({
             type: "bi.vertical",
@@ -83317,6 +83318,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 }
                 this.ne.fireEvent("selected", e);
                 this.isFocused = true;
+                this.ne.element.removeClass("bi-nic-editor-focus").addClass("bi-nic-editor-focus");
                 this.elm.element.addClass(prefix + "selected");
             }
             // return false;
@@ -83328,6 +83330,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         blur: function () {
             this.isFocused = false;
+            this.ne.element.removeClass("bi-nic-editor-focus");
             this.elm.element.removeClass(prefix + "selected");
         },
 
@@ -83998,13 +84001,13 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             listeners: [{
                 eventName: BI.NicEditor.EVENT_BLUR,
                 action: function () {
-                    self.element.removeClass("bi-editor-focus");
+                    self.element.removeClass("bi-rich-editor-focus");
                     self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
                 }
             }, {
                 eventName: BI.NicEditor.EVENT_FOCUS,
                 action: function () {
-                    self.element.addClass("bi-editor-focus");
+                    self.element.addClass("bi-rich-editor-focus");
                     if (!o.readOnly && !self.combo.isViewVisible()) {
                         self.combo.showView();
                     }
