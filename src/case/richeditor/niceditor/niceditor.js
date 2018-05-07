@@ -247,7 +247,6 @@
                 }
                 this.ne.fireEvent("selected", e);
                 this.isFocused = true;
-                this.ne.element.removeClass("bi-nic-editor-focus").addClass("bi-nic-editor-focus");
                 this.elm.element.addClass(prefix + "selected");
             }
             // return false;
@@ -259,7 +258,6 @@
 
         blur: function () {
             this.isFocused = false;
-            this.ne.element.removeClass("bi-nic-editor-focus");
             this.elm.element.removeClass(prefix + "selected");
         },
 
