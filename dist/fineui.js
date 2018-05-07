@@ -86108,9 +86108,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         this.half.on(BI.HalfIconButton.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
-        this.checkbox.on(BI.Checkbox.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
-        });
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
