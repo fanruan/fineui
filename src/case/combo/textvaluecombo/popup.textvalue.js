@@ -29,6 +29,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
                 self.fireEvent(BI.TextValueComboPopup.EVENT_CHANGE, val, obj);
             }
         });
+        this.check();
 
         BI.createWidget({
             type: "bi.vertical",

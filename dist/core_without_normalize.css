@@ -116,12 +116,6 @@ textarea {
 .bi-border {
   border: 1px solid #d4dadd;
 }
-.bi-border.bi-editor-focus {
-  border: 1px solid #3685f2;
-}
-.bi-border.niceditor-focus {
-  border: 1px solid #3685f2;
-}
 .bi-theme-dark .bi-border {
   border: 1px solid #525466;
 }
