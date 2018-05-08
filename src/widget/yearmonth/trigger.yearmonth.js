@@ -167,7 +167,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _autoSwitch: function (editor) {
         var v = editor.getValue();
-        if (BI.checkDateLegal(v)) {
+        if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
                 this.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
