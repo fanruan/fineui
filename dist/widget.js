@@ -2909,8 +2909,8 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             };
         });
 
-        if(values.length === 1 && values[0] === BI.DynamicDateCard.TYPE.DAY) {
-            items.push = [{
+        if(values.length === 1 && values[0].dateType === BI.DynamicDateCard.TYPE.DAY) {
+            items.push({
                 type: "bi.text_value_combo",
                 height: 24,
                 items: this._getText(BI.DynamicDateCard.TYPE.MONTH),
@@ -2922,7 +2922,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
-            }];
+            });
         }else{
             if(values.length !== 0 && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.DAY && BI.last(values).dateType !== BI.DynamicDateCard.TYPE.WORK_DAY) {
                 items.push({
