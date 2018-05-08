@@ -88842,6 +88842,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             };
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
+            day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
         this.calendar = BI.createWidget({
@@ -89565,7 +89566,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
             });
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
-            self.fireEvent("EVENT_CHANGE");
+            day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
         this.calendar = BI.createWidget({
@@ -109721,7 +109722,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _autoSwitch: function (editor) {
         var v = editor.getValue();
-        if (BI.checkDateLegal(v)) {
+        if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
                 this.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
@@ -110661,7 +110662,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _autoSwitch: function (editor) {
         var v = editor.getValue();
-        if (BI.checkDateLegal(v)) {
+        if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
                 this.quarterEditor.focus();
