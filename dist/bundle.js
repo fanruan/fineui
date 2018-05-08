@@ -83325,6 +83325,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         focus: function () {
             this.setFocus(this.elm.element[0]);
+            this.nicCommand("selectAll");
         },
 
         blur: function () {

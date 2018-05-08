@@ -254,6 +254,7 @@
 
         focus: function () {
             this.setFocus(this.elm.element[0]);
+            this.nicCommand("selectAll");
         },
 
         blur: function () {
