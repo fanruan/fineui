@@ -110419,7 +110419,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _autoSwitch: function (editor) {
         var v = editor.getValue();
-        if (BI.isNotNull(v) && BI.checkDateLegal(v)) {
+        if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
                 this.quarterEditor.focus();
