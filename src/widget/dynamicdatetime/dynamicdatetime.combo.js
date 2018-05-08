@@ -83,8 +83,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_ERROR,
                                 action: function () {
                                     self.storeValue = {
-                                        year: date.getFullYear(),
-                                        month: date.getMonth() + 1
+                                        type: BI.DynamicDateTimeCombo.Static,
+                                        value: {
+                                            year: date.getFullYear(),
+                                            month: date.getMonth() + 1
+                                        }
                                     };
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_ERROR);
                                 }
@@ -140,12 +143,15 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     action: function () {
                                         var date = BI.getDate();
                                         self.setValue({
-                                            year: date.getFullYear(),
-                                            month: date.getMonth() + 1,
-                                            day: date.getDate(),
-                                            hour: 0,
-                                            minute: 0,
-                                            second: 0
+                                            type: BI.DynamicDateTimeCombo.Static,
+                                            value: {
+                                                year: date.getFullYear(),
+                                                month: date.getMonth() + 1,
+                                                day: date.getDate(),
+                                                hour: 0,
+                                                minute: 0,
+                                                second: 0
+                                            }
                                         });
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
