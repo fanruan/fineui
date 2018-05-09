@@ -81905,7 +81905,7 @@ BI.SortList = BI.inherit(BI.Widget, {
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({
-                        type: "bi.layout",
+                        type: "bi.label",
                         cls: "bi-sortable-holder",
                         width: $currentItem.width() - 2,
                         height: $currentItem.outerHeight()
