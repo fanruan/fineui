@@ -9452,7 +9452,7 @@ BI.SortList = BI.inherit(BI.Widget, {
                         type: "bi.label",
                         cls: "bi-sortable-holder",
                         width: $currentItem.width() - 2,
-                        height: $currentItem.outerHeight()
+                        height: $currentItem.height() - 2
                     });
                     holder.element.css({
                         "margin-left": $currentItem.css("margin-left"),
