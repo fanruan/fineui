@@ -399,16 +399,19 @@ BI.GridTable = BI.inherit(BI.Widget, {
     setVerticalScroll: function (scrollTop) {
         this.bottomLeftGrid.setScrollTop(scrollTop);
         this.bottomRightGrid.setScrollTop(scrollTop);
+        this._populateScrollbar();
     },
 
     setLeftHorizontalScroll: function (scrollLeft) {
         this.topLeftGrid.setScrollLeft(scrollLeft);
         this.bottomLeftGrid.setScrollLeft(scrollLeft);
+        this._populateScrollbar();
     },
 
     setRightHorizontalScroll: function (scrollLeft) {
         this.topRightGrid.setScrollLeft(scrollLeft);
         this.bottomRightGrid.setScrollLeft(scrollLeft);
+        this._populateScrollbar();
     },
 
     getVerticalScroll: function () {
