@@ -82013,7 +82013,8 @@ BI.SortList = BI.inherit(BI.Widget, {
     }
 });
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.sort_list", BI.SortList);/**
+BI.shortcut("bi.sort_list", BI.SortList);
+/**
  * 有总页数和总行数的分页控件
  * Created by Young's on 2016/10/13.
  */
