@@ -43,6 +43,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             };
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
+            day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
         this.calendar = BI.createWidget({

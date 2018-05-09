@@ -2022,7 +2022,7 @@ BI.ComplexCanvas = BI.inherit(BI.Widget, {
 
 BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
  * Created by roy on 15/10/16.
- * 上箭头与下箭头切换的树节点
+ * 右与下箭头切换的树节点
  */
 BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
@@ -6739,6 +6739,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
                 self.fireEvent(BI.TextValueComboPopup.EVENT_CHANGE, val, obj);
             }
         });
+        this.check();
 
         BI.createWidget({
             type: "bi.vertical",
@@ -9556,7 +9557,8 @@ BI.SortList = BI.inherit(BI.Widget, {
     }
 });
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.sort_list", BI.SortList);/**
+BI.shortcut("bi.sort_list", BI.SortList);
+/**
  * 有总页数和总行数的分页控件
  * Created by Young's on 2016/10/13.
  */
@@ -10743,7 +10745,8 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on("mousedown", BI.bind(this.selected, this));
-            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("keyup", BI.bind(this.keyDown, this));
+            // this.elm.element.on("keydown", BI.bind(this.keyDown, this));
             this.elm.element.on("focus", BI.bind(this.selected, this));
             this.elm.element.on("blur", BI.bind(this.blur, this));
             this.elm.element.on("keyup", BI.bind(this.selected, this));
@@ -10867,6 +10870,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         focus: function () {
             this.setFocus(this.elm.element[0]);
+            this.nicCommand("selectAll");
         },
 
         blur: function () {
@@ -13404,9 +13408,6 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, self.isSelected(), self);
         });
         this.half.on(BI.HalfIconButton.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
-        });
-        this.checkbox.on(BI.Checkbox.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, self.isSelected(), self);
         });
         this.text = BI.createWidget({

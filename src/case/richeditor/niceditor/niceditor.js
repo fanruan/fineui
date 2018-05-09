@@ -129,7 +129,8 @@
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on("mousedown", BI.bind(this.selected, this));
-            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("keyup", BI.bind(this.keyDown, this));
+            // this.elm.element.on("keydown", BI.bind(this.keyDown, this));
             this.elm.element.on("focus", BI.bind(this.selected, this));
             this.elm.element.on("blur", BI.bind(this.blur, this));
             this.elm.element.on("keyup", BI.bind(this.selected, this));
@@ -253,6 +254,7 @@
 
         focus: function () {
             this.setFocus(this.elm.element[0]);
+            this.nicCommand("selectAll");
         },
 
         blur: function () {

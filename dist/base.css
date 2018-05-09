@@ -927,6 +927,9 @@ li.CodeMirror-hint-active {
   cursor: text;
   font-size: 14px;
 }
+.bi-sortable-holder {
+  border: 1px dashed #d4dadd;
+}
 .bi-all-count-pager .all-pager-prev {
   font-size: 16px;
 }
@@ -1003,7 +1006,7 @@ body .bi-button,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  border: 1px solid #178cdf;
+  border: 1px solid #3685f2;
   background-color: #3f8ce8;
   text-align: center;
   vertical-align: middle;
@@ -1069,7 +1072,7 @@ body .bi-button.button-common.ghost:active,
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore {
   background-color: #ffffff;
-  border-color: #178cdf;
+  border-color: #3685f2;
 }
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore,

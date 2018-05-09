@@ -18250,7 +18250,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     _analyzeContent: function (v) {
-        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]/g;
+        var regx = /\$[\{][^\}]*[\}]|[^\$\{]*[^\$\{]|\$[^\{]*[^\$\{]/g;
         return v.match(regx);
     },
 
@@ -18398,6 +18398,7 @@ BI.Editor = BI.inherit(BI.Single, {
             element: this,
             items: items
         });
+        this.element[0].tabIndex = -1;
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -33951,7 +33952,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             if (mouseMoveTracker.isDragging()) {
                 start = true;
                 offset += deltaX;
-                size = BI.clamp(defaultSize + offset, 15, o.width - 15);
+                size = BI.clamp(defaultSize + offset, 10, o.width - 15);
 
                 self.regionResizerHandler.element.addClass("dragging");
                 self._setRegionResizerHandlerPosition(size - 3, 0);
@@ -33959,7 +33960,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
 
         }, function () {
             if (start === true) {
-                o.regionColumnSize[0] = BI.clamp(size, 15, o.width - 15);
+                o.regionColumnSize[0] = BI.clamp(size, 10, o.width - 15);
                 self.table.setRegionColumnSize(o.regionColumnSize);
                 if (o.isResizeAdapt === true) {
                     var freezeColumnSize = self._getFreezeColumnSize();

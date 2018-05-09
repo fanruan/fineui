@@ -11,6 +11,12 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         height: 24
     },
 
+    beforeInit: function (callback) {
+        var o = this.options;
+        o.title = BI.bind(this._titleCreator, this);
+        callback();
+    },
+
     _init: function () {
         BI.DynamicYearMonthTrigger.superclass._init.apply(this, arguments);
         var o = this.options;
@@ -86,20 +92,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_STOP);
         });
         editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = editor.getValue();
-            if (BI.isNotNull(value)) {
-                editor.setValue(value);
-            }
-            var monthValue = self.monthEditor.getValue();
-            self.storeValue = {
-                type: BI.DynamicDateCombo.Static,
-                value: {
-                    year: self.yearEditor.getValue(),
-                    month: BI.isEmptyString(self.monthEditor.getValue()) ? "" : monthValue
-                }
-            };
-            self.setTitle(self._getStaticTitle(self.storeValue.value));
-
+            self._doEditorConfirm(editor);
             self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
         });
         editor.on(BI.SignEditor.EVENT_SPACE, function () {
@@ -124,11 +117,47 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
-                self._autoSwitch(editor.getValue());
+                self._autoSwitch(editor);
             }
         });
 
         return editor;
+    },
+
+    _titleCreator: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        if(!this.monthEditor.isValid() || !this.yearEditor.isValid()) {
+            return "";
+        }
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.getDate();
+                date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = date.print("%Y-%x");
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                value = value || {};
+                return this._getStaticTitle(value);
+        }
+    },
+
+    _doEditorConfirm: function (editor) {
+        var value = editor.getValue();
+        if (BI.isNotNull(value)) {
+            editor.setValue(value);
+        }
+        var monthValue = this.monthEditor.getValue();
+        this.storeValue = {
+            type: BI.DynamicDateCombo.Static,
+            value: {
+                year: this.yearEditor.getValue(),
+                month: BI.isEmptyString(this.monthEditor.getValue()) ? "" : monthValue
+            }
+        };
     },
 
     _yearCheck: function (v) {
@@ -136,9 +165,12 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
-    _autoSwitch: function (v) {
-        if (BI.checkDateLegal(v)) {
+    _autoSwitch: function (editor) {
+        var v = editor.getValue();
+        if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
+                this._doEditorConfirm(editor);
+                this.fireEvent(BI.DynamicYearMonthTrigger.EVENT_CONFIRM);
                 this.monthEditor.focus();
             }
         }
@@ -156,10 +188,8 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%x");
         this.yearEditor.setValue(date.getFullYear());
         this.monthEditor.setValue(date.getMonth() + 1);
-        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
     _getStaticTitle: function (value) {
@@ -188,10 +218,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                 value = value || {};
                 var month = BI.isNull(value.month) ? null : value.month;
                 this.yearEditor.setValue(value.year);
-                this.yearEditor.setTitle(value.year);
                 this.monthEditor.setValue(month);
-                this.monthEditor.setTitle(month);
-                this.setTitle(this._getStaticTitle(value));
                 break;
         }
     },

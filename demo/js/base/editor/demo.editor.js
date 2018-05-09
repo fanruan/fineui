@@ -5,7 +5,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
     render: function () {
         var editor1 = BI.createWidget({
             type: "bi.editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,

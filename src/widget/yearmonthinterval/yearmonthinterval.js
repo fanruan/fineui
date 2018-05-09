@@ -164,14 +164,10 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
-        this.left.setTitle(v);
-        this.right.setTitle(v);
-        this.label.setTitle(v);
+        this.setTitle(v);
     },
     _clearTitle: function () {
-        this.left.setTitle("");
-        this.right.setTitle("");
-        this.label.setTitle("");
+        this.setTitle("");
     },
     setValue: function (date) {
         date = date || {};

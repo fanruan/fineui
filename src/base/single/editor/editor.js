@@ -98,6 +98,7 @@ BI.Editor = BI.inherit(BI.Single, {
             element: this,
             items: items
         });
+        this.element[0].tabIndex = -1;
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
