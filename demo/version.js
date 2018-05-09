@@ -89,7 +89,7 @@ BI.i18n = {
     "BI-Created_By_Me": "我创建的",
     "BI-Basic_Simple_Tuesday": "二",
     "BI-Word_Align_Right": "文字居右",
-    "BI-Summary_Values": "汇总",
+    "BI-Summary_Values": "合计",
     "BI-Basic_Clear": "清除",
     "BI-Upload_File_Size_Error": "文件大小不支持",
     "BI-Up_Page": "向上翻页",
