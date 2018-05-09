@@ -90396,10 +90396,12 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
         });
 
         if(values.length === 1 && values[0].dateType === BI.DynamicDateCard.TYPE.DAY) {
+            var comboItems = this._getText(BI.DynamicDateCard.TYPE.MONTH);
+            comboItems[0].text = BI.i18nText("BI-Basic_Empty");
             items.push({
                 type: "bi.text_value_combo",
                 height: 24,
-                items: this._getText(BI.DynamicDateCard.TYPE.MONTH),
+                items: comboItems,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                 listeners: [{
                     eventName: "EVENT_CHANGE",
