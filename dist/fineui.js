@@ -82148,10 +82148,9 @@ BI.SortList = BI.inherit(BI.Widget, {
             placeholder: {
                 element: function ($currentItem) {
                     var holder = BI.createWidget({
-                        type: "bi.label",
+                        type: "bi.layout",
                         cls: "bi-sortable-holder",
-                        width: $currentItem.width() - 2,
-                        height: $currentItem.height() - 2
+                        height: $currentItem.outerHeight() - 2
                     });
                     holder.element.css({
                         "margin-left": $currentItem.css("margin-left"),
