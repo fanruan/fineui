@@ -216,6 +216,20 @@ BI.GridView = BI.inherit(BI.Widget, {
         }
     },
 
+    /**
+     * 获取真实的可滚动的最大宽度
+     * 对于grid_view如果没有全部渲染过，this._columnSizeAndPositionManager.getTotalSize获取的宽度是不准确的
+     * 因此在调用setScrollLeft等函数时会造成没法移动到最右端(预估可移动具体太短)
+     */
+    _getRealMaxScrollLeft: function () {
+        var o = this.options;
+        var totalWidth = 0;
+        BI.count(0, this.columnCount, function (index) {
+            totalWidth += o.columnWidthGetter(index);
+        });
+        return Math.max(0, totalWidth - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
+    },
+
     _getMaxScrollLeft: function () {
         return Math.max(0, this._columnSizeAndPositionManager.getTotalSize() - this.options.width + (this.options.overflowX ? BI.DOM.getScrollWidth() : 0));
     },
@@ -262,7 +276,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             return;
         }
         this._scrollLock = true;
-        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getMaxScrollLeft());
+        this.options.scrollLeft = BI.clamp(scrollLeft || 0, 0, this._getRealMaxScrollLeft());
         this._debounceRelease();
         this._calculateChildrenToRender();
         this.element.scrollLeft(this.options.scrollLeft);
