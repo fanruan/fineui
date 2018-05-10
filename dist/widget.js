@@ -2762,6 +2762,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             if (BI.isNotNull(obj.year)) {
                 return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), 0, 1) : BI.getDate(date.getFullYear(), 11, 31);
             }
+            return date;
         }
     });
 })();BI.DynamicDateCard = BI.inherit(BI.Widget, {
