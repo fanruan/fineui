@@ -36196,7 +36196,7 @@ BI.Single = BI.inherit(BI.Widget, {
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
-        if (BI.isKey(title)) {
+        if (BI.isKey(title) || BI.isFunction(title)) {
             this.enableHover(opt);
         } else {
             this.disabledHover();
@@ -36205,7 +36205,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
     setWarningTitle: function (title, opt) {
         this.options.warningTitle = title;
-        if (BI.isKey(title)) {
+        if (BI.isKey(title) || BI.isFunction(title)) {
             this.enableHover(opt);
         } else {
             this.disabledHover();
@@ -76924,13 +76924,14 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: true,
+            allowBlank: false,
             value: 255,
             width: 32,
             height: 20
         });
         BI.each(Ws, function (i, w) {
             w.on(BI.TextEditor.EVENT_CHANGE, function () {
+                self._checkEditors();
                 if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
                     self.colorShow.element.css("background-color", self.getValue());
                     self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
@@ -77029,6 +77030,18 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 width: 18
             }]
         });
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
     },
 
     _showPreColor: function (color) {

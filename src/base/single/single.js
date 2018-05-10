@@ -106,7 +106,7 @@ BI.Single = BI.inherit(BI.Widget, {
     // opt: {container: '', belowMouse: false}
     setTitle: function (title, opt) {
         this.options.title = title;
-        if (BI.isKey(title)) {
+        if (BI.isKey(title) || BI.isFunction(title)) {
             this.enableHover(opt);
         } else {
             this.disabledHover();
@@ -115,7 +115,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
     setWarningTitle: function (title, opt) {
         this.options.warningTitle = title;
-        if (BI.isKey(title)) {
+        if (BI.isKey(title) || BI.isFunction(title)) {
             this.enableHover(opt);
         } else {
             this.disabledHover();
