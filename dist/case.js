@@ -10427,29 +10427,29 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
     },
 
-    _createBlankNode: function () {
-        return $("<span>").html("&nbsp;");
-    },
+    // _createBlankNode: function () {
+    //     return $("<span>").html("&nbsp;");
+    // },
 
-    _addBlank: function ($param) {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var next = $param.next();
-        if (next.length === 0) {
-            var nextNode = this._createBlankNode();
-            $param.after(nextNode);
-            instance.setFocus(nextNode[0]);
-        } else {
-            instance.setFocus(next[0]);
-        }
-    },
-
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        return sel;
-    },
+    // _addBlank: function ($param) {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var next = $param.next();
+    //     if (next.length === 0) {
+    //         var nextNode = this._createBlankNode();
+    //         $param.after(nextNode);
+    //         instance.setFocus(nextNode[0]);
+    //     } else {
+    //         instance.setFocus(next[0]);
+    //     }
+    // },
+    //
+    // _get$Sel: function () {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var sel = $(instance.selElm());
+    //     return sel;
+    // },
 
     addParam: function (param) {
         var o = this.options;
@@ -10460,14 +10460,15 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         image.alt = param;
         image.style = attrs.style;
         $(image).addClass("rich-editor-param");
-        var sel = this._get$Sel();
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append(image);
-        } else {
-            sel.after(image);
-        }
-        this._addBlank($(image));
+        this.options.editor.insertHTML($("<div>").append(image).html());
+        // var sel = this._get$Sel();
+        // var wrapper = o.editor.instance.getElm().element;
+        // if (wrapper.find(sel).length <= 0) {
+        //     wrapper.append(image);
+        // } else {
+        //     sel.after(image);
+        // }
+        // this._addBlank($(image));
     }
 });
 
@@ -10680,10 +10681,22 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             } else {
                 console.error("不支持此浏览器");
             }
-            if(o.readOnly) {
+            if (o.readOnly) {
                 newInstance.disable();
             }
             return newInstance;
+        },
+
+        insertElem: function ($elem) {
+            if (this.selectedInstance) {
+                this.selectedInstance.insertElem($elem);
+            }
+        },
+
+        insertHTML: function (html) {
+            if (this.selectedInstance) {
+                this.selectedInstance.insertHTML(html);
+            }
         },
 
         nicCommand: function (cmd, args) {
@@ -10827,7 +10840,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 return contain;
             }
             return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
-            
+
         },
 
         saveRng: function () {
@@ -10926,6 +10939,31 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.content = e;
             this.ne.fireEvent("set");
             this.elm.element.html(this.content);
+        },
+
+        insertElem: function ($elem) {
+            var range = this.getRng();
+
+            if (range.insertNode) {
+                range.deleteContents();
+                range.insertNode($elem);
+            }
+        },
+
+        insertHTML: function (html) {
+            var range = this.getRng();
+
+            if (document.queryCommandState("insertHTML")) {
+                // W3C
+                this.nicCommand("insertHTML", html);
+            } else if (range.insertNode) {
+                // IE
+                range.deleteContents();
+                range.insertNode($(html)[0]);
+            } else if (range.pasteHTML) {
+                // IE <= 10
+                range.pasteHTML(html);
+            }
         },
 
         nicCommand: function (cmd, args) {
