@@ -18602,9 +18602,9 @@ BI.Editor = BI.inherit(BI.Single, {
 
     getValue: function () {
         if (!this.isValid()) {
-            return BI.trim(this.editor.getLastValidValue());
+            return this.editor.getLastValidValue();
         }
-        return BI.trim(this.editor.getValue());
+        return this.editor.getValue();
     },
 
     isEditing: function () {
@@ -19727,7 +19727,7 @@ BI.Input = BI.inherit(BI.Single, {
         }
 
         function blur () {
-            if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
+            if (!self.isValid() && self.options.quitChecker.apply(self, [self.getValue()]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
                 self._checkValidationOnValueChange();
                 self._defaultState();
@@ -19757,11 +19757,11 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     onKeyDown: function (keyCode, ctrlKey) {
-        if (!this.isValid() || BI.trim(this._lastValidValue) !== BI.trim(this.getValue())) {
+        if (!this.isValid() || this._lastValidValue !== this.getValue()) {
             this._checkValidationOnValueChange();
         }
-        if (this.isValid() && BI.trim(this.getValue()) !== "") {
-            if (BI.trim(this.getValue()) !== this._lastValue && (!this._start || this._lastValue == null || this._lastValue === "")
+        if (this.isValid() && this.getValue() !== "") {
+            if (this.getValue() !== this._lastValue && (!this._start || this._lastValue == null || this._lastValue === "")
                 || (this._pause === true && !/(\s|\u00A0)$/.test(this.getValue()))) {
                 this._start = true;
                 this._pause = false;
@@ -19773,7 +19773,7 @@ BI.Input = BI.inherit(BI.Single, {
             this._valueChange();
         } else {
             if (keyCode == BI.KeyCode.ENTER) {
-                if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
+                if (this.isValid() || this.options.quitChecker.apply(this, [this.getValue()]) !== false) {
                     this.blur();
                     this.fireEvent(BI.Input.EVENT_ENTER);
                 } else {
@@ -19798,7 +19798,7 @@ BI.Input = BI.inherit(BI.Single, {
             this.fireEvent(BI.Input.EVENT_PAUSE);
             this._defaultState();
         } else if ((keyCode === BI.KeyCode.BACKSPACE || keyCode === BI.KeyCode.DELETE) &&
-            BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
+            this.getValue() === "" && (this._lastValue !== null && this._lastValue !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);
             this._valueChange();
@@ -19818,10 +19818,10 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     _valueChange: function () {
-        if (this.isValid() && BI.trim(this.getValue()) !== this._lastSubmitValue) {
+        if (this.isValid() && this.getValue() !== this._lastSubmitValue) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CHANGE, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_CHANGE);
-            this._lastSubmitValue = BI.trim(this.getValue());
+            this._lastSubmitValue = this.getValue();
         }
         if (this.getValue() == "") {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EMPTY, this.getValue(), this);
@@ -19834,10 +19834,10 @@ BI.Input = BI.inherit(BI.Single, {
         var o = this.options;
         var v = this.getValue();
         this.setValid(
-            (o.allowBlank === true && BI.trim(v) == "") ||
-            (BI.isNotEmptyString(BI.trim(v))
+            (o.allowBlank === true && v == "") ||
+            (BI.isNotEmptyString(v)
                 && (v === this._lastValidValue ||
-                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+                    o.validationChecker.apply(this, [v]) !== false))
         );
     },
 
@@ -19897,13 +19897,13 @@ BI.Input = BI.inherit(BI.Single, {
         BI.Input.superclass._setValid.apply(this, arguments);
         if (this.isValid()) {
             this.element.removeClass("bi-input-error");
-            this.fireEvent(BI.Input.EVENT_VALID, BI.trim(this.getValue()), this);
+            this.fireEvent(BI.Input.EVENT_VALID, this.getValue(), this);
         } else {
             if (this._lastValidValue === this.getValue()) {
                 this._lastValidValue = null;
             }
             this.element.addClass("bi-input-error");
-            this.fireEvent(BI.Input.EVENT_ERROR, BI.trim(this.getValue()), this);
+            this.fireEvent(BI.Input.EVENT_ERROR, this.getValue(), this);
         }
     },
 
