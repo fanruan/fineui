@@ -12523,6 +12523,58 @@ BI.shortcut("demo.date_time", Demo.CustomDateTime);Demo.Downlist = BI.inherit(BI
                             text: "column 1.2",
                             value: 22,
                             cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
                         }]
                     }],
                     [{
