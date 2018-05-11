@@ -24192,8 +24192,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
         if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-            this.populate();
+            this.populate(o.items);
         }
     },
 
