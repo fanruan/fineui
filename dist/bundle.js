@@ -90056,7 +90056,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                                 type: "bi.vertical"
                             }]
 
-                        }
+                        },
+                        maxHeight: 378
                     };
                     item.el.childValues = [];
                     BI.each(item.children, function (i, child) {
@@ -111707,8 +111708,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
         if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-            this.populate();
+            this.populate(o.items);
         }
     },
 
