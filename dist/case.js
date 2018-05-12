@@ -4431,6 +4431,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorPickerEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
@@ -4451,14 +4452,15 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: true,
+            allowBlank: false,
             value: 255,
             width: 32,
             height: 20
         });
         BI.each(Ws, function (i, w) {
             w.on(BI.TextEditor.EVENT_CHANGE, function () {
-                if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self._checkEditors();
+                if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
                     self.colorShow.element.css("background-color", self.getValue());
                     self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                 }
@@ -4558,6 +4560,23 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+        this.storeValue = {
+            r: this.R.getValue() || 0,
+            g: this.G.getValue() || 0,
+            b: this.B.getValue() || 0
+        };
+    },
+
     _showPreColor: function (color) {
         if (color === "") {
             this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
@@ -4576,6 +4595,11 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             this.R.setValue("");
             this.G.setValue("");
             this.B.setValue("");
+            this.storeValue = {
+                r: "",
+                g: "",
+                b: ""
+            };
             return;
         }
         if (!color) {
@@ -4587,9 +4611,14 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent.setSelected(false);
         this._showPreColor(color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
-        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
-        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
-        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
+        this.storeValue = {
+            r: BI.isNull(json.r) ? "" : json.r,
+            g: BI.isNull(json.r) ? "" : json.g,
+            b: BI.isNull(json.r) ? "" : json.b
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
     },
 
     getValue: function () {
@@ -4597,9 +4626,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             return "transparent";
         }
         return BI.DOM.rgb2hex(BI.DOM.json2rgb({
-            r: this.R.getValue(),
-            g: this.G.getValue(),
-            b: this.B.getValue()
+            r: this.storeValue.r,
+            g: this.storeValue.g,
+            b: this.storeValue.b
         }));
     }
 });
@@ -10398,29 +10427,29 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
     },
 
-    _createBlankNode: function () {
-        return $("<span>").html("&nbsp;");
-    },
+    // _createBlankNode: function () {
+    //     return $("<span>").html("&nbsp;");
+    // },
 
-    _addBlank: function ($param) {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var next = $param.next();
-        if (next.length === 0) {
-            var nextNode = this._createBlankNode();
-            $param.after(nextNode);
-            instance.setFocus(nextNode[0]);
-        } else {
-            instance.setFocus(next[0]);
-        }
-    },
-
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        return sel;
-    },
+    // _addBlank: function ($param) {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var next = $param.next();
+    //     if (next.length === 0) {
+    //         var nextNode = this._createBlankNode();
+    //         $param.after(nextNode);
+    //         instance.setFocus(nextNode[0]);
+    //     } else {
+    //         instance.setFocus(next[0]);
+    //     }
+    // },
+    //
+    // _get$Sel: function () {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var sel = $(instance.selElm());
+    //     return sel;
+    // },
 
     addParam: function (param) {
         var o = this.options;
@@ -10431,14 +10460,15 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         image.alt = param;
         image.style = attrs.style;
         $(image).addClass("rich-editor-param");
-        var sel = this._get$Sel();
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append(image);
-        } else {
-            sel.after(image);
-        }
-        this._addBlank($(image));
+        this.options.editor.insertHTML($("<div>").append(image).html());
+        // var sel = this._get$Sel();
+        // var wrapper = o.editor.instance.getElm().element;
+        // if (wrapper.find(sel).length <= 0) {
+        //     wrapper.append(image);
+        // } else {
+        //     sel.after(image);
+        // }
+        // this._addBlank($(image));
     }
 });
 
@@ -10651,10 +10681,22 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             } else {
                 console.error("不支持此浏览器");
             }
-            if(o.readOnly) {
+            if (o.readOnly) {
                 newInstance.disable();
             }
             return newInstance;
+        },
+
+        insertElem: function ($elem) {
+            if (this.selectedInstance) {
+                this.selectedInstance.insertElem($elem);
+            }
+        },
+
+        insertHTML: function (html) {
+            if (this.selectedInstance) {
+                this.selectedInstance.insertHTML(html);
+            }
         },
 
         nicCommand: function (cmd, args) {
@@ -10798,7 +10840,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 return contain;
             }
             return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
-            
+
         },
 
         saveRng: function () {
@@ -10897,6 +10939,31 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.content = e;
             this.ne.fireEvent("set");
             this.elm.element.html(this.content);
+        },
+
+        insertElem: function ($elem) {
+            var range = this.getRng();
+
+            if (range.insertNode) {
+                range.deleteContents();
+                range.insertNode($elem);
+            }
+        },
+
+        insertHTML: function (html) {
+            var range = this.getRng();
+
+            if (document.queryCommandState("insertHTML")) {
+                // W3C
+                this.nicCommand("insertHTML", html);
+            } else if (range.insertNode) {
+                // IE
+                range.deleteContents();
+                range.insertNode($(html)[0]);
+            } else if (range.pasteHTML) {
+                // IE <= 10
+                range.pasteHTML(html);
+            }
         },
 
         nicCommand: function (cmd, args) {
@@ -12013,17 +12080,18 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             var c = [crossHeader[row]];
             result.push(c.concat(node || []));
         });
+        var rowHeaderCreator = BI.isFunction(o.rowHeaderCreator) ? o.rowHeaderCreator() : o.rowHeaderCreator;
         if (header && header.length > 0) {
             var newHeader = this._formatColumns(header);
             var deep = this._getHDeep();
             if (deep <= 0) {
-                newHeader.unshift(o.rowHeaderCreator || {
+                newHeader.unshift(rowHeaderCreator || {
                     type: "bi.table_style_cell",
                     text: BI.i18nText("BI-Row_Header"),
                     styleGetter: o.headerCellStyleGetter
                 });
             } else {
-                newHeader[0] = o.rowHeaderCreator || {
+                newHeader[0] = rowHeaderCreator || {
                     type: "bi.table_style_cell",
                     text: BI.i18nText("BI-Row_Header"),
                     styleGetter: o.headerCellStyleGetter

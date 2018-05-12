@@ -288,9 +288,9 @@ BI.Editor = BI.inherit(BI.Single, {
 
     getValue: function () {
         if (!this.isValid()) {
-            return BI.trim(this.editor.getLastValidValue());
+            return this.editor.getLastValidValue();
         }
-        return BI.trim(this.editor.getValue());
+        return this.editor.getValue();
     },
 
     isEditing: function () {

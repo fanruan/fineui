@@ -2540,7 +2540,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                                 type: "bi.vertical"
                             }]
 
-                        }
+                        },
+                        maxHeight: 378
                     };
                     item.el.childValues = [];
                     BI.each(item.children, function (i, child) {
@@ -2762,6 +2763,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             if (BI.isNotNull(obj.year)) {
                 return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), 0, 1) : BI.getDate(date.getFullYear(), 11, 31);
             }
+            return date;
         }
     });
 })();BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -24190,8 +24192,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
         if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-            this.populate();
+            this.populate(o.items);
         }
     },
 

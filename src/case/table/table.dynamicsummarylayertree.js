@@ -68,17 +68,18 @@ BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
             var c = [crossHeader[row]];
             result.push(c.concat(node || []));
         });
+        var rowHeaderCreator = BI.isFunction(o.rowHeaderCreator) ? o.rowHeaderCreator() : o.rowHeaderCreator;
         if (header && header.length > 0) {
             var newHeader = this._formatColumns(header);
             var deep = this._getHDeep();
             if (deep <= 0) {
-                newHeader.unshift(o.rowHeaderCreator || {
+                newHeader.unshift(rowHeaderCreator || {
                     type: "bi.table_style_cell",
                     text: BI.i18nText("BI-Row_Header"),
                     styleGetter: o.headerCellStyleGetter
                 });
             } else {
-                newHeader[0] = o.rowHeaderCreator || {
+                newHeader[0] = rowHeaderCreator || {
                     type: "bi.table_style_cell",
                     text: BI.i18nText("BI-Row_Header"),
                     styleGetter: o.headerCellStyleGetter

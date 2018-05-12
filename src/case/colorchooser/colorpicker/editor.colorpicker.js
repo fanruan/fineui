@@ -18,6 +18,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     _init: function () {
         BI.ColorPickerEditor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
@@ -38,14 +39,15 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: true,
+            allowBlank: false,
             value: 255,
             width: 32,
             height: 20
         });
         BI.each(Ws, function (i, w) {
             w.on(BI.TextEditor.EVENT_CHANGE, function () {
-                if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+                self._checkEditors();
+                if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
                     self.colorShow.element.css("background-color", self.getValue());
                     self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
                 }
@@ -145,6 +147,23 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
+        this.storeValue = {
+            r: this.R.getValue() || 0,
+            g: this.G.getValue() || 0,
+            b: this.B.getValue() || 0
+        };
+    },
+
     _showPreColor: function (color) {
         if (color === "") {
             this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
@@ -163,6 +182,11 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             this.R.setValue("");
             this.G.setValue("");
             this.B.setValue("");
+            this.storeValue = {
+                r: "",
+                g: "",
+                b: ""
+            };
             return;
         }
         if (!color) {
@@ -174,9 +198,14 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent.setSelected(false);
         this._showPreColor(color);
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
-        this.R.setValue(BI.isNull(json.r) ? "" : json.r);
-        this.G.setValue(BI.isNull(json.g) ? "" : json.g);
-        this.B.setValue(BI.isNull(json.b) ? "" : json.b);
+        this.storeValue = {
+            r: BI.isNull(json.r) ? "" : json.r,
+            g: BI.isNull(json.r) ? "" : json.g,
+            b: BI.isNull(json.r) ? "" : json.b
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
     },
 
     getValue: function () {
@@ -184,9 +213,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             return "transparent";
         }
         return BI.DOM.rgb2hex(BI.DOM.json2rgb({
-            r: this.R.getValue(),
-            g: this.G.getValue(),
-            b: this.B.getValue()
+            r: this.storeValue.r,
+            g: this.storeValue.g,
+            b: this.storeValue.b
         }));
     }
 });
