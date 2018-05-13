@@ -17,29 +17,29 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
     },
 
-    _createBlankNode: function () {
-        return $("<span>").html("&nbsp;");
-    },
+    // _createBlankNode: function () {
+    //     return $("<span>").html("&nbsp;");
+    // },
 
-    _addBlank: function ($param) {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var next = $param.next();
-        if (next.length === 0) {
-            var nextNode = this._createBlankNode();
-            $param.after(nextNode);
-            instance.setFocus(nextNode[0]);
-        } else {
-            instance.setFocus(next[0]);
-        }
-    },
-
-    _get$Sel: function () {
-        var o = this.options;
-        var instance = o.editor.selectedInstance;
-        var sel = $(instance.selElm());
-        return sel;
-    },
+    // _addBlank: function ($param) {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var next = $param.next();
+    //     if (next.length === 0) {
+    //         var nextNode = this._createBlankNode();
+    //         $param.after(nextNode);
+    //         instance.setFocus(nextNode[0]);
+    //     } else {
+    //         instance.setFocus(next[0]);
+    //     }
+    // },
+    //
+    // _get$Sel: function () {
+    //     var o = this.options;
+    //     var instance = o.editor.selectedInstance;
+    //     var sel = $(instance.selElm());
+    //     return sel;
+    // },
 
     addParam: function (param) {
         var o = this.options;
@@ -50,14 +50,15 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         image.alt = param;
         image.style = attrs.style;
         $(image).addClass("rich-editor-param");
-        var sel = this._get$Sel();
-        var wrapper = o.editor.instance.getElm().element;
-        if (wrapper.find(sel).length <= 0) {
-            wrapper.append(image);
-        } else {
-            sel.after(image);
-        }
-        this._addBlank($(image));
+        this.options.editor.insertHTML($("<div>").append(image).html());
+        // var sel = this._get$Sel();
+        // var wrapper = o.editor.instance.getElm().element;
+        // if (wrapper.find(sel).length <= 0) {
+        //     wrapper.append(image);
+        // } else {
+        //     sel.after(image);
+        // }
+        // this._addBlank($(image));
     }
 });
 
