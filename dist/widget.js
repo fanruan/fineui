@@ -3009,6 +3009,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
 
     setValue: function (v) {
         v = v || {};
+        this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
         var values = [];
         var valuesItems = [];
         if(BI.isNotNull(v.year)) {
@@ -3310,7 +3311,10 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     mounted: function () {
-        this._checkDynamicValue(this.options.value);
+        var o = this.options;
+        if(BI.isNotNull(o.value)) {
+            this._checkDynamicValue(o.value);
+        }
     },
 
     _checkDynamicValue: function (v) {
@@ -3550,7 +3554,6 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
         var self = this;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicDateCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
@@ -4171,7 +4174,10 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
     },
 
     mounted: function () {
-        this._checkDynamicValue(this.options.value);
+        var o = this.options;
+        if(BI.isNotNull(o.value)) {
+            this._checkDynamicValue(o.value);
+        }
     },
 
     _checkDynamicValue: function (v) {
@@ -4299,7 +4305,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
         var self = this;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicDateCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
