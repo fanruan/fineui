@@ -17387,8 +17387,8 @@ BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keyword = self.trigger.getKeyword();
-                this.setKeyword(op.keyword);
+                op.keywords = [self.trigger.getKeyword()];
+                this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
             }
         });
