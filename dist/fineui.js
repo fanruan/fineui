@@ -88924,9 +88924,9 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             };
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
@@ -89651,6 +89651,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                 month: value.month,
                 day: day
             });
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
