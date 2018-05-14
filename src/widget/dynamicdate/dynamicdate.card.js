@@ -241,6 +241,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         v = v || {};
+        this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
         var values = [];
         var valuesItems = [];
         if(BI.isNotNull(v.year)) {

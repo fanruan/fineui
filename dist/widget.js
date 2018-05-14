@@ -3009,6 +3009,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
 
     setValue: function (v) {
         v = v || {};
+        this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
         var values = [];
         var valuesItems = [];
         if(BI.isNotNull(v.year)) {
@@ -3310,7 +3311,10 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     mounted: function () {
-        this._checkDynamicValue(this.options.value);
+        var o = this.options;
+        if(BI.isNotNull(o.value)) {
+            this._checkDynamicValue(o.value);
+        }
     },
 
     _checkDynamicValue: function (v) {
@@ -3407,7 +3411,7 @@ BI.extend(BI.DynamicDateCombo, {
                     height: 24,
                     text: this._getText()
                 },
-                width: 20
+                width: o.dateType === BI.DynamicDateCard.TYPE.WORK_DAY ? 60 : 20
             }, {
                 type: "bi.text_value_combo",
                 height: 24,
@@ -3448,8 +3452,11 @@ BI.extend(BI.DynamicDateCombo, {
                 text = BI.i18nText("BI-Basic_Week");
                 break;
             case BI.DynamicDateCard.TYPE.DAY:
-            default:
                 text = BI.i18nText("BI-Basic_Day");
+                break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+            default:
+                text = BI.i18nText("BI-Basic_Work_Day");
                 break;
         }
         return text;
@@ -3547,7 +3554,6 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
         var self = this;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicDateCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },
@@ -4168,7 +4174,10 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
     },
 
     mounted: function () {
-        this._checkDynamicValue(this.options.value);
+        var o = this.options;
+        if(BI.isNotNull(o.value)) {
+            this._checkDynamicValue(o.value);
+        }
     },
 
     _checkDynamicValue: function (v) {
@@ -4296,7 +4305,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
         var self = this;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicDateCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },

@@ -45,7 +45,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     height: 24,
                     text: this._getText()
                 },
-                width: 20
+                width: o.dateType === BI.DynamicDateCard.TYPE.WORK_DAY ? 60 : 20
             }, {
                 type: "bi.text_value_combo",
                 height: 24,
@@ -86,8 +86,11 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 text = BI.i18nText("BI-Basic_Week");
                 break;
             case BI.DynamicDateCard.TYPE.DAY:
-            default:
                 text = BI.i18nText("BI-Basic_Day");
+                break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+            default:
+                text = BI.i18nText("BI-Basic_Work_Day");
                 break;
         }
         return text;
