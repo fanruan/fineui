@@ -78721,7 +78721,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         baseCls: "bi-search-text-value-combo",
         height: 30,
         text: "",
-        items: []
+        items: [],
+        tipType: "",
+        warningTitle: ""
     },
 
     render: function () {
@@ -78745,6 +78747,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         height: o.height - 2,
                         text: o.text,
                         value: o.value,
+                        tipType: o.tipType,
+                        warningTitle: o.warningTitle,
                         listeners: [{
                             eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
                             action: function () {
