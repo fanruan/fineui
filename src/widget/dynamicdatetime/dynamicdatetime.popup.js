@@ -72,7 +72,6 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         var self = this;
         return {
             type: "bi.tab",
-            showIndex: BI.DynamicDateCombo.Static,
             ref: function () {
                 self.dateTab = this;
             },

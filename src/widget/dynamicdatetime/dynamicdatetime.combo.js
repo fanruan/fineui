@@ -214,7 +214,10 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     mounted: function () {
-        this._checkDynamicValue(this.options.value);
+        var o = this.options;
+        if(BI.isNotNull(o.value)) {
+            this._checkDynamicValue(o.value);
+        }
     },
 
     _checkDynamicValue: function (v) {
