@@ -36351,7 +36351,8 @@ BI.Single = BI.inherit(BI.Widget, {
             title: null,
             warningTitle: null,
             tipType: null, // success或warning
-            value: null
+            value: null,
+            belowMouse: false   // title是否跟随鼠标
         });
     },
 
@@ -36380,7 +36381,9 @@ BI.Single = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
-            this.enableHover();
+            this.enableHover({
+                belowMouse: o.belowMouse
+            });
         }
     },
 
