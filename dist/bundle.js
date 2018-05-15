@@ -101094,11 +101094,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
-                text: "(" + BI.i18nText("BI-Less_Than") + ")",
+                text: "(" + BI.i18nText("BI-More_Than") + ")",
                 iconCls: "less-font",
                 value: 0
             }, {
-                text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
+                text: "(" + BI.i18nText("BI-More_And_Equal") + ")",
                 value: 1,
                 iconCls: "less-equal-font"
             }]
@@ -112767,5 +112767,7 @@ BI.i18n = {
     "BI-Font_Family": "字体",
     "BI-Basic_Please_Input_Content": "请输入内容",
     "BI-Word_Align_Center": "文字居中",
-    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值"
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
+    "BI-More_Than": "大于",
+    "BI-More_And_Equal": "大于等于"
 };
