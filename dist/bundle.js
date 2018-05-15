@@ -90877,10 +90877,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     mounted: function () {
-        var o = this.options;
-        if(BI.isNotNull(o.value)) {
-            this._checkDynamicValue(o.value);
-        }
+        this._checkDynamicValue(this.storeValue);
     },
 
     _checkDynamicValue: function (v) {
@@ -91740,10 +91737,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
     },
 
     mounted: function () {
-        var o = this.options;
-        if(BI.isNotNull(o.value)) {
-            this._checkDynamicValue(o.value);
-        }
+        this._checkDynamicValue(this.storeValue);
     },
 
     _checkDynamicValue: function (v) {
@@ -109022,18 +109016,18 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.month = obj.month || 0;
-        if (obj.year === 0 || obj.month === 0 || BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.month = obj.month || 0;
+        if (newObj.year === 0 || newObj.month === 0 || BI.checkDateVoid(newObj.year, newObj.month, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
             this.month.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedMonth = BI.parseInt(obj.month);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedMonth = BI.parseInt(newObj.month);
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
@@ -109079,9 +109073,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
+            // 没看出来干啥的，先去掉
+            // if (self.combo.isViewVisible()) {
+            //     return;
+            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
@@ -110023,18 +110018,18 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.quarter = obj.quarter || 0;
-        if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.quarter = obj.quarter || 0;
+        if (newObj.quarter === 0 || newObj.year === 0 || BI.checkDateVoid(newObj.year, newObj.quarter, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
             this.quarter.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedQuarter = BI.parseInt(obj.quarter);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedQuarter = BI.parseInt(newObj.quarter);
             this.yearPicker.setValue(this.selectedYear);
             this.quarter.setValue(this.selectedQuarter);
         }
@@ -110076,9 +110071,10 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
+            // 没看出来干啥的，先去掉
+            // if (self.combo.isViewVisible()) {
+            //     return;
+            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {

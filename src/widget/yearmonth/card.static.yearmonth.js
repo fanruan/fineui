@@ -96,18 +96,18 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.month = obj.month || 0;
-        if (obj.year === 0 || obj.month === 0 || BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.month = obj.month || 0;
+        if (newObj.year === 0 || newObj.month === 0 || BI.checkDateVoid(newObj.year, newObj.month, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
             this.month.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedMonth = BI.parseInt(obj.month);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedMonth = BI.parseInt(newObj.month);
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }

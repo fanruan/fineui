@@ -88,18 +88,18 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.quarter = obj.quarter || 0;
-        if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.quarter = obj.quarter || 0;
+        if (newObj.quarter === 0 || newObj.year === 0 || BI.checkDateVoid(newObj.year, newObj.quarter, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
             this.quarter.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedQuarter = BI.parseInt(obj.quarter);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedQuarter = BI.parseInt(newObj.quarter);
             this.yearPicker.setValue(this.selectedYear);
             this.quarter.setValue(this.selectedQuarter);
         }
