@@ -124,11 +124,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
-                text: "(" + BI.i18nText("BI-Less_Than") + ")",
+                text: "(" + BI.i18nText("BI-More_Than") + ")",
                 iconCls: "less-font",
                 value: 0
             }, {
-                text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
+                text: "(" + BI.i18nText("BI-More_And_Equal") + ")",
                 value: 1,
                 iconCls: "less-equal-font"
             }]
