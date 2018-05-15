@@ -21418,7 +21418,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             lineNumbers: false
         });
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
-        
+
         this.editor.on("change", function (cm, change) {
             self._checkWaterMark();
             if (o.showHint) {
@@ -21444,7 +21444,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         // 水印
         this.watermark = BI.createWidget({
             type: "bi.label",
-            text: BI.i18nText("Please_Enter_SQL"),
+            text: BI.i18nText("BI-Please_Enter_SQL"),
             cls: "bi-water-mark",
             whiteSpace: "nowrap",
             textAlign: "left"
