@@ -52,11 +52,11 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
-            self._setStartValue("");
+            self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
-            self._setStartValue("");
+            self._setStartValue();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -69,7 +69,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     self._setStartValue(keyword);
                     assertShowValue();
                     self.populate();
-                    self._setStartValue("");
+                    self._setStartValue();
                 });
             }
         });
@@ -82,7 +82,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
-                        self._setStartValue("");
+                        self._setStartValue();
                     } else {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
@@ -193,9 +193,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
-    _assertValue: function (val) {
-        val || (val = "");
-    },
+    _assertValue: function (val) {},
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);

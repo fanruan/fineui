@@ -110,8 +110,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
     setState: function (v) {
         var o = this.options;
-        v || (v = "");
-        if (v === "") {
+        if (BI.isNull(v)) {
             this.editor.setState(BI.Selection.None);
         } else {
             this.editor.setState(o.valueFormatter(v + "") || (v + ""));

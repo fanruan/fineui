@@ -104322,11 +104322,11 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
-            self._setStartValue("");
+            self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
-            self._setStartValue("");
+            self._setStartValue();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -104339,7 +104339,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     self._setStartValue(keyword);
                     assertShowValue();
                     self.populate();
-                    self._setStartValue("");
+                    self._setStartValue();
                 });
             }
         });
@@ -104352,7 +104352,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
-                        self._setStartValue("");
+                        self._setStartValue();
                     } else {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
@@ -104463,9 +104463,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.combo.hideView();
     },
 
-    _assertValue: function (val) {
-        val || (val = "");
-    },
+    _assertValue: function (val) {},
 
     _makeMap: function (values) {
         return BI.makeObject(values || []);
@@ -104869,20 +104867,20 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                self.storeValue && (op = BI.extend(op || {}, {
+                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && self.storeValue) {
+                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
                                 value: v,
                                 title: txt,
-                                selected: false
+                                selected: true
                             };
                         });
                         firstItems = self._createItems(json);
@@ -104924,16 +104922,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         }, 30);
     },
 
-    _assertValue: function (val) {
-        val || (val = "");
-    },
+    _assertValue: function (val) {},
 
     setStartValue: function (v) {
         this._startValue = v;
     },
 
     setValue: function (v) {
-        this.storeValue = v || "";
+        this.storeValue = v;
         this._assertValue(this.storeValue);
         this.button_group.setValue(this.storeValue);
     },
@@ -104964,7 +104960,8 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 });
 
 BI.SingleSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);/**
+BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
+/**
  * 带加载的单选下拉面板
  * @class BI.SingleSelectPopupView
  * @extends Widget
@@ -105655,8 +105652,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
     setState: function (v) {
         var o = this.options;
-        v || (v = "");
-        if (v === "") {
+        if (BI.isNull(v)) {
             this.editor.setState(BI.Selection.None);
         } else {
             this.editor.setState(o.valueFormatter(v + "") || (v + ""));

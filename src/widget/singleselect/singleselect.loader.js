@@ -55,20 +55,20 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             }, opts.el),
             itemsCreator: function (op, callback) {
                 var startValue = self._startValue;
-                self.storeValue && (op = BI.extend(op || {}, {
+                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && self.storeValue) {
+                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
                         var json = BI.map([self.storeValue], function (i, v) {
                             var txt = opts.valueFormatter(v) || v;
                             return {
                                 text: txt,
                                 value: v,
                                 title: txt,
-                                selected: false
+                                selected: true
                             };
                         });
                         firstItems = self._createItems(json);
@@ -110,16 +110,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         }, 30);
     },
 
-    _assertValue: function (val) {
-        val || (val = "");
-    },
+    _assertValue: function (val) {},
 
     setStartValue: function (v) {
         this._startValue = v;
     },
 
     setValue: function (v) {
-        this.storeValue = v || "";
+        this.storeValue = v;
         this._assertValue(this.storeValue);
         this.button_group.setValue(this.storeValue);
     },
