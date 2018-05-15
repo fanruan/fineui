@@ -163,5 +163,6 @@ BI.i18n = {
     "BI-Word_Align_Center": "文字居中",
     "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
     "BI-More_Than": "大于",
-    "BI-More_And_Equal": "大于等于"
+    "BI-More_And_Equal": "大于等于",
+    "BI-Please_Enter_SQL": "请输入SQL"
 };
