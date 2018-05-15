@@ -36351,7 +36351,8 @@ BI.Single = BI.inherit(BI.Widget, {
             title: null,
             warningTitle: null,
             tipType: null, // success或warning
-            value: null
+            value: null,
+            belowMouse: false   // title是否跟随鼠标
         });
     },
 
@@ -36380,7 +36381,9 @@ BI.Single = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
-            this.enableHover();
+            this.enableHover({
+                belowMouse: o.belowMouse
+            });
         }
     },
 
@@ -84184,7 +84187,6 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: 70,
                 minWidth: 70,
                 el: {
                     type: "bi.button_group",
@@ -88928,9 +88930,9 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             };
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
@@ -89467,7 +89469,12 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             type: "bi.sign_editor",
             value: this._alertInEditorValue(o.min),
             allowBlank: false,
-            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
+            errorText: function (v) {
+                if(BI.isNumeric(v)) {
+                    return BI.i18nText("BI-Please_Input_Natural_Number");
+                }
+                return BI.i18nText("BI-Numerical_Interval_Input_Data");
+            },
             validationChecker: function (v) {
                 return BI.isNaturalNumber(v);
             }
@@ -89655,6 +89662,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                 month: value.month,
                 day: day
             });
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
@@ -92286,8 +92294,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         validationChecker: function (v) {
                             return BI.isNaturalNumber(v) && BI.parseInt(v) < 24;
                         },
-                        errorText: function () {
-                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                        errorText: function (v) {
+                            if(BI.isNumeric(v)) {
+                                return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                            }
+                            return BI.i18nText("BI-Numerical_Interval_Input_Data");
                         },
                         listeners: [{
                             eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -92320,8 +92331,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -92352,8 +92366,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -94967,7 +94984,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _setErrorText: function () {
-        var errorText = BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number");
+        var errorText = BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max);
         this.labelOne.setErrorText(errorText);
         this.labelTwo.setErrorText(errorText);
     },
@@ -112995,5 +113012,7 @@ BI.i18n = {
     "BI-Microsoft_YaHei": "微软雅黑",
     "BI-Apple_Light": "苹方-light",
     "BI-Font_Family": "字体",
-    "BI-Basic_Please_Input_Content": "请输入内容"
+    "BI-Basic_Please_Input_Content": "请输入内容",
+    "BI-Word_Align_Center": "文字居中",
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值"
 };

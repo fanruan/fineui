@@ -11468,7 +11468,6 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: 70,
                 minWidth: 70,
                 el: {
                     type: "bi.button_group",

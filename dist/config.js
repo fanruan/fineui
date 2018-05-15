@@ -160,5 +160,6 @@ BI.i18n = {
     "BI-Apple_Light": "苹方-light",
     "BI-Font_Family": "字体",
     "BI-Basic_Please_Input_Content": "请输入内容",
-    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值"
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
+    "BI-Word_Align_Center": "文字居中"
 };
