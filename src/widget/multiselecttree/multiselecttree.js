@@ -1,7 +1,7 @@
 /**
  * Created by zcf_1 on 2017/5/11.
  */
-BI.MultiSelectTree = BI.inherit(BI.Widget, {
+BI.MultiSelectTree = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",

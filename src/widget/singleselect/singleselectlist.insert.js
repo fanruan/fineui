@@ -3,7 +3,7 @@
  * @createdAt: 2018/3/28
  * @Description
 */
-BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
+BI.SingleSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",

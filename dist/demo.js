@@ -12275,7 +12275,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300,
+                width: 300
                 // value: {
                 //     type: 1,
                 //     value: {

@@ -19,8 +19,11 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         validationChecker: function (v) {
                             return BI.isNaturalNumber(v) && BI.parseInt(v) < 24;
                         },
-                        errorText: function () {
-                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                        errorText: function (v) {
+                            if(BI.isNumeric(v)) {
+                                return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                            }
+                            return BI.i18nText("BI-Numerical_Interval_Input_Data");
                         },
                         listeners: [{
                             eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -53,8 +56,11 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -85,8 +91,11 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,

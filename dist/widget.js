@@ -1127,9 +1127,9 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             };
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
@@ -1666,7 +1666,12 @@ BI.DateTimeSelect = BI.inherit(BI.Widget, {
             type: "bi.sign_editor",
             value: this._alertInEditorValue(o.min),
             allowBlank: false,
-            errorText: BI.i18nText("BI-Please_Input_Natural_Number"),
+            errorText: function (v) {
+                if(BI.isNumeric(v)) {
+                    return BI.i18nText("BI-Please_Input_Natural_Number");
+                }
+                return BI.i18nText("BI-Numerical_Interval_Input_Data");
+            },
             validationChecker: function (v) {
                 return BI.isNaturalNumber(v);
             }
@@ -1854,6 +1859,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                 month: value.month,
                 day: day
             });
+            day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
@@ -3311,10 +3317,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     mounted: function () {
-        var o = this.options;
-        if(BI.isNotNull(o.value)) {
-            this._checkDynamicValue(o.value);
-        }
+        this._checkDynamicValue(this.storeValue);
     },
 
     _checkDynamicValue: function (v) {
@@ -4174,10 +4177,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
     },
 
     mounted: function () {
-        var o = this.options;
-        if(BI.isNotNull(o.value)) {
-            this._checkDynamicValue(o.value);
-        }
+        this._checkDynamicValue(this.storeValue);
     },
 
     _checkDynamicValue: function (v) {
@@ -4485,8 +4485,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         validationChecker: function (v) {
                             return BI.isNaturalNumber(v) && BI.parseInt(v) < 24;
                         },
-                        errorText: function () {
-                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                        errorText: function (v) {
+                            if(BI.isNumeric(v)) {
+                                return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-23\"");
+                            }
+                            return BI.i18nText("BI-Numerical_Interval_Input_Data");
                         },
                         listeners: [{
                             eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -4519,8 +4522,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -4551,8 +4557,11 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     validationChecker: function (v) {
                         return BI.isNaturalNumber(v) && BI.parseInt(v) < 60;
                     },
-                    errorText: function () {
-                        return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                    errorText: function (v) {
+                        if(BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Basic_Input_From_To_Number", "\"00-59\"");
+                        }
+                        return BI.i18nText("BI-Numerical_Interval_Input_Data");
                     },
                     listeners: [{
                         eventName: BI.SignEditor.EVENT_CONFIRM,
@@ -7166,7 +7175,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
     },
 
     _setErrorText: function () {
-        var errorText = BI.i18nText("BI-Please_Enter") + this.min + "-" + this.max + BI.i18nText("BI-Basic_De") + BI.i18nText("BI-Basic_Number");
+        var errorText = BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max);
         this.labelOne.setErrorText(errorText);
         this.labelTwo.setErrorText(errorText);
     },
@@ -11609,7 +11618,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSe
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
-BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
+BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
@@ -12280,7 +12289,7 @@ BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
  * Created by zcf_1 on 2017/5/11.
  */
-BI.MultiSelectTree = BI.inherit(BI.Widget, {
+BI.MultiSelectTree = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",
@@ -13525,11 +13534,11 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             cls: "number-interval-small-combo bi-border",
             height: o.height - 2,
             items: [{
-                text: "(" + BI.i18nText("BI-Less_Than") + ")",
+                text: "(" + BI.i18nText("BI-More_Than") + ")",
                 iconCls: "less-font",
                 value: 0
             }, {
-                text: "(" + BI.i18nText("BI-Less_And_Equal") + ")",
+                text: "(" + BI.i18nText("BI-More_And_Equal") + ")",
                 value: 1,
                 iconCls: "less-equal-font"
             }]
@@ -17339,7 +17348,7 @@ BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);/**
  * @createdAt: 2018/3/28
  * @Description
 */
-BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
+BI.SingleSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
@@ -21443,18 +21452,18 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.month = obj.month || 0;
-        if (obj.year === 0 || obj.month === 0 || BI.checkDateVoid(obj.year, obj.month, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.month = obj.month || 0;
+        if (newObj.year === 0 || newObj.month === 0 || BI.checkDateVoid(newObj.year, newObj.month, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedMonth = "";
             this.yearPicker.setValue(year);
             this.month.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedMonth = BI.parseInt(obj.month);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedMonth = BI.parseInt(newObj.month);
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
@@ -21500,9 +21509,10 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
+            // 没看出来干啥的，先去掉
+            // if (self.combo.isViewVisible()) {
+            //     return;
+            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
@@ -22444,18 +22454,18 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
 
     setValue: function (obj) {
         var o = this.options;
-        obj = obj || {};
-        obj.year = obj.year || 0;
-        obj.quarter = obj.quarter || 0;
-        if (obj.quarter === 0 || obj.year === 0 || BI.checkDateVoid(obj.year, obj.quarter, 1, o.min, o.max)[0]) {
-            var year = obj.year || BI.getDate().getFullYear();
+        var newObj = {};
+        newObj.year = obj.year || 0;
+        newObj.quarter = obj.quarter || 0;
+        if (newObj.quarter === 0 || newObj.year === 0 || BI.checkDateVoid(newObj.year, newObj.quarter, 1, o.min, o.max)[0]) {
+            var year = newObj.year || BI.getDate().getFullYear();
             this.selectedYear = year;
             this.selectedQuarter = "";
             this.yearPicker.setValue(year);
             this.quarter.setValue();
         } else {
-            this.selectedYear = BI.parseInt(obj.year);
-            this.selectedQuarter = BI.parseInt(obj.quarter);
+            this.selectedYear = BI.parseInt(newObj.year);
+            this.selectedQuarter = BI.parseInt(newObj.quarter);
             this.yearPicker.setValue(this.selectedYear);
             this.quarter.setValue(this.selectedQuarter);
         }
@@ -22497,9 +22507,10 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
+            // 没看出来干啥的，先去掉
+            // if (self.combo.isViewVisible()) {
+            //     return;
+            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
