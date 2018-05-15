@@ -11624,7 +11624,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSe
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
-BI.MultiSelectInsertList = BI.inherit(BI.Widget, {
+BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
@@ -12295,7 +12295,7 @@ BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
  * Created by zcf_1 on 2017/5/11.
  */
-BI.MultiSelectTree = BI.inherit(BI.Widget, {
+BI.MultiSelectTree = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",
@@ -17357,7 +17357,7 @@ BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);/**
  * @createdAt: 2018/3/28
  * @Description
 */
-BI.SingleSelectInsertList = BI.inherit(BI.Widget, {
+BI.SingleSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
