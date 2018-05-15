@@ -21150,6 +21150,13 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
             height: 24
         });
     },
+
+    beforeInit: function (callback) {
+        var o = this.options;
+        o.title = BI.bind(this._titleCreator, this);
+        callback();
+    },
+
     _init: function () {
         BI.DynamicYearTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
@@ -21239,7 +21246,27 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         var dateStr = date.print("%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
-        this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
+    },
+
+    _titleCreator: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        if(!this.editor.isValid()) {
+            return "";
+        }
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.getDate();
+                date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = date.print("%Y");
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                value = value || {};
+                return value.year;
+        }
     },
 
     setValue: function (v) {
@@ -21261,7 +21288,6 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 value = value || {};
                 this.editor.setState(value.year);
                 this.editor.setValue(value.year);
-                this.setTitle(value.year);
                 break;
         }
     },
