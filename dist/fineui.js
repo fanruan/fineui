@@ -84180,7 +84180,6 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: 70,
                 minWidth: 70,
                 el: {
                     type: "bi.button_group",
@@ -113006,5 +113005,7 @@ BI.i18n = {
     "BI-Microsoft_YaHei": "微软雅黑",
     "BI-Apple_Light": "苹方-light",
     "BI-Font_Family": "字体",
-    "BI-Basic_Please_Input_Content": "请输入内容"
+    "BI-Basic_Please_Input_Content": "请输入内容",
+    "BI-Word_Align_Center": "文字居中",
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
 };

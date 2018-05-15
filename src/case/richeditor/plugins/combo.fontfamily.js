@@ -25,7 +25,6 @@ BI.RichEditorFontChooser = BI.inherit(BI.RichEditorAction, {
             el: this.trigger,
             adjustLength: 1,
             popup: {
-                maxWidth: 70,
                 minWidth: 70,
                 el: {
                     type: "bi.button_group",
