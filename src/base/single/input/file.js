@@ -407,6 +407,7 @@
                 this.element.attr("multiple", "multiple");
             }
             this.element.attr("name", o.name || this.getName());
+            this.element.attr("title", o.title || "");
         },
 
         mounted: function () {
