@@ -10676,6 +10676,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        arguments[0] = this._createItems(items);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -24222,6 +24223,9 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     _init: function () {
         BI.ValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
@@ -24232,9 +24236,6 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
-        if (BI.isNotNull(o.items)) {
-            this.populate(o.items);
-        }
     },
 
     setValue: function (v) {
