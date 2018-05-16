@@ -111783,9 +111783,6 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     _init: function () {
         BI.ValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-        }
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
@@ -111796,6 +111793,10 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+            this.list.populate();
+        }
     },
 
     setValue: function (v) {
@@ -111812,7 +111813,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        this.items = items;
+        items && (this.items = items);
         this.list.populate.apply(this.list, arguments);
     }
 });
