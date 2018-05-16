@@ -101237,7 +101237,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             extraCls: "bi-number-interval",
             height: 25,
-            validation: "valid"
+            validation: "valid",
+            closeMin: true
         });
     },
     _init: function () {
