@@ -54654,7 +54654,7 @@ BI.shortcut("bi.editor", BI.Editor);/**
  * @extends BI.Single
  * @abstract
  */
-BI.MultifileEditor = BI.inherit(BI.Single, {
+BI.MultifileEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.MultifileEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -54678,7 +54678,8 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
             url: o.url,
             multiple: o.multiple,
             accept: o.accept,
-            maxSize: o.maxSize
+            maxSize: o.maxSize,
+            title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultifileEditor.EVENT_CHANGE, arguments);
@@ -55443,6 +55444,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 this.element.attr("multiple", "multiple");
             }
             this.element.attr("name", o.name || this.getName());
+            this.element.attr("title", o.title || "");
         },
 
         mounted: function () {
