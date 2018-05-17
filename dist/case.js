@@ -11896,7 +11896,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
         var regionSize = o.regionColumnSize[0];
         var freezeColLength = this._getFreezeColLength();
         if (!regionSize || regionSize > o.width - 10 || regionSize < 10) {
-            regionSize = (freezeColLength > o.columnSize.length / 2 ? 2 / 3 : 1 / 3) * o.width;
+            regionSize = (freezeColLength > o.columnSize.length / 2 ? 4 / 5 : 1 / 5) * o.width;
         }
         if (freezeColLength === 0) {
             regionSize = 0;
@@ -13077,6 +13077,7 @@ BI.TableStyleCell = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
+            height: o.height,
             textAlign: "left",
             forceCenter: true,
             hgap: 5,

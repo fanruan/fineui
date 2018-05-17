@@ -54411,7 +54411,7 @@ BI.shortcut("bi.editor", BI.Editor);/**
  * @extends BI.Single
  * @abstract
  */
-BI.MultifileEditor = BI.inherit(BI.Single, {
+BI.MultifileEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.MultifileEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -54435,7 +54435,8 @@ BI.MultifileEditor = BI.inherit(BI.Single, {
             url: o.url,
             multiple: o.multiple,
             accept: o.accept,
-            maxSize: o.maxSize
+            maxSize: o.maxSize,
+            title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultifileEditor.EVENT_CHANGE, arguments);
@@ -55200,6 +55201,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 this.element.attr("multiple", "multiple");
             }
             this.element.attr("name", o.name || this.getName());
+            this.element.attr("title", o.title || "");
         },
 
         mounted: function () {
@@ -84372,7 +84374,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
         var regionSize = o.regionColumnSize[0];
         var freezeColLength = this._getFreezeColLength();
         if (!regionSize || regionSize > o.width - 10 || regionSize < 10) {
-            regionSize = (freezeColLength > o.columnSize.length / 2 ? 2 / 3 : 1 / 3) * o.width;
+            regionSize = (freezeColLength > o.columnSize.length / 2 ? 4 / 5 : 1 / 5) * o.width;
         }
         if (freezeColLength === 0) {
             regionSize = 0;
@@ -85553,6 +85555,7 @@ BI.TableStyleCell = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
+            height: o.height,
             textAlign: "left",
             forceCenter: true,
             hgap: 5,
@@ -98237,6 +98240,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        arguments[0] = this._createItems(items);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
@@ -111795,7 +111799,8 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
         if (BI.isNotNull(o.items)) {
-            this.populate(o.items);
+            this.items = o.items;
+            this.list.populate();
         }
     },
 
@@ -111813,7 +111818,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        this.items = items;
+        items && (this.items = items);
         this.list.populate.apply(this.list, arguments);
     }
 });

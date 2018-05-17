@@ -31,7 +31,8 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
             self.fireEvent(BI.ValueChooserPane.EVENT_CHANGE);
         });
         if (BI.isNotNull(o.items)) {
-            this.populate(o.items);
+            this.items = o.items;
+            this.list.populate();
         }
     },
 
@@ -49,7 +50,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        this.items = items;
+        items && (this.items = items);
         this.list.populate.apply(this.list, arguments);
     }
 });
