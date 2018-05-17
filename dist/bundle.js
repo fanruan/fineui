@@ -85554,6 +85554,7 @@ BI.TableStyleCell = BI.inherit(BI.Single, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
+            height: o.height,
             textAlign: "left",
             forceCenter: true,
             hgap: 5,
