@@ -10678,15 +10678,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var conf = {
                 ne: this,
                 height: o.height,
-                maxHeight: o.maxHeight ? o.maxHeight : null
+                maxHeight: o.maxHeight ? o.maxHeight : null,
+                readOnly: o.readOnly
             };
             if (this.element[0].contentEditable || !!window.opera) {
                 var newInstance = new nicEditorInstance(conf);
             } else {
                 console.error("不支持此浏览器");
-            }
-            if (o.readOnly) {
-                newInstance.disable();
             }
             return newInstance;
         },
@@ -10764,6 +10762,11 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 outline: "none"
             }).html(o.value);
 
+            if(o.readOnly) {
+                this.elm.element.attr("contentEditable", false);
+                this.elm.element.css("word-break", "break-all");
+            }
+
             this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + "px" : null);
 
             this.e = BI.createWidget({
@@ -10797,11 +10800,6 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.elm.element.on("blur", BI.bind(this.blur, this));
             this.elm.element.on("keyup", BI.bind(this.selected, this));
             this.ne.fireEvent("add");
-        },
-
-        disable: function () {
-            this.elm.element.attr("contentEditable", false);
-            this.elm.element.css("word-break", "break-all");
         },
 
         getSel: function () {
