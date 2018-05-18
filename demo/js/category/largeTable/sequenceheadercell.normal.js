@@ -16,6 +16,7 @@ BI.NormalSequenceHeaderCell = BI.inherit(BI.Widget, {
             type: "bi.label",
             element: this,
             textAlign: "left",
+            height: o.height,
             forceCenter: true,
             hgap: 5,
             text: BI.i18nText("BI-Number_Index")
