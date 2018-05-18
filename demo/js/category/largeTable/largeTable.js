@@ -48,15 +48,17 @@ Demo.Face = BI.inherit(BI.Widget, {
                     sequence: {
                         type: "bi.sequence_table_list_number",
                         pageSize: 100,
-                        sequenceHeaderCreator: {
-                            type: "bi.normal_sequence_header_cell",
-                            styleGetter: function () {
-                                return {
-                                    background: "rgb(4, 177, 194)",
-                                    color: "#ffffff",
-                                    fontWeight: "bold"
-                                };
-                            }
+                        sequenceHeaderCreator: function () {
+                            return {
+                                type: "bi.normal_sequence_header_cell",
+                                styleGetter: function () {
+                                    return {
+                                        background: "rgb(4, 177, 194)",
+                                        color: "#ffffff",
+                                        fontWeight: "bold"
+                                    };
+                                }
+                            };
                         }
                     },
                     itemsCreator: function (op, populate) {

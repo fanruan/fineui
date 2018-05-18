@@ -15,7 +15,7 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
-            sequenceHeaderCreator: null,
+            sequenceHeaderCreator: BI.emptyFn,
 
             header: [],
             items: [], // 二维数组
@@ -233,9 +233,10 @@ BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             element: this.headerContainer,
             items: [{
-                el: o.sequenceHeaderCreator || {
+                el: o.sequenceHeaderCreator() || {
                     type: "bi.table_style_cell",
                     cls: "sequence-table-title-cell",
+                    height: this._getHeaderHeight() - 2,
                     styleGetter: o.headerCellStyleGetter,
                     text: BI.i18nText("BI-Number_Index")
                 },
@@ -15734,7 +15735,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             headerRowSize: 25,
             rowSize: 25,
 
-            sequenceHeaderCreator: null,
+            sequenceHeaderCreator: BI.emptyFn,
 
             header: [],
             items: [], // 二维数组
@@ -15817,7 +15818,7 @@ BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
             type: "bi.absolute",
             element: this.headerContainer,
             items: [{
-                el: o.sequenceHeaderCreator || {
+                el: o.sequenceHeaderCreator() || {
                     type: "bi.table_style_cell",
                     cls: "sequence-table-title-cell",
                     styleGetter: o.headerCellStyleGetter,
