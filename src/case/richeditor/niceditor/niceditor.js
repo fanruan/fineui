@@ -151,6 +151,7 @@
 
         disable: function () {
             this.elm.element.attr("contentEditable", false);
+            this.elm.element.css("word-break", "break-all");
         },
 
         getSel: function () {

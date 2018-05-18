@@ -10801,6 +10801,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         disable: function () {
             this.elm.element.attr("contentEditable", false);
+            this.elm.element.css("word-break", "break-all");
         },
 
         getSel: function () {
