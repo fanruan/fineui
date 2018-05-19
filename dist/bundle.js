@@ -94218,8 +94218,9 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
                 }
 
                 var trigger = BI.createWidget({
-                    type: "bi.icon_text_item",
-                    cls: "operation-trigger " + cls,
+                    type: "bi.icon_text_icon_item",
+                    iconCls1: "operation-trigger " + cls,
+                    iconCls2: "pull-down-font",
                     text: text,
                     height: 30,
                     width: 100
