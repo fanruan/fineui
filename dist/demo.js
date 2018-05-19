@@ -4667,15 +4667,17 @@ BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inher
                     sequence: {
                         type: "bi.sequence_table_list_number",
                         pageSize: 100,
-                        sequenceHeaderCreator: {
-                            type: "bi.normal_sequence_header_cell",
-                            styleGetter: function () {
-                                return {
-                                    background: "rgb(4, 177, 194)",
-                                    color: "#ffffff",
-                                    fontWeight: "bold"
-                                };
-                            }
+                        sequenceHeaderCreator: function () {
+                            return {
+                                type: "bi.normal_sequence_header_cell",
+                                styleGetter: function () {
+                                    return {
+                                        background: "rgb(4, 177, 194)",
+                                        color: "#ffffff",
+                                        fontWeight: "bold"
+                                    };
+                                }
+                            };
                         }
                     },
                     itemsCreator: function (op, populate) {
@@ -4769,6 +4771,7 @@ BI.NormalSequenceHeaderCell = BI.inherit(BI.Widget, {
             type: "bi.label",
             element: this,
             textAlign: "left",
+            height: o.height,
             forceCenter: true,
             hgap: 5,
             text: BI.i18nText("BI-Number_Index")
