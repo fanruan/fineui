@@ -118,18 +118,6 @@
 .bi-search-text-value-combo.combo-error .bi-search-text-value-trigger .bi-text-button {
   color: #ff4949;
 }
-.bi-search-text-value-combo .trigger-up {
-  display: none;
-}
-.bi-search-text-value-combo .trigger-down {
-  display: block;
-}
-.bi-search-text-value-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-search-text-value-combo.combo-show .trigger-down {
-  display: none;
-}
 
 .bi-text-value-combo.combo-error .bi-select-text-trigger .bi-label {
   color: #ff4949;

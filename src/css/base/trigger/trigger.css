@@ -3,18 +3,6 @@
 .bi-trigger .bi-trigger-icon-button {
   font-size: 16px;
 }
-.bi-trigger .trigger-up {
-  display: none;
-}
-.bi-trigger .trigger-down {
-  display: block;
-}
-.bi-combo-popup .trigger-up {
-  display: block;
-}
-.bi-combo-popup .trigger-down {
-  display: none;
-}
 
 .bi-select-text-trigger {
   -webkit-border-radius: 2px;

@@ -248,33 +248,9 @@
 .bi-multi-select-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
-.bi-multi-select-combo .trigger-up {
-  display: none;
-}
-.bi-multi-select-combo .trigger-down {
-  display: block;
-}
-.bi-multi-select-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-select-combo.combo-show .trigger-down {
-  display: none;
-}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
-}
-.bi-multi-select-insert-combo .trigger-up {
-  display: none;
-}
-.bi-multi-select-insert-combo .trigger-down {
-  display: block;
-}
-.bi-multi-select-insert-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-select-insert-combo.combo-show .trigger-down {
-  display: none;
 }
 
 
@@ -311,18 +287,6 @@
 }
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
-}
-.bi-multi-tree-combo .trigger-up {
-  display: none;
-}
-.bi-multi-tree-combo .trigger-down {
-  display: block;
-}
-.bi-multi-tree-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-tree-combo.combo-show .trigger-down {
-  display: none;
 }
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -635,18 +599,6 @@
 }
 .bi-single-select-combo .single-select-trigger-icon-button {
   font-size: 16px;
-}
-.bi-single-select-combo .trigger-up {
-  display: none;
-}
-.bi-single-select-combo .trigger-down {
-  display: block;
-}
-.bi-single-select-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-single-select-combo.combo-show .trigger-down {
-  display: none;
 }
 .bi-single-slider-label {
   min-height: 50px;
