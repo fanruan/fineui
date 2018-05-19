@@ -551,6 +551,17 @@
   content: "\e64e";
   color: #999999;
 }
+.pull-up-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
+}
+.pull-up-font .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.pull-up-font.disabled .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
 .pull-down-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
