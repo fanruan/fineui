@@ -1294,7 +1294,9 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        self.fireEvent("EVENT_CHANGE");
+                                        if(self._checkValue(self.getValue())) {
+                                            self.fireEvent("EVENT_CHANGE");
+                                        }
                                     }
                                 }],
                                 ref: function () {
@@ -1313,6 +1315,16 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
+        }
     },
 
     setValue: function (v) {
@@ -2050,7 +2062,9 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        self.fireEvent("EVENT_CHANGE");
+                                        if(self._checkValue(self.getValue())) {
+                                            self.fireEvent("EVENT_CHANGE");
+                                        }
                                     }
                                 }],
                                 ref: function () {
@@ -2069,6 +2083,16 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
+        }
     },
 
     setValue: function (v) {
@@ -3263,7 +3287,10 @@ BI.extend(BI.DynamicDateCard, {
                                 }, {
                                     eventName: BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE,
                                     action: function () {
-                                        self.setValue(self.popup.getValue());
+                                        var value = self.popup.getValue();
+                                        if(self._checkValue(value)) {
+                                            self.setValue(value);
+                                        }
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                     }
@@ -3337,6 +3364,16 @@ BI.extend(BI.DynamicDateCard, {
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
         }
     },
 
@@ -4123,7 +4160,10 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                                 }, {
                                     eventName: BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE,
                                     action: function () {
-                                        self.setValue(self.popup.getValue());
+                                        var value = self.popup.getValue();
+                                        if(self._checkValue(value)) {
+                                            self.setValue(value);
+                                        }
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                     }
@@ -4197,6 +4237,16 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
         }
     },
 

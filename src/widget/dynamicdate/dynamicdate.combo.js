@@ -156,7 +156,10 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                 }, {
                                     eventName: BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE,
                                     action: function () {
-                                        self.setValue(self.popup.getValue());
+                                        var value = self.popup.getValue();
+                                        if(self._checkValue(value)) {
+                                            self.setValue(value);
+                                        }
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                     }
@@ -230,6 +233,16 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 this.comboWrapper.resize();
                 this.changeIcon.setVisible(false);
                 break;
+        }
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
         }
     },
 
