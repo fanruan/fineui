@@ -11017,6 +11017,111 @@ BI.shortcut("demo.tmp", Demo.Func);
     });
 
     BI.shortcut("demo.fix_global_watcher", Demo.Fix);
+}());(function () {
+    var State = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                name: "原始属性",
+                info: {
+                    age: 12,
+                    sex: "male",
+                    birth: {
+                        year: 2018,
+                        month: 9,
+                        day: 11
+                    }
+                },
+                career: [{
+                    a: 1,
+                    b: 2,
+                    c: 3
+                }]
+            };
+        },
+        computed: {
+            b: function () {
+                return this.model.name + "-计算属性";
+            },
+            birth: function () {
+                return this.model.info.birth;
+            }
+        }
+    });
+
+    Demo.Fix = BI.inherit(BI.Widget, {
+        _store: function () {
+            return new State();
+        },
+        watch: {
+            b: function () {
+                this.button.setText(this.model.b);
+            },
+            "birth.**": function () {
+                console.log(123);
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.vertical",
+                items: [{
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.name = "这是改变后的属性";
+                        },
+                        text: this.model.b
+                    }
+                }, {
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.birth.year = 2019;
+                        },
+                        text: "birthYearButton"
+                    }
+                }, {
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.career.push({
+                                year: 2017,
+                                month: 3,
+                                day: 24
+                            });
+                        },
+                        text: "careerAddButton"
+                    }
+                }, {
+                    el: {
+                        type: "bi.button",
+                        ref: function () {
+                            self.button = this;
+                        },
+                        handler: function () {
+                            self.model.career[0].a = 24;
+                        },
+                        text: "careerChangeButton"
+                    }
+                }]
+            };
+        },
+        mounted: function () {
+
+
+        }
+    });
+
+    BI.shortcut("demo.fix_immutable", Demo.Fix);
 }());/**
  * @Author: Young
  * @CreationDate 2017-11-06 10:32
@@ -13248,14 +13353,17 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     _createSingleSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.single_select_combo",
+            type: "bi.single_select_insert_list",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
+            height: 600,
             ref: function () {
                 self.SingleSelectCombo = this;
             },
             value: "柳州市针织总厂"
         });
+
+        widget.populate();
 
         widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
             BI.Msg.toast(JSON.stringify(this.getValue()));

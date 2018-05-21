@@ -26,7 +26,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
         var self = this, opts = this.options;
         var hasNext = false;
-
+        this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
             element: this,

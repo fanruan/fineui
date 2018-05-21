@@ -41,7 +41,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             valueFormatter: o.valueFormatter,
             popup: {},
             adapter: o.adapter,
-            masker: o.masker
+            masker: o.masker,
+            value: o.value
         });
         this.searcher.on(BI.SingleSelectSearcher.EVENT_START, function () {
             self.fireEvent(BI.SingleSelectTrigger.EVENT_START);

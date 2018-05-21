@@ -61,16 +61,11 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
                 var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue();
-                });
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue();
             }
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
@@ -222,44 +217,6 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
         }
     },
 
-    _joinAll: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        this.requesting = true;
-        o.itemsCreator({
-            type: BI.SingleSelectCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
-        }, function (ob) {
-            var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
-            var selectedMap = self._makeMap(self.storeValue.value);
-            var notSelectedMap = self._makeMap(res.value);
-            var newItems = [];
-            BI.each(items, function (i, item) {
-                if (BI.isNotNull(selectedMap[items[i]])) {
-                    delete selectedMap[items[i]];
-                }
-                if (BI.isNull(notSelectedMap[items[i]])) {
-                    newItems.push(item);
-                }
-            });
-            self.storeValue.value = newItems.concat(BI.values(selectedMap));
-            self._adjust(callback);
-        });
-    },
-
     _adjust: function (callback) {
         var self = this, o = this.options;
         if (!this._count) {
@@ -283,32 +240,6 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             }
             self.requesting = false;
         }
-    },
-
-    _join: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        this._assertValue(this.storeValue);
-        if (this.storeValue.type === res.type) {
-            var map = this._makeMap(this.storeValue.value);
-            BI.each(res.value, function (i, v) {
-                if (!map[v]) {
-                    self.storeValue.value.push(v);
-                    map[v] = v;
-                }
-            });
-            var change = false;
-            BI.each(res.assist, function (i, v) {
-                if (BI.isNotNull(map[v])) {
-                    change = true;
-                    delete map[v];
-                }
-            });
-            change && (this.storeValue.value = BI.values(map));
-            self._adjust(callback);
-            return;
-        }
-        this._joinAll(res, callback);
     },
 
     _setStartValue: function (value) {

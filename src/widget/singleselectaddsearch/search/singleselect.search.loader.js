@@ -50,44 +50,21 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
                 }
             },
             itemsCreator: function (op, callback) {
-                self.storeValue && (op = BI.extend(op || {}, {
+                var startValue = self._startValue;
+                BI.isNotNull(self.storeValue) && (op = BI.extend(op || {}, {
                     selectedValues: [self.storeValue]
                 }));
                 opts.itemsCreator(op, function (ob) {
                     var keyword = ob.keyword = opts.keywordGetter();
                     hasNext = ob.hasNext;
                     var firstItems = [];
-                    if (op.times === 1 && self.storeValue) {
-                        var json = BI.map([self.storeValue], function (i, v) {
-                            var txt = opts.valueFormatter(v) || v;
-                            return {
-                                text: txt,
-                                value: v,
-                                title: txt,
-                                selected: false
-                            };
-                        });
+                    if (op.times === 1 && BI.isNotNull(self.storeValue)) {
+                        var json = self._filterValues(self.storeValue);
                         firstItems = self._createItems(json);
                     }
-                    if(keyword) {
-                        var flag = false;
-                        for(var i = 0; i < ob.items.length; i++) {
-                            if(BI.contains(ob.items[i], keyword)) {
-                                flag = true;
-                            }
-                        }
-                        if(!flag) {
-                            var preItems = self._createItems([{
-                                text: keyword,
-                                value: keyword,
-                                title: keyword,
-                                selected: false
-                            }]);
-                            firstItems = firstItems.concat(preItems);
-                        }
-                    }
-                    callback(firstItems.concat(self._createItems(ob.items)), keyword);
+                    callback(firstItems.concat(self._createItems(ob.items)), keyword || "");
                     if (op.times === 1 && self.storeValue) {
+                        BI.isKey(startValue) && (self.storeValue = startValue);
                         self.setValue(self.storeValue);
                     }
                 });
@@ -118,8 +95,8 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
     _filterValues: function (src) {
         var o = this.options;
         var keyword = o.keywordGetter();
-        var values = BI.deepClone(src.value) || [];
-        var newValues = BI.map(values, function (i, v) {
+        var values = src || [];
+        var newValues = BI.map(BI.isArray(values) ? values : [values], function (i, v) {
             return {
                 text: o.valueFormatter(v) || v,
                 value: v
