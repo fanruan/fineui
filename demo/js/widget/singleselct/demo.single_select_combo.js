@@ -9,7 +9,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
     _createSingleSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.single_select_combo",
+            type: "bi.single_select_insert_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             ref: function () {
@@ -17,6 +17,8 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             },
             value: "柳州市针织总厂"
         });
+
+        widget.populate();
 
         widget.on(BI.SingleSelectCombo.EVENT_CONFIRM, function () {
             BI.Msg.toast(JSON.stringify(this.getValue()));

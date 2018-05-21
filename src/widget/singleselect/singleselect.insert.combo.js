@@ -22,12 +22,12 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             self.trigger.getSearcher().setState(self.storeValue);
         };
-        this.storeValue = "";
+        this.storeValue = o.value;
         // 标记正在请求数据
         this.requesting = false;
 
         this.trigger = BI.createWidget({
-            type: "bi.single_select_add_trigger",
+            type: "bi.single_select_trigger",
             height: o.height,
             // adapter: this.popup,
             masker: {
@@ -47,30 +47,25 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                     callback.apply(self, arguments);
                 });
-            }
+            },
+            value: this.storeValue
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
-            self._setStartValue("");
+            self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
-            self._setStartValue("");
+            self._setStartValue();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue("");
-                });
-            }
+            var keyword = this.getSearcher().getKeyword();
+            self.storeValue = keyword;
+            self.combo.setValue(self.storeValue);
+            self._setStartValue(keyword);
+            assertShowValue();
+            self.populate();
+            self._setStartValue();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -81,7 +76,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                         self.combo.populate();
-                        self._setStartValue("");
+                        self._setStartValue();
                     } else {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
@@ -93,6 +88,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
             self.storeValue = this.getValue();
             assertShowValue();
+            self._defaultState();
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -133,7 +129,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             },
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0;
-            }
+            },
+            value: o.value
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -191,7 +188,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
     },
 
     _assertValue: function (val) {
-        val || (val = "");
     },
 
     _makeMap: function (values) {
@@ -221,59 +217,10 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         }
     },
 
-    _joinAll: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        this.requesting = true;
-        o.itemsCreator({
-            type: BI.SingleSelectInsertCombo.REQ_GET_ALL_DATA,
-            keywords: [this.trigger.getKey()]
-        }, function (ob) {
-            var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                self._adjust(callback);
-                return;
-            }
-            var selectedMap = self._makeMap(self.storeValue.value);
-            var notSelectedMap = self._makeMap(res.value);
-            var newItems = [];
-            BI.each(items, function (i, item) {
-                if (BI.isNotNull(selectedMap[items[i]])) {
-                    delete selectedMap[items[i]];
-                }
-                if (BI.isNull(notSelectedMap[items[i]])) {
-                    newItems.push(item);
-                }
-            });
-            self.storeValue.value = newItems.concat(BI.values(selectedMap));
-            self._adjust(callback);
-        });
-    },
-
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.SingleSelectInsertCombo.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-
-        }
+        adjust();
+        callback();
 
         function adjust () {
             if (self.wants2Quit === true) {
@@ -284,39 +231,13 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         }
     },
 
-    _join: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        this._assertValue(this.storeValue);
-        if (this.storeValue.type === res.type) {
-            var map = this._makeMap(this.storeValue.value);
-            BI.each(res.value, function (i, v) {
-                if (!map[v]) {
-                    self.storeValue.value.push(v);
-                    map[v] = v;
-                }
-            });
-            var change = false;
-            BI.each(res.assist, function (i, v) {
-                if (BI.isNotNull(map[v])) {
-                    change = true;
-                    delete map[v];
-                }
-            });
-            change && (this.storeValue.value = BI.values(map));
-            self._adjust(callback);
-            return;
-        }
-        this._joinAll(res, callback);
-    },
-
     _setStartValue: function (value) {
         this._startValue = value;
         this.popup.setStartValue(value);
     },
 
     setValue: function (v) {
-        this.storeValue = v || "";
+        this.storeValue = v;
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
     },
@@ -326,7 +247,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
         this.combo.populate.apply(this.combo, arguments);
     }
 });

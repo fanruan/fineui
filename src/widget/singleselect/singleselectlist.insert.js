@@ -18,7 +18,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
         this.storeValue = o.value;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            BI.isKey(self._startValue) && (self.storeValue = self._startValue);
             // self.trigger.setValue(self.storeValue);
         };
 
@@ -87,33 +87,14 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    if (this.hasMatched()) {
-                        self._join({
-                            type: BI.Selection.Single,
-                            value: [keyword]
-                        }, function () {
-                            if (self.storeValue.type === BI.Selection.Single) {
-                                self.storeValue.value.pushDistinct(keyword);
-                            }
-                            self._showAdapter();
-                            self.adapter.setValue(self.storeValue);
-                            self._setStartValue(keyword);
-                            assertShowValue();
-                            self.adapter.populate();
-                            self._setStartValue();
-                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                        });
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Single) {
-                            self.storeValue.value.pushDistinct(keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Single) {
-                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
-                        }
-                    }
+                    self.storeValue = keyword;
+                    self._showAdapter();
+                    self.adapter.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.adapter.populate();
+                    self._setStartValue();
+                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
@@ -211,69 +192,6 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             });
             callback();
         }
-    },
-
-    _joinAll: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        o.itemsCreator({
-            type: BI.SingleSelectInsertList.REQ_GET_ALL_DATA,
-            keyword: self.trigger.getKeyword()
-        }, function (ob) {
-            var items = BI.map(ob.items, "value");
-            if (self.storeValue.type === res.type) {
-                var change = false;
-                var map = self._makeMap(self.storeValue.value);
-                BI.each(items, function (i, v) {
-                    if (BI.isNotNull(map[v])) {
-                        change = true;
-                        delete map[v];
-                    }
-                });
-                change && (self.storeValue.value = BI.values(map));
-                callback();
-                return;
-            }
-            var selectedMap = self._makeMap(self.storeValue.value);
-            var notSelectedMap = self._makeMap(res.value);
-            var newItems = [];
-            BI.each(items, function (i, item) {
-                if (BI.isNotNull(selectedMap[items[i]])) {
-                    delete selectedMap[items[i]];
-                }
-                if (BI.isNull(notSelectedMap[items[i]])) {
-                    newItems.push(item);
-                }
-            });
-            self.storeValue.value = newItems.concat(BI.values(selectedMap));
-            callback();
-        });
-    },
-
-    _join: function (res, callback) {
-        var self = this, o = this.options;
-        this._assertValue(res);
-        this._assertValue(this.storeValue);
-        if (this.storeValue.type === res.type) {
-            var map = this._makeMap(this.storeValue.value);
-            BI.each(res.value, function (i, v) {
-                if (!map[v]) {
-                    self.storeValue.value.push(v);
-                    map[v] = v;
-                }
-            });
-            var change = false;
-            BI.each(res.assist, function (i, v) {
-                if (BI.isNotNull(map[v])) {
-                    change = true;
-                    delete map[v];
-                }
-            });
-            change && (this.storeValue.value = BI.values(map));
-            callback();
-            return;
-        }
-        this._joinAll(res, callback);
     },
 
     _setStartValue: function (value) {

@@ -79,7 +79,9 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        self.fireEvent("EVENT_CHANGE");
+                                        if(self._checkValue(self.getValue())) {
+                                            self.fireEvent("EVENT_CHANGE");
+                                        }
                                     }
                                 }],
                                 ref: function () {
@@ -98,6 +100,16 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkValue: function (v) {
+        switch (v.type) {
+            case BI.DynamicDateCombo.Dynamic:
+                return BI.isNotEmptyObject(v.value);
+            case BI.DynamicDateCombo.Static:
+            default:
+                return true;
+        }
     },
 
     setValue: function (v) {
