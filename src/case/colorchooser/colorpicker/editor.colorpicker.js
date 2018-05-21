@@ -73,7 +73,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             } else {
                 self.setValue(self.lastColor || "#ffffff");
             }
-            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) || self._isEmptyRGB()) {
                 self.colorShow.element.css("background-color", self.getValue());
                 self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
             }
@@ -98,7 +98,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                 }
                 self.setValue(self.lastColor || "#ffffff");
             }
-            if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
+            if ((self.R.isValid() && self.G.isValid() && self.B.isValid()) ||
+                self._isEmptyRGB()) {
                 self.colorShow.element.css("background-color", self.getValue());
                 self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
             }
@@ -162,6 +163,10 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             g: this.G.getValue() || 0,
             b: this.B.getValue() || 0
         };
+    },
+
+    _isEmptyRGB: function () {
+        return BI.isEmptyString(this.storeValue.r) && BI.isEmptyString(this.storeValue.g) && BI.isEmptyString(this.storeValue.b);
     },
 
     _showPreColor: function (color) {
