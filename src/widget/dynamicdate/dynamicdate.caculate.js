@@ -7,6 +7,11 @@
     BI.extend(BI.DynamicDateHelper, {
         getCalculation: function (obj) {
             var date = BI.getDate();
+
+            return this.getCalculationByDate(date, obj);
+        },
+
+        getCalculationByDate: function (date, obj) {
             if (BI.isNotNull(obj.year)) {
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
@@ -29,6 +34,7 @@
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
                 date = this.getBeginDate(date, obj);
             }
+
             return date;
         },
 

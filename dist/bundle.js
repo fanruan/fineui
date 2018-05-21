@@ -90320,6 +90320,11 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
     BI.extend(BI.DynamicDateHelper, {
         getCalculation: function (obj) {
             var date = BI.getDate();
+
+            return this.getCalculationByDate(date, obj);
+        },
+
+        getCalculationByDate: function (date, obj) {
             if (BI.isNotNull(obj.year)) {
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
@@ -90342,6 +90347,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
                 date = this.getBeginDate(date, obj);
             }
+
             return date;
         },
 
@@ -90364,7 +90370,8 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             return date;
         }
     });
-})();BI.DynamicDateCard = BI.inherit(BI.Widget, {
+})();
+BI.DynamicDateCard = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-dynamic-date-card"
