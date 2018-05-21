@@ -13356,7 +13356,6 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             type: "bi.single_select_insert_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
-            height: 600,
             ref: function () {
                 self.SingleSelectCombo = this;
             },
