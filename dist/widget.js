@@ -10274,23 +10274,23 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
-                self._join({
-                    type: BI.Selection.Multi,
-                    value: [keyword]
-                }, function () {
-                    // 如果在不选的状态下直接把该值添加进来
-                    if (self.storeValue.type === BI.Selection.Multi) {
-                        self.storeValue.value.pushDistinct(keyword);
-                    }
-                    self.combo.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.populate();
-                    self._setStartValue("");
-                });
-            }
+            // if (this.getSearcher().hasMatched()) {
+            var keyword = this.getSearcher().getKeyword();
+            self._join({
+                type: BI.Selection.Multi,
+                value: [keyword]
+            }, function () {
+                // 如果在不选的状态下直接把该值添加进来
+                if (self.storeValue.type === BI.Selection.Multi) {
+                    self.storeValue.value.pushDistinct(keyword);
+                }
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue("");
+            });
+            // }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -11807,17 +11807,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             height: this.constants.height
         });
 
-        this.addNotMatchTip = BI.createWidget({
-            type: "bi.icon_text_item",
-            invisible: true,
-            text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
-            cls: "text-add-tip-font",
-            height: this.constants.height,
-            handler: function () {
-                self.fireEvent(BI.MultiSelectSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
-            }
-        });
-
         this.loader = BI.createWidget({
             type: "bi.multi_select_search_loader",
             keywordGetter: o.keywordGetter,
@@ -11838,20 +11827,23 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                type: "bi.center_adapt",
-                items: [this.tooltipClick, this.addNotMatchTip],
-                height: this.constants.height
+                el: this.tooltipClick,
+                height: 0
             }, {
                 el: this.loader
             }]
         });
+        this.tooltipClick.setVisible(false);
     },
 
     setKeyword: function (keyword) {
         var btn;
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
-        this.tooltipClick.setVisible(isMatchTipVisible);
-        this.addNotMatchTip.setVisible(!isMatchTipVisible);
+        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        if (isVisible !== this.tooltipClick.isVisible()) {
+            this.tooltipClick.setVisible(isVisible);
+            this.resizer.attr("items")[0].height = (isVisible ? this.constants.height : 0);
+            this.resizer.resize();
+        }
     },
 
     isAllSelected: function () {
@@ -11880,7 +11872,6 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
-BI.MultiSelectSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);/**
  * 查看已选按钮
