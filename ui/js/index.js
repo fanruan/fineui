@@ -59,7 +59,7 @@ BI.i18n = {
     "BI-Basic_April": "四月",
     "BI-Multi_Date_Quarter_Begin": "季度初",
     "BI-Multi_Date_Week": "周",
-    "BI-Click_Blank_To_Select": "点击\"空格键\"选中匹配项",
+    "BI-Click_Blank_To_Select": "点击\"空格键\"选中完全匹配项",
     "BI-Basic_August": "八月",
     "BI-Word_Align_Left": "文字居左",
     "BI-Basic_November": "十一月",
@@ -164,5 +164,6 @@ BI.i18n = {
     "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
-    "BI-Please_Enter_SQL": "请输入SQL"
+    "BI-Please_Enter_SQL": "请输入SQL",
+    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\""
 };
