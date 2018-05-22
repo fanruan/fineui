@@ -97841,23 +97841,23 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            // if (this.getSearcher().hasMatched()) {
-            var keyword = this.getSearcher().getKeyword();
-            self._join({
-                type: BI.Selection.Multi,
-                value: [keyword]
-            }, function () {
-                // 如果在不选的状态下直接把该值添加进来
-                if (self.storeValue.type === BI.Selection.Multi) {
-                    self.storeValue.value.pushDistinct(keyword);
-                }
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue("");
-            });
-            // }
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self._join({
+                    type: BI.Selection.Multi,
+                    value: [keyword]
+                }, function () {
+                    // 如果在不选的状态下直接把该值添加进来
+                    if (self.storeValue.type === BI.Selection.Multi) {
+                        self.storeValue.value.pushDistinct(keyword);
+                    }
+                    self.combo.setValue(self.storeValue);
+                    self._setStartValue(keyword);
+                    assertShowValue();
+                    self.populate();
+                    self._setStartValue("");
+                });
+            }
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -99374,6 +99374,17 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             height: this.constants.height
         });
 
+        this.addNotMatchTip = BI.createWidget({
+            type: "bi.icon_text_item",
+            invisible: true,
+            text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+            cls: "text-add-tip-font",
+            height: this.constants.height,
+            handler: function () {
+                self.fireEvent(BI.MultiSelectSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
+            }
+        });
+
         this.loader = BI.createWidget({
             type: "bi.multi_select_search_loader",
             keywordGetter: o.keywordGetter,
@@ -99394,23 +99405,20 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                el: this.tooltipClick,
-                height: 0
+                type: "bi.center_adapt",
+                items: [this.tooltipClick, this.addNotMatchTip],
+                height: this.constants.height
             }, {
                 el: this.loader
             }]
         });
-        this.tooltipClick.setVisible(false);
     },
 
     setKeyword: function (keyword) {
         var btn;
-        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
-        if (isVisible !== this.tooltipClick.isVisible()) {
-            this.tooltipClick.setVisible(isVisible);
-            this.resizer.attr("items")[0].height = (isVisible ? this.constants.height : 0);
-            this.resizer.resize();
-        }
+        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        this.tooltipClick.setVisible(isMatchTipVisible);
+        this.addNotMatchTip.setVisible(!isMatchTipVisible);
     },
 
     isAllSelected: function () {
@@ -99439,6 +99447,7 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 });
 
 BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiSelectSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);/**
  * 查看已选按钮
@@ -112961,7 +112970,7 @@ BI.i18n = {
     "BI-Basic_April": "四月",
     "BI-Multi_Date_Quarter_Begin": "季度初",
     "BI-Multi_Date_Week": "周",
-    "BI-Click_Blank_To_Select": "点击\"空格键\"选中匹配项",
+    "BI-Click_Blank_To_Select": "点击\"空格键\"选中完全匹配项",
     "BI-Basic_August": "八月",
     "BI-Word_Align_Left": "文字居左",
     "BI-Basic_November": "十一月",
@@ -113066,5 +113075,6 @@ BI.i18n = {
     "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
-    "BI-Please_Enter_SQL": "请输入SQL"
+    "BI-Please_Enter_SQL": "请输入SQL",
+    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\""
 };

@@ -1175,6 +1175,17 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e74b";
   color: inherit;
 }
+.text-add-tip-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6dd;');
+}
+.text-add-tip-font .b-font:before {
+  content: "\e6dd";
+  color: #5cb75d;
+}
+.text-add-tip-font.disabled .b-font:before {
+  content: "\e6dd";
+  color: #5cb75d;
+}
 .tree-collapse-icon-type1 .x-icon {
   display: block;
   background: url('images/2x/icon/tree_collapse_1.png') no-repeat center center;
