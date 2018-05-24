@@ -9,7 +9,8 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         return BI.extend(BI.RichEditorAction.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
             height: 20,
-            command: ""
+            command: "",
+            used: true
         });
     },
 
@@ -17,14 +18,19 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
         BI.RichEditorAction.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
-            self.setEnable(true);
-            self.checkNodes(e.target);
-            self.key(e);
+            if (o.used === true) {
+                self.setEnable(true);
+                self.checkNodes(e.target);
+                self.key(e);
+            }
         });
         o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
             self.setEnable(false);
         });
         o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
+        if (o.used === false) {
+            this.setEnable(false);
+        }
     },
 
     checkNodes: function (e) {
