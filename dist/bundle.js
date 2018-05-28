@@ -88112,6 +88112,10 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.fireEvent(BI.YearDateCombo.EVENT_CHANGE);
         });
+        // BI-22551 popup未初始化传入的behavior无效
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.doBehavior();
+        });
     },
 
     setValue: function (v) {
