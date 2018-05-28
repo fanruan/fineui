@@ -183,7 +183,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             if (self.isEnabled()) {
                                 self.doClick();
                             }
-                        }, 100);
+                        }, 180);
                         mouseDown = true;
                         ev(e);
                     });
