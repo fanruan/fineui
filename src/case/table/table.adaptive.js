@@ -113,7 +113,7 @@ BI.AdaptiveTable = BI.inherit(BI.Widget, {
                 }
                 return 0;
             });
-            regionSize = BI.clamp(rs, 1 / 5 * o.width, 1 / 4 * o.width);
+            regionSize = BI.clamp(rs, 1 / 5 * o.width, 4 / 5 * o.width);
         }
         if (freezeColLength === 0) {
             regionSize = 0;
