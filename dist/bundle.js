@@ -98746,7 +98746,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value || {};
         this._assertValue(this.storeValue);
 
-        this.button_group = BI.createWidget({
+        this.button_group = BI.createWidget(BI.extend({
             type: "bi.list_pane",
             element: this,
             onLoaded: opts.onLoaded,
@@ -98811,9 +98811,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                 return hasNext;
             },
             value: this.storeValue
-        }, {
-            el: opts.el
-        });
+        }, opts.el));
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
