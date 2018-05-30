@@ -90600,8 +90600,18 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = date.getOffsetDate(BI.parseInt(obj.day));
             }
             if (BI.isNotNull(obj.workDay)) {
-                // todo 根据工作日做偏移 暂时按天偏移
-                date = date.getOffsetDate(BI.parseInt(obj.workDay));
+                // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
+                if(BI.isNotNull(Date.holidays)) {
+                    var count = Math.abs(obj.workDay);
+                    for (var i = 0; i < count; i++) {
+                        date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
+                        if(BI.isNotNull(Date.holidays[date.print("%Y-%X-%d")])) {
+                            i--;
+                        }
+                    }
+                } else {
+                    date = date.getOffsetDate(BI.parseInt(obj.workDay));
+                }
             }
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
                 date = this.getBeginDate(date, obj);
