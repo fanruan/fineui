@@ -83520,7 +83520,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         start: function () {
-            this.elm.element.attr("contentEditable", true);
+            this.elm.element.attr("contentEditable", this.options.readOnly !== true);
             if (this.getContent() == "") {
                 // this.setContent("<br />");
             }
