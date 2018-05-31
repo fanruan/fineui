@@ -78221,21 +78221,21 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             },
             buttons: [{
                 type: "bi.button",
-                value: BI.i18nText("BI-Basic_Sure"),
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
-                }
-            }, {
-                type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
                 level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
                 }
+            }, {
+                type: "bi.button",
+                value: BI.i18nText("BI-Basic_Sure"),
+                height: 24,
+                handler: function () {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
+                }
             }]
-        }
+        };
     },
 
     populate: function (v) {
