@@ -57519,7 +57519,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.editor.getValue("\n", function (line) {
+        var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
             _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
@@ -57537,6 +57537,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             });
             return value;
         });
+        return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
 
     setValue: function (v) {
@@ -78220,21 +78221,21 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             },
             buttons: [{
                 type: "bi.button",
-                value: BI.i18nText("BI-Basic_Sure"),
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
-                }
-            }, {
-                type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
                 level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
                 }
+            }, {
+                type: "bi.button",
+                value: BI.i18nText("BI-Basic_Sure"),
+                height: 24,
+                handler: function () {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
+                }
             }]
-        }
+        };
     },
 
     populate: function (v) {
