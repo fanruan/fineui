@@ -21510,7 +21510,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        return this.editor.getValue("\n", function (line) {
+        var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
             _.forEach(_.sortBy(line.markedSpans, "from"), function (i, ms) {
@@ -21528,6 +21528,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
             });
             return value;
         });
+        return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
 
     setValue: function (v) {
