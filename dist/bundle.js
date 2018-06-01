@@ -56371,7 +56371,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         });
     },
     _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);
+        BI.Toast.superclass._init.apply(this, arguments);BI
         var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth + "px"
@@ -78463,9 +78463,12 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.IconTextValueComboPopup.superclass.populate.apply(this, arguments);
+        var o = this.options;
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 30
+            height: 30,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup.populate(items);
     },
