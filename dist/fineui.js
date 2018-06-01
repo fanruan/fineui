@@ -56614,7 +56614,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         });
     },
     _init: function () {
-        BI.Toast.superclass._init.apply(this, arguments);BI
+        BI.Toast.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.element.css({
             minWidth: this._const.minWidth + "px"
