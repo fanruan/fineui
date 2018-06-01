@@ -42,9 +42,12 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
 
     populate: function (items) {
         BI.IconTextValueComboPopup.superclass.populate.apply(this, arguments);
+        var o = this.options;
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 30
+            height: 30,
+            iconHeight: o.iconHeight,
+            iconWidth: o.iconWidth
         });
         this.popup.populate(items);
     },
