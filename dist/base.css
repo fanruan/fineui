@@ -1334,6 +1334,9 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: alpha(opacity=10);
   background-color: #1a1a1a;
 }
+.bi-basic-button .popup-content {
+  font-size: 14px;
+}
 .bi-theme-dark body .bi-button.button-common.ghost,
 .bi-theme-dark #body .bi-button.button-common.ghost,
 .bi-theme-dark body .bi-button.button-common.ghost .b-font:before,

@@ -238,6 +238,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                 },
                                 popup: {
                                     type: "bi.text_bubble_bar_popup_view",
+                                    cls: "popup-content",
                                     text: getBubble(),
                                     ref: function () {
                                         popup = this;

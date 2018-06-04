@@ -11709,11 +11709,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         }
     },
 
-    _setEnable: function (enable) {
-        BI.RichEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
-    },
-
     focus: function () {
         this.editor.focus();
     },
