@@ -46,7 +46,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text bi-disabled",
+            cls: "state-editor-infinite-text",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Basic_Unrestricted"),

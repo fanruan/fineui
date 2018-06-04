@@ -76431,16 +76431,13 @@ BI.shortcut("bi.color_chooser", BI.ColorChooser);/**
  */
 BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
-    _defaultConfig: function () {
-        return BI.extend(BI.ColorChooserPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser-popup",
-            width: 200,
-            height: 145
-        });
+    props: {
+        baseCls: "bi-color-chooser-popup",
+        width: 200,
+        height: 145
     },
 
-    _init: function () {
-        BI.ColorChooserPopup.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
@@ -76547,51 +76544,82 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vtape",
-            element: this,
+        return {
+            type: "bi.absolute",
             items: [{
                 el: {
-                    type: "bi.absolute",
-                    cls: "bi-background bi-border-bottom",
+                    type: "bi.vtape",
                     items: [{
-                        el: this.colorEditor,
-                        left: 0,
-                        right: 0,
-                        top: 5
+                        el: {
+                            type: "bi.absolute",
+                            cls: "bi-background bi-border-bottom",
+                            items: [{
+                                el: this.colorEditor,
+                                left: 0,
+                                right: 0,
+                                top: 5
+                            }]
+                        },
+                        height: 30
+                    }, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: this.storeColors,
+                                left: 5,
+                                right: 5,
+                                top: 5
+                            }]
+                        },
+                        height: 30
+                    }, {
+                        el: {
+                            type: "bi.absolute",
+                            items: [{
+                                el: this.colorPicker,
+                                left: 5,
+                                right: 5,
+                                top: 5
+                            }]
+                        },
+                        height: 65
+                    }, {
+                        el: this.more,
+                        height: 20
                     }]
                 },
-                height: 30
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }, {
                 el: {
-                    type: "bi.absolute",
-                    items: [{
-                        el: this.storeColors,
-                        left: 5,
-                        right: 5,
-                        top: 5
-                    }]
+                    type: "bi.layout",
+                    cls: "disable-mask",
+                    invisible: !o.disabled,
+                    ref: function () {
+                        self.mask = this;
+                    }
                 },
-                height: 30
-            }, {
-                el: {
-                    type: "bi.absolute",
-                    items: [{
-                        el: this.colorPicker,
-                        left: 5,
-                        right: 5,
-                        top: 5
-                    }]
-                },
-                height: 65
-            }, {
-                el: this.more,
-                height: 20
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
             }]
-        });
+        };
+    },
+
+    mounted: function () {
+        var self = this;
+        var o = this.options;
         if (BI.isNotNull(o.value)) {
             this.setValue(o.value);
         }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorChooserPopup.superclass._setEnable.apply(this, arguments);
+        this.mask.setVisible(!enable);
     },
 
     setStoreColors: function (colors) {
@@ -80952,7 +80980,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text bi-disabled",
+            cls: "state-editor-infinite-text",
             textAlign: "left",
             height: o.height,
             text: BI.i18nText("BI-Basic_Unrestricted"),
@@ -84332,7 +84360,7 @@ BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor",
+        baseCls: "bi-rich-editor bi-textarea",
         toolbar: {},
         readOnly: false
     },
