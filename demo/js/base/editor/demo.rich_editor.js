@@ -12,7 +12,6 @@ Demo.RichEditor = BI.inherit(BI.Widget, {
                     type: "bi.rich_editor",
                     height: "100%",
                     cls: "bi-border",
-                    disabled: true,
                     ref: function () {
                         self.editor = this;
                     },

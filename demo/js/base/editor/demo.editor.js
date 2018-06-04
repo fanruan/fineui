@@ -9,9 +9,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
-            height: 30,
-            value: "aaa",
-            disabled: true
+            height: 30
         });
         editor1.on(BI.Editor.EVENT_ENTER, function () {
             editor1.blur();
@@ -23,7 +21,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             disabled: true,
             errorText: "字段不可重名",
             validationChecker: function (v) {
-                if (v == "a") {
+                if (v == "a") {d
                     return false;
                 }
                 return true;

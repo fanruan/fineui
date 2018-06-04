@@ -721,9 +721,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
-            height: 30,
-            value: "aaa",
-            disabled: true
+            height: 30
         });
         editor1.on(BI.Editor.EVENT_ENTER, function () {
             editor1.blur();
@@ -735,7 +733,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             disabled: true,
             errorText: "字段不可重名",
             validationChecker: function (v) {
-                if (v == "a") {
+                if (v == "a") {d
                     return false;
                 }
                 return true;
@@ -867,7 +865,6 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inher
                     type: "bi.rich_editor",
                     height: "100%",
                     cls: "bi-border",
-                    disabled: true,
                     ref: function () {
                         self.editor = this;
                     },
