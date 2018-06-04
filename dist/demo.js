@@ -2449,7 +2449,6 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
             }, {
                 el: {
                     type: "bi.color_chooser",
-                    disabled: true,
                     width: 230,
                     height: 30
                 },

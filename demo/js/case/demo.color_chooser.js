@@ -25,7 +25,6 @@ Demo.Func = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.color_chooser",
-                    disabled: true,
                     width: 230,
                     height: 30
                 },
