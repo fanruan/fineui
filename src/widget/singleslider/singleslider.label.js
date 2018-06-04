@@ -243,6 +243,11 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
         return (v - this.min) * 100 / (this.max - this.min);
     },
 
+    _setEnable: function (b) {
+        BI.SingleSliderLabel.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
+    },
+
     getValue: function () {
         return this.value;
     },

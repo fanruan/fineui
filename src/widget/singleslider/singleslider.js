@@ -10,16 +10,14 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         SLIDER_HEIGHT: 30,
         TRACK_HEIGHT: 24
     },
-    _defaultConfig: function () {
-        return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-slider bi-slider-track",
-            digit: false,
-            unit: ""
-        });
-    },
-    _init: function () {
-        BI.SingleSlider.superclass._init.apply(this, arguments);
 
+    props: {
+        baseCls: "bi-single-slider bi-slider-track",
+        digit: false,
+        unit: ""
+    },
+
+    render: function () {
         var self = this, o = this.options;
         var c = this._constant;
         this.enable = false;
@@ -99,9 +97,8 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         });
         this._setVisible(false);
-        BI.createWidget({
+        return {
             type: "bi.absolute",
-            element: this,
             items: [{
                 el: {
                     type: "bi.vertical",
@@ -138,7 +135,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
-        });
+        };
     },
 
     _draggable: function (widget) {
@@ -290,6 +287,11 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 this.value = this.min;
             }
         }
+    },
+
+    _setEnable: function (b) {
+        BI.SingleSlider.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
     },
 
     setMinAndMax: function (v) {

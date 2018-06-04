@@ -12,16 +12,13 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         TRACK_HEIGHT: 24
     },
 
-    _defaultConfig: function () {
-        return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-interval-slider bi-slider-track",
-            digit: false,
-            unit: ""
-        });
+    props: {
+        baseCls: "bi-interval-slider bi-slider-track",
+        digit: false,
+        unit: ""
     },
 
-    _init: function () {
-        BI.IntervalSlider.superclass._init.apply(this, arguments);
+    render: function () {
 
         var self = this;
         var c = this._constant;
@@ -111,7 +108,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         this._draggable(this.sliderTwo, false);
         this._setVisible(false);
 
-        BI.createWidget({
+        return {
             type: "bi.absolute",
             element: this,
             items: [{
@@ -132,10 +129,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             },
-            this._createLabelWrapper(),
-            this._createSliderWrapper()
+                this._createLabelWrapper(),
+                this._createSliderWrapper()
             ]
-        });
+        };
     },
 
     _rePosBySizeAfterMove: function (size, isLeft) {
@@ -444,6 +441,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return this.max;
         }
         return value;
+    },
+
+    _setEnable: function (b) {
+        BI.IntervalSlider.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
     },
 
     getValue: function () {
