@@ -2406,6 +2406,7 @@ BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.color_chooser_popup",
+                    disabled: true,
                     cls: "bi-card"
                 },
                 left: 100,

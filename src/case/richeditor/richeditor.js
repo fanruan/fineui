@@ -8,7 +8,7 @@
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor",
+        baseCls: "bi-rich-editor bi-textarea",
         toolbar: {},
         readOnly: false
     },
@@ -77,6 +77,11 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
         }
+    },
+
+    _setEnable: function (enable) {
+        BI.RichEditor.superclass._setEnable.apply(this, arguments);
+        this.mask.setVisible(!enable);
     },
 
     focus: function () {
