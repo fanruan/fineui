@@ -8,7 +8,7 @@
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor",
+        baseCls: "bi-rich-editor bi-textarea",
         toolbar: {},
         readOnly: false
     },

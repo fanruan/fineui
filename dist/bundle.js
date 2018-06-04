@@ -36608,6 +36608,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                 },
                                 popup: {
                                     type: "bi.text_bubble_bar_popup_view",
+                                    cls: "popup-content",
                                     text: getBubble(),
                                     ref: function () {
                                         popup = this;
@@ -56162,6 +56163,15 @@ BI.Label = BI.inherit(BI.Single, {
             element: this.text,
             scrollable: o.whiteSpace === "normal"
         });
+    },
+
+    _setEnable: function (enable) {
+        BI.Label.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
     },
 
     doRedMark: function () {
@@ -84117,7 +84127,7 @@ BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor",
+        baseCls: "bi-rich-editor bi-textarea",
         toolbar: {},
         readOnly: false
     },
