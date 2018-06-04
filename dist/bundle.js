@@ -20909,11 +20909,11 @@ if (!window.BI) {
                     dt = new Date();
                     break;
             }
-            if (BI.isNotNull(Date.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
+            if (BI.isNotNull(BI.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
                 var localTime = dt.getTime();
                 var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
                 var utc = localTime + localOffset; // utc即GMT时间标准时区
-                return new Date(utc + Date.timeZone);// + Pool.timeZone.offset);
+                return new Date(utc + BI.timeZone);// + Pool.timeZone.offset);
             }
             return dt;
 
@@ -20960,8 +20960,8 @@ if (!window.BI) {
                     dt = new Date();
                     break;
             }
-            if (BI.isNotNull(Date.timeZone)) {
-                return dt.getTime() - Date.timeZone - dt.getTimezoneOffset() * 60000;
+            if (BI.isNotNull(BI.timeZone)) {
+                return dt.getTime() - BI.timeZone - dt.getTimezoneOffset() * 60000;
             }
             return dt.getTime();
 
