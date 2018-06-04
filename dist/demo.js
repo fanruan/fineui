@@ -733,7 +733,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             disabled: true,
             errorText: "字段不可重名",
             validationChecker: function (v) {
-                if (v == "a") {d
+                if (v == "a") {
                     return false;
                 }
                 return true;

@@ -21,7 +21,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             disabled: true,
             errorText: "字段不可重名",
             validationChecker: function (v) {
-                if (v == "a") {d
+                if (v == "a") {
                     return false;
                 }
                 return true;
