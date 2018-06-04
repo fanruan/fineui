@@ -11638,7 +11638,7 @@ BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor bi-textarea",
+        baseCls: "bi-rich-editor",
         toolbar: {},
         readOnly: false
     },
@@ -11707,11 +11707,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
         }
-    },
-
-    _setEnable: function (enable) {
-        BI.RichEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
     },
 
     focus: function () {
