@@ -84117,7 +84117,7 @@ BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
 BI.RichEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-rich-editor bi-textarea",
+        baseCls: "bi-rich-editor",
         toolbar: {},
         readOnly: false
     },
