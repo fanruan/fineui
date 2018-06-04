@@ -94703,16 +94703,13 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         TRACK_HEIGHT: 24
     },
 
-    _defaultConfig: function () {
-        return BI.extend(BI.IntervalSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-interval-slider bi-slider-track",
-            digit: false,
-            unit: ""
-        });
+    props: {
+        baseCls: "bi-interval-slider bi-slider-track",
+        digit: false,
+        unit: ""
     },
 
-    _init: function () {
-        BI.IntervalSlider.superclass._init.apply(this, arguments);
+    render: function () {
 
         var self = this;
         var c = this._constant;
@@ -94802,7 +94799,7 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
         this._draggable(this.sliderTwo, false);
         this._setVisible(false);
 
-        BI.createWidget({
+        return {
             type: "bi.absolute",
             element: this,
             items: [{
@@ -94823,10 +94820,10 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             },
-            this._createLabelWrapper(),
-            this._createSliderWrapper()
+                this._createLabelWrapper(),
+                this._createSliderWrapper()
             ]
-        });
+        };
     },
 
     _rePosBySizeAfterMove: function (size, isLeft) {
@@ -95135,6 +95132,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
             return this.max;
         }
         return value;
+    },
+
+    _setEnable: function (b) {
+        BI.IntervalSlider.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
     },
 
     getValue: function () {
@@ -107098,16 +107100,14 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         SLIDER_HEIGHT: 30,
         TRACK_HEIGHT: 24
     },
-    _defaultConfig: function () {
-        return BI.extend(BI.SingleSlider.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-slider bi-slider-track",
-            digit: false,
-            unit: ""
-        });
-    },
-    _init: function () {
-        BI.SingleSlider.superclass._init.apply(this, arguments);
 
+    props: {
+        baseCls: "bi-single-slider bi-slider-track",
+        digit: false,
+        unit: ""
+    },
+
+    render: function () {
         var self = this, o = this.options;
         var c = this._constant;
         this.enable = false;
@@ -107187,9 +107187,8 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         });
         this._setVisible(false);
-        BI.createWidget({
+        return {
             type: "bi.absolute",
-            element: this,
             items: [{
                 el: {
                     type: "bi.vertical",
@@ -107226,7 +107225,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 left: 0,
                 width: "100%"
             }]
-        });
+        };
     },
 
     _draggable: function (widget) {
@@ -107378,6 +107377,11 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 this.value = this.min;
             }
         }
+    },
+
+    _setEnable: function (b) {
+        BI.SingleSlider.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
     },
 
     setMinAndMax: function (v) {
@@ -107660,6 +107664,11 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
         return (v - this.min) * 100 / (this.max - this.min);
     },
 
+    _setEnable: function (b) {
+        BI.SingleSliderLabel.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
+    },
+
     getValue: function () {
         return this.value;
     },
@@ -107936,6 +107945,11 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
 
     _getPercentByValue: function (v) {
         return (v - this.min) * 100 / (this.max - this.min);
+    },
+
+    _setEnable: function (b) {
+        BI.SingleSliderNormal.superclass._setEnable.apply(this, [b]);
+        this.blueTrack && this.blueTrack.setVisible(!!b);
     },
 
     getValue: function () {
