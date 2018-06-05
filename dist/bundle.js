@@ -78407,7 +78407,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            defaultIconCls: o.defaultIconCls,
+            iconCls: o.iconCls,
             value: o.value,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
@@ -87332,7 +87332,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            defaultIconCls: ""
+            iconCls: ""
         });
     },
 
@@ -87375,7 +87375,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         } else {
             return {
                 text: o.text,
-                iconCls: o.defaultIconCls
+                iconCls: o.iconCls
             };
         }
     },
@@ -90402,11 +90402,11 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             }
             if (BI.isNotNull(obj.workDay)) {
                 // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
-                if(BI.isNotNull(Date.holidays)) {
+                if(BI.isNotNull(BI.holidays)) {
                     var count = Math.abs(obj.workDay);
                     for (var i = 0; i < count; i++) {
                         date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
-                        if(BI.isNotNull(Date.holidays[date.print("%Y-%X-%d")])) {
+                        if(BI.isNotNull(BI.holidays[date.print("%Y-%X-%d")])) {
                             i--;
                         }
                     }

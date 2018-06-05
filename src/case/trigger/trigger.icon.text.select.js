@@ -9,7 +9,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            defaultIconCls: ""
+            iconCls: ""
         });
     },
 
@@ -52,7 +52,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         } else {
             return {
                 text: o.text,
-                iconCls: o.defaultIconCls
+                iconCls: o.iconCls
             };
         }
     },

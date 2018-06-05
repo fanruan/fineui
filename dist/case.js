@@ -5918,7 +5918,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            defaultIconCls: o.defaultIconCls,
+            iconCls: o.iconCls,
             value: o.value,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
@@ -14843,7 +14843,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            defaultIconCls: ""
+            iconCls: ""
         });
     },
 
@@ -14886,7 +14886,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         } else {
             return {
                 text: o.text,
-                iconCls: o.defaultIconCls
+                iconCls: o.iconCls
             };
         }
     },
