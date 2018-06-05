@@ -2028,7 +2028,8 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 type: "bi.icon_text_value_combo",
                 text: "默认值",
-                value: 1,
+                // defaultIconCls: "next-page-h-font",
+                value: 23,
                 width: 300,
                 iconHeight: 16,
                 iconWidth: 16,

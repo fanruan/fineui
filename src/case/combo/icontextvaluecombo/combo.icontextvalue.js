@@ -21,6 +21,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
+            defaultIconCls: o.defaultIconCls,
             value: o.value,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
