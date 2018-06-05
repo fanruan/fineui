@@ -2779,11 +2779,11 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
             }
             if (BI.isNotNull(obj.workDay)) {
                 // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
-                if(BI.isNotNull(Date.holidays)) {
+                if(BI.isNotNull(BI.holidays)) {
                     var count = Math.abs(obj.workDay);
                     for (var i = 0; i < count; i++) {
                         date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
-                        if(BI.isNotNull(Date.holidays[date.print("%Y-%X-%d")])) {
+                        if(BI.isNotNull(BI.holidays[date.print("%Y-%X-%d")])) {
                             i--;
                         }
                     }
