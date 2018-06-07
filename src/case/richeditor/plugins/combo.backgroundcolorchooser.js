@@ -39,12 +39,6 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         }
     },
 
-    _setVisible: function (b) {
-        if(b === false) {
-            this.colorchooser.hideView();
-        }
-    },
-
     deactivate: function () {
     }
 });

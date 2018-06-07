@@ -57,12 +57,6 @@ BI.RichEditorFontChooser = BI.inherit(BI.RichEditorAction, {
         });
     },
 
-    _setVisible: function (b) {
-        if(b === false) {
-            this.combo.hideView();
-        }
-    },
-
     hideIf: function (e) {
         if(!this.combo.element.find(e.target).length > 0) {
             this.combo.hideView();
