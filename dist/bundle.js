@@ -83918,6 +83918,12 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         }
     },
 
+    _setVisible: function (b) {
+        if(b === false) {
+            this.colorchooser.hideView();
+        }
+    },
+
     deactivate: function () {
     }
 });
@@ -83960,6 +83966,12 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
 
     hideIf: function (e) {
         if (!this.colorchooser.element.find(e.target).length > 0) {
+            this.colorchooser.hideView();
+        }
+    },
+
+    _setVisible: function (b) {
+        if(b === false) {
             this.colorchooser.hideView();
         }
     },
@@ -84029,6 +84041,12 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
             this.hideView();
             this.setValue([]);
         });
+    },
+
+    _setVisible: function (b) {
+        if(b === false) {
+            this.combo.hideView();
+        }
     },
 
     hideIf: function (e) {
@@ -84110,6 +84128,12 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             this.hideView();
             this.setValue([]);
         });
+    },
+
+    _setVisible: function (b) {
+        if(b === false) {
+            this.combo.hideView();
+        }
     },
 
     hideIf: function (e) {
