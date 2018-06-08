@@ -291,7 +291,11 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
 
     _setEnable: function (b) {
         BI.SingleSlider.superclass._setEnable.apply(this, [b]);
-        this.blueTrack && this.blueTrack.setVisible(!!b);
+        if(b) {
+            this.blueTrack.element.removeClass("disabled-blue-track").addClass("blue-track");
+        } else {
+            this.blueTrack.element.removeClass("blue-track").addClass("disabled-blue-track");
+        }
     },
 
     setMinAndMax: function (v) {

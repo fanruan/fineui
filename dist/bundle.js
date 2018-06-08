@@ -51146,6 +51146,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                                         type: "bi.label",
                                         height: 36,
                                         text: o.header,
+                                        title: o.header,
                                         textAlign: "left"
                                     },
                                     left: 10,
@@ -76969,7 +76970,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: false,
+            allowBlank: true,
             value: 255,
             width: 32,
             height: 20
@@ -94933,7 +94934,11 @@ BI.IntervalSlider = BI.inherit(BI.Widget, {
 
     _setEnable: function (b) {
         BI.IntervalSlider.superclass._setEnable.apply(this, [b]);
-        this.blueTrack && this.blueTrack.setVisible(!!b);
+        if(b) {
+            this.blueTrack.element.removeClass("disabled-blue-track").addClass("blue-track");
+        } else {
+            this.blueTrack.element.removeClass("blue-track").addClass("disabled-blue-track");
+        }
     },
 
     getValue: function () {
@@ -107178,7 +107183,11 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
 
     _setEnable: function (b) {
         BI.SingleSlider.superclass._setEnable.apply(this, [b]);
-        this.blueTrack && this.blueTrack.setVisible(!!b);
+        if(b) {
+            this.blueTrack.element.removeClass("disabled-blue-track").addClass("blue-track");
+        } else {
+            this.blueTrack.element.removeClass("blue-track").addClass("disabled-blue-track");
+        }
     },
 
     setMinAndMax: function (v) {
@@ -107463,7 +107472,11 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
 
     _setEnable: function (b) {
         BI.SingleSliderLabel.superclass._setEnable.apply(this, [b]);
-        this.blueTrack && this.blueTrack.setVisible(!!b);
+        if(b) {
+            this.blueTrack.element.removeClass("disabled-blue-track").addClass("blue-track");
+        } else {
+            this.blueTrack.element.removeClass("blue-track").addClass("disabled-blue-track");
+        }
     },
 
     getValue: function () {
@@ -107746,7 +107759,11 @@ BI.SingleSliderNormal = BI.inherit(BI.Widget, {
 
     _setEnable: function (b) {
         BI.SingleSliderNormal.superclass._setEnable.apply(this, [b]);
-        this.blueTrack && this.blueTrack.setVisible(!!b);
+        if(b) {
+            this.blueTrack.element.removeClass("disabled-blue-track").addClass("blue-track");
+        } else {
+            this.blueTrack.element.removeClass("blue-track").addClass("disabled-blue-track");
+        }
     },
 
     getValue: function () {
