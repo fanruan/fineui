@@ -51146,6 +51146,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                                         type: "bi.label",
                                         height: 36,
                                         text: o.header,
+                                        title: o.header,
                                         textAlign: "left"
                                     },
                                     left: 10,
