@@ -1,11 +1,15 @@
 @import "../../../index";
 
 .bi-slider-track {
-  .gray-track {
-    .background-color(@color-bi-background-gray, 30%);
+  & .gray-track {
+    background-color: @color-bi-background-light-gray;
     .border-radius(3px);
   }
-  .blue-track {
+  & .blue-track {
+    .border-radius(3px);
+  }
+  & .disabled-blue-track {
+    background-color: @background-color-dark-gray;
     .border-radius(3px);
   }
 }
