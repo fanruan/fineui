@@ -76969,7 +76969,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             cls: "color-picker-editor-input",
             validationChecker: checker,
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: false,
+            allowBlank: true,
             value: 255,
             width: 32,
             height: 20
