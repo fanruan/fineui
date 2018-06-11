@@ -16,7 +16,7 @@
 }
 .bi-bubble .bubble-success {
   background: #e1f4e7;
-  color: #5cb75d;
+  color: #13cd66;
 }
 .bi-bubble .bubble-warning {
   background: #feeed7;
@@ -37,7 +37,7 @@
   border-radius: 2px;
 }
 .bi-toast.toast-success {
-  background: #58cc7d;
+  background: #13cd66;
 }
 .bi-toast.toast-warning {
   background: #faaa39;

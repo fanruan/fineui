@@ -643,7 +643,7 @@ textarea {
 .bi-list-item-select.button-success:active,
 .bi-list-item-select.button-success.active {
   color: #ffffff;
-  background-color: #58cc7d;
+  background-color: #13cd66;
 }
 .bi-list-item-select.button-success:active .bi-input,
 .bi-list-item-select.button-success.active .bi-input {
@@ -659,7 +659,7 @@ textarea {
 }
 .bi-list-item-select.button-success:active.bi-high-light-border,
 .bi-list-item-select.button-success.active.bi-high-light-border {
-  border-color: #58cc7d;
+  border-color: #13cd66;
 }
 .bi-list-item-select.button-warning {
   color: #ff4949;
