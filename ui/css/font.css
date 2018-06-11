@@ -859,9 +859,9 @@
 }
 .text-add-tip-font .b-font:before {
   content: "\e6dd";
-  color: #5cb75d;
+  color: #13cd66;
 }
 .text-add-tip-font.disabled .b-font:before {
   content: "\e6dd";
-  color: #5cb75d;
+  color: #13cd66;
 }

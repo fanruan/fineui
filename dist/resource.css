@@ -1180,11 +1180,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .text-add-tip-font .b-font:before {
   content: "\e6dd";
-  color: #5cb75d;
+  color: #13cd66;
 }
 .text-add-tip-font.disabled .b-font:before {
   content: "\e6dd";
-  color: #5cb75d;
+  color: #13cd66;
 }
 .tree-collapse-icon-type1 .x-icon {
   display: block;

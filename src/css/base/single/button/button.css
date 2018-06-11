@@ -84,8 +84,8 @@ body .bi-button.button-ignore.clear,
 }
 body .bi-button.button-success,
 #body .bi-button.button-success {
-  background-color: #58cc7d;
-  border-color: #58cc7d;
+  background-color: #13cd66;
+  border-color: #13cd66;
 }
 body .bi-button.button-success,
 #body .bi-button.button-success,
@@ -102,7 +102,7 @@ body .bi-button.button-success.clear,
 #body .bi-button.button-success.clear,
 body .bi-button.button-success.clear .b-font:before,
 #body .bi-button.button-success.clear .b-font:before {
-  color: #5cb75d;
+  color: #13cd66;
 }
 body .bi-button.button-warning,
 #body .bi-button.button-warning {
