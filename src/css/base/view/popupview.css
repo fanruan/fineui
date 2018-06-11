@@ -11,6 +11,11 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-popup-view .list-view-shadow {
+  -webkit-box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
+  -moz-box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
+  box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
+}
 .bi-popup-view .list-view-toolbar {
   line-height: 30px;
 }
