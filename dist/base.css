@@ -2438,9 +2438,9 @@ ul.ztree.zTreeDragUL {
   border-radius: 2px;
 }
 .bi-popup-view .list-view-shadow {
-  -webkit-box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
-  -moz-box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
-  box-shadow: 0 1px 5px 0 rgba(255, 255, 255, 0.002);
+  -webkit-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
+  -moz-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
+  box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
 }
 .bi-popup-view .list-view-toolbar {
   line-height: 30px;
