@@ -1,3 +1,15 @@
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
+.bi-multi-tree-combo .trigger-up {
+  display: none;
+}
+.bi-multi-tree-combo .trigger-down {
+  display: block;
+}
+.bi-multi-tree-combo.combo-show .trigger-up {
+  display: block;
+}
+.bi-multi-tree-combo.combo-show .trigger-down {
+  display: none;
+}

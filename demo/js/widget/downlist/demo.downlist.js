@@ -29,7 +29,6 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.downlist = _ref;
                 },
-                cls: "layout-bg3",
                 // value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
                 height: 30,
                 width: 100,
