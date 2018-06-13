@@ -180,6 +180,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.element.removeClass("combo-show").addClass("combo-show");
             if (isSearching()) {
                 return;
             }
@@ -192,6 +193,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
+            self.element.removeClass("combo-show");
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);

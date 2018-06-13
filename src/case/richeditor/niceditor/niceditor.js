@@ -109,7 +109,8 @@
             });
             this.elm.element.css({
                 minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
-                outline: "none"
+                outline: "none",
+                padding: "0 10px"
             }).html(o.value);
 
             if(o.readOnly) {
