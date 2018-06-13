@@ -10,7 +10,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 

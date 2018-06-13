@@ -58,7 +58,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2018,
-                            month: 0,
+                            month: 1,
                             day: 12
                         }
                     }

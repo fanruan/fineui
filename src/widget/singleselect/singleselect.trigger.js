@@ -69,7 +69,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     width: "fill"
                 }, {
                     el: BI.createWidget(),
-                    width: 30
+                    width: 24
                 }]
         });
     },

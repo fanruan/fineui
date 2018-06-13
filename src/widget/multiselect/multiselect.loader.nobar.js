@@ -108,7 +108,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
-            height: 25
+            height: 24
         });
     },
 

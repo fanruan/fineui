@@ -12,7 +12,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -20,8 +20,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox",
-            iconWidth: 13,
-            iconHeight: 13
+            iconWidth: 12,
+            iconHeight: 12
         });
 
         this.text = BI.createWidget({

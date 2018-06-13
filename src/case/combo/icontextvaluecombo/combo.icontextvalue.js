@@ -6,7 +6,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
-            height: 30,
+            height: 24,
             iconHeight: null,
             iconWidth: null,
             value: ""
@@ -48,7 +48,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 300
+                maxHeight: 240
             }
         });
         if (BI.isKey(o.value)) {

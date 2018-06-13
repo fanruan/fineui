@@ -25,7 +25,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({
-                type: o.width <= 30 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
+                type: o.width <= 24 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },

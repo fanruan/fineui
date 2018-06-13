@@ -8,7 +8,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer_select_tree-combo",
             isDefaultInit: false,
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: ""

@@ -9,7 +9,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
             iconCls: "",
-            height: 25
+            height: 24
         });
     },
     _init: function () {

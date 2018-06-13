@@ -14,7 +14,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.editor_trigger",
                 watermark: "这是水印",
                 width: 200,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20

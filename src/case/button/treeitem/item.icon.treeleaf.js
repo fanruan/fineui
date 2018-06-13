@@ -5,7 +5,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            height: 25,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             iconCls: ""
@@ -18,7 +18,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 
         var icon = BI.createWidget({
             type: "bi.center_adapt",
-            width: 23,
+            width: 24,
             cls: o.iconCls,
             items: [{
                 type: "bi.icon",
@@ -40,7 +40,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 23,
+            width: 24,
             el: icon
         }, {
             el: this.text

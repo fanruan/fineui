@@ -263,8 +263,8 @@ BI.shortcut("demo.button", Demo.Button);Demo.Button = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.icon_button",
                     cls: "close-ha-font",
-                    width: 20,
-                    height: 20
+                    width: 25,
+                    height: 25
                 }
             }
         ];
@@ -721,7 +721,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
-            height: 30
+            height: 24
         });
         editor1.on(BI.Editor.EVENT_ENTER, function () {
             editor1.blur();
@@ -740,7 +740,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             },
             allowBlank: true,
             width: 200,
-            height: 30
+            height: 24
         });
         var editor3 = BI.createWidget({
             type: "bi.editor",
@@ -759,7 +759,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             },
             allowBlank: true,
             width: 300,
-            height: 30
+            height: 24
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -1826,14 +1826,14 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button",
                 text: "测试",
-                height: 25
+                height: 24
             },
             popup: {
                 el: {
                     type: "bi.button_group",
                     items: BI.makeArray(100, {
                         type: "bi.text_item",
-                        height: 25,
+                        height: 24,
                         text: "item"
                     }),
                     layouts: [{
@@ -1848,7 +1848,7 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button",
                 text: "测试",
-                height: 25
+                height: 24
             },
             popup: {
                 type: "bi.text_bubble_bar_popup_view",
@@ -1950,7 +1950,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 },
                 watermark: "默认值",
                 width: 200,
-                height: 30,
+                height: 24,
                 value: 2,
                 items: [{
                     // text: "MVC-1",
@@ -2434,8 +2434,8 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
             items: [{
                 el: {
                     type: "bi.color_chooser",
-                    width: 30,
-                    height: 30
+                    width: 24,
+                    height: 24
                 },
                 left: 100,
                 top: 250
@@ -2443,7 +2443,7 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
                 el: {
                     type: "bi.simple_color_chooser",
                     width: 30,
-                    height: 30
+                    height: 24
                 },
                 left: 400,
                 top: 250
@@ -2451,7 +2451,7 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
                 el: {
                     type: "bi.color_chooser",
                     width: 230,
-                    height: 30
+                    height: 24
                 },
                 left: 100,
                 top: 350
@@ -4244,7 +4244,7 @@ BI.shortcut("demo.simple_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.editor_trigger",
                 watermark: "这是水印",
                 width: 200,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20
@@ -4267,7 +4267,7 @@ BI.shortcut("demo.editor_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Widget, 
             }, {
                 type: "bi.icon_trigger",
                 width: 30,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20
@@ -4291,7 +4291,7 @@ BI.shortcut("demo.icon_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.select_text_trigger",
                 text: "这是一个简单的trigger",
                 width: 200,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20
@@ -4315,7 +4315,7 @@ BI.shortcut("demo.select_text_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Wid
                 type: "bi.text_trigger",
                 text: "这是一个简单的trigger",
                 width: 200,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20
@@ -14369,7 +14369,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                         type: 1,
                         value: {
                             year: 2018,
-                            month: 0,
+                            month: 1,
                             day: 12
                         }
                     }

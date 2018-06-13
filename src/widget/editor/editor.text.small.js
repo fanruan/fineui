@@ -9,7 +9,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
         var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-small-text-editor",
-            height: 25
+            height: 24
         });
     },
 

@@ -9,8 +9,8 @@ Demo.Func = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.color_chooser",
-                    width: 30,
-                    height: 30
+                    width: 24,
+                    height: 24
                 },
                 left: 100,
                 top: 250
@@ -18,7 +18,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.simple_color_chooser",
                     width: 30,
-                    height: 30
+                    height: 24
                 },
                 left: 400,
                 top: 250
@@ -26,7 +26,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.color_chooser",
                     width: 230,
-                    height: 30
+                    height: 24
                 },
                 left: 100,
                 top: 350

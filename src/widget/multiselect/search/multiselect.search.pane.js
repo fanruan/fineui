@@ -8,7 +8,7 @@
 BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 
     constants: {
-        height: 25,
+        height: 24,
         lgap: 10,
         tgap: 5
     },

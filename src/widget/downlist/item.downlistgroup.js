@@ -27,7 +27,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
-            width: 25,
+            width: 24,
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
@@ -35,13 +35,13 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
-            width: 25,
+            width: 24,
             forceNotSelected: true
         });
 
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: 25
+            width: 24
         });
         BI.createWidget({
             type: "bi.absolute",

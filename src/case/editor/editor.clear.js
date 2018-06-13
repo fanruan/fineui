@@ -48,7 +48,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
                 },
                 {
                     el: this.clear,
-                    width: 25
+                    width: 24
                 }]
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

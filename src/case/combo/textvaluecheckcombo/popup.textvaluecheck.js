@@ -38,7 +38,7 @@ BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
             return BI.extend({
                 type: "bi.icon_text_item",
                 cls: "item-check-font bi-list-item",
-                height: 30
+                height: 24
             }, item);
         });
     },

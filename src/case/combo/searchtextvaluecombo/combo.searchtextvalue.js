@@ -5,7 +5,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-search-text-value-combo",
-        height: 30,
+        height: 24,
         text: "",
         items: [],
         tipType: "",
@@ -63,7 +63,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 302
+                        maxHeight: 242
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,

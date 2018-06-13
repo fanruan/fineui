@@ -3,8 +3,8 @@
  */
 BI.DateInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 25,
-        width: 25,
+        height: 24,
+        width: 24,
         lgap: 15,
         offset: -15,
         timeErrorCls: "time-error",

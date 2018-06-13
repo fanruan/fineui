@@ -15,7 +15,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 type: "bi.text_trigger",
                 text: "这是一个简单的trigger",
                 width: 200,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20

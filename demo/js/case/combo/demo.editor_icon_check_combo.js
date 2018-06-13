@@ -16,7 +16,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                 },
                 watermark: "默认值",
                 width: 200,
-                height: 30,
+                height: 24,
                 value: 2,
                 items: [{
                     // text: "MVC-1",

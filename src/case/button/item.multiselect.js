@@ -7,7 +7,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-item",
-            height: 25,
+            height: 24,
             logic: {
                 dynamic: false
             }
