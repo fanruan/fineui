@@ -86,7 +86,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            height: 25,
+            height: 24,
             selected: this.isAllSelected()
         });
     },

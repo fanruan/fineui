@@ -11,7 +11,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-singletree-combo",
             isDefaultInit: false,
-            height: 30,
+            height: 24,
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],

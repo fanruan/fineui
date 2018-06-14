@@ -114,7 +114,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
                 el: this.editor
             }, {
                 el: BI.createWidget(),
-                width: 30
+                width: 24
             }]
         });
         this.setValue(o.value);

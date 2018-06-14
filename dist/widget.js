@@ -429,7 +429,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -492,7 +492,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             behaviors: {},
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -574,8 +574,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
-            width: 25,
-            height: 25
+            width: 24,
+            height: 24
         });
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 1) {
@@ -597,8 +597,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.right = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
-            width: 25,
-            height: 25
+            width: 24,
+            height: 24
         });
 
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -649,7 +649,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.left]
                 },
-                width: 25
+                width: 24
             }, {
                 type: "bi.center_adapt",
                 items: [{
@@ -662,7 +662,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.right]
                 },
-                width: 25
+                width: 24
             }]
         });
         this.setValue({
@@ -957,16 +957,16 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
-            width: 25,
-            height: 25,
+            width: 24,
+            height: 24,
             value: -1
         });
 
         var preBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
-            width: 25,
-            height: 25,
+            width: 24,
+            height: 24,
             value: 1
         });
 
@@ -979,7 +979,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 cls: "year-popup-navigation bi-high-light bi-border-top",
-                height: 25,
+                height: 24,
                 items: [backBtn, preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
@@ -1032,15 +1032,15 @@ BI.shortcut("bi.year_popup", BI.YearPopup);/**
  */
 BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        height: 25,
-        iconWidth: 16,
-        iconHeight: 13
+        height: 24,
+        iconWidth: 12,
+        iconHeight: 12
     },
 
     _defaultConfig: function () {
         return BI.extend( BI.DateTriangleTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-triangle-trigger pull-down-ha-font cursor-pointer",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -2281,7 +2281,7 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         return BI.extend(conf, {
             baseCls: "bi-down-list-item bi-list-item-active",
             cls: "",
-            height: 25,
+            height: 24,
             logic: {
                 dynamic: true
             },
@@ -2383,7 +2383,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
-            width: 25,
+            width: 24,
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
@@ -2391,13 +2391,13 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         this.icon2 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls2,
-            width: 25,
+            width: 24,
             forceNotSelected: true
         });
 
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: 25
+            width: 24
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -2476,7 +2476,7 @@ BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);/**
 BI.DownListPopup = BI.inherit(BI.Pane, {
     constants: {
         nextIcon: "pull-right-e-font",
-        height: 25,
+        height: 24,
         iconHeight: 12,
         iconWidth: 12,
         hgap: 0,
@@ -3872,7 +3872,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 el: this.editor
             }, {
                 el: BI.createWidget(),
-                width: 30
+                width: 24
             }]
         });
         this.setValue(o.value);
@@ -4851,7 +4851,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 el: this.editor
             }, {
                 el: BI.createWidget(),
-                width: 30
+                width: 24
             }]
         });
         this.setValue(o.value);
@@ -5399,7 +5399,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
         var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-small-text-editor",
-            height: 25
+            height: 24
         });
     },
 
@@ -7624,7 +7624,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.MonthCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
             behaviors: {},
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -8320,7 +8320,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer_select_tree-combo",
             isDefaultInit: false,
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: ""
@@ -8873,7 +8873,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-singletree-combo",
             isDefaultInit: false,
-            height: 30,
+            height: 24,
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
@@ -9674,7 +9674,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
     constants: {
-        height: 25,
+        height: 24,
         lgap: 10,
         tgap: 5
     },
@@ -9782,7 +9782,7 @@ BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);/**
 BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 
     constants: {
-        height: 25,
+        height: 24,
         lgap: 10
     },
 
@@ -9870,7 +9870,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 
@@ -10256,7 +10256,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 
@@ -10619,7 +10619,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 
@@ -11097,7 +11097,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
-            height: 25,
+            height: 24,
             selected: this.isAllSelected()
         });
     },
@@ -11266,7 +11266,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
-            height: 25
+            height: 24
         });
     },
 
@@ -11599,7 +11599,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
                     width: 0
                 }, {
                     el: BI.createWidget(),
-                    width: 30
+                    width: 24
                 }]
         });
 
@@ -11746,7 +11746,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            height: 25,
+            height: 24,
             selected: this.isAllSelected()
         });
     },
@@ -11821,7 +11821,7 @@ BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);/**
 BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
 
     constants: {
-        height: 25,
+        height: 24,
         lgap: 10,
         tgap: 5
     },
@@ -13701,7 +13701,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 25
+            height: 24
         });
     },
 
@@ -17532,7 +17532,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 
@@ -17810,7 +17810,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 28
+            height: 24
         });
     },
 
@@ -18071,7 +18071,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             hgap: 10,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -18358,7 +18358,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
-            height: 25,
+            height: 24,
             selected: false
         });
     },
@@ -18555,7 +18555,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     width: "fill"
                 }, {
                     el: BI.createWidget(),
-                    width: 30
+                    width: 24
                 }]
         });
     },
@@ -20532,8 +20532,8 @@ BI.shortcut("bi.switch_tree", BI.SwitchTree);
  */
 BI.DateInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 25,
-        width: 25,
+        height: 24,
+        width: 24,
         lgap: 15,
         offset: -15,
         timeErrorCls: "time-error",
@@ -20711,8 +20711,8 @@ BI.shortcut("bi.date_interval", BI.DateInterval);/**
  */
 BI.TimeInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 25,
-        width: 25,
+        height: 24,
+        width: 24,
         lgap: 15,
         offset: -15,
         timeErrorCls: "time-error",

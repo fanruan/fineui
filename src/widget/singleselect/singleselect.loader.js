@@ -98,7 +98,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
-            height: 25,
+            height: 24,
             selected: false
         });
     },

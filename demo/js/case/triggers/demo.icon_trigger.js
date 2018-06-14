@@ -14,7 +14,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.icon_trigger",
                 width: 30,
-                height: 30
+                height: 24
             }],
             hgap: 20,
             vgap: 20

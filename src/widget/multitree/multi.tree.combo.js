@@ -20,7 +20,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 25
+            height: 24
         });
     },
 

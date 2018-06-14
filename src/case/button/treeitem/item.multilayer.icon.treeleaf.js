@@ -7,9 +7,9 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.MultiLayerIconTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multilayer-icon-tree-leaf-item bi-list-item-active",
             layer: 0,
-            height: 25,
+            height: 24,
             iconCls: "",
-            iconHeight: 14,
+            iconHeight: 12,
             iconWidth: 12
         });
     },
@@ -42,7 +42,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -50,7 +50,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },

@@ -7,15 +7,15 @@
  */
 BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        height: 25,
-        iconWidth: 16,
-        iconHeight: 13
+        height: 24,
+        iconWidth: 12,
+        iconHeight: 12
     },
 
     _defaultConfig: function () {
         return BI.extend( BI.DateTriangleTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-triangle-trigger pull-down-ha-font cursor-pointer",
-            height: 25
+            height: 24
         });
     },
     _init: function () {

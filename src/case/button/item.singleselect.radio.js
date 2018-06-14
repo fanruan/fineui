@@ -11,7 +11,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             hgap: 10,
-            height: 25
+            height: 24
         });
     },
     _init: function () {

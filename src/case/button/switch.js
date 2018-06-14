@@ -29,7 +29,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 top: 2,
                 left: this.options.selected ? 24 : 2
             }]
-        }
+        };
     },
 
     setSelected: function (v) {

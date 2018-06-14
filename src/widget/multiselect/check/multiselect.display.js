@@ -8,7 +8,7 @@
 BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 
     constants: {
-        height: 25,
+        height: 24,
         lgap: 10
     },
 

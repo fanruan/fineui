@@ -42,16 +42,16 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var backBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
-            width: 25,
-            height: 25,
+            width: 24,
+            height: 24,
             value: -1
         });
 
         var preBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
-            width: 25,
-            height: 25,
+            width: 24,
+            height: 24,
             value: 1
         });
 
@@ -64,7 +64,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 cls: "year-popup-navigation bi-high-light bi-border-top",
-                height: 25,
+                height: 24,
                 items: [backBtn, preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),

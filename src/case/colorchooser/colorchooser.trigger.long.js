@@ -11,7 +11,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -38,7 +38,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                     },
                     textAlign: "left",
                     hgap: 5,
-                    height: 24,
+                    height: 18,
                     text: BI.i18nText("BI-Basic_Auto")
                 }
             }]

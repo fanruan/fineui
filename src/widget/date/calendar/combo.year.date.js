@@ -12,7 +12,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             behaviors: {},
-            height: 25
+            height: 24
         });
     },
     _init: function () {

@@ -5,7 +5,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
         baseCls: "bi-search-text-value-trigger bi-border",
-        height: 30
+        height: 24
     },
 
     render: function () {
@@ -50,12 +50,12 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.layout",
-                        width: 30
+                        width: 24
                     },
-                    width: 30
+                    width: 24
                 }
             ]
-        }
+        };
     },
 
     _setState: function (v) {

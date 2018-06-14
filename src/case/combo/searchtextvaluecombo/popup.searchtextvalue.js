@@ -19,7 +19,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
                 items: BI.createItems(o.items, {
                     type: "bi.single_select_item",
                     textAlign: o.textAlign,
-                    height: 30
+                    height: 24
                 }),
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                 layouts: [{
@@ -49,7 +49,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
-            height: 30
+            height: 24
         });
         this.popup.populate(items, keyword);
     },

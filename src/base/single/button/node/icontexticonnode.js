@@ -5,9 +5,6 @@
  * @extends BI.NodeButton
  */
 BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
-    _const: {
-        commonWidth: 25
-    },
 
     _defaultConfig: function () {
         var conf = BI.IconTextIconNode.superclass._defaultConfig.apply(this, arguments);
@@ -45,7 +42,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
             cls: o.iconCls1,
-            width: c.commonWidth,
+            width: o.height,
             height: o.height,
             items: [{
                 el: {
@@ -57,7 +54,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         });
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: c.commonWidth,
+            width: o.height,
             height: o.height
         });
         BI.createWidget({
@@ -67,7 +64,7 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
                 el: {
                     type: "bi.center_adapt",
                     cls: o.iconCls2,
-                    width: c.commonWidth,
+                    width: o.height,
                     items: [{
                         el: {
                             type: "bi.icon",

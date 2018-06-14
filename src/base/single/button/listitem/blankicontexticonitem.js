@@ -7,9 +7,6 @@
  * @extends BI.BasicButton
  */
 BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
-    _const: {
-        commonWidth: 25
-    },
 
     _defaultConfig: function () {
         var conf = BI.BlankIconTextIconItem.superclass._defaultConfig.apply(this, arguments);
@@ -48,7 +45,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         var icon1 = BI.createWidget({
             type: "bi.center_adapt",
             cls: o.iconCls1,
-            width: c.commonWidth,
+            width: o.height,
             height: o.height,
             items: [{
                 el: {
@@ -65,7 +62,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.center_adapt",
                     cls: o.iconCls2,
-                    width: c.commonWidth,
+                    width: o.height,
                     height: o.height,
                     items: [{
                         el: {
@@ -89,7 +86,7 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
                 width: o.blankWidth
             }, icon1, this.text, {
                 type: "bi.layout",
-                width: c.commonWidth
+                width: o.height
             })
         }))));
     },

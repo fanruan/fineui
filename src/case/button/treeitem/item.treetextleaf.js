@@ -10,7 +10,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-tree-text-leaf-item bi-list-item-active",
             id: "",
             pId: "",
-            height: 25,
+            height: 24,
             hgap: 0,
             lgap: 0,
             rgap: 0

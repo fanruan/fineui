@@ -6,9 +6,6 @@
  * @extends BI.BasicButton
  */
 BI.IconTextItem = BI.inherit(BI.BasicButton, {
-    _const: {
-        commonWidth: 25
-    },
 
     _defaultConfig: function () {
         var conf = BI.IconTextItem.superclass._defaultConfig.apply(this, arguments);
@@ -44,7 +41,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.center_adapt",
-            width: c.commonWidth,
+            width: o.height,
             height: o.height,
             items: [{
                 el: {

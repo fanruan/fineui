@@ -17,9 +17,9 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25,
-            iconHeight: 13,
-            iconWidth: 13,
+            height: 24,
+            iconHeight: 12,
+            iconWidth: 12,
             iconCls: ""
         });
     },
@@ -28,14 +28,14 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox",
-            width: 23,
+            width: 24,
             stopPropagation: true
         });
 
         var icon = BI.createWidget({
             type: "bi.center_adapt",
             cls: o.iconCls,
-            width: 23,
+            width: 24,
             items: [{
                 type: "bi.icon",
                 height: o.iconHeight,
@@ -65,10 +65,10 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, {
-            width: 23,
+            width: 24,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({

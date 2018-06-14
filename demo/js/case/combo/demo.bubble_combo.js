@@ -11,14 +11,14 @@ Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button",
                 text: "测试",
-                height: 25
+                height: 24
             },
             popup: {
                 el: {
                     type: "bi.button_group",
                     items: BI.makeArray(100, {
                         type: "bi.text_item",
-                        height: 25,
+                        height: 24,
                         text: "item"
                     }),
                     layouts: [{
@@ -33,7 +33,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             el: {
                 type: "bi.button",
                 text: "测试",
-                height: 25
+                height: 24
             },
             popup: {
                 type: "bi.text_bubble_bar_popup_view",

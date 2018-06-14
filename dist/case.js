@@ -161,7 +161,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multi-select-item",
-            height: 25,
+            height: 24,
             logic: {
                 dynamic: false
             }
@@ -237,7 +237,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
         return BI.extend(BI.SingleSelectIconTextItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-icon-text-item bi-list-item-active",
             iconCls: "",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -293,7 +293,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
             hgap: 10,
-            height: 25,
+            height: 24,
             textAlign: "left"
         });
     },
@@ -345,7 +345,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
                 dynamic: false
             },
             hgap: 10,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -413,7 +413,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -421,8 +421,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox",
-            iconWidth: 13,
-            iconHeight: 13
+            iconWidth: 12,
+            iconHeight: 12
         });
 
         this.text = BI.createWidget({
@@ -580,9 +580,9 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25,
-            iconHeight: 13,
-            iconWidth: 13,
+            height: 24,
+            iconHeight: 12,
+            iconWidth: 12,
             iconCls: ""
         });
     },
@@ -591,14 +591,14 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         this.checkbox = BI.createWidget({
             type: "bi.arrow_group_node_checkbox",
-            width: 23,
+            width: 24,
             stopPropagation: true
         });
 
         var icon = BI.createWidget({
             type: "bi.center_adapt",
             cls: o.iconCls,
-            width: 23,
+            width: 24,
             items: [{
                 type: "bi.icon",
                 height: o.iconHeight,
@@ -628,10 +628,10 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, {
-            width: 23,
+            width: 24,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
@@ -833,9 +833,9 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
             id: "",
             pId: "",
             open: false,
-            height: 25,
-            iconHeight: 13,
-            iconWidth: 13,
+            height: 24,
+            iconHeight: 12,
+            iconWidth: 12,
             iconCls: ""
         });
     },
@@ -868,7 +868,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -930,7 +930,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -958,7 +958,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -1020,7 +1020,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
                 top: 2,
                 left: this.options.selected ? 24 : 2
             }]
-        }
+        };
     },
 
     setSelected: function (v) {
@@ -1146,7 +1146,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
             logic: {
                 dynamic: false
             },
-            height: 25,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             iconCls: ""
@@ -1159,7 +1159,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
 
         var icon = BI.createWidget({
             type: "bi.center_adapt",
-            width: 23,
+            width: 24,
             cls: o.iconCls,
             items: [{
                 type: "bi.icon",
@@ -1181,7 +1181,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 23,
+            width: 24,
             el: icon
         }, {
             el: this.text
@@ -1443,9 +1443,9 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.MultiLayerIconTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multilayer-icon-tree-leaf-item bi-list-item-active",
             layer: 0,
-            height: 25,
+            height: 24,
             iconCls: "",
-            iconHeight: 14,
+            iconHeight: 12,
             iconWidth: 12
         });
     },
@@ -1478,7 +1478,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -1486,7 +1486,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -1542,7 +1542,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             extraCls: "bi-tree-text-leaf-item bi-list-item-active",
             id: "",
             pId: "",
-            height: 25,
+            height: 24,
             hgap: 0,
             lgap: 0,
             rgap: 0
@@ -1865,7 +1865,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: 24,
                     width: 38,
                     value: td.text,
                     disabled: td.disabled
@@ -1881,7 +1881,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 25
+                rowSize: 24
             })), {
                 type: "bi.center_adapt",
                 vgap: 1
@@ -3640,7 +3640,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
             el: BI.extend({
-                type: o.width <= 30 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
+                type: o.width <= 24 ? "bi.color_chooser_trigger" : "bi.long_color_chooser_trigger",
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
@@ -4056,7 +4056,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -4120,7 +4120,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
-            height: 30
+            height: 24
         });
     },
 
@@ -4147,7 +4147,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                     },
                     textAlign: "left",
                     hgap: 5,
-                    height: 24,
+                    height: 18,
                     text: BI.i18nText("BI-Basic_Auto")
                 }
             }]
@@ -5764,7 +5764,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 30
+                height: 24
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -5791,7 +5791,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.IconComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 30
+            height: 24
         });
         this.popup.populate(items);
     },
@@ -5915,7 +5915,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseClass: "bi-icon-text-value-combo",
-            height: 30,
+            height: 24,
             iconHeight: null,
             iconWidth: null,
             value: ""
@@ -5957,7 +5957,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 300
+                maxHeight: 240
             }
         });
         if (BI.isKey(o.value)) {
@@ -5998,7 +5998,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 30,
+                height: 24,
                 iconHeight: o.iconHeight,
                 iconWidth: o.iconWidth
             }),
@@ -6028,7 +6028,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         var o = this.options;
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 30,
+            height: 24,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
         });
@@ -6052,7 +6052,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-search-text-value-combo",
-        height: 30,
+        height: 24,
         text: "",
         items: [],
         tipType: "",
@@ -6110,7 +6110,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 302
+                        maxHeight: 242
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -6215,7 +6215,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
                 items: BI.createItems(o.items, {
                     type: "bi.single_select_item",
                     textAlign: o.textAlign,
-                    height: 30
+                    height: 24
                 }),
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                 layouts: [{
@@ -6245,7 +6245,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
-            height: 30
+            height: 24
         });
         this.popup.populate(items, keyword);
     },
@@ -6267,7 +6267,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
         baseCls: "bi-search-text-value-trigger bi-border",
-        height: 30
+        height: 24
     },
 
     render: function () {
@@ -6312,12 +6312,12 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                 }, {
                     el: {
                         type: "bi.layout",
-                        width: 30
+                        width: 24
                     },
-                    width: 30
+                    width: 24
                 }
             ]
-        }
+        };
     },
 
     _setState: function (v) {
@@ -6619,7 +6619,7 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
             return BI.extend({
                 type: "bi.icon_text_item",
                 cls: "item-check-font bi-list-item",
-                height: 30
+                height: 24
             }, item);
         });
     },
@@ -6649,7 +6649,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-combo",
-            height: 30,
+            height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
             value: ""
@@ -6687,7 +6687,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 300
+                maxHeight: 240
             }
         });
         if(BI.isKey(o.value)) {
@@ -6772,7 +6772,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 300
+                maxHeight: 240
             }
         });
     },
@@ -6808,7 +6808,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
             items: BI.createItems(o.items, {
                 type: "bi.single_select_item",
                 textAlign: o.textAlign,
-                height: 30
+                height: 24
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -6836,7 +6836,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
         BI.TextValueComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
-            height: 30
+            height: 24
         });
         this.popup.populate(items);
     },
@@ -6859,7 +6859,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 30
+            height: 24
         });
     },
 
@@ -7043,7 +7043,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
                 },
                 {
                     el: this.clear,
-                    width: 25
+                    width: 24
                 }]
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

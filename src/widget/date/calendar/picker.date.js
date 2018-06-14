@@ -22,8 +22,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.left = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
-            width: 25,
-            height: 25
+            width: 24,
+            height: 24
         });
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 1) {
@@ -45,8 +45,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.right = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
-            width: 25,
-            height: 25
+            width: 24,
+            height: 24
         });
 
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -97,7 +97,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.left]
                 },
-                width: 25
+                width: 24
             }, {
                 type: "bi.center_adapt",
                 items: [{
@@ -110,7 +110,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                     type: "bi.center_adapt",
                     items: [this.right]
                 },
-                width: 25
+                width: 24
             }]
         });
         this.setValue({

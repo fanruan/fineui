@@ -9,7 +9,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
-            height: 30
+            height: 24
         });
         editor1.on(BI.Editor.EVENT_ENTER, function () {
             editor1.blur();
@@ -28,7 +28,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             },
             allowBlank: true,
             width: 200,
-            height: 30
+            height: 24
         });
         var editor3 = BI.createWidget({
             type: "bi.editor",
@@ -47,7 +47,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             },
             allowBlank: true,
             width: 300,
-            height: 30
+            height: 24
         });
         BI.createWidget({
             type: "bi.absolute",
