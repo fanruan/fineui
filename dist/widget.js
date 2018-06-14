@@ -16219,21 +16219,21 @@ BI.ResponisveTable = BI.inherit(BI.Widget, {
 });
 BI.shortcut("bi.responsive_table", BI.ResponisveTable);/**
  *
- * @class BI.SearchMultiSelectCombo
+ * @class BI.SearchMultiTextValueCombo
  * @extends BI.Single
  */
-BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
+BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
-        return BI.extend(BI.SearchMultiSelectCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-combo bi-search-multi-select-combo",
+        return BI.extend(BI.SearchMultiTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-combo bi-search-multi-text-value-combo",
             height: 24,
             items: []
         });
     },
 
     _init: function () {
-        BI.SearchMultiSelectCombo.superclass._init.apply(this, arguments);
+        BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var assertShowValue = function () {
             BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
@@ -16407,7 +16407,7 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.SearchMultiSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
 
@@ -16468,7 +16468,7 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(this.storeValue);
         this.requesting = true;
         this._itemsCreator({
-            type: BI.SearchMultiSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SearchMultiTextValueCombo.REQ_GET_ALL_DATA,
             keywords: keywords
         }, function (ob) {
             var values = BI.map(ob.items, "value");
@@ -16491,7 +16491,7 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
         this._assertValue(res);
         this.requesting = true;
         this._itemsCreator({
-            type: BI.SearchMultiSelectCombo.REQ_GET_ALL_DATA,
+            type: BI.SearchMultiTextValueCombo.REQ_GET_ALL_DATA,
             keywords: [this.trigger.getKey()]
         }, function (ob) {
             var items = BI.map(ob.items, "value");
@@ -16528,7 +16528,7 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         if (!this._count) {
             this._itemsCreator({
-                type: BI.SearchMultiSelectCombo.REQ_GET_DATA_LENGTH
+                type: BI.SearchMultiTextValueCombo.REQ_GET_DATA_LENGTH
             }, function (res) {
                 self._count = res.count;
                 adjust();
@@ -16555,7 +16555,7 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
             self._updateAllValue();
             self._checkError();
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.SearchMultiSelectCombo.EVENT_CONFIRM);
+                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;
@@ -16683,14 +16683,14 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.extend(BI.SearchMultiSelectCombo, {
+BI.extend(BI.SearchMultiTextValueCombo, {
     REQ_GET_DATA_LENGTH: 1,
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SearchMultiSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SearchMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.search_multi_select_combo", BI.SearchMultiSelectCombo);BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
+BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     constants: {
         height: 14,
