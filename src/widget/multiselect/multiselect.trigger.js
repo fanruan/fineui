@@ -37,6 +37,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.multi_select_searcher",
             height: o.height,
+            text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             popup: {},

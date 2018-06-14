@@ -53876,14 +53876,16 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     _init: function () {
         BI.CodeEditor.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
-        this.editor = CodeMirror(this.element[0], {
+        var conf = {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: o.lineNumbers,
+            lineNumbers: false,
             readOnly: o.readOnly,
-            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
-        });
+        };
+        o.readOnly && (conf.cursorBlinkRate = -1);
+        this.editor = CodeMirror(this.element[0], conf);
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
@@ -97512,6 +97514,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            text: o.text,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -97895,6 +97898,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            text: o.text,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -98261,6 +98265,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            text: o.text,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -99161,6 +99166,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.multi_select_searcher",
             height: o.height,
+            text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             popup: {},
@@ -99702,7 +99708,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             popup: {},
             valueFormatter: BI.emptyFn,
             adapter: null,
-            masker: {}
+            masker: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -99711,7 +99718,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
-            height: o.height
+            height: o.height,
+            text: o.text
         });
 
         this.searcher = BI.createWidget({
@@ -114241,5 +114249,6 @@ BI.i18n = {
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
-    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\""
+    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\"",
+    "BI-Basic_Please_Select": "请选择"
 };

@@ -22,14 +22,16 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     _init: function () {
         BI.CodeEditor.superclass._init.apply(this, arguments);
         var o = this.options, self = this;
-        this.editor = CodeMirror(this.element[0], {
+        var conf = {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: o.lineNumbers,
+            lineNumbers: false,
             readOnly: o.readOnly,
-            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
+            //解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
-        });
+        };
+        o.readOnly && (conf.cursorBlinkRate = -1);
+        this.editor = CodeMirror(this.element[0], conf);
         o.lineHeight === 1 ? this.element.addClass("codemirror-low-line-height") : this.element.addClass("codemirror-high-line-height");
         this.editor.on("change", function (cm, change) {
             BI.nextTick(function () {
