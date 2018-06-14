@@ -9,7 +9,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_insert_combo",
+            type: "bi.multi_select_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
@@ -74,12 +74,16 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         return {
-            type: "bi.absolute",
-            scrolly: false,
-            items: [{
-                el: this._createMultiSelectCombo(),
-                right: "50%",
-                top: 10
+            type: "bi.vertical",
+            vgap: 200,
+            items: [this._createMultiSelectCombo(), {
+                type: "bi.search_multi_select_combo",
+                items: Demo.CONSTANTS.ITEMS,
+                text: "请选择",
+                value: {
+                    type: 1,
+                    value: ["1", "2", "3"]
+                }
             }]
         };
     }

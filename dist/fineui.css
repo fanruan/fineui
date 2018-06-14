@@ -2950,9 +2950,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   word-wrap: break-word;
   word-break: break-word;
 }
-.bi-bubble {
-  font-size: 14px;
-}
 .bi-bubble .bubble-text {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3909,6 +3906,24 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-search-multi-select-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+.bi-search-multi-select-combo.combo-error .bi-multi-select-searcher .tip-text-style {
+  color: #ff4949;
+}
+.bi-search-multi-select-combo .trigger-up {
+  display: none;
+}
+.bi-search-multi-select-combo .trigger-down {
+  display: block;
+}
+.bi-search-multi-select-combo.combo-show .trigger-up {
+  display: block;
+}
+.bi-search-multi-select-combo.combo-show .trigger-down {
+  display: none;
+}
 .bi-sequence-table-dynamic-number .sequence-table-title-cell {
   overflow: hidden;
   overflow-x: hidden;
@@ -4386,6 +4401,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 .auto-color-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/auto_color.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/background/auto_color.png');
+  _background: none;
+}
+.auto-color-normal-background {
+  background: url('resources?path=/com/fr/web/ui/images/1x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/background/auto_color_normal.png');
   _background: none;
 }
 .trans-color-background {
