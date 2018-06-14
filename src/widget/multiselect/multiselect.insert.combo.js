@@ -30,6 +30,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             height: o.height,
+            text: o.text,
             // adapter: this.popup,
             masker: {
                 offset: {

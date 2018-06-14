@@ -165,5 +165,6 @@ BI.i18n = {
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
-    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\""
+    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\"",
+    "BI-Basic_Please_Select": "请选择"
 };

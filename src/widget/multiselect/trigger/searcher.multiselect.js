@@ -14,7 +14,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             popup: {},
             valueFormatter: BI.emptyFn,
             adapter: null,
-            masker: {}
+            masker: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -23,7 +24,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
-            height: o.height
+            height: o.height,
+            text: o.text
         });
 
         this.searcher = BI.createWidget({
