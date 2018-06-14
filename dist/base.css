@@ -192,7 +192,12 @@
   color: #ff4949;
 }
 /*************BI.SearchEditor******************/
-.bi-search-editor .search-close-h-font {
+.bi-search-editor {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-search-editor .circle-close-font {
   font-size: 16px;
 }
 .bi-search-editor .search-font {
