@@ -8860,8 +8860,8 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                         action: action
                     }],
                     ref: ref,
-                    width: 30,
-                    height: 30
+                    width: 24,
+                    height: 24
                 }]
             }
         };
