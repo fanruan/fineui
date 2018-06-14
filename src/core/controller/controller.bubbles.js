@@ -11,7 +11,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     },
 
     _const: {
-        bubbleHeight: 35
+        bubbleHeight: 18
     },
 
     _init: function () {
@@ -33,7 +33,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             type: "bi.bubble",
             text: text,
             level: level,
-            height: height || 35,
+            height: height || 18,
             direction: direct
         });
     },

@@ -22,7 +22,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             height: o.height,
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
-            value: o.value
+            value: o.value,
+            text: o.text
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

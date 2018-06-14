@@ -20475,7 +20475,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             direction: "top",
             text: "",
             level: "error",
-            height: 35
+            height: 18
         });
     },
     _init: function () {
@@ -20500,7 +20500,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             cls: "bubble-text" + (" bubble-" + o.level),
             text: o.text,
             hgap: 10,
-            height: 30
+            height: 18
         }));
     },
 
@@ -20509,7 +20509,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             type: "bi.vertical",
             items: [{
                 el: this._createBubbleText(),
-                height: 30
+                height: 18
             }, {
                 el: {
                     type: "bi.layout"
@@ -20529,7 +20529,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
                 height: 3
             }, {
                 el: this._createBubbleText(),
-                height: 30
+                height: 18
             }]
         });
     },
@@ -20541,7 +20541,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
                 el: {
                     type: "bi.layout",
                     width: 3,
-                    height: 30
+                    height: 18
                 }
             }, {
                 el: this._createBubbleText()
@@ -20556,7 +20556,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
                 el: {
                     type: "bi.layout",
                     width: 3,
-                    height: 30
+                    height: 18
                 }
             }, {
                 el: this._createBubbleText()

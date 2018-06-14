@@ -2113,6 +2113,15 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     value: 10
                 }]
             }, {
+                type: "bi.search_multi_text_value_combo",
+                items: Demo.CONSTANTS.ITEMS,
+                text: "请选择",
+                width: 200,
+                value: {
+                    type: 1,
+                    value: ["1", "2", "3"]
+                }
+            }, {
                 type: "bi.button",
                 text: "setValue(3)",
                 width: 90,

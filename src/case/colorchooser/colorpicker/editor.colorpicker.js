@@ -171,11 +171,11 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
     _showPreColor: function (color) {
         if (color === "") {
-            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-background");
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
         } else if (color === "transparent") {
-            this.colorShow.element.css("background-color", "").removeClass("auto-color-background").addClass("trans-color-background");
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
         } else {
-            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-background").removeClass("trans-color-background");
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
         }
     },
 

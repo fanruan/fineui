@@ -314,6 +314,11 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
   _background: none;
 }
+.auto-color-normal-background {
+  background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
+  _background: none;
+}
 .trans-color-background {
   background: url('images/1x/background/trans_color.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_color.png');

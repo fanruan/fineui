@@ -1279,9 +1279,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   word-wrap: break-word;
   word-break: break-word;
 }
-.bi-bubble {
-  font-size: 14px;
-}
 .bi-bubble .bubble-text {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;

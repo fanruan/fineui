@@ -20,7 +20,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 24
+            height: 24,
+            text: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
 
@@ -45,10 +46,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text",
+            cls: "state-editor-infinite-text tip-text-style",
             textAlign: "left",
             height: o.height,
-            text: BI.i18nText("BI-Basic_Unrestricted"),
+            text: o.text,
             hgap: 4,
             handler: function () {
                 self._showInput();
@@ -211,6 +212,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (v) {
+        var o = this.options;
         BI.StateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
@@ -222,7 +224,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+                this.text.setText(o.text);
                 this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
@@ -230,7 +232,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         }
         if (BI.isString(v)) {
             // if (BI.isEmpty(v)) {
-            //     this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+            //     this.text.setText(o.text);
             //     this.text.setTitle("");
             //     this.text.element.addClass("state-editor-infinite-text");
             // } else {
@@ -242,7 +244,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+                this.text.setText(o.text);
                 this.text.element.addClass("state-editor-infinite-text");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);

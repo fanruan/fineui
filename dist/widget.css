@@ -291,6 +291,24 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-search-multi-text-value-combo .multi-select-trigger-icon-button {
+  font-size: 16px;
+}
+.bi-search-multi-text-value-combo.combo-error .bi-multi-select-searcher .tip-text-style {
+  color: #ff4949;
+}
+.bi-search-multi-text-value-combo .trigger-up {
+  display: none;
+}
+.bi-search-multi-text-value-combo .trigger-down {
+  display: block;
+}
+.bi-search-multi-text-value-combo.combo-show .trigger-up {
+  display: block;
+}
+.bi-search-multi-text-value-combo.combo-show .trigger-down {
+  display: none;
+}
 .bi-sequence-table-dynamic-number .sequence-table-title-cell {
   overflow: hidden;
   overflow-x: hidden;
