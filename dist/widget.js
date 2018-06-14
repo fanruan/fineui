@@ -16643,12 +16643,12 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
         if(BI.isNotEmptyArray(v)) {
             v = BI.isArray(v) ? v : [v];
             var result = BI.find(this.allValue, function (idx, value) {
-                return BI.contains(v, value);
+                return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
-                this.element.addClass("combo-error");
-            } else {
                 this.element.removeClass("combo-error");
+            } else {
+                this.element.addClass("combo-error");
             }
         } else {
             v.length === this.allValue.length ? this.element.removeClass("combo-error") : this.element.addClass("combo-error");

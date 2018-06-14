@@ -4086,8 +4086,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }, {
                 el: down,
-                right: 3,
-                bottom: 3
+                right: 1,
+                bottom: 1
             }]
         });
         if (BI.isNotNull(this.options.value)) {

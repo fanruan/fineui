@@ -54290,7 +54290,7 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (!this.disabledError && BI.isKey(errorText)) {
-            BI.Bubbles.show(this.getName(), errorText, this);
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this);
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
         }
@@ -76554,8 +76554,8 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }, {
                 el: down,
-                right: 3,
-                bottom: 3
+                right: 1,
+                bottom: 1
             }]
         });
         if (BI.isNotNull(this.options.value)) {
@@ -104262,12 +104262,12 @@ BI.SearchMultiSelectCombo = BI.inherit(BI.Single, {
         if(BI.isNotEmptyArray(v)) {
             v = BI.isArray(v) ? v : [v];
             var result = BI.find(this.allValue, function (idx, value) {
-                return BI.contains(v, value);
+                return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
-                this.element.addClass("combo-error");
-            } else {
                 this.element.removeClass("combo-error");
+            } else {
+                this.element.addClass("combo-error");
             }
         } else {
             v.length === this.allValue.length ? this.element.removeClass("combo-error") : this.element.addClass("combo-error");

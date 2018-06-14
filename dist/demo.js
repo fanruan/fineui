@@ -12816,6 +12816,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
                 type: "bi.search_multi_select_combo",
                 items: Demo.CONSTANTS.ITEMS,
                 text: "请选择",
+                width: 200,
                 value: {
                     type: 1,
                     value: ["1", "2", "3"]
