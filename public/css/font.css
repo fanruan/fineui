@@ -62,6 +62,18 @@
   content: "\e6d0";
   color: inherit;
 }
+.circle-close-font .b-font {
+  line-height: 1;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d5;');
+}
+.circle-close-font .b-font:before {
+  content: "\e6d5";
+  color: inherit;
+}
+.circle-close-font.disabled .b-font:before {
+  content: "\e6d5";
+  color: inherit;
+}
 .search-close-h-font .b-font {
   line-height: 1;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');

@@ -73024,6 +73024,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             keyword: o.keyword,
             value: o.value,
+            title: o.text,
             py: o.py
         });
     },
@@ -92897,6 +92898,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             height: o.height,
             watermark: o.watermark,
             allowBlank: true,
+            hgap: 1,
             errorText: o.errorText,
             validationChecker: o.validationChecker,
             quitChecker: o.quitChecker
@@ -92904,7 +92906,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "search-close-h-font"
+            cls: "circle-close-font"
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
@@ -92925,14 +92927,14 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
                             }
                         }]
                     },
-                    width: 25
+                    width: 24
                 },
                 {
                     el: self.editor
                 },
                 {
                     el: this.clear,
-                    width: 25
+                    width: 24
                 }
             ]
         });
