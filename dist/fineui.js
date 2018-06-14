@@ -29822,6 +29822,10 @@ Date.prototype.print = function (str) {
     var m = this.getMonth();
     var d = this.getDate();
     var y = this.getFullYear();
+    var yWith4number = y + "";
+    while (yWith4number.length < 4) {
+        yWith4number = "0" + yWith4number;
+    }
     var wn = this.getWeekNumber();
     var qr = this.getQuarter();
     var w = this.getDay();
@@ -29867,8 +29871,8 @@ Date.prototype.print = function (str) {
     s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
     // FIXME: %x : preferred date representation for the current locale without the time
     // FIXME: %X : preferred time representation for the current locale without the date
-    s["%y"] = ("" + y).substr(2, 2); // year without the century (range 00 to 99)
-    s["%Y"] = y;		// year with the century
+    s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
+    s["%Y"] = yWith4number;		// year with the century
     s["%%"] = "%";		// a literal '%' character
     s["%Q"] = qr;
 
