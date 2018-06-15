@@ -249,7 +249,7 @@
 }
 .bi-resizable-table-cell .resizable-table-cell-resizer-container:hover .resizable-table-cell-resizer-knob,
 .bi-resizable-table-cell .resizable-table-cell-resizer-container.dragging .resizable-table-cell-resizer-knob {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 .bi-resizable-table-cell .resizable-table-cell-resizer-container.suitable .resizable-table-cell-resizer-knob {
   background-color: #13cd66;
@@ -258,7 +258,7 @@
 .bi-resizable-table .resizable-table-resizer {
   cursor: ew-resize;
   z-index: 1;
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 .bi-resizable-table .resizable-table-resizer.suitable {
   background-color: #13cd66;
@@ -269,6 +269,6 @@
 }
 .bi-resizable-table .resizable-table-region-resizer:hover .resizable-table-region-resizer-knob,
 .bi-resizable-table .resizable-table-region-resizer.dragging .resizable-table-region-resizer-knob {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 

@@ -9,6 +9,9 @@
 .bi-down-list-popup .bi-down-list-item .list-item-text {
   max-width: 203px;
 }
+.bi-dynamic-date-combo .date-font {
+  font-size: 16px;
+}
 
 .bi-excel-table-header-cell {
   font-weight: bold;

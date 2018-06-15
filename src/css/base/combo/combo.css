@@ -131,6 +131,6 @@
   display: none;
 }
 
-.bi-text-value-combo.combo-error .bi-select-text-trigger .bi-label {
+.bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
