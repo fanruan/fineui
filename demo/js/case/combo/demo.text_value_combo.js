@@ -31,6 +31,14 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     value: 3
                 }]
             }, {
+                type: "bi.search_multi_text_value_combo",
+                items: Demo.CONSTANTS.ITEMS,
+                width: 200,
+                value: {
+                    type: 1,
+                    value: ["1", "2", "3"]
+                }
+            }, {
                 type: "bi.button",
                 width: 90,
                 height: 25,
