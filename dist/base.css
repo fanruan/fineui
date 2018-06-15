@@ -188,7 +188,7 @@
   display: none;
 }
 
-.bi-text-value-combo.combo-error .bi-select-text-trigger .bi-label {
+.bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
 /*************BI.SearchEditor******************/
@@ -820,7 +820,7 @@ body .bi-button,
   -moz-border-radius: 2px;
   border-radius: 2px;
   border: 1px solid #3685f2;
-  background-color: #3f8ce8;
+  background-color: #3685f2;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -875,11 +875,11 @@ body .bi-button.button-common.ghost .b-font:before,
 body .bi-button.button-common.ghost:hover,
 #body .bi-button.button-common.ghost:hover {
   color: #ffffff;
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 body .bi-button.button-common.ghost:active,
 #body .bi-button.button-common.ghost:active {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 body .bi-button.button-ignore,
 #body .bi-button.button-ignore {
@@ -1188,7 +1188,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-switch:active,
 .bi-switch.active {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 .bi-switch .circle-button {
   -webkit-border-radius: 9px 9px 9px 9px;
@@ -1202,7 +1202,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  background: #3f8ce8;
+  background: #3685f2;
   display: inline-block;
 }
 .bi-code-editor .error-param {
@@ -1329,7 +1329,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   background: #ff4949;
 }
 .bi-toast.toast-normal {
-  background: #3f8ce8;
+  background: #3685f2;
 }
 .bi-toast .toast-icon {
   font-size: 16px;
@@ -1367,7 +1367,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  background: #3f8ce8;
+  background: #3685f2;
   display: inline-block;
 }
 .CodeMirror-hints .sql-fr-function {
@@ -1627,7 +1627,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-resizable-table-cell .resizable-table-cell-resizer-container:hover .resizable-table-cell-resizer-knob,
 .bi-resizable-table-cell .resizable-table-cell-resizer-container.dragging .resizable-table-cell-resizer-knob {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 .bi-resizable-table-cell .resizable-table-cell-resizer-container.suitable .resizable-table-cell-resizer-knob {
   background-color: #13cd66;
@@ -1636,7 +1636,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-resizable-table .resizable-table-resizer {
   cursor: ew-resize;
   z-index: 1;
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 .bi-resizable-table .resizable-table-resizer.suitable {
   background-color: #13cd66;
@@ -1647,7 +1647,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-resizable-table .resizable-table-region-resizer:hover .resizable-table-region-resizer-knob,
 .bi-resizable-table .resizable-table-region-resizer.dragging .resizable-table-region-resizer-knob {
-  background-color: #3f8ce8;
+  background-color: #3685f2;
 }
 
 .bi-branch-tree .bi-branch-tree-view {

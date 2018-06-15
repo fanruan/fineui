@@ -302,7 +302,7 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-black;
     }
-    .background-color(@color-bi-background-black, 5%);
+    .background-color(@color-bi-background-highlight, 5%);
   }
   &.disabled {
     &, &:hover, &:active {
@@ -468,9 +468,9 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-black;
     }
-    .background-color(@color-bi-background-black, 5%);
+    .background-color(@color-bi-background-highlight, 6%);
   }
-  &.active, &:active {
+  &:active {
     color: @color-bi-text-highlight;
     & .bi-input {
       color: @color-bi-text-highlight;
@@ -478,7 +478,17 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-highlight;
     }
-    .background-color(@color-bi-background-black, 5%);
+    .background-color(@color-bi-background-highlight, 6%);
+  }
+  &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    background-color: @color-bi-background-default;
   }
   &.disabled {
     &, &:hover, &:active {
@@ -626,7 +636,7 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-black;
     }
-    .background-color(@color-bi-background-black, 5%);
+    .background-color(@color-bi-background-highlight, 6%);
   }
   &:active, &.active {
     color: @color-bi-text;

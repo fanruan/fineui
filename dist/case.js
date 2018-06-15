@@ -1705,7 +1705,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return BI.extend(td, {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
@@ -14944,6 +14944,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
+            cls: "select-text-label",
             textAlign: "left",
             height: o.height,
             text: o.text,
