@@ -94734,7 +94734,7 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
 }());/**
  * Created by zcf on 2016/9/26.
  */
-BI.IntervalSlider = BI.inherit(BI.Widget, {
+BI.IntervalSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
