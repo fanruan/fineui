@@ -28,7 +28,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                         if(BI.isEmptyString(v)) {
                             return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
-                        return BI.i18nText("BI-Please_Input_Positive_Integer");
+                        return BI.i18nText("BI-Please_Input_Natural_Number");
                     },
                     allowBlank: false,
                     listeners: [{

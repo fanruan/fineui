@@ -91080,7 +91080,7 @@ BI.extend(BI.DynamicDateCombo, {
                         if(BI.isEmptyString(v)) {
                             return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
-                        return BI.i18nText("BI-Please_Input_Positive_Integer");
+                        return BI.i18nText("BI-Please_Input_Natural_Number");
                     },
                     allowBlank: false,
                     listeners: [{
@@ -91166,7 +91166,8 @@ BI.extend(BI.DynamicDateCombo, {
 
 });
 BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDatePopup = BI.inherit(BI.Widget, {
+BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
+BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
         tabHeight: 30
     },
