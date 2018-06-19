@@ -12150,7 +12150,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             var keywords = this.getKeywords();
             self.fireEvent(BI.MultiSelectSearcher.EVENT_SEARCHING, keywords);
         });
-        if(BI.isNotNull(o.value)){
+        if (BI.isNotNull(o.value)) {
             this.setState(o.value);
         }
     },
@@ -12206,6 +12206,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         } else {
             if (ob.value.length === 0) {
                 this.editor.setState(BI.Selection.None);
+            } else if (BI.size(ob.assist) === 0) {
+                this.editor.setState(BI.Selection.All);
             } else if (BI.size(ob.value) <= 20) {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
