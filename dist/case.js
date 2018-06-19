@@ -11532,13 +11532,13 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
                 el: {
                     type: "bi.button_group",
                     items: BI.createItems([{
-                        value: "Microsoft YaHei",
+                        value: "MicrosoftYaHei",
                         text: BI.i18nText("BI-Microsoft_YaHei")
                     }, {
-                        value: "PingFangSC-Light !important",
+                        value: "PingFangSC-Light",
                         text: BI.i18nText("BI-Apple_Light")
                     }, {
-                        value: "arial",
+                        value: "ArialMT",
                         text: "Arial"
                     }, {
                         value: "Verdana",

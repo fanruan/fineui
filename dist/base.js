@@ -16574,7 +16574,6 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
                 items: [this.icon]
             });
         } else {
-            this.element.css("lineHeight", "1px");
             BI.createWidget({
                 element: this,
                 type: "bi.center_adapt",
