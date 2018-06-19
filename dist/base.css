@@ -1896,10 +1896,10 @@ ul.ztree.zTreeDragUL {
 .bi-trigger .trigger-down {
   display: block;
 }
-.bi-combo-popup .trigger-up {
+.bi-combo-popup > .bi-trigger .trigger-up {
   display: block;
 }
-.bi-combo-popup .trigger-down {
+.bi-combo-popup > .bi-trigger .trigger-down {
   display: none;
 }
 
