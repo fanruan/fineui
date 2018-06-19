@@ -73161,7 +73161,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73212,7 +73212,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73245,7 +73245,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73394,7 +73394,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73427,7 +73427,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73475,7 +73475,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73508,7 +73508,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73765,7 +73765,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73794,19 +73794,19 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -73956,7 +73956,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73985,19 +73985,19 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -74060,7 +74060,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -74089,19 +74089,19 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -101566,10 +101566,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     constants: {
         offset: {
-            top: 1,
-            left: 1,
-            right: 2,
-            bottom: 33
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 31
         }
     },
 
