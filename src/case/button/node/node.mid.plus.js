@@ -15,7 +15,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -48,7 +48,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({

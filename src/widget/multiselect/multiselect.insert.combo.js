@@ -36,7 +36,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 offset: {
                     left: 1,
                     top: 1,
-                    right: 2,
+                    right: 1,
                     bottom: 33
                 }
             },

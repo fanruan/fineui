@@ -103,7 +103,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
-                self._autoSwitch(editor.getValue());
+                self._autoSwitch(editor);
             }
         });
 
@@ -136,6 +136,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
+                this.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
                 this.quarterEditor.focus();
             }
         }

@@ -72918,7 +72918,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -72969,7 +72969,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73002,7 +73002,7 @@ BI.FirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73151,7 +73151,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73184,7 +73184,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73232,7 +73232,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73265,7 +73265,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -73522,7 +73522,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73551,19 +73551,19 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -73713,7 +73713,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73742,19 +73742,19 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -73817,7 +73817,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -73846,19 +73846,19 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 13,
+            width: 12,
             el: {
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             }
         }), {
-            width: 25,
+            width: 24,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 25,
+                width: 24,
                 height: o.height
             }
         }, {
@@ -91204,7 +91204,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);BI.DynamicDat
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -91965,7 +91965,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -94491,7 +94491,7 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
 }());/**
  * Created by zcf on 2016/9/26.
  */
-BI.IntervalSlider = BI.inherit(BI.Widget, {
+BI.IntervalSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 58,
         EDITOR_R_GAP: 60,
@@ -97524,7 +97524,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 offset: {
                     left: 1,
                     top: 1,
-                    right: 2,
+                    right: 1,
                     bottom: 33
                 }
             },
@@ -97908,7 +97908,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 offset: {
                     left: 1,
                     top: 1,
-                    right: 2,
+                    right: 1,
                     bottom: 33
                 }
             },
@@ -98275,7 +98275,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 offset: {
                     left: 1,
                     top: 1,
-                    right: 2,
+                    right: 1,
                     bottom: 33
                 }
             },
@@ -101323,10 +101323,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     constants: {
         offset: {
-            top: 1,
-            left: 1,
-            right: 2,
-            bottom: 33
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 31
         }
     },
 
@@ -106236,14 +106236,6 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             // adapter: this.popup,
-            masker: {
-                offset: {
-                    left: 1,
-                    top: 1,
-                    right: 2,
-                    bottom: 33
-                }
-            },
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
@@ -106514,14 +106506,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             // adapter: this.popup,
-            masker: {
-                offset: {
-                    left: 1,
-                    top: 1,
-                    right: 2,
-                    bottom: 33
-                }
-            },
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
@@ -109997,7 +109981,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -110748,7 +110732,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -111723,7 +111707,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -111987,7 +111971,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
-                self._autoSwitch(editor.getValue());
+                self._autoSwitch(editor);
             }
         });
 
@@ -112020,6 +112004,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
+                this.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
                 this.quarterEditor.focus();
             }
         }

@@ -44,7 +44,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {

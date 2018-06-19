@@ -8,10 +8,10 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     constants: {
         offset: {
-            top: 1,
-            left: 1,
-            right: 2,
-            bottom: 33
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 31
         }
     },
 

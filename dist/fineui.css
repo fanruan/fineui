@@ -439,6 +439,15 @@ textarea {
 .bi-high-light .bi-textarea {
   color: #3685f2;
 }
+.bi-error {
+  color: #ff4949;
+}
+.bi-error .bi-input {
+  color: #ff4949;
+}
+.bi-error .bi-textarea {
+  color: #ff4949;
+}
 .bi-high-light-background {
   background-color: #3685f2;
   color: #ffffff;
@@ -447,6 +456,16 @@ textarea {
   color: #ffffff;
 }
 .bi-high-light-background .bi-textarea {
+  color: #ffffff;
+}
+.bi-error-background {
+  background-color: #ff4949;
+  color: #ffffff;
+}
+.bi-error-background .bi-input {
+  color: #ffffff;
+}
+.bi-error-background .bi-textarea {
   color: #ffffff;
 }
 .bi-high-light-border {
@@ -2989,7 +3008,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 
 .bi-toast {
-  font-size: 14px;
   color: #ffffff;
   max-width: 400px;
   min-width: 150px;
@@ -3574,10 +3592,10 @@ ul.ztree.zTreeDragUL {
 .bi-trigger .trigger-down {
   display: block;
 }
-.bi-combo-popup .trigger-up {
+.bi-combo-popup > .bi-trigger .trigger-up {
   display: block;
 }
-.bi-combo-popup .trigger-down {
+.bi-combo-popup > .bi-trigger .trigger-down {
   display: none;
 }
 
