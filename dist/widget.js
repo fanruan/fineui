@@ -24361,7 +24361,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
-                self._autoSwitch(editor.getValue());
+                self._autoSwitch(editor);
             }
         });
 
@@ -24394,6 +24394,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         if (BI.isNotEmptyString(v) && BI.checkDateLegal(v)) {
             if (v.length === 4 && this._yearCheck(v)) {
                 this._doEditorConfirm(editor);
+                this.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM);
                 this.quarterEditor.focus();
             }
         }

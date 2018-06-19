@@ -205,6 +205,16 @@ textarea {
   }
 }
 
+.bi-error {
+  color: @color-bi-text-failure;
+  & .bi-input {
+    color: @color-bi-text-failure;
+  }
+  & .bi-textarea {
+    color: @color-bi-text-failure;
+  }
+}
+
 .bi-high-light-background {
   background-color: @color-bi-background-highlight;
   color: @color-bi-text;
@@ -215,6 +225,18 @@ textarea {
     color: @color-bi-text;
   }
 }
+
+.bi-error-background {
+  background-color: @color-bi-background-failure;
+  color: @color-bi-text;
+  & .bi-input {
+    color: @color-bi-text;
+  }
+  & .bi-textarea {
+    color: @color-bi-text;
+  }
+}
+
 
 .bi-high-light-border {
   border-color: @color-bi-border-highlight;

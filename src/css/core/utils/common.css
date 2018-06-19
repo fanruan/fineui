@@ -161,6 +161,15 @@ textarea {
 .bi-high-light .bi-textarea {
   color: #3685f2;
 }
+.bi-error {
+  color: #ff4949;
+}
+.bi-error .bi-input {
+  color: #ff4949;
+}
+.bi-error .bi-textarea {
+  color: #ff4949;
+}
 .bi-high-light-background {
   background-color: #3685f2;
   color: #ffffff;
@@ -169,6 +178,16 @@ textarea {
   color: #ffffff;
 }
 .bi-high-light-background .bi-textarea {
+  color: #ffffff;
+}
+.bi-error-background {
+  background-color: #ff4949;
+  color: #ffffff;
+}
+.bi-error-background .bi-input {
+  color: #ffffff;
+}
+.bi-error-background .bi-textarea {
   color: #ffffff;
 }
 .bi-high-light-border {
