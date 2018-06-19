@@ -30,14 +30,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             // adapter: this.popup,
-            masker: {
-                offset: {
-                    left: 1,
-                    top: 1,
-                    right: 2,
-                    bottom: 33
-                }
-            },
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {

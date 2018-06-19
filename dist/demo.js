@@ -13286,14 +13286,14 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {
@@ -16354,17 +16354,13 @@ Demo.CONSTANTS = {
     }, {pId: "0_1_33", id: "0_1_33_0", text: "重庆市区", value: "重庆市区", open: true}],
 
     TREE: [{id: -1, pId: -2, value: "根目录", text: "根目录"},
-        {id: -2, pId: -2, value: "根目录", text: "根目录"},
-        {id: -3, pId: -2, value: "根目录", text: "根目录"},
-        {id: -4, pId: -2, value: "根目录", text: "根目录"},
-        {id: -5, pId: -2, value: "根目录", text: "根目录"},
         {id: 1, pId: -1, value: "第一级目录1", text: "第一级目录1"},
         {id: 11, pId: 1, value: "第二级文件1", text: "第二级文件1"},
         {id: 12, pId: 1, value: "第二级目录2", text: "第二级目录2"},
         {id: 121, pId: 12, value: "第三级目录1", text: "第三级目录1"},
         {id: 122, pId: 12, value: "第三级文件1", text: "第三级文件1"},
         {id: 1211, pId: 121, value: "第四级目录1", text: "第四级目录1"},
-        {id: 12111, pId: 1211, value: "第五级文件1", text: "第五级文件1111111111111111111"},
+        {id: 12111, pId: 1211, value: "第五级文件1", text: "第五级文件111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"},
         {id: 2, pId: -1, value: "第一级目录2", text: "第一级目录2"},
         {id: 21, pId: 2, value: "第二级目录3", text: "第二级目录3"},
         {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},
