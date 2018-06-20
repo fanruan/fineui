@@ -52587,6 +52587,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
                 items: [this.icon]
             });
         } else {
+            this.element.css("lineHeight", "1");
             BI.createWidget({
                 element: this,
                 type: "bi.center_adapt",
@@ -91641,6 +91642,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     _init: function () {
         BI.DynamicDateTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
+        this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -91690,6 +91692,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTrigger.EVENT_FOCUS);
         });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
@@ -91707,7 +91710,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 self.editor.setState(value);
             }
 
-            if (BI.isNotEmptyString(value)) {
+            if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
                 var date = value.split("-");
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
@@ -92622,6 +92625,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     _init: function () {
         BI.DynamicDateTimeTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
+        this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -92671,6 +92675,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_FOCUS);
         });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
@@ -92688,7 +92693,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 self.editor.setState(value);
             }
 
-            if (BI.isNotEmptyString(value)) {
+            if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
                 var date = value.split(/-|\s|:/);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
@@ -98967,6 +98972,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: this.isAllSelected()
         });
@@ -99794,7 +99800,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-check-selected-button bi-high-light",
+            baseCls: "bi-multi-select-check-selected-button",
             itemsCreator: BI.emptyFn
         });
     },
@@ -99808,7 +99814,8 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             hgap: 4,
             text: "0",
             textAlign: "center",
-            textHeight: 15
+            textHeight: 16,
+            cls: "bi-high-light-background count-tip"
         });
         this.numberCounter.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
