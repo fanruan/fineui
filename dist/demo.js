@@ -8200,7 +8200,7 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
                     el: {
                         type: "bi.label",
                         text: "1",
-                        cls: "layout-bg1"
+                        cls: "bi-background"
                     }
                 }, {
                     width: 200,
