@@ -77,7 +77,6 @@ $.extend(BI, {
                         el: {
                             type: "bi.button",
                             text: BI.i18nText("BI-Basic_Cancel"),
-                            height: 30,
                             level: "ignore",
                             handler: function () {
                                 close();
@@ -92,7 +91,6 @@ $.extend(BI, {
                     el: {
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_OK"),
-                        height: 30,
                         handler: function () {
                             close();
                             if (BI.isFunction(callback)) {
