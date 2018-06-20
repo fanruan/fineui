@@ -50738,7 +50738,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
     getValue: function () {
         var fieldMap = this.options.fieldTextValueMap;
-        return this.editor.getValue("\n", function (line) {
+        var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
             _.forEach(line.markedSpans, function (i, ms) {
@@ -50753,7 +50753,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
-            return value;
+            return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
         });
     },
 
