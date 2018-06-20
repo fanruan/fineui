@@ -76138,7 +76138,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 stopPropagation: false,
-                width: 202
+                width: 230
             },
             value: o.value
         });
@@ -76194,7 +76194,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-chooser-popup",
-        width: 200,
+        width: 230,
         height: 145
     },
 
@@ -76202,7 +76202,9 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
-            value: o.value
+            value: o.value,
+            cls: "bi-background bi-border-bottom",
+            height: 30
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -76237,8 +76239,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 value: "",
                 disabled: true
             }]],
-            width: 190,
-            height: 25,
+            width: 210,
+            height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
@@ -76248,7 +76250,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
-            width: 190,
+            width: 210,
             height: 50,
             value: o.value
         });
@@ -76283,7 +76285,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 type: "bi.text_item",
                 cls: "color-chooser-popup-more bi-list-item",
                 textAlign: "center",
-                height: 20,
+                height: 24,
                 text: BI.i18nText("BI-Basic_More") + "..."
             },
             popup: panel
@@ -76310,43 +76312,32 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.vtape",
-                    items: [{
-                        el: {
-                            type: "bi.absolute",
-                            cls: "bi-background bi-border-bottom",
-                            items: [{
-                                el: this.colorEditor,
-                                left: 0,
-                                right: 0,
-                                top: 5
-                            }]
-                        },
-                        height: 30
-                    }, {
+                    items: [this.colorEditor, {
                         el: {
                             type: "bi.absolute",
                             items: [{
                                 el: this.storeColors,
-                                left: 5,
-                                right: 5,
+                                left: 10,
+                                right: 10,
                                 top: 5
                             }]
                         },
-                        height: 30
+                        height: 29
                     }, {
                         el: {
                             type: "bi.absolute",
                             items: [{
                                 el: this.colorPicker,
-                                left: 5,
-                                right: 5,
-                                top: 5
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                                bottom: 5
                             }]
                         },
-                        height: 65
+                        height: 60
                     }, {
                         el: this.more,
-                        height: 20
+                        height: 24
                     }]
                 },
                 left: 0,
@@ -76935,7 +76926,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -76946,12 +76937,13 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
             cls: "color-picker-editor-label",
-            width: 10,
+            width: 20,
             height: 20
         }));
 
@@ -76984,8 +76976,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.none = BI.createWidget({
             type: "bi.icon_button",
             cls: "auto-color-icon",
-            width: 16,
-            height: 16,
+            width: 24,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Basic_Auto")
@@ -77006,8 +76998,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent = BI.createWidget({
             type: "bi.icon_button",
             cls: "trans-color-icon",
-            width: 16,
-            height: 16,
+            width: 24,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Transparent_Color")
@@ -77030,44 +77022,44 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget({
-            type: "bi.htape",
+            type: "bi.absolute",
             element: this,
             items: [{
-                el: this.colorShow,
-                width: "fill"
-            }, {
-                el: RGB[0],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.R,
-                width: 32
-            }, {
-                el: RGB[1],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.G,
-                width: 32
-            }, {
-                el: RGB[2],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.B,
-                width: 32
-            }, {
                 el: {
-                    type: "bi.center_adapt",
-                    items: [this.none]
+                    type: "bi.vertical_adapt",
+                    items: [{
+                        el: this.colorShow,
+                        width: 16
+                    }, {
+                        el: RGB[0],
+                        width: 20
+                    }, {
+                        el: this.R,
+                        width: 30
+                    }, {
+                        el: RGB[1],
+                        width: 20
+                    }, {
+                        el: this.G,
+                        width: 30
+                    }, {
+                        el: RGB[2],
+                        width: 20
+                    }, {
+                        el: this.B,
+                        width: 30
+                    }, {
+                        el: this.transparent,
+                        width: 24
+                    }, {
+                        el: this.none,
+                        width: 24
+                    }]
                 },
-                width: 18
-            }, {
-                el: {
-                    type: "bi.center_adapt",
-                    items: [this.transparent]
-                },
-                width: 18
+                left: 10,
+                right: 20,
+                top: 0,
+                bottom: 0
             }]
         });
     },
@@ -77172,12 +77164,13 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20
+            height: 20,
+            width: 40
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
             cls: "color-picker-editor-label",
-            width: 10,
+            width: 20,
             height: 20
         }));
 
@@ -77207,34 +77200,31 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.B = Ws[2];
 
         BI.createWidget({
-            type: "bi.htape",
+            type: "bi.vertical_adapt",
             element: this,
             items: [{
                 el: this.colorShow,
+                width: 40,
                 lgap: 5,
                 rgap: 5
             }, {
                 el: RGB[0],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.R,
-                width: 36
+                width: 30
             }, {
                 el: RGB[1],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.G,
-                width: 36
+                width: 30
             }, {
                 el: RGB[2],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.B,
-                width: 36,
-                rgap: 10
+                width: 30
             }]
         });
     },

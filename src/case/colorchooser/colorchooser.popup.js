@@ -9,7 +9,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-color-chooser-popup",
-        width: 200,
+        width: 230,
         height: 145
     },
 
@@ -17,7 +17,9 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
-            value: o.value
+            value: o.value,
+            cls: "bi-background bi-border-bottom",
+            height: 30
         });
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
@@ -52,8 +54,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 value: "",
                 disabled: true
             }]],
-            width: 190,
-            height: 25,
+            width: 210,
+            height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
@@ -63,7 +65,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker = BI.createWidget({
             type: "bi.color_picker",
-            width: 190,
+            width: 210,
             height: 50,
             value: o.value
         });
@@ -98,7 +100,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                 type: "bi.text_item",
                 cls: "color-chooser-popup-more bi-list-item",
                 textAlign: "center",
-                height: 20,
+                height: 24,
                 text: BI.i18nText("BI-Basic_More") + "..."
             },
             popup: panel
@@ -125,43 +127,32 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.vtape",
-                    items: [{
-                        el: {
-                            type: "bi.absolute",
-                            cls: "bi-background bi-border-bottom",
-                            items: [{
-                                el: this.colorEditor,
-                                left: 0,
-                                right: 0,
-                                top: 5
-                            }]
-                        },
-                        height: 30
-                    }, {
+                    items: [this.colorEditor, {
                         el: {
                             type: "bi.absolute",
                             items: [{
                                 el: this.storeColors,
-                                left: 5,
-                                right: 5,
+                                left: 10,
+                                right: 10,
                                 top: 5
                             }]
                         },
-                        height: 30
+                        height: 29
                     }, {
                         el: {
                             type: "bi.absolute",
                             items: [{
                                 el: this.colorPicker,
-                                left: 5,
-                                right: 5,
-                                top: 5
+                                left: 10,
+                                right: 10,
+                                top: 5,
+                                bottom: 5
                             }]
                         },
-                        height: 65
+                        height: 60
                     }, {
                         el: this.more,
-                        height: 20
+                        height: 24
                     }]
                 },
                 left: 0,
