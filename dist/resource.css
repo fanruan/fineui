@@ -835,6 +835,28 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e6d7";
   color: inherit;
 }
+.expander-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
+}
+.expander-right-font .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.expander-right-font.disabled .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.expander-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
+}
+.expander-down-font .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.expander-down-font.disabled .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
 .solid-triangle-top-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
 }

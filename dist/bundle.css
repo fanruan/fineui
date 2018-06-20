@@ -325,7 +325,7 @@ textarea {
   clear: both;
 }
 .bi-background {
-  background-color: #fafbfc;
+  background-color: #f7f8fa;
   color: #3d4d66;
 }
 .bi-background .bi-input {
@@ -3673,7 +3673,7 @@ ul.ztree.zTreeDragUL {
   max-width: 200px;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-text.active {
-  background-color: #fafbfc;
+  background-color: #f7f8fa;
   color: #999999;
 }
 .bi-file-manager-nav-button .file-manager-nav-button-triangle {
@@ -3928,7 +3928,7 @@ ul.ztree.zTreeDragUL {
 }
 .bi-preview-table > div > table > thead > tr.odd,
 .bi-preview-table > div > div > div > table > thead > tr.odd {
-  background-color: #fafbfc;
+  background-color: #f7f8fa;
 }
 .bi-theme-dark .bi-preview-table > div > table > thead > tr.odd,
 .bi-theme-dark .bi-preview-table > div > div > div > table > thead > tr.odd {
@@ -4954,6 +4954,28 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .column-next-page-h-font.disabled .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.expander-right-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
+}
+.expander-right-font .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.expander-right-font.disabled .b-font:before {
+  content: "\e6d8";
+  color: inherit;
+}
+.expander-down-font .b-font {
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
+}
+.expander-down-font .b-font:before {
+  content: "\e6d7";
+  color: inherit;
+}
+.expander-down-font.disabled .b-font:before {
   content: "\e6d7";
   color: inherit;
 }
