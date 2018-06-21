@@ -83527,6 +83527,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Background_Color"),
             cls: "text-background-font"
         });
 
@@ -83846,6 +83847,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Font_Color"),
             cls: "text-color-font"
         });
 
@@ -114764,5 +114766,8 @@ BI.i18n = {
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
     "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\"",
-    "BI-Basic_Please_Select": "请选择"
+    "BI-Basic_Please_Select": "请选择",
+    "BI-Basic_Font_Color": "文字颜色",
+    "BI-Basic_Background_Color": "背景色",
+    "BI-Basic_Underline": "下划线"
 };

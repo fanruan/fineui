@@ -19,6 +19,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Background_Color"),
             cls: "text-background-font"
         });
 
