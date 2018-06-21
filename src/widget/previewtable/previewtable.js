@@ -197,6 +197,24 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     },
 
     populate: function (items, header) {
+        if (items) {
+            items = BI.map(items, function (i, items) {
+                return BI.map(items, function (j, item) {
+                    return BI.extend({
+                        type: "bi.preview_table_cell"
+                    }, item);
+                });
+            });
+        }
+        if (header) {
+            header = BI.map(header, function (i, items) {
+                return BI.map(items, function (j, item) {
+                    return BI.extend({
+                        type: "bi.preview_table_header_cell"
+                    }, item);
+                });
+            });
+        }
         this.table.populate(items, header);
         this._adjustColumns();
     }

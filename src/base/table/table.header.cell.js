@@ -16,13 +16,17 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableHeaderCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "center",
+            textAlign: o.textAlign || "center",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });

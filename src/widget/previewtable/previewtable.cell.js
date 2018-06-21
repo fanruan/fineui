@@ -21,11 +21,14 @@ BI.PreviewTableCell = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
+            textAlign: o.textAlign || "left",
+            whiteSpace: o.whiteSpace || "normal",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });

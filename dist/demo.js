@@ -2068,6 +2068,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 ref: function () {
                     combo = this;
                 },
+                warningTitle: "111",
                 text: "默认值",
                 value: 14,
                 width: 300,
@@ -12762,7 +12763,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_insert_no_bar_combo",
+            type: "bi.multi_select_insert_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
