@@ -65,7 +65,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 width: 200,
                 value: {
                     type: 1,
-                    value: ["1", "2", "3"]
+                    value: ["1", "2", "柳州市城贸金属材料有限责任公司", "3"]
                 }
             }, {
                 type: "bi.button",

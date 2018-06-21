@@ -45,7 +45,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.multi_select_search_pane",
+            type: "bi.multi_select_search_insert_pane",
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
             keywordGetter: function () {
@@ -55,7 +55,24 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
+                action: function () {
+                    var keyword = self.trigger.getKeyword();
+                    if (!self.trigger.hasMatched()) {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }]
         });
         this.searcherPane.setVisible(false);
 
@@ -106,16 +123,6 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {

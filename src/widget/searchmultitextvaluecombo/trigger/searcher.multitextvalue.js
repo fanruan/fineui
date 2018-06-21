@@ -107,6 +107,7 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
         var ob = {};
         ob.type = obj.type;
         ob.value = o.allValueGetter() || [];
+        ob.assist = obj.assist;
         if (ob.type === BI.Selection.All) {
             if (ob.value.length === 0) {
                 this.editor.setState(BI.Selection.All);

@@ -14740,8 +14740,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
-            return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
         });
+        return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
 
     setValue: function (value) {
@@ -14843,7 +14843,6 @@ $.extend(BI, {
                         el: {
                             type: "bi.button",
                             text: BI.i18nText("BI-Basic_Cancel"),
-                            height: 30,
                             level: "ignore",
                             handler: function () {
                                 close();
@@ -14858,7 +14857,6 @@ $.extend(BI, {
                     el: {
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_OK"),
-                        height: 30,
                         handler: function () {
                             close();
                             if (BI.isFunction(callback)) {
@@ -15331,7 +15329,8 @@ BI.Popover = BI.inherit(BI.Widget, {
             SMALL: "small",
             NORMAL: "normal",
             BIG: "big"
-        }
+        },
+        HEADER_HEIGHT: 40
     },
 
     _defaultConfig: function () {
@@ -15378,7 +15377,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                                 items: [{
                                     el: BI.isPlainObject(o.header) ? BI.createWidget(o.header) : {
                                         type: "bi.label",
-                                        height: 36,
+                                        height: this._constant.HEADER_HEIGHT,
                                         text: o.header,
                                         title: o.header,
                                         textAlign: "left"
@@ -15394,7 +15393,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             el: {
                                 type: "bi.icon_button",
                                 cls: "bi-message-close close-font",
-                                height: 36,
+                                height: this._constant.HEADER_HEIGHT,
                                 handler: function () {
                                     self.close();
                                 }
@@ -15403,7 +15402,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                         }
                     }
                 },
-                height: 36
+                height: this._constant.HEADER_HEIGHT
             },
             center: {
                 el: {

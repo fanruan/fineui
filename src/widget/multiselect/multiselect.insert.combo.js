@@ -28,7 +28,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.requesting = false;
 
         this.trigger = BI.createWidget({
-            type: "bi.multi_select_trigger",
+            type: "bi.multi_select_insert_trigger",
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -53,33 +53,25 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            // if (this.getSearcher().hasMatched()) {
-            var keyword = this.getSearcher().getKeyword();
-            self._join({
-                type: BI.Selection.Multi,
-                value: [keyword]
-            }, function () {
-                // 如果在不选的状态下直接把该值添加进来
-                if (self.storeValue.type === BI.Selection.Multi) {
-                    self.storeValue.value.pushDistinct(keyword);
-                }
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue("");
-            });
-            // }
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+            }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
+            if (!this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+                self.trigger.stopEditing();
+            }
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
@@ -97,7 +89,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
@@ -108,10 +100,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 });
             }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
                 self.combo.showView();
             }
@@ -217,6 +209,25 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 top: 0,
                 bottom: 0
             }]
+        });
+    },
+
+    _addItem: function (assertShowValue) {
+        var self = this;
+        var keyword = this.trigger.getSearcher().getKeyword();
+        this._join({
+            type: BI.Selection.Multi,
+            value: [keyword]
+        }, function () {
+            // 如果在不选的状态下直接把该值添加进来
+            if (self.storeValue.type === BI.Selection.Multi) {
+                self.storeValue.value.pushDistinct(keyword);
+            }
+            self.combo.setValue(self.storeValue);
+            self._setStartValue(keyword);
+            assertShowValue();
+            self.populate();
+            self._setStartValue("");
         });
     },
 

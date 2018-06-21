@@ -181,12 +181,10 @@
 }
 .bi-multi-select-check-selected-button {
   z-index: 1;
+  min-width: 16px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-}
-.bi-multi-select-check-selected-button .count-tip {
-  min-width: 16px;
 }
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #3685f2;

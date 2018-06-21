@@ -702,7 +702,7 @@ li.CodeMirror-hint-active {
   color: white;
 }
 .bi-message-title {
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 .bi-message-text {
@@ -718,7 +718,7 @@ li.CodeMirror-hint-active {
   font-size: 16px;
 }
 .bi-message-close {
-  font-size: 25px;
+  font-size: 16px;
 }
 .bi-message-animate {
   -webkit-transition: opacity 0.3s, transform 0.4s, -webkit-transform 0.4s;
