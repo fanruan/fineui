@@ -52733,19 +52733,21 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
-                this.element.css({height: o.height + "px", lineHeight: o.height + "px"});
+                this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
             } else {
-                this.element.css({lineHeight: o.height + "px"});
+                this.element.css({lineHeight: (o.height - 2) + "px"});
             }
             if (BI.isKey(o.iconCls)) {
                 this.icon = BI.createWidget({
                     type: "bi.icon",
-                    width: 18
+                    width: 18,
+                    height: o.height - 2
                 });
                 this.text = BI.createWidget({
                     type: "bi.label",
                     text: o.text,
-                    value: o.value
+                    value: o.value,
+                    height: o.height - 2
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
@@ -66101,15 +66103,18 @@ BI.TableCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            whiteSpace: "nowrap",
+            whiteSpace: o.whiteSpace || "nowrap",
             textAlign: this.options.textAlign,
             height: this.options.height,
             text: this.options.text,
             value: this.options.value,
-            lgap: 5
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });
@@ -68115,13 +68120,17 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableHeaderCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "center",
+            textAlign: o.textAlign || "center",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });
@@ -78875,8 +78884,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             });
             if (BI.isNull(result)) {
                 this.element.removeClass("combo-error").addClass("combo-error");
+                this.trigger.attr("tipType", "warning");
             } else {
                 this.element.removeClass("combo-error");
+                this.trigger.attr("tipType", "success");
             }
         }
     },
@@ -103702,11 +103713,14 @@ BI.PreviewTableCell = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
+            textAlign: o.textAlign || "left",
+            whiteSpace: o.whiteSpace || "normal",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });
@@ -103733,11 +103747,14 @@ BI.PreviewTableHeaderCell = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "left",
-            whiteSpace: "normal",
+            textAlign: o.textAlign || "left",
+            whiteSpace: o.whiteSpace || "normal",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });
@@ -103940,6 +103957,24 @@ BI.PreviewTable = BI.inherit(BI.Widget, {
     },
 
     populate: function (items, header) {
+        if (items) {
+            items = BI.map(items, function (i, items) {
+                return BI.map(items, function (j, item) {
+                    return BI.extend({
+                        type: "bi.preview_table_cell"
+                    }, item);
+                });
+            });
+        }
+        if (header) {
+            header = BI.map(header, function (i, items) {
+                return BI.map(items, function (j, item) {
+                    return BI.extend({
+                        type: "bi.preview_table_header_cell"
+                    }, item);
+                });
+            });
+        }
         this.table.populate(items, header);
         this._adjustColumns();
     }

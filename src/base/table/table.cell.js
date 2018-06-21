@@ -17,15 +17,18 @@ BI.TableCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            whiteSpace: "nowrap",
+            whiteSpace: o.whiteSpace || "nowrap",
             textAlign: this.options.textAlign,
             height: this.options.height,
             text: this.options.text,
             value: this.options.value,
-            lgap: 5
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });

@@ -42,19 +42,21 @@
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
-                this.element.css({height: o.height + "px", lineHeight: o.height + "px"});
+                this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
             } else {
-                this.element.css({lineHeight: o.height + "px"});
+                this.element.css({lineHeight: (o.height - 2) + "px"});
             }
             if (BI.isKey(o.iconCls)) {
                 this.icon = BI.createWidget({
                     type: "bi.icon",
-                    width: 18
+                    width: 18,
+                    height: o.height - 2
                 });
                 this.text = BI.createWidget({
                     type: "bi.label",
                     text: o.text,
-                    value: o.value
+                    value: o.value,
+                    height: o.height - 2
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
