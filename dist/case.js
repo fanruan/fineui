@@ -6163,8 +6163,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             });
             if (BI.isNull(result)) {
                 this.element.removeClass("combo-error").addClass("combo-error");
+                this.trigger.attr("tipType", "warning");
             } else {
                 this.element.removeClass("combo-error");
+                this.trigger.attr("tipType", "success");
             }
         }
     },

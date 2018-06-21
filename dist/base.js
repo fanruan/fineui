@@ -14740,7 +14740,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
-
             return value;
         });
         return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
@@ -15412,7 +15411,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                     items: [{
                         el: BI.createWidget(o.body),
                         left: 20,
-                        top: 10,
+                        top: 20,
                         right: 20,
                         bottom: 0
                     }]
@@ -16722,19 +16721,21 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             BI.Button.superclass._init.apply(this, arguments);
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
-                this.element.css({height: o.height + "px", lineHeight: o.height + "px"});
+                this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
             } else {
-                this.element.css({lineHeight: o.height + "px"});
+                this.element.css({lineHeight: (o.height - 2) + "px"});
             }
             if (BI.isKey(o.iconCls)) {
                 this.icon = BI.createWidget({
                     type: "bi.icon",
-                    width: 18
+                    width: 18,
+                    height: o.height - 2
                 });
                 this.text = BI.createWidget({
                     type: "bi.label",
                     text: o.text,
-                    value: o.value
+                    value: o.value,
+                    height: o.height - 2
                 });
                 BI.createWidget({
                     type: "bi.horizontal_auto",
@@ -30090,15 +30091,18 @@ BI.TableCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            whiteSpace: "nowrap",
+            whiteSpace: o.whiteSpace || "nowrap",
             textAlign: this.options.textAlign,
             height: this.options.height,
             text: this.options.text,
             value: this.options.value,
-            lgap: 5
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });
@@ -32104,13 +32108,17 @@ BI.TableHeaderCell = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.TableHeaderCell.superclass._init.apply(this, arguments);
+        var o = this.options;
         BI.createWidget({
             type: "bi.label",
             element: this,
-            textAlign: "center",
+            textAlign: o.textAlign || "center",
             height: this.options.height,
             text: this.options.text,
-            value: this.options.value
+            value: this.options.value,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap || 5
         });
     }
 });

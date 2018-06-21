@@ -14,6 +14,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 ref: function () {
                     combo = this;
                 },
+                warningTitle: "111",
                 text: "默认值",
                 value: 14,
                 width: 300,
