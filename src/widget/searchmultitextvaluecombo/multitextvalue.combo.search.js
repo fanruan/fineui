@@ -23,7 +23,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = o.value || {};
+        this.storeValue = BI.deepClone(o.value || {});
         this._updateAllValue();
 
         this._assertValue(this.storeValue);
@@ -442,7 +442,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = BI.deepClone(v || {});
         this._updateAllValue();
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);

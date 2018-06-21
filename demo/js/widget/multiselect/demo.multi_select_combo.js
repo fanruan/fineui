@@ -9,7 +9,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_insert_combo",
+            type: "bi.multi_select_insert_no_bar_combo",
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
@@ -27,14 +27,14 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {

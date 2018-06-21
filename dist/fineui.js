@@ -50753,8 +50753,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
-            return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
         });
+        return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
 
     setValue: function (value) {
@@ -50856,7 +50856,6 @@ $.extend(BI, {
                         el: {
                             type: "bi.button",
                             text: BI.i18nText("BI-Basic_Cancel"),
-                            height: 30,
                             level: "ignore",
                             handler: function () {
                                 close();
@@ -50871,7 +50870,6 @@ $.extend(BI, {
                     el: {
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_OK"),
-                        height: 30,
                         handler: function () {
                             close();
                             if (BI.isFunction(callback)) {
@@ -51344,7 +51342,8 @@ BI.Popover = BI.inherit(BI.Widget, {
             SMALL: "small",
             NORMAL: "normal",
             BIG: "big"
-        }
+        },
+        HEADER_HEIGHT: 40
     },
 
     _defaultConfig: function () {
@@ -51391,7 +51390,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                                 items: [{
                                     el: BI.isPlainObject(o.header) ? BI.createWidget(o.header) : {
                                         type: "bi.label",
-                                        height: 36,
+                                        height: this._constant.HEADER_HEIGHT,
                                         text: o.header,
                                         title: o.header,
                                         textAlign: "left"
@@ -51407,7 +51406,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             el: {
                                 type: "bi.icon_button",
                                 cls: "bi-message-close close-font",
-                                height: 36,
+                                height: this._constant.HEADER_HEIGHT,
                                 handler: function () {
                                     self.close();
                                 }
@@ -51416,7 +51415,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                         }
                     }
                 },
-                height: 36
+                height: this._constant.HEADER_HEIGHT
             },
             center: {
                 el: {
@@ -98137,7 +98136,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.requesting = false;
 
         this.trigger = BI.createWidget({
-            type: "bi.multi_select_trigger",
+            type: "bi.multi_select_insert_trigger",
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -98162,33 +98161,25 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            // if (this.getSearcher().hasMatched()) {
-            var keyword = this.getSearcher().getKeyword();
-            self._join({
-                type: BI.Selection.Multi,
-                value: [keyword]
-            }, function () {
-                // 如果在不选的状态下直接把该值添加进来
-                if (self.storeValue.type === BI.Selection.Multi) {
-                    self.storeValue.value.pushDistinct(keyword);
-                }
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue("");
-            });
-            // }
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+            }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
+            if (!this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+                self.trigger.stopEditing();
+            }
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
@@ -98206,7 +98197,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
@@ -98217,10 +98208,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 });
             }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
                 self.combo.showView();
             }
@@ -98326,6 +98317,25 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 top: 0,
                 bottom: 0
             }]
+        });
+    },
+
+    _addItem: function (assertShowValue) {
+        var self = this;
+        var keyword = this.trigger.getSearcher().getKeyword();
+        this._join({
+            type: BI.Selection.Multi,
+            value: [keyword]
+        }, function () {
+            // 如果在不选的状态下直接把该值添加进来
+            if (self.storeValue.type === BI.Selection.Multi) {
+                self.storeValue.value.pushDistinct(keyword);
+            }
+            self.combo.setValue(self.storeValue);
+            self._setStartValue(keyword);
+            assertShowValue();
+            self.populate();
+            self._setStartValue("");
         });
     },
 
@@ -98504,7 +98514,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.requesting = false;
 
         this.trigger = BI.createWidget({
-            type: "bi.multi_select_trigger",
+            type: "bi.multi_select_insert_trigger",
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -98535,33 +98545,25 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
-            // if (this.getSearcher().hasMatched()) {
-            var keyword = this.getSearcher().getKeyword();
-            self._join({
-                type: BI.Selection.Multi,
-                value: [keyword]
-            }, function () {
-                // 如果在不选的状态下直接把该值添加进来
-                if (self.storeValue.type === BI.Selection.Multi) {
-                    self.storeValue.value.pushDistinct(keyword);
-                }
-                self.combo.setValue(self.storeValue);
-                self._setStartValue(keyword);
-                assertShowValue();
-                self.populate();
-                self._setStartValue("");
-            });
-            // }
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+            }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
+            if (!this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+                self.trigger.stopEditing();
+            }
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
             keywords = BI.initial(keywords || []);
             if (keywords.length > 0) {
@@ -98579,7 +98581,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
             if (obj instanceof BI.MultiSelectBar) {
                 self._joinAll(this.getValue(), function () {
                     assertShowValue();
@@ -98590,10 +98592,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 });
             }
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
         });
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
                 self.combo.showView();
             }
@@ -98702,6 +98704,25 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 top: 0,
                 bottom: 0
             }]
+        });
+    },
+
+    _addItem: function (assertShowValue) {
+        var self = this;
+        var keyword = this.trigger.getSearcher().getKeyword();
+        this._join({
+            type: BI.Selection.Multi,
+            value: [keyword]
+        }, function () {
+            // 如果在不选的状态下直接把该值添加进来
+            if (self.storeValue.type === BI.Selection.Multi) {
+                self.storeValue.value.pushDistinct(keyword);
+            }
+            self.combo.setValue(self.storeValue);
+            self._setStartValue(keyword);
+            assertShowValue();
+            self.populate();
+            self._setStartValue("");
         });
     },
 
@@ -98850,6 +98871,166 @@ BI.extend(BI.MultiSelectInsertNoBarCombo, {
 BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarCombo);/**
+ *
+ * 复选下拉框
+ * @class BI.MultiSelectInsertTrigger
+ * @extends BI.Trigger
+ */
+
+BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
+
+    constants: {
+        height: 14,
+        rgap: 4,
+        lgap: 4
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectInsertTrigger.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-trigger bi-border",
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            searcher: {},
+            switcher: {},
+
+            adapter: null,
+            masker: {}
+        });
+    },
+
+    _init: function () {
+        BI.MultiSelectInsertTrigger.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+        if (o.height) {
+            this.setHeight(o.height - 2);
+        }
+
+        this.searcher = BI.createWidget(o.searcher, {
+            type: "bi.multi_select_insert_searcher",
+            height: o.height,
+            text: o.text,
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            popup: {},
+            adapter: o.adapter,
+            masker: o.masker,
+            value: o.value
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_START, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_START);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_PAUSE, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_PAUSE);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, arguments);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_STOP, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_STOP);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_CHANGE, arguments);
+        });
+        this.numberCounter = BI.createWidget(o.switcher, {
+            type: "bi.multi_select_check_selected_switcher",
+            valueFormatter: o.valueFormatter,
+            itemsCreator: o.itemsCreator,
+            adapter: o.adapter,
+            masker: o.masker,
+            value: o.value
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK);
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW);
+        });
+
+        var wrapNumberCounter = BI.createWidget({
+            type: "bi.right_vertical_adapt",
+            hgap: 4,
+            items: [{
+                el: this.numberCounter
+            }]
+        });
+
+        var wrapper = BI.createWidget({
+            type: "bi.htape",
+            element: this,
+            items: [
+                {
+                    el: this.searcher,
+                    width: "fill"
+                }, {
+                    el: wrapNumberCounter,
+                    width: 0
+                }, {
+                    el: BI.createWidget(),
+                    width: 24
+                }]
+        });
+
+        this.numberCounter.on(BI.Events.VIEW, function (b) {
+            BI.nextTick(function () {// 自动调整宽度
+                wrapper.attr("items")[1].width = (b === true ? self.numberCounter.element.outerWidth() + 8 : 0);
+                wrapper.resize();
+            });
+        });
+
+        this.element.click(function (e) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+                self.numberCounter.hideView();
+            }
+        });
+    },
+
+    getCounter: function () {
+        return this.numberCounter;
+    },
+
+    getSearcher: function () {
+        return this.searcher;
+    },
+
+    stopEditing: function () {
+        this.searcher.stopSearch();
+        this.numberCounter.hideView();
+    },
+
+    setAdapter: function (adapter) {
+        this.searcher.setAdapter(adapter);
+        this.numberCounter.setAdapter(adapter);
+    },
+
+    setValue: function (ob) {
+        this.searcher.setValue(ob);
+        this.numberCounter.setValue(ob);
+    },
+
+    getKey: function () {
+        return this.searcher.getKey();
+    },
+
+    getValue: function () {
+        return this.searcher.getValue();
+    }
+});
+
+BI.MultiSelectInsertTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
+BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK = "EVENT_COUNTER_CLICK";
+BI.MultiSelectInsertTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiSelectInsertTrigger.EVENT_START = "EVENT_START";
+BI.MultiSelectInsertTrigger.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
+BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+
+BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);/**
  * 多选加载数据面板
  * Created by guy on 15/11/2.
  * @class BI.MultiSelectLoader
@@ -99526,6 +99707,121 @@ BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);/**
+ *
+ * 在搜索框中输入文本弹出的面板
+ * @class BI.MultiSelectSearchInsertPane
+ * @extends Widget
+ */
+
+BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
+
+    constants: {
+        height: 24,
+        lgap: 10,
+        tgap: 5
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectSearchInsertPane.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-search-pane bi-card",
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            keywordGetter: BI.emptyFn
+        });
+    },
+
+    _init: function () {
+        BI.MultiSelectSearchInsertPane.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        this.tooltipClick = BI.createWidget({
+            type: "bi.label",
+            invisible: true,
+            text: BI.i18nText("BI-Click_Blank_To_Select"),
+            cls: "multi-select-toolbar",
+            height: this.constants.height
+        });
+
+        this.addNotMatchTip = BI.createWidget({
+            type: "bi.icon_text_item",
+            invisible: true,
+            logic: {
+                dynamic: true
+            },
+            text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+            cls: "text-add-tip-font",
+            height: this.constants.height,
+            handler: function () {
+                self.fireEvent(BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
+            }
+        });
+
+        this.loader = BI.createWidget({
+            type: "bi.multi_select_search_loader",
+            keywordGetter: o.keywordGetter,
+            valueFormatter: o.valueFormatter,
+            itemsCreator: function (op, callback) {
+                o.itemsCreator.apply(self, [op, function (res) {
+                    callback(res);
+                    self.setKeyword(o.keywordGetter());
+                }]);
+            },
+            value: o.value
+        });
+        this.loader.on(BI.Controller.EVENT_CHANGE, function () {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        this.resizer = BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                type: "bi.float_center_adapt",
+                items: [this.tooltipClick, this.addNotMatchTip],
+                height: this.constants.height
+            }, {
+                el: this.loader
+            }]
+        });
+    },
+
+    setKeyword: function (keyword) {
+        var btn;
+        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        this.tooltipClick.setVisible(isMatchTipVisible);
+        this.addNotMatchTip.setVisible(!isMatchTipVisible);
+        !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    isAllSelected: function () {
+        return this.loader.isAllSelected();
+    },
+
+    hasMatched: function () {
+        return this.tooltipClick.isVisible();
+    },
+
+    setValue: function (v) {
+        this.loader.setValue(v);
+    },
+
+    getValue: function () {
+        return this.loader.getValue();
+    },
+
+    empty: function () {
+        this.loader.empty();
+    },
+
+    populate: function (items) {
+        this.loader.populate.apply(this.loader, arguments);
+    }
+});
+
+BI.MultiSelectSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+
+BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);/**
  * 多选加载数据搜索loader面板
  * Created by guy on 15/11/4.
  * @class BI.MultiSelectSearchLoader
@@ -99938,6 +100234,187 @@ BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
 BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);/**
  * searcher
  * Created by guy on 15/11/3.
+ * @class BI.MultiSelectInsertSearcher
+ * @extends Widget
+ */
+BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiSelectInsertSearcher.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-select-searcher",
+            itemsCreator: BI.emptyFn,
+            el: {},
+            popup: {},
+            valueFormatter: BI.emptyFn,
+            adapter: null,
+            masker: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
+        });
+    },
+
+    _init: function () {
+        BI.MultiSelectInsertSearcher.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.editor = BI.createWidget(o.el, {
+            type: "bi.multi_select_editor",
+            height: o.height,
+            text: o.text
+        });
+
+        this.searcher = BI.createWidget({
+            type: "bi.searcher",
+            element: this,
+            height: o.height,
+            isAutoSearch: false,
+            isAutoSync: false,
+            onSearch: function (op, callback) {
+                callback();
+            },
+            el: this.editor,
+
+            popup: BI.extend({
+                type: "bi.multi_select_search_insert_pane",
+                valueFormatter: o.valueFormatter,
+                keywordGetter: function () {
+                    return self.editor.getValue();
+                },
+                itemsCreator: function (op, callback) {
+                    var keyword = self.editor.getValue();
+                    op.keywords = [keyword];
+                    this.setKeyword(keyword);
+                    o.itemsCreator(op, callback);
+                },
+                value: o.value,
+                listeners: [{
+                    eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
+                    action: function () {
+                        self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM);
+                    }
+                }]
+            }, o.popup),
+
+            adapter: o.adapter,
+            masker: o.masker
+        });
+        this.searcher.on(BI.Searcher.EVENT_START, function () {
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_START);
+        });
+        this.searcher.on(BI.Searcher.EVENT_PAUSE, function () {
+            if (this.hasMatched()) {
+
+            }
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_PAUSE);
+        });
+        this.searcher.on(BI.Searcher.EVENT_STOP, function () {
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_STOP);
+        });
+        this.searcher.on(BI.Searcher.EVENT_CHANGE, function () {
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_CHANGE, arguments);
+        });
+        this.searcher.on(BI.Searcher.EVENT_SEARCHING, function () {
+            var keywords = this.getKeywords();
+            self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_SEARCHING, keywords);
+        });
+        if (BI.isNotNull(o.value)) {
+            this.setState(o.value);
+        }
+    },
+
+    adjustView: function () {
+        this.searcher.adjustView();
+    },
+
+    isSearching: function () {
+        return this.searcher.isSearching();
+    },
+
+    stopSearch: function () {
+        this.searcher.stopSearch();
+    },
+
+    getKeyword: function () {
+        return this.editor.getValue();
+    },
+
+    hasMatched: function () {
+        return this.searcher.hasMatched();
+    },
+
+    hasChecked: function () {
+        return this.searcher.getView() && this.searcher.getView().hasChecked();
+    },
+
+    setAdapter: function (adapter) {
+        this.searcher.setAdapter(adapter);
+    },
+
+    setState: function (ob) {
+        var o = this.options;
+        ob || (ob = {});
+        ob.value || (ob.value = []);
+        if (ob.type === BI.Selection.All) {
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.All);
+            } else if (BI.size(ob.assist) <= 20) {
+                var state = "";
+                BI.each(ob.assist, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
+            } else {
+                this.editor.setState(BI.Selection.Multi);
+            }
+        } else {
+            if (ob.value.length === 0) {
+                this.editor.setState(BI.Selection.None);
+            } else if (BI.size(ob.value) <= 20) {
+                var state = "";
+                BI.each(ob.value, function (i, v) {
+                    if (i === 0) {
+                        state += "" + (o.valueFormatter(v + "") || v);
+                    } else {
+                        state += "," + (o.valueFormatter(v + "") || v);
+                    }
+                });
+                this.editor.setState(state);
+            } else {
+                this.editor.setState(BI.Selection.Multi);
+            }
+        }
+    },
+
+    setValue: function (ob) {
+        this.setState(ob);
+        this.searcher.setValue(ob);
+    },
+
+    getKey: function () {
+        return this.editor.getValue();
+    },
+
+    getValue: function () {
+        return this.searcher.getValue();
+    },
+
+    populate: function (items) {
+        this.searcher.populate.apply(this.searcher, arguments);
+    }
+});
+
+BI.MultiSelectInsertSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectInsertSearcher.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiSelectInsertSearcher.EVENT_START = "EVENT_START";
+BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
+BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);/**
+ * searcher
+ * Created by guy on 15/11/3.
  * @class BI.MultiSelectSearcher
  * @extends Widget
  */
@@ -100069,8 +100546,6 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         } else {
             if (ob.value.length === 0) {
                 this.editor.setState(BI.Selection.None);
-            } else if (BI.size(ob.assist) === 0) {
-                this.editor.setState(BI.Selection.All);
             } else if (BI.size(ob.value) <= 20) {
                 var state = "";
                 BI.each(ob.value, function (i, v) {
@@ -100251,7 +100726,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.multi_select_search_pane",
+            type: "bi.multi_select_search_insert_pane",
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
             keywordGetter: function () {
@@ -100261,7 +100736,24 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
+                action: function () {
+                    var keyword = self.trigger.getKeyword();
+                    if (!self.trigger.hasMatched()) {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }]
         });
         this.searcherPane.setVisible(false);
 
@@ -100312,16 +100804,6 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {
@@ -100584,7 +101066,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.multi_select_search_pane",
+            type: "bi.multi_select_search_insert_pane",
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
             keywordGetter: function () {
@@ -100594,7 +101076,24 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
+                action: function () {
+                    var keyword = self.trigger.getKeyword();
+                    if (!self.trigger.hasMatched()) {
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.storeValue.value.pushDistinct(keyword);
+                        }
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }]
         });
         this.searcherPane.setVisible(false);
 
@@ -100645,16 +101144,6 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             self._setStartValue("");
                             self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
-                    } else {
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
-                        }
-                        self._showAdapter();
-                        self.adapter.setValue(self.storeValue);
-                        self.adapter.populate();
-                        if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
-                        }
                     }
                 }
             }, {
@@ -104114,7 +104603,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
-        this.storeValue = o.value || {};
+        this.storeValue = BI.deepClone(o.value || {});
         this._updateAllValue();
 
         this._assertValue(this.storeValue);
@@ -104533,7 +105022,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        this.storeValue = v || {};
+        this.storeValue = BI.deepClone(v || {});
         this._updateAllValue();
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
@@ -105080,6 +105569,7 @@ BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
         var ob = {};
         ob.type = obj.type;
         ob.value = o.allValueGetter() || [];
+        ob.assist = obj.assist;
         if (ob.type === BI.Selection.All) {
             if (ob.value.length === 0) {
                 this.editor.setState(BI.Selection.All);
