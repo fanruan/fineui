@@ -14740,6 +14740,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
+
+            return value;
         });
         return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
@@ -15410,7 +15412,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                     items: [{
                         el: BI.createWidget(o.body),
                         left: 20,
-                        top: 20,
+                        top: 10,
                         right: 20,
                         bottom: 0
                     }]

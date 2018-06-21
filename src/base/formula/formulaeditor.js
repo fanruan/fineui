@@ -217,6 +217,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
+
+            return value;
         });
         return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },

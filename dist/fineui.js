@@ -50753,6 +50753,8 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
                         break;
                 }
             });
+
+            return value;
         });
         return v.replaceAll("(\\$\\{.*?\\})\\s", "$1");
     },
@@ -51423,7 +51425,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                     items: [{
                         el: BI.createWidget(o.body),
                         left: 20,
-                        top: 20,
+                        top: 10,
                         right: 20,
                         bottom: 0
                     }]
@@ -114090,13 +114092,15 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         return result;
     };
 
-    var populate = BI.Loader.prototype.populate;
-    BI.Loader.prototype.populate = function () {
-        pushContext(this);
-        var result = populate.apply(this, arguments);
-        popContext();
-        return result;
-    };
+    _.each(["populate", "addItems", "prependItems"], function (name) {
+        var old = BI.Loader.prototype[name];
+        BI.Loader.prototype[name] = function () {
+            pushContext(this);
+            var result = old.apply(this, arguments);
+            popContext();
+            return result;
+        };
+    });
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
