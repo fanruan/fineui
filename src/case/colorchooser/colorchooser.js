@@ -52,7 +52,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 stopPropagation: false,
-                width: 202
+                width: 230
             },
             value: o.value
         });

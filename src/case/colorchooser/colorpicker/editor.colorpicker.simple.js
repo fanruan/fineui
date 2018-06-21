@@ -21,12 +21,13 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20
+            height: 20,
+            width: 40
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
             cls: "color-picker-editor-label",
-            width: 10,
+            width: 20,
             height: 20
         }));
 
@@ -56,34 +57,31 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.B = Ws[2];
 
         BI.createWidget({
-            type: "bi.htape",
+            type: "bi.vertical_adapt",
             element: this,
             items: [{
                 el: this.colorShow,
+                width: 40,
                 lgap: 5,
                 rgap: 5
             }, {
                 el: RGB[0],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.R,
-                width: 36
+                width: 30
             }, {
                 el: RGB[1],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.G,
-                width: 36
+                width: 30
             }, {
                 el: RGB[2],
-                lgap: 10,
-                width: 16
+                width: 20
             }, {
                 el: this.B,
-                width: 36,
-                rgap: 10
+                width: 30
             }]
         });
     },

@@ -8,7 +8,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectCheckSelectedButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-check-selected-button bi-high-light",
+            baseCls: "bi-multi-select-check-selected-button",
             itemsCreator: BI.emptyFn
         });
     },
@@ -22,7 +22,8 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             hgap: 4,
             text: "0",
             textAlign: "center",
-            textHeight: 15
+            textHeight: 16,
+            cls: "bi-high-light-background count-tip"
         });
         this.numberCounter.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);

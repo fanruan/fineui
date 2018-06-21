@@ -11,7 +11,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -22,12 +22,13 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
             cls: "color-picker-editor-label",
-            width: 10,
+            width: 20,
             height: 20
         }));
 
@@ -60,8 +61,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.none = BI.createWidget({
             type: "bi.icon_button",
             cls: "auto-color-icon",
-            width: 16,
-            height: 16,
+            width: 24,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Basic_Auto")
@@ -82,8 +83,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent = BI.createWidget({
             type: "bi.icon_button",
             cls: "trans-color-icon",
-            width: 16,
-            height: 16,
+            width: 24,
+            height: 24,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Transparent_Color")
@@ -106,44 +107,44 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         });
 
         BI.createWidget({
-            type: "bi.htape",
+            type: "bi.absolute",
             element: this,
             items: [{
-                el: this.colorShow,
-                width: "fill"
-            }, {
-                el: RGB[0],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.R,
-                width: 32
-            }, {
-                el: RGB[1],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.G,
-                width: 32
-            }, {
-                el: RGB[2],
-                lgap: 10,
-                width: 16
-            }, {
-                el: this.B,
-                width: 32
-            }, {
                 el: {
-                    type: "bi.center_adapt",
-                    items: [this.none]
+                    type: "bi.vertical_adapt",
+                    items: [{
+                        el: this.colorShow,
+                        width: 16
+                    }, {
+                        el: RGB[0],
+                        width: 20
+                    }, {
+                        el: this.R,
+                        width: 30
+                    }, {
+                        el: RGB[1],
+                        width: 20
+                    }, {
+                        el: this.G,
+                        width: 30
+                    }, {
+                        el: RGB[2],
+                        width: 20
+                    }, {
+                        el: this.B,
+                        width: 30
+                    }, {
+                        el: this.transparent,
+                        width: 24
+                    }, {
+                        el: this.none,
+                        width: 24
+                    }]
                 },
-                width: 18
-            }, {
-                el: {
-                    type: "bi.center_adapt",
-                    items: [this.transparent]
-                },
-                width: 18
+                left: 10,
+                right: 20,
+                top: 0,
+                bottom: 0
             }]
         });
     },

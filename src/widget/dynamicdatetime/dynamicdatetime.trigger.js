@@ -17,6 +17,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     _init: function () {
         BI.DynamicDateTimeTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options, c = this._const;
+        this.storeTriggerValue = "";
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
@@ -66,6 +67,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_FOCUS);
         });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
@@ -83,7 +85,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 self.editor.setState(value);
             }
 
-            if (BI.isNotEmptyString(value)) {
+            if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
                 var date = value.split(/-|\s|:/);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,

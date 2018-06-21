@@ -111,6 +111,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: this.isAllSelected()
         });
