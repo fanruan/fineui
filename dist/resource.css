@@ -926,18 +926,18 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .pull-down-font .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .pull-down-font.disabled .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .pull-down-h-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .pull-down-h-font .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .pull-down-h-font:hover .b-font:before,
 .pull-down-h-font.hover .b-font:before {
@@ -946,14 +946,14 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .pull-down-h-font.disabled .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .pull-down-ha-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .pull-down-ha-font .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .pull-down-ha-font:hover .b-font:before,
 .pull-down-ha-font.hover .b-font:before {
@@ -967,7 +967,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .pull-down-ha-font.disabled .b-font:before {
   content: "\e70b";
-  color: inherit;
+  color: #647185;
 }
 .check-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');

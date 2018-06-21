@@ -10,7 +10,6 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            hgap: 10,
             height: 24
         });
     },
@@ -40,7 +39,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 36
+                width: 26
             }, this.text)
         }))));
     },
