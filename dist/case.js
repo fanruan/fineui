@@ -199,7 +199,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: 36
+                width: 26
             }, this.text)
         }))));
     },
@@ -3586,9 +3586,9 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 items: [{
                     el: this.editor,
-                    left: 10,
-                    top: 10,
-                    right: 10
+                    left: 0,
+                    top: 0,
+                    right: 0
                 }],
                 height: 30
             }, {
@@ -11048,6 +11048,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Background_Color"),
             cls: "text-background-font"
         });
 
@@ -11367,6 +11368,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Font_Color"),
             cls: "text-color-font"
         });
 
@@ -13556,7 +13558,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             type: "bi.htape",
             element: this,
             items: [{
-                width: 36,
+                width: 26,
                 el: {
                     type: "bi.center_adapt",
                     items: [this.checkbox, this.half]

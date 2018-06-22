@@ -14568,6 +14568,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
+        this.editor.on("keyup", function (cm, keyboard) {
+            self.fireEvent(BI.FormulaEditor.EVENT_KEY_UP, keyboard.key);
+        });
+
         if (BI.isKey(this.options.watermark)) {
             var self = this;
             this.watermark = BI.createWidget({
@@ -14764,6 +14768,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 BI.FormulaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.FormulaEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.FormulaEditor.EVENT_KEY_UP = "EVENT_KEY_UP";
 BI.shortcut("bi.formula_editor", BI.FormulaEditor);
 /**
  * z-index在1亿层级

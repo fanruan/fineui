@@ -50338,6 +50338,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
         });
 
+        this.editor.on("keyup", function (cm, keyboard) {
+            self.fireEvent(BI.FormulaEditor.EVENT_KEY_UP, keyboard.key);
+        });
+
         if (BI.isKey(this.options.watermark)) {
             var self = this;
             this.watermark = BI.createWidget({
@@ -50534,6 +50538,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 BI.FormulaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.FormulaEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.FormulaEditor.EVENT_KEY_UP = "EVENT_KEY_UP";
 BI.shortcut("bi.formula_editor", BI.FormulaEditor);
 /**
  * z-index在1亿层级
@@ -72678,7 +72683,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: 36
+                width: 26
             }, this.text)
         }))));
     },
@@ -76065,9 +76070,9 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                 type: "bi.absolute",
                 items: [{
                     el: this.editor,
-                    left: 10,
-                    top: 10,
-                    right: 10
+                    left: 0,
+                    top: 0,
+                    right: 0
                 }],
                 height: 30
             }, {
@@ -83527,6 +83532,7 @@ BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Background_Color"),
             cls: "text-background-font"
         });
 
@@ -83846,6 +83852,7 @@ BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
         this.font = BI.createWidget({
             type: "bi.icon_button",
             element: this,
+            title: BI.i18nText("BI-Basic_Font_Color"),
             cls: "text-color-font"
         });
 
@@ -86035,7 +86042,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             type: "bi.htape",
             element: this,
             items: [{
-                width: 36,
+                width: 26,
                 el: {
                     type: "bi.center_adapt",
                     items: [this.checkbox, this.half]
@@ -107260,7 +107267,6 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            hgap: 10,
             height: 24
         });
     },
@@ -107290,7 +107296,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 36
+                width: 26
             }, this.text)
         }))));
     },
@@ -114765,5 +114771,8 @@ BI.i18n = {
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
     "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\"",
-    "BI-Basic_Please_Select": "请选择"
+    "BI-Basic_Please_Select": "请选择",
+    "BI-Basic_Font_Color": "文字颜色",
+    "BI-Basic_Background_Color": "背景色",
+    "BI-Basic_Underline": "下划线"
 };
