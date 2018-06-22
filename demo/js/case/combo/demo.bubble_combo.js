@@ -30,6 +30,7 @@ Demo.Func = BI.inherit(BI.Widget, {
         });
         var combo2 = BI.createWidget({
             type: "bi.bubble_combo",
+            direction: "right",
             el: {
                 type: "bi.button",
                 text: "测试",
@@ -104,7 +105,7 @@ Demo.Func = BI.inherit(BI.Widget, {
             }, {
                 el: combo2,
                 left: 10,
-                bottom: 10
+                bottom: 200
             }, {
                 el: combo3,
                 right: 10,
