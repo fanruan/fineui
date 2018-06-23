@@ -37400,6 +37400,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             scrollable: true,
             scrolly: false,
             element: this,
+            vgap: o.vgap,
+            hgap: o.hgap,
             items: [this.tip]
         });
         if(BI.isNotNull(o.value)){
@@ -78258,6 +78260,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -78494,6 +78497,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -78585,7 +78589,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 242
+                        maxHeight: 252
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -78684,6 +78688,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         return {
             type: "bi.vertical",
+            vgap: 5,
             items: [{
                 type: "bi.button_group",
                 ref: function () {
@@ -79087,6 +79092,7 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -79305,6 +79311,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -96193,6 +96200,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -96754,6 +96762,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -98840,7 +98849,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -98906,6 +98914,12 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                 return hasNext;
             },
             value: this.storeValue
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -99013,7 +99027,6 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget(BI.extend({
             type: "bi.list_pane",
-            element: this,
             onLoaded: opts.onLoaded,
             el: {
                 type: "bi.loader",
@@ -99077,6 +99090,14 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         }, opts.el));
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -105891,6 +105912,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -107485,7 +107507,6 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -107542,6 +107563,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -107554,6 +107583,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: false
         });
@@ -109520,6 +109550,7 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 

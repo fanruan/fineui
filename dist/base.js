@@ -1630,6 +1630,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             scrollable: true,
             scrolly: false,
             element: this,
+            vgap: o.vgap,
+            hgap: o.hgap,
             items: [this.tip]
         });
         if(BI.isNotNull(o.value)){

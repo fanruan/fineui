@@ -5774,6 +5774,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -6010,6 +6011,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -6101,7 +6103,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 242
+                        maxHeight: 252
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -6200,6 +6202,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         return {
             type: "bi.vertical",
+            vgap: 5,
             items: [{
                 type: "bi.button_group",
                 ref: function () {
@@ -6603,6 +6606,7 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -6821,6 +6825,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
