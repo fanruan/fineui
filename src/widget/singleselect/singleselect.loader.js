@@ -29,7 +29,6 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -86,6 +85,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -98,6 +105,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: false
         });

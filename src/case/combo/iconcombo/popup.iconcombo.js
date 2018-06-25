@@ -38,6 +38,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },

@@ -35,6 +35,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
