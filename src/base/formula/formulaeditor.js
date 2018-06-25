@@ -125,7 +125,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         this.editor.replaceSelection("\u200b" + field + "\u200b");
         var to = this.editor.getCursor();
         this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
