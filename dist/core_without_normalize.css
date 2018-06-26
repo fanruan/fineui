@@ -548,7 +548,6 @@ textarea {
 .bi-list-item-active2:hover,
 .bi-list-item-active2.hover {
   color: #1a1a1a;
-  background-color: #ffffff;
 }
 .bi-list-item-active2:hover .bi-input,
 .bi-list-item-active2.hover .bi-input {
@@ -558,18 +557,34 @@ textarea {
 .bi-list-item-active2.hover .bi-textarea {
   color: #1a1a1a;
 }
-.bi-list-item-active2.active,
+.bi-list-item-active2:hover.bi-border,
+.bi-list-item-active2.hover.bi-border {
+  border-color: #3685f2;
+}
 .bi-list-item-active2:active {
   color: #3685f2;
-  background-color: #ffffff;
 }
-.bi-list-item-active2.active .bi-input,
 .bi-list-item-active2:active .bi-input {
   color: #3685f2;
 }
-.bi-list-item-active2.active .bi-textarea,
 .bi-list-item-active2:active .bi-textarea {
   color: #3685f2;
+}
+.bi-list-item-active2:active.bi-border {
+  border-color: #3685f2;
+}
+.bi-list-item-active2.active {
+  color: #ffffff;
+  background-color: #3685f2;
+}
+.bi-list-item-active2.active .bi-input {
+  color: #ffffff;
+}
+.bi-list-item-active2.active .bi-textarea {
+  color: #ffffff;
+}
+.bi-list-item-active2.active.bi-border {
+  border-color: #3685f2;
 }
 .bi-list-item-active2.disabled,
 .bi-list-item-active2.disabled:hover,
@@ -641,17 +656,8 @@ textarea {
 }
 .bi-list-item-select:hover,
 .bi-list-item-select.hover {
-  color: #1a1a1a;
   background-color: rgba(54, 133, 242, 0.06);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
-}
-.bi-list-item-select:hover .bi-input,
-.bi-list-item-select.hover .bi-input {
-  color: #1a1a1a;
-}
-.bi-list-item-select:hover .bi-textarea,
-.bi-list-item-select.hover .bi-textarea {
-  color: #1a1a1a;
 }
 .bi-list-item-select:active,
 .bi-list-item-select.active {

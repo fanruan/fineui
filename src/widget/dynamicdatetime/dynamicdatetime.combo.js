@@ -125,6 +125,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,

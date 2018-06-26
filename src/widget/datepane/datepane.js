@@ -5,7 +5,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -62,6 +62,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {

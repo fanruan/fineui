@@ -582,9 +582,11 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-black;
     }
-    background-color: @color-bi-background-default;
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
   }
-  &.active, &:active {
+  &:active {
     color: @color-bi-text-highlight;
     & .bi-input {
       color: @color-bi-text-highlight;
@@ -592,7 +594,22 @@ textarea {
     & .bi-textarea {
       color: @color-bi-text-highlight;
     }
-    background-color: @color-bi-background-default;
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &.active {
+    color: @color-bi-text;
+    & .bi-input {
+      color: @color-bi-text;
+    }
+    & .bi-textarea {
+      color: @color-bi-text;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+    background-color: @color-bi-background-highlight;
   }
   &.disabled {
     &, &:hover, &:active {
@@ -654,13 +671,6 @@ textarea {
 // 激活和选中时背景高亮
 .bi-list-item-select {
   &:hover, &.hover {
-    color: @color-bi-text-black;
-    & .bi-input {
-      color: @color-bi-text-black;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-black;
-    }
     .background-color(@color-bi-background-highlight, 6%);
   }
   &:active, &.active {

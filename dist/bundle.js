@@ -88077,7 +88077,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
@@ -88101,6 +88102,10 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.combo.hideView();
             self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.doBehavior();
         });
     },
 
@@ -88256,6 +88261,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -88267,7 +88273,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
         this.month = BI.createWidget({
-            type: "bi.month_date_combo"
+            type: "bi.month_date_combo",
+            behaviors: o.behaviors
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
@@ -88501,6 +88508,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         };
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -88756,6 +88764,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -88860,7 +88869,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -88917,6 +88926,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -89044,6 +89054,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
+            behaviors: opts.behaviors,
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE,
             value: opts.value
@@ -89170,6 +89181,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.dateCombo = BI.createWidget({
             type: "bi.date_calendar_popup",
+            behaviors: opts.behaviors,
             min: self.options.min,
             max: self.options.max
         });
@@ -89497,6 +89509,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -89628,7 +89641,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -89685,6 +89698,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -90913,6 +90927,7 @@ BI.extend(BI.DynamicDateCard, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -91250,7 +91265,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -91289,6 +91304,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     default:
                         return {
                             type: "bi.date_calendar_popup",
+                            behaviors: o.behaviors,
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
@@ -91786,6 +91802,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -92013,7 +92030,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -92054,6 +92071,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             type: "bi.vtape",
                             items: [{
                                 type: "bi.date_calendar_popup",
+                                behaviors: o.behaviors,
                                 min: self.options.min,
                                 max: self.options.max,
                                 ref: function () {
@@ -109819,9 +109837,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
@@ -109998,9 +110017,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {

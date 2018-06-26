@@ -21,7 +21,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
@@ -45,6 +46,10 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.combo.hideView();
             self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.doBehavior();
         });
     },
 

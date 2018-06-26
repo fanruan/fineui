@@ -46,6 +46,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         };
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
