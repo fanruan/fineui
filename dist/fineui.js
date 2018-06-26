@@ -50547,7 +50547,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             value: "",
             fieldTextValueMap: {},
             showHint: true,
-            lineHeight: 2
+            lineHeight: 2,
+            paramFormatter: function (v) {
+                return v;
+            }
         });
     },
     _init: function () {
@@ -50579,10 +50582,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
         this.editor.on("blur", function () {
             self.fireEvent(BI.FormulaEditor.EVENT_BLUR);
-        });
-
-        this.editor.on("keyup", function (cm, keyboard) {
-            self.fireEvent(BI.FormulaEditor.EVENT_KEY_UP, keyboard.key);
         });
 
         if (BI.isKey(this.options.watermark)) {
@@ -50656,11 +50655,21 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      * @param field
      */
     insertField: function (field) {
+        var value = this.options.fieldTextValueMap[field];
+        var fieldId = this.options.paramFormatter(field);
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection("\u200b" + field + "\u200b");
+        var showName = fieldId.replaceAll(/^<!.*!>$/, function (str) {
+            return str.substring(2, str.length - 2);
+        });
+        this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
+        var className = "fieldName";
+        if (BI.isNotNull(fieldId.match(/^<!.*!>$/))) {
+            className = "error-field";
+        }
+        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
+        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -50708,8 +50717,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         // 因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
-                        var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
+                        var dId = i.marker.value;
                         if (!fields.contains(dId)) {
                             fields.push(dId);
                         }
@@ -50728,6 +50738,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$a" + value.substr(i.to + num, value.length);
                         num = num + 2 - fieldNameLength;
@@ -50747,10 +50758,11 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         var fieldNameLength = i.to - i.from;
                         var start = i.from + num + 1;
                         var end = fieldNameLength - 2;
-                        var fieldId = fieldMap[value.substr(start, end)];
+                        var fieldId = i.marker.value;
                         value = value.substr(0, i.from + num) + "$\{" + fieldId + "\}" + value.substr(i.to + num, value.length);
                         num += fieldId.length - fieldNameLength + 3;
                         break;
@@ -50780,7 +50792,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 BI.FormulaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.FormulaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.FormulaEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.FormulaEditor.EVENT_KEY_UP = "EVENT_KEY_UP";
 BI.shortcut("bi.formula_editor", BI.FormulaEditor);
 /**
  * z-index在1亿层级
