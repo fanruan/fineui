@@ -38,6 +38,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
+            behaviors: opts.behaviors,
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE,
             value: opts.value

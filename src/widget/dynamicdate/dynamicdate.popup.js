@@ -69,7 +69,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -108,6 +108,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     default:
                         return {
                             type: "bi.date_calendar_popup",
+                            behaviors: o.behaviors,
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
