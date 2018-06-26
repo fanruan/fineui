@@ -44,7 +44,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
+                e.stopEvent();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;

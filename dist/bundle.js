@@ -50418,7 +50418,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         this.editor.replaceSelection("\u200b" + field + "\u200b");
         var to = this.editor.getCursor();
         this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -51364,7 +51363,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
+                e.stopEvent();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;
@@ -87288,7 +87287,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconCls,
+                    cls: "icon-combo-trigger-icon",
+                    iconCls: o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -87296,7 +87296,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text

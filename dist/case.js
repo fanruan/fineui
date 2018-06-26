@@ -14804,7 +14804,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconCls,
+                    cls: "icon-combo-trigger-icon",
+                    iconCls: o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -14812,7 +14813,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text

@@ -14648,7 +14648,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         this.editor.replaceSelection("\u200b" + field + "\u200b");
         var to = this.editor.getCursor();
         this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -15594,7 +15593,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
+                e.stopEvent();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;
