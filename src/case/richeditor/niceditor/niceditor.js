@@ -307,16 +307,18 @@
         insertHTML: function (html) {
             var range = this.getRng();
 
-            if (document.queryCommandState("insertHTML")) {
-                // W3C
+            try {
+                // w3c
                 this.nicCommand("insertHTML", html);
-            } else if (range.insertNode) {
-                // IE
-                range.deleteContents();
-                range.insertNode($(html)[0]);
-            } else if (range.pasteHTML) {
-                // IE <= 10
-                range.pasteHTML(html);
+            } catch(e) {
+                if (range.insertNode) {
+                    // IE
+                    range.deleteContents();
+                    range.insertNode($(html)[0]);
+                } else if (range.pasteHTML) {
+                    // IE <= 10
+                    range.pasteHTML(html);
+                }
             }
         },
 
