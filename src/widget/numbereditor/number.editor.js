@@ -40,8 +40,9 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
+            forceNotSelected: true,
             trigger: "lclick,",
-            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
+            cls: "pull-up-font top-button bi-border-left bi-list-item-active3"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -51,7 +52,8 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
             trigger: "lclick,",
-            cls: "column-next-page-h-font bottom-button bi-border-left bi-border-top"
+            forceNotSelected: true,
+            cls: "pull-down-font bottom-button bi-border-left bi-list-item-active3"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
