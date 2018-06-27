@@ -97,7 +97,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 2,
+                        lgap: 4,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
