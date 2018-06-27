@@ -91829,7 +91829,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
         var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
+        return (date.getMonth() >= 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
             BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
@@ -91936,7 +91936,8 @@ BI.DynamicDateTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
 BI.DynamicDateTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
+BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
+BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     constants: {
         popupHeight: 259,
         popupWidth: 270,
