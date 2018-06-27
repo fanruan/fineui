@@ -20523,7 +20523,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             type: "bi.label",
             cls: "bubble-text" + (" bubble-" + o.level),
             text: o.text,
-            hgap: 10,
+            hgap: 5,
             height: 18
         }));
     },

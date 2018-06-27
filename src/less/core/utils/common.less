@@ -484,7 +484,7 @@ textarea {
   }
 }
 
-//文字和背景hover和active时变化
+//文字和背景hover和active时变化, hover和点击时文本和背景变化，active后文本变化，背景不变化
 .bi-list-item-active {
   &:hover, &.hover {
     color: @color-bi-text-black;
@@ -572,7 +572,7 @@ textarea {
   }
 }
 
-//文字和背景hover和active时变化
+//文字和背景hover和active时变化 hover和点击时边框变化，active后背景和边框变化
 .bi-list-item-active2 {
   &:hover, &.hover {
     color: @color-bi-text-black;
@@ -663,6 +663,45 @@ textarea {
         & .bi-high-light {
           color: @color-bi-text-disabled-theme-dark !important;
         }
+      }
+    }
+  }
+}
+
+//文字和背景hover和active时变化 hover
+.bi-list-item-active3 {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    .background-color(@color-bi-background-highlight, 6%);
+  }
+  &:active, &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    .background-color(@color-bi-background-highlight, 6%);
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
       }
     }
   }
