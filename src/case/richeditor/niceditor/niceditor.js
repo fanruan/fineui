@@ -308,8 +308,9 @@
             var range = this.getRng();
 
             try {
+                // w3c
                 this.nicCommand("insertHTML", html);
-            } finally {
+            } catch(e) {
                 if (range.insertNode) {
                     // IE
                     range.deleteContents();

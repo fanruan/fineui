@@ -83757,8 +83757,9 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var range = this.getRng();
 
             try {
+                // w3c
                 this.nicCommand("insertHTML", html);
-            } finally {
+            } catch(e) {
                 if (range.insertNode) {
                     // IE
                     range.deleteContents();
