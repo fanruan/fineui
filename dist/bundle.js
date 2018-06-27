@@ -56277,7 +56277,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             type: "bi.label",
             cls: "bubble-text" + (" bubble-" + o.level),
             text: o.text,
-            hgap: 10,
+            hgap: 5,
             height: 18
         }));
     },
@@ -112762,6 +112762,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
+            text: o.text,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -113753,6 +113754,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
             element: this,
+            text: o.text,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
