@@ -50547,7 +50547,10 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             value: "",
             fieldTextValueMap: {},
             showHint: true,
-            lineHeight: 2
+            lineHeight: 2,
+            paramFormatter: function (v) {
+                return v;
+            }
         });
     },
     _init: function () {
@@ -50656,11 +50659,20 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      * @param field
      */
     insertField: function (field) {
+        var value = this.options.fieldTextValueMap[field];
+        var fieldId = this.options.paramFormatter(field);
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        this.editor.replaceSelection("\u200b" + field + "\u200b");
+        var showName = fieldId.replaceAll(/^<!.*!>$/, function (str) {
+            return str.substring(2, str.length - 2);
+        });
+        this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
-        this.editor.markText(from, to, {className: "fieldName", atomic: true, startStyle: "start", endStyle: "end"});
+        var className = "fieldName";
+        if (BI.isNotNull(fieldId.match(/^<!.*!>$/))) {
+            className = "error-field";
+        }
+        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
         this.editor.replaceSelection(" ");
         this.editor.focus();
     },
@@ -50709,8 +50721,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         // 因为插入字段的时候首尾加了不可见字符，所以首尾缩进一个字符
-                        var dId = fieldMap[value.substr(i.from + 1, i.to - i.from - 2)];
+                        var dId = i.marker.value;
                         if (!fields.contains(dId)) {
                             fields.push(dId);
                         }
@@ -50729,6 +50742,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         var fieldNameLength = i.to - i.from;
                         value = value.substr(0, i.from + num) + "$a" + value.substr(i.to + num, value.length);
                         num = num + 2 - fieldNameLength;
@@ -50748,10 +50762,11 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             _.forEach(line.markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
+                    case "error-field":
                         var fieldNameLength = i.to - i.from;
                         var start = i.from + num + 1;
                         var end = fieldNameLength - 2;
-                        var fieldId = fieldMap[value.substr(start, end)];
+                        var fieldId = i.marker.value;
                         value = value.substr(0, i.from + num) + "$\{" + fieldId + "\}" + value.substr(i.to + num, value.length);
                         num += fieldId.length - fieldNameLength + 3;
                         break;
@@ -51607,7 +51622,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
+                e.stopEvent();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;
@@ -56521,7 +56536,7 @@ BI.Bubble = BI.inherit(BI.Tip, {
             type: "bi.label",
             cls: "bubble-text" + (" bubble-" + o.level),
             text: o.text,
-            hgap: 10,
+            hgap: 5,
             height: 18
         }));
     },
@@ -78501,6 +78516,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -78737,6 +78753,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -78828,7 +78845,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
-                        maxHeight: 242
+                        maxHeight: 252
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -78927,6 +78944,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         return {
             type: "bi.vertical",
+            vgap: 5,
             items: [{
                 type: "bi.button_group",
                 ref: function () {
@@ -79330,6 +79348,7 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -79548,6 +79567,7 @@ BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);BI.TextValueCom
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.popup]
         });
     },
@@ -83736,16 +83756,17 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         insertHTML: function (html) {
             var range = this.getRng();
 
-            if (document.queryCommandState("insertHTML")) {
-                // W3C
+            try {
                 this.nicCommand("insertHTML", html);
-            } else if (range.insertNode) {
-                // IE
-                range.deleteContents();
-                range.insertNode($(html)[0]);
-            } else if (range.pasteHTML) {
-                // IE <= 10
-                range.pasteHTML(html);
+            } finally {
+                if (range.insertNode) {
+                    // IE
+                    range.deleteContents();
+                    range.insertNode($(html)[0]);
+                } else if (range.pasteHTML) {
+                    // IE <= 10
+                    range.pasteHTML(html);
+                }
             }
         },
 
@@ -87526,7 +87547,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             items: [{
                 el: {
                     type: "bi.icon_change_button",
-                    cls: "icon-combo-trigger-icon " + o.iconCls,
+                    cls: "icon-combo-trigger-icon",
+                    iconCls: o.iconCls,
                     ref: function (_ref) {
                         self.icon = _ref;
                     },
@@ -87534,7 +87556,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls)? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
             },
             {
                 el: this.text
@@ -88315,7 +88337,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
@@ -88339,6 +88362,10 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.combo.hideView();
             self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.doBehavior();
         });
     },
 
@@ -88494,6 +88521,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -88505,7 +88533,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
         this.month = BI.createWidget({
-            type: "bi.month_date_combo"
+            type: "bi.month_date_combo",
+            behaviors: o.behaviors
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
@@ -88739,6 +88768,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         };
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -88994,6 +89024,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -89098,7 +89129,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -89155,6 +89186,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -89282,6 +89314,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
+            behaviors: opts.behaviors,
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE,
             value: opts.value
@@ -89408,6 +89441,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.dateCombo = BI.createWidget({
             type: "bi.date_calendar_popup",
+            behaviors: opts.behaviors,
             min: self.options.min,
             max: self.options.max
         });
@@ -89735,6 +89769,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -89866,7 +89901,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -89923,6 +89958,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -91151,6 +91187,7 @@ BI.extend(BI.DynamicDateCard, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -91488,7 +91525,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -91527,6 +91564,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     default:
                         return {
                             type: "bi.date_calendar_popup",
+                            behaviors: o.behaviors,
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
@@ -92024,6 +92062,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -92251,7 +92290,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -92292,6 +92331,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             type: "bi.vtape",
                             items: [{
                                 type: "bi.date_calendar_popup",
+                                behaviors: o.behaviors,
                                 min: self.options.min,
                                 max: self.options.max,
                                 ref: function () {
@@ -96436,6 +96476,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -96997,6 +97038,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -99083,7 +99125,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -99149,6 +99190,12 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                 return hasNext;
             },
             value: this.storeValue
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -99256,7 +99303,6 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget(BI.extend({
             type: "bi.list_pane",
-            element: this,
             onLoaded: opts.onLoaded,
             el: {
                 type: "bi.loader",
@@ -99320,6 +99366,14 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         }, opts.el));
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -106134,6 +106188,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -107728,7 +107783,6 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -107785,6 +107839,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -107797,6 +107859,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: false
         });
@@ -109763,6 +109826,7 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -110033,9 +110097,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
@@ -110212,9 +110277,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
@@ -112956,6 +113022,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
+            text: o.text,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -113947,6 +114014,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
             element: this,
+            text: o.text,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,

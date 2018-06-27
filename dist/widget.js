@@ -441,7 +441,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         });
 
         this.popup = BI.createWidget({
-            type: "bi.month_popup"
+            type: "bi.month_popup",
+            behaviors: o.behaviors
         });
 
         this.popup.on(BI.YearPopup.EVENT_CHANGE, function () {
@@ -465,6 +466,10 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             self.combo.hideView();
             self.fireEvent(BI.MonthDateCombo.EVENT_CHANGE);
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.doBehavior();
         });
     },
 
@@ -620,6 +625,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -631,7 +637,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
         this.month = BI.createWidget({
-            type: "bi.month_date_combo"
+            type: "bi.month_date_combo",
+            behaviors: o.behaviors
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
@@ -865,6 +872,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         };
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -1120,6 +1128,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -1224,7 +1233,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -1281,6 +1290,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -1408,6 +1418,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
+            behaviors: opts.behaviors,
             min: this.constants.DATE_MIN_VALUE,
             max: this.constants.DATE_MAX_VALUE,
             value: opts.value
@@ -1534,6 +1545,7 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.dateCombo = BI.createWidget({
             type: "bi.date_calendar_popup",
+            behaviors: opts.behaviors,
             min: self.options.min,
             max: self.options.max
         });
@@ -1861,6 +1873,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
 
         this.datePicker = BI.createWidget({
             type: "bi.date_picker",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -1992,7 +2005,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vtape",
             items: [{
@@ -2049,6 +2062,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -3277,6 +3291,7 @@ BI.extend(BI.DynamicDateCard, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -3614,7 +3629,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -3653,6 +3668,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     default:
                         return {
                             type: "bi.date_calendar_popup",
+                            behaviors: o.behaviors,
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
@@ -4150,6 +4166,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTime
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                behaviors: opts.behaviors,
                                 min: this.constants.DATE_MIN_VALUE,
                                 max: this.constants.DATE_MAX_VALUE,
                                 value: opts.value,
@@ -4377,7 +4394,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
     },
 
     _getTabJson: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.tab",
             ref: function () {
@@ -4418,6 +4435,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             type: "bi.vtape",
                             items: [{
                                 type: "bi.date_calendar_popup",
+                                behaviors: o.behaviors,
                                 min: self.options.min,
                                 max: self.options.max,
                                 ref: function () {
@@ -8562,6 +8580,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -9123,6 +9142,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             scrolly: false,
             scrollable: true,
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -11209,7 +11229,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -11275,6 +11294,12 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                 return hasNext;
             },
             value: this.storeValue
+        });
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -11382,7 +11407,6 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget(BI.extend({
             type: "bi.list_pane",
-            element: this,
             onLoaded: opts.onLoaded,
             el: {
                 type: "bi.loader",
@@ -11446,6 +11470,14 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         }, opts.el));
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -18260,6 +18292,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -19854,7 +19887,6 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
-            element: this,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -19911,6 +19943,14 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
+
+        BI.createWidget({
+            type: "bi.vertical",
+            element: this,
+            items: [this.button_group],
+            vgap: 5
+        });
+
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -19923,6 +19963,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.single_select_combo.item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
             selected: false
         });
@@ -21889,6 +21930,7 @@ BI.SingleTreePopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
+            vgap: 5,
             items: [this.tree]
         });
 
@@ -22159,9 +22201,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
@@ -22338,9 +22381,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
     },
 
     _createCombo: function (v) {
-        var self = this;
+        var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            behaviors: o.behaviors,
             value: v
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
@@ -25082,6 +25126,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
+            text: o.text,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -26073,6 +26118,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_select_combo",
             element: this,
+            text: o.text,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,

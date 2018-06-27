@@ -68,6 +68,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
         this.year = BI.createWidget({
             type: "bi.year_date_combo",
+            behaviors: o.behaviors,
             min: o.min,
             max: o.max
         });
@@ -79,7 +80,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
         this.month = BI.createWidget({
-            type: "bi.month_date_combo"
+            type: "bi.month_date_combo",
+            behaviors: o.behaviors
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({

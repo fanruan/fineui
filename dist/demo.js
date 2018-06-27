@@ -2030,7 +2030,7 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
                 type: "bi.icon_text_value_combo",
                 text: "默认值",
                 // defaultIconCls: "next-page-h-font",
-                value: 23,
+                value: 1,
                 width: 300,
                 iconHeight: 16,
                 iconWidth: 16,
@@ -2191,7 +2191,7 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
     render: function () {
         var combo;
         return {
-            type: "bi.horizontal_auto",
+            type: "bi.vertical",
             items: [{
                 type: "bi.text_value_combo",
                 ref: function () {
@@ -2222,12 +2222,15 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     value: ["1", "2", "3"]
                 }
             }, {
-                type: "bi.button",
+                type: "bi.popup_view",
                 width: 90,
                 height: 25,
                 handler: function () {
                     combo.setValue(3);
                 }
+            }, {
+                type: 'bi.label',
+                height: 1000
             }],
             vgap: 20
         };

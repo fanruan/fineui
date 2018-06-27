@@ -11,6 +11,7 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         return {
             type: "bi.vertical",
+            vgap: 5,
             items: [{
                 type: "bi.button_group",
                 ref: function () {
