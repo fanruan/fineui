@@ -28,7 +28,7 @@
                 }
             });
         },
-        
+
         props: {
             baseCls: "bi-filter-operation",
             expander: {},
@@ -195,7 +195,7 @@
                     iconCls2: "pull-down-font",
                     text: text,
                     height: 30,
-                    width: 100
+                    width: 110
                 });
                 combos.push({
                     type: "bi.combo",
