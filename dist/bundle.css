@@ -4123,6 +4123,12 @@ ul.ztree.zTreeDragUL {
   border-radius: 8px;
   background-color: #ffffff;
 }
+.bi-single-slider-button .slider-button:hover,
+.bi-single-slider-button .slider-button.hover {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
 .bi-slider-track .gray-track {
   background-color: #F2F4F7;
   -webkit-border-radius: 3px;

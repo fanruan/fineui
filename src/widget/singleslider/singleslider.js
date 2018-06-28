@@ -48,6 +48,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             hgap: c.SLIDER_WIDTH_HALF,
             height: c.SLIDER_HEIGHT
         });
+        // 这边其实是有问题的，拖拽区域是个圆，在圆的边缘拖拽后放开，这边计算出来的蓝条宽度实际上会比放开时长一点或者短一点
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
