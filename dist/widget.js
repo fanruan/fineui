@@ -6590,7 +6590,7 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
                 }
             });
         },
-        
+
         props: {
             baseCls: "bi-filter-operation",
             expander: {},
@@ -6757,7 +6757,7 @@ BI.Filter.FILTER_TYPE.EMPTY_CONDITION = 37;
                     iconCls2: "pull-down-font",
                     text: text,
                     height: 30,
-                    width: 100
+                    width: 110
                 });
                 combos.push({
                     type: "bi.combo",
