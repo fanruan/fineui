@@ -50431,7 +50431,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -51380,7 +51379,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopEvent();
+                e.stopPropagation();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;
@@ -56650,7 +56649,7 @@ BI.Trigger = BI.inherit(BI.Single, {
                 if (wordlist.hasOwnProperty(word)) {
                     var val = wordlist[word];
                     if (!val || val === true) {val = word;} else {val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text;}
-                    if (match(search, val)) result.push(formatter(val));
+                    if (match(search, val)) result.push(formatter(val, -1));
                 }
             }
         }
@@ -108524,32 +108523,35 @@ BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);/**
  * Created by zcf on 2016/9/22.
  */
 BI.SliderIconButton = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SliderIconButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-slider-button"
-        });
+
+    props: {
+        baseCls: "bi-single-slider-button"
     },
-    _init: function () {
-        BI.extend(BI.SliderIconButton.superclass._init.apply(this, arguments));
-        this.slider = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "slider-icon slider-button",
-            iconWidth: 14,
-            iconHeight: 14,
-            height: 14,
-            width: 14
-        });
-        BI.createWidget({
+
+    constants: {
+        LARGE_SIZE: 16,
+        NORMAL_SIZE: 12,
+        LARGE_OFFSET: 4,
+        NORMAL_OFFSET: 6
+    },
+
+    render: function () {
+        var self = this;
+        return {
             type: "bi.absolute",
-            element: this,
+            ref: function () {
+                self.wrapper = this;
+            },
             items: [{
-                el: this.slider,
-                top: 7,
-                left: -7
-            }],
-            width: 0,
-            height: 14
-        });
+                el: {
+                    type: "bi.text_button",
+                    cls: "slider-button",
+                    ref: function () {
+                        self.slider = this;
+                    }
+                }
+            }]
+        };
     }
 });
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);/**
@@ -108602,6 +108604,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
             hgap: c.SLIDER_WIDTH_HALF,
             height: c.SLIDER_HEIGHT
         });
+        // 这边其实是有问题的，拖拽区域是个圆，在圆的边缘拖拽后放开，这边计算出来的蓝条宽度实际上会比放开时长一点或者短一点
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;

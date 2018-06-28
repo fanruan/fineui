@@ -3,7 +3,19 @@
 .bi-single-slider-button {
   & .slider-button {
     cursor: ew-resize;
-    .box-shadow(0 0 10px, rgba(0, 0, 0, 0.2));
-    .border-radius(7px);
+    border: 2px solid @color-bi-border-highlight;
+    .border-radius(8px);
+    background-color: @color-bi-background-default;
+    height: 16px;
+    width: 16px;
+    top: 6px;
+    left: -8px;
+    &:hover, &.hover {
+      .border-radius(10px);
+      width: 20px;
+      height: 20px;
+      top: 4px;
+      left: -10px;
+    }
   }
 }

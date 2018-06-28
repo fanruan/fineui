@@ -137,7 +137,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 

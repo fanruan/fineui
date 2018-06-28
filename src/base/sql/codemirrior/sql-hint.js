@@ -80,7 +80,7 @@
                 if (wordlist.hasOwnProperty(word)) {
                     var val = wordlist[word];
                     if (!val || val === true) {val = word;} else {val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text;}
-                    if (match(search, val)) result.push(formatter(val));
+                    if (match(search, val)) result.push(formatter(val, -1));
                 }
             }
         }
