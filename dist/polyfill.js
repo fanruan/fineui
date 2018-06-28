@@ -196,6 +196,12 @@ if (typeof Object.getPrototypeOf !== "function") {
             // May break if the constructor has been tampered with
             return object.constructor.prototype;
         };
+}
+
+if(!Date.now) {
+    Date.now = function () {
+        return new Date().valueOf();
+    };
 }if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
 
 } else {

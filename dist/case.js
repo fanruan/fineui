@@ -10646,7 +10646,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
 BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-text-toolbar bi-background",
+            baseCls: "bi-rich-editor-text-toolbar",
             buttons: [
                 {type: "bi.rich_editor_font_chooser"},
                 {type: "bi.rich_editor_size_chooser"},

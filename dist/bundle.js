@@ -28716,23 +28716,24 @@ BI.extend(BI.DOM, {
 
     getImage: function (param, fillStyle, backgroundColor) {
         var canvas = document.createElement("canvas");
+        var ratio = 2;
         $("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
-        canvas.width = w;
-        canvas.height = 24;
+        canvas.width = w * ratio;
+        canvas.height = 24 * ratio;
         var ctx = canvas.getContext("2d");
         // ctx.fillStyle = "#EAF2FD";
-        ctx.font = "12px Georgia";
+        ctx.font = 12 * ratio + "px Georgia";
         ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
-        ctx.fillText(param, 6, 12);
+        ctx.fillText(param, 6 * ratio, 12 * ratio);
         $(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
         return {
             width: w,
             height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px;",
+            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px; width:" + w + "px;height: 24px",
             param: param
         };
     }
@@ -83144,7 +83145,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
 BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-text-toolbar bi-background",
+            baseCls: "bi-rich-editor-text-toolbar",
             buttons: [
                 {type: "bi.rich_editor_font_chooser"},
                 {type: "bi.rich_editor_size_chooser"},
@@ -91585,7 +91586,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
         var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
+        return (date.getMonth() >= 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
             BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
@@ -91692,7 +91693,8 @@ BI.DynamicDateTrigger.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateTrigger.EVENT_TRIGGER_CLICK = "EVENT_TRIGGER_CLICK";
 BI.DynamicDateTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
+BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
+BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     constants: {
         popupHeight: 259,
         popupWidth: 270,
