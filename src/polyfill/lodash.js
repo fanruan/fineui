@@ -41,3 +41,9 @@ if (typeof Object.getPrototypeOf !== "function") {
             return object.constructor.prototype;
         };
 }
+
+if(!Date.now) {
+    Date.now = function () {
+        return new Date().valueOf();
+    };
+}
