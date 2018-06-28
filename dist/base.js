@@ -14660,7 +14660,6 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
-        this.editor.replaceSelection(" ");
         this.editor.focus();
     },
 
@@ -20879,7 +20878,7 @@ BI.Trigger = BI.inherit(BI.Single, {
                 if (wordlist.hasOwnProperty(word)) {
                     var val = wordlist[word];
                     if (!val || val === true) {val = word;} else {val = val.displayText ? {text: val.text, displayText: val.displayText} : val.text;}
-                    if (match(search, val)) result.push(formatter(val));
+                    if (match(search, val)) result.push(formatter(val, -1));
                 }
             }
         }

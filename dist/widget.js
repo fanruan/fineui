@@ -20876,23 +20876,21 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
     _init: function () {
         BI.extend(BI.SliderIconButton.superclass._init.apply(this, arguments));
         this.slider = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "slider-icon slider-button",
-            iconWidth: 14,
-            iconHeight: 14,
-            height: 14,
-            width: 14
+            type: "bi.text_button",
+            cls: "slider-button",
+            height: 12,
+            width: 12
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: this.slider,
-                top: 7,
-                left: -7
+                top: 6,
+                left: -6
             }],
             width: 0,
-            height: 14
+            height: 12
         });
     }
 });
