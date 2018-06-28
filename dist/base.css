@@ -13,7 +13,7 @@
   -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
-  border: 1px solid #1a1a1a;
+  border: 1px solid #232e40;
 }
 .bi-theme-dark .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #ffffff;
@@ -263,7 +263,7 @@
 }
 /* CURSOR */
 .CodeMirror div.CodeMirror-cursor {
-  border-left: 1px solid #1a1a1a;
+  border-left: 1px solid #232e40;
 }
 .bi-theme-dark .CodeMirror div.CodeMirror-cursor {
   border-left: 1px solid #ffffff;
@@ -755,7 +755,7 @@ li.CodeMirror-hint-active {
   font-size: 14px;
 }
 .bi-sortable-holder {
-  border: 1px dashed #d4dadd;
+  border: 1px dashed #e8eaed;
 }
 .bi-all-count-pager .all-pager-prev {
   font-size: 16px;
@@ -789,12 +789,12 @@ li.CodeMirror-hint-active {
   overflow-x: hidden;
   overflow-y: hidden;
   background: #ffffff;
-  border-right: 1px solid #d4dadd;
-  border-top: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #e8eaed;
+  border-top: 1px solid #e8eaed;
+  border-bottom: 1px solid #e8eaed;
 }
 .bi-segment > .first-element {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
   -webkit-border-radius: 6px 0px 0px 6px;
   -moz-border-radius: 6px 0px 0px 6px;
   border-radius: 6px 0px 0px 6px;
@@ -1021,7 +1021,7 @@ body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {
   background: #ffffff !important;
-  border-color: #d4dadd !important;
+  border-color: #e8eaed !important;
 }
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled,
@@ -1140,7 +1140,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-basic-button.button-ignore:active .bi-button-mask {
   opacity: 0.1;
   filter: alpha(opacity=10);
-  background-color: #1a1a1a;
+  background-color: #232E40;
 }
 .bi-basic-button .popup-content {
   font-size: 14px;
@@ -1387,10 +1387,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-collection-table-cell.first-row {
-  border-top: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
 }
 .bi-collection-table-cell.first-col {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-collection-table-cell.first-row {
   border-top: 1px solid #525466;
@@ -1416,10 +1416,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-grid-table-cell.first-row {
-  border-top: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
 }
 .bi-grid-table-cell.first-col {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-grid-table-cell.first-row {
   border-top: 1px solid #525466;
@@ -1549,24 +1549,24 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-top: none;
 }
 .bi-table > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.top-left > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.top-right > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.bottom-left > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #e8eaed;
 }
 .bi-table > div > div > table,
 .bi-table > div > div > div > table {
@@ -1590,8 +1590,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-table > div > div > div > table > tbody > tr > td,
 .bi-table > div > div > table > thead > tr > td,
 .bi-table > div > div > div > table > thead > tr > td {
-  border-top: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-table > div > div > table {
   border-bottom: 1px solid #525466;
@@ -1928,15 +1928,15 @@ ul.ztree.zTreeDragUL {
   border-radius: 2px;
 }
 .bi-popup-view .list-view-shadow {
-  -webkit-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
+  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
 }
 .bi-popup-view .list-view-toolbar {
   line-height: 30px;
 }
 .bi-popup-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;

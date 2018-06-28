@@ -5,16 +5,16 @@
 }
 .bi-filter-expander > .filter-item-empty-item {
   border-top: 0px;
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #e8eaed;
 }
 .bi-filter-expander > table {
   min-width: 100%;
 }
 .bi-filter-expander > table > tbody > tr > td.first-element {
   width: 20px;
-  border-right: 1px solid #d4dadd !important;
-  border-bottom: 1px solid #d4dadd !important;
+  border-right: 1px solid #e8eaed !important;
+  border-bottom: 1px solid #e8eaed !important;
 }
 .bi-theme-dark .bi-filter-expander > .filter-item-empty-item {
   border-right: 1px solid #525466;

@@ -41,7 +41,7 @@
 }
 /* CURSOR */
 .CodeMirror div.CodeMirror-cursor {
-  border-left: 1px solid #1a1a1a;
+  border-left: 1px solid #232e40;
 }
 .bi-theme-dark .CodeMirror div.CodeMirror-cursor {
   border-left: 1px solid #ffffff;
