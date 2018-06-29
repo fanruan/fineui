@@ -163,8 +163,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #cccccc !important;
-  border-color: #cccccc !important;
+  background: #F0F3F7 !important;
+  border-color: #F0F3F7 !important;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -198,7 +198,7 @@ body .bi-button.button-error.disabled.base-disabled .b-font:before,
 #body .bi-button.button-error.disabled.base-disabled .b-font:before,
 body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 #body .bi-button.button-warning.disabled.base-disabled .b-font:before {
-  color: #ffffff !important;
+  color: #9ea6b2 !important;
 }
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {

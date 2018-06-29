@@ -58,13 +58,13 @@ textarea {
 }
 .bi-theme-dark .bi-background {
   background-color: #191B2B;
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-background .bi-input {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-background .bi-textarea {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-card {
   background-color: #ffffff;
@@ -78,13 +78,13 @@ textarea {
 }
 .bi-theme-dark .bi-card {
   background-color: #242640;
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-card .bi-input {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-card .bi-textarea {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-disabled {
   color: #9ea6b2;
@@ -827,7 +827,24 @@ textarea {
 .bi-list-item-select.disabled.bi-high-light-border,
 .bi-list-item-select.disabled:hover.bi-high-light-border,
 .bi-list-item-select.disabled:active.bi-high-light-border {
-  border-color: #cccccc;
+  border-color: #F0F3F7;
+}
+.bi-list-item-select2:hover,
+.bi-list-item-select2.hover {
+  background-color: #f7f8fa;
+}
+.bi-list-item-select2:active,
+.bi-list-item-select2.active {
+  color: #3685f2;
+  background-color: #f7f8fa;
+}
+.bi-list-item-select2:active .bi-input,
+.bi-list-item-select2.active .bi-input {
+  color: #3685f2;
+}
+.bi-list-item-select2:active .bi-textarea,
+.bi-list-item-select2.active .bi-textarea {
+  color: #3685f2;
 }
 .bi-theme-dark .bi-list-item-select:hover,
 .bi-theme-dark .bi-list-item-select.hover {
@@ -1471,7 +1488,7 @@ textarea {
 }
 .bi-theme-dark {
   background-color: #191B2B;
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-input {
   color: #ffffff;

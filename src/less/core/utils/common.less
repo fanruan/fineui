@@ -812,6 +812,23 @@ textarea {
   }
 }
 
+//与bi-list-item-select的区别是背景是灰的
+.bi-list-item-select2 {
+  &:hover, &.hover {
+    background-color: @color-bi-background-normal;
+  }
+  &:active, &.active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    background-color: @color-bi-background-normal;
+  }
+}
+
 .bi-theme-dark {
   .bi-list-item-select {
     &:hover, &.hover {
