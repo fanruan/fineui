@@ -203,7 +203,7 @@ body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {
   background: #ffffff !important;
-  border-color: #d4dadd !important;
+  border-color: #e8eaed !important;
 }
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled,
@@ -322,7 +322,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-basic-button.button-ignore:active .bi-button-mask {
   opacity: 0.1;
   filter: alpha(opacity=10);
-  background-color: #1a1a1a;
+  background-color: #232E40;
 }
 .bi-basic-button .popup-content {
   font-size: 14px;

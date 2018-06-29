@@ -9,10 +9,10 @@
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-collection-table-cell.first-row {
-  border-top: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
 }
 .bi-collection-table-cell.first-col {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-collection-table-cell.first-row {
   border-top: 1px solid #525466;
@@ -38,10 +38,10 @@
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
 }
 .bi-grid-table-cell.first-row {
-  border-top: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
 }
 .bi-grid-table-cell.first-col {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-grid-table-cell.first-row {
   border-top: 1px solid #525466;
@@ -171,24 +171,24 @@
   border-top: none;
 }
 .bi-table > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.top-left > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.top-right > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.bottom-left > div > div > table {
-  border-bottom: 1px solid #d4dadd;
-  border-right: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #e8eaed;
 }
 .bi-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #d4dadd;
-  border-bottom: 1px solid #d4dadd;
+  border-right: 1px solid #e8eaed;
+  border-bottom: 1px solid #e8eaed;
 }
 .bi-table > div > div > table,
 .bi-table > div > div > div > table {
@@ -212,8 +212,8 @@
 .bi-table > div > div > div > table > tbody > tr > td,
 .bi-table > div > div > table > thead > tr > td,
 .bi-table > div > div > div > table > thead > tr > td {
-  border-top: 1px solid #d4dadd;
-  border-left: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-table > div > div > table {
   border-bottom: 1px solid #525466;

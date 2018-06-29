@@ -12,15 +12,15 @@
   border-radius: 2px;
 }
 .bi-popup-view .list-view-shadow {
-  -webkit-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(26, 26, 26, 0.2);
+  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
 }
 .bi-popup-view .list-view-toolbar {
   line-height: 30px;
 }
 .bi-popup-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;

@@ -161,18 +161,18 @@
 }
 .dot-font .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-font.disabled .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-h-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
 }
 .dot-h-font .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-h-font:hover .b-font:before,
 .dot-h-font.hover .b-font:before {
@@ -181,7 +181,7 @@
 }
 .dot-h-font.disabled .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-ha-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
@@ -198,7 +198,7 @@
 .dot-ha-font:active .b-font:before,
 .dot-ha-font.active .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-ha-font.disabled .b-font:before {
   content: "\e762";
@@ -222,7 +222,7 @@
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e762";
@@ -316,7 +316,7 @@
 }
 .copy-h-font .b-font:before {
   content: "\e6bd";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .copy-h-font:hover .b-font:before,
 .copy-h-font.hover .b-font:before {
@@ -325,7 +325,7 @@
 }
 .copy-h-font.disabled .b-font:before {
   content: "\e6bd";
-  color: #1a1a1a;
+  color: #232e40;
 }
 .copy-ha-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');

@@ -1,6 +1,6 @@
 input,
 textarea {
-  border: 1px solid #d4dadd;
+  border: 1px solid #e8eaed;
 }
 .bi-theme-dark input,
 .bi-theme-dark textarea {
@@ -114,7 +114,7 @@ textarea {
   color: #c4c9d1;
 }
 .bi-border {
-  border: 1px solid #d4dadd;
+  border: 1px solid #e8eaed;
 }
 .bi-border-radius {
   -webkit-border-radius: 2px;
@@ -125,25 +125,25 @@ textarea {
   border: 1px solid #525466;
 }
 .bi-border-left {
-  border-left: 1px solid #d4dadd;
+  border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-border-left {
   border-left: 1px solid #525466;
 }
 .bi-border-right {
-  border-right: 1px solid #d4dadd;
+  border-right: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-border-right {
   border-right: 1px solid #525466;
 }
 .bi-border-top {
-  border-top: 1px solid #d4dadd;
+  border-top: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-border-top {
   border-top: 1px solid #525466;
 }
 .bi-border-bottom {
-  border-bottom: 1px solid #d4dadd;
+  border-bottom: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-border-bottom {
   border-bottom: 1px solid #525466;
@@ -218,7 +218,7 @@ textarea {
   color: #666666;
 }
 .bi-resizer {
-  background: #1a1a1a;
+  background: #232E40;
   opacity: 0.2;
   filter: alpha(opacity=20);
   z-index: 1000000000 !important;
@@ -228,8 +228,8 @@ textarea {
 }
 .bi-mask {
   color: #ffffff;
-  background-color: rgba(26, 26, 26, 0.2);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#331a1a1a,endColorstr=#331a1a1a);
+  background-color: rgba(35, 46, 64, 0.2);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33232e40,endColorstr=#33232e40);
 }
 .bi-mask .bi-input {
   color: #ffffff;
@@ -249,22 +249,22 @@ textarea {
   color: #242640;
 }
 .bi-z-index-mask {
-  background-color: rgba(26, 26, 26, 0.5);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#801a1a1a,endColorstr=#801a1a1a);
+  background-color: rgba(35, 46, 64, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80232e40,endColorstr=#80232e40);
 }
 .bi-list-item:hover,
 .bi-list-item.hover {
-  color: #1a1a1a;
+  color: #232e40;
   background-color: rgba(54, 133, 242, 0.05);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d3685f2,endColorstr=#0d3685f2);
 }
 .bi-list-item:hover .bi-input,
 .bi-list-item.hover .bi-input {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item:hover .bi-textarea,
 .bi-list-item.hover .bi-textarea {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item.disabled,
 .bi-list-item.disabled:hover,
@@ -359,13 +359,13 @@ textarea {
   color: #9ea6b2 !important;
 }
 .bi-list-item-effect:hover {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-effect:hover .bi-input {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-effect:hover .bi-textarea {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-effect.active,
 .bi-list-item-effect:active {
@@ -443,17 +443,17 @@ textarea {
 }
 .bi-list-item-active:hover,
 .bi-list-item-active.hover {
-  color: #1a1a1a;
+  color: #232e40;
   background-color: rgba(54, 133, 242, 0.06);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
 }
 .bi-list-item-active:hover .bi-input,
 .bi-list-item-active.hover .bi-input {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active:hover .bi-textarea,
 .bi-list-item-active.hover .bi-textarea {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active:active {
   color: #3685f2;
@@ -547,15 +547,15 @@ textarea {
 }
 .bi-list-item-active2:hover,
 .bi-list-item-active2.hover {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active2:hover .bi-input,
 .bi-list-item-active2.hover .bi-input {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active2:hover .bi-textarea,
 .bi-list-item-active2.hover .bi-textarea {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active2:hover.bi-border,
 .bi-list-item-active2.hover.bi-border {
@@ -656,17 +656,17 @@ textarea {
 }
 .bi-list-item-active3:hover,
 .bi-list-item-active3.hover {
-  color: #1a1a1a;
+  color: #232e40;
   background-color: rgba(54, 133, 242, 0.06);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
 }
 .bi-list-item-active3:hover .bi-input,
 .bi-list-item-active3.hover .bi-input {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active3:hover .bi-textarea,
 .bi-list-item-active3.hover .bi-textarea {
-  color: #1a1a1a;
+  color: #232e40;
 }
 .bi-list-item-active3:active,
 .bi-list-item-active3.active {
