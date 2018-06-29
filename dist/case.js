@@ -10403,13 +10403,13 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
                 self.key(e);
             }
         });
-        o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.setEnable(false);
-        });
-        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
-        if (o.used === false) {
-            this.setEnable(false);
-        }
+        // o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
+        //     self.setEnable(false);
+        // });
+        // o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
+        // if (o.used === false) {
+        //     this.setEnable(false);
+        // }
     },
 
     checkNodes: function (e) {
@@ -10772,9 +10772,12 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     return;
                     // return false;
                 }
+                if (this.instance.checkToolbar(t)) {
+                    return;
+                }
             } while (t = t.parentNode);
             this.fireEvent("blur", t);
-            this.lastSelectedInstance = this.selectedInstance;
+            this.lastSelectedInstance = this.selectedInstance || this.lastSelectedInstance;
             this.selectedInstance = null;
             // return false;
         },
@@ -10783,12 +10786,20 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.instance.focus();
         },
 
+        bindToolbar: function (toolbar) {
+            this.instance.bindToolbar(toolbar);
+        },
+
         setValue: function (v) {
             this.instance.setContent(v);
         },
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        getInstance: function () {
+            return this.instance;
         },
 
         destroyed: function () {
@@ -11027,6 +11038,14 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     range.pasteHTML(html);
                 }
             }
+        },
+
+        bindToolbar: function (toolbar) {
+            this.toolbar = toolbar;
+        },
+
+        checkToolbar: function (element) {
+            return this.toolbar && this.toolbar.element[0] === element;
         },
 
         nicCommand: function (cmd, args) {

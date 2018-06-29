@@ -65,9 +65,12 @@
                     return;
                     // return false;
                 }
+                if (this.instance.checkToolbar(t)) {
+                    return;
+                }
             } while (t = t.parentNode);
             this.fireEvent("blur", t);
-            this.lastSelectedInstance = this.selectedInstance;
+            this.lastSelectedInstance = this.selectedInstance || this.lastSelectedInstance;
             this.selectedInstance = null;
             // return false;
         },
@@ -76,12 +79,20 @@
             this.instance.focus();
         },
 
+        bindToolbar: function (toolbar) {
+            this.instance.bindToolbar(toolbar);
+        },
+
         setValue: function (v) {
             this.instance.setContent(v);
         },
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        getInstance: function () {
+            return this.instance;
         },
 
         destroyed: function () {
@@ -320,6 +331,14 @@
                     range.pasteHTML(html);
                 }
             }
+        },
+
+        bindToolbar: function (toolbar) {
+            this.toolbar = toolbar;
+        },
+
+        checkToolbar: function (element) {
+            return this.toolbar && this.toolbar.element[0] === element;
         },
 
         nicCommand: function (cmd, args) {

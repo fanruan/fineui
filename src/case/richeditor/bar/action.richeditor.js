@@ -24,13 +24,13 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
                 self.key(e);
             }
         });
-        o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-            self.setEnable(false);
-        });
-        o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
-        if (o.used === false) {
-            this.setEnable(false);
-        }
+        // o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
+        //     self.setEnable(false);
+        // });
+        // o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
+        // if (o.used === false) {
+        //     this.setEnable(false);
+        // }
     },
 
     checkNodes: function (e) {
