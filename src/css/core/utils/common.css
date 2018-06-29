@@ -58,13 +58,13 @@ textarea {
 }
 .bi-theme-dark .bi-background {
   background-color: #191B2B;
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-background .bi-input {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-background .bi-textarea {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-card {
   background-color: #ffffff;
@@ -78,13 +78,13 @@ textarea {
 }
 .bi-theme-dark .bi-card {
   background-color: #242640;
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-card .bi-input {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-theme-dark .bi-card .bi-textarea {
-  color: #cccccc;
+  color: #F0F3F7;
 }
 .bi-disabled {
   color: #9ea6b2;
@@ -827,7 +827,7 @@ textarea {
 .bi-list-item-select.disabled.bi-high-light-border,
 .bi-list-item-select.disabled:hover.bi-high-light-border,
 .bi-list-item-select.disabled:active.bi-high-light-border {
-  border-color: #cccccc;
+  border-color: #F0F3F7;
 }
 .bi-list-item-select2:hover,
 .bi-list-item-select2.hover {
