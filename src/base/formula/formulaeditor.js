@@ -125,7 +125,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
      */
     insertField: function (fieldName, fieldId) {
         var value = this.options.fieldTextValueMap[fieldName] || fieldId;
-        var fieldFormattedName = this.options.paramFormatter(fieldName) || "undefined";
+        var fieldFormattedName = this.options.paramFormatter(fieldName, fieldId) || "undefined";
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         var showName = fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
