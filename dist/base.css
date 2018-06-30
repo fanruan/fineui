@@ -8,9 +8,9 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #d4dadd inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
-  -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  box-shadow: 0px 0px 2px 1px #d0d4da inset;
+  -webkit-box-shadow: 0px 0px 2px 1px #d0d4da inset;
+  -moz-box-shadow: 0px 0px 2px 1px #d0d4da inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #232e40;
@@ -784,17 +784,20 @@ li.CodeMirror-hint-active {
 .bi-rich-editor-text-toolbar .text-toolbar-button {
   font-size: 16px;
 }
+.bi-segment-button {
+  color: #3685f2;
+}
 .bi-segment > .center-element {
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   background: #ffffff;
-  border-right: 1px solid #e8eaed;
-  border-top: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #3685f2;
+  border-top: 1px solid #3685f2;
+  border-bottom: 1px solid #3685f2;
 }
 .bi-segment > .first-element {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #3685f2;
   -webkit-border-radius: 6px 0px 0px 6px;
   -moz-border-radius: 6px 0px 0px 6px;
   border-radius: 6px 0px 0px 6px;
@@ -803,6 +806,10 @@ li.CodeMirror-hint-active {
   -webkit-border-radius: 0px 6px 6px 0px;
   -moz-border-radius: 0px 6px 6px 0px;
   border-radius: 0px 6px 6px 0px;
+}
+.bi-segment.disabled > .center-element,
+.bi-segment.disabled > .first-element {
+  border-color: #F0F3F7;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;

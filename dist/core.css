@@ -1081,30 +1081,41 @@ textarea {
 .bi-list-item-select.button-warning.active.bi-high-light-border {
   border-color: #e85050;
 }
-.bi-list-item-select.disabled,
-.bi-list-item-select.disabled:hover,
-.bi-list-item-select.disabled:active {
+.bi-list-item-select.disabled {
   color: #9ea6b2 !important;
   background-color: transparent !important;
 }
-.bi-list-item-select.disabled .bi-input,
-.bi-list-item-select.disabled:hover .bi-input,
-.bi-list-item-select.disabled:active .bi-input {
+.bi-list-item-select.disabled .bi-input {
   color: #9ea6b2 !important;
 }
-.bi-list-item-select.disabled .bi-textarea,
-.bi-list-item-select.disabled:hover .bi-textarea,
-.bi-list-item-select.disabled:active .bi-textarea {
+.bi-list-item-select.disabled .bi-textarea {
   color: #9ea6b2 !important;
 }
-.bi-list-item-select.disabled .bi-high-light,
-.bi-list-item-select.disabled:hover .bi-high-light,
-.bi-list-item-select.disabled:active .bi-high-light {
+.bi-list-item-select.disabled .bi-high-light {
   color: #9ea6b2 !important;
 }
-.bi-list-item-select.disabled.bi-high-light-border,
-.bi-list-item-select.disabled:hover.bi-high-light-border,
-.bi-list-item-select.disabled:active.bi-high-light-border {
+.bi-list-item-select.disabled.bi-high-light-border {
+  border-color: #F0F3F7;
+}
+.bi-list-item-select.disabled.hover,
+.bi-list-item-select.disabled.active {
+  color: #ffffff !important;
+  background-color: #d0d4da !important;
+}
+.bi-list-item-select.disabled.hover .bi-input,
+.bi-list-item-select.disabled.active .bi-input {
+  color: #ffffff !important;
+}
+.bi-list-item-select.disabled.hover .bi-textarea,
+.bi-list-item-select.disabled.active .bi-textarea {
+  color: #ffffff !important;
+}
+.bi-list-item-select.disabled.hover .bi-high-light,
+.bi-list-item-select.disabled.active .bi-high-light {
+  color: #9ea6b2 !important;
+}
+.bi-list-item-select.disabled.hover.bi-high-light-border,
+.bi-list-item-select.disabled.active.bi-high-light-border {
   border-color: #F0F3F7;
 }
 .bi-list-item-select2:hover,
@@ -1113,7 +1124,7 @@ textarea {
 }
 .bi-list-item-select2:active,
 .bi-list-item-select2.active {
-  color: #3685f2;
+  color: #ffffff;
   background-color: #f7f8fa;
 }
 .bi-list-item-select2:active .bi-input,
@@ -1123,6 +1134,10 @@ textarea {
 .bi-list-item-select2:active .bi-textarea,
 .bi-list-item-select2.active .bi-textarea {
   color: #3685f2;
+}
+.bi-list-item-select2:active .bi-high-light,
+.bi-list-item-select2.active .bi-high-light {
+  color: #ffffff;
 }
 .bi-theme-dark .bi-list-item-select:hover,
 .bi-theme-dark .bi-list-item-select.hover {
