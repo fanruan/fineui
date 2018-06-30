@@ -701,10 +701,10 @@ li.CodeMirror-hint-active {
   color: white;
 }
 .bi-formula-editor .error-field {
-  color: #ff4949;
+  display: inline-block;
   padding: 0 5px;
   margin: 1px 1px;
-  display: inline-block;
+  color: #ff4949;
 }
 .bi-message-title {
   font-size: 14px;
