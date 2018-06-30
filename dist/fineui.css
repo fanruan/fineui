@@ -2458,9 +2458,10 @@ li.CodeMirror-hint-active {
 }
 .bi-formula-editor .error-field {
   display: inline-block;
+  background: #ff4949;
+  color: #ffffff;
   padding: 0 5px;
   margin: 1px 1px;
-  color: #ff4949;
 }
 .bi-message-title {
   font-size: 14px;
