@@ -320,7 +320,11 @@
 
             try {
                 // w3c
-                this.nicCommand("insertHTML", html);
+                if (document.queryCommandState("insertHTML")) {
+                    this.nicCommand("insertHTML", html);
+                } else {
+                    throw new Error("Does not support this command");
+                }
             } catch(e) {
                 if (range.insertNode) {
                     // IE
