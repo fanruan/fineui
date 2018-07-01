@@ -103,7 +103,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                         }
                     });
                     break;
-                default :
+                case "click":
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
                             if (self.expander.element.__isMouseInBounds__(e)) {
