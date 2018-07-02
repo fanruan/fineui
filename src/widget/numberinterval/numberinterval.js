@@ -183,7 +183,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 el: self.bigCombo,
                 width: c.width - c.border * 2
             }, {
-                el: self.bigEditor
+                el: self.bigEditor,
+                // BI-23883 间距考虑边框
+                lgap: 1
             }]
         });
 
