@@ -39614,7 +39614,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                         }
                     });
                     break;
-                default :
+                case "click":
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
                             if (self.expander.element.__isMouseInBounds__(e)) {
@@ -50663,15 +50663,14 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
 
     /**
      * 添加字段
-     * @param fieldName
      * @param fieldId
      */
-    insertField: function (fieldName, fieldId) {
-        var value = this.options.fieldTextValueMap[fieldName] || fieldId;
-        var fieldFormattedName = this.options.paramFormatter(fieldName);
+    insertField: function (fieldId) {
+        var value = fieldId;
+        var fieldFormattedName = this.options.paramFormatter(fieldId) || "undefined";
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        var showName = BI.isNull(fieldFormattedName) ? "undefined" : fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
+        var showName = fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
             return str.substring(2, str.length - 2);
         });
         this.editor.replaceSelection("\u200b" + showName + "\u200b");
@@ -84538,7 +84537,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.SegmentButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-active",
+            baseCls: (conf.baseCls || "") + " bi-segment-button bi-list-item-select",
             shadow: true,
             readonly: true,
             hgap: 5
@@ -106101,7 +106100,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeExpander.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-tree-expander",
-            trigger: "click",
+            trigger: "",
             toggle: true,
             direction: "bottom",
             isDefaultInit: true,
@@ -106114,7 +106113,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
         BI.SelectTreeExpander.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        this.trigger = BI.createWidget(BI.extend({stopPropagation: true}, o.el));
+        this.trigger = BI.createWidget(o.el);
         this.trigger.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
                 if (this.isSelected()) {
