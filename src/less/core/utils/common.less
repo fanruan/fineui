@@ -793,21 +793,55 @@ textarea {
     }
   }
   &.disabled {
-    &, &:hover, &:active {
+    color: @color-bi-text-disabled !important;
+    & .bi-input {
       color: @color-bi-text-disabled !important;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-disabled !important;
+    }
+    background-color: transparent !important;
+    & .bi-high-light {
+      color: @color-bi-text-disabled !important;
+    }
+    &.bi-high-light-border {
+      border-color: @color-bi-border-disabled;
+    }
+    &.hover, &.active {
+      color: @color-bi-text !important;
       & .bi-input {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text !important;
       }
       & .bi-textarea {
-        color: @color-bi-text-disabled !important;
+        color: @color-bi-text !important;
       }
-      background-color: transparent !important;
+      background-color: @color-bi-background-dark-gray !important;
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
       }
       &.bi-high-light-border {
         border-color: @color-bi-border-disabled;
       }
+    }
+  }
+}
+
+//与bi-list-item-select的区别是背景是灰的
+.bi-list-item-select2 {
+  &:hover, &.hover {
+    background-color: @color-bi-background-normal;
+  }
+  &:active, &.active {
+    color: @color-bi-text;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    background-color: @color-bi-background-normal;
+    & .bi-high-light {
+      color: @color-bi-text;
     }
   }
 }

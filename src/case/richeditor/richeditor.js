@@ -13,6 +13,14 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         readOnly: false
     },
 
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
+            adjustLength: 1,
+            adjustXOffset: 0,
+            adjustYOffset: 0
+        });
+    },
+
     render: function () {
         var self = this, o = this.options;
         var editor = {
@@ -49,7 +57,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             direction: "top,right",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
-            adjustLength: 1,
+            adjustLength: o.adjustLength,
+            adjustXOffset: o.adjustXOffset,
+            adjustYOffset: o.adjustYOffset,
             ref: function () {
                 self.combo = this;
             },
@@ -59,7 +69,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
                     type: "bi.rich_editor_text_toolbar",
                     editor: this.editor
                 }, o.toolbar),
-                height: 30,
+                height: 34,
                 stopPropagation: true,
                 stopEvent: true
             },

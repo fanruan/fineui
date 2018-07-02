@@ -83267,8 +83267,8 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var attrs = BI.DOM.getImage(o.paramFormatter(param));
         image.src = attrs.src;
         image.alt = param;
-        image.style = attrs.style;
         $(image).addClass("rich-editor-param");
+        $(image).attr("style", attrs.style);
         this.options.editor.insertHTML($("<div>").append(image).html());
         // var sel = this._get$Sel();
         // var wrapper = o.editor.instance.getElm().element;
@@ -83408,7 +83408,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 {type: "bi.rich_editor_align_right_button"},
                 {type: "bi.rich_editor_param_button"}
             ],
-            height: 28
+            height: 34
         });
     },
 
@@ -83430,7 +83430,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
             element: this,
             items: buttons,
             hgap: 3,
-            vgap: 3
+            vgap: 6
         });
     },
 
@@ -83775,7 +83775,11 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
             try {
                 // w3c
-                this.nicCommand("insertHTML", html);
+                if (document.queryCommandState("insertHTML")) {
+                    this.nicCommand("insertHTML", html);
+                } else {
+                    throw new Error("Does not support this command");
+                }
             } catch(e) {
                 if (range.insertNode) {
                     // IE
@@ -84430,6 +84434,14 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         readOnly: false
     },
 
+    _defaultConfig: function () {
+        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
+            adjustLength: 1,
+            adjustXOffset: 0,
+            adjustYOffset: 0
+        });
+    },
+
     render: function () {
         var self = this, o = this.options;
         var editor = {
@@ -84466,7 +84478,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             direction: "top,right",
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
-            adjustLength: 1,
+            adjustLength: o.adjustLength,
+            adjustXOffset: o.adjustXOffset,
+            adjustYOffset: o.adjustYOffset,
             ref: function () {
                 self.combo = this;
             },
@@ -84476,7 +84490,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
                     type: "bi.rich_editor_text_toolbar",
                     editor: this.editor
                 }, o.toolbar),
-                height: 30,
+                height: 34,
                 stopPropagation: true,
                 stopEvent: true
             },
@@ -108813,7 +108827,8 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.text_button",
-                    cls: "slider-button",
+                    forceNotSelected: true,
+                    cls: "slider-button bi-list-item-select2",
                     ref: function () {
                         self.slider = this;
                     }

@@ -51,8 +51,8 @@ textarea::-webkit-scrollbar-thumb:hover {
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(204, 204, 204, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
+  background-color: rgba(240, 243, 247, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
   width: 6px;
   height: 6px;
 }
@@ -61,13 +61,13 @@ textarea::-webkit-scrollbar-thumb:hover {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: rgba(204, 204, 204, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dcccccc,endColorstr=#4dcccccc);
+  background-color: rgba(240, 243, 247, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
 }
 .bi-theme-dark div::-webkit-scrollbar-thumb:hover,
 .bi-theme-dark textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(204, 204, 204, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
+  background-color: rgba(240, 243, 247, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
 }
 .farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;

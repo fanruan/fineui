@@ -8,9 +8,9 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #d4dadd inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #d4dadd inset;
-  -moz-box-shadow: 0px 0px 2px 1px #d4dadd inset;
+  box-shadow: 0px 0px 2px 1px #d0d4da inset;
+  -webkit-box-shadow: 0px 0px 2px 1px #d0d4da inset;
+  -moz-box-shadow: 0px 0px 2px 1px #d0d4da inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #232e40;
@@ -785,17 +785,20 @@ li.CodeMirror-hint-active {
 .bi-rich-editor-text-toolbar .text-toolbar-button {
   font-size: 16px;
 }
+.bi-segment-button {
+  color: #3685f2;
+}
 .bi-segment > .center-element {
   overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
   background: #ffffff;
-  border-right: 1px solid #e8eaed;
-  border-top: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #3685f2;
+  border-top: 1px solid #3685f2;
+  border-bottom: 1px solid #3685f2;
 }
 .bi-segment > .first-element {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #3685f2;
   -webkit-border-radius: 6px 0px 0px 6px;
   -moz-border-radius: 6px 0px 0px 6px;
   border-radius: 6px 0px 0px 6px;
@@ -804,6 +807,10 @@ li.CodeMirror-hint-active {
   -webkit-border-radius: 0px 6px 6px 0px;
   -moz-border-radius: 0px 6px 6px 0px;
   border-radius: 0px 6px 6px 0px;
+}
+.bi-segment.disabled > .center-element,
+.bi-segment.disabled > .first-element {
+  border-color: #F0F3F7;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;
@@ -982,8 +989,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #cccccc !important;
-  border-color: #cccccc !important;
+  background: #F0F3F7 !important;
+  border-color: #F0F3F7 !important;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -1017,7 +1024,7 @@ body .bi-button.button-error.disabled.base-disabled .b-font:before,
 #body .bi-button.button-error.disabled.base-disabled .b-font:before,
 body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 #body .bi-button.button-warning.disabled.base-disabled .b-font:before {
-  color: #ffffff !important;
+  color: #9ea6b2 !important;
 }
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {
@@ -1442,8 +1449,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
-  background-color: rgba(204, 204, 204, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
+  background-color: rgba(240, 243, 247, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -1465,8 +1472,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
-  background-color: rgba(204, 204, 204, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dcccccc,endColorstr=#0dcccccc);
+  background-color: rgba(240, 243, 247, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -1523,8 +1530,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d666666,endColorstr=#4d666666);
 }
 .bi-theme-dark .public-scrollbar-face:after {
-  background-color: rgba(204, 204, 204, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dcccccc,endColorstr=#4dcccccc);
+  background-color: rgba(240, 243, 247, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
@@ -1535,8 +1542,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-face-active:after {
-  background-color: rgba(204, 204, 204, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3cccccc,endColorstr=#b3cccccc);
+  background-color: rgba(240, 243, 247, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
 }
 .horizontal-scrollbar {
   bottom: 0;
