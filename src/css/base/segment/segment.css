@@ -3,12 +3,12 @@
   overflow-x: hidden;
   overflow-y: hidden;
   background: #ffffff;
-  border-right: 1px solid #e8eaed;
-  border-top: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
+  border-right: 1px solid #3685f2;
+  border-top: 1px solid #3685f2;
+  border-bottom: 1px solid #3685f2;
 }
 .bi-segment > .first-element {
-  border-left: 1px solid #e8eaed;
+  border-left: 1px solid #3685f2;
   -webkit-border-radius: 6px 0px 0px 6px;
   -moz-border-radius: 6px 0px 0px 6px;
   border-radius: 6px 0px 0px 6px;
@@ -17,6 +17,10 @@
   -webkit-border-radius: 0px 6px 6px 0px;
   -moz-border-radius: 0px 6px 6px 0px;
   border-radius: 0px 6px 6px 0px;
+}
+.bi-segment.disabled > .center-element,
+.bi-segment.disabled > .first-element {
+  border-color: #F0F3F7;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;

@@ -4,16 +4,19 @@
   & > .center-element{
     .overflow-hidden();
     background: @color-bi-background-default;
-    border-right: 1px solid @color-bi-border-line;
-    border-top: 1px solid @color-bi-border-line;
-    border-bottom: 1px solid @color-bi-border-line;
+    border-right: 1px solid @color-bi-border-highlight;
+    border-top: 1px solid @color-bi-border-highlight;
+    border-bottom: 1px solid @color-bi-border-highlight;
   }
   & > .first-element{
-    border-left: 1px solid @color-bi-border-line;
+    border-left: 1px solid @color-bi-border-highlight;
     .border-corner-radius(6px,0px,0px,6px)
   }
   & > .last-element{
     .border-corner-radius(0px,6px,6px,0px)
+  }
+  &.disabled > .center-element, &.disabled > .first-element{
+    border-color: @color-bi-border-disabled;
   }
 }
 
