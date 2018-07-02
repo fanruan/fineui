@@ -111131,11 +111131,13 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     // 判格式合法
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        return this._dateCheck(smallDate) && BI.checkDateLegal(smallDate) && this._checkVoid({
+        var smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
+        var bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
             day: 1
-        }) && this._dateCheck(bigDate) && BI.checkDateLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate) && this._checkVoid({
             year: bigObj[0],
             month: bigObj[1],
             day: 1
@@ -111166,7 +111168,8 @@ BI.YearMonthInterval.EVENT_VALID = "EVENT_VALID";
 BI.YearMonthInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);/**
+BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
+/**
  * 年份展示面板
  *
  * Created by GUY on 2015/9/2.
