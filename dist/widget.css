@@ -38,46 +38,6 @@
   background-color: #191B2B;
   color: #999999;
 }
-.bi-filter-item .filter-item-empty-item .empty-filter-item-leaf {
-  border: 1px dashed #3685f2;
-  background: #eaf2fd;
-}
-.bi-filter-expander {
-  min-width: 100%;
-  border-right: 0px;
-  border-bottom: 0px;
-}
-.bi-filter-expander > .filter-item-empty-item {
-  border-top: 0px;
-  border-right: 1px solid #e8eaed;
-  border-bottom: 1px solid #e8eaed;
-}
-.bi-filter-expander > table {
-  min-width: 100%;
-}
-.bi-filter-expander > table > tbody > tr > td.first-element {
-  width: 20px;
-  border-right: 1px solid #e8eaed !important;
-  border-bottom: 1px solid #e8eaed !important;
-}
-.bi-theme-dark .bi-filter-expander > .filter-item-empty-item {
-  border-right: 1px solid #525466;
-  border-bottom: 1px solid #525466;
-}
-.bi-theme-dark .bi-filter-expander > table > tbody > tr > td.first-element {
-  border-right: 1px solid #525466 !important;
-  border-bottom: 1px solid #525466 !important;
-}
-.bi-filter-operation .operation-trigger.hover,
-.bi-filter-operation .operation-trigger:hover {
-  color: #13cd66;
-}
-.bi-filter-pane {
-  min-width: 100%;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-}
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
   background-color: #faaa39;
