@@ -32,7 +32,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -44,7 +44,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -59,7 +59,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{

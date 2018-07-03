@@ -8881,7 +8881,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
                 el: {
                     type: "bi.layout",
                     cls: "line-segment-button-line",
-                    height: 3,
+                    height: 2,
                     ref: function () {
                         self.line = this;
                     }

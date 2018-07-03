@@ -7,6 +7,9 @@
 .bi-year-popup .year-popup-navigation > .first-element {
   border-left: none;
 }
+.bi-year-popup .toolbar-button {
+  line-height: 23px;
+}
 .bi-theme-dark .bi-year-popup .year-popup-navigation > .center-element {
   border-left: 1px solid #525466;
 }

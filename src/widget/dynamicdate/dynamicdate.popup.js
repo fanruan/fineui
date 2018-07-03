@@ -24,7 +24,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -36,7 +36,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -51,7 +51,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{

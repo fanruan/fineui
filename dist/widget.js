@@ -3585,7 +3585,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -3597,7 +3597,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -3612,7 +3612,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -4351,7 +4351,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -4363,7 +4363,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -4378,7 +4378,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22131,7 +22131,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22143,7 +22143,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -22158,7 +22158,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22882,7 +22882,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22894,7 +22894,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -22909,7 +22909,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -23860,7 +23860,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -23872,7 +23872,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -23887,7 +23887,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-border-top bi-high-light toolbar-button",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
