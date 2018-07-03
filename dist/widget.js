@@ -7878,7 +7878,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this,
+            cls: "tree-view display-inline",
             expander: {
                 type: "bi.select_tree_expander",
                 isDefaultInit: o.isDefaultInit,
@@ -7904,6 +7904,12 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, arguments);
             }
+        });
+        BI.createWidget({
+            type: "bi.adaptive",
+            element: this,
+            scrollable: true,
+            items: [this.tree]
         })
     },
 
@@ -8419,7 +8425,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            element: this,
+            cls: "tree-view display-inline",
             expander: {
                 isDefaultInit: o.isDefaultInit,
                 el: {},
@@ -8448,6 +8454,12 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, v);
             }
+        });
+        BI.createWidget({
+            type: "bi.adaptive",
+            element: this,
+            scrollable: true,
+            items: [this.tree]
         })
     },
 
