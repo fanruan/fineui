@@ -6,9 +6,10 @@
 BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
     constants: {
-        height: 24,
+        height: 12,
         lgap: 10,
-        tgap: 5
+        tgap: 10,
+        bgap: 5
     },
 
     _defaultConfig: function () {
@@ -67,7 +68,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
             items: [{
                 height: this.constants.height,
                 el: {
-                    type: "bi.left",
+                    type: "bi.vertical_adapt",
                     cls: "multi-select-continue-select",
                     items: [
                         {
@@ -75,18 +76,18 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                                 type: "bi.label",
                                 text: BI.i18nText("BI-Selected_Data")
                             },
-                            lgap: this.constants.lgap,
-                            tgap: this.constants.tgap
+                            lgap: this.constants.lgap
                         },
                         {
                             el: this.continueSelect,
-                            lgap: this.constants.lgap,
-                            tgap: this.constants.tgap
+                            lgap: this.constants.lgap
                         }]
-                }
+                },
+                tgap: this.constants.tgap
             }, {
                 height: "fill",
-                el: this.display
+                el: this.display,
+                tgap: this.constants.bgap
             }]
         });
     },

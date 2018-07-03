@@ -36017,7 +36017,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 height: 25
             });
             BI.createWidget({
-                type: "bi.vertical",
+                type: "bi.absolute_center_adapt",
                 element: this,
                 items: [this._tipText],
                 bgap: 25
@@ -51464,7 +51464,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         return BI.createWidget({
             type: "bi.center",
             cls: "list-view-toolbar bi-high-light bi-border-top",
-            height: 30,
+            height: 24,
             items: BI.createItems(o.buttons, {
                 once: false,
                 shadow: true,
@@ -51487,7 +51487,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 30) : 0,
+        var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
@@ -78145,7 +78145,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 28,
+            width: 24,
             height: 24,
             el: {},
             popup: {},
@@ -78310,7 +78310,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 28,
+            width: 24,
             height: 24,
             isShowDown: true,
             value: ""
@@ -78329,7 +78329,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.isShowDown ? o.width - 12 : o.width,
+            width: o.isShowDown ? o.width - 2 : o.width,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -81018,7 +81018,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
             cls: "list-view-toolbar bi-high-light bi-border-top",
-            height: 30,
+            height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
                 once: false,
@@ -90241,7 +90241,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: [this.popup]
+            items: [this.popup],
+            vgap: 5
         });
 
     },
@@ -90268,7 +90269,6 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 4,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -90277,6 +90277,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
+                        vgap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];
@@ -90331,7 +90332,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     }],
                     cls: "bi-down-list-spliter-container cursor-pointer",
                     lgap: 10,
-                    rgap: 10
+                    rgap: 0
                 });
                 result.push(spliter_container);
             }
@@ -95074,7 +95075,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     }],
                     cls: "bi-down-list-spliter-container cursor-pointer",
                     lgap: 10,
-                    rgap: 10
+                    rgap: 0
                 });
                 result.push(spliter_container);
             }
@@ -96597,9 +96598,10 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 
     constants: {
-        height: 24,
+        height: 12,
         lgap: 10,
-        tgap: 5
+        tgap: 10,
+        bgap: 5
     },
 
     _defaultConfig: function () {
@@ -96658,7 +96660,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
             items: [{
                 height: this.constants.height,
                 el: {
-                    type: "bi.left",
+                    type: "bi.vertical_adapt",
                     cls: "multi-select-continue-select",
                     items: [
                         {
@@ -96666,18 +96668,18 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
                                 type: "bi.label",
                                 text: BI.i18nText("BI-Selected_Data")
                             },
-                            lgap: this.constants.lgap,
-                            tgap: this.constants.tgap
+                            lgap: this.constants.lgap
                         },
                         {
                             el: this.continueSelect,
-                            lgap: this.constants.lgap,
-                            tgap: this.constants.tgap
+                            lgap: this.constants.lgap
                         }]
-                }
+                },
+                tgap: this.constants.tgap
             }, {
                 height: "fill",
-                el: this.display
+                el: this.display,
+                tgap: this.constants.bgap
             }]
         });
     },
@@ -96820,10 +96822,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             // adapter: this.popup,
             masker: {
                 offset: {
-                    left: 1,
-                    top: 1,
-                    right: 1,
-                    bottom: 33
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 26
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -97204,10 +97206,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             // adapter: this.popup,
             masker: {
                 offset: {
-                    left: 1,
-                    top: 1,
-                    right: 1,
-                    bottom: 33
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 26
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -97582,10 +97584,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             // adapter: this.popup,
             masker: {
                 offset: {
-                    left: 1,
-                    top: 1,
-                    right: 1,
-                    bottom: 33
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 26
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -101921,7 +101923,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         signalError: "signalBubble",
         editorWidth: 114,
         columns: 5,
-        width: 30,
+        width: 24,
         rows: 1,
         numberErrorCls: "number-error",
         border: 1,
@@ -101933,7 +101935,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-number-interval",
-            height: 25,
+            height: 24,
             validation: "valid",
             closeMin: true
         });
@@ -103721,10 +103723,10 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             // adapter: this.popup,
             masker: {
                 offset: {
-                    left: 1,
-                    top: 1,
-                    right: 2,
-                    bottom: 33
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 26
                 }
             },
             allValueGetter: function () {
@@ -105970,7 +105972,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "single-select-toolbar",
+            cls: "multi-select-toolbar",
             height: this.constants.height
         });
 
@@ -107131,7 +107133,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             logic: {
-                dynamic: false
+                dynamic: true
             },
             // onLoaded: o.onLoaded,
             el: {},
