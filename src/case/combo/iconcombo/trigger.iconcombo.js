@@ -11,7 +11,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 28,
+            width: 24,
             height: 24,
             isShowDown: true,
             value: ""
@@ -30,7 +30,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.isShowDown ? o.width - 12 : o.width,
+            width: o.isShowDown ? o.width - 2 : o.width,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,

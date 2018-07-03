@@ -70,7 +70,8 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: [this.popup]
+            items: [this.popup],
+            vgap: 5
         });
 
     },
@@ -97,7 +98,6 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 4,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -106,6 +106,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
+                        vgap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];

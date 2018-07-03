@@ -11,7 +11,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         signalError: "signalBubble",
         editorWidth: 114,
         columns: 5,
-        width: 30,
+        width: 24,
         rows: 1,
         numberErrorCls: "number-error",
         border: 1,
@@ -23,7 +23,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             extraCls: "bi-number-interval",
-            height: 25,
+            height: 24,
             validation: "valid",
             closeMin: true
         });
