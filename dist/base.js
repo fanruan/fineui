@@ -14644,8 +14644,9 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
     /**
      * 添加字段
      * @param fieldId
+     * @param force, 判断是否强制不标红
      */
-    insertField: function (fieldId) {
+    insertField: function (fieldId, force) {
         var value = fieldId;
         var fieldFormattedName = this.options.paramFormatter(fieldId) || "undefined";
         var from = this.editor.getCursor();
@@ -14656,7 +14657,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
         var className = "fieldName";
-        if (BI.isNotNull(fieldFormattedName.match(/^<!.*!>$/))) {
+        if (BI.isNotNull(fieldFormattedName.match(/^<!.*!>$/)) && !force) {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
