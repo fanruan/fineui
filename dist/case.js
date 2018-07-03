@@ -5646,7 +5646,7 @@ BI.IconCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-icon-combo",
-            width: 28,
+            width: 24,
             height: 24,
             el: {},
             popup: {},
@@ -5811,7 +5811,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             el: {},
             items: [],
             iconCls: "",
-            width: 28,
+            width: 24,
             height: 24,
             isShowDown: true,
             value: ""
@@ -5830,7 +5830,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.isShowDown ? o.width - 12 : o.width,
+            width: o.isShowDown ? o.width - 2 : o.width,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -8519,7 +8519,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
             cls: "list-view-toolbar bi-high-light bi-border-top",
-            height: 30,
+            height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
                 once: false,

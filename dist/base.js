@@ -246,7 +246,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 height: 25
             });
             BI.createWidget({
-                type: "bi.vertical",
+                type: "bi.absolute_center_adapt",
                 element: this,
                 items: [this._tipText],
                 bgap: 25
@@ -15694,7 +15694,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         return BI.createWidget({
             type: "bi.center",
             cls: "list-view-toolbar bi-high-light bi-border-top",
-            height: 30,
+            height: 24,
             items: BI.createItems(o.buttons, {
                 once: false,
                 shadow: true,
@@ -15717,7 +15717,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 30) : 0,
+        var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :

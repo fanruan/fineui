@@ -37,10 +37,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             // adapter: this.popup,
             masker: {
                 offset: {
-                    left: 1,
-                    top: 1,
-                    right: 1,
-                    bottom: 33
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 26
                 }
             },
             valueFormatter: o.valueFormatter,
