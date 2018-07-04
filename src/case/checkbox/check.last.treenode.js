@@ -7,8 +7,8 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {

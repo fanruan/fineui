@@ -2090,8 +2090,8 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.FirstTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type2",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2116,8 +2116,8 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2142,8 +2142,8 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.MidTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type3",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2168,8 +2168,8 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type1",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
