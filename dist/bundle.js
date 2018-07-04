@@ -50422,13 +50422,13 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var fieldFormattedName = this.options.paramFormatter(fieldId) || "undefined";
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        var showName = fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
+        var showName = fieldFormattedName.replaceAll("^<!.*!>$", function (str) {
             return str.substring(2, str.length - 2);
         });
         this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
         var className = "fieldName";
-        if (BI.isNotNull(fieldFormattedName.match(/^<!.*!>$/)) && !force) {
+        if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
