@@ -15582,6 +15582,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             bgap: 0,
             vgap: 0,
             hgap: 0,
+            innerVGap: 0,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
             stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
@@ -15659,7 +15660,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _createView: function () {
         var o = this.options;
         this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
-        this.button_group.element.css({"min-height": o.minHeight + "px"});
+        this.button_group.element.css({"min-height": o.minHeight + "px", "padding-top": o.innerVGap + "px", "padding-bottom": o.innerVGap + "px"});
         return this.button_group;
     },
 

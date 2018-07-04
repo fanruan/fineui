@@ -530,7 +530,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
                 el: this.popup
             }
@@ -564,7 +564,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-date-picker bi-background",
+            baseCls: "bi-date-picker",
             height: 40,
             min: "1900-01-01", // 最小日期
             max: "2099-12-31" // 最大日期
@@ -720,7 +720,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.YearPicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-year-picker bi-background",
+            baseCls: "bi-year-picker",
             behaviors: {},
             height: 40,
             min: "1900-01-01", // 最小日期
@@ -879,7 +879,6 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 
         this.calendar = BI.createWidget({
             direction: "top",
-            element: this,
             logic: {
                 dynamic: true
             },
@@ -906,6 +905,25 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.selectedTime = self.calendar.getValue();
             self.setValue(self.selectedTime);
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.calendar,
+                left: 10,
+                right: 10
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
         });
     },
 
@@ -1075,7 +1093,10 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
                 type: "bi.center_adapt",
                 width: 50,
                 height: c.height,
-                items: [this.text, this.icon]
+                items: [{
+                    el: this.text,
+                    rgap: 10
+                }, this.icon]
             }]
         });
     },
@@ -1150,11 +1171,10 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
 
         this.calendar = BI.createWidget({
-            direction: "top",
-            element: this,
-            logic: {
-                dynamic: false
-            },
+            direction: "custom",
+            // logic: {
+            //     dynamic: false
+            // },
             type: "bi.navigation",
             tab: this.datePicker,
             cardCreator: BI.bind(this._createNav, this)
@@ -1166,6 +1186,31 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
         this.setValue(o.selectedTime);
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.datePicker,
+                height: 40
+            }, this.calendar],
+            hgap: 10
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
+        });
 
     },
 
@@ -1896,10 +1941,10 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         });
 
         this.calendar = BI.createWidget({
-            direction: "top",
-            logic: {
-                dynamic: false
-            },
+            direction: "custom",
+            // logic: {
+            //     dynamic: false
+            // },
             type: "bi.navigation",
             tab: this.datePicker,
             cardCreator: BI.bind(this._createNav, this)
@@ -1914,7 +1959,11 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            items: [this.calendar, {
+            hgap: 10,
+            items: [{
+                el: this.datePicker,
+                height: 40
+            }, this.calendar, {
                 el: {
                     type: "bi.dynamic_date_time_select",
                     ref: function () {
@@ -1929,6 +1978,21 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                     }]
                 },
                 height: 40
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
             }]
         });
         this.setValue(o.selectedTime);
@@ -2590,7 +2654,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        vgap: 5,
+                        innerVGap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];
@@ -2849,15 +2913,18 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 24,
+                    height: 12,
                     lgap: 10
-                }
+                },
+                tgap: 10,
+                bgap: 5
             }, {
                 type: "bi.button_group",
                 ref: function () {
                     self.checkgroup = this;
                 },
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
+                lgap: 4,
                 value: [BI.DynamicDateCard.TYPE.YEAR],
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year"),
@@ -2881,7 +2948,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     }
                 }),
                 layouts: [{
-                    type: "bi.left"
+                    type: "bi.left",
+                    rgap: 4
                 }],
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
@@ -2917,29 +2985,33 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.vertical_adapt",
+                lgap: 2,
                 items: [{
-                    type: "bi.multi_select_item",
-                    ref: function () {
-                        self.workDayBox = this;
-                    },
-                    logic: {
-                        dynamic: true
-                    },
-                    text: BI.i18nText("BI-Basic_Work_Day"),
-                    value: BI.DynamicDateCard.TYPE.WORK_DAY,
-                    listeners: [{
-                        eventName: BI.MultiSelectItem.EVENT_CHANGE,
-                        action: function () {
-                            if(this.isSelected()) {
-                                self.checkgroup.setValue();
+                    el: {
+                        type: "bi.multi_select_item",
+                        ref: function () {
+                            self.workDayBox = this;
+                        },
+                        logic: {
+                            dynamic: true
+                        },
+                        text: BI.i18nText("BI-Basic_Work_Day"),
+                        value: BI.DynamicDateCard.TYPE.WORK_DAY,
+                        listeners: [{
+                            eventName: BI.MultiSelectItem.EVENT_CHANGE,
+                            action: function () {
+                                if(this.isSelected()) {
+                                    self.checkgroup.setValue();
+                                }
+                                self.resultPane.populate(this.isSelected() ? self._getParamJson([{
+                                    dateType: BI.DynamicDateCard.TYPE.WORK_DAY
+                                }]) : []);
+                                self.position = BI.DynamicDateCard.OFFSET.CURRENT;
+                                self.fireEvent("EVENT_CHANGE");
                             }
-                            self.resultPane.populate(this.isSelected() ? self._getParamJson([{
-                                dateType: BI.DynamicDateCard.TYPE.WORK_DAY
-                            }]) : []);
-                            self.position = BI.DynamicDateCard.OFFSET.CURRENT;
-                            self.fireEvent("EVENT_CHANGE");
-                        }
-                    }]
+                        }]
+                    },
+                    bgap: 5
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -2954,7 +3026,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 },
                 layouts: [{
                     type: "bi.vertical",
-                    vgap: 10,
+                    bgap: 10,
                     hgap: 10
                 }]
             }]
@@ -3585,7 +3657,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -3597,7 +3669,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -3612,7 +3684,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -4351,7 +4423,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -4363,7 +4435,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -4378,7 +4450,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22131,7 +22203,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22143,7 +22215,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -22158,7 +22230,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22604,6 +22676,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 }]
             }, {
                 type: "bi.button_group",
+                cls: "bi-border-top",
                 behaviors: o.behaviors,
                 ref: function () {
                     self.month = this;
@@ -22725,7 +22798,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
@@ -22882,7 +22955,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22894,7 +22967,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -22909,7 +22982,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -23860,7 +23933,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -23872,7 +23945,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top toolbar-button",
+                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -23887,7 +23960,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light toolbar-button",
+                        cls: "bi-border-top bi-high-light",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
