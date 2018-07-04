@@ -25154,6 +25154,9 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
 
     _isMatch: function (parentValues, value, keyword) {
         var node = this._getTreeNode(parentValues, value);
+        if (!node) {
+            return false;
+        }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
         return find.find.length > 0 || find.match.length > 0;
     },

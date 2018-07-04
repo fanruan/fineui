@@ -83423,11 +83423,6 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 editor: o.editor
             });
         }));
-        this.element.mousedown(function (e) {
-            BI.each(buttons, function (i, btn) {
-                btn.hideIf(e);
-            });
-        });
         BI.createWidget({
             type: "bi.left",
             element: this,
@@ -83547,6 +83542,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        getContentHeight: function () {
+            return this.instance.getContentHeight();
         },
 
         getInstance: function () {
@@ -83756,6 +83755,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.content = this.getElm().element.html();
             this.ne.fireEvent("get");
             return this.content;
+        },
+
+        getContentHeight: function () {
+            return this.elm.element.height();
         },
 
         setContent: function (e) {
@@ -84523,6 +84526,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
+    },
+
+    getContentHeight: function () {
+        return this.editor.getContentHeight();
     }
 });
 BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
@@ -113093,6 +113100,9 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
 
     _isMatch: function (parentValues, value, keyword) {
         var node = this._getTreeNode(parentValues, value);
+        if (!node) {
+            return false;
+        }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
         return find.find.length > 0 || find.match.length > 0;
     },
