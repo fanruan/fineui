@@ -48,11 +48,10 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
 
         this.calendar = BI.createWidget({
-            direction: "top",
-            element: this,
-            logic: {
-                dynamic: false
-            },
+            direction: "custom",
+            // logic: {
+            //     dynamic: false
+            // },
             type: "bi.navigation",
             tab: this.datePicker,
             cardCreator: BI.bind(this._createNav, this)
@@ -64,6 +63,31 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
         this.setValue(o.selectedTime);
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.datePicker,
+                height: 40
+            }, this.calendar],
+            hgap: 10
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
+        });
 
     },
 

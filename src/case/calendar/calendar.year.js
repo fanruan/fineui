@@ -65,7 +65,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    width: 38,
+                    width: 45,
                     value: td.text,
                     disabled: td.disabled
                 });

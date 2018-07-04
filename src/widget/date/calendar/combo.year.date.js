@@ -45,7 +45,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
                 el: this.popup
             }

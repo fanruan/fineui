@@ -53,7 +53,6 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 
         this.calendar = BI.createWidget({
             direction: "top",
-            element: this,
             logic: {
                 dynamic: true
             },
@@ -80,6 +79,25 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.selectedTime = self.calendar.getValue();
             self.setValue(self.selectedTime);
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.calendar,
+                left: 10,
+                right: 10
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
         });
     },
 

@@ -56,6 +56,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.button_group",
+                cls: "bi-border-top",
                 behaviors: o.behaviors,
                 ref: function () {
                     self.month = this;

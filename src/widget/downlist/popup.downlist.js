@@ -106,7 +106,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        vgap: 5,
+                        innerVGap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];

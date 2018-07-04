@@ -42,7 +42,10 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
                 type: "bi.center_adapt",
                 width: 50,
                 height: c.height,
-                items: [this.text, this.icon]
+                items: [{
+                    el: this.text,
+                    rgap: 10
+                }, this.icon]
             }]
         });
     },
