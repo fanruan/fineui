@@ -99,6 +99,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
+    },
+
+    getContentHeight: function () {
+        return this.editor.getContentHeight();
     }
 });
 BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
