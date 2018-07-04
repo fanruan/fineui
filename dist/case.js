@@ -1703,6 +1703,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
         items = BI.map(items, function (i, item) {
             return BI.map(item, function (j, td) {
+                var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
                     type: "bi.text_item",
                     cls: "bi-list-item-select",
@@ -1711,7 +1712,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    value: o.year + "-" + o.month + "-" + td.text,
+                    value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
                     // selected: td.currentDay
                 });
