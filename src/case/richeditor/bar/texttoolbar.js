@@ -34,11 +34,6 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 editor: o.editor
             });
         }));
-        this.element.mousedown(function (e) {
-            BI.each(buttons, function (i, btn) {
-                btn.hideIf(e);
-            });
-        });
         BI.createWidget({
             type: "bi.left",
             element: this,

@@ -91,6 +91,10 @@
             return this.instance.getContent();
         },
 
+        getContentHeight: function () {
+            return this.instance.getContentHeight();
+        },
+
         getInstance: function () {
             return this.instance;
         },
@@ -298,6 +302,10 @@
             this.content = this.getElm().element.html();
             this.ne.fireEvent("get");
             return this.content;
+        },
+
+        getContentHeight: function () {
+            return this.elm.element.height();
         },
 
         setContent: function (e) {
