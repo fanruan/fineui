@@ -52763,6 +52763,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            } else if (o.clear || o.block) {
+                this.element.css({lineHeight: o.height + "px"});
             } else {
                 this.element.css({lineHeight: (o.height - 2) + "px"});
             }
@@ -83423,11 +83425,6 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 editor: o.editor
             });
         }));
-        this.element.mousedown(function (e) {
-            BI.each(buttons, function (i, btn) {
-                btn.hideIf(e);
-            });
-        });
         BI.createWidget({
             type: "bi.left",
             element: this,
@@ -83547,6 +83544,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        getContentHeight: function () {
+            return this.instance.getContentHeight();
         },
 
         getInstance: function () {
@@ -83756,6 +83757,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.content = this.getElm().element.html();
             this.ne.fireEvent("get");
             return this.content;
+        },
+
+        getContentHeight: function () {
+            return this.elm.element.height();
         },
 
         setContent: function (e) {
@@ -84523,6 +84528,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
+    },
+
+    getContentHeight: function () {
+        return this.editor.getContentHeight();
     }
 });
 BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";

@@ -16743,6 +16743,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            } else if (o.clear || o.block) {
+                this.element.css({lineHeight: o.height + "px"});
             } else {
                 this.element.css({lineHeight: (o.height - 2) + "px"});
             }
