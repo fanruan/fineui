@@ -14,15 +14,18 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 24,
+                    height: 12,
                     lgap: 10
-                }
+                },
+                tgap: 10,
+                bgap: 5
             }, {
                 type: "bi.button_group",
                 ref: function () {
                     self.checkgroup = this;
                 },
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
+                lgap: 4,
                 value: [BI.DynamicDateCard.TYPE.YEAR],
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year"),
@@ -46,7 +49,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     }
                 }),
                 layouts: [{
-                    type: "bi.left"
+                    type: "bi.left",
+                    rgap: 4
                 }],
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
@@ -82,29 +86,33 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.vertical_adapt",
+                lgap: 2,
                 items: [{
-                    type: "bi.multi_select_item",
-                    ref: function () {
-                        self.workDayBox = this;
-                    },
-                    logic: {
-                        dynamic: true
-                    },
-                    text: BI.i18nText("BI-Basic_Work_Day"),
-                    value: BI.DynamicDateCard.TYPE.WORK_DAY,
-                    listeners: [{
-                        eventName: BI.MultiSelectItem.EVENT_CHANGE,
-                        action: function () {
-                            if(this.isSelected()) {
-                                self.checkgroup.setValue();
+                    el: {
+                        type: "bi.multi_select_item",
+                        ref: function () {
+                            self.workDayBox = this;
+                        },
+                        logic: {
+                            dynamic: true
+                        },
+                        text: BI.i18nText("BI-Basic_Work_Day"),
+                        value: BI.DynamicDateCard.TYPE.WORK_DAY,
+                        listeners: [{
+                            eventName: BI.MultiSelectItem.EVENT_CHANGE,
+                            action: function () {
+                                if(this.isSelected()) {
+                                    self.checkgroup.setValue();
+                                }
+                                self.resultPane.populate(this.isSelected() ? self._getParamJson([{
+                                    dateType: BI.DynamicDateCard.TYPE.WORK_DAY
+                                }]) : []);
+                                self.position = BI.DynamicDateCard.OFFSET.CURRENT;
+                                self.fireEvent("EVENT_CHANGE");
                             }
-                            self.resultPane.populate(this.isSelected() ? self._getParamJson([{
-                                dateType: BI.DynamicDateCard.TYPE.WORK_DAY
-                            }]) : []);
-                            self.position = BI.DynamicDateCard.OFFSET.CURRENT;
-                            self.fireEvent("EVENT_CHANGE");
-                        }
-                    }]
+                        }]
+                    },
+                    bgap: 5
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -119,7 +127,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 },
                 layouts: [{
                     type: "bi.vertical",
-                    vgap: 10,
+                    bgap: 10,
                     hgap: 10
                 }]
             }]

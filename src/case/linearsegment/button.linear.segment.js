@@ -26,7 +26,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.layout",
                     cls: "line-segment-button-line",
-                    height: 3,
+                    height: 2,
                     ref: function () {
                         self.line = this;
                     }

@@ -51353,6 +51353,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             bgap: 0,
             vgap: 0,
             hgap: 0,
+            innerVGap: 0,
             direction: BI.Direction.Top, // 工具栏的方向
             stopEvent: false, // 是否停止mousedown、mouseup事件
             stopPropagation: false, // 是否停止mousedown、mouseup向上冒泡
@@ -51430,7 +51431,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _createView: function () {
         var o = this.options;
         this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
-        this.button_group.element.css({"min-height": o.minHeight + "px"});
+        this.button_group.element.css({"min-height": o.minHeight + "px", "padding-top": o.innerVGap + "px", "padding-bottom": o.innerVGap + "px"});
         return this.button_group;
     },
 
@@ -74203,6 +74204,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
         items = BI.map(items, function (i, item) {
             return BI.map(item, function (j, td) {
+                var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
                     type: "bi.text_item",
                     cls: "bi-list-item-select",
@@ -74211,7 +74213,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    value: o.year + "-" + o.month + "-" + td.text,
+                    value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
                     // selected: td.currentDay
                 });
@@ -74367,7 +74369,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    width: 38,
+                    width: 45,
                     value: td.text,
                     disabled: td.disabled
                 });
@@ -74589,8 +74591,8 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.FirstTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type2",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -74615,8 +74617,8 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -74641,8 +74643,8 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.MidTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type3",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -74667,8 +74669,8 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type1",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -81381,7 +81383,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
                 el: {
                     type: "bi.layout",
                     cls: "line-segment-button-line",
-                    height: 3,
+                    height: 2,
                     ref: function () {
                         self.line = this;
                     }
@@ -88218,7 +88220,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
                 el: this.popup
             }
@@ -88252,7 +88254,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-date-picker bi-background",
+            baseCls: "bi-date-picker",
             height: 40,
             min: "1900-01-01", // 最小日期
             max: "2099-12-31" // 最大日期
@@ -88408,7 +88410,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.YearPicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-year-picker bi-background",
+            baseCls: "bi-year-picker",
             behaviors: {},
             height: 40,
             min: "1900-01-01", // 最小日期
@@ -88567,7 +88569,6 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 
         this.calendar = BI.createWidget({
             direction: "top",
-            element: this,
             logic: {
                 dynamic: true
             },
@@ -88594,6 +88595,25 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.selectedTime = self.calendar.getValue();
             self.setValue(self.selectedTime);
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.calendar,
+                left: 10,
+                right: 10
+            }, {
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
         });
     },
 
@@ -88763,7 +88783,10 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
                 type: "bi.center_adapt",
                 width: 50,
                 height: c.height,
-                items: [this.text, this.icon]
+                items: [{
+                    el: this.text,
+                    rgap: 10
+                }, this.icon]
             }]
         });
     },
@@ -88838,11 +88861,10 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
 
         this.calendar = BI.createWidget({
-            direction: "top",
-            element: this,
-            logic: {
-                dynamic: false
-            },
+            direction: "custom",
+            // logic: {
+            //     dynamic: false
+            // },
             type: "bi.navigation",
             tab: this.datePicker,
             cardCreator: BI.bind(this._createNav, this)
@@ -88854,6 +88876,31 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
         this.setValue(o.selectedTime);
+
+        BI.createWidget({
+            type: "bi.vtape",
+            element: this,
+            items: [{
+                el: this.datePicker,
+                height: 40
+            }, this.calendar],
+            hgap: 10
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
+            }]
+        });
 
     },
 
@@ -89584,10 +89631,10 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         });
 
         this.calendar = BI.createWidget({
-            direction: "top",
-            logic: {
-                dynamic: false
-            },
+            direction: "custom",
+            // logic: {
+            //     dynamic: false
+            // },
             type: "bi.navigation",
             tab: this.datePicker,
             cardCreator: BI.bind(this._createNav, this)
@@ -89602,7 +89649,11 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         BI.createWidget({
             type: "bi.vtape",
             element: this,
-            items: [this.calendar, {
+            hgap: 10,
+            items: [{
+                el: this.datePicker,
+                height: 40
+            }, this.calendar, {
                 el: {
                     type: "bi.dynamic_date_time_select",
                     ref: function () {
@@ -89617,6 +89668,21 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
                     }]
                 },
                 height: 40
+            }]
+        });
+
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "bi-border-top"
+                },
+                height: 1,
+                top: 40,
+                left: 0,
+                right: 0
             }]
         });
         this.setValue(o.selectedTime);
@@ -90278,7 +90344,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                             }]
 
                         },
-                        vgap: 5,
+                        innerVGap: 5,
                         maxHeight: 378
                     };
                     item.el.childValues = [];
@@ -90537,15 +90603,18 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     type: "bi.label",
                     text: BI.i18nText("BI-Multi_Date_Relative_Current_Time"),
                     textAlign: "left",
-                    height: 24,
+                    height: 12,
                     lgap: 10
-                }
+                },
+                tgap: 10,
+                bgap: 5
             }, {
                 type: "bi.button_group",
                 ref: function () {
                     self.checkgroup = this;
                 },
                 chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
+                lgap: 4,
                 value: [BI.DynamicDateCard.TYPE.YEAR],
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year"),
@@ -90569,7 +90638,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     }
                 }),
                 layouts: [{
-                    type: "bi.left"
+                    type: "bi.left",
+                    rgap: 4
                 }],
                 listeners: [{
                     eventName: BI.ButtonGroup.EVENT_CHANGE,
@@ -90605,29 +90675,33 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.vertical_adapt",
+                lgap: 2,
                 items: [{
-                    type: "bi.multi_select_item",
-                    ref: function () {
-                        self.workDayBox = this;
-                    },
-                    logic: {
-                        dynamic: true
-                    },
-                    text: BI.i18nText("BI-Basic_Work_Day"),
-                    value: BI.DynamicDateCard.TYPE.WORK_DAY,
-                    listeners: [{
-                        eventName: BI.MultiSelectItem.EVENT_CHANGE,
-                        action: function () {
-                            if(this.isSelected()) {
-                                self.checkgroup.setValue();
+                    el: {
+                        type: "bi.multi_select_item",
+                        ref: function () {
+                            self.workDayBox = this;
+                        },
+                        logic: {
+                            dynamic: true
+                        },
+                        text: BI.i18nText("BI-Basic_Work_Day"),
+                        value: BI.DynamicDateCard.TYPE.WORK_DAY,
+                        listeners: [{
+                            eventName: BI.MultiSelectItem.EVENT_CHANGE,
+                            action: function () {
+                                if(this.isSelected()) {
+                                    self.checkgroup.setValue();
+                                }
+                                self.resultPane.populate(this.isSelected() ? self._getParamJson([{
+                                    dateType: BI.DynamicDateCard.TYPE.WORK_DAY
+                                }]) : []);
+                                self.position = BI.DynamicDateCard.OFFSET.CURRENT;
+                                self.fireEvent("EVENT_CHANGE");
                             }
-                            self.resultPane.populate(this.isSelected() ? self._getParamJson([{
-                                dateType: BI.DynamicDateCard.TYPE.WORK_DAY
-                            }]) : []);
-                            self.position = BI.DynamicDateCard.OFFSET.CURRENT;
-                            self.fireEvent("EVENT_CHANGE");
-                        }
-                    }]
+                        }]
+                    },
+                    bgap: 5
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -90642,7 +90716,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 },
                 layouts: [{
                     type: "bi.vertical",
-                    vgap: 10,
+                    bgap: 10,
                     hgap: 10
                 }]
             }]
@@ -95527,7 +95601,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -95559,7 +95633,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -95567,7 +95641,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -95621,7 +95695,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -95653,7 +95727,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -95661,7 +95735,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -95711,7 +95785,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -95743,7 +95817,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -95751,7 +95825,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96088,7 +96162,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96122,7 +96196,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96130,7 +96204,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96172,7 +96246,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96206,7 +96280,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96214,7 +96288,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96256,7 +96330,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96290,7 +96364,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96298,7 +96372,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96340,7 +96414,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96373,7 +96447,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96381,7 +96455,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96429,7 +96503,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96462,7 +96536,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96470,7 +96544,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -96518,7 +96592,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -96551,7 +96625,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: "base-line-conn-background",
-                width: 13,
+                width: 12,
                 height: o.height
             });
         });
@@ -96559,7 +96633,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },
@@ -104752,7 +104826,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -104784,7 +104858,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -104836,7 +104910,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -104868,7 +104942,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -104920,7 +104994,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 25
+            height: 24
         });
     },
     _init: function () {
@@ -104952,7 +105026,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 25,
+            width: 24,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -110292,6 +110366,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 }]
             }, {
                 type: "bi.button_group",
+                cls: "bi-border-top",
                 behaviors: o.behaviors,
                 ref: function () {
                     self.month = this;
@@ -110413,7 +110488,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             popup: {
-                minWidth: 85,
+                minWidth: 100,
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",

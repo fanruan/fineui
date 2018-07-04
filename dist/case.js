@@ -1703,6 +1703,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
 
         items = BI.map(items, function (i, item) {
             return BI.map(item, function (j, td) {
+                var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
                     type: "bi.text_item",
                     cls: "bi-list-item-select",
@@ -1711,7 +1712,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    value: o.year + "-" + o.month + "-" + td.text,
+                    value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled
                     // selected: td.currentDay
                 });
@@ -1867,7 +1868,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
                     once: false,
                     forceSelected: true,
                     height: 24,
-                    width: 38,
+                    width: 45,
                     value: td.text,
                     disabled: td.disabled
                 });
@@ -2089,8 +2090,8 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.FirstTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type2",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2115,8 +2116,8 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2141,8 +2142,8 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.MidTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type3",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -2167,8 +2168,8 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type1",
-            iconWidth: 25,
-            iconHeight: 25
+            iconWidth: 24,
+            iconHeight: 24
         });
     },
     _init: function () {
@@ -8881,7 +8882,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
                 el: {
                     type: "bi.layout",
                     cls: "line-segment-button-line",
-                    height: 3,
+                    height: 2,
                     ref: function () {
                         self.line = this;
                     }

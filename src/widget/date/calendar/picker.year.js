@@ -7,7 +7,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.YearPicker.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-year-picker bi-background",
+            baseCls: "bi-year-picker",
             behaviors: {},
             height: 40,
             min: "1900-01-01", // 最小日期
