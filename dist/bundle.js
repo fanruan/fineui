@@ -36019,8 +36019,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
                 element: this,
-                items: [this._tipText],
-                bgap: 25
+                items: [this._tipText]
             });
         }
     },
