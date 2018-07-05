@@ -246,9 +246,10 @@ BI.Pane = BI.inherit(BI.Widget, {
                 height: 25
             });
             BI.createWidget({
-                type: "bi.absolute_center_adapt",
+                type: "bi.vertical",
                 element: this,
-                items: [this._tipText]
+                items: [this._tipText],
+                bgap: 25
             });
         }
     },
@@ -18122,6 +18123,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineHeight: 2,
             readOnly: false,
             lineNumbers: false,
+            paramMatch: true, // 用来判断是否需要在代码中匹配参数，默认为true, R语言是不需要匹配参数
             // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
@@ -18134,9 +18136,9 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var conf = {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false,
+            lineNumbers: o.lineNumbers,
             readOnly: o.readOnly,
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         };
         o.readOnly && (conf.cursorBlinkRate = -1);
@@ -18275,19 +18277,23 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        var self = this, result;
+        var self = this, o = this.options, result;
         this.refresh();
         self.editor.setValue("");
-        result = this._analyzeContent(v || "");
-        BI.each(result, function (i, item) {
-            var fieldRegx = /\$[\{][^\}]*[\}]/;
-            var str = item.match(fieldRegx);
-            if (BI.isNotEmptyArray(str)) {
-                self.insertParam(str[0].substring(2, item.length - 1));
-            } else {
-                self.insertString(item);
-            }
-        });
+        if(o.paramMatch) {
+            result = this._analyzeContent(v || "");
+            BI.each(result, function (i, item) {
+                var fieldRegx = /\$[\{][^\}]*[\}]/;
+                var str = item.match(fieldRegx);
+                if (BI.isNotEmptyArray(str)) {
+                    self.insertParam(str[0].substring(2, item.length - 1));
+                } else {
+                    self.insertString(item);
+                }
+            });
+        }else {
+            self.editor.setValue(v);
+        }
         this._checkWaterMark();
     },
 
@@ -18318,7 +18324,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 BI.CodeEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CodeEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.CodeEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.shortcut("bi.code_editor", BI.CodeEditor);/**
+BI.shortcut("bi.code_editor", BI.CodeEditor);
+/**
  * Created by GUY on 2015/4/15.
  * @class BI.Editor
  * @extends BI.Single
