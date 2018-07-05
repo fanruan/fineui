@@ -4550,6 +4550,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   -moz-osx-font-smoothing: grayscale;
 }
 .close-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
 }
 .close-font .b-font:before {
@@ -4561,6 +4562,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .close-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
 }
 .close-h-font .b-font:before {
@@ -4577,6 +4579,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .close-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
 }
 .close-ha-font .b-font:before {
@@ -4598,6 +4601,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .circle-close-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d5;');
 }
 .circle-close-font .b-font:before {
@@ -4609,6 +4613,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .search-close-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
 }
 .search-close-h-font .b-font:before {
@@ -4625,6 +4630,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .pre-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70d;');
 }
 .pre-page-h-font .b-font:before {
@@ -4641,6 +4647,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .next-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .next-page-h-font .b-font:before {
@@ -4657,6 +4664,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .search-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6dc;');
 }
 .search-font .b-font:before {
@@ -4668,6 +4676,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .date-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe733;');
 }
 .date-font .b-font:before {
@@ -4679,6 +4688,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .date-change-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe72f;');
 }
 .date-change-h-font .b-font:before {
@@ -4695,6 +4705,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .dot-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
 }
 .dot-font .b-font:before {
@@ -4706,6 +4717,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #232e40;
 }
 .dot-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
 }
 .dot-h-font .b-font:before {
@@ -4722,6 +4734,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #232e40;
 }
 .dot-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
 }
 .dot-ha-font .b-font:before {
@@ -4743,6 +4756,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #ffffff;
 }
 .dot-e-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe762;');
 }
 .dot-e-font .b-font:before {
@@ -4767,6 +4781,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #ffffff;
 }
 .pull-right-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .pull-right-font .b-font:before {
@@ -4778,6 +4793,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .pull-right-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .pull-right-h-font .b-font:before {
@@ -4794,6 +4810,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .pull-right-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .pull-right-ha-font .b-font:before {
@@ -4815,6 +4832,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .pull-right-e-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .pull-right-e-font .b-font:before {
@@ -4839,6 +4857,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .copy-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
 }
 .copy-font .b-font:before {
@@ -4850,6 +4869,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .copy-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
 }
 .copy-h-font .b-font:before {
@@ -4866,6 +4886,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #232e40;
 }
 .copy-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
 }
 .copy-ha-font .b-font:before {
@@ -4887,6 +4908,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .copy-e-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bd;');
 }
 .copy-e-font .b-font:before {
@@ -4911,6 +4933,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .check-mark-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .check-mark-font .b-font:before {
@@ -4922,6 +4945,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .check-mark-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .check-mark-h-font .b-font:before {
@@ -4938,6 +4962,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .check-mark-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .check-mark-ha-font .b-font:before {
@@ -4959,6 +4984,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .check-mark-e-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .check-mark-e-font .b-font:before {
@@ -4984,6 +5010,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 /** dashboard组件/控件 下拉列表图标字体 ~end~**/
 .row-pre-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d9;');
 }
 .row-pre-page-h-font .b-font:before {
@@ -5000,6 +5027,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .row-next-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
 }
 .row-next-page-h-font .b-font:before {
@@ -5016,6 +5044,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .column-pre-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
 }
 .column-pre-page-h-font .b-font:before {
@@ -5032,6 +5061,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .column-next-page-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
 }
 .column-next-page-h-font .b-font:before {
@@ -5048,6 +5078,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .expander-right-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
 }
 .expander-right-font .b-font:before {
@@ -5059,6 +5090,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .expander-down-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
 }
 .expander-down-font .b-font:before {
@@ -5070,6 +5102,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .solid-triangle-top-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
 }
 .solid-triangle-top-font .b-font:before {
@@ -5086,6 +5119,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .solid-triangle-bottom-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
 }
 .solid-triangle-bottom-font .b-font:before {
@@ -5102,6 +5136,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .trigger-triangle-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe64e;');
 }
 .trigger-triangle-font .b-font:before {
@@ -5123,6 +5158,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #999999;
 }
 .pull-up-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
 }
 .pull-up-font .b-font:before {
@@ -5134,6 +5170,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .pull-down-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .pull-down-font .b-font:before {
@@ -5145,6 +5182,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #647185;
 }
 .pull-down-h-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .pull-down-h-font .b-font:before {
@@ -5161,6 +5199,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #647185;
 }
 .pull-down-ha-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .pull-down-ha-font .b-font:before {
@@ -5182,6 +5221,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #647185;
 }
 .check-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .check-font .b-font:before {
@@ -5193,6 +5233,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #3685f2;
 }
 .item-check-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6cf;');
 }
 .item-check-font .b-font:before {
@@ -5214,6 +5255,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #ffffff;
 }
 .primary-key-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe740;');
 }
 .primary-key-font .b-font:before {
@@ -5230,6 +5272,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .drag-tag-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d0;');
 }
 .drag-tag-font .b-font:before {
@@ -5241,6 +5284,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #faaa39;
 }
 .less-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75e;');
 }
 .less-font .b-font:before {
@@ -5262,6 +5306,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .less-equal-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe761;');
 }
 .less-equal-font .b-font:before {
@@ -5283,6 +5328,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-bold-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75b;');
 }
 .text-bold-font .b-font:before {
@@ -5294,6 +5340,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-italic-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75c;');
 }
 .text-italic-font .b-font:before {
@@ -5305,6 +5352,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-underline-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
 }
 .text-underline-font .b-font:before {
@@ -5316,6 +5364,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-color-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75a;');
 }
 .text-color-font .b-font:before {
@@ -5327,6 +5376,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-background-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe758;');
 }
 .text-background-font .b-font:before {
@@ -5338,6 +5388,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-color-underline-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
 }
 .text-color-underline-font .b-font:before {
@@ -5349,6 +5400,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-align-left-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6ca;');
 }
 .text-align-left-font .b-font:before {
@@ -5360,6 +5412,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-align-center-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6bf;');
 }
 .text-align-center-font .b-font:before {
@@ -5371,6 +5424,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-align-right-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6c8;');
 }
 .text-align-right-font .b-font:before {
@@ -5382,6 +5436,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .toast-error-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe757;');
 }
 .toast-error-font .b-font:before {
@@ -5393,6 +5448,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .toast-success-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe756;');
 }
 .toast-success-font .b-font:before {
@@ -5404,6 +5460,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .toast-warning-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe755;');
 }
 .toast-warning-font .b-font:before {
@@ -5415,6 +5472,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .toast-message-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe74b;');
 }
 .toast-message-font .b-font:before {
@@ -5426,6 +5484,7 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-add-tip-font .b-font {
+  font-size: 16px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6dd;');
 }
 .text-add-tip-font .b-font:before {

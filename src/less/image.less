@@ -315,10 +315,11 @@
 @color-bi-font-active: #3f8ce8;
 
 // 默认font
-.font(@class,@content, @color: @color-bi-font-native) {
+.font(@class,@content, @color: @color-bi-font-native, @fontSize: 16px) {
   @fc: "\@{content}";
   .@{class} {
     & .b-font {
+      font-size: 16px;
       *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
@@ -333,10 +334,11 @@
 }
 
 // 有悬浮效果的font
-.font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover) {
+.font-hover(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @fontSize: 16px) {
   @fc: "\@{content}";
   .@{class} {
     & .b-font {
+      font-size: 16px;
       *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
@@ -356,10 +358,11 @@
 }
 
 // 有默认、激活(选中)的font
-.font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active) {
+.font-hover-active(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @fontSize: 16px) {
   @fc: "\@{content}";
   .@{class} {
     & .b-font {
+      font-size: 16px;
       *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
@@ -384,10 +387,11 @@
   }
 }
 
-.font-effect(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @color-selected: @color-bi-font-active) {
+.font-effect(@class,@content,@color-native: @color-bi-font-native, @color-hover: @color-bi-font-hover, @color-active: @color-bi-font-active, @color-selected: @color-bi-font-active, @fontSize: 16px) {
   @fc: "\@{content}";
   .@{class} {
     & .b-font {
+      font-size: 16px;
       *zoom: ~"expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#x@{content};')";
     }
     & .b-font:before {
