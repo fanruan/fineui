@@ -50671,13 +50671,13 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var fieldFormattedName = this.options.paramFormatter(fieldId) || "undefined";
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        var showName = fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
+        var showName = fieldFormattedName.replaceAll("^<!.*!>$", function (str) {
             return str.substring(2, str.length - 2);
         });
         this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
         var className = "fieldName";
-        if (BI.isNotNull(fieldFormattedName.match(/^<!.*!>$/)) && !force) {
+        if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
@@ -52763,6 +52763,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            } else if (o.clear || o.block) {
+                this.element.css({lineHeight: o.height + "px"});
             } else {
                 this.element.css({lineHeight: (o.height - 2) + "px"});
             }
@@ -70012,7 +70014,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             if (mouseMoveTracker.isDragging()) {
                 start = true;
                 offset += deltaX;
-                size = BI.clamp(defaultSize + offset, 10, o.width - 15);
+                size = BI.clamp(defaultSize + offset, 30, o.width - 40);
 
                 self.regionResizerHandler.element.addClass("dragging");
                 self._setRegionResizerHandlerPosition(size - 3, 0);
@@ -70020,7 +70022,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
 
         }, function () {
             if (start === true) {
-                o.regionColumnSize[0] = BI.clamp(size, 10, o.width - 15);
+                o.regionColumnSize[0] = BI.clamp(size, 30, o.width - 40);
                 self.table.setRegionColumnSize(o.regionColumnSize);
                 if (o.isResizeAdapt === true) {
                     var freezeColumnSize = self._getFreezeColumnSize();
@@ -83423,11 +83425,6 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
                 editor: o.editor
             });
         }));
-        this.element.mousedown(function (e) {
-            BI.each(buttons, function (i, btn) {
-                btn.hideIf(e);
-            });
-        });
         BI.createWidget({
             type: "bi.left",
             element: this,
@@ -83547,6 +83544,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         getValue: function () {
             return this.instance.getContent();
+        },
+
+        getContentHeight: function () {
+            return this.instance.getContentHeight();
         },
 
         getInstance: function () {
@@ -83756,6 +83757,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.content = this.getElm().element.html();
             this.ne.fireEvent("get");
             return this.content;
+        },
+
+        getContentHeight: function () {
+            return this.elm.element.height();
         },
 
         setContent: function (e) {
@@ -84523,6 +84528,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.editor.getValue();
+    },
+
+    getContentHeight: function () {
+        return this.editor.getContentHeight();
     }
 });
 BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
