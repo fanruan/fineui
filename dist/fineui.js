@@ -83275,11 +83275,13 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.instance;
         var image = new Image();
-        var attrs = BI.DOM.getImage(o.paramFormatter(param));
+        var name = o.paramFormatter(param);
+        var attrs = BI.DOM.getImage(name);
         image.src = attrs.src;
         image.alt = param;
         $(image).addClass("rich-editor-param");
         $(image).attr("style", attrs.style);
+        $(image).attr("name", name);
         this.options.editor.insertHTML($("<div>").append(image).html());
         // var sel = this._get$Sel();
         // var wrapper = o.editor.instance.getElm().element;
