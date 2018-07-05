@@ -41,10 +41,10 @@ BI.Pane = BI.inherit(BI.Widget, {
                 height: 25
             });
             BI.createWidget({
-                type: "bi.vertical",
+                type: "bi.absolute_center_adapt",
+                cls: "tip-text",
                 element: this,
-                items: [this._tipText],
-                bgap: 25
+                items: [this._tipText]
             });
         }
     },
