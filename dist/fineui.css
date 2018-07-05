@@ -4312,12 +4312,12 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .ztree li ul.line {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png');
   _background: none;
 }
 .bi-theme-dark .ztree li ul.line {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png');
   _background: none;
 }
