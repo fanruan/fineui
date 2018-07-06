@@ -113394,12 +113394,12 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             "keys", "allKeys", "values", "pairs", "invert",
             "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
             var old = BI[name];
-            BI[name] = function (obj, fn) {
+            BI[name] = function (obj, fn, context) {
                 return typeof fn === "function" ? old(obj, function (key, value) {
                     if (!(key in Fix.$$skipArray)) {
                         return fn.apply(this, arguments);
                     }
-                }) : old.apply(this, arguments);
+                }, context) : old.apply(this, arguments);
             };
         });
         BI.isEmpty = function (ob) {
