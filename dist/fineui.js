@@ -36267,7 +36267,6 @@ BI.Pane = BI.inherit(BI.Widget, {
             });
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
-                cls: "tip-text",
                 element: this,
                 items: [this._tipText]
             });
