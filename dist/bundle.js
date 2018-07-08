@@ -67225,13 +67225,19 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     populate: function (items, header) {
-        if (items && this.options.items !== items) {
+        var headerChanged = this.options.header !== header;
+        var itemsChanged = this.options.items !== items;
+        if(header && headerChanged) {
+            this.options.header = header;
+        }
+        if(items && itemsChanged) {
             this.options.items = items;
+        }
+        if (items && itemsChanged) {
             this.items = this._getItems();
             this._restore();
         }
-        if (header && this.options.header !== header) {
-            this.options.header = header;
+        if (header && headerChanged) {
             this.header = this._getHeader();
             this._restore();
         }
@@ -67249,7 +67255,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut("bi.grid_table", BI.GridTable);/**
+BI.shortcut("bi.grid_table", BI.GridTable);
+/**
  * QuickGridTable
  *
  * Created by GUY on 2016/1/12.
@@ -113394,12 +113401,12 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             "keys", "allKeys", "values", "pairs", "invert",
             "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
             var old = BI[name];
-            BI[name] = function (obj, fn) {
+            BI[name] = function (obj, fn, context) {
                 return typeof fn === "function" ? old(obj, function (key, value) {
                     if (!(key in Fix.$$skipArray)) {
                         return fn.apply(this, arguments);
                     }
-                }) : old.apply(this, arguments);
+                }, context) : old.apply(this, arguments);
             };
         });
         BI.isEmpty = function (ob) {
