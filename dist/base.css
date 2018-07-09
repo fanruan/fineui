@@ -781,6 +781,9 @@ li.CodeMirror-hint-active {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-pane {
+  min-height: 25px;
+}
 .bi-rich-editor .rich-editor-param {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
@@ -821,9 +824,9 @@ li.CodeMirror-hint-active {
   overflow-x: hidden;
   overflow-y: hidden;
   background: #242640;
-  border-right: 1px solid #525466;
-  border-top: 1px solid #525466;
-  border-bottom: 1px solid #525466;
+  border-right: 1px solid #3a3c53;
+  border-top: 1px solid #3a3c53;
+  border-bottom: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-segment > .first-element {
   border-left: 1px solid #242640;
@@ -1405,10 +1408,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-collection-table-cell.first-row {
-  border-top: 1px solid #525466;
+  border-top: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-collection-table-cell.first-col {
-  border-left: 1px solid #525466;
+  border-left: 1px solid #3a3c53;
 }
 
 .bi-quick-collection-table > div > .bi-collection {
@@ -1434,10 +1437,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-grid-table-cell.first-row {
-  border-top: 1px solid #525466;
+  border-top: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-grid-table-cell.first-col {
-  border-left: 1px solid #525466;
+  border-left: 1px solid #3a3c53;
 }
 
 .scrollbar-layout-main {
@@ -1448,8 +1451,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   transition-duration: 250ms;
   transition-timing-function: ease;
   user-select: none;
-  background-color: rgba(102, 102, 102, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
+  background-color: rgba(135, 141, 159, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d878d9f,endColorstr=#0d878d9f);
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
@@ -1472,8 +1475,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   height: 10px;
   left: 0;
   transition-property: background-color;
-  background-color: rgba(102, 102, 102, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d666666,endColorstr=#0d666666);
+  background-color: rgba(135, 141, 159, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d878d9f,endColorstr=#0d878d9f);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
   background-color: rgba(240, 243, 247, 0.05);
@@ -1530,8 +1533,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
  */
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .public-scrollbar-face:after {
-  background-color: rgba(102, 102, 102, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d666666,endColorstr=#4d666666);
+  background-color: rgba(135, 141, 159, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d878d9f,endColorstr=#4d878d9f);
 }
 .bi-theme-dark .public-scrollbar-face:after {
   background-color: rgba(240, 243, 247, 0.3);
@@ -1540,8 +1543,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
 .public-scrollbar-face-active:after {
-  background-color: rgba(102, 102, 102, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3666666,endColorstr=#b3666666);
+  background-color: rgba(135, 141, 159, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3878d9f,endColorstr=#b3878d9f);
 }
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
@@ -1606,31 +1609,31 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-left: 1px solid #e8eaed;
 }
 .bi-theme-dark .bi-table > div > div > table {
-  border-bottom: 1px solid #525466;
-  border-right: 1px solid #525466;
+  border-bottom: 1px solid #3a3c53;
+  border-right: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-table > div.top-left > div > div > table {
-  border-bottom: 1px solid #525466;
-  border-right: 1px solid #525466;
+  border-bottom: 1px solid #3a3c53;
+  border-right: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-table > div.top-right > div > div > table {
-  border-bottom: 1px solid #525466;
-  border-right: 1px solid #525466;
+  border-bottom: 1px solid #3a3c53;
+  border-right: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-table > div.bottom-left > div > div > table {
-  border-bottom: 1px solid #525466;
-  border-right: 1px solid #525466;
+  border-bottom: 1px solid #3a3c53;
+  border-right: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #525466;
-  border-bottom: 1px solid #525466;
+  border-right: 1px solid #3a3c53;
+  border-bottom: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-table > div > div > table > tbody > tr > td,
 .bi-theme-dark .bi-table > div > div > div > table > tbody > tr > td,
 .bi-theme-dark .bi-table > div > div > table > thead > tr > td,
 .bi-theme-dark .bi-table > div > div > div > table > thead > tr > td {
-  border-top: 1px solid #525466;
-  border-left: 1px solid #525466;
+  border-top: 1px solid #3a3c53;
+  border-left: 1px solid #3a3c53;
 }
 
 .bi-resizable-table-cell .resizable-table-cell-resizer-container {
@@ -1958,7 +1961,7 @@ ul.ztree.zTreeDragUL {
   border-left: none;
 }
 .bi-theme-dark .bi-popup-view .list-view-toolbar > .center-element {
-  border-left: 1px solid #525466;
+  border-left: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-popup-view .list-view-toolbar > .first-element {
   border-left: none;

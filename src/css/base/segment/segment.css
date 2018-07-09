@@ -27,9 +27,9 @@
   overflow-x: hidden;
   overflow-y: hidden;
   background: #242640;
-  border-right: 1px solid #525466;
-  border-top: 1px solid #525466;
-  border-bottom: 1px solid #525466;
+  border-right: 1px solid #3a3c53;
+  border-top: 1px solid #3a3c53;
+  border-bottom: 1px solid #3a3c53;
 }
 .bi-theme-dark .bi-segment > .first-element {
   border-left: 1px solid #242640;
