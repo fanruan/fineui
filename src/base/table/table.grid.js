@@ -455,13 +455,19 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     populate: function (items, header) {
-        if (items && this.options.items !== items) {
+        var headerChanged = this.options.header !== header;
+        var itemsChanged = this.options.items !== items;
+        if(header && headerChanged) {
+            this.options.header = header;
+        }
+        if(items && itemsChanged) {
             this.options.items = items;
+        }
+        if (items && itemsChanged) {
             this.items = this._getItems();
             this._restore();
         }
-        if (header && this.options.header !== header) {
-            this.options.header = header;
+        if (header && headerChanged) {
             this.header = this._getHeader();
             this._restore();
         }
