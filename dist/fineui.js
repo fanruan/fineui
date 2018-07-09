@@ -36302,8 +36302,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
                 element: this,
-                items: [this._tipText],
-                bgap: 25
+                items: [this._tipText]
             });
         }
     },
@@ -50705,13 +50704,13 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var fieldFormattedName = this.options.paramFormatter(fieldId) || "undefined";
         var from = this.editor.getCursor();
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
-        var showName = fieldFormattedName.replaceAll(/^<!.*!>$/, function (str) {
+        var showName = fieldFormattedName.replaceAll("^<!.*!>$", function (str) {
             return str.substring(2, str.length - 2);
         });
         this.editor.replaceSelection("\u200b" + showName + "\u200b");
         var to = this.editor.getCursor();
         var className = "fieldName";
-        if (BI.isNotNull(fieldFormattedName.match(/^<!.*!>$/)) && !force) {
+        if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
         this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
@@ -52797,6 +52796,8 @@ BI.shortcut("bi.image_button", BI.ImageButton);(function ($) {
             var o = this.options, self = this;
             if (BI.isNumber(o.height) && !o.clear && !o.block) {
                 this.element.css({height: o.height + "px", lineHeight: (o.height - 2) + "px"});
+            } else if (o.clear || o.block) {
+                this.element.css({lineHeight: o.height + "px"});
             } else {
                 this.element.css({lineHeight: (o.height - 2) + "px"});
             }
@@ -54175,6 +54176,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
             lineHeight: 2,
             readOnly: false,
             lineNumbers: false,
+            paramMatch: true, // 用来判断是否需要在代码中匹配参数，默认为true, R语言是不需要匹配参数
             // 参数显示值构造函数
             paramFormatter: function (v) {
                 return v;
@@ -54187,9 +54189,9 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         var conf = {
             textWrapping: true,
             lineWrapping: true,
-            lineNumbers: false,
+            lineNumbers: o.lineNumbers,
             readOnly: o.readOnly,
-            //解决插入字段由括号或其他特殊字符包围时分裂的bug
+            // 解决插入字段由括号或其他特殊字符包围时分裂的bug
             specialChars: /[\u0000-\u001f\u007f\u00ad\u200c-\u200f\u2028\u2029\ufeff]/
         };
         o.readOnly && (conf.cursorBlinkRate = -1);
@@ -54328,19 +54330,23 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        var self = this, result;
+        var self = this, o = this.options, result;
         this.refresh();
         self.editor.setValue("");
-        result = this._analyzeContent(v || "");
-        BI.each(result, function (i, item) {
-            var fieldRegx = /\$[\{][^\}]*[\}]/;
-            var str = item.match(fieldRegx);
-            if (BI.isNotEmptyArray(str)) {
-                self.insertParam(str[0].substring(2, item.length - 1));
-            } else {
-                self.insertString(item);
-            }
-        });
+        if(o.paramMatch) {
+            result = this._analyzeContent(v || "");
+            BI.each(result, function (i, item) {
+                var fieldRegx = /\$[\{][^\}]*[\}]/;
+                var str = item.match(fieldRegx);
+                if (BI.isNotEmptyArray(str)) {
+                    self.insertParam(str[0].substring(2, item.length - 1));
+                } else {
+                    self.insertString(item);
+                }
+            });
+        }else {
+            self.editor.setValue(v);
+        }
         this._checkWaterMark();
     },
 
@@ -54371,7 +54377,8 @@ BI.CodeEditor = BI.inherit(BI.Single, {
 BI.CodeEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.CodeEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.CodeEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.shortcut("bi.code_editor", BI.CodeEditor);/**
+BI.shortcut("bi.code_editor", BI.CodeEditor);
+/**
  * Created by GUY on 2015/4/15.
  * @class BI.Editor
  * @extends BI.Single
@@ -67500,13 +67507,19 @@ BI.GridTable = BI.inherit(BI.Widget, {
     },
 
     populate: function (items, header) {
-        if (items && this.options.items !== items) {
+        var headerChanged = this.options.header !== header;
+        var itemsChanged = this.options.items !== items;
+        if(header && headerChanged) {
+            this.options.header = header;
+        }
+        if(items && itemsChanged) {
             this.options.items = items;
+        }
+        if (items && itemsChanged) {
             this.items = this._getItems();
             this._restore();
         }
-        if (header && this.options.header !== header) {
-            this.options.header = header;
+        if (header && headerChanged) {
             this.header = this._getHeader();
             this._restore();
         }
@@ -67524,7 +67537,8 @@ BI.GridTable = BI.inherit(BI.Widget, {
         this._restore();
     }
 });
-BI.shortcut("bi.grid_table", BI.GridTable);/**
+BI.shortcut("bi.grid_table", BI.GridTable);
+/**
  * QuickGridTable
  *
  * Created by GUY on 2016/1/12.
@@ -70046,7 +70060,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
             if (mouseMoveTracker.isDragging()) {
                 start = true;
                 offset += deltaX;
-                size = BI.clamp(defaultSize + offset, 10, o.width - 15);
+                size = BI.clamp(defaultSize + offset, 30, o.width - 40);
 
                 self.regionResizerHandler.element.addClass("dragging");
                 self._setRegionResizerHandlerPosition(size - 3, 0);
@@ -70054,7 +70068,7 @@ BI.ResizableTable = BI.inherit(BI.Widget, {
 
         }, function () {
             if (start === true) {
-                o.regionColumnSize[0] = BI.clamp(size, 10, o.width - 15);
+                o.regionColumnSize[0] = BI.clamp(size, 30, o.width - 40);
                 self.table.setRegionColumnSize(o.regionColumnSize);
                 if (o.isResizeAdapt === true) {
                     var freezeColumnSize = self._getFreezeColumnSize();
@@ -83301,11 +83315,13 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         var o = this.options;
         var instance = o.editor.instance;
         var image = new Image();
-        var attrs = BI.DOM.getImage(o.paramFormatter(param));
+        var name = o.paramFormatter(param);
+        var attrs = BI.DOM.getImage(name);
         image.src = attrs.src;
         image.alt = param;
         $(image).addClass("rich-editor-param");
         $(image).attr("style", attrs.style);
+        $(image).attr("name", name);
         this.options.editor.insertHTML($("<div>").append(image).html());
         // var sel = this._get$Sel();
         // var wrapper = o.editor.instance.getElm().element;
@@ -95742,7 +95758,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            cls: "tree-view display-inline",
+            cls: "tree-view display-table",
             expander: {
                 type: "bi.select_tree_expander",
                 isDefaultInit: o.isDefaultInit,
@@ -96298,7 +96314,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            cls: "tree-view display-inline",
+            cls: "tree-view display-table",
             expander: {
                 isDefaultInit: o.isDefaultInit,
                 el: {},
@@ -102580,17 +102596,17 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 default :
@@ -102626,7 +102642,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "center"
+                offsetStyle: "left"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102639,13 +102655,13 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102662,17 +102678,17 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 default :
@@ -113134,6 +113150,9 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTree
 
     _isMatch: function (parentValues, value, keyword) {
         var node = this._getTreeNode(parentValues, value);
+        if (!node) {
+            return false;
+        }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
         return find.find.length > 0 || find.match.length > 0;
     },
@@ -113664,12 +113683,12 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             "keys", "allKeys", "values", "pairs", "invert",
             "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
             var old = BI[name];
-            BI[name] = function (obj, fn) {
+            BI[name] = function (obj, fn, context) {
                 return typeof fn === "function" ? old(obj, function (key, value) {
                     if (!(key in Fix.$$skipArray)) {
                         return fn.apply(this, arguments);
                     }
-                }) : old.apply(this, arguments);
+                }, context) : old.apply(this, arguments);
             };
         });
         BI.isEmpty = function (ob) {
