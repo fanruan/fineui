@@ -36268,8 +36268,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
                 element: this,
-                items: [this._tipText],
-                bgap: 25
+                items: [this._tipText]
             });
         }
     },
@@ -102556,17 +102555,17 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 default :
@@ -102602,7 +102601,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "center"
+                offsetStyle: "left"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102615,13 +102614,13 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102638,17 +102637,17 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "center"
+                        offsetStyle: "left"
                     });
                     break;
                 default :
@@ -113643,12 +113642,12 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             "keys", "allKeys", "values", "pairs", "invert",
             "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
             var old = BI[name];
-            BI[name] = function (obj, fn) {
+            BI[name] = function (obj, fn, context) {
                 return typeof fn === "function" ? old(obj, function (key, value) {
                     if (!(key in Fix.$$skipArray)) {
                         return fn.apply(this, arguments);
                     }
-                }) : old.apply(this, arguments);
+                }, context) : old.apply(this, arguments);
             };
         });
         BI.isEmpty = function (ob) {
