@@ -7762,7 +7762,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            cls: "tree-view display-inline",
+            cls: "tree-view display-table",
             expander: {
                 type: "bi.select_tree_expander",
                 isDefaultInit: o.isDefaultInit,
@@ -8318,7 +8318,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         this._assertId(nodes);
         this.tree = BI.createWidget({
             type: "bi.custom_tree",
-            cls: "tree-view display-inline",
+            cls: "tree-view display-table",
             expander: {
                 isDefaultInit: o.isDefaultInit,
                 el: {},
