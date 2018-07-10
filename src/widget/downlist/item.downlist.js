@@ -1,4 +1,4 @@
-BI.DownListItem = BI.inherit(BI.Single, {
+BI.DownListItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.DownListItem.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -21,30 +21,61 @@ BI.DownListItem = BI.inherit(BI.Single, {
         BI.DownListItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
-            type: "bi.icon_text_item",
-            element: this,
-            height: o.height,
+            type: "bi.label",
+            cls: "list-item-text",
+            textAlign: "left",
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
             text: o.text,
             value: o.value,
-            logic: o.logic,
-            selected: o.selected,
-            disabled: o.disabled,
-            iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth,
-            textHgap: o.textHgap,
-            textVgap: o.textVgap,
-            textLgap: o.textLgap,
-            textRgap: o.textRgap,
-            father: o.father,
-            bubble: o.bubble
+            keyword: o.keyword,
+            height: o.height
         });
-        this.text.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        this.icon = BI.createWidget({
+            type: "bi.center_adapt",
+            width: 36,
+            height: o.height,
+            items: [{
+                el: {
+                    type: "bi.icon",
+                    width: o.iconWidth,
+                    height: o.iconHeight
+                }
+            }]
         });
-        this.text.on(BI.IconTextItem.EVENT_CHANGE, function () {
-            self.fireEvent(BI.DownListItem.EVENT_CHANGE);
-        });
-        // this.setSelected(o.selected);
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left), BI.extend(o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, this.icon, this.text)
+        }))));
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    },
+
+    setText: function () {
+        this.text.setText.apply(this.text, arguments);
+    },
+
+    getText: function () {
+        return this.text.getText();
+    },
+
+    doClick: function () {
+        BI.DownListItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.DownListItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     doRedMark: function () {
@@ -55,25 +86,12 @@ BI.DownListItem = BI.inherit(BI.Single, {
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    isSelected: function () {
-        return this.text.isSelected();
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
     },
 
-    setSelected: function (b) {
-        this.text.setSelected(b);
-        // if (b === true) {
-        //     this.element.addClass("dot-e-font");
-        // } else {
-        //     this.element.removeClass("dot-e-font");
-        // }
-    },
-
-    setValue: function (v) {
-        this.text.setValue(v);
-    },
-
-    getValue: function () {
-        return this.text.getValue();
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
     }
 });
 BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
