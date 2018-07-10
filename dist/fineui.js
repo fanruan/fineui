@@ -37552,7 +37552,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         var v = [];
         BI.each(this.buttons, function (i, item) {
             if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                v = BI.concat(v, item.getValue());
+                v = BI.union(v, item.getValue());
                 return;
             }
             if (item.isEnabled() && item.isSelected && item.isSelected()) {
@@ -111468,35 +111468,11 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_VALID, function () {
-            BI.Bubbles.hide("error");
-            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
-                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
-                self.element.addClass(self.constants.timeErrorCls);
-                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
-                    offsetStyle: "center"
-                });
-                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
-            } else {
-                self._clearTitle();
-                self.element.removeClass(self.constants.timeErrorCls);
-            }
+            self._checkValid();
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
-            BI.Bubbles.hide("error");
-            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
-                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
-                self.element.addClass(self.constants.timeErrorCls);
-                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
-                    offsetStyle: "center"
-                });
-                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
-            } else {
-                self._clearTitle();
-                self.element.removeClass(self.constants.timeErrorCls);
-            }
+            self._checkValid();
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -111534,8 +111510,17 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     // 判格式合法
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        var smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
-        var bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+
+        var smallDate4Check = "";
+        if (BI.isNotNull(smallObj)) {
+            smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
+        }
+
+        var bigDate4Check = "";
+        if (BI.isNotNull(bigObj)) {
+            bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+        }
+
         return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
@@ -111558,10 +111543,29 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     _clearTitle: function () {
         this.setTitle("");
     },
+    _checkValid: function () {
+        var self = this;
+
+        BI.Bubbles.hide("error");
+        var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+        if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+            self.element.addClass(self.constants.timeErrorCls);
+            BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                offsetStyle: "center"
+            });
+            self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+        } else {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+        }
+    },
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
         this.right.setValue(date.end);
+
+        this._checkValid();
     },
     getValue: function () {
         return {start: this.left.getValue(), end: this.right.getValue()};
