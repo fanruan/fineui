@@ -310,7 +310,12 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-connect");
 
-    grunt.registerTask("default", ["less", "concat", "connect", "watch"]);
+    var defaultTask = ["less", "concat", "connect", "watch"];
+    grunt.registerTask("default", defaultTask);
+    grunt.registerTask("compile", function () {
+        grunt.config.set("connect.options.open", false);
+        grunt.task.run(defaultTask);
+    });
     grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
     grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
 };
