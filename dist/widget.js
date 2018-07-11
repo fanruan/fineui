@@ -2271,7 +2271,12 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             popup: {
                 el: this.popupview,
                 stopPropagation: true,
+<<<<<<< HEAD
                 maxHeight: 1000
+=======
+                maxHeight: 1000,
+                minWidth: 140
+>>>>>>> master
             }
         });
 
@@ -2353,7 +2358,11 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
 
 });
 BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
+<<<<<<< HEAD
 BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.Single, {
+=======
+BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.BasicButton, {
+>>>>>>> master
     _defaultConfig: function () {
         var conf = BI.DownListItem.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -2376,6 +2385,7 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         BI.DownListItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
+<<<<<<< HEAD
             type: "bi.icon_text_item",
             element: this,
             height: o.height,
@@ -2429,6 +2439,79 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
 
     getValue: function () {
         return this.text.getValue();
+=======
+            type: "bi.label",
+            cls: "list-item-text",
+            textAlign: "left",
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
+            text: o.text,
+            value: o.value,
+            keyword: o.keyword,
+            height: o.height
+        });
+        this.icon = BI.createWidget({
+            type: "bi.center_adapt",
+            width: 36,
+            height: o.height,
+            items: [{
+                el: {
+                    type: "bi.icon",
+                    width: o.iconWidth,
+                    height: o.iconHeight
+                }
+            }]
+        });
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left), BI.extend(o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, this.icon, this.text)
+        }))));
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    },
+
+    setText: function () {
+        this.text.setText.apply(this.text, arguments);
+    },
+
+    getText: function () {
+        return this.text.getText();
+    },
+
+    doClick: function () {
+        BI.DownListItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.DownListItem.EVENT_CHANGE, this.getValue(), this);
+        }
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
+    },
+
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+>>>>>>> master
     }
 });
 BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
@@ -2461,7 +2544,11 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
+<<<<<<< HEAD
             width: 24,
+=======
+            width: 36,
+>>>>>>> master
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
