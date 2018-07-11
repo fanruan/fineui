@@ -14724,7 +14724,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         return this.editor.getValue(true, function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans);
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
 
                 switch (i.marker.className) {
                     case "fieldName":
@@ -14745,7 +14750,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans);
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
                     case "error-field":
