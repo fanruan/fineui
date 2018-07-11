@@ -50778,7 +50778,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         return this.editor.getValue(true, function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            var markedSpans = _.clone(line.markedSpans);
+            var markedSpans = _.clone(line.markedSpans) || [];
             markedSpans.sort(function (a, b) {
                 return a.from > b.from;
             });
@@ -50804,7 +50804,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            var markedSpans = _.clone(line.markedSpans);
+            var markedSpans = _.clone(line.markedSpans) || [];
             markedSpans.sort(function (a, b) {
                 return a.from > b.from;
             });
