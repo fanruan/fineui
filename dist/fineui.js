@@ -50713,7 +50713,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
-        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
+        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value, replacedWith: $("<span class='" + className + "  start end' />").text(showName)[0]});
         this.editor.focus();
     },
 
@@ -50778,16 +50778,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         return this.editor.getValue(true, function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-<<<<<<< HEAD
             var markedSpans = _.clone(line.markedSpans) || [];
             markedSpans.sort(function (a, b) {
                 return a.from > b.from;
             });
 
             _.forEach(markedSpans, function (i, ms) {
-=======
-            _.forEach(line.markedSpans, function (i, ms) {
->>>>>>> master
 
                 switch (i.marker.className) {
                     case "fieldName":
@@ -50808,16 +50804,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-<<<<<<< HEAD
             var markedSpans = _.clone(line.markedSpans) || [];
             markedSpans.sort(function (a, b) {
                 return a.from > b.from;
             });
 
             _.forEach(markedSpans, function (i, ms) {
-=======
-            _.forEach(line.markedSpans, function (i, ms) {
->>>>>>> master
                 switch (i.marker.className) {
                     case "fieldName":
                     case "error-field":
@@ -54305,7 +54297,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
             options.className = "error-param";
         }
@@ -57577,7 +57569,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -57644,7 +57636,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("bi.sql_editor", BI.SQLEditor);// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+BI.shortcut("bi.sql_editor", BI.SQLEditor);
+// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -90285,12 +90278,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             popup: {
                 el: this.popupview,
                 stopPropagation: true,
-<<<<<<< HEAD
-                maxHeight: 1000
-=======
                 maxHeight: 1000,
                 minWidth: 140
->>>>>>> master
             }
         });
 
@@ -90372,11 +90361,7 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
 
 });
 BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
-<<<<<<< HEAD
-BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.Single, {
-=======
 BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.BasicButton, {
->>>>>>> master
     _defaultConfig: function () {
         var conf = BI.DownListItem.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -90399,61 +90384,6 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         BI.DownListItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
-<<<<<<< HEAD
-            type: "bi.icon_text_item",
-            element: this,
-            height: o.height,
-            text: o.text,
-            value: o.value,
-            logic: o.logic,
-            selected: o.selected,
-            disabled: o.disabled,
-            iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth,
-            textHgap: o.textHgap,
-            textVgap: o.textVgap,
-            textLgap: o.textLgap,
-            textRgap: o.textRgap,
-            father: o.father,
-            bubble: o.bubble
-        });
-        this.text.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.text.on(BI.IconTextItem.EVENT_CHANGE, function () {
-            self.fireEvent(BI.DownListItem.EVENT_CHANGE);
-        });
-        // this.setSelected(o.selected);
-    },
-
-    doRedMark: function () {
-        this.text.doRedMark.apply(this.text, arguments);
-    },
-
-    unRedMark: function () {
-        this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    isSelected: function () {
-        return this.text.isSelected();
-    },
-
-    setSelected: function (b) {
-        this.text.setSelected(b);
-        // if (b === true) {
-        //     this.element.addClass("dot-e-font");
-        // } else {
-        //     this.element.removeClass("dot-e-font");
-        // }
-    },
-
-    setValue: function (v) {
-        this.text.setValue(v);
-    },
-
-    getValue: function () {
-        return this.text.getValue();
-=======
             type: "bi.label",
             cls: "list-item-text",
             textAlign: "left",
@@ -90525,7 +90455,6 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
 
     unHighLight: function () {
         this.text.unHighLight.apply(this.text, arguments);
->>>>>>> master
     }
 });
 BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
@@ -90558,11 +90487,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
-<<<<<<< HEAD
-            width: 24,
-=======
             width: 36,
->>>>>>> master
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
