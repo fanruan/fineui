@@ -37303,7 +37303,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
         var v = [];
         BI.each(this.buttons, function (i, item) {
             if (item.isEnabled() && !BI.isFunction(item.setSelected)) {
-                v = BI.union(v, item.getValue());
+                v = BI.concat(v, item.getValue());
                 return;
             }
             if (item.isEnabled() && item.isSelected && item.isSelected()) {
