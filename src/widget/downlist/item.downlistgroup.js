@@ -27,7 +27,7 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
-            width: 24,
+            width: 36,
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
