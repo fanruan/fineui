@@ -84675,6 +84675,15 @@ BI.Segment = BI.inherit(BI.Widget, {
         });
     },
 
+    _setEnable: function (enable) {
+        BI.Segment.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+    },
+
     setValue: function (v) {
         this.buttonGroup.setValue(v);
     },
@@ -90661,6 +90670,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
+                        lgap: 1,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
