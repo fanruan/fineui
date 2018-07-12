@@ -50713,7 +50713,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
-        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
+        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value, replacedWith: $("<span class='" + className + "  start end' />").text(showName)[0]});
         this.editor.focus();
     },
 
@@ -50778,7 +50778,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         return this.editor.getValue(true, function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans) || [];
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
 
                 switch (i.marker.className) {
                     case "fieldName":
@@ -50799,7 +50804,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans) || [];
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
                     case "error-field":
@@ -54287,7 +54297,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
             options.className = "error-param";
         }
@@ -57559,7 +57569,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -57626,7 +57636,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("bi.sql_editor", BI.SQLEditor);// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+BI.shortcut("bi.sql_editor", BI.SQLEditor);
+// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
