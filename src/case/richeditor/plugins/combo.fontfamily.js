@@ -3,8 +3,8 @@ BI.RichEditorFontChooser = BI.inherit(BI.RichEditorAction, {
         return BI.extend(BI.RichEditorFontChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-rich-editor-font-chooser bi-border bi-card",
             command: "FontName",
-            width: 50,
-            height: 20
+            width: 100,
+            height: 24
         });
     },
 
