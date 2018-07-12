@@ -223,7 +223,7 @@
 }
 .dot-e-font .b-font:before {
   content: "\e762";
-  color: #ffffff;
+  color: transparent;
 }
 .dot-e-font:hover .b-font:before,
 .dot-e-font.hover .b-font:before {
@@ -236,11 +236,11 @@
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";
-  color: #232e40;
+  color: #3685f2;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e762";
-  color: #ffffff;
+  color: transparent;
 }
 .pull-right-font .b-font {
   font-size: 16px;

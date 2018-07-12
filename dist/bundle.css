@@ -1979,6 +1979,10 @@ textarea {
   display: none;
 }
 
+.bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
+  color: #ff4949;
+}
+
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
@@ -2597,14 +2601,14 @@ li.CodeMirror-hint-active {
 }
 .bi-segment > .first-element {
   border-left: 1px solid #3685f2;
-  -webkit-border-radius: 6px 0px 0px 6px;
-  -moz-border-radius: 6px 0px 0px 6px;
-  border-radius: 6px 0px 0px 6px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  border-radius: 2px 0px 0px 2px;
 }
 .bi-segment > .last-element {
-  -webkit-border-radius: 0px 6px 6px 0px;
-  -moz-border-radius: 0px 6px 6px 0px;
-  border-radius: 0px 6px 6px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  border-radius: 0px 2px 2px 0px;
 }
 .bi-segment.disabled > .center-element,
 .bi-segment.disabled > .first-element {
@@ -4537,9 +4541,14 @@ textarea::-webkit-scrollbar-thumb:hover {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png');
   _background: none;
 }
+.auto-color-normal-disabled-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png');
+  _background: none;
+}
 .trans-color-background {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/trans_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/trans_color.png');
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/trans_normal.png');
   _background: none;
 }
 @font-face {
@@ -4767,7 +4776,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .dot-e-font .b-font:before {
   content: "\e762";
-  color: #ffffff;
+  color: transparent;
 }
 .dot-e-font:hover .b-font:before,
 .dot-e-font.hover .b-font:before {
@@ -4780,11 +4789,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";
-  color: #232e40;
+  color: #3685f2;
 }
 .dot-e-font.disabled .b-font:before {
   content: "\e762";
-  color: #ffffff;
+  color: transparent;
 }
 .pull-right-font .b-font {
   font-size: 16px;

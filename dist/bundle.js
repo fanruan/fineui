@@ -28916,10 +28916,10 @@ BI.extend(BI.DOM, {
     };
 
     BI.Actions = {
-        runAction: function (type, config) {
+        runAction: function (type, event, config) {
             BI.each(actions[type], function (i, act) {
                 try {
-                    act(config);
+                    act(event, config);
                 } catch (e) {
                     console.error(e);
                 }
@@ -36147,7 +36147,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标
+            belowMouse: false   // title是否跟随鼠标,
         });
     },
 
@@ -36158,6 +36158,10 @@ BI.Single = BI.inherit(BI.Widget, {
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
+            if (opt.action) {
+                BI.Actions.runAction(opt.action, "hover", opt, title);
+            }
+            BI.Actions.runGlobalAction("hover", opt, title);
         }
     },
 
@@ -36710,9 +36714,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
-                BI.Actions.runAction(o.action, o);
+                BI.Actions.runAction(o.action, "click", o);
             }
-            BI.Actions.runGlobalAction(o);
+            BI.Actions.runGlobalAction("click", o);
         }
     },
 
@@ -77177,13 +77181,28 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     _showPreColor: function (color) {
-        if (color === "") {
-            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
-        } else if (color === "transparent") {
-            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+        if(this.isEnabled()) {
+            if (color === "") {
+                this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+            } else if (color === "transparent") {
+                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
+            } else {
+                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+            }
         } else {
-            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+            if (color === "") {
+                this.colorShow.element.css("background-color", "").removeClass("trans-color-disabled-background").addClass("auto-color-normal-disabled-background");
+            } else if (color === "transparent") {
+                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-disabled-background").addClass("trans-color-disabled-background");
+            } else {
+                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-disabled-background").removeClass("trans-color-disabled-background");
+            }
         }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        this.mask.setVisible(!enable);
     },
 
     setValue: function (color) {
@@ -78467,7 +78486,7 @@ BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);/**
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-icon-text-value-combo",
+            baseCls: "bi-icon-text-value-combo",
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -78518,9 +78537,24 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkError: function (v) {
+        if(BI.isNotNull(v)) {
+            v = BI.isArray(v) ? v : [v];
+            var result = BI.find(this.options.items, function (idx, item) {
+                return BI.contains(v, item.value);
+            });
+            if (BI.isNull(result)) {
+                this.element.removeClass("combo-error").addClass("combo-error");
+            } else {
+                this.element.removeClass("combo-error");
+            }
+        }
+    },
+
     setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);
+        this._checkError(v);
     },
 
     getValue: function () {
@@ -87399,6 +87433,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
+            cls: "select-text-label",
             textAlign: "left",
             height: o.height,
             text: o.text,
