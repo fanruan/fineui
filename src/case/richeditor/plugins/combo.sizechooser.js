@@ -11,7 +11,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
             command: "FontSize",
             width: 50,
-            height: 20
+            height: 24
         });
     },
 

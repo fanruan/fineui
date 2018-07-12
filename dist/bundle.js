@@ -84096,8 +84096,8 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
         return BI.extend(BI.RichEditorFontChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-rich-editor-font-chooser bi-border bi-card",
             command: "FontName",
-            width: 50,
-            height: 20
+            width: 100,
+            height: 24
         });
     },
 
@@ -84169,7 +84169,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
             command: "FontSize",
             width: 50,
-            height: 20
+            height: 24
         });
     },
 
