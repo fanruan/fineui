@@ -13586,7 +13586,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            trigger: o.trigger,
             el: this.trigger,
             adjustLength: 1,
             popup: {
