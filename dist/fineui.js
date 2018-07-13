@@ -108081,7 +108081,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL);
             });
         });
-        this.formatTextWrapper = BI.createWidget({
+        BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
@@ -108499,8 +108499,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
 
     _setLabelPosition: function (percent) {
         this.label.element.css({left: percent + "%"});
-        // this.label.formatTextWrapper.attr("items")[0].left = percent + "%";
-        // this.label.formatTextWrapper.resize();
     },
 
     _setSliderPosition: function (percent) {

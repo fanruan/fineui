@@ -63,7 +63,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL);
             });
         });
-        this.formatTextWrapper = BI.createWidget({
+        BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
