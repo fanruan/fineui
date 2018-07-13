@@ -11,7 +11,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -21,8 +21,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -61,9 +61,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20

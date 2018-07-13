@@ -13586,6 +13586,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            trigger: o.trigger,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -20029,7 +20030,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL);
             });
         });
-        BI.createWidget({
+        this.formatTextWrapper = BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
@@ -20447,6 +20448,8 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
 
     _setLabelPosition: function (percent) {
         this.label.element.css({left: percent + "%"});
+        // this.label.formatTextWrapper.attr("items")[0].left = percent + "%";
+        // this.label.formatTextWrapper.resize();
     },
 
     _setSliderPosition: function (percent) {
@@ -25249,6 +25252,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
+            trigger: o.trigger,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -25269,7 +25273,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

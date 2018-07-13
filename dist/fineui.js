@@ -54301,10 +54301,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
+        var className = "param";
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = "error-param";
+            className = "error-param";
         }
+        var options = {className: className, atomic: true, replacedWith: $("<span class='" + className + " start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -76381,7 +76382,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -76411,7 +76412,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]
@@ -77449,9 +77450,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
-    _setEnable: function (enable) {
+    _setEnable: function () {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
+        this._showPreColor(this.getValue());
     },
 
     setValue: function (color) {
@@ -77513,7 +77514,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -77523,8 +77524,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -77563,9 +77564,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20
@@ -101637,6 +101638,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            trigger: o.trigger,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -108080,7 +108082,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.SignTextEditor.EVENT_CLICK_LABEL);
             });
         });
-        BI.createWidget({
+        this.formatTextWrapper = BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
@@ -108498,6 +108500,8 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
 
     _setLabelPosition: function (percent) {
         this.label.element.css({left: percent + "%"});
+        // this.label.formatTextWrapper.attr("items")[0].left = percent + "%";
+        // this.label.formatTextWrapper.resize();
     },
 
     _setSliderPosition: function (percent) {
@@ -113300,6 +113304,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
+            trigger: o.trigger,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -113320,7 +113325,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

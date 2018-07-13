@@ -3568,7 +3568,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -3598,7 +3598,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]
@@ -4636,9 +4636,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
-    _setEnable: function (enable) {
+    _setEnable: function () {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
+        this._showPreColor(this.getValue());
     },
 
     setValue: function (color) {
@@ -4700,7 +4700,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -4710,8 +4710,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -4750,9 +4750,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20

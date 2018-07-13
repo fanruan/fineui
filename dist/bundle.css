@@ -4591,8 +4591,8 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .auto-color-normal-disabled-background {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png');
+  background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
 .trans-color-background {

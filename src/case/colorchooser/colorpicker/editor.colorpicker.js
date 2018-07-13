@@ -190,9 +190,9 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
-    _setEnable: function (enable) {
+    _setEnable: function () {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
+        this._showPreColor(this.getValue());
     },
 
     setValue: function (color) {

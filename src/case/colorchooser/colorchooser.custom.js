@@ -19,7 +19,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -49,7 +49,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]

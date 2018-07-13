@@ -18247,10 +18247,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
+        var className = "param";
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = "error-param";
+            className = "error-param";
         }
+        var options = {className: className, atomic: true, replacedWith: $("<span class='" + className + " start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
