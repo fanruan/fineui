@@ -130,6 +130,10 @@
   display: none;
 }
 
+.bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
+  color: #ff4949;
+}
+
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }

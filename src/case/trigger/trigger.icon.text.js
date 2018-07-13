@@ -25,6 +25,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
+            cls: "select-text-label",
             textAlign: "left",
             height: o.height,
             text: o.text,

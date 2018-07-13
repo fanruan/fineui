@@ -342,7 +342,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标
+            belowMouse: false   // title是否跟随鼠标,
         });
     },
 
@@ -353,6 +353,10 @@ BI.Single = BI.inherit(BI.Widget, {
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
+            if (opt.action) {
+                BI.Actions.runAction(opt.action, "hover", opt, title);
+            }
+            BI.Actions.runGlobalAction("hover", opt, title);
         }
     },
 
@@ -905,9 +909,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
-                BI.Actions.runAction(o.action, o);
+                BI.Actions.runAction(o.action, "click", o);
             }
-            BI.Actions.runGlobalAction(o);
+            BI.Actions.runGlobalAction("click", o);
         }
     },
 
