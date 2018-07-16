@@ -27015,6 +27015,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var container = opt.container || context;
         var offsetStyle = opt.offsetStyle || {};
         var level = opt.level || "error";
+        var adjustLength = opt.adjustLength || 0;
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
@@ -27030,9 +27031,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
         this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
-        this.get(name).element.css({left: position.left, top: position.top - 2});
+        this.get(name).element.css({left: position.left, top: position.top - adjustLength});
         this.get(name).invisible();
-        if (!$.isTopSpaceEnough(context, this.get(name), 2)) {
+        if (!$.isTopSpaceEnough(context, this.get(name), adjustLength)) {
             if (!this.storeBubbles[name]["left"]) {
                 this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
@@ -27045,9 +27046,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             });
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left - 2, top: position.top});
+            this.get(name).element.css({left: position.left - adjustLength, top: position.top});
             this.get(name).invisible();
-            if (!$.isLeftSpaceEnough(context, this.get(name), 2)) {
+            if (!$.isLeftSpaceEnough(context, this.get(name), adjustLength)) {
                 if (!this.storeBubbles[name]["right"]) {
                     this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
@@ -27060,9 +27061,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 });
                 this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left + 2, top: position.top});
+                this.get(name).element.css({left: position.left + adjustLength, top: position.top});
                 this.get(name).invisible();
-                if (!$.isRightSpaceEnough(context, this.get(name), 2)) {
+                if (!$.isRightSpaceEnough(context, this.get(name), adjustLength)) {
                     if (!this.storeBubbles[name]["bottom"]) {
                         this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
@@ -27075,7 +27076,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     });
                     this.set(name, this.storeBubbles[name]["bottom"]);
                     var position = this._getBottomPosition(name, context, offsetStyle);
-                    this.get(name).element.css({left: position.left, top: position.top + 2});
+                    this.get(name).element.css({left: position.left, top: position.top + adjustLength});
                     this.get(name).invisible();
                 }
             }
@@ -54621,7 +54622,9 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (!this.disabledError && BI.isKey(errorText)) {
-            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this);
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
+                adjustLength: 2
+            });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
         }
@@ -77452,7 +77455,11 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
     _setEnable: function () {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this._showPreColor(this.getValue());
+        this._showPreColor(this._isEmptyRGB() && this.transparent.isSelected() ? "transparent" : BI.DOM.rgb2hex(BI.DOM.json2rgb({
+            r: this.storeValue.r,
+            g: this.storeValue.g,
+            b: this.storeValue.b
+        })));
     },
 
     setValue: function (color) {
@@ -78749,7 +78756,6 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
-            action: o.action,
             items: o.items,
             height: o.height,
             text: o.text,
@@ -78915,7 +78921,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         ref: function () {
                             self.trigger = this;
                         },
-                        action: o.action,
                         items: o.items,
                         height: o.height - 2,
                         text: o.text,
@@ -79505,7 +79510,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
-            action: o.action,
             items: o.items,
             height: o.height,
             text: o.text,
@@ -102389,7 +102393,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         border: 1,
         less: 0,
         less_equal: 1,
-        numTip: ""
+        numTip: "",
+        adjustLength: 2
     },
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
@@ -102675,17 +102680,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 default :
@@ -102721,7 +102729,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "left"
+                offsetStyle: "left",
+                adjustLength: c.adjustLength
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102734,13 +102743,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102757,17 +102768,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustLength: c.adjustLength
                     });
                     break;
                 default :
@@ -113304,7 +113318,6 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
-            trigger: o.trigger,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
