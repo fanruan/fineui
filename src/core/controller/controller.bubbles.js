@@ -112,7 +112,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var container = opt.container || context;
         var offsetStyle = opt.offsetStyle || {};
         var level = opt.level || "error";
-        var adjustLength = opt.adjustLength || 0;
+        var adjustTop = opt.adjustTop || 0;
+        var adjustRight = opt.adjustRight || 0;
+        var adjustLeft = opt.adjustLeft || 0;
+        var adjustBottom = opt.adjustBottom || 0;
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
@@ -128,9 +131,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
         this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
-        this.get(name).element.css({left: position.left, top: position.top - adjustLength});
+        this.get(name).element.css({left: position.left + adjustLeft, top: position.top - adjustTop});
         this.get(name).invisible();
-        if (!$.isTopSpaceEnough(context, this.get(name), adjustLength)) {
+        if (!$.isTopSpaceEnough(context, this.get(name), adjustTop)) {
             if (!this.storeBubbles[name]["left"]) {
                 this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
@@ -143,9 +146,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             });
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left - adjustLength, top: position.top});
+            this.get(name).element.css({left: position.left - adjustLeft, top: position.top - adjustTop});
             this.get(name).invisible();
-            if (!$.isLeftSpaceEnough(context, this.get(name), adjustLength)) {
+            if (!$.isLeftSpaceEnough(context, this.get(name), adjustLeft)) {
                 if (!this.storeBubbles[name]["right"]) {
                     this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
@@ -158,9 +161,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 });
                 this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left + adjustLength, top: position.top});
+                this.get(name).element.css({left: position.left + adjustRight, top: position.top - adjustTop});
                 this.get(name).invisible();
-                if (!$.isRightSpaceEnough(context, this.get(name), adjustLength)) {
+                if (!$.isRightSpaceEnough(context, this.get(name), adjustLeft)) {
                     if (!this.storeBubbles[name]["bottom"]) {
                         this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
@@ -173,7 +176,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     });
                     this.set(name, this.storeBubbles[name]["bottom"]);
                     var position = this._getBottomPosition(name, context, offsetStyle);
-                    this.get(name).element.css({left: position.left, top: position.top + adjustLength});
+                    this.get(name).element.css({left: position.left + adjustLeft, top: position.top + adjustBottom});
                     this.get(name).invisible();
                 }
             }
