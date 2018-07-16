@@ -10989,6 +10989,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             }
         },
 
+        restoreRngAndClearRange: function () {
+            if (this.savedRange) {
+                this.savedRange.setStart(this.savedRange.endContainer, this.savedRange.endOffset);
+                this.selRng(this.savedRange, this.savedSel);
+            }
+        },
+
         keyDown: function (e, t) {
             this.ne.fireEvent("keydown", e);
         },
