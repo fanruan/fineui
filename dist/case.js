@@ -4636,15 +4636,6 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
-    _setEnable: function () {
-        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this._showPreColor(this._isEmptyRGB() && this.transparent.isSelected() ? "transparent" : BI.DOM.rgb2hex(BI.DOM.json2rgb({
-            r: this.storeValue.r,
-            g: this.storeValue.g,
-            b: this.storeValue.b
-        })));
-    },
-
     setValue: function (color) {
         if (color === "transparent") {
             this.transparent.setSelected(true);
