@@ -4617,22 +4617,21 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     _showPreColor: function (color) {
-        if(this.isEnabled()) {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
-            }
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
         } else {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-disabled-background").addClass("auto-color-normal-disabled-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-disabled-background").addClass("trans-color-disabled-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-disabled-background").removeClass("trans-color-disabled-background");
-            }
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
         }
     },
 
