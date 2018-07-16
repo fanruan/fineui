@@ -36159,15 +36159,9 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
             if (opt.action) {
-                BI.Actions.runAction(opt.action, "hover", BI.extend({}, opt, {
-                    title: o.title,
-                    warningTitle: o.warningTitle
-                }));
+                BI.Actions.runAction(opt.action, "hover", o);
             }
-            BI.Actions.runGlobalAction("hover", BI.extend({}, opt, {
-                title: o.title,
-                warningTitle: o.warningTitle
-            }));
+            BI.Actions.runGlobalAction("hover", o);
         }
     },
 
