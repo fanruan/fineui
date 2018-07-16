@@ -254,6 +254,13 @@
             }
         },
 
+        restoreRngAndClearRange: function () {
+            if (this.savedRange) {
+                this.savedRange.setStart(this.savedRange.endContainer, this.savedRange.endOffset);
+                this.selRng(this.savedRange, this.savedSel);
+            }
+        },
+
         keyDown: function (e, t) {
             this.ne.fireEvent("keydown", e);
         },
