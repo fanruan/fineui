@@ -36407,8 +36407,8 @@ BI.Single = BI.inherit(BI.Widget, {
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
-            if (opt.action) {
-                BI.Actions.runAction(opt.action, "hover", o);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o);
             }
             BI.Actions.runGlobalAction("hover", o);
         }
@@ -78749,6 +78749,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
+            action: o.action,
             items: o.items,
             height: o.height,
             text: o.text,
@@ -78914,6 +78915,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         ref: function () {
                             self.trigger = this;
                         },
+                        action: o.action,
                         items: o.items,
                         height: o.height - 2,
                         text: o.text,
@@ -79503,6 +79505,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            action: o.action,
             items: o.items,
             height: o.height,
             text: o.text,

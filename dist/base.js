@@ -353,8 +353,8 @@ BI.Single = BI.inherit(BI.Widget, {
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
-            if (opt.action) {
-                BI.Actions.runAction(opt.action, "hover", o);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o);
             }
             BI.Actions.runGlobalAction("hover", o);
         }
