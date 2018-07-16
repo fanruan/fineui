@@ -252,8 +252,7 @@
 }
 /* GUTTER */
 .CodeMirror-gutters {
-  border-right: 1px solid #ddd;
-  background-color: #f7f7f7;
+  background-color: #F2F4F7;
   white-space: nowrap;
 }
 .CodeMirror-linenumber {
@@ -631,7 +630,7 @@ div.CodeMirror-cursors {
   background: #d9d9d9;
 }
 .CodeMirror-focused .CodeMirror-selected {
-  background: #d7d4f0;
+  background: #3685F2;
 }
 .CodeMirror-crosshair {
   cursor: crosshair;
