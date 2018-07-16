@@ -354,9 +354,9 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
             if (o.action) {
-                BI.Actions.runAction(o.action, "hover", o);
+                BI.Actions.runAction(o.action, "hover", o, this);
             }
-            BI.Actions.runGlobalAction("hover", o);
+            BI.Actions.runGlobalAction("hover", o, this);
         }
     },
 
