@@ -707,6 +707,46 @@ textarea {
   }
 }
 
+.bi-theme-dark {
+  .bi-list-item-active3 {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-highlight, 6%);
+    }
+    &:active, &.active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      .background-color(@color-bi-background-highlight, 6%);
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
 // 激活和选中时背景高亮
 .bi-list-item-select {
   &:hover, &.hover {
