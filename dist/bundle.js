@@ -73404,8 +73404,8 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
             pId: "",
             open: false,
             height: 24,
-            iconHeight: 12,
-            iconWidth: 12,
+            iconHeight: 16,
+            iconWidth: 16,
             iconCls: ""
         });
     },
@@ -73438,7 +73438,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 12,
+                width: 24,
                 height: o.height
             });
         });
@@ -73446,7 +73446,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 24),
             items: [items]
         });
     },
@@ -73483,7 +73483,8 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
     }
 });
 
-BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);/**
+BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
+/**
  * 加号表示的组节点
  * Created by GUY on 2015/9/6.
  * @class BI.PlusGroupNode
@@ -74015,8 +74016,8 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             height: 24,
             iconCls: "",
-            iconHeight: 12,
-            iconWidth: 12
+            iconHeight: 16,
+            iconWidth: 16
         });
     },
     _init: function () {
@@ -74048,7 +74049,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 12,
+                width: 24,
                 height: o.height
             });
         });
@@ -74056,7 +74057,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 24),
             items: [items]
         });
     },
@@ -74100,7 +74101,8 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);/**
+BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
+/**
  * 树叶子节点
  * Created by GUY on 2015/9/6.
  * @class BI.TreeTextLeafItem
