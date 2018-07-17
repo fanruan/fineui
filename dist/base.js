@@ -18568,7 +18568,7 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustTop: 2
+                adjustYOffset: 2
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());

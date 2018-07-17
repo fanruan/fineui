@@ -4267,6 +4267,12 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-number-editor .pull-down-font {
+  font-size: 12px;
+}
+.bi-number-editor .pull-up-font {
+  font-size: 12px;
+}
 .bi-number-interval .number-interval-small-editor {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
@@ -5838,6 +5844,30 @@ textarea::-webkit-scrollbar-thumb:hover {
 .text-add-tip-font.disabled .b-font:before {
   content: "\e6dd";
   color: #13cd66;
+}
+.add-up-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
+}
+.add-up-font .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.add-up-font.disabled .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.minus-down-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.minus-down-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.minus-down-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
 }
 .tree-collapse-icon-type1 .x-icon {
   display: block;

@@ -1293,6 +1293,30 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e6dd";
   color: #13cd66;
 }
+.add-up-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
+}
+.add-up-font .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.add-up-font.disabled .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.minus-down-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.minus-down-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.minus-down-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
 .tree-collapse-icon-type1 .x-icon {
   display: block;
   background: url('images/2x/icon/tree_collapse_1.png') no-repeat center center;
