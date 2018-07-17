@@ -5786,7 +5786,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: #13cd66;
 }
 .add-up-font .b-font {
-  font-size: 12px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
 }
 .add-up-font .b-font:before {
@@ -5798,7 +5797,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .minus-down-font .b-font {
-  font-size: 12px;
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .minus-down-font .b-font:before {
