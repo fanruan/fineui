@@ -75,10 +75,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.label = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: o.unit,
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
+            textAlign: "center",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -126,10 +126,9 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -238,7 +237,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {

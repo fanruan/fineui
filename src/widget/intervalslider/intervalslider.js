@@ -48,7 +48,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            errorText: "",
+            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -74,10 +74,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         this.labelTwo = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
+            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -327,13 +327,13 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     _setLabelOnePosition: function (percent) {
-        this.labelOne.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelOne.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setLabelTwoPosition: function (percent) {
-        this.labelTwo.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelTwo.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setSliderOnePosition: function (percent) {
