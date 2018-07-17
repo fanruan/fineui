@@ -113,6 +113,12 @@
 .bi-multidate-segment .bi-multidate-editor {
   font-size: 14px;
 }
+.bi-multilayer-select-level-tree .tree-view {
+  min-width: 100%;
+}
+.bi-multilayer-single-level-tree .tree-view {
+  min-width: 100%;
+}
 .bi-multi-select-check-pane .multi-select-check-selected {
   text-decoration: underline;
 }
