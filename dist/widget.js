@@ -3653,7 +3653,8 @@ BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
     
     props: {
@@ -3664,7 +3665,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     
     _init: function () {
         BI.DynamicDatePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
@@ -3680,6 +3681,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
+                        textHeight: c.buttonHeight - 1,
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
@@ -3691,6 +3693,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
                             self.textButton = this;
@@ -3705,6 +3708,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -4419,7 +4423,8 @@ BI.extend(BI.DynamicDateTimeCombo, {
     Dynamic: 2
 });BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -4430,7 +4435,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
     _init: function () {
         BI.DynamicDateTimePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
@@ -4444,6 +4449,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -4456,6 +4462,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -4471,6 +4478,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22208,7 +22216,8 @@ BI.extend(BI.DynamicYearCombo, {
  */
 BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -22221,7 +22230,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearCombo.Static};
         return {
             type: "bi.vtape",
@@ -22234,6 +22243,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22245,6 +22255,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
+                        textHeight: c.buttonHeight - 1,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
@@ -22261,6 +22272,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22960,7 +22972,8 @@ BI.extend(BI.DynamicYearMonthCombo, {
  */
 BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -22973,7 +22986,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearMonthCombo.Static};
         return {
             type: "bi.vtape",
@@ -22986,6 +22999,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22998,6 +23012,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -23013,6 +23028,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -23942,7 +23958,8 @@ BI.extend(BI.DynamicYearQuarterCombo, {
     Dynamic: 2
 });BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -23955,7 +23972,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
             type: "bi.vtape",
@@ -23969,6 +23986,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -23980,6 +23998,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -23996,6 +24015,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,

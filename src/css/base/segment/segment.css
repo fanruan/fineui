@@ -20,7 +20,7 @@
 }
 .bi-segment.disabled > .center-element,
 .bi-segment.disabled > .first-element {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;

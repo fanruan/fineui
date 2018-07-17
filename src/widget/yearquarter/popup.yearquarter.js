@@ -1,6 +1,7 @@
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -13,7 +14,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
             type: "bi.vtape",
@@ -27,6 +28,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -38,6 +40,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -54,6 +57,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,

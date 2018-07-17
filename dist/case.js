@@ -11848,7 +11848,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
-            height: opts.height - 2,
+            textHeight: opts.height,
             whiteSpace: opts.whiteSpace,
             text: opts.text,
             value: opts.value,

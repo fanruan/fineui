@@ -163,8 +163,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #F0F3F7 !important;
-  border-color: #F0F3F7 !important;
+  background: #d0d4da !important;
+  border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
