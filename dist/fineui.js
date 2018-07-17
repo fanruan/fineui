@@ -97223,7 +97223,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.icon_text_item",
-            cls: "cursor-default check-font display-list-item bi-tips",
+            cls: "cursor-default check-font icon-size-12 display-list-item bi-tips",
             once: true,
             invalid: true,
             selected: true,
@@ -102039,7 +102039,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         var self = this;
         this.indicator = BI.createWidget({
             type: "bi.icon_button",
-            cls: "check-font trigger-check-selected",
+            cls: "check-font trigger-check-selected icon-size-12",
             width: 15,
             height: 15,
             stopPropagation: true
