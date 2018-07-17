@@ -51,8 +51,8 @@ textarea::-webkit-scrollbar-thumb:hover {
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
   width: 6px;
   height: 6px;
 }
@@ -61,13 +61,13 @@ textarea::-webkit-scrollbar-thumb:hover {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: rgba(240, 243, 247, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
+  background-color: rgba(208, 212, 218, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da,endColorstr=#4dd0d4da);
 }
 .bi-theme-dark div::-webkit-scrollbar-thumb:hover,
 .bi-theme-dark textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(240, 243, 247, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
+  background-color: rgba(208, 212, 218, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
 .farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;

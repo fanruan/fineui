@@ -295,7 +295,7 @@ textarea {
   color: #9ea6b2 !important;
 }
 .base-disabled .b-font:before {
-  color: #9ea6b2 !important;
+  color: #d0d4da !important;
 }
 .bi-theme-dark .base-disabled {
   color: #878d9f !important;
@@ -307,7 +307,7 @@ textarea {
   color: #878d9f !important;
 }
 .bi-theme-dark .base-disabled .b-font:before {
-  color: #878d9f !important;
+  color: #606479 !important;
 }
 .base-invalid {
   cursor: default !important;
@@ -1144,7 +1144,7 @@ textarea {
   color: #9ea6b2 !important;
 }
 .bi-list-item-select.disabled.bi-high-light-border {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-list-item-select.disabled.hover,
 .bi-list-item-select.disabled.active {
@@ -1165,7 +1165,7 @@ textarea {
 }
 .bi-list-item-select.disabled.hover.bi-high-light-border,
 .bi-list-item-select.disabled.active.bi-high-light-border {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-list-item-select2:hover,
 .bi-list-item-select2.hover {
@@ -1187,6 +1187,12 @@ textarea {
 .bi-list-item-select2:active .bi-high-light,
 .bi-list-item-select2.active .bi-high-light {
   color: #ffffff;
+}
+.bi-list-item-select2.disabled:hover,
+.bi-list-item-select2.disabled.hover,
+.bi-list-item-select2.disabled:active,
+.bi-list-item-select2.disabled.active {
+  background-color: #ffffff !important;
 }
 .bi-theme-dark .bi-list-item-select:hover,
 .bi-theme-dark .bi-list-item-select.hover {
@@ -2935,7 +2941,7 @@ li.CodeMirror-hint-active {
 }
 .bi-segment.disabled > .center-element,
 .bi-segment.disabled > .first-element {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;
@@ -3114,8 +3120,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #F0F3F7 !important;
-  border-color: #F0F3F7 !important;
+  background: #d0d4da !important;
+  border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -3574,8 +3580,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -3597,8 +3603,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d878d9f,endColorstr=#0d878d9f);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -3655,8 +3661,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d878d9f,endColorstr=#4d878d9f);
 }
 .bi-theme-dark .public-scrollbar-face:after {
-  background-color: rgba(240, 243, 247, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
+  background-color: rgba(208, 212, 218, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da,endColorstr=#4dd0d4da);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
@@ -3667,8 +3673,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-face-active:after {
-  background-color: rgba(240, 243, 247, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
+  background-color: rgba(208, 212, 218, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
 .horizontal-scrollbar {
   bottom: 0;
@@ -4489,6 +4495,17 @@ ul.ztree.zTreeDragUL {
   top: 4px;
   left: -10px;
 }
+.bi-single-slider-button .slider-button.disabled {
+  border-color: #d0d4da;
+}
+.bi-single-slider-button .slider-button.disabled:hover,
+.bi-single-slider-button .slider-button.disabled.hover {
+  background-color: #f7f8fa;
+  width: 16px;
+  height: 16px;
+  top: 6px;
+  left: -8px;
+}
 .bi-slider-track .gray-track {
   background-color: #F2F4F7;
   -webkit-border-radius: 3px;
@@ -4602,8 +4619,8 @@ textarea::-webkit-scrollbar-thumb:hover {
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
   width: 6px;
   height: 6px;
 }
@@ -4612,13 +4629,13 @@ textarea::-webkit-scrollbar-thumb:hover {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: rgba(240, 243, 247, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
+  background-color: rgba(208, 212, 218, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da,endColorstr=#4dd0d4da);
 }
 .bi-theme-dark div::-webkit-scrollbar-thumb:hover,
 .bi-theme-dark textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(240, 243, 247, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
+  background-color: rgba(208, 212, 218, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
 .farbtastic .wheel {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/wheel.png') no-repeat center center;

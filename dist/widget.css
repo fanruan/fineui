@@ -403,6 +403,17 @@
   top: 4px;
   left: -10px;
 }
+.bi-single-slider-button .slider-button.disabled {
+  border-color: #d0d4da;
+}
+.bi-single-slider-button .slider-button.disabled:hover,
+.bi-single-slider-button .slider-button.disabled.hover {
+  background-color: #f7f8fa;
+  width: 16px;
+  height: 16px;
+  top: 6px;
+  left: -8px;
+}
 .bi-slider-track .gray-track {
   background-color: #F2F4F7;
   -webkit-border-radius: 3px;

@@ -20669,17 +20669,16 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         var items = [{
-            type: "bi.center_adapt",
+            type: "bi.icon_button",
+            disableSelected: true,
             cls: cls + " toast-icon",
-            items: [{
-                type: "bi.icon"
-            }],
             width: 36
         }, {
             el: {
                 type: "bi.label",
                 whiteSpace: "normal",
                 text: o.text,
+                textHeight: 16,
                 textAlign: "left"
             },
             rgap: o.autoClose ? this._const.hgap : 0
@@ -20703,7 +20702,7 @@ BI.Toast = BI.inherit(BI.Tip, {
             type: "bi.horizontal_adapt",
             element: this,
             items: items,
-            vgap: 5,
+            vgap: 7,
             columnSize: columnSize
         });
     },

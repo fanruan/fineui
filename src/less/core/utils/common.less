@@ -22,7 +22,7 @@ textarea {
     color: @color-bi-text-disabled !important;
   }
   & .b-font:before {
-    color: @color-bi-text-disabled !important;
+    color: @color-bi-icon-disabled !important;
   }
 }
 
@@ -36,7 +36,7 @@ textarea {
       color: @color-bi-text-disabled-theme-dark !important;
     }
     & .b-font:before {
-      color: @color-bi-text-disabled-theme-dark !important;
+      color: @color-bi-icon-disabled-theme-dark !important;
     }
   }
 }
@@ -882,6 +882,11 @@ textarea {
     background-color: @color-bi-background-normal;
     & .bi-high-light {
       color: @color-bi-text;
+    }
+  }
+  &.disabled {
+    &:hover, &.hover, &:active, &.active {
+      background-color: @color-bi-background-default !important;
     }
   }
 }
