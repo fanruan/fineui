@@ -105244,6 +105244,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -105328,6 +105329,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -105412,6 +105414,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
