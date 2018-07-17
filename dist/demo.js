@@ -369,7 +369,26 @@ BI.shortcut("demo.text_button", Demo.Button);Demo.Func = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("demo.canvas", Demo.Func);Demo.Label = BI.inherit(BI.Widget, {
+BI.shortcut("demo.canvas", Demo.Func);Demo.IconLabel = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-bubble"
+    },
+    render: function () {
+        return {
+            type: "bi.default",
+            items: [{
+                type: "bi.label",
+                text: "这是一个icon标签,在加了border之后仍然是居中显示的"
+            }, {
+                type: "bi.icon_label",
+                cls: "date-font bi-border",
+                height: 40,
+                width: 40
+            }]
+        };
+    }
+});
+BI.shortcut("demo.icon_label", Demo.IconLabel);Demo.Label = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-label"
     },
@@ -5099,6 +5118,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 2,
     text: "bi.label",
     value: "demo.label"
+}, {
+    pId: 2,
+    text: "bi.icon_label",
+    value: "demo.icon_label"
 }, {
     pId: 2,
     text: "title提示",

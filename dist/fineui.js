@@ -56051,6 +56051,47 @@ BI.Radio = BI.inherit(BI.IconButton, {
 BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
+ * @class BI.IconButton
+ * @extends BI.BasicButton
+ * 图标标签
+ */
+BI.IconLabel = BI.inherit(BI.Single, {
+
+    props: {
+        baseCls: "bi-icon-label horizon-center",
+        iconWidth: null,
+        iconHeight: null
+    },
+
+    _init: function () {
+        BI.IconLabel.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.element.css({
+            textAlign: "center"
+        });
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: o.iconWidth,
+            height: o.iconHeight
+        });
+        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
+            this.element.css("lineHeight", o.height + "px");
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.icon]
+            });
+        } else {
+            this.element.css("lineHeight", "1");
+            BI.createWidget({
+                element: this,
+                type: "bi.center_adapt",
+                items: [this.icon]
+            });
+        }
+    }
+});
+BI.shortcut("bi.icon_label", BI.IconLabel);/**
  * Created by GUY on 2015/6/26.
  */
 
@@ -94306,7 +94347,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            errorText: "",
+            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -94332,10 +94373,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         this.labelTwo = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
+            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -94585,13 +94626,13 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     _setLabelOnePosition: function (percent) {
-        this.labelOne.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelOne.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setLabelTwoPosition: function (percent) {
-        this.labelTwo.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelTwo.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setSliderOnePosition: function (percent) {
@@ -108051,17 +108092,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
             text: "",
             height: 24
         });
@@ -108073,18 +108104,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.editor",
             height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: 4,
+            vgap: 2,
             value: o.value,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
+            allowBlank: false
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
@@ -108092,9 +108116,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             title: function () {
                 return self.getValue();
             },
-            warningTitle: o.warningTitle,
-            tipType: o.tipType,
-            textAlign: "left",
+            textAlign: o.textAlign,
             height: o.height,
             hgap: 4,
             handler: function () {
@@ -108362,10 +108384,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.label = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: o.unit,
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
+            textAlign: "center",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -108413,10 +108435,9 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -108525,7 +108546,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
