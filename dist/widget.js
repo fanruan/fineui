@@ -9164,7 +9164,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.icon_text_item",
-            cls: "cursor-default check-font display-list-item bi-tips",
+            cls: "cursor-default check-font icon-size-12 display-list-item bi-tips",
             once: true,
             invalid: true,
             selected: true,
@@ -13980,7 +13980,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         var self = this;
         this.indicator = BI.createWidget({
             type: "bi.icon_button",
-            cls: "check-font trigger-check-selected",
+            cls: "check-font trigger-check-selected icon-size-12",
             width: 15,
             height: 15,
             stopPropagation: true
@@ -14243,7 +14243,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active3"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -14254,7 +14254,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);

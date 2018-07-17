@@ -60,7 +60,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.icon_text_item",
-            cls: "cursor-default check-font display-list-item bi-tips",
+            cls: "cursor-default check-font icon-size-12 display-list-item bi-tips",
             once: true,
             invalid: true,
             selected: true,

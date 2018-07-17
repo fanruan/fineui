@@ -18,7 +18,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         var self = this;
         this.indicator = BI.createWidget({
             type: "bi.icon_button",
-            cls: "check-font trigger-check-selected",
+            cls: "check-font trigger-check-selected icon-size-12",
             width: 15,
             height: 15,
             stopPropagation: true
