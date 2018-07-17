@@ -14243,7 +14243,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "pull-up-font top-button bi-border-left bi-list-item-active3"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active3"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -14254,7 +14254,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "pull-down-font bottom-button bi-border-left bi-list-item-active3"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -14334,7 +14334,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         border: 1,
         less: 0,
         less_equal: 1,
-        numTip: ""
+        numTip: "",
+        adjustYOffset: 2
     },
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
@@ -14620,17 +14621,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -14666,7 +14670,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "left"
+                offsetStyle: "left",
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -14679,13 +14684,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -14702,17 +14709,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -25269,7 +25279,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

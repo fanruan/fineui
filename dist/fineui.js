@@ -27015,6 +27015,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var container = opt.container || context;
         var offsetStyle = opt.offsetStyle || {};
         var level = opt.level || "error";
+        var adjustYOffset = opt.adjustYOffset || 0;
+        var adjustXOffset = opt.adjustXOffset || 0;
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
@@ -27030,9 +27032,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
         this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
-        this.get(name).element.css({left: position.left, top: position.top});
+        this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
         this.get(name).invisible();
-        if (!$.isTopSpaceEnough(context, this.get(name))) {
+        if (!$.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
             if (!this.storeBubbles[name]["left"]) {
                 this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
@@ -27045,9 +27047,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             });
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left, top: position.top});
+            this.get(name).element.css({left: position.left - adjustXOffset, top: position.top - adjustYOffset});
             this.get(name).invisible();
-            if (!$.isLeftSpaceEnough(context, this.get(name))) {
+            if (!$.isLeftSpaceEnough(context, this.get(name), adjustXOffset)) {
                 if (!this.storeBubbles[name]["right"]) {
                     this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
@@ -27060,9 +27062,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 });
                 this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left, top: position.top});
+                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
                 this.get(name).invisible();
-                if (!$.isRightSpaceEnough(context, this.get(name))) {
+                if (!$.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
                     if (!this.storeBubbles[name]["bottom"]) {
                         this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
@@ -27075,7 +27077,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     });
                     this.set(name, this.storeBubbles[name]["bottom"]);
                     var position = this._getBottomPosition(name, context, offsetStyle);
-                    this.get(name).element.css({left: position.left, top: position.top});
+                    this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
                     this.get(name).invisible();
                 }
             }
@@ -36402,15 +36404,15 @@ BI.Single = BI.inherit(BI.Widget, {
 
     _showToolTip: function (e, opt) {
         opt || (opt = {});
-        var self = this;
+        var self = this, o = this.options;
         var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
-            if (opt.action) {
-                BI.Actions.runAction(opt.action, "hover", opt, title);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o, this);
             }
-            BI.Actions.runGlobalAction("hover", opt, title);
+            BI.Actions.runGlobalAction("hover", o, this);
         }
     },
 
@@ -54301,10 +54303,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
+        var className = "param";
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = "error-param";
+            className = "error-param";
         }
+        var options = {className: className, atomic: true, replacedWith: $("<span class='" + className + " start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -54620,7 +54623,9 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (!this.disabledError && BI.isKey(errorText)) {
-            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this);
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
+                adjustYOffset: 2
+            });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
         }
@@ -76383,7 +76388,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -76413,7 +76418,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]
@@ -77432,28 +77437,22 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     _showPreColor: function (color) {
-        if(this.isEnabled()) {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
-            }
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
         } else {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-disabled-background").addClass("auto-color-normal-disabled-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-disabled-background").addClass("trans-color-disabled-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-disabled-background").removeClass("trans-color-disabled-background");
-            }
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
         }
     },
 
     _setEnable: function (enable) {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
     },
 
     setValue: function (color) {
@@ -77515,7 +77514,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -77525,8 +77524,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -77565,9 +77564,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20
@@ -102303,7 +102302,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "pull-up-font top-button bi-border-left bi-list-item-active3"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active3"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -102314,7 +102313,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "pull-down-font bottom-button bi-border-left bi-list-item-active3"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -102394,7 +102393,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         border: 1,
         less: 0,
         less_equal: 1,
-        numTip: ""
+        numTip: "",
+        adjustYOffset: 2
     },
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
@@ -102680,17 +102680,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -102726,7 +102729,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "left"
+                offsetStyle: "left",
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102739,13 +102743,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102762,17 +102768,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -113329,7 +113338,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

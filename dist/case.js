@@ -3570,7 +3570,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -3600,7 +3600,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]
@@ -4619,28 +4619,22 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
     },
 
     _showPreColor: function (color) {
-        if(this.isEnabled()) {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
-            }
+        if (color === "") {
+            this.colorShow.element.css("background-color", "").removeClass("trans-color-background").addClass("auto-color-normal-background");
+        } else if (color === "transparent") {
+            this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-background").addClass("trans-color-background");
         } else {
-            if (color === "") {
-                this.colorShow.element.css("background-color", "").removeClass("trans-color-disabled-background").addClass("auto-color-normal-disabled-background");
-            } else if (color === "transparent") {
-                this.colorShow.element.css("background-color", "").removeClass("auto-color-normal-disabled-background").addClass("trans-color-disabled-background");
-            } else {
-                this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-disabled-background").removeClass("trans-color-disabled-background");
-            }
+            this.colorShow.element.css({"background-color": color}).removeClass("auto-color-normal-background").removeClass("trans-color-background");
         }
     },
 
     _setEnable: function (enable) {
         BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
-        this.mask.setVisible(!enable);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
     },
 
     setValue: function (color) {
@@ -4702,7 +4696,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -4712,8 +4706,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -4752,9 +4746,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20

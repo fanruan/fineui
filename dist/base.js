@@ -348,15 +348,15 @@ BI.Single = BI.inherit(BI.Widget, {
 
     _showToolTip: function (e, opt) {
         opt || (opt = {});
-        var self = this;
+        var self = this, o = this.options;
         var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
-            if (opt.action) {
-                BI.Actions.runAction(opt.action, "hover", opt, title);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o, this);
             }
-            BI.Actions.runGlobalAction("hover", opt, title);
+            BI.Actions.runGlobalAction("hover", o, this);
         }
     },
 
@@ -18247,10 +18247,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
+        var className = "param";
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = "error-param";
+            className = "error-param";
         }
+        var options = {className: className, atomic: true, replacedWith: $("<span class='" + className + " start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -18566,7 +18567,9 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (!this.disabledError && BI.isKey(errorText)) {
-            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this);
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
+                adjustYOffset: 2
+            });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
         }

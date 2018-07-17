@@ -320,13 +320,18 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .auto-color-normal-disabled-background {
-  background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
+  background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
 .trans-color-background {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('images/1x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;
 }
 @font-face {
@@ -1287,6 +1292,30 @@ textarea::-webkit-scrollbar-thumb:hover {
 .text-add-tip-font.disabled .b-font:before {
   content: "\e6dd";
   color: #13cd66;
+}
+.add-up-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
+}
+.add-up-font .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.add-up-font.disabled .b-font:before {
+  content: "\e70a";
+  color: inherit;
+}
+.minus-down-font .b-font {
+  font-size: 12px;
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
+}
+.minus-down-font .b-font:before {
+  content: "\e70b";
+  color: inherit;
+}
+.minus-down-font.disabled .b-font:before {
+  content: "\e70b";
+  color: inherit;
 }
 .tree-collapse-icon-type1 .x-icon {
   display: block;

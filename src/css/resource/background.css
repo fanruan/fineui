@@ -249,12 +249,17 @@
   _background: none;
 }
 .auto-color-normal-disabled-background {
-  background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
+  background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
 .trans-color-background {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('images/1x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;
 }
