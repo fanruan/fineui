@@ -19,7 +19,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[01],
+            text: Date._QN[1],
             value: 1
         }, {
             text: Date._QN[2],
@@ -58,7 +58,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
             }
-        })
+        });
     },
 
     getValue: function () {
@@ -66,6 +66,9 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
+        if(BI.isNumeric(v)) {
+            v = BI.parseInt(v);
+        }
         this.quarter.setValue([v]);
     }
 });
