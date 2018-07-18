@@ -38,16 +38,11 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({

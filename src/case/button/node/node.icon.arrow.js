@@ -33,14 +33,11 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
 
         var icon = BI.createWidget({
-            type: "bi.center_adapt",
-            cls: o.iconCls,
+            type: "bi.icon_label",
             width: 24,
-            items: [{
-                type: "bi.icon",
-                height: o.iconHeight,
-                width: o.iconWidth
-            }]
+            cls: o.iconCls,
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         this.text = BI.createWidget({
