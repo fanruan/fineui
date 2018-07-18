@@ -2908,6 +2908,14 @@ li.CodeMirror-hint-active {
 .bi-pane {
   min-height: 25px;
 }
+.bi-nic-editor {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
 .bi-rich-editor .rich-editor-param {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
