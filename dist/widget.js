@@ -11270,22 +11270,6 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
                 el: this.loader
             }]
         });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.addNotMatchTip,
-            items: [{
-                el: {
-                    type: "bi.icon_label",
-                    width: this.constants.height,
-                    cls: "text-add-tip-font"
-                },
-                left: 0,
-                top: 0,
-                height: this.constants.height,
-                width: this.constants.height
-            }]
-        });
     },
 
     setKeyword: function (keyword) {
