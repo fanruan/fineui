@@ -42,6 +42,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
                         action: function () {
                             fn();
+                            if (!self._isRGBColor(self.colorPicker.getValue())) {
+                                self.combo.hideView();
+                            }
                         }
                     }, {
                         eventName: BI.ColorChooserPopup.EVENT_CHANGE,
@@ -74,6 +77,10 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
     },
 
     isViewVisible: function () {
