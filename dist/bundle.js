@@ -26938,6 +26938,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
+            invisible: true,
             items: [{
                 el: widget,
                 left: 0,
