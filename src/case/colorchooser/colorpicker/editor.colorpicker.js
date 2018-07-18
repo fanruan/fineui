@@ -180,6 +180,15 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+    },
+
     setValue: function (color) {
         if (color === "transparent") {
             this.transparent.setSelected(true);

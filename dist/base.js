@@ -342,17 +342,21 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标
+            belowMouse: false   // title是否跟随鼠标,
         });
     },
 
     _showToolTip: function (e, opt) {
         opt || (opt = {});
-        var self = this;
+        var self = this, o = this.options;
         var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o, this);
+            }
+            BI.Actions.runGlobalAction("hover", o, this);
         }
     },
 
@@ -905,9 +909,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
-                BI.Actions.runAction(o.action, o);
+                BI.Actions.runAction(o.action, "click", o);
             }
-            BI.Actions.runGlobalAction(o);
+            BI.Actions.runGlobalAction("click", o);
         }
     },
 
@@ -14659,7 +14663,7 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         if (BI.isNotNull(fieldFormattedName.match("^<!.*!>$")) && !force) {
             className = "error-field";
         }
-        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value});
+        this.editor.markText(from, to, {className: className, atomic: true, startStyle: "start", endStyle: "end", value: value, replacedWith: $("<span class='" + className + "  start end' />").text(showName)[0]});
         this.editor.focus();
     },
 
@@ -14724,7 +14728,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         return this.editor.getValue(true, function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans) || [];
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
 
                 switch (i.marker.className) {
                     case "fieldName":
@@ -14745,7 +14754,12 @@ BI.FormulaEditor = BI.inherit(BI.Single, {
         var v = this.editor.getValue("\n", function (line) {
             var rawText = line.text, value = line.text, num = 0;
             value.text = rawText;
-            _.forEach(line.markedSpans, function (i, ms) {
+            var markedSpans = _.clone(line.markedSpans) || [];
+            markedSpans.sort(function (a, b) {
+                return a.from > b.from;
+            });
+
+            _.forEach(markedSpans, function (i, ms) {
                 switch (i.marker.className) {
                     case "fieldName":
                     case "error-field":
@@ -17101,34 +17115,24 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
                     height: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17238,16 +17242,11 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17343,17 +17342,12 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -17364,16 +17358,12 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    height: o.height,
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17472,16 +17462,11 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17576,16 +17561,11 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17764,17 +17744,12 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -17786,16 +17761,11 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17885,16 +17855,11 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17978,16 +17943,11 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -18233,10 +18193,11 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         // 解决插入字段由括号或其他特殊字符包围时分裂的bug,在两端以不可见字符包裹一下
         this.editor.replaceSelection("\u200b" + param + "\u200b");
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var className = "param";
         if (BI.isNotNull(param.match(/^<!.*!>$/))) {
-            options.className = "error-param";
+            className = "error-param";
         }
+        var options = {className: className, atomic: true, replacedWith: $("<span class='" + className + " start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -18552,7 +18513,9 @@ BI.Editor = BI.inherit(BI.Single, {
             errorText = errorText(this.editor.getValue());
         }
         if (!this.disabledError && BI.isKey(errorText)) {
-            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this);
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
+                adjustYOffset: 2
+            });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
         }
@@ -19978,6 +19941,47 @@ BI.Radio = BI.inherit(BI.IconButton, {
 BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
+ * @class BI.IconButton
+ * @extends BI.BasicButton
+ * 图标标签
+ */
+BI.IconLabel = BI.inherit(BI.Single, {
+
+    props: {
+        baseCls: "bi-icon-label horizon-center",
+        iconWidth: null,
+        iconHeight: null
+    },
+
+    _init: function () {
+        BI.IconLabel.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.element.css({
+            textAlign: "center"
+        });
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: o.iconWidth,
+            height: o.iconHeight
+        });
+        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
+            this.element.css("lineHeight", o.height + "px");
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.icon]
+            });
+        } else {
+            this.element.css("lineHeight", "1");
+            BI.createWidget({
+                element: this,
+                type: "bi.center_adapt",
+                items: [this.icon]
+            });
+        }
+    }
+});
+BI.shortcut("bi.icon_label", BI.IconLabel);/**
  * Created by GUY on 2015/6/26.
  */
 
@@ -20652,17 +20656,16 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         var items = [{
-            type: "bi.center_adapt",
+            type: "bi.icon_button",
+            disableSelected: true,
             cls: cls + " toast-icon",
-            items: [{
-                type: "bi.icon"
-            }],
             width: 36
         }, {
             el: {
                 type: "bi.label",
                 whiteSpace: "normal",
                 text: o.text,
+                textHeight: 16,
                 textAlign: "left"
             },
             rgap: o.autoClose ? this._const.hgap : 0
@@ -20686,7 +20689,7 @@ BI.Toast = BI.inherit(BI.Tip, {
             type: "bi.horizontal_adapt",
             element: this,
             items: items,
-            vgap: 5,
+            vgap: 7,
             columnSize: columnSize
         });
     },
@@ -21505,7 +21508,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
@@ -21572,7 +21575,8 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("bi.sql_editor", BI.SQLEditor);// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+BI.shortcut("bi.sql_editor", BI.SQLEditor);
+// Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

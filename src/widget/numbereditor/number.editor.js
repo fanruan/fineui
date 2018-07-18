@@ -31,7 +31,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            o.value = this.getValue();
+            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
@@ -42,7 +42,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "pull-up-font top-button bi-border-left bi-list-item-active3"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -53,7 +53,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "pull-down-font bottom-button bi-border-left bi-list-item-active3"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);

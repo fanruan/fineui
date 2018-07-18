@@ -19,9 +19,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
-            type: "bi.arrow_group_node_checkbox",
-            iconWidth: 12,
-            iconHeight: 12
+            type: "bi.arrow_group_node_checkbox"
         });
 
         this.text = BI.createWidget({

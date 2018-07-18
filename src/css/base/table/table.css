@@ -63,8 +63,8 @@
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -86,8 +86,8 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d878d9f,endColorstr=#0d878d9f);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -144,8 +144,8 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d878d9f,endColorstr=#4d878d9f);
 }
 .bi-theme-dark .public-scrollbar-face:after {
-  background-color: rgba(240, 243, 247, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
+  background-color: rgba(208, 212, 218, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da,endColorstr=#4dd0d4da);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
@@ -156,8 +156,8 @@
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-face-active:after {
-  background-color: rgba(240, 243, 247, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
+  background-color: rgba(208, 212, 218, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
 .horizontal-scrollbar {
   bottom: 0;

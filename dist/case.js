@@ -421,9 +421,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         var self = this, o = this.options;
         BI.ArrowNode.superclass._init.apply(this, arguments);
         this.checkbox = BI.createWidget({
-            type: "bi.arrow_group_node_checkbox",
-            iconWidth: 12,
-            iconHeight: 12
+            type: "bi.arrow_group_node_checkbox"
         });
 
         this.text = BI.createWidget({
@@ -597,14 +595,11 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
 
         var icon = BI.createWidget({
-            type: "bi.center_adapt",
-            cls: o.iconCls,
+            type: "bi.icon_label",
             width: 24,
-            items: [{
-                type: "bi.icon",
-                height: o.iconHeight,
-                width: o.iconWidth
-            }]
+            cls: o.iconCls,
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         this.text = BI.createWidget({
@@ -835,8 +830,8 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
             pId: "",
             open: false,
             height: 24,
-            iconHeight: 12,
-            iconWidth: 12,
+            iconHeight: 16,
+            iconWidth: 16,
             iconCls: ""
         });
     },
@@ -869,7 +864,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 12,
+                width: 24,
                 height: o.height
             });
         });
@@ -877,7 +872,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 13),
+            columnSize: BI.makeArray(o.layer, 24),
             items: [items]
         });
     },
@@ -914,7 +909,8 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
     }
 });
 
-BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);/**
+BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
+/**
  * 加号表示的组节点
  * Created by GUY on 2015/9/6.
  * @class BI.PlusGroupNode
@@ -1446,8 +1442,8 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             height: 24,
             iconCls: "",
-            iconHeight: 12,
-            iconWidth: 12
+            iconHeight: 16,
+            iconWidth: 16
         });
     },
     _init: function () {
@@ -1479,7 +1475,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 12,
+                width: 24,
                 height: o.height
             });
         });
@@ -1487,7 +1483,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 24),
             items: [items]
         });
     },
@@ -1531,7 +1527,8 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);/**
+BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
+/**
  * 树叶子节点
  * Created by GUY on 2015/9/6.
  * @class BI.TreeTextLeafItem
@@ -3568,7 +3565,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor"
+            type: "bi.simple_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -3598,7 +3595,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     el: this.farbtastic,
                     left: 15,
                     right: 15,
-                    top: 10
+                    top: 7
                 }],
                 height: 215
             }]
@@ -3659,6 +3656,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
                         action: function () {
                             fn();
+                            if (!self._isRGBColor(self.colorPicker.getValue())) {
+                                self.combo.hideView();
+                            }
                         }
                     }, {
                         eventName: BI.ColorChooserPopup.EVENT_CHANGE,
@@ -3691,6 +3691,10 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
     },
 
     isViewVisible: function () {
@@ -4626,6 +4630,15 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    _setEnable: function (enable) {
+        BI.ColorPickerEditor.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
+    },
+
     setValue: function (color) {
         if (color === "transparent") {
             this.transparent.setSelected(true);
@@ -4685,7 +4698,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
             // width: 200,
-            height: 20
+            height: 30
         });
     },
 
@@ -4695,8 +4708,8 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card",
-            height: 20,
-            width: 40
+            height: 16,
+            width: 16
         });
         var RGB = BI.createWidgets(BI.createItems([{text: "R"}, {text: "G"}, {text: "B"}], {
             type: "bi.label",
@@ -4735,9 +4748,9 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.colorShow,
-                width: 40,
-                lgap: 5,
-                rgap: 5
+                width: 16,
+                lgap: 20,
+                rgap: 15
             }, {
                 el: RGB[0],
                 width: 20
@@ -5831,7 +5844,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
             cls: "icon-combo-trigger-icon",
             iconCls: iconCls,
             disableSelected: true,
-            width: o.isShowDown ? o.width - 2 : o.width,
+            width: o.isShowDown ? o.width - 12 : o.width,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight,
@@ -5840,7 +5853,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
         this.down = BI.createWidget({
             type: "bi.icon_button",
             disableSelected: true,
-            cls: "icon-combo-down-icon trigger-triangle-font",
+            cls: "icon-combo-down-icon trigger-triangle-font font-size-12",
             width: 12,
             height: 8,
             selected: BI.isNotEmptyString(iconCls)
@@ -5857,7 +5870,7 @@ BI.IconComboTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }, {
                 el: this.down,
-                right: 0,
+                right: 3,
                 bottom: 0
             }]
         });
@@ -5907,7 +5920,7 @@ BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);/**
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-icon-text-value-combo",
+            baseCls: "bi-icon-text-value-combo",
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -5958,9 +5971,24 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkError: function (v) {
+        if(BI.isNotNull(v)) {
+            v = BI.isArray(v) ? v : [v];
+            var result = BI.find(this.options.items, function (idx, item) {
+                return BI.contains(v, item.value);
+            });
+            if (BI.isNull(result)) {
+                this.element.removeClass("combo-error").addClass("combo-error");
+            } else {
+                this.element.removeClass("combo-error");
+            }
+        }
+    },
+
     setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);
+        this._checkError(v);
     },
 
     getValue: function () {
@@ -10524,7 +10552,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         $(image).addClass("rich-editor-param");
         $(image).attr("style", attrs.style);
         $(image).attr("name", name);
-        this.options.editor.insertHTML($("<div>").append(image).html());
+        instance.insertHTML($("<div>").append(image).html());
         // var sel = this._get$Sel();
         // var wrapper = o.editor.instance.getElm().element;
         // if (wrapper.find(sel).length <= 0) {
@@ -10771,6 +10799,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
+                    this.instance.saveRng();
                     return;
                 }
             } while (t = t.parentNode);
@@ -10918,8 +10947,19 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         saveRng: function () {
-            this.savedRange = this.getRng();
+            var range = this.getRng();
+            if (!this._isChildOf(this.getSelectionContainerElem(range), this.element[0])) {
+                return;
+            }
+            this.savedRange = range;
             this.savedSel = this.getSel();
+        },
+
+        getSelectionContainerElem: function (range) {
+            if (range) {
+                var elem = range.commonAncestorContainer;
+                return elem.nodeType === 1 ? elem : elem.parentNode;
+            }
         },
 
         setFocus: function (el) {
@@ -10955,6 +10995,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         restoreRng: function () {
             if (this.savedRange) {
+                this.selRng(this.savedRange, this.savedSel);
+            }
+        },
+
+        restoreRngAndClearRange: function () {
+            if (this.savedRange) {
+                this.savedRange.setStart(this.savedRange.endContainer, this.savedRange.endOffset);
                 this.selRng(this.savedRange, this.savedSel);
             }
         },
@@ -11029,7 +11076,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         insertHTML: function (html) {
-            var range = this.getRng();
+            var range = this.savedRange || this.getRng();
 
             try {
                 // w3c
@@ -11060,6 +11107,20 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         nicCommand: function (cmd, args) {
             document.execCommand(cmd, false, args);
+        },
+
+        _isChildOf: function(child, parent) {
+            var parentNode;
+            if(child && parent) {
+                parentNode = child.parentNode;
+                while(parentNode) {
+                    if(parent === parentNode) {
+                        return true;
+                    }
+                    parentNode = parentNode.parentNode;
+                }
+            }
+            return false;
         }
     });
 }());
@@ -11512,7 +11573,11 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
             }
         });
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
-            self.doCommand(this.getValue());
+            var value = this.getValue();
+            // 用span代替font
+            document.execCommand('styleWithCSS', null, true);
+            self.doCommand(this.getValue() || "inherit");
+            document.execCommand('styleWithCSS', null, false);
         });
 
     },
@@ -11536,8 +11601,8 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
         return BI.extend(BI.RichEditorFontChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-rich-editor-font-chooser bi-border bi-card",
             command: "FontName",
-            width: 50,
-            height: 20
+            width: 100,
+            height: 24
         });
     },
 
@@ -11609,7 +11674,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
             baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
             command: "FontSize",
             width: 50,
-            height: 20
+            height: 24
         });
     },
 
@@ -11815,7 +11880,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
         this.text = BI.createWidget({
             type: "bi.label",
             element: this,
-            height: opts.height - 2,
+            textHeight: opts.height,
             whiteSpace: opts.whiteSpace,
             text: opts.text,
             value: opts.value,
@@ -11875,6 +11940,15 @@ BI.Segment = BI.inherit(BI.Widget, {
         this.buttonGroup.on(BI.ButtonGroup.EVENT_CHANGE, function (value, obj) {
             self.fireEvent(BI.Segment.EVENT_CHANGE, value, obj);
         });
+    },
+
+    _setEnable: function (enable) {
+        BI.Segment.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (enable === false) {
+            this.element.addClass("base-disabled disabled");
+        }
     },
 
     setValue: function (v) {
@@ -14830,6 +14904,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
+            cls: "select-text-label",
             textAlign: "left",
             height: o.height,
             text: o.text,

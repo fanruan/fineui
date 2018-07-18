@@ -13401,10 +13401,10 @@ _.extend(BI.OB.prototype, {
     };
 
     BI.Actions = {
-        runAction: function (type, config) {
+        runAction: function (type, event, config) {
             BI.each(actions[type], function (i, act) {
                 try {
-                    act(config);
+                    act(event, config);
                 } catch (e) {
                     console.error(e);
                 }

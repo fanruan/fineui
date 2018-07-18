@@ -6,17 +6,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
             text: "",
             height: 24
         });
@@ -28,18 +18,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.editor",
             height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: 4,
+            vgap: 2,
             value: o.value,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
+            allowBlank: false
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
@@ -47,9 +30,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             title: function () {
                 return self.getValue();
             },
-            warningTitle: o.warningTitle,
-            tipType: o.tipType,
-            textAlign: "left",
+            textAlign: o.textAlign,
             height: o.height,
             hgap: 4,
             handler: function () {

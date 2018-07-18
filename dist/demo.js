@@ -369,7 +369,26 @@ BI.shortcut("demo.text_button", Demo.Button);Demo.Func = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("demo.canvas", Demo.Func);Demo.Label = BI.inherit(BI.Widget, {
+BI.shortcut("demo.canvas", Demo.Func);Demo.IconLabel = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-bubble"
+    },
+    render: function () {
+        return {
+            type: "bi.default",
+            items: [{
+                type: "bi.label",
+                text: "这是一个icon标签,在加了border之后仍然是居中显示的"
+            }, {
+                type: "bi.icon_label",
+                cls: "date-font bi-border",
+                height: 40,
+                width: 40
+            }]
+        };
+    }
+});
+BI.shortcut("demo.icon_label", Demo.IconLabel);Demo.Label = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-label"
     },
@@ -2030,13 +2049,10 @@ Demo.IconTextValueCombo = BI.inherit(BI.Widget, {
                 type: "bi.icon_text_value_combo",
                 text: "默认值",
                 // defaultIconCls: "next-page-h-font",
-                value: 1,
                 width: 300,
-                iconHeight: 16,
-                iconWidth: 16,
                 items: [{
                     text: "MVC-1",
-                    iconCls: "check-box-icon",
+                    iconCls: "close-font",
                     value: 1
                 }, {
                     text: "MVC-2",
@@ -2378,6 +2394,46 @@ BI.shortcut("demo.text_value_check_combo", Demo.TextValueCheckCombo);Demo.Func =
     }
 });
 BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+
+    render: function () {
+        return {
+            type: "bi.vertical",
+            items: BI.createItems([{
+                text: "bi-list-item",
+                cls: "bi-list-item close-font"
+            }, {
+                text: "bi-list-item-simple",
+                cls: "bi-list-item-simple close-font"
+            }, {
+                text: "bi-list-item-effect",
+                cls: "bi-list-item-effect close-font"
+            }, {
+                text: "bi-list-item-active",
+                cls: "bi-list-item-active close-font"
+            }, {
+                text: "bi-list-item-active2",
+                cls: "bi-list-item-active2 close-font"
+            }, {
+                text: "bi-list-item-active3",
+                cls: "bi-list-item-active3 close-font"
+            }, {
+                text: "bi-list-item-select",
+                cls: "bi-list-item-select close-font"
+            }], {
+                type: "bi.icon_text_item",
+                disabled: true,
+                logic: {
+                    dynamic: true
+                }
+            }),
+            vgap: 10
+        };
+    }
+});
+BI.shortcut("demo.click_item_effect", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -5062,6 +5118,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.label"
 }, {
     pId: 2,
+    text: "bi.icon_label",
+    value: "demo.icon_label"
+}, {
+    pId: 2,
     text: "title提示",
     value: "demo.title"
 }, {
@@ -5408,6 +5468,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 3,
     text: "bi.segment",
     value: "demo.segment"
+}, {
+    pId: 3,
+    text: "点击项样式查看",
+    value: "demo.click_item_effect"
 }];Demo.CATEGORY_CONFIG = [{
     id: 100000,
     text: "专题"
@@ -13011,6 +13075,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             } else {
                 editor.setDownEnable(true);
             }
+            BI.Msg.toast(editor.getValue());
         });
         return {
             type: "bi.vertical",

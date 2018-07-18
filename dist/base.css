@@ -22,10 +22,285 @@
 .bi-theme-dark .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #ffffff;
 }
+.farbtastic .wheel {
+  background: url('images/1x/background/wheel.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/wheel.png');
+  _background: none;
+}
+.farbtastic .overlay {
+  background: url('images/1x/background/mask.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/mask.png');
+  _background: none;
+}
+.farbtastic .marker {
+  background: url('images/1x/background/marker.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/marker.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.center_open {
+  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.roots_open {
+  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-display-tree .ztree li span.button.switch.bottom_open {
+  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.ztree li ul.line {
+  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li ul.line {
+  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_full {
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_full_focus {
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part {
+  background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part_focus {
+  background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full {
+  background: url('images/1x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full_focus {
+  background: url('images/1x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part {
+  background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part_focus {
+  background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  _background: none;
+}
+.ztree li span.button.root_open {
+  background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.root_open {
+  background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_1.png');
+  _background: none;
+}
+.ztree li span.button.root_close {
+  background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_1.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.root_close {
+  background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_1.png');
+  _background: none;
+}
+.ztree li span.button.roots_open {
+  background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_open {
+  background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_2.png');
+  _background: none;
+}
+.ztree li span.button.roots_close {
+  background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_close {
+  background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_2.png');
+  _background: none;
+}
+.ztree li span.button.center_open {
+  background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_open {
+  background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_3.png');
+  _background: none;
+}
+.ztree li span.button.center_close {
+  background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_close {
+  background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_3.png');
+  _background: none;
+}
+.ztree li span.button.bottom_open {
+  background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_open {
+  background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_4.png');
+  _background: none;
+}
+.ztree li span.button.bottom_close {
+  background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_close {
+  background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_4.png');
+  _background: none;
+}
+.ztree li span.button.roots_docu {
+  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.roots_docu {
+  background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
+  _background: none;
+}
+.ztree li span.button.center_docu {
+  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.center_docu {
+  background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
+  _background: none;
+}
+.ztree li span.button.bottom_docu {
+  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.bi-theme-dark .ztree li span.button.bottom_docu {
+  background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
+  _background: none;
+}
+.ztree li span.button.ico_loading {
+  background: url('images/1x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
+  _background: none;
+}
+.base-line-conn-background {
+  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
+  _background: none;
+}
+.bi-theme-dark .base-line-conn-background {
+  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
+  _background: none;
+}
+.first-line-conn-background {
+  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
+  _background: none;
+}
+.bi-theme-dark .first-line-conn-background {
+  background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
+  _background: none;
+}
+.mid-line-conn-background {
+  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
+  _background: none;
+}
+.bi-theme-dark .mid-line-conn-background {
+  background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
+  _background: none;
+}
+.last-line-conn-background {
+  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
+  _background: none;
+}
+.bi-theme-dark .last-line-conn-background {
+  background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
+  _background: none;
+}
+.loading-background {
+  background: url('images/1x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
+  _background: none;
+}
+.auto-color-background {
+  background: url('images/1x/background/auto_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
+  _background: none;
+}
+.auto-color-normal-background {
+  background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
+  _background: none;
+}
+.auto-color-normal-disabled-background {
+  background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
+  _background: none;
+}
+.trans-color-background {
+  background: url('images/1x/background/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('images/1x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
+  _background: none;
+}
 .bi-color-picker-editor .color-picker-editor-display {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+.bi-color-picker-editor.disabled .auto-color-normal-background {
+  background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
+  _background: none;
+}
+.bi-color-picker-editor.disabled .trans-color-background {
+  background: url('images/1x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
+  _background: none;
 }
 .farbtastic {
   position: relative;
@@ -188,6 +463,10 @@
   display: none;
 }
 
+.bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
+  color: #ff4949;
+}
+
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
@@ -248,8 +527,7 @@
 }
 /* GUTTER */
 .CodeMirror-gutters {
-  border-right: 1px solid #ddd;
-  background-color: #f7f7f7;
+  background-color: #F2F4F7;
   white-space: nowrap;
 }
 .CodeMirror-linenumber {
@@ -627,7 +905,7 @@ div.CodeMirror-cursors {
   background: #d9d9d9;
 }
 .CodeMirror-focused .CodeMirror-selected {
-  background: #d7d4f0;
+  background: #3685F2;
 }
 .CodeMirror-crosshair {
   cursor: crosshair;
@@ -784,6 +1062,14 @@ li.CodeMirror-hint-active {
 .bi-pane {
   min-height: 25px;
 }
+.bi-nic-editor {
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
 .bi-rich-editor .rich-editor-param {
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
@@ -806,18 +1092,18 @@ li.CodeMirror-hint-active {
 }
 .bi-segment > .first-element {
   border-left: 1px solid #3685f2;
-  -webkit-border-radius: 6px 0px 0px 6px;
-  -moz-border-radius: 6px 0px 0px 6px;
-  border-radius: 6px 0px 0px 6px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  border-radius: 2px 0px 0px 2px;
 }
 .bi-segment > .last-element {
-  -webkit-border-radius: 0px 6px 6px 0px;
-  -moz-border-radius: 0px 6px 6px 0px;
-  border-radius: 0px 6px 6px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  border-radius: 0px 2px 2px 0px;
 }
 .bi-segment.disabled > .center-element,
 .bi-segment.disabled > .first-element {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;
@@ -996,8 +1282,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #F0F3F7 !important;
-  border-color: #F0F3F7 !important;
+  background: #d0d4da !important;
+  border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -1456,8 +1742,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-radius: 5px;
 }
 .bi-theme-dark .scrollbar-layout-main {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 .scrollbar-layout-main-vertical {
   bottom: 0;
@@ -1479,8 +1765,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d878d9f,endColorstr=#0d878d9f);
 }
 .bi-theme-dark .scrollbar-layout-main-horizontal {
-  background-color: rgba(240, 243, 247, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0df0f3f7,endColorstr=#0df0f3f7);
+  background-color: rgba(208, 212, 218, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dd0d4da,endColorstr=#0dd0d4da);
 }
 /* Touching the scroll-track directly makes the scroll-track bolder */
 .scrollbar-layout-main-horizontal.public-scrollbar-main-active,
@@ -1537,8 +1823,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d878d9f,endColorstr=#4d878d9f);
 }
 .bi-theme-dark .public-scrollbar-face:after {
-  background-color: rgba(240, 243, 247, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4df0f3f7,endColorstr=#4df0f3f7);
+  background-color: rgba(208, 212, 218, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dd0d4da,endColorstr=#4dd0d4da);
 }
 .public-scrollbar-main:hover .public-scrollbar-face:after,
 .public-scrollbar-main-active .public-scrollbar-face:after,
@@ -1549,8 +1835,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark .public-scrollbar-main:hover .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-main-active .public-scrollbar-face:after,
 .bi-theme-dark .public-scrollbar-face-active:after {
-  background-color: rgba(240, 243, 247, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3f0f3f7,endColorstr=#b3f0f3f7);
+  background-color: rgba(208, 212, 218, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
 .horizontal-scrollbar {
   bottom: 0;

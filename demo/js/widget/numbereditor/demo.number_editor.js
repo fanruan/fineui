@@ -22,6 +22,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
             } else {
                 editor.setDownEnable(true);
             }
+            BI.Msg.toast(editor.getValue());
         });
         return {
             type: "bi.vertical",

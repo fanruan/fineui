@@ -45,7 +45,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

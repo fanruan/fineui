@@ -2271,7 +2271,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             popup: {
                 el: this.popupview,
                 stopPropagation: true,
-                maxHeight: 1000
+                maxHeight: 1000,
+                minWidth: 140
             }
         });
 
@@ -2353,7 +2354,7 @@ BI.DownListGroup = BI.inherit(BI.Widget, {
 
 });
 BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.Single, {
+BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.DownListItem.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -2376,30 +2377,61 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         BI.DownListItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.text = BI.createWidget({
-            type: "bi.icon_text_item",
-            element: this,
-            height: o.height,
+            type: "bi.label",
+            cls: "list-item-text",
+            textAlign: "left",
+            hgap: o.textHgap,
+            vgap: o.textVgap,
+            lgap: o.textLgap,
+            rgap: o.textRgap,
             text: o.text,
             value: o.value,
-            logic: o.logic,
-            selected: o.selected,
-            disabled: o.disabled,
-            iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth,
-            textHgap: o.textHgap,
-            textVgap: o.textVgap,
-            textLgap: o.textLgap,
-            textRgap: o.textRgap,
-            father: o.father,
-            bubble: o.bubble
+            keyword: o.keyword,
+            height: o.height
         });
-        this.text.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        this.icon = BI.createWidget({
+            type: "bi.center_adapt",
+            width: 36,
+            height: o.height,
+            items: [{
+                el: {
+                    type: "bi.icon",
+                    width: o.iconWidth,
+                    height: o.iconHeight
+                }
+            }]
         });
-        this.text.on(BI.IconTextItem.EVENT_CHANGE, function () {
-            self.fireEvent(BI.DownListItem.EVENT_CHANGE);
-        });
-        // this.setSelected(o.selected);
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left), BI.extend(o.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, this.icon, this.text)
+        }))));
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    },
+
+    setText: function () {
+        this.text.setText.apply(this.text, arguments);
+    },
+
+    getText: function () {
+        return this.text.getText();
+    },
+
+    doClick: function () {
+        BI.DownListItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.DownListItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     doRedMark: function () {
@@ -2410,25 +2442,12 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         this.text.unRedMark.apply(this.text, arguments);
     },
 
-    isSelected: function () {
-        return this.text.isSelected();
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
     },
 
-    setSelected: function (b) {
-        this.text.setSelected(b);
-        // if (b === true) {
-        //     this.element.addClass("dot-e-font");
-        // } else {
-        //     this.element.removeClass("dot-e-font");
-        // }
-    },
-
-    setValue: function (v) {
-        this.text.setValue(v);
-    },
-
-    getValue: function () {
-        return this.text.getValue();
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
     }
 });
 BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
@@ -2461,7 +2480,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
         this.icon1 = BI.createWidget({
             type: "bi.icon_button",
             cls: o.iconCls1,
-            width: 24,
+            width: 36,
             forceNotSelected: true,
             selected: this._digest(o.value)
         });
@@ -2646,6 +2665,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
+                        lgap: 1,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -3633,7 +3653,8 @@ BI.DynamicDateParamItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
     
     props: {
@@ -3644,7 +3665,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     
     _init: function () {
         BI.DynamicDatePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
@@ -3660,6 +3681,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         cls: "bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
+                        textHeight: c.buttonHeight - 1,
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
                             action: function () {
@@ -3671,6 +3693,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
                             self.textButton = this;
@@ -3685,6 +3708,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -4399,7 +4423,8 @@ BI.extend(BI.DynamicDateTimeCombo, {
     Dynamic: 2
 });BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -4410,7 +4435,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
     _init: function () {
         BI.DynamicDateTimePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
@@ -4424,6 +4449,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -4436,6 +4462,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -4451,6 +4478,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -6220,7 +6248,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            errorText: "",
+            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -6246,10 +6274,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         this.labelTwo = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
+            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -6499,13 +6527,13 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     _setLabelOnePosition: function (percent) {
-        this.labelOne.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelOne.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setLabelTwoPosition: function (percent) {
-        this.labelTwo.element.css({left: percent + "%"});
-        this._checkOverlap();
+        // this.labelTwo.element.css({left: percent + "%"});
+        // this._checkOverlap();
     },
 
     _setSliderOnePosition: function (percent) {
@@ -9144,7 +9172,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.icon_text_item",
-            cls: "cursor-default check-font display-list-item bi-tips",
+            cls: "cursor-default check-font icon-size-12 display-list-item bi-tips",
             once: true,
             invalid: true,
             selected: true,
@@ -13960,7 +13988,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         var self = this;
         this.indicator = BI.createWidget({
             type: "bi.icon_button",
-            cls: "check-font trigger-check-selected",
+            cls: "check-font trigger-check-selected icon-size-12",
             width: 15,
             height: 15,
             stopPropagation: true
@@ -14212,7 +14240,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            o.value = this.getValue();
+            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
@@ -14223,7 +14251,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "pull-up-font top-button bi-border-left bi-list-item-active3"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -14234,7 +14262,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "pull-down-font bottom-button bi-border-left bi-list-item-active3"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -14314,7 +14342,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         border: 1,
         less: 0,
         less_equal: 1,
-        numTip: ""
+        numTip: "",
+        adjustYOffset: 2
     },
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
@@ -14600,17 +14629,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -14646,7 +14678,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         w.on(BI.Editor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                offsetStyle: "left"
+                offsetStyle: "left",
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -14659,13 +14692,15 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -14682,17 +14717,20 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
-                        offsetStyle: "left"
+                        offsetStyle: "left",
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -17155,6 +17193,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -17239,6 +17278,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -17323,6 +17363,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -19952,17 +19993,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
             validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
             text: "",
             height: 24
         });
@@ -19974,18 +20005,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget({
             type: "bi.editor",
             height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: 4,
+            vgap: 2,
             value: o.value,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
+            allowBlank: false
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
@@ -19993,9 +20017,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             title: function () {
                 return self.getValue();
             },
-            warningTitle: o.warningTitle,
-            tipType: o.tipType,
-            textAlign: "left",
+            textAlign: o.textAlign,
             height: o.height,
             hgap: 4,
             handler: function () {
@@ -20263,10 +20285,10 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
         this.label = BI.createWidget({
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
-            errorText: "",
             text: o.unit,
             width: c.EDITOR_WIDTH - 2,
             allowBlank: false,
+            textAlign: "center",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -20314,10 +20336,9 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -20426,7 +20447,7 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
@@ -22178,7 +22199,8 @@ BI.extend(BI.DynamicYearCombo, {
  */
 BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -22191,7 +22213,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearCombo.Static};
         return {
             type: "bi.vtape",
@@ -22204,6 +22226,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22215,6 +22238,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
+                        textHeight: c.buttonHeight - 1,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
@@ -22231,6 +22255,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -22930,7 +22955,8 @@ BI.extend(BI.DynamicYearMonthCombo, {
  */
 BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -22943,7 +22969,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearMonthCombo.Static};
         return {
             type: "bi.vtape",
@@ -22956,6 +22982,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -22968,6 +22995,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
                         ref: function () {
@@ -22983,6 +23011,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
@@ -23453,35 +23482,11 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_VALID, function () {
-            BI.Bubbles.hide("error");
-            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
-                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
-                self.element.addClass(self.constants.timeErrorCls);
-                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
-                    offsetStyle: "center"
-                });
-                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
-            } else {
-                self._clearTitle();
-                self.element.removeClass(self.constants.timeErrorCls);
-            }
+            self._checkValid();
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
-            BI.Bubbles.hide("error");
-            var smallDate = self.left.getKey(), bigDate = self.right.getKey();
-            if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
-                self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
-                self.element.addClass(self.constants.timeErrorCls);
-                BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
-                    offsetStyle: "center"
-                });
-                self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
-            } else {
-                self._clearTitle();
-                self.element.removeClass(self.constants.timeErrorCls);
-            }
+            self._checkValid();
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -23519,8 +23524,17 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     // 判格式合法
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
-        var smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
-        var bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+
+        var smallDate4Check = "";
+        if (BI.isNotNull(smallObj)) {
+            smallDate4Check = (smallObj[0] || "") + "-" + (smallObj[1] || 1);
+        }
+
+        var bigDate4Check = "";
+        if (BI.isNotNull(bigObj)) {
+            bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
+        }
+
         return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate) && this._checkVoid({
             year: smallObj[0],
             month: smallObj[1],
@@ -23543,10 +23557,29 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     _clearTitle: function () {
         this.setTitle("");
     },
+    _checkValid: function () {
+        var self = this;
+
+        BI.Bubbles.hide("error");
+        var smallDate = self.left.getKey(), bigDate = self.right.getKey();
+        if (self.left.isValid() && self.right.isValid() && self._check(smallDate, bigDate) && self._compare(smallDate, bigDate)) {
+            self._setTitle(BI.i18nText("BI-Time_Interval_Error_Text"));
+            self.element.addClass(self.constants.timeErrorCls);
+            BI.Bubbles.show("error", BI.i18nText("BI-Time_Interval_Error_Text"), self, {
+                offsetStyle: "center"
+            });
+            self.fireEvent(BI.YearMonthInterval.EVENT_ERROR);
+        } else {
+            self._clearTitle();
+            self.element.removeClass(self.constants.timeErrorCls);
+        }
+    },
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
         this.right.setValue(date.end);
+
+        this._checkValid();
     },
     getValue: function () {
         return {start: this.left.getValue(), end: this.right.getValue()};
@@ -23908,7 +23941,8 @@ BI.extend(BI.DynamicYearQuarterCombo, {
     Dynamic: 2
 });BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -23921,7 +23955,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
     },
 
     render: function () {
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
             type: "bi.vtape",
@@ -23935,6 +23969,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -23946,6 +23981,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
                         ref: function () {
@@ -23962,6 +23998,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         forceCenter: true,
                         cls: "bi-border-top bi-high-light",
                         shadow: true,
+                        textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -25245,7 +25282,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.combo.getValue();
     },
 
-    populate: function () {
+    populate: function (items) {
+        this._initData(items);
         this.combo.populate.apply(this.combo, arguments);
     }
 });

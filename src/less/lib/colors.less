@@ -18,6 +18,10 @@
 @color-bi-text-disabled: @font-color-disabled;
 //深色主题灰化字体颜色
 @color-bi-text-disabled-theme-dark: @font-color-disabled-theme-dark;
+//灰化图标色
+@color-bi-icon-disabled: @font-color-light-disabled;
+//深色主题灰化图标颜色
+@color-bi-icon-disabled-theme-dark: @font-color-light-disabled-theme-dark;
 //提示字体颜色
 @color-bi-text-tips: @font-color-tips;
 //成功字体颜色
@@ -106,8 +110,8 @@
 @color-bi-blue-60: fade(@font-color-highlight, 60);
 @color-bi-blue-40: fade(@font-color-highlight, 40);
 @color-bi-blue-30: fade(@font-color-highlight, 30);
-@color-bi-blue-20: fade(@font-color-highlight, 20);
-@color-bi-blue-10: fade(@font-color-highlight, 10);
+@color-bi-blue-20: @background-color-medium-highlight;
+@color-bi-blue-10: @background-color-light-highlight;
 @color-bi-blue-5: fade(@font-color-highlight, 5);
 
 //light-blue

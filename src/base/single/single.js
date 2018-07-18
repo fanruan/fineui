@@ -19,17 +19,21 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标
+            belowMouse: false   // title是否跟随鼠标,
         });
     },
 
     _showToolTip: function (e, opt) {
         opt || (opt = {});
-        var self = this;
+        var self = this, o = this.options;
         var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
         var title = type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
         if (BI.isKey(title)) {
             BI.Tooltips.show(e, this.getName(), title, type, this, opt);
+            if (o.action) {
+                BI.Actions.runAction(o.action, "hover", o, this);
+            }
+            BI.Actions.runGlobalAction("hover", o, this);
         }
     },
 

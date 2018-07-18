@@ -90,7 +90,7 @@ BI.SQLEditor = BI.inherit(BI.Widget, {
         var from = this.editor.getCursor();
         this.editor.replaceSelection(param);
         var to = this.editor.getCursor();
-        var options = {className: "param", atomic: true};
+        var options = {className: "param", atomic: true, replacedWith: $("<span class='param start end' />").text(param)[0]};
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");

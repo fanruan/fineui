@@ -8,6 +8,10 @@ Demo.BASE_CONFIG = [{
     value: "demo.label"
 }, {
     pId: 2,
+    text: "bi.icon_label",
+    value: "demo.icon_label"
+}, {
+    pId: 2,
     text: "title提示",
     value: "demo.title"
 }, {

@@ -1,6 +1,7 @@
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     constants: {
-        tabHeight: 30
+        tabHeight: 30,
+        buttonHeight: 24
     },
 
     props: {
@@ -11,7 +12,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.DynamicDateTimePopup.superclass._init.apply(this, arguments);
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
@@ -25,6 +26,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         listeners: [{
@@ -37,6 +39,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
                         ref: function () {
@@ -52,6 +55,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         cls: "bi-high-light bi-border-top",
+                        textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
                         listeners: [{

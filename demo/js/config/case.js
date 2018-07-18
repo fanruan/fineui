@@ -230,4 +230,8 @@ Demo.CASE_CONFIG = [{
     pId: 3,
     text: "bi.segment",
     value: "demo.segment"
+}, {
+    pId: 3,
+    text: "点击项样式查看",
+    value: "demo.click_item_effect"
 }];

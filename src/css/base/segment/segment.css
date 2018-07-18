@@ -9,18 +9,18 @@
 }
 .bi-segment > .first-element {
   border-left: 1px solid #3685f2;
-  -webkit-border-radius: 6px 0px 0px 6px;
-  -moz-border-radius: 6px 0px 0px 6px;
-  border-radius: 6px 0px 0px 6px;
+  -webkit-border-radius: 2px 0px 0px 2px;
+  -moz-border-radius: 2px 0px 0px 2px;
+  border-radius: 2px 0px 0px 2px;
 }
 .bi-segment > .last-element {
-  -webkit-border-radius: 0px 6px 6px 0px;
-  -moz-border-radius: 0px 6px 6px 0px;
-  border-radius: 0px 6px 6px 0px;
+  -webkit-border-radius: 0px 2px 2px 0px;
+  -moz-border-radius: 0px 2px 2px 0px;
+  border-radius: 0px 2px 2px 0px;
 }
 .bi-segment.disabled > .center-element,
 .bi-segment.disabled > .first-element {
-  border-color: #F0F3F7;
+  border-color: #d0d4da;
 }
 .bi-theme-dark .bi-segment > .center-element {
   overflow: hidden;
