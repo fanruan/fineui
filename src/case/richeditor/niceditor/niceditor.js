@@ -66,6 +66,7 @@
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
+                    this.instance.saveRng();
                     return;
                 }
             } while (t = t.parentNode);
@@ -213,8 +214,19 @@
         },
 
         saveRng: function () {
-            this.savedRange = this.getRng();
+            var range = this.getRng();
+            if (!this._isChildOf(this.getSelectionContainerElem(range), this.element[0])) {
+                return;
+            }
+            this.savedRange = range;
             this.savedSel = this.getSel();
+        },
+
+        getSelectionContainerElem: function (range) {
+            if (range) {
+                var elem = range.commonAncestorContainer;
+                return elem.nodeType === 1 ? elem : elem.parentNode;
+            }
         },
 
         setFocus: function (el) {
@@ -331,7 +343,7 @@
         },
 
         insertHTML: function (html) {
-            var range = this.getRng();
+            var range = this.savedRange || this.getRng();
 
             try {
                 // w3c
@@ -362,6 +374,20 @@
 
         nicCommand: function (cmd, args) {
             document.execCommand(cmd, false, args);
+        },
+
+        _isChildOf: function(child, parent) {
+            var parentNode;
+            if(child && parent) {
+                parentNode = child.parentNode;
+                while(parentNode) {
+                    if(parent === parentNode) {
+                        return true;
+                    }
+                    parentNode = parentNode.parentNode;
+                }
+            }
+            return false;
         }
     });
 }());

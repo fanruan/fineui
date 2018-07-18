@@ -76270,6 +76270,9 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         eventName: BI.ColorChooserPopup.EVENT_VALUE_CHANGE,
                         action: function () {
                             fn();
+                            if (!self._isRGBColor(self.colorPicker.getValue())) {
+                                self.combo.hideView();
+                            }
                         }
                     }, {
                         eventName: BI.ColorChooserPopup.EVENT_CHANGE,
@@ -76302,6 +76305,10 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
         });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
     },
 
     isViewVisible: function () {
@@ -83159,7 +83166,7 @@ BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
         $(image).addClass("rich-editor-param");
         $(image).attr("style", attrs.style);
         $(image).attr("name", name);
-        this.options.editor.insertHTML($("<div>").append(image).html());
+        instance.insertHTML($("<div>").append(image).html());
         // var sel = this._get$Sel();
         // var wrapper = o.editor.instance.getElm().element;
         // if (wrapper.find(sel).length <= 0) {
@@ -83406,6 +83413,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
+                    this.instance.saveRng();
                     return;
                 }
             } while (t = t.parentNode);
@@ -83553,8 +83561,19 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         saveRng: function () {
-            this.savedRange = this.getRng();
+            var range = this.getRng();
+            if (!this._isChildOf(this.getSelectionContainerElem(range), this.element[0])) {
+                return;
+            }
+            this.savedRange = range;
             this.savedSel = this.getSel();
+        },
+
+        getSelectionContainerElem: function (range) {
+            if (range) {
+                var elem = range.commonAncestorContainer;
+                return elem.nodeType === 1 ? elem : elem.parentNode;
+            }
         },
 
         setFocus: function (el) {
@@ -83671,7 +83690,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         insertHTML: function (html) {
-            var range = this.getRng();
+            var range = this.savedRange || this.getRng();
 
             try {
                 // w3c
@@ -83702,6 +83721,20 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         nicCommand: function (cmd, args) {
             document.execCommand(cmd, false, args);
+        },
+
+        _isChildOf: function(child, parent) {
+            var parentNode;
+            if(child && parent) {
+                parentNode = child.parentNode;
+                while(parentNode) {
+                    if(parent === parentNode) {
+                        return true;
+                    }
+                    parentNode = parentNode.parentNode;
+                }
+            }
+            return false;
         }
     });
 }());
