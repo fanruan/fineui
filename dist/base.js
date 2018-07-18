@@ -17115,34 +17115,24 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
                     height: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17252,16 +17242,11 @@ BI.BlankIconTextItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17357,17 +17342,12 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -17378,16 +17358,12 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    height: o.height,
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17486,16 +17462,11 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17590,16 +17561,11 @@ BI.TextIconItem = BI.inherit(BI.BasicButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17778,17 +17744,12 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
@@ -17800,16 +17761,11 @@ BI.IconTextIconNode = BI.inherit(BI.NodeButton, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
@@ -17899,16 +17855,11 @@ BI.IconTextNode = BI.inherit(BI.NodeButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
@@ -17992,16 +17943,11 @@ BI.TextIconNode = BI.inherit(BI.NodeButton, {
             height: o.height
         });
         this.icon = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
 
         BI.createWidget(BI.extend({
