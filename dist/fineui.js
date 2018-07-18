@@ -83299,6 +83299,9 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     },
 
     doCommand: function (args) {
+        // 执行命令前先恢复选区
+        this.options.editor.instance.restoreRng();
+
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
