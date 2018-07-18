@@ -43,34 +43,24 @@ BI.BlankIconTextIconItem = BI.inherit(BI.BasicButton, {
         });
 
         var icon1 = BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.icon_label",
             cls: o.iconCls1,
             width: o.height,
             height: o.height,
-            items: [{
-                el: {
-                    type: "bi.icon",
-                    width: o.iconWidth,
-                    height: o.iconHeight
-                }
-            }]
+            iconWidth: o.iconWidth,
+            iconHeight: o.iconHeight
         });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
             items: [{
                 el: {
-                    type: "bi.center_adapt",
+                    type: "bi.icon_label",
                     cls: o.iconCls2,
                     width: o.height,
                     height: o.height,
-                    items: [{
-                        el: {
-                            type: "bi.icon",
-                            width: o.iconWidth,
-                            height: o.iconHeight
-                        }
-                    }]
+                    iconWidth: o.iconWidth,
+                    iconHeight: o.iconHeight
                 },
                 top: 0,
                 bottom: 0,
