@@ -2228,6 +2228,54 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     text: "MVC-3",
                     iconCls: "pull-right-font",
                     value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
+                }, {
+                    text: "MVC-3",
+                    iconCls: "pull-right-font",
+                    value: 3
                 }]
             }, {
                 type: "bi.search_multi_text_value_combo",
@@ -12853,7 +12901,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
     _createMultiSelectCombo: function () {
         var self = this;
         var widget = BI.createWidget({
-            type: "bi.multi_select_insert_no_bar_list",
+            type: "bi.multi_select_insert_list",
             ref: function (ref) {
                 self.list = ref;
             },

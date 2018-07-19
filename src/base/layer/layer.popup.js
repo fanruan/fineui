@@ -44,8 +44,14 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _init: function () {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        this.wheelHandler = new BI.WheelHandler(function (deltaX, deltaY) {
+            var scrollTop = self.button_group.element.scrollTop();
+            scrollTop += deltaY;
+            self.button_group.element.scrollTop(scrollTop);
+        }, false, true);
         var fn = function (e) {
-                e.stopPropagation();
+                self.wheelHandler.onWheel(e.originalEvent);
+                e.stopEvent();
             }, stop = function (e) {
                 e.stopEvent();
                 return false;
@@ -56,7 +62,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});
 
-        this.element.bind("mousewheel", fn);
+        this.element.bind("mousewheel", BI.bind(fn, this));
 
         o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
         o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
