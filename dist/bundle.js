@@ -26938,6 +26938,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         }, op), context);
         var layout = BI.createWidget({
             type: "bi.absolute",
+            invisible: true,
             items: [{
                 el: widget,
                 left: 0,
@@ -83049,6 +83050,9 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     },
 
     doCommand: function (args) {
+        // 执行命令前先恢复选区
+        this.options.editor.instance.restoreRng();
+
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
@@ -99060,14 +99064,12 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.icon_text_item",
+            type: "bi.label",
             invisible: true,
-            logic: {
-                dynamic: true
-            },
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
-            cls: "text-add-tip-font",
             height: this.constants.height,
+            cls: "bi-high-light",
+            hgap: 5,
             handler: function () {
                 self.fireEvent(BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
             }
@@ -99093,7 +99095,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                type: "bi.float_center_adapt",
+                type: "bi.vertical",
                 items: [this.tooltipClick, this.addNotMatchTip],
                 height: this.constants.height
             }, {
