@@ -376,6 +376,34 @@
             document.execCommand(cmd, false, args);
         },
 
+        initSelection: function (newLine) {
+            var newLineHtml = this._isIE11Below() ? "<p></p>" : "<p><br></p>"
+            var el = this.elm.element;
+            var children = el.children();
+            if (!children.length) {
+                // 如果编辑器区域无内容，添加一个空行，重新设置选区
+                el.append(newLineHtml);
+                this.initSelection();
+                return;
+            }
+            
+            var last = children.last();
+
+            if (newLine) {
+                // 新增一个空行
+                var html = last.html().toLowerCase();
+                var nodeName = last.nodeName;
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
+                    // 最后一个元素不是空行，添加一个空行，重新设置选区
+                    el.append(newLineHtml);
+                    this.initSelection();
+                    return;
+                }
+            }
+
+            this.setFocus(last[0]);
+        },
+
         _isChildOf: function(child, parent) {
             var parentNode;
             if(child && parent) {
@@ -388,6 +416,13 @@
                 }
             }
             return false;
+        },
+
+        _isIE11Below: function() {
+            if (!BI.isIE()) {
+                return false;
+            }
+            return BI.getIEVersion() < 11;
         }
     });
 }());
