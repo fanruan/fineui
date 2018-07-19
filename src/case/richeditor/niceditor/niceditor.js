@@ -394,7 +394,7 @@
                 var html = last.html().toLowerCase();
                 var nodeName = last.nodeName;
                 if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
-                    // 最后一个元素不是 <p><br></p>，添加一个空行，重新设置选区
+                    // 最后一个元素不是空行，添加一个空行，重新设置选区
                     el.append(newLineHtml);
                     this.initSelection();
                     return;
