@@ -4471,7 +4471,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
@@ -4707,7 +4707,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
