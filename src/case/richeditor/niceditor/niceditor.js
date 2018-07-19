@@ -377,7 +377,7 @@
         },
 
         initSelection: function (newLine) {
-            var newLineHtml = this._isIE10Below() ? "<p></p>" : "<p><br></p>"
+            var newLineHtml = this._isIE11Below() ? "<p></p>" : "<p><br></p>"
             var el = this.elm.element;
             var children = el.children();
             if (!children.length) {
@@ -418,11 +418,11 @@
             return false;
         },
 
-        _isIE10Below: function() {
+        _isIE11Below: function() {
             if (!BI.isIE()) {
                 return false;
             }
-            return BI.getIEVersion() < 10;
+            return BI.getIEVersion() < 11;
         }
     });
 }());
