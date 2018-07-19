@@ -29,54 +29,6 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     text: "MVC-3",
                     iconCls: "pull-right-font",
                     value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
-                }, {
-                    text: "MVC-3",
-                    iconCls: "pull-right-font",
-                    value: 3
                 }]
             }, {
                 type: "bi.search_multi_text_value_combo",
