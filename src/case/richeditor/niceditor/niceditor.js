@@ -85,6 +85,8 @@
         },
 
         setValue: function (v) {
+            v = v || "";
+            v = v.startWith("<div>") ? v : "<div>" + v + "</div>";
             this.instance.setContent(v);
         },
 
@@ -108,6 +110,7 @@
     BI.NicEditor.EVENT_BLUR = "blur";
     BI.NicEditor.EVENT_FOCUS = "focus";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
+    BI.NicEditor.EVENT_KEYUP = "keyup";
     BI.shortcut("bi.nic_editor", BI.NicEditor);
 
     var prefix = "niceditor-";
@@ -117,6 +120,8 @@
         _init: function () {
             nicEditorInstance.superclass._init.apply(this, arguments);
             var o = this.options;
+            var initValue = o.value || "<br>";
+            initValue = initValue.startWith("<div>") ? initValue : "<div>" + initValue + "</div>";
             this.ne = this.options.ne;
             this.elm = BI.createWidget({
                 type: "bi.layout",
@@ -126,8 +131,9 @@
             this.elm.element.css({
                 minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
                 outline: "none",
-                padding: "0 10px"
-            }).html(o.value);
+                padding: "0 10px",
+                wordWrap: "break-word"
+            }).html(initValue);
 
             if(o.readOnly) {
                 this.elm.element.attr("contentEditable", false);
@@ -161,8 +167,7 @@
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on("mousedown", BI.bind(this.selected, this));
-            this.elm.element.on("keyup", BI.bind(this.keyDown, this));
-            // this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
             this.elm.element.on("focus", BI.bind(this.selected, this));
             this.elm.element.on("blur", BI.bind(this.blur, this));
             this.elm.element.on("keyup", BI.bind(this.selected, this));
@@ -274,6 +279,13 @@
         },
 
         keyDown: function (e, t) {
+            if (e.keyCode === 8) {
+                var html = this.elm.element.html().toLowerCase().trim();
+                if (html === "<div><br></div>" || html === "<div></div>") {
+                    e.preventDefault()
+                    return;
+                }
+            }
             this.ne.fireEvent("keydown", e);
         },
 
@@ -294,6 +306,19 @@
                 this.ne.fireEvent("selected", e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + "selected");
+            }
+            this.ne.fireEvent("keyup", e);
+
+            if (e.keyCode !== 8) {
+                return;
+            }
+            var newLine;
+            var html = this.elm.element.html().toLowerCase().trim();
+            if (!html || html === '<br>') {
+                newLine = $("<div></div>");
+                this.elm.element.html('');
+                this.elm.element.append(newLine);
+                this.setFocus(newLine[0]);
             }
             // return false;
         },
@@ -377,7 +402,7 @@
         },
 
         initSelection: function (newLine) {
-            var newLineHtml = this._isIE11Below() ? "<p></p>" : "<p><br></p>"
+            var newLineHtml = this._getNewLine();
             var el = this.elm.element;
             var children = el.children();
             if (!children.length) {
@@ -393,7 +418,7 @@
                 // 新增一个空行
                 var html = last.html().toLowerCase();
                 var nodeName = last.nodeName;
-                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "DIV") {
                     // 最后一个元素不是空行，添加一个空行，重新设置选区
                     el.append(newLineHtml);
                     this.initSelection();
@@ -402,6 +427,10 @@
             }
 
             this.setFocus(last[0]);
+        },
+
+        _getNewLine: function () {
+            return "<div><br></div>";
         },
 
         _isChildOf: function(child, parent) {
