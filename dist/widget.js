@@ -11232,7 +11232,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.label",
+            type: "bi.text_button",
             invisible: true,
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
@@ -12292,6 +12292,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
+                    self._showAdapter();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,

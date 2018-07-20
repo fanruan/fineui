@@ -118,6 +118,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
+                    self._showAdapter();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
