@@ -54777,7 +54777,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({resize: "none"});
+        this.content.element.css({resize: "none", whiteSpace: "normal"});
         BI.createWidget({
             type: "bi.absolute",
             element: this,
