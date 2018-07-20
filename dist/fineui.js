@@ -77276,7 +77276,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
@@ -77512,7 +77512,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
@@ -99377,7 +99377,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.label",
+            type: "bi.text_button",
             invisible: true,
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
             height: this.constants.height,
@@ -100437,6 +100437,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
+                    self._showAdapter();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
@@ -114666,7 +114667,7 @@ BI.i18n = {
     "BI-More_Than": "大于",
     "BI-More_And_Equal": "大于等于",
     "BI-Please_Enter_SQL": "请输入SQL",
-    "BI-Basic_Click_To_Add_Text": "点击新增\"{R1}\"",
+    "BI-Basic_Click_To_Add_Text": "+点击新增\"{R1}\"",
     "BI-Basic_Please_Select": "请选择",
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
