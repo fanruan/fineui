@@ -718,7 +718,7 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
             height: 30
         });
         BI.createWidget({
-            type: "bi.vertical",
+            type: "bi.absolute",
             element: this,
             items: [{
                 el: editor1,
@@ -758,9 +758,6 @@ BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Wid
                 },
                 left: 200,
                 bottom: 60
-            }, {
-                type: "bi.label",
-                height: 500
             }]
         })
     }

@@ -4815,6 +4815,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", //top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            container: null,
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true,//是否需要高度调整
@@ -4838,6 +4839,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             trigger: o.trigger,
             toggle: o.toggle,
             direction: o.direction,
+            container: o.container,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
             isNeedAdjustHeight: o.isNeedAdjustHeight,
