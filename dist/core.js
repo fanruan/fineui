@@ -25696,7 +25696,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         var e = fmt.indexOf("E");
         var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
         if (/^[0\.-]+$/.test(text)) {
-            text = BI._numberFormat(0.0, eleft) + "E" + BI._numberFormat(0, eright);
+            text = _numberFormat(0.0, eleft) + "E" + _numberFormat(0, eright);
         } else {
             var isNegative = text < 0;
             if (isNegative) {
@@ -25730,7 +25730,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
             if (right < 0 && eright.indexOf("-") < 0) {
                 eright += ";-" + eright;
             }
-            text = BI._numberFormat(left, eleft) + "E" + BI._numberFormat(right, eright);
+            text = _numberFormat(left, eleft) + "E" + _numberFormat(right, eright);
             if (isNegative) {
                 text = "-" + text;
             }
