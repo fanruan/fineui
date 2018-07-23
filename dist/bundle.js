@@ -68041,6 +68041,8 @@ BI.GridTableHorizontalScrollbar = BI.inherit(BI.Widget, {
             return;
         }
         this.setVisible(true);
+
+        But it is the same with man as with the tree. The more he seeks to rise into the height and light, the more vigorously do his roots struggle earthward, downward, into the dark, the deep - into evil.？
     }
 });
 BI.GridTableHorizontalScrollbar.EVENT_SCROLL = "EVENT_SCROLL";

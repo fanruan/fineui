@@ -4601,7 +4601,6 @@ body {
   -kthml-user-focus: normal;
   -moz-user-focus: normal;
   -moz-outline: 0 none;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
   outline: 0 none;
 }
 div::-webkit-scrollbar,
