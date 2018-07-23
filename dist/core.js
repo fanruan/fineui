@@ -26161,7 +26161,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     cv = new Date(cv);
                 } else {
                     // 字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
-                    cv = Date.parseDateTime(cv + "", Date.patterns.ISO8601Long);
+                    cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
                 }
             }
             if (!BI.isNull(cv)) {

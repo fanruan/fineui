@@ -26410,7 +26410,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     cv = new Date(cv);
                 } else {
                     // 字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
-                    cv = Date.parseDateTime(cv + "", Date.patterns.ISO8601Long);
+                    cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
                 }
             }
             if (!BI.isNull(cv)) {
@@ -54777,7 +54777,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({resize: "none"});
+        this.content.element.css({resize: "none", whiteSpace: "normal"});
         BI.createWidget({
             type: "bi.absolute",
             element: this,
