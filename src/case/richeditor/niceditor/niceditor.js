@@ -6,6 +6,12 @@
  * @extends BI.Widget
  */
 !(function () {
+    function isIE11Below () {
+        if (!BI.isIE()) {
+            return false;
+        }
+        return BI.getIEVersion() < 11;
+    }
     BI.NicEditor = BI.inherit(BI.Widget, {
         _defaultConfig: function () {
             return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
@@ -85,7 +91,7 @@
         },
 
         setValue: function (v) {
-            v = v || "<br>";
+            v = v || ( isIE11Below() ? "" : "<br>");
             v = v.startWith("<p>") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
@@ -315,7 +321,7 @@
             var newLine;
             var html = this.elm.element.html().toLowerCase().trim();
             if (!html || html === '<br>') {
-                newLine = $("<p><br></p>");
+                newLine = $(this._getNewLine());
                 this.elm.element.html('');
                 this.elm.element.append(newLine);
                 this.setFocus(newLine[0]);
@@ -430,7 +436,7 @@
         },
 
         _getNewLine: function () {
-            return "<p><br></p>";
+            return isIE11Below() ? "<p></p>" : "<p><br></p>";
         },
 
         _isChildOf: function(child, parent) {
@@ -447,11 +453,6 @@
             return false;
         },
 
-        _isIE11Below: function() {
-            if (!BI.isIE()) {
-                return false;
-            }
-            return BI.getIEVersion() < 11;
-        }
+
     });
 }());
