@@ -36506,9 +36506,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
             // 之所以默认为body，是因为transform的效果影响
-            // container: "body"
+            container: "body"
         });
     },
 
@@ -36651,6 +36651,10 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
+    },
+
+    destroyed: function () {
+        BI.Tooltips.remove(this.getName());
     }
 });/**
  * guy 表示一行数据，通过position来定位位置的数据
@@ -39187,7 +39191,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -39645,6 +39649,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";

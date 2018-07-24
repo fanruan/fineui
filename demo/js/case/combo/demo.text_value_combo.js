@@ -6,9 +6,9 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
         baseCls: ""
     },
     render: function () {
-        var combo;
+        var combo, wrapper;
         return {
-            type: "bi.vertical",
+            type: "bi.button_group",
             items: [{
                 type: "bi.text_value_combo",
                 ref: function () {
@@ -39,17 +39,23 @@ Demo.TextValueCombo = BI.inherit(BI.Widget, {
                     value: ["1", "2", "3"]
                 }
             }, {
-                type: "bi.popup_view",
+                type: "bi.button",
                 width: 90,
                 height: 25,
                 handler: function () {
-                    combo.setValue(3);
+                    wrapper.populate();
                 }
             }, {
                 type: 'bi.label',
                 height: 1000
             }],
-            vgap: 20
+            ref: function () {
+                wrapper = this;
+            },
+            layouts: [{
+                type: "bi.vertical",
+                vgap: 20
+            }]
         };
     }
 });
