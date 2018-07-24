@@ -39184,7 +39184,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            // 之所以默认为body，是因为
+            // 1、页面上如果有transform,那么fixed的表现行为就是absolute
+            // 2、另外在IE下，也会有位置偏移的问题
+            container: "body", // popupview放置的容器，默认为body
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
