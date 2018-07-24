@@ -342,7 +342,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
+            // 之所以默认为body，是因为transform的效果影响
+            container: "body"
         });
     },
 
@@ -376,7 +378,8 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse
+                belowMouse: o.belowMouse,
+                container: o.container
             });
         }
     },
@@ -3020,10 +3023,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            // 之所以默认为body，是因为
-            // 1、页面上如果有transform,那么fixed的表现行为就是absolute
-            // 2、另外在IE下，也会有位置偏移的问题
-            container: "body", // popupview放置的容器，默认为body
+            container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
