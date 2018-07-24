@@ -92,7 +92,7 @@
 
         setValue: function (v) {
             v = v || ( isIE11Below() ? "" : "<br>");
-            v = v.startWith("<p>") ? v : "<p>" + v + "</p>";
+            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
