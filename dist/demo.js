@@ -2131,9 +2131,9 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     value: 10
                 }]
             }, {
-                type: "bi.search_multi_text_value_combo",
+                type: "bi.all_value_multi_text_value_combo",
                 items: Demo.CONSTANTS.ITEMS,
-                text: "请选择",
+                text: "提示文本",
                 width: 200,
                 value: {
                     type: 1,
@@ -2141,7 +2141,13 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
                 },
                 ref: function () {
                     searchCombo = this;
-                }
+                },
+                listeners: [{
+                    eventName: "BI.AllValueMultiTextValueCombo.EVENT_CONFIRM",
+                    action: function () {
+                        BI.Msg.toast(JSON.stringify(searchCombo.getValue()));
+                    }
+                }]
             }, {
                 type: "bi.button",
                 text: "setValue(3)",

@@ -442,11 +442,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        var obj = {
-            type: BI.Selection.Multi,
-            value: v || []
-        };
-        this.storeValue = BI.deepClone(obj);
+        this.storeValue = BI.deepClone(v || {});
         this._updateAllValue();
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
@@ -454,15 +450,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        var obj = BI.deepClone(this.storeValue), self = this;
-        if(obj.type === BI.Selection.All) {
-            var values = [];
-            BI.each(this.options.items, function (idx, item) {
-                !BI.contains(self.storeValue.value, item.value) && values.push(item.value);
-            });
-            return values;
-        }
-        return obj.value;
+        return BI.deepClone(this.storeValue);
     },
 
     _populate: function () {

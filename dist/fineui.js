@@ -36506,9 +36506,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false,   // title是否跟随鼠标,
+            belowMouse: false   // title是否跟随鼠标,
             // 之所以默认为body，是因为transform的效果影响
-            container: "body"
+            // container: "body"
         });
     },
 
@@ -104804,11 +104804,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        var obj = {
-            type: BI.Selection.Multi,
-            value: v || []
-        };
-        this.storeValue = BI.deepClone(obj);
+        this.storeValue = BI.deepClone(v || {});
         this._updateAllValue();
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
@@ -104816,15 +104812,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        var obj = BI.deepClone(this.storeValue), self = this;
-        if(obj.type === BI.Selection.All) {
-            var values = [];
-            BI.each(this.options.items, function (idx, item) {
-                !BI.contains(self.storeValue.value, item.value) && values.push(item.value);
-            });
-            return values;
-        }
-        return obj.value;
+        return BI.deepClone(this.storeValue);
     },
 
     _populate: function () {
@@ -112829,7 +112817,63 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
     }
 });
 BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
+BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-all-value-multi-text-value-combo",
+        width: 200,
+        height: 30,
+        items: []
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.search_multi_text_value_combo",
+            text: o.text,
+            height: o.height,
+            items: o.items,
+            value: o.value,
+            valueFormatter: o.valueFormatter,
+            listeners: [{
+                eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.AllValueMultiTextValueCombo.EVENT_CONFIRM);
+                }
+            }],
+            ref: function () {
+                self.combo = this;
+            }
+        };
+    },
+
+    setValue: function (v) {
+        this.combo.setValue({
+            type: BI.Selection.Multi,
+            value: v || []
+        });
+    },
+
+    getValue: function () {
+        var obj = this.combo.getValue() || {};
+        obj.value = obj.value || [];
+        if(obj.type === BI.Selection.All) {
+            var values = [];
+            BI.each(this.options.items, function (idx, item) {
+                !BI.contains(obj.value, item.value) && values.push(item.value);
+            });
+            return values;
+        }
+        return obj.value || [];
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.combo.populate.apply(this, arguments);
+    }
+});
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
         perPage: 100
