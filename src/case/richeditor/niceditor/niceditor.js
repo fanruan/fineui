@@ -60,13 +60,13 @@
         selectCheck: function (e) {
             var t = e.target;
             var found = false;
+            this.instance.saveRng();
             do {
                 if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
-                    this.instance.saveRng();
                     return;
                 }
             } while (t = t.parentNode);
@@ -85,8 +85,8 @@
         },
 
         setValue: function (v) {
-            v = v || "";
-            v = v.startWith("<div>") ? v : "<div>" + v + "</div>";
+            v = v || "<br>";
+            v = v.startWith("<p>") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
@@ -121,7 +121,7 @@
             nicEditorInstance.superclass._init.apply(this, arguments);
             var o = this.options;
             var initValue = o.value || "<br>";
-            initValue = initValue.startWith("<div>") ? initValue : "<div>" + initValue + "</div>";
+            initValue = initValue.startWith("<p>") ? initValue : "<p>" + initValue + "</p>";
             this.ne = this.options.ne;
             this.elm = BI.createWidget({
                 type: "bi.layout",
@@ -281,7 +281,7 @@
         keyDown: function (e, t) {
             if (e.keyCode === 8) {
                 var html = this.elm.element.html().toLowerCase().trim();
-                if (html === "<div><br></div>" || html === "<div></div>") {
+                if (html === "<p><br></p>" || html === "<p></p>") {
                     e.preventDefault()
                     return;
                 }
@@ -315,7 +315,7 @@
             var newLine;
             var html = this.elm.element.html().toLowerCase().trim();
             if (!html || html === '<br>') {
-                newLine = $("<div></div>");
+                newLine = $("<p><br></p>");
                 this.elm.element.html('');
                 this.elm.element.append(newLine);
                 this.setFocus(newLine[0]);
@@ -418,7 +418,7 @@
                 // 新增一个空行
                 var html = last.html().toLowerCase();
                 var nodeName = last.nodeName;
-                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "DIV") {
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
                     // 最后一个元素不是空行，添加一个空行，重新设置选区
                     el.append(newLineHtml);
                     this.initSelection();
@@ -430,7 +430,7 @@
         },
 
         _getNewLine: function () {
-            return "<div><br></div>";
+            return "<p><br></p>";
         },
 
         _isChildOf: function(child, parent) {
