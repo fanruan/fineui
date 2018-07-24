@@ -90900,7 +90900,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = this.getBeginDate(date, obj);
             }
 
-            return date;
+            return BI.getDate(date.getFullYear(), date.getMonth(), date.getDate());
         },
 
         getBeginDate: function (date, obj) {
