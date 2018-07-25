@@ -36257,7 +36257,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
+            // 之所以默认为body，是因为transform的效果影响
+            container: "body"
         });
     },
 
@@ -36291,7 +36293,8 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse
+                belowMouse: o.belowMouse,
+                container: o.container
             });
         }
     },
@@ -36399,6 +36402,11 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
+    },
+
+    _unMount: function () {
+        BI.Single.superclass._unMount.apply(this, arguments);
+        BI.Tooltips.remove(this.getName());
     }
 });/**
  * guy 表示一行数据，通过position来定位位置的数据
@@ -38935,7 +38943,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为body
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -39393,6 +39401,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -39707,7 +39721,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-
+            container: null,
             popup: {
                 el: {
                     type: "bi.button_tree",
@@ -39751,6 +39765,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,
@@ -54429,7 +54444,8 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: 2,
+                container: "body"
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
@@ -54502,6 +54518,10 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    destroyed: function () {
+        BI.Bubbles.remove(this.getName());
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -76477,6 +76497,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
             el: {
@@ -79341,6 +79362,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
+            container: null,
             value: ""
         });
     },
@@ -79371,6 +79393,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -83405,6 +83428,12 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
  * @extends BI.Widget
  */
 !(function () {
+    function isIE11Below () {
+        if (!BI.isIE()) {
+            return false;
+        }
+        return BI.getIEVersion() < 11;
+    }
     BI.NicEditor = BI.inherit(BI.Widget, {
         _defaultConfig: function () {
             return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
@@ -83458,6 +83487,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         selectCheck: function (e) {
             var t = e.target;
+            var self = this;
             var found = false;
             do {
                 if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
@@ -83466,6 +83496,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 }
                 if (this.instance.checkToolbar(t)) {
                     this.instance.saveRng();
+                    // 如果是点击在toolbar内恢复选取(IE中出现的问题)
+                    BI.defer(function () {
+                        self.instance.restoreRng();
+                    });
                     return;
                 }
             } while (t = t.parentNode);
@@ -83484,8 +83518,8 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         setValue: function (v) {
-            v = v || "";
-            v = v.startWith("<div>") ? v : "<div>" + v + "</div>";
+            v = v || ( isIE11Below() ? "" : "<br>");
+            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
@@ -83520,7 +83554,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             nicEditorInstance.superclass._init.apply(this, arguments);
             var o = this.options;
             var initValue = o.value || "<br>";
-            initValue = initValue.startWith("<div>") ? initValue : "<div>" + initValue + "</div>";
+            initValue = initValue.startWith("<p>") ? initValue : "<p>" + initValue + "</p>";
             this.ne = this.options.ne;
             this.elm = BI.createWidget({
                 type: "bi.layout",
@@ -83680,7 +83714,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         keyDown: function (e, t) {
             if (e.keyCode === 8) {
                 var html = this.elm.element.html().toLowerCase().trim();
-                if (html === "<div><br></div>" || html === "<div></div>") {
+                if (html === "<p><br></p>" || html === "<p></p>") {
                     e.preventDefault()
                     return;
                 }
@@ -83714,7 +83748,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var newLine;
             var html = this.elm.element.html().toLowerCase().trim();
             if (!html || html === '<br>') {
-                newLine = $("<div></div>");
+                newLine = $(this._getNewLine());
                 this.elm.element.html('');
                 this.elm.element.append(newLine);
                 this.setFocus(newLine[0]);
@@ -83817,7 +83851,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 // 新增一个空行
                 var html = last.html().toLowerCase();
                 var nodeName = last.nodeName;
-                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "DIV") {
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
                     // 最后一个元素不是空行，添加一个空行，重新设置选区
                     el.append(newLineHtml);
                     this.initSelection();
@@ -83829,7 +83863,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         _getNewLine: function () {
-            return "<div><br></div>";
+            return isIE11Below() ? "<p></p>" : "<p><br></p>";
         },
 
         _isChildOf: function(child, parent) {
@@ -83846,12 +83880,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             return false;
         },
 
-        _isIE11Below: function() {
-            if (!BI.isIE()) {
-                return false;
-            }
-            return BI.getIEVersion() < 11;
-        }
+
     });
 }());
 /**
@@ -88432,7 +88461,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -88456,6 +88486,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
+            container: null,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -88500,7 +88531,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             behaviors: {},
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -88529,6 +88561,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.combo",
             offsetStyle: "center",
             element: this,
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -102632,19 +102665,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -102681,7 +102717,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset
+                adjustYOffset: c.adjustYOffset,
+                container: "body"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102695,14 +102732,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102720,19 +102759,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -102863,6 +102905,13 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             value.closeMax = true;
         }
         return value;
+    },
+
+    destroyed: function () {
+        var c = this.constants;
+        BI.Bubbles.remove(c.typeError);
+        BI.Bubbles.remove(c.numberError);
+        BI.Bubbles.remove(c.signalError);
     }
 });
 BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";

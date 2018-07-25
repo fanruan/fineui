@@ -9,7 +9,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -33,6 +34,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
+            container: null,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,

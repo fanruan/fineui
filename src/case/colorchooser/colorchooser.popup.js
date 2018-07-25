@@ -94,6 +94,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
             el: {

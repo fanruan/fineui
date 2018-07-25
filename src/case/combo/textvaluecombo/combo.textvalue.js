@@ -11,6 +11,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
+            container: null,
             value: ""
         });
     },
@@ -41,6 +42,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,

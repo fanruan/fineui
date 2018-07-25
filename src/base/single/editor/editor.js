@@ -227,7 +227,8 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: 2,
+                container: "body"
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
@@ -300,6 +301,10 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    destroyed: function () {
+        BI.Bubbles.remove(this.getName());
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";

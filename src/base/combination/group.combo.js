@@ -17,7 +17,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-
+            container: null,
             popup: {
                 el: {
                     type: "bi.button_tree",
@@ -61,6 +61,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,

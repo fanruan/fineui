@@ -342,7 +342,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
+            // 之所以默认为body，是因为transform的效果影响
+            container: "body"
         });
     },
 
@@ -376,7 +378,8 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse
+                belowMouse: o.belowMouse,
+                container: o.container
             });
         }
     },
@@ -484,6 +487,11 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
+    },
+
+    _unMount: function () {
+        BI.Single.superclass._unMount.apply(this, arguments);
+        BI.Tooltips.remove(this.getName());
     }
 });/**
  * guy 表示一行数据，通过position来定位位置的数据
@@ -3020,7 +3028,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为body
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -3478,6 +3486,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -3792,7 +3806,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-
+            container: null,
             popup: {
                 el: {
                     type: "bi.button_tree",
@@ -3836,6 +3850,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,
@@ -18514,7 +18529,8 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: 2,
+                container: "body"
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
@@ -18587,6 +18603,10 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    destroyed: function () {
+        BI.Bubbles.remove(this.getName());
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";
