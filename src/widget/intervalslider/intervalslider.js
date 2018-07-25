@@ -48,7 +48,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -61,13 +60,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelOne.element.removeClass("bi-border");
         });
         this.labelOne.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueOne = self.valueOne;
             var v = BI.parseFloat(this.getValue());
             self.valueOne = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));// 分成1000份
-            self._setLabelOnePosition(significantPercent);
             self._setSliderOnePosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(oldValueOne, self.valueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -77,7 +77,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
-            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -88,13 +87,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelTwo.element.removeClass("bi-border");
         });
         this.labelTwo.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueTwo = self.valueTwo;
             var v = BI.parseFloat(this.getValue());
             self.valueTwo = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));
-            self._setLabelTwoPosition(significantPercent);
             self._setSliderTwoPosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(self.valueOne, oldValueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -142,16 +142,17 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         var v = this._getValueByPercent(significantPercent);
         v = this._assertValue(v);
         v = o.digit === false ? v : v.toFixed(o.digit);
+        var oldValueOne = this.valueOne, oldValueTwo = this.valueTwo;
         if(isLeft) {
-            this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
             this.valueOne = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, v, this.valueTwo);
         }else{
-            this._setLabelTwoPosition(significantPercent);
             this._setSliderTwoPosition(significantPercent);
             this.labelTwo.setValue(v);
             this.valueTwo = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, this.valueOne, v);
         }
         this._setBlueTrack();
     },
@@ -326,14 +327,16 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         }
     },
 
-    _setLabelOnePosition: function (percent) {
-        // this.labelOne.element.css({left: percent + "%"});
-        // this._checkOverlap();
-    },
-
-    _setLabelTwoPosition: function (percent) {
-        // this.labelTwo.element.css({left: percent + "%"});
-        // this._checkOverlap();
+    _checkLabelPosition: function (oldValueOne, oldValueTwo, valueOne, valueTwo, isLeft) {
+        oldValueOne = BI.parseFloat(oldValueOne);
+        oldValueTwo = BI.parseFloat(oldValueTwo);
+        valueOne = BI.parseFloat(valueOne);
+        valueTwo = BI.parseFloat(valueTwo);
+        if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
+            var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
+            this.labelOne.element.css({left: isSliderOneLeft ? "0%" : "100%"});
+            this.labelTwo.element.css({left: isSliderOneLeft ? "100%" : "0%"});
+        }
     },
 
     _setSliderOnePosition: function (percent) {
@@ -366,9 +369,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
 
     _setAllPosition: function (one, two) {
         this._setSliderOnePosition(one);
-        this._setLabelOnePosition(one);
         this._setSliderTwoPosition(two);
-        this._setLabelTwoPosition(two);
         this._setBlueTrack();
     },
 

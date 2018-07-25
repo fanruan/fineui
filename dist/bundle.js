@@ -39186,7 +39186,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         // BI-10290 公式combo双击公式内容会收起
-        if (this.element.find(e.target).length > 0
+        if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
@@ -90229,7 +90229,6 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
-            container: null,
             stopPropagation: false,
             el: {}
         });
@@ -90897,7 +90896,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = this.getBeginDate(date, obj);
             }
 
-            return date;
+            return BI.getDate(date.getFullYear(), date.getMonth(), date.getDate());
         },
 
         getBeginDate: function (date, obj) {
@@ -94251,7 +94250,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -94264,13 +94262,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelOne.element.removeClass("bi-border");
         });
         this.labelOne.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueOne = self.valueOne;
             var v = BI.parseFloat(this.getValue());
             self.valueOne = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));// 分成1000份
-            self._setLabelOnePosition(significantPercent);
             self._setSliderOnePosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(oldValueOne, self.valueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -94280,7 +94279,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
-            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -94291,13 +94289,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelTwo.element.removeClass("bi-border");
         });
         this.labelTwo.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueTwo = self.valueTwo;
             var v = BI.parseFloat(this.getValue());
             self.valueTwo = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));
-            self._setLabelTwoPosition(significantPercent);
             self._setSliderTwoPosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(self.valueOne, oldValueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -94345,16 +94344,17 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         var v = this._getValueByPercent(significantPercent);
         v = this._assertValue(v);
         v = o.digit === false ? v : v.toFixed(o.digit);
+        var oldValueOne = this.valueOne, oldValueTwo = this.valueTwo;
         if(isLeft) {
-            this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
             this.valueOne = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, v, this.valueTwo);
         }else{
-            this._setLabelTwoPosition(significantPercent);
             this._setSliderTwoPosition(significantPercent);
             this.labelTwo.setValue(v);
             this.valueTwo = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, this.valueOne, v);
         }
         this._setBlueTrack();
     },
@@ -94529,14 +94529,16 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         }
     },
 
-    _setLabelOnePosition: function (percent) {
-        // this.labelOne.element.css({left: percent + "%"});
-        // this._checkOverlap();
-    },
-
-    _setLabelTwoPosition: function (percent) {
-        // this.labelTwo.element.css({left: percent + "%"});
-        // this._checkOverlap();
+    _checkLabelPosition: function (oldValueOne, oldValueTwo, valueOne, valueTwo, isLeft) {
+        oldValueOne = BI.parseFloat(oldValueOne);
+        oldValueTwo = BI.parseFloat(oldValueTwo);
+        valueOne = BI.parseFloat(valueOne);
+        valueTwo = BI.parseFloat(valueTwo);
+        if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
+            var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
+            this.labelOne.element.css({left: isSliderOneLeft ? "0%" : "100%"});
+            this.labelTwo.element.css({left: isSliderOneLeft ? "100%" : "0%"});
+        }
     },
 
     _setSliderOnePosition: function (percent) {
@@ -94569,9 +94571,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
 
     _setAllPosition: function (one, two) {
         this._setSliderOnePosition(one);
-        this._setLabelOnePosition(one);
         this._setSliderTwoPosition(two);
-        this._setLabelTwoPosition(two);
         this._setBlueTrack();
     },
 
@@ -112564,7 +112564,63 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
     }
 });
 BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
+BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-all-value-multi-text-value-combo",
+        width: 200,
+        height: 30,
+        items: []
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.search_multi_text_value_combo",
+            text: o.text,
+            height: o.height,
+            items: o.items,
+            value: o.value,
+            valueFormatter: o.valueFormatter,
+            listeners: [{
+                eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.AllValueMultiTextValueCombo.EVENT_CONFIRM);
+                }
+            }],
+            ref: function () {
+                self.combo = this;
+            }
+        };
+    },
+
+    setValue: function (v) {
+        this.combo.setValue({
+            type: BI.Selection.Multi,
+            value: v || []
+        });
+    },
+
+    getValue: function () {
+        var obj = this.combo.getValue() || {};
+        obj.value = obj.value || [];
+        if(obj.type === BI.Selection.All) {
+            var values = [];
+            BI.each(this.options.items, function (idx, item) {
+                !BI.contains(obj.value, item.value) && values.push(item.value);
+            });
+            return values;
+        }
+        return obj.value || [];
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.combo.populate.apply(this, arguments);
+    }
+});
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
         perPage: 100
