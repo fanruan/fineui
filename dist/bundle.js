@@ -27001,7 +27001,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
-        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -27101,7 +27100,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -27116,7 +27115,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", this.zindex++);
+        layout.element.css("z-index", BI.zIndex_layer++);
         return this;
     },
 
@@ -27155,7 +27154,6 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
-        this.zindex = BI.zIndex_masker;
     }
 });/**
  * guy
@@ -27178,7 +27176,6 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
-        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -27244,11 +27241,11 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
+            container.element.css("zIndex", BI.zIndex_layer++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
+            this.zindexMap[name] = BI.zIndex_layer;
+            this.modal && container.element.__buildZIndexMask__(BI.zIndex_layer++);
+            this.get(name).setZindex(BI.zIndex_layer++);
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
@@ -37008,7 +37005,7 @@ BI.Tip = BI.inherit(BI.Single, {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_tip
+            zIndex: BI.zIndex_layer++
         });
     },
 
@@ -50782,7 +50779,7 @@ $.extend(BI, {
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 2,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -50791,7 +50788,7 @@ $.extend(BI, {
                 }).appendTo("body");
                 $pop = $("<div class=\"bi-message-depend\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 1,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -51559,7 +51556,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 return false;
             };
         this.element.css({
-            "z-index": BI.zIndex_popup,
+            "z-index": BI.zIndex_layer++,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});

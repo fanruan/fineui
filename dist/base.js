@@ -1093,7 +1093,7 @@ BI.Tip = BI.inherit(BI.Single, {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_tip
+            zIndex: BI.zIndex_layer++
         });
     },
 
@@ -14867,7 +14867,7 @@ $.extend(BI, {
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 2,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -14876,7 +14876,7 @@ $.extend(BI, {
                 }).appendTo("body");
                 $pop = $("<div class=\"bi-message-depend\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 1,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -15644,7 +15644,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 return false;
             };
         this.element.css({
-            "z-index": BI.zIndex_popup,
+            "z-index": BI.zIndex_layer++,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});
