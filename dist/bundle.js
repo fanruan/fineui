@@ -38935,7 +38935,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -39393,6 +39393,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -83405,6 +83411,12 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
  * @extends BI.Widget
  */
 !(function () {
+    function isIE11Below () {
+        if (!BI.isIE()) {
+            return false;
+        }
+        return BI.getIEVersion() < 11;
+    }
     BI.NicEditor = BI.inherit(BI.Widget, {
         _defaultConfig: function () {
             return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
@@ -83458,6 +83470,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         selectCheck: function (e) {
             var t = e.target;
+            var self = this;
             var found = false;
             do {
                 if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
@@ -83466,6 +83479,10 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 }
                 if (this.instance.checkToolbar(t)) {
                     this.instance.saveRng();
+                    // 如果是点击在toolbar内恢复选取(IE中出现的问题)
+                    BI.defer(function () {
+                        self.instance.restoreRng();
+                    });
                     return;
                 }
             } while (t = t.parentNode);
@@ -83484,8 +83501,8 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         setValue: function (v) {
-            v = v || "";
-            v = v.startWith("<div>") ? v : "<div>" + v + "</div>";
+            v = v || ( isIE11Below() ? "" : "<br>");
+            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
@@ -83520,7 +83537,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             nicEditorInstance.superclass._init.apply(this, arguments);
             var o = this.options;
             var initValue = o.value || "<br>";
-            initValue = initValue.startWith("<div>") ? initValue : "<div>" + initValue + "</div>";
+            initValue = initValue.startWith("<p>") ? initValue : "<p>" + initValue + "</p>";
             this.ne = this.options.ne;
             this.elm = BI.createWidget({
                 type: "bi.layout",
@@ -83680,7 +83697,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         keyDown: function (e, t) {
             if (e.keyCode === 8) {
                 var html = this.elm.element.html().toLowerCase().trim();
-                if (html === "<div><br></div>" || html === "<div></div>") {
+                if (html === "<p><br></p>" || html === "<p></p>") {
                     e.preventDefault()
                     return;
                 }
@@ -83714,7 +83731,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var newLine;
             var html = this.elm.element.html().toLowerCase().trim();
             if (!html || html === '<br>') {
-                newLine = $("<div></div>");
+                newLine = $(this._getNewLine());
                 this.elm.element.html('');
                 this.elm.element.append(newLine);
                 this.setFocus(newLine[0]);
@@ -83817,7 +83834,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 // 新增一个空行
                 var html = last.html().toLowerCase();
                 var nodeName = last.nodeName;
-                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "DIV") {
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
                     // 最后一个元素不是空行，添加一个空行，重新设置选区
                     el.append(newLineHtml);
                     this.initSelection();
@@ -83829,7 +83846,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         _getNewLine: function () {
-            return "<div><br></div>";
+            return isIE11Below() ? "<p></p>" : "<p><br></p>";
         },
 
         _isChildOf: function(child, parent) {
@@ -83846,12 +83863,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             return false;
         },
 
-        _isIE11Below: function() {
-            if (!BI.isIE()) {
-                return false;
-            }
-            return BI.getIEVersion() < 11;
-        }
+
     });
 }());
 /**

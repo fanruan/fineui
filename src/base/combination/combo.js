@@ -10,7 +10,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -468,6 +468,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
