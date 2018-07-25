@@ -376,14 +376,14 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {

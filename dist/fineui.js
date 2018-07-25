@@ -95679,7 +95679,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: [this.popup]
+            items: [this.popup],
+            vgap: 5
         });
 
     },
@@ -95705,7 +95706,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 4,
+                        lgap: 1,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -95713,7 +95714,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                                 type: "bi.vertical"
                             }]
 
-                        }
+                        },
+                        innerVGap: 5
                     };
                     item.el.childValues = [];
                     BI.each(item.children, function (i, child) {
@@ -104785,14 +104787,14 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {
