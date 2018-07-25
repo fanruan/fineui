@@ -342,9 +342,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false,   // title是否跟随鼠标,
-            // 之所以默认为body，是因为transform的效果影响
-            container: "body"
+            belowMouse: false   // title是否跟随鼠标,
         });
     },
 
@@ -378,8 +376,7 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse,
-                container: o.container
+                belowMouse: o.belowMouse
             });
         }
     },
@@ -487,10 +484,6 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
-    },
-
-    destroyed: function () {
-        BI.Tooltips.remove(this.getName());
     }
 });/**
  * guy 表示一行数据，通过position来定位位置的数据
