@@ -9,12 +9,14 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, o = this.options;
+        var value = this._digestValue(o.value);
         return {
             type: "bi.search_multi_text_value_combo",
             text: o.text,
             height: o.height,
             items: o.items,
-            value: o.value,
+            value: value,
+            numOfPage: 100,
             valueFormatter: o.valueFormatter,
             listeners: [{
                 eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
@@ -29,10 +31,8 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        this.combo.setValue({
-            type: BI.Selection.Multi,
-            value: v || []
-        });
+        var value = this._digestValue(v);
+        this.combo.setValue(value);
     },
 
     getValue: function () {
@@ -51,6 +51,13 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
     populate: function (items) {
         this.options.items = items;
         this.combo.populate.apply(this, arguments);
+    },
+
+    _digestValue: function (v) {
+        return {
+            type: BI.Selection.Multi,
+            value: v || []
+        };
     }
 });
 BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";

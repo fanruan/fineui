@@ -9,6 +9,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         return BI.extend(BI.SearchMultiTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-combo bi-search-multi-text-value-combo",
             height: 24,
+            numOfPage: 10,
             items: []
         });
     },
@@ -376,14 +377,14 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * this.options.numOfPage; items[i] && i < times * this.options.numOfPage; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * this.options.numOfPage < items.length;
     },
 
     _itemsCreator: function (options, callback) {
