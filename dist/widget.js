@@ -2226,7 +2226,6 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
-            container: "body",
             stopPropagation: false,
             el: {}
         });
