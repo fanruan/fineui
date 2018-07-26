@@ -247,6 +247,7 @@ $(function () {
         // });
         return {
             type: "bi.left",
+            scrolly: true,
             vgap: 100,
             hgap: 20,
             items: items
