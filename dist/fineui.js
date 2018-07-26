@@ -76565,6 +76565,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 1,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
@@ -76940,6 +76941,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.color_chooser",
             element: this,
+            container: o.container,
             value: o.value,
             popup: {
                 type: "bi.simple_color_chooser_popup"
@@ -78890,6 +78892,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -83736,7 +83739,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var self = this;
             var found = false;
             do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
