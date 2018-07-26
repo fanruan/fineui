@@ -8,21 +8,27 @@
   & .bubble-combo-triangle-left {
     z-index: 1;
     .triangle-right();
-    //.solid-triangle-right(@color-bi-background-highlight);
   }
   & .bubble-combo-triangle-right {
     z-index: 1;
     .triangle-left();
-    //.solid-triangle-left(@color-bi-background-highlight);
   }
   & .bubble-combo-triangle-top {
     z-index: 1;
     .triangle-bottom();
-    //.solid-triangle-down(@color-bi-background-highlight);
   }
   & .bubble-combo-triangle-bottom {
     z-index: 1;
     .triangle-top();
-    //.solid-triangle-up(@color-bi-background-highlight);
+  }
+}
+
+.bi-theme-dark {
+  .bi-bubble-combo {
+    & .bubble-combo-triangle-left, &.bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
+      &:before {
+        background-color: @color-bi-background-default-theme-dark;
+      }
+    }
   }
 }

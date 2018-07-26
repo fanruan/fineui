@@ -345,14 +345,14 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 2px;
-  margin-top: -5px;
+  margin-left: 3px;
+  margin-top: -3px;
   content: "";
   background-color: #ffffff;
-  transform: rotate(45deg);
-  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  transform: rotate(-45deg);
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
 }
 .bi-bubble-combo .bubble-combo-triangle-right {
   z-index: 1;
@@ -364,14 +364,14 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 2px;
-  margin-top: 5px;
+  margin-left: 3px;
+  margin-top: 3px;
   content: "";
   background-color: #ffffff;
-  transform: rotate(45deg);
-  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  transform: rotate(135deg);
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
 }
 .bi-bubble-combo .bubble-combo-triangle-top {
   z-index: 1;
@@ -388,9 +388,9 @@
   content: "";
   background-color: #ffffff;
   transform: rotate(45deg);
-  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom {
   z-index: 1;
@@ -406,10 +406,16 @@
   margin-top: 3px;
   content: "";
   background-color: #ffffff;
-  transform: rotate(45deg);
-  -webkit-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 0 1px 5px 0 rgba(35, 46, 64, 0.2);
+  transform: rotate(-135deg);
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+}
+.bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-left:before,
+.bi-theme-dark .bi-bubble-combo.bubble-combo-triangle-right:before,
+.bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-top:before,
+.bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-bottom:before {
+  background-color: #242640;
 }
 
 .bi-combo.bi-combo-popup {

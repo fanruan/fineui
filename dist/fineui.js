@@ -78401,7 +78401,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), ghost: true}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
     _init: function () {
@@ -78475,7 +78475,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                level: "ignore",
+                ghost: true,
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
