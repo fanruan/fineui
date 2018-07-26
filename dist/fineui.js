@@ -78137,6 +78137,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
@@ -79022,6 +79023,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
@@ -79372,6 +79374,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 2,
+            container: o.container,
             el: this.trigger,
             popup: {
                 el: this.popup
@@ -97607,6 +97610,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -97989,6 +97993,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
+            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
@@ -98371,6 +98376,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -104536,6 +104542,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
