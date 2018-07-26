@@ -21,6 +21,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.color_chooser",
             element: this,
+            container: o.container,
             value: o.value,
             popup: {
                 type: "bi.simple_color_chooser_popup"
