@@ -25943,10 +25943,11 @@ BI.ShowAction = BI.inherit(BI.Action, {
      * 使用数值计算的方式来获取任意数值的科学技术表示值。
      * 科学计数格式
      */
-    function _eFormat(text, fmt) {
+    function _eFormat (text, fmt) {
         text = +text;
 
         return eFormat(text, fmt);
+
         /**
          * 科学计数格式具体计算过程
          * @param num
@@ -25957,7 +25958,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
          *         数量级没有规定，因为没见过实数里有用科学计数法表示之后E的后面会小于一位的情况（0无所谓）。
          * @returns {*}
          */
-        function eFormat(num, format) {
+        function eFormat (num, format) {
             var neg = num < 0 ? (num *= -1, "-") : "",
                 magnitudeNeg = "";
 
@@ -25966,7 +25967,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
             var magnitude = Math[funcName](Math.log(num) / Math.log(10));
 
             if (!isFinite(magnitude)) {
-                return format.replace(/#/ig, "").replace(/\.e/ig, 'E');
+                return format.replace(/#/ig, "").replace(/\.e/ig, "E");
             }
 
             num = num / Math.pow(10, magnitude);
@@ -25991,7 +25992,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
             num *= Math.pow(10, precision);
             num = Math.round(num);
             // 如果出现进位的情况，将num除以10
-            isValueCarry && (num /= 10, magnitude += magnitudeNeg === '-' ? -1 : 1);
+            isValueCarry && (num /= 10, magnitude += magnitudeNeg === "-" ? -1 : 1);
             num /= Math.pow(10, precision);
 
             // 小数部分保留precision位
@@ -26003,7 +26004,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         }
 
         // 获取format格式规定的数量级的形式
-        function formatExponential(format, num, magnitudeNeg) {
+        function formatExponential (format, num, magnitudeNeg) {
             num += "";
             if (!/e/ig.test(format)) {
                 return num;
@@ -26028,7 +26029,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         }
 
         // 获取format规定的科学计数法精确到的位数
-        function getPrecision(format) {
+        function getPrecision (format) {
             if (!/e/ig.test(format)) {
                 return 0;
             }
@@ -26039,7 +26040,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
         // 获取数值科学计数法表示之后整数的位数
         // 这边我们还需要考虑#和0的问题
-        function getInteger(magnitude, format) {
+        function getInteger (magnitude, format) {
             if (!/e/ig.test(format)) {
                 return 0;
             }
@@ -26048,10 +26049,10 @@ BI.ShowAction = BI.inherit(BI.Action, {
             var formatLeft = format.split(/e/ig)[0].split(".")[0], i, f, len = formatLeft.length;
             var valueLeftLen = 0;
 
-            for(i = 0; i < len; i++) {
+            for (i = 0; i < len; i++) {
                 f = formatLeft.charAt(i);
                 // "#"所在的位置到末尾长度小于等于值的整数部分长度，那么这个#才可以占位
-                if(f == 0 || (f == "#" && (len - i <= magnitude + 1))) {
+                if (f == 0 || (f == "#" && (len - i <= magnitude + 1))) {
                     valueLeftLen++;
                 }
             }
@@ -26060,10 +26061,10 @@ BI.ShowAction = BI.inherit(BI.Action, {
         }
 
         // 判断num通过round函数之后是否有进位
-        function isValueCarried(num) {
+        function isValueCarried (num) {
             var roundNum = Math.round(num);
             num = (num + "").split(".")[0];
-            roundNum =(roundNum + "").split(".")[0];
+            roundNum = (roundNum + "").split(".")[0];
             return num.length !== roundNum.length;
         }
     }
@@ -26518,11 +26519,11 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     // 毫秒数类型
                     cv = new Date(cv);
                 } else {
-                    // 字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
-                    cv = BI.parseDateTime(cv + "", "Y-m-d H:i:s");
+                    //字符串类型转化为date类型
+                    cv = new Date(Date.parse(("" + cv).replace(/-|\./g, "/")));
                 }
             }
-            if (!BI.isNull(cv)) {
+            if (!isInvalidDate(cv) && !BI.isNull(cv)) {
                 var needTrim = fmt.match(/^DT/);
                 text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
             }
