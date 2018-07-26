@@ -21,7 +21,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
-            container: o.container,
             adjustLength: 1,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
