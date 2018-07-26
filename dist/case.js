@@ -3814,6 +3814,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
             el: {
@@ -6708,6 +6709,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -10833,7 +10835,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         setValue: function (v) {
             v = v || ( isIE11Below() ? "" : "<br>");
-            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
+            v = v.startWith("<p") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 

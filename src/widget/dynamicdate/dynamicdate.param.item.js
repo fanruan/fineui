@@ -59,6 +59,7 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.offsetCombo = this;
                 },
+                container: null,
                 value: o.offset,
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,

@@ -27250,7 +27250,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
-        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -27350,7 +27349,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -27365,7 +27364,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", this.zindex++);
+        layout.element.css("z-index", BI.zIndex_layer++);
         return this;
     },
 
@@ -27404,7 +27403,6 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
-        this.zindex = BI.zIndex_masker;
     }
 });/**
  * guy
@@ -27427,7 +27425,6 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
-        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -27493,11 +27490,11 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
+            container.element.css("zIndex", BI.zIndex_layer++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
+            this.zindexMap[name] = BI.zIndex_layer;
+            this.modal && container.element.__buildZIndexMask__(BI.zIndex_layer++);
+            this.get(name).setZindex(BI.zIndex_layer++);
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
@@ -36506,7 +36503,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
+            // 之所以默认为body，是因为transform的效果影响
+            container: "body"
         });
     },
 
@@ -36540,7 +36539,8 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse
+                belowMouse: o.belowMouse,
+                container: o.container
             });
         }
     },
@@ -36648,6 +36648,11 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
+    },
+
+    _unMount: function () {
+        BI.Single.superclass._unMount.apply(this, arguments);
+        BI.Tooltips.remove(this.getName());
     }
 });/**
  * guy 表示一行数据，通过position来定位位置的数据
@@ -37249,7 +37254,7 @@ BI.Tip = BI.inherit(BI.Single, {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_tip
+            zIndex: BI.zIndex_layer++
         });
     },
 
@@ -39184,7 +39189,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: null, // popupview放置的容器，默认为this.element
+            container: "body", // popupview放置的容器，默认为body
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -39642,6 +39647,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
+    },
+
+    destroyed: function () {
+        this.popupView && this.popupView.destroy();
+        this.popupView = null;
+        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -39956,7 +39967,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-
+            container: null,
             popup: {
                 el: {
                     type: "bi.button_tree",
@@ -40000,6 +40011,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             height: o.height,
             trigger: o.trigger,
             direction: o.direction,
@@ -51016,7 +51028,7 @@ $.extend(BI, {
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 2,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -51025,7 +51037,7 @@ $.extend(BI, {
                 }).appendTo("body");
                 $pop = $("<div class=\"bi-message-depend\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_tip - 1,
+                    zIndex: BI.zIndex_layer++,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -51793,7 +51805,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 return false;
             };
         this.element.css({
-            "z-index": BI.zIndex_popup,
+            "z-index": BI.zIndex_layer++,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});
@@ -54678,7 +54690,8 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: 2,
+                container: "body"
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
@@ -54751,6 +54764,10 @@ BI.Editor = BI.inherit(BI.Single, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    destroyed: function () {
+        BI.Bubbles.remove(this.getName());
     }
 });
 BI.Editor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -76726,6 +76743,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
             el: {
@@ -79620,6 +79638,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -83745,7 +83764,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         setValue: function (v) {
             v = v || ( isIE11Below() ? "" : "<br>");
-            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
+            v = v.startWith("<p") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
@@ -88687,7 +88706,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -88711,6 +88731,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
+            container: null,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -88755,7 +88776,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             behaviors: {},
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -88784,6 +88806,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.combo",
             offsetStyle: "center",
             element: this,
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -91334,6 +91357,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 type: "bi.text_value_combo",
                 height: 24,
                 items: comboItems,
+                container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -91348,6 +91372,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items.push({
                     type: "bi.text_value_combo",
                     height: 24,
+                    container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                     listeners: [{
@@ -91852,6 +91877,7 @@ BI.extend(BI.DynamicDateCombo, {
                 ref: function () {
                     self.offsetCombo = this;
                 },
+                container: null,
                 value: o.offset,
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
@@ -95650,7 +95676,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: [this.popup]
+            items: [this.popup],
+            vgap: 5
         });
 
     },
@@ -95676,7 +95703,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 4,
+                        lgap: 1,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -95684,7 +95711,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                                 type: "bi.vertical"
                             }]
 
-                        }
+                        },
+                        innerVGap: 5
                     };
                     item.el.childValues = [];
                     BI.each(item.children, function (i, child) {
@@ -102887,19 +102915,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -102936,7 +102967,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset
+                adjustYOffset: c.adjustYOffset,
+                container: "body"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -102950,14 +102982,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -102975,19 +103009,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -103118,6 +103155,13 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             value.closeMax = true;
         }
         return value;
+    },
+
+    destroyed: function () {
+        var c = this.constants;
+        BI.Bubbles.remove(c.typeError);
+        BI.Bubbles.remove(c.numberError);
+        BI.Bubbles.remove(c.signalError);
     }
 });
 BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
@@ -104373,7 +104417,6 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         return BI.extend(BI.SearchMultiTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-combo bi-search-multi-text-value-combo",
             height: 24,
-            numOfPage: 10,
             items: []
         });
     },
@@ -104741,14 +104784,14 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * this.options.numOfPage; items[i] && i < times * this.options.numOfPage; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * this.options.numOfPage < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {

@@ -15,7 +15,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
-        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -115,7 +114,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -130,7 +129,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", this.zindex++);
+        layout.element.css("z-index", BI.zIndex_layer++);
         return this;
     },
 

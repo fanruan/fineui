@@ -158,6 +158,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 type: "bi.text_value_combo",
                 height: 24,
                 items: comboItems,
+                container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -172,6 +173,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items.push({
                     type: "bi.text_value_combo",
                     height: 24,
+                    container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                     listeners: [{

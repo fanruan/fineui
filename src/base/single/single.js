@@ -19,7 +19,9 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false   // title是否跟随鼠标,
+            belowMouse: false,   // title是否跟随鼠标,
+            // 之所以默认为body，是因为transform的效果影响
+            container: "body"
         });
     },
 
@@ -53,7 +55,8 @@ BI.Single = BI.inherit(BI.Widget, {
         if (BI.isKey(o.title) || BI.isKey(o.warningTitle)
             || BI.isFunction(o.title) || BI.isFunction(o.warningTitle)) {
             this.enableHover({
-                belowMouse: o.belowMouse
+                belowMouse: o.belowMouse,
+                container: o.container
             });
         }
     },
@@ -161,5 +164,10 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.options.value;
+    },
+
+    _unMount: function () {
+        BI.Single.superclass._unMount.apply(this, arguments);
+        BI.Tooltips.remove(this.getName());
     }
 });
