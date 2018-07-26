@@ -16602,7 +16602,8 @@ BI.extend(BI.SearchMultiTextValueCombo, {
 
 BI.SearchMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
+BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
+BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     constants: {
         height: 14,
@@ -24597,12 +24598,14 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
 
     render: function () {
         var self = this, o = this.options;
+        var value = this._digestValue(o.value);
         return {
             type: "bi.search_multi_text_value_combo",
             text: o.text,
             height: o.height,
             items: o.items,
-            value: o.value,
+            value: value,
+            numOfPage: 100,
             valueFormatter: o.valueFormatter,
             listeners: [{
                 eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
@@ -24617,10 +24620,8 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
     },
 
     setValue: function (v) {
-        this.combo.setValue({
-            type: BI.Selection.Multi,
-            value: v || []
-        });
+        var value = this._digestValue(v);
+        this.combo.setValue(value);
     },
 
     getValue: function () {
@@ -24639,10 +24640,18 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
     populate: function (items) {
         this.options.items = items;
         this.combo.populate.apply(this, arguments);
+    },
+
+    _digestValue: function (v) {
+        return {
+            type: BI.Selection.Multi,
+            value: v || []
+        };
     }
 });
 BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
-BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
+BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);
+BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
         perPage: 100

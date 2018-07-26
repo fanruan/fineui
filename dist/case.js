@@ -10835,7 +10835,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         setValue: function (v) {
             v = v || ( isIE11Below() ? "" : "<br>");
-            v = ($(v)[0] && $(v)[0].nodeName === "P") ? v : "<p>" + v + "</p>";
+            v = v.startWith("<p") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
