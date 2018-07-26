@@ -3635,6 +3635,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 1,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
@@ -4010,6 +4011,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.color_chooser",
             element: this,
+            container: o.container,
             value: o.value,
             popup: {
                 type: "bi.simple_color_chooser_popup"
@@ -5205,6 +5207,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
@@ -5960,6 +5963,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -6089,6 +6093,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
@@ -6439,6 +6444,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 2,
+            container: o.container,
             el: this.trigger,
             popup: {
                 el: this.popup
@@ -10806,7 +10812,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var self = this;
             var found = false;
             do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
