@@ -306,7 +306,7 @@
                         });
                     }
                 };
-                form.setAttribute("action", handler.url);
+                form.setAttribute("action", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName));
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);
