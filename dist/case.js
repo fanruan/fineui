@@ -5207,7 +5207,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
-            container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
@@ -6093,7 +6092,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
-                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
@@ -6444,7 +6442,6 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 2,
-            container: o.container,
             el: this.trigger,
             popup: {
                 el: this.popup

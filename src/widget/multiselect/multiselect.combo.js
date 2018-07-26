@@ -119,7 +119,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {

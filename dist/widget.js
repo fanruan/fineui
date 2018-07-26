@@ -9326,7 +9326,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -9709,7 +9708,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
-            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
@@ -10092,7 +10090,6 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -16258,7 +16255,6 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
-            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {

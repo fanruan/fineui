@@ -19,7 +19,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
-                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {

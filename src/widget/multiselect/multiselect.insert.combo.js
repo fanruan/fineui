@@ -114,7 +114,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
-            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
