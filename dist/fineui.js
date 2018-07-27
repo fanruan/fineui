@@ -84688,7 +84688,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -84843,7 +84843,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
