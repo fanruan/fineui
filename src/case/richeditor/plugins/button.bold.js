@@ -30,6 +30,22 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("bold") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.bold.setSelected(true);
     },

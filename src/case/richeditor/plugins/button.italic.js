@@ -30,6 +30,22 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("italic") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.italic.setSelected(true);
     },
