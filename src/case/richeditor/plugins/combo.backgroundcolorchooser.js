@@ -18,6 +18,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         var self = this, o = this.options;
         this.colorchooser = BI.createWidget({
             type: "bi.color_chooser",
+            container: null,
             element: this,
             width: o.width,
             height: o.height,

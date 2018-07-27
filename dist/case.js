@@ -11648,6 +11648,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         var self = this, o = this.options;
         this.colorchooser = BI.createWidget({
             type: "bi.color_chooser",
+            container: null,
             element: this,
             width: o.width,
             height: o.height,
@@ -11694,6 +11695,7 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         var self = this, o = this.options;
         this.colorchooser = BI.createWidget({
             type: "bi.color_chooser",
+            container: null,
             element: this,
             width: o.width,
             height: o.height,
@@ -11754,7 +11756,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -11909,7 +11911,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -12033,7 +12035,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor
+                    editor: this.editor,
+                    ref: function (_ref) {
+                        self.toolbar = _ref;
+                    }
                 }, o.toolbar),
                 height: 34,
                 stopPropagation: true,
@@ -12052,6 +12057,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
+        }
+        if(o.toolbar) {
+            this.editor.bindToolbar(this.toolbar);
         }
     },
 
