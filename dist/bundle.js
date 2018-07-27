@@ -35356,7 +35356,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Deep watchers and watchers on Object/Arrays should fire even
                 // when the value is the same, because the value may
                 // have mutated.
-                _.isObject(value) || this.deep) {
+                this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -55242,7 +55242,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         });
                     }
                 };
-                form.setAttribute("action", handler.url);
+                form.setAttribute("action", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName));
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);
@@ -83886,9 +83886,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 }
             }
             return false;
-        },
-
-
+        }
     });
 }());
 /**
@@ -84087,6 +84085,22 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("bold") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.bold.setSelected(true);
     },
@@ -84127,6 +84141,22 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("italic") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.italic.setSelected(true);
     },
@@ -84203,6 +84233,22 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("underline") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.underline.setSelected(true);
     },
@@ -84342,9 +84388,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var value = this.getValue();
             // 用span代替font
-            document.execCommand('styleWithCSS', null, true);
-            self.doCommand(this.getValue() || "inherit");
-            document.execCommand('styleWithCSS', null, false);
+            if(BI.isIE() && BI.getIEVersion() < 11) {
+                self.doCommand(this.getValue());
+            } else {
+                document.execCommand('styleWithCSS', null, true);
+                self.doCommand(this.getValue() || "inherit");
+                document.execCommand('styleWithCSS', null, false);
+            }
         });
 
     },
@@ -84437,37 +84487,99 @@ BI.shortcut("bi.rich_editor_font_chooser", BI.RichEditorFontChooser);/**
  */
 BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
-        return BI.extend(BI.RichEditorSizeChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
-            command: "FontSize",
-            width: 50,
-            height: 24
-        });
+        return BI.extend(
+            BI.RichEditorSizeChooser.superclass._defaultConfig.apply(
+                this,
+                arguments
+            ),
+            {
+                baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
+                command: "FontSize",
+                width: 50,
+                height: 24
+            }
+        );
     },
 
-    _items: [{
-        value: 1,
-        text: "1(8pt)"
-    }, {
-        value: 2,
-        text: "2(10pt)"
-    }, {
-        value: 3,
-        text: "3(12pt)"
-    }, {
-        value: 4,
-        text: "4(14pt)"
-    }, {
-        value: 5,
-        text: "5(18pt)"
-    }, {
-        value: 6,
-        text: "6(24pt)"
-    }],
+    _items: [
+        {
+            value: 12,
+            text: 12
+        },
+        {
+            value: 13,
+            text: 13
+        },
+        {
+            value: 14,
+            text: 14
+        },
+        {
+            value: 16,
+            text: 16
+        },
+        {
+            value: 18,
+            text: 18
+        },
+        {
+            value: 20,
+            text: 20
+        },
+        {
+            value: 22,
+            text: 22
+        },
+        {
+            value: 24,
+            text: 24
+        },
+        {
+            value: 26,
+            text: 26
+        },
+        {
+            value: 28,
+            text: 28
+        },
+        {
+            value: 30,
+            text: 30
+        },
+        {
+            value: 32,
+            text: 32
+        },
+        {
+            value: 34,
+            text: 34
+        },
+        {
+            value: 36,
+            text: 36
+        },
+        {
+            value: 38,
+            text: 38
+        },
+        {
+            value: 40,
+            text: 40
+        },
+        {
+            value: 64,
+            text: 64
+        },
+        {
+            value: 128,
+            text: 128
+        }
+    ],
 
     _init: function () {
         BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this,
+            o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             readonly: true,
@@ -84489,27 +84601,49 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
                     items: BI.createItems(this._items, {
                         type: "bi.single_select_item"
                     }),
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
+                    layouts: [
+                        {
+                            type: "bi.vertical"
+                        }
+                    ]
                 }
             }
         });
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             var val = this.getValue()[0];
-            self.doCommand(val);
+            self.doAction(val);
             this.hideView();
             this.setValue([]);
         });
     },
 
     hideIf: function (e) {
-        if(!this.combo.element.find(e.target).length > 0) {
+        if (!this.combo.element.find(e.target).length > 0) {
             this.combo.hideView();
+        }
+    },
+
+    doAction: function (fontSize) {
+        var editor = this.options.editor.instance;
+        var range = editor.getRng();
+        var commonSize = 7;
+        if (!range.collapsed) {
+            this.doCommand(commonSize);
+            BI.each(document.getElementsByTagName("font"), function (idx, el) {
+                if (
+                    BI.contains($(el).parents(), editor.element[0]) &&
+                    el["size"] == commonSize
+                ) {
+                    $(el)
+                        .removeAttr("size")
+                        .css("font-size", fontSize + "px");
+                }
+            });
         }
     }
 });
-BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
+BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);
+/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.

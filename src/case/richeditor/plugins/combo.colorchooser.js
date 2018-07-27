@@ -32,9 +32,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var value = this.getValue();
             // 用span代替font
-            document.execCommand('styleWithCSS', null, true);
-            self.doCommand(this.getValue() || "inherit");
-            document.execCommand('styleWithCSS', null, false);
+            if(BI.isIE() && BI.getIEVersion() < 11) {
+                self.doCommand(this.getValue());
+            } else {
+                document.execCommand('styleWithCSS', null, true);
+                self.doCommand(this.getValue() || "inherit");
+                document.execCommand('styleWithCSS', null, false);
+            }
         });
 
     },
