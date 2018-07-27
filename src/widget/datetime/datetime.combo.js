@@ -58,7 +58,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         });
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: opts.container,
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,

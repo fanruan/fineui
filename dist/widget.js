@@ -1481,7 +1481,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         });
         this.combo = BI.createWidget({
             type: "bi.combo",
-            container: o.container,
+            container: opts.container,
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -3296,7 +3296,7 @@ BI.extend(BI.DynamicDateCard, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        container: o.container,
+                        container: opts.container,
                         ref: function () {
                             self.combo = this;
                         },
@@ -4178,7 +4178,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
-                        container: o.container,
+                        container: opts.container,
                         ref: function () {
                             self.combo = this;
                         },
