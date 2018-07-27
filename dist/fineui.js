@@ -35605,7 +35605,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Deep watchers and watchers on Object/Arrays should fire even
                 // when the value is the same, because the value may
                 // have mutated.
-                _.isObject(value) || this.deep) {
+                this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -76565,6 +76565,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 1,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
@@ -76940,6 +76941,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.color_chooser",
             element: this,
+            container: o.container,
             value: o.value,
             popup: {
                 type: "bi.simple_color_chooser_popup"
@@ -78135,6 +78137,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
@@ -78890,6 +78893,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -79019,6 +79023,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
@@ -79369,6 +79374,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 2,
+            container: o.container,
             el: this.trigger,
             popup: {
                 el: this.popup
@@ -83736,7 +83742,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var self = this;
             var found = false;
             do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
@@ -97604,6 +97610,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -97986,6 +97993,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
+            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
@@ -98368,6 +98376,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -104533,6 +104542,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
