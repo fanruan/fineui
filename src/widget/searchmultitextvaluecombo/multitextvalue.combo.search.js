@@ -166,7 +166,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 

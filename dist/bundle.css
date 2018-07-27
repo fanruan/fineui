@@ -399,6 +399,9 @@ textarea {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-font-bold {
+  font-weight: 600;
+}
 .bi-theme-dark .bi-border {
   border: 1px solid #3a3c53;
 }
@@ -3253,8 +3256,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-basic-button.button-common:hover .bi-button-mask,
 .bi-basic-button.button-success:hover .bi-button-mask,
 .bi-basic-button.button-warning:hover .bi-button-mask,
-.bi-basic-button.button-error:hover .bi-button-mask,
-.bi-basic-button.button-ignore:hover .bi-button-mask {
+.bi-basic-button.button-error:hover .bi-button-mask {
   opacity: 0.1;
   filter: alpha(opacity=10);
   background-color: #ffffff;
@@ -3262,11 +3264,16 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-basic-button.button-common:active .bi-button-mask,
 .bi-basic-button.button-success:active .bi-button-mask,
 .bi-basic-button.button-warning:active .bi-button-mask,
-.bi-basic-button.button-error:active .bi-button-mask,
-.bi-basic-button.button-ignore:active .bi-button-mask {
+.bi-basic-button.button-error:active .bi-button-mask {
   opacity: 0.1;
   filter: alpha(opacity=10);
   background-color: #232E40;
+}
+.bi-basic-button.button-ignore:hover {
+  background-color: rgba(54, 133, 242, 0.05);
+}
+.bi-basic-button.button-ignore:active {
+  background-color: #eaf2fd;
 }
 .bi-basic-button .popup-content {
   font-size: 14px;

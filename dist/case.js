@@ -5630,6 +5630,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.editorIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6154,7 +6155,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     hideChecker: function (e) {
-                        return self.triggerBtn.element.find(e.target).length === 0;
+                        return self.triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
                     }
                 },
                 left: 0,
@@ -6508,6 +6509,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6587,6 +6589,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.SmallTextIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6802,6 +6805,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
         this.SmallTextValueCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -11750,6 +11754,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -11904,6 +11909,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -12011,6 +12017,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",

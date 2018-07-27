@@ -144,9 +144,23 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : "-" + value.quarter;
-        return yearStr + quarterStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.quarter) || BI.isEmptyString(value.quarter));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.quarter;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.quarter;
+        }
     },
 
     _getText: function (obj) {

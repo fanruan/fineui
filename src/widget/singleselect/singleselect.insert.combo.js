@@ -90,6 +90,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
@@ -120,7 +121,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             },
             value: o.value
         });

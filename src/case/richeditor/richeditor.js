@@ -52,6 +52,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",

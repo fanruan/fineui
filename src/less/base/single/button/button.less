@@ -154,7 +154,7 @@ body .bi-button, #body .bi-button {
 }
 
 .bi-basic-button {
-  &.button-common, &.button-success, &.button-warning, &.button-error, &.button-ignore {
+  &.button-common, &.button-success, &.button-warning, &.button-error {
     &:hover{
       & .bi-button-mask {
         .opacity(0.1);
@@ -166,6 +166,14 @@ body .bi-button, #body .bi-button {
         .opacity(0.1);
         background-color: @color-bi-button-mask;
       }
+    }
+  }
+  &.button-ignore {
+    &:hover{
+      background-color: @color-bi-blue-5;
+    }
+    &:active{
+      background-color: @color-bi-blue-10;
     }
   }
   & .popup-content{

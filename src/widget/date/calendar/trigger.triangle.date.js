@@ -29,23 +29,16 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
             value: o.value,
             height: c.height
         });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: c.iconWidth,
-            height: c.iconHeight
-        });
 
         BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.vertical_adapt",
             element: this,
             items: [{
-                type: "bi.center_adapt",
-                width: 50,
-                height: c.height,
-                items: [{
-                    el: this.text,
-                    rgap: 10
-                }, this.icon]
+                el: this.text,
+                rgap: 5
+            }, {
+                type: "bi.icon_label",
+                width: 16
             }]
         });
     },

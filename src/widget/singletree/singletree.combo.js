@@ -35,6 +35,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
