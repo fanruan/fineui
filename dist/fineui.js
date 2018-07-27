@@ -89089,6 +89089,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 items: [{
                     type: "bi.horizontal",
                     width: 100,
+                    rgap: 10,
                     items: [this.year, this.month]
                 }]
             }, {
