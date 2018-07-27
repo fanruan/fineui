@@ -51593,7 +51593,6 @@ BI.Popover = BI.inherit(BI.Widget, {
                                         cls: "bi-font-bold",
                                         height: this._constant.HEADER_HEIGHT,
                                         text: o.header,
-                                        title: o.header,
                                         textAlign: "left"
                                     },
                                     left: 10,
