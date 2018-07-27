@@ -1084,23 +1084,16 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
             value: o.value,
             height: c.height
         });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: c.iconWidth,
-            height: c.iconHeight
-        });
 
         BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.vertical_adapt",
             element: this,
             items: [{
-                type: "bi.center_adapt",
-                width: 50,
-                height: c.height,
-                items: [{
-                    el: this.text,
-                    rgap: 10
-                }, this.icon]
+                el: this.text,
+                rgap: 5
+            }, {
+                type: "bi.icon_label",
+                width: 16
             }]
         });
     },
@@ -9326,6 +9319,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -9367,7 +9361,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -9627,6 +9621,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             text: o.text,
             // adapter: this.popup,
             masker: {
+                container: "body",
                 offset: {
                     left: 0,
                     top: 0,
@@ -9708,6 +9703,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
+            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
@@ -9747,7 +9743,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 &&
+                    (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -10090,6 +10087,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -10134,7 +10132,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 value: o.value
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -13580,6 +13578,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
+                container: "body",
                 offset: this.constants.offset
             },
             searcher: {
@@ -13653,7 +13652,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
         
@@ -16255,6 +16254,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -16296,7 +16296,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -18612,7 +18612,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             },
             value: o.value
         });
@@ -18881,7 +18881,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             },
             value: o.value
         });
@@ -23376,9 +23376,23 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : "-" + value.month;
-        return yearStr + monthStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.month) || BI.isEmptyString(value.month));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.month;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.month;
+        }
     },
 
     setValue: function (v) {
@@ -24312,9 +24326,23 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : "-" + value.quarter;
-        return yearStr + quarterStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.quarter) || BI.isEmptyString(value.quarter));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.quarter;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.quarter;
+        }
     },
 
     _getText: function (obj) {
