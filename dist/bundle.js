@@ -53403,8 +53403,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.icon, this.text),
-            lgap: 5
+            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.icon, this.text)
         }))));
     },
 
