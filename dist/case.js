@@ -5630,6 +5630,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.editorIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6508,6 +6509,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6587,6 +6589,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.SmallTextIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -11751,6 +11754,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -11905,6 +11909,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -12012,6 +12017,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",

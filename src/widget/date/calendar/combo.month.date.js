@@ -34,7 +34,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
-            container: null,
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,

@@ -78563,6 +78563,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.editorIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -79441,6 +79442,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -79520,6 +79522,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.SmallTextIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -84684,6 +84687,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -84838,6 +84842,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -84945,6 +84950,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",
@@ -88876,7 +88882,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
-            container: null,
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -89903,6 +89909,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         });
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -91717,6 +91724,7 @@ BI.extend(BI.DynamicDateCard, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        container: o.container,
                         ref: function () {
                             self.combo = this;
                         },
@@ -92598,6 +92606,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        container: o.container,
                         ref: function () {
                             self.combo = this;
                         },
@@ -95430,6 +95439,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -96108,6 +96118,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -96664,6 +96675,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -102024,6 +102036,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -103978,6 +103991,7 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -105895,6 +105909,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -107005,6 +107020,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
@@ -107274,6 +107290,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
@@ -109619,6 +109636,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -110526,6 +110544,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -111267,6 +111286,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -112289,6 +112309,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,

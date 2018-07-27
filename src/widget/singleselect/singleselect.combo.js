@@ -91,6 +91,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,

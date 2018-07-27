@@ -110,6 +110,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             el: this.trigger,
             adjustLength: 1,

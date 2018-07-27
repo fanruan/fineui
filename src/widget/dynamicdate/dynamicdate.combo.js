@@ -37,6 +37,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        container: o.container,
                         ref: function () {
                             self.combo = this;
                         },
