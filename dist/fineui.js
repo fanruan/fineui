@@ -27251,6 +27251,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
+        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -27350,7 +27351,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -27365,7 +27366,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", BI.zIndex_layer++);
+        layout.element.css("z-index", this.zindex++);
         return this;
     },
 
@@ -27404,6 +27405,7 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
+        this.zindex = BI.zIndex_masker;
     }
 });/**
  * guy
@@ -27426,6 +27428,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
+        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -27491,11 +27494,11 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", BI.zIndex_layer++);
+            container.element.css("zIndex", this.zindex++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = BI.zIndex_layer;
-            this.modal && container.element.__buildZIndexMask__(BI.zIndex_layer++);
-            this.get(name).setZindex(BI.zIndex_layer++);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
@@ -30929,7 +30932,8 @@ _.extend(BI, {
         Top: "top",
         Bottom: "bottom",
         Stretch: "stretch"
-    }
+    },
+    StartOfWeek: 0
 });BI.version = "2.0";/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
@@ -36504,9 +36508,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false,   // title是否跟随鼠标,
-            // 之所以默认为body，是因为transform的效果影响
-            container: "body"
+            belowMouse: false   // title是否跟随鼠标
         });
     },
 
@@ -37255,7 +37257,7 @@ BI.Tip = BI.inherit(BI.Single, {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_layer++
+            zIndex: BI.zIndex_tip
         });
     },
 
@@ -39190,7 +39192,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
-            container: "body", // popupview放置的容器，默认为body
+            container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
             isNeedAdjustHeight: true, // 是否需要高度调整
@@ -39648,12 +39650,6 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
         BI.Combo.superclass.destroy.apply(this, arguments);
-    },
-
-    destroyed: function () {
-        this.popupView && this.popupView.destroy();
-        this.popupView = null;
-        this._rendered = false;
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -39968,7 +39964,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-            container: null,
+
             popup: {
                 el: {
                     type: "bi.button_tree",
@@ -51029,7 +51025,7 @@ $.extend(BI, {
             _show: function (hasCancel, title, message, callback) {
                 $mask = $("<div class=\"bi-z-index-mask\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_layer++,
+                    zIndex: BI.zIndex_tip - 2,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -51038,7 +51034,7 @@ $.extend(BI, {
                 }).appendTo("body");
                 $pop = $("<div class=\"bi-message-depend\">").css({
                     position: "absolute",
-                    zIndex: BI.zIndex_layer++,
+                    zIndex: BI.zIndex_tip - 1,
                     top: 0,
                     left: 0,
                     right: 0,
@@ -51808,7 +51804,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 return false;
             };
         this.element.css({
-            "z-index": BI.zIndex_layer++,
+            "z-index": BI.zIndex_popup,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});
@@ -54693,8 +54689,7 @@ BI.Editor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2,
-                container: "body"
+                adjustYOffset: 2
             });
             this._checkToolTip();
             return BI.Bubbles.get(this.getName());
@@ -79087,7 +79082,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     hideChecker: function (e) {
-                        return self.triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                        return self.triggerBtn.element.find(e.target).length === 0;
                     }
                 },
                 left: 0,
@@ -90660,6 +90655,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
+            container: null,
             stopPropagation: false,
             el: {}
         });
@@ -97803,7 +97799,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -98063,7 +98059,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             text: o.text,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: {
                     left: 0,
                     top: 0,
@@ -98185,8 +98180,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 &&
-                    (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -98574,7 +98568,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 value: o.value
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -102020,7 +102014,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: this.constants.offset
             },
             searcher: {
@@ -102095,7 +102088,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
         
@@ -103080,22 +103073,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -103132,8 +103122,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset,
-                container: "body"
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -103147,16 +103136,14 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -103174,22 +103161,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -104740,7 +104724,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -107058,7 +107042,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             },
             value: o.value
         });
@@ -107328,7 +107312,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             },
             value: o.value
         });

@@ -6155,7 +6155,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     hideChecker: function (e) {
-                        return self.triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                        return self.triggerBtn.element.find(e.target).length === 0;
                     }
                 },
                 left: 0,

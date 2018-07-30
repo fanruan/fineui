@@ -132,5 +132,6 @@ _.extend(BI, {
         Top: "top",
         Bottom: "bottom",
         Stretch: "stretch"
-    }
+    },
+    StartOfWeek: 0
 });

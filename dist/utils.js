@@ -10143,7 +10143,8 @@ _.extend(BI, {
         Top: "top",
         Bottom: "bottom",
         Stretch: "stretch"
-    }
+    },
+    StartOfWeek: 0
 });/**
  * 对数组对象的扩展
  * @class Array

@@ -2225,6 +2225,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
+            container: null,
             stopPropagation: false,
             el: {}
         });
@@ -9368,7 +9369,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -9628,7 +9629,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             text: o.text,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: {
                     left: 0,
                     top: 0,
@@ -9750,8 +9750,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 &&
-                    (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -10139,7 +10138,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 value: o.value
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -13585,7 +13584,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: this.constants.offset
             },
             searcher: {
@@ -13660,7 +13658,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
         
@@ -14645,22 +14643,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -14697,8 +14692,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset,
-                container: "body"
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -14712,16 +14706,14 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -14739,22 +14731,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -16305,7 +16294,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 
@@ -18623,7 +18612,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             },
             value: o.value
         });
@@ -18893,7 +18882,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             },
             value: o.value
         });

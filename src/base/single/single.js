@@ -19,9 +19,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false,   // title是否跟随鼠标,
-            // 之所以默认为body，是因为transform的效果影响
-            container: "body"
+            belowMouse: false   // title是否跟随鼠标
         });
     },
 

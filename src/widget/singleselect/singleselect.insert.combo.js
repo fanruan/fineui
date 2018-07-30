@@ -121,7 +121,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             },
             value: o.value
         });
