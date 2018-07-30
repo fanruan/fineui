@@ -17,7 +17,7 @@ BI.ComboGroup = BI.inherit(BI.Widget, {
 
             el: {type: "bi.text_button", text: "", value: ""},
             children: [],
-            container: null,
+
             popup: {
                 el: {
                     type: "bi.button_tree",

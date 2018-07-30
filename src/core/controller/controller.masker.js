@@ -11,5 +11,6 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
+        this.zindex = BI.zIndex_masker;
     }
 });

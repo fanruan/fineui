@@ -11,7 +11,7 @@ BI.Tip = BI.inherit(BI.Single, {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-tip",
-            zIndex: BI.zIndex_layer++
+            zIndex: BI.zIndex_tip
         });
     },
 

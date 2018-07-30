@@ -305,22 +305,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :
@@ -357,8 +354,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset,
-                container: "body"
+                adjustYOffset: c.adjustYOffset
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -372,16 +368,14 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -399,22 +393,19 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset,
-                        container: "body"
+                        adjustYOffset: c.adjustYOffset
                     });
                     break;
                 default :

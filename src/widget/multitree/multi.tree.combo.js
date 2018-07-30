@@ -40,7 +40,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: this.constants.offset
             },
             searcher: {
@@ -115,7 +114,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
         

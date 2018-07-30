@@ -51,7 +51,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
                 return false;
             };
         this.element.css({
-            "z-index": BI.zIndex_layer++,
+            "z-index": BI.zIndex_popup,
             "min-width": o.minWidth + "px",
             "max-width": o.maxWidth + "px"
         }).bind({click: fn});

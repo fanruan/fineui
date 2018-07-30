@@ -33,7 +33,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             text: o.text,
             // adapter: this.popup,
             masker: {
-                container: "body",
                 offset: {
                     left: 0,
                     top: 0,
@@ -155,8 +154,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0 &&
-                    (self.popup && !self.popup.element.__isMouseInBounds__(e));
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
 

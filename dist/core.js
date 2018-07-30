@@ -27002,6 +27002,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
+        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -27101,7 +27102,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -27116,7 +27117,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", BI.zIndex_layer++);
+        layout.element.css("z-index", this.zindex++);
         return this;
     },
 
@@ -27155,6 +27156,7 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
+        this.zindex = BI.zIndex_masker;
     }
 });/**
  * guy
@@ -27177,6 +27179,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
+        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -27242,11 +27245,11 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", BI.zIndex_layer++);
+            container.element.css("zIndex", this.zindex++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = BI.zIndex_layer;
-            this.modal && container.element.__buildZIndexMask__(BI.zIndex_layer++);
-            this.get(name).setZindex(BI.zIndex_layer++);
+            this.zindexMap[name] = this.zindex;
+            this.modal && container.element.__buildZIndexMask__(this.zindex++);
+            this.get(name).setZindex(this.zindex++);
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
@@ -30680,7 +30683,8 @@ _.extend(BI, {
         Top: "top",
         Bottom: "bottom",
         Stretch: "stretch"
-    }
+    },
+    StartOfWeek: 0
 });BI.version = "2.0";/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout
