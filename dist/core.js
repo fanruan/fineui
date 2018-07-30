@@ -25690,51 +25690,153 @@ BI.ShowAction = BI.inherit(BI.Action, {
     }
 
     /**
+     * CHART-1400
+     * 使用数值计算的方式来获取任意数值的科学技术表示值。
      * 科学计数格式
      */
     function _eFormat (text, fmt) {
-        var e = fmt.indexOf("E");
-        var eleft = fmt.substr(0, e), eright = fmt.substr(e + 1);
-        if (/^[0\.-]+$/.test(text)) {
-            text = BI._numberFormat(0.0, eleft) + "E" + BI._numberFormat(0, eright);
-        } else {
-            var isNegative = text < 0;
-            if (isNegative) {
-                text = text.substr(1);
+        text = +text;
+
+        return eFormat(text, fmt);
+
+        /**
+         * 科学计数格式具体计算过程
+         * @param num
+         * @param format {String}有两种形式，
+         *      1、"0.00E00"这样的字符串表示正常的科学计数表示，只不过规定了数值精确到百分位，
+         *         而数量级的绝对值如果是10以下的时候在前面补零。
+         *      2、 "##0.0E0"这样的字符串则规定用科学计数法表示之后的数值的整数部分是三位，精确到十分位，
+         *         数量级没有规定，因为没见过实数里有用科学计数法表示之后E的后面会小于一位的情况（0无所谓）。
+         * @returns {*}
+         */
+        function eFormat (num, format) {
+            var neg = num < 0 ? (num *= -1, "-") : "",
+                magnitudeNeg = "";
+
+            var funcName = num > 0 && num < 1 ? "floor" : "ceil";  // -0.9999->-1
+            // 数量级
+            var magnitude = Math[funcName](Math.log(num) / Math.log(10));
+
+            if (!isFinite(magnitude)) {
+                return format.replace(/#/ig, "").replace(/\.e/ig, "E");
             }
-            var elvl = (eleft.split(".")[0] || "").length;
-            var point = text.indexOf(".");
-            if (point < 0) {
-                point = text.length;
+
+            num = num / Math.pow(10, magnitude);
+
+            // 让num转化成[1, 10)区间上的数
+            if (num > 0 && num < 1) {
+                num *= 10;
+                magnitude -= 1;
             }
-            var i = 0; // 第一个不为0的数的位置
-            text = text.replace(".", "");
-            for (var len = text.length; i < len; i++) {
-                var ech = text.charAt(i);
-                if (ech <= "9" && ech >= "1") {
-                    break;
-                }
-            }
-            var right = point - i - elvl;
-            var left = text.substr(i, elvl);
-            var dis = i + elvl - text.length;
-            if (dis > 0) {
-                // 末位补全0
-                for (var k = 0; k < dis; k++) {
-                    left += "0";
-                }
-            } else {
-                left += "." + text.substr(i + elvl);
-            }
-            left = left.replace(/^[0]+/, "");
-            if (right < 0 && eright.indexOf("-") < 0) {
-                eright += ";-" + eright;
-            }
-            text = BI._numberFormat(left, eleft) + "E" + BI._numberFormat(right, eright);
-            if (isNegative) {
-                text = "-" + text;
-            }
+
+            // 计算出format中需要显示的整数部分的位数，然后更新这个数值，也更新数量级
+            var integerLen = getInteger(magnitude, format);
+            integerLen > 1 && (magnitude -= integerLen - 1, num *= Math.pow(10, integerLen - 1));
+
+            magnitude < 0 && (magnitudeNeg = "-", magnitude *= -1);
+
+            // 获取科学计数法精确到的位数
+            var precision = getPrecision(format);
+            // 判断num经过四舍五入之后是否有进位
+            var isValueCarry = isValueCarried(num);
+
+            num *= Math.pow(10, precision);
+            num = Math.round(num);
+            // 如果出现进位的情况，将num除以10
+            isValueCarry && (num /= 10, magnitude += magnitudeNeg === "-" ? -1 : 1);
+            num /= Math.pow(10, precision);
+
+            // 小数部分保留precision位
+            num = num.toFixed(precision);
+            // 格式化指数的部分
+            magnitude = formatExponential(format, magnitude, magnitudeNeg);
+
+            return neg + num + "E" + magnitude;
         }
+
+        // 获取format格式规定的数量级的形式
+        function formatExponential (format, num, magnitudeNeg) {
+            num += "";
+            if (!/e/ig.test(format)) {
+                return num;
+            }
+            format = format.split(/e/ig)[1];
+
+            while (num.length < format.length) {
+                num = "0" + num;
+            }
+
+            // 如果magnitudeNeg是一个"-"，而且num正好全是0，那么就别显示负号了
+            var isAllZero = true;
+            for (var i = 0, len = num.length; i < len; i++) {
+                if (!isAllZero) {
+                    continue;
+                }
+                isAllZero = num.charAt(i) === "0";
+            }
+            magnitudeNeg = isAllZero ? "" : magnitudeNeg;
+
+            return magnitudeNeg + num;
+        }
+
+        // 获取format规定的科学计数法精确到的位数
+        function getPrecision (format) {
+            if (!/e/ig.test(format)) {
+                return 0;
+            }
+            var arr = format.split(/e/ig)[0].split(".");
+
+            return arr.length > 1 ? arr[1].length : 0;
+        }
+
+        // 获取数值科学计数法表示之后整数的位数
+        // 这边我们还需要考虑#和0的问题
+        function getInteger (magnitude, format) {
+            if (!/e/ig.test(format)) {
+                return 0;
+            }
+            // return format.split(/e/ig)[0].split(".")[0].length;
+
+            var formatLeft = format.split(/e/ig)[0].split(".")[0], i, f, len = formatLeft.length;
+            var valueLeftLen = 0;
+
+            for (i = 0; i < len; i++) {
+                f = formatLeft.charAt(i);
+                // "#"所在的位置到末尾长度小于等于值的整数部分长度，那么这个#才可以占位
+                if (f == 0 || (f == "#" && (len - i <= magnitude + 1))) {
+                    valueLeftLen++;
+                }
+            }
+
+            return valueLeftLen;
+        }
+
+        // 判断num通过round函数之后是否有进位
+        function isValueCarried (num) {
+            var roundNum = Math.round(num);
+            num = (num + "").split(".")[0];
+            roundNum = (roundNum + "").split(".")[0];
+            return num.length !== roundNum.length;
+        }
+    }
+
+    //'#.##'之类的格式处理 1.324e-18 这种的科学数字
+    function _dealNumberPrecision (text, fright) {
+        if (/[eE]/.test(text)) {
+            var precision = 0, i = 0, ch;
+
+            if (/[%‰]$/.test(fright)) {
+                precision = /[%]$/.test(fright) ? 2 : 3;
+            }
+
+            for (var len = fright.length; i < len; i++) {
+                if ((ch = fright.charAt(i)) == "0" || ch == "#") {
+                    precision++;
+                }
+            }
+            return Number(text).toFixed(precision);
+        }
+
         return text;
     }
 
@@ -25743,6 +25845,12 @@ BI.ShowAction = BI.inherit(BI.Action, {
      */
     function _numberFormat (text, format) {
         var text = text + "";
+
+        //在调用数字格式的时候如果text里没有任何数字则不处理
+        if (!(/[0-9]/.test(text)) || !format) {
+            return text;
+        }
+
         // 数字格式，区分正负数
         var numMod = format.indexOf(";");
         if (numMod > -1) {
@@ -25751,15 +25859,17 @@ BI.ShowAction = BI.inherit(BI.Action, {
             }
             return _numberFormat((-text) + "", format.substr(numMod + 1));
 
-        }
-        // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
-        if (+text < 0 && format.charAt(0) !== "-") {
-            return _numberFormat((-text) + "", "-" + format);
+        } else {
+            // 兼容格式处理负数的情况(copy:fr-jquery.format.js)
+            if (+text < 0 && format.charAt(0) !== "-") {
+                return _numberFormat((-text) + "", "-" + format);
+            }
         }
 
-        var tp = text.split("."), fp = format.split("."),
-            tleft = tp[0] || "", fleft = fp[0] || "",
-            tright = tp[1] || "", fright = fp[1] || "";
+        var fp = format.split("."), fleft = fp[0] || "", fright = fp[1] || "";
+        text = _dealNumberPrecision(text, fright);
+        var tp = text.split("."), tleft = tp[0] || "", tright = tp[1] || "";
+
         // 百分比,千分比的小数点移位处理
         if (/[%‰]$/.test(format)) {
             var paddingZero = /[%]$/.test(format) ? "00" : "000";
@@ -25782,9 +25892,9 @@ BI.ShowAction = BI.inherit(BI.Action, {
         }
         if (!(/[0-9]/.test(right))) {
             return left + right;
+        } else {
+            return left + "." + right;
         }
-        return left + "." + right;
-
     }
 
     /**
@@ -26160,11 +26270,11 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     // 毫秒数类型
                     cv = new Date(cv);
                 } else {
-                    // 字符串类型，如yyyyMMdd、MMddyyyy等这样无分隔符的结构
-                    cv = Date.parseDate(cv + "", Date.patterns.ISO8601Long);
+                    //字符串类型转化为date类型
+                    cv = new Date(Date.parse(("" + cv).replace(/-|\./g, "/")));
                 }
             }
-            if (!BI.isNull(cv)) {
+            if (!isInvalidDate(cv) && !BI.isNull(cv)) {
                 var needTrim = fmt.match(/^DT/);
                 text = BI.date2Str(cv, fmt.substring(needTrim ? 2 : 1));
             }
@@ -26173,8 +26283,6 @@ BI.ShowAction = BI.inherit(BI.Action, {
             text = _eFormat(text, fmt);
         } else {
             // 数字格式
-            var s = [];
-            BI.clamp(s);
             text = _numberFormat(text, fmt);
         }
         // ¤ - 货币格式
@@ -26231,9 +26339,9 @@ BI.ShowAction = BI.inherit(BI.Action, {
      * 把字符串按照对应的格式转化成日期对象
      *
      *      @example
-     *      var result = FR.str2Date('2013-12-12', 'yyyy-MM-dd');//Thu Dec 12 2013 00:00:00 GMT+0800
+     *      var result = BI.str2Date('2013-12-12', 'yyyy-MM-dd');//Thu Dec 12 2013 00:00:00 GMT+0800
      *
-     * @class FR.str2Date
+     * @class BI.str2Date
      * @param str 字符串
      * @param format 日期格式
      * @returns {*}
@@ -26894,7 +27002,6 @@ BI.LayerController = BI.inherit(BI.Controller, {
         BI.LayerController.superclass._init.apply(this, arguments);
         this.layerManager = {};
         this.layouts = {};
-        this.zindex = BI.zIndex_layer;
         BI.Resizers.add("layerController" + BI.uniqueId(), BI.bind(this._resize, this));
     },
 
@@ -26994,7 +27101,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             return this;
         }
         this._getLayout(name).visible();
-        this._getLayout(name).element.css("z-index", this.zindex++).show(0, callback).trigger("__resize__");
+        this._getLayout(name).element.css("z-index", BI.zIndex_layer++).show(0, callback).trigger("__resize__");
         return this;
     },
 
@@ -27009,7 +27116,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
         layout.setVisible(false);
         this.layerManager[name] = layer;
         this.layouts[name] = layout;
-        layout.element.css("z-index", this.zindex++);
+        layout.element.css("z-index", BI.zIndex_layer++);
         return this;
     },
 
@@ -27048,7 +27155,6 @@ BI.MaskersController = BI.inherit(BI.LayerController, {
 
     _init: function () {
         BI.MaskersController.superclass._init.apply(this, arguments);
-        this.zindex = BI.zIndex_masker;
     }
 });/**
  * guy
@@ -27071,7 +27177,6 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         this.floatLayer = {};
         this.floatContainer = {};
         this.floatOpened = {};
-        this.zindex = BI.zIndex_popover;
         this.zindexMap = {};
     },
 
@@ -27137,11 +27242,11 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         if (!this.floatOpened[name]) {
             this.floatOpened[name] = true;
             var container = this.floatContainer[name];
-            container.element.css("zIndex", this.zindex++);
+            container.element.css("zIndex", BI.zIndex_layer++);
             this.modal && container.element.__hasZIndexMask__(this.zindexMap[name]) && container.element.__releaseZIndexMask__(this.zindexMap[name]);
-            this.zindexMap[name] = this.zindex;
-            this.modal && container.element.__buildZIndexMask__(this.zindex++);
-            this.get(name).setZindex(this.zindex++);
+            this.zindexMap[name] = BI.zIndex_layer;
+            this.modal && container.element.__buildZIndexMask__(BI.zIndex_layer++);
+            this.get(name).setZindex(BI.zIndex_layer++);
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();

@@ -429,7 +429,8 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend( BI.MonthDateCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-month-combo",
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -453,6 +454,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             offsetStyle: "center",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -497,7 +499,8 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             min: "1900-01-01", // 最小日期
             max: "2099-12-31", // 最大日期
             behaviors: {},
-            height: 24
+            height: 24,
+            container: null
         });
     },
     _init: function () {
@@ -526,6 +529,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
             type: "bi.combo",
             offsetStyle: "center",
             element: this,
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -662,6 +666,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 items: [{
                     type: "bi.horizontal",
                     width: 100,
+                    rgap: 10,
                     items: [this.year, this.month]
                 }]
             }, {
@@ -1080,23 +1085,16 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
             value: o.value,
             height: c.height
         });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: c.iconWidth,
-            height: c.iconHeight
-        });
 
         BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.vertical_adapt",
             element: this,
             items: [{
-                type: "bi.center_adapt",
-                width: 50,
-                height: c.height,
-                items: [{
-                    el: this.text,
-                    rgap: 10
-                }, this.icon]
+                el: this.text,
+                rgap: 5
+            }, {
+                type: "bi.icon_label",
+                width: 16
             }]
         });
     },
@@ -1483,6 +1481,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         });
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: opts.container,
             toggle: false,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -2226,7 +2225,6 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             adjustLength: 0,
             direction: "bottom",
             trigger: "click",
-            container: null,
             stopPropagation: false,
             el: {}
         });
@@ -2894,7 +2892,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = this.getBeginDate(date, obj);
             }
 
-            return date;
+            return BI.getDate(date.getFullYear(), date.getMonth(), date.getDate());
         },
 
         getBeginDate: function (date, obj) {
@@ -3077,6 +3075,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 type: "bi.text_value_combo",
                 height: 24,
                 items: comboItems,
+                container: null,
                 value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -3091,6 +3090,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 items.push({
                     type: "bi.text_value_combo",
                     height: 24,
+                    container: null,
                     items: this._getText(BI.last(values).dateType),
                     value: positionValue || BI.DynamicDateCard.OFFSET.CURRENT,
                     listeners: [{
@@ -3296,6 +3296,7 @@ BI.extend(BI.DynamicDateCard, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        container: opts.container,
                         ref: function () {
                             self.combo = this;
                         },
@@ -3595,6 +3596,7 @@ BI.extend(BI.DynamicDateCombo, {
                 ref: function () {
                     self.offsetCombo = this;
                 },
+                container: null,
                 value: o.offset,
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
@@ -4176,6 +4178,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        container: opts.container,
                         ref: function () {
                             self.combo = this;
                         },
@@ -6248,7 +6251,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             type: "bi.sign_text_editor",
             cls: "slider-editor-button",
             text: this.options.unit,
-            textAlign: "left",
             allowBlank: false,
             width: c.EDITOR_WIDTH,
             validationChecker: function (v) {
@@ -6261,13 +6263,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelOne.element.removeClass("bi-border");
         });
         this.labelOne.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueOne = self.valueOne;
             var v = BI.parseFloat(this.getValue());
             self.valueOne = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));// 分成1000份
-            self._setLabelOnePosition(significantPercent);
             self._setSliderOnePosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(oldValueOne, self.valueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -6277,7 +6280,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             text: this.options.unit,
             allowBlank: false,
             width: c.EDITOR_WIDTH,
-            textAlign: "right",
             validationChecker: function (v) {
                 return self._checkValidation(v);
             }
@@ -6288,13 +6290,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             self.labelTwo.element.removeClass("bi-border");
         });
         this.labelTwo.on(BI.Editor.EVENT_CONFIRM, function () {
+            var oldValueTwo = self.valueTwo;
             var v = BI.parseFloat(this.getValue());
             self.valueTwo = v;
             var percent = self._getPercentByValue(v);
             var significantPercent = BI.parseFloat(percent.toFixed(1));
-            self._setLabelTwoPosition(significantPercent);
             self._setSliderTwoPosition(significantPercent);
             self._setBlueTrack();
+            self._checkLabelPosition(self.valueOne, oldValueTwo, self.valueOne, self.valueTwo);
             self.fireEvent(BI.IntervalSlider.EVENT_CHANGE);
         });
 
@@ -6342,16 +6345,17 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         var v = this._getValueByPercent(significantPercent);
         v = this._assertValue(v);
         v = o.digit === false ? v : v.toFixed(o.digit);
+        var oldValueOne = this.valueOne, oldValueTwo = this.valueTwo;
         if(isLeft) {
-            this._setLabelOnePosition(significantPercent);
             this._setSliderOnePosition(significantPercent);
             this.labelOne.setValue(v);
             this.valueOne = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, v, this.valueTwo);
         }else{
-            this._setLabelTwoPosition(significantPercent);
             this._setSliderTwoPosition(significantPercent);
             this.labelTwo.setValue(v);
             this.valueTwo = v;
+            this._checkLabelPosition(oldValueOne, oldValueTwo, this.valueOne, v);
         }
         this._setBlueTrack();
     },
@@ -6526,14 +6530,16 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         }
     },
 
-    _setLabelOnePosition: function (percent) {
-        // this.labelOne.element.css({left: percent + "%"});
-        // this._checkOverlap();
-    },
-
-    _setLabelTwoPosition: function (percent) {
-        // this.labelTwo.element.css({left: percent + "%"});
-        // this._checkOverlap();
+    _checkLabelPosition: function (oldValueOne, oldValueTwo, valueOne, valueTwo, isLeft) {
+        oldValueOne = BI.parseFloat(oldValueOne);
+        oldValueTwo = BI.parseFloat(oldValueTwo);
+        valueOne = BI.parseFloat(valueOne);
+        valueTwo = BI.parseFloat(valueTwo);
+        if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
+            var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
+            this.labelOne.element.css({left: isSliderOneLeft ? "0%" : "100%"});
+            this.labelTwo.element.css({left: isSliderOneLeft ? "100%" : "0%"});
+        }
     },
 
     _setSliderOnePosition: function (percent) {
@@ -6566,9 +6572,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
 
     _setAllPosition: function (one, two) {
         this._setSliderOnePosition(one);
-        this._setLabelOnePosition(one);
         this._setSliderTwoPosition(two);
-        this._setLabelTwoPosition(two);
         this._setBlueTrack();
     },
 
@@ -7007,6 +7011,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -7392,7 +7397,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         BI.createWidget({
             type: "bi.vertical",
             element: this,
-            items: [this.popup]
+            items: [this.popup],
+            vgap: 5
         });
 
     },
@@ -7418,7 +7424,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     item.el.height = self.constants.height;
                     item.el.iconCls2 = self.constants.nextIcon;
                     item.popup = {
-                        lgap: 4,
+                        lgap: 1,
                         el: {
                             type: "bi.button_tree",
                             chooseType: 0,
@@ -7426,7 +7432,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                                 type: "bi.vertical"
                             }]
 
-                        }
+                        },
+                        innerVGap: 5
                     };
                     item.el.childValues = [];
                     BI.each(item.children, function (i, child) {
@@ -7683,6 +7690,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -8239,6 +8247,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -9317,6 +9326,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -9358,7 +9368,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -9618,6 +9628,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             text: o.text,
             // adapter: this.popup,
             masker: {
+                container: "body",
                 offset: {
                     left: 0,
                     top: 0,
@@ -9699,6 +9710,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
+            container: o.container,
             popup: {
                 type: "bi.multi_select_popup_view",
                 ref: function () {
@@ -9738,7 +9750,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 &&
+                    (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -10081,6 +10094,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -10125,7 +10139,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 value: o.value
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -11232,14 +11246,12 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
         });
 
         this.addNotMatchTip = BI.createWidget({
-            type: "bi.icon_text_item",
+            type: "bi.text_button",
             invisible: true,
-            logic: {
-                dynamic: true
-            },
             text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
-            cls: "text-add-tip-font",
             height: this.constants.height,
+            cls: "bi-high-light",
+            hgap: 5,
             handler: function () {
                 self.fireEvent(BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM, o.keywordGetter());
             }
@@ -11265,7 +11277,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.vtape",
             element: this,
             items: [{
-                type: "bi.float_center_adapt",
+                type: "bi.vertical",
                 items: [this.tooltipClick, this.addNotMatchTip],
                 height: this.constants.height
             }, {
@@ -12294,6 +12306,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
+                    self._showAdapter();
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
@@ -13572,6 +13585,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
+                container: "body",
                 offset: this.constants.offset
             },
             searcher: {
@@ -13594,6 +13608,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -13645,7 +13660,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
         
@@ -14630,19 +14645,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -14679,7 +14697,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
-                adjustYOffset: c.adjustYOffset
+                adjustYOffset: c.adjustYOffset,
+                container: "body"
             });
             self.fireEvent(BI.NumberInterval.EVENT_ERROR);
         });
@@ -14693,14 +14712,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     self.fireEvent(BI.NumberInterval.EVENT_ERROR);
                     break;
@@ -14718,19 +14739,22 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 case c.signalError:
                     BI.Bubbles.show(c.signalError, BI.i18nText("BI-Numerical_Interval_Signal_Value"), self, {
                         offsetStyle: "left",
-                        adjustYOffset: c.adjustYOffset
+                        adjustYOffset: c.adjustYOffset,
+                        container: "body"
                     });
                     break;
                 default :
@@ -14861,6 +14885,13 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             value.closeMax = true;
         }
         return value;
+    },
+
+    destroyed: function () {
+        var c = this.constants;
+        BI.Bubbles.remove(c.typeError);
+        BI.Bubbles.remove(c.numberError);
+        BI.Bubbles.remove(c.signalError);
     }
 });
 BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
@@ -15532,6 +15563,7 @@ BI.QuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
@@ -16231,6 +16263,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             toggle: false,
+            container: o.container,
             el: this.trigger,
             adjustLength: 1,
             popup: {
@@ -16272,7 +16305,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             }
         });
 
@@ -16483,14 +16516,14 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _getItemsByTimes: function (items, times) {
         var res = [];
-        for (var i = (times - 1) * 10; items[i] && i < times * 10; i++) {
+        for (var i = (times - 1) * 100; items[i] && i < times * 100; i++) {
             res.push(items[i]);
         }
         return res;
     },
 
     _hasNextByTimes: function (items, times) {
-        return times * 10 < items.length;
+        return times * 100 < items.length;
     },
 
     _itemsCreator: function (options, callback) {
@@ -16578,7 +16611,8 @@ BI.extend(BI.SearchMultiTextValueCombo, {
 
 BI.SearchMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
+BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
+BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     constants: {
         height: 14,
@@ -17447,6 +17481,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -18557,6 +18592,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
@@ -18587,7 +18623,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             },
             value: o.value
         });
@@ -18826,6 +18862,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             el: this.trigger,
             adjustLength: 1,
@@ -18856,7 +18893,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
             },
             value: o.value
         });
@@ -21171,6 +21208,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -22078,6 +22116,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -22819,6 +22858,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -23351,9 +23391,23 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : "-" + value.month;
-        return yearStr + monthStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.month) || BI.isEmptyString(value.month));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.month;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.month;
+        }
     },
 
     setValue: function (v) {
@@ -23827,6 +23881,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
@@ -24287,9 +24342,23 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var quarterStr = (BI.isNull(value.quarter) || BI.isEmptyString(value.quarter)) ? "" : "-" + value.quarter;
-        return yearStr + quarterStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.quarter) || BI.isEmptyString(value.quarter));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.quarter;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.quarter;
+        }
     },
 
     _getText: function (obj) {
@@ -24562,7 +24631,71 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
     }
 });
 BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
+BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-all-value-multi-text-value-combo",
+        width: 200,
+        height: 30,
+        items: []
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        var value = this._digestValue(o.value);
+        return {
+            type: "bi.search_multi_text_value_combo",
+            text: o.text,
+            height: o.height,
+            items: o.items,
+            value: value,
+            numOfPage: 100,
+            valueFormatter: o.valueFormatter,
+            listeners: [{
+                eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.AllValueMultiTextValueCombo.EVENT_CONFIRM);
+                }
+            }],
+            ref: function () {
+                self.combo = this;
+            }
+        };
+    },
+
+    setValue: function (v) {
+        var value = this._digestValue(v);
+        this.combo.setValue(value);
+    },
+
+    getValue: function () {
+        var obj = this.combo.getValue() || {};
+        obj.value = obj.value || [];
+        if(obj.type === BI.Selection.All) {
+            var values = [];
+            BI.each(this.options.items, function (idx, item) {
+                !BI.contains(obj.value, item.value) && values.push(item.value);
+            });
+            return values;
+        }
+        return obj.value || [];
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+        this.combo.populate.apply(this, arguments);
+    },
+
+    _digestValue: function (v) {
+        return {
+            type: BI.Selection.Multi,
+            value: v || []
+        };
+    }
+});
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);
+BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _const: {
         perPage: 100

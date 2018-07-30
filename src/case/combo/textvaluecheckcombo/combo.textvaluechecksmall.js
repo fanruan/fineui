@@ -39,6 +39,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.SmallTextIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,

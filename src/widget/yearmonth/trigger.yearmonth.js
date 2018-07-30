@@ -194,9 +194,23 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _getStaticTitle: function (value) {
         value = value || {};
-        var yearStr = (BI.isNull(value.year) || BI.isEmptyString(value.year)) ? "" : value.year;
-        var monthStr = (BI.isNull(value.month) || BI.isEmptyString(value.month)) ? "" : "-" + value.month;
-        return yearStr + monthStr;
+        var hasYear = !(BI.isNull(value.year) || BI.isEmptyString(value.year));
+        var hasMonth = !(BI.isNull(value.month) || BI.isEmptyString(value.month));
+        switch ((hasYear << 1) | hasMonth) {
+            // !hasYear && !hasMonth
+            case 0:
+                return "";
+            // !hasYear && hasMonth
+            case 1:
+                return value.month;
+            // hasYear && !hasMonth
+            case 2:
+                return value.year;
+            // hasYear && hasMonth
+            case 3:
+            default:
+                return value.year + "-" + value.month;
+        }
     },
 
     setValue: function (v) {

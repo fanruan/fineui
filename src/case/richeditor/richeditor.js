@@ -52,6 +52,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",
@@ -67,7 +68,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor
+                    editor: this.editor,
+                    ref: function (_ref) {
+                        self.toolbar = _ref;
+                    }
                 }, o.toolbar),
                 height: 34,
                 stopPropagation: true,
@@ -86,6 +90,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
+        }
+        if(o.toolbar) {
+            this.editor.bindToolbar(this.toolbar);
         }
     },
 

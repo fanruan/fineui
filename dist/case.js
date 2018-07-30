@@ -3635,6 +3635,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 1,
             isNeedAdjustWidth: false,
             isNeedAdjustHeight: false,
@@ -3814,6 +3815,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
             el: {
@@ -4009,6 +4011,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         this.combo = BI.createWidget({
             type: "bi.color_chooser",
             element: this,
+            container: o.container,
             value: o.value,
             popup: {
                 type: "bi.simple_color_chooser_popup"
@@ -4471,7 +4474,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
@@ -4707,7 +4710,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
-            cls: "color-picker-editor-display bi-card",
+            cls: "color-picker-editor-display bi-card bi-border",
             height: 16,
             width: 16
         });
@@ -5204,6 +5207,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             element: this,
             trigger: o.trigger,
             toggle: o.toggle,
+            container: o.container,
             direction: o.direction,
             isDefaultInit: o.isDefaultInit,
             destroyWhenHide: o.destroyWhenHide,
@@ -5471,7 +5475,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), level: "ignore"}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), ghost: true}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
     _init: function () {
@@ -5545,7 +5549,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                level: "ignore",
+                ghost: true,
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
@@ -5626,6 +5630,7 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.editorIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -5959,6 +5964,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -6088,6 +6094,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    container: o.container,
                     adjustLength: 2,
                     toggle: false,
                     ref: function () {
@@ -6148,7 +6155,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     hideChecker: function (e) {
-                        return self.triggerBtn.element.find(e.target).length === 0;
+                        return self.triggerBtn.element.find(e.target).length === 0 && (self.popup && !self.popup.element.__isMouseInBounds__(e));
                     }
                 },
                 left: 0,
@@ -6438,6 +6445,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             type: "bi.combo",
             element: this,
             adjustLength: 2,
+            container: o.container,
             el: this.trigger,
             popup: {
                 el: this.popup
@@ -6501,6 +6509,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6580,6 +6589,7 @@ BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
         });
         this.SmallTextIconCheckCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6708,6 +6718,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         });
         this.textIconCombo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             adjustLength: 2,
             el: this.trigger,
@@ -6794,6 +6805,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
         this.SmallTextValueCombo = BI.createWidget({
             type: "bi.combo",
             element: this,
+            container: o.container,
             adjustLength: 2,
             el: this.trigger,
             popup: {
@@ -10494,6 +10506,9 @@ BI.RichEditorAction = BI.inherit(BI.Widget, {
     },
 
     doCommand: function (args) {
+        // 执行命令前先恢复选区
+        this.options.editor.instance.restoreRng();
+
         if (this.options.command) {
             this.options.editor.nicCommand(this.options.command, args);
         }
@@ -10739,6 +10754,12 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
  * @extends BI.Widget
  */
 !(function () {
+    function isIE11Below () {
+        if (!BI.isIE()) {
+            return false;
+        }
+        return BI.getIEVersion() < 11;
+    }
     BI.NicEditor = BI.inherit(BI.Widget, {
         _defaultConfig: function () {
             return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
@@ -10792,14 +10813,19 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         selectCheck: function (e) {
             var t = e.target;
+            var self = this;
             var found = false;
             do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf(prefix) != -1) {
+                if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
                     this.instance.saveRng();
+                    // 如果是点击在toolbar内恢复选取(IE中出现的问题)
+                    BI.defer(function () {
+                        self.instance.restoreRng();
+                    });
                     return;
                 }
             } while (t = t.parentNode);
@@ -10818,6 +10844,8 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         setValue: function (v) {
+            v = v || ( isIE11Below() ? "" : "<br>");
+            v = v.startWith("<p") ? v : "<p>" + v + "</p>";
             this.instance.setContent(v);
         },
 
@@ -10841,6 +10869,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
     BI.NicEditor.EVENT_BLUR = "blur";
     BI.NicEditor.EVENT_FOCUS = "focus";
     BI.NicEditor.EVENT_KEYDOWN = "keydown";
+    BI.NicEditor.EVENT_KEYUP = "keyup";
     BI.shortcut("bi.nic_editor", BI.NicEditor);
 
     var prefix = "niceditor-";
@@ -10850,6 +10879,8 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         _init: function () {
             nicEditorInstance.superclass._init.apply(this, arguments);
             var o = this.options;
+            var initValue = o.value || "<br>";
+            initValue = initValue.startWith("<p>") ? initValue : "<p>" + initValue + "</p>";
             this.ne = this.options.ne;
             this.elm = BI.createWidget({
                 type: "bi.layout",
@@ -10859,8 +10890,9 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             this.elm.element.css({
                 minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
                 outline: "none",
-                padding: "0 10px"
-            }).html(o.value);
+                padding: "0 10px",
+                wordWrap: "break-word"
+            }).html(initValue);
 
             if(o.readOnly) {
                 this.elm.element.attr("contentEditable", false);
@@ -10894,8 +10926,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             }
             this.instanceDoc = document.defaultView;
             this.elm.element.on("mousedown", BI.bind(this.selected, this));
-            this.elm.element.on("keyup", BI.bind(this.keyDown, this));
-            // this.elm.element.on("keydown", BI.bind(this.keyDown, this));
+            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
             this.elm.element.on("focus", BI.bind(this.selected, this));
             this.elm.element.on("blur", BI.bind(this.blur, this));
             this.elm.element.on("keyup", BI.bind(this.selected, this));
@@ -11007,6 +11038,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
         },
 
         keyDown: function (e, t) {
+            if (e.keyCode === 8) {
+                var html = this.elm.element.html().toLowerCase().trim();
+                if (html === "<p><br></p>" || html === "<p></p>") {
+                    e.preventDefault()
+                    return;
+                }
+            }
             this.ne.fireEvent("keydown", e);
         },
 
@@ -11027,6 +11065,19 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 this.ne.fireEvent("selected", e);
                 this.isFocused = true;
                 this.elm.element.addClass(prefix + "selected");
+            }
+            this.ne.fireEvent("keyup", e);
+
+            if (e.keyCode !== 8) {
+                return;
+            }
+            var newLine;
+            var html = this.elm.element.html().toLowerCase().trim();
+            if (!html || html === '<br>') {
+                newLine = $(this._getNewLine());
+                this.elm.element.html('');
+                this.elm.element.append(newLine);
+                this.setFocus(newLine[0]);
             }
             // return false;
         },
@@ -11107,6 +11158,38 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
 
         nicCommand: function (cmd, args) {
             document.execCommand(cmd, false, args);
+        },
+
+        initSelection: function (newLine) {
+            var newLineHtml = this._getNewLine();
+            var el = this.elm.element;
+            var children = el.children();
+            if (!children.length) {
+                // 如果编辑器区域无内容，添加一个空行，重新设置选区
+                el.append(newLineHtml);
+                this.initSelection();
+                return;
+            }
+            
+            var last = children.last();
+
+            if (newLine) {
+                // 新增一个空行
+                var html = last.html().toLowerCase();
+                var nodeName = last.nodeName;
+                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
+                    // 最后一个元素不是空行，添加一个空行，重新设置选区
+                    el.append(newLineHtml);
+                    this.initSelection();
+                    return;
+                }
+            }
+
+            this.setFocus(last[0]);
+        },
+
+        _getNewLine: function () {
+            return isIE11Below() ? "<p></p>" : "<p><br></p>";
         },
 
         _isChildOf: function(child, parent) {
@@ -11320,6 +11403,22 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("bold") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.bold.setSelected(true);
     },
@@ -11360,6 +11459,22 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("italic") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.italic.setSelected(true);
     },
@@ -11436,6 +11551,22 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             self.doCommand();
         });
     },
+
+    checkNodes: function (e) {
+        var self = this;
+        try {
+            BI.defer(function() {
+                if(document.queryCommandState("underline") ) {
+                    self.activate();
+                } else {
+                    self.deactivate();
+                }
+            });
+        } catch (error) {
+            BI.RichEditorBoldButton.superclass.checkNodes(e);
+        }
+    },
+
     activate: function () {
         this.underline.setSelected(true);
     },
@@ -11517,6 +11648,7 @@ BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
         var self = this, o = this.options;
         this.colorchooser = BI.createWidget({
             type: "bi.color_chooser",
+            container: null,
             element: this,
             width: o.width,
             height: o.height,
@@ -11563,6 +11695,7 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         var self = this, o = this.options;
         this.colorchooser = BI.createWidget({
             type: "bi.color_chooser",
+            container: null,
             element: this,
             width: o.width,
             height: o.height,
@@ -11575,9 +11708,13 @@ BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
         this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
             var value = this.getValue();
             // 用span代替font
-            document.execCommand('styleWithCSS', null, true);
-            self.doCommand(this.getValue() || "inherit");
-            document.execCommand('styleWithCSS', null, false);
+            if(BI.isIE() && BI.getIEVersion() < 11) {
+                self.doCommand(this.getValue());
+            } else {
+                document.execCommand('styleWithCSS', null, true);
+                self.doCommand(this.getValue() || "inherit");
+                document.execCommand('styleWithCSS', null, false);
+            }
         });
 
     },
@@ -11619,6 +11756,7 @@ BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEd
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -11670,37 +11808,99 @@ BI.shortcut("bi.rich_editor_font_chooser", BI.RichEditorFontChooser);/**
  */
 BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
     _defaultConfig: function () {
-        return BI.extend(BI.RichEditorSizeChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
-            command: "FontSize",
-            width: 50,
-            height: 24
-        });
+        return BI.extend(
+            BI.RichEditorSizeChooser.superclass._defaultConfig.apply(
+                this,
+                arguments
+            ),
+            {
+                baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
+                command: "FontSize",
+                width: 50,
+                height: 24
+            }
+        );
     },
 
-    _items: [{
-        value: 1,
-        text: "1(8pt)"
-    }, {
-        value: 2,
-        text: "2(10pt)"
-    }, {
-        value: 3,
-        text: "3(12pt)"
-    }, {
-        value: 4,
-        text: "4(14pt)"
-    }, {
-        value: 5,
-        text: "5(18pt)"
-    }, {
-        value: 6,
-        text: "6(24pt)"
-    }],
+    _items: [
+        {
+            value: 12,
+            text: 12
+        },
+        {
+            value: 13,
+            text: 13
+        },
+        {
+            value: 14,
+            text: 14
+        },
+        {
+            value: 16,
+            text: 16
+        },
+        {
+            value: 18,
+            text: 18
+        },
+        {
+            value: 20,
+            text: 20
+        },
+        {
+            value: 22,
+            text: 22
+        },
+        {
+            value: 24,
+            text: 24
+        },
+        {
+            value: 26,
+            text: 26
+        },
+        {
+            value: 28,
+            text: 28
+        },
+        {
+            value: 30,
+            text: 30
+        },
+        {
+            value: 32,
+            text: 32
+        },
+        {
+            value: 34,
+            text: 34
+        },
+        {
+            value: 36,
+            text: 36
+        },
+        {
+            value: 38,
+            text: 38
+        },
+        {
+            value: 40,
+            text: 40
+        },
+        {
+            value: 64,
+            text: 64
+        },
+        {
+            value: 128,
+            text: 128
+        }
+    ],
 
     _init: function () {
         BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this,
+            o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             readonly: true,
@@ -11711,6 +11911,7 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,
@@ -11722,27 +11923,49 @@ BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
                     items: BI.createItems(this._items, {
                         type: "bi.single_select_item"
                     }),
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
+                    layouts: [
+                        {
+                            type: "bi.vertical"
+                        }
+                    ]
                 }
             }
         });
         this.combo.on(BI.Combo.EVENT_CHANGE, function () {
             var val = this.getValue()[0];
-            self.doCommand(val);
+            self.doAction(val);
             this.hideView();
             this.setValue([]);
         });
     },
 
     hideIf: function (e) {
-        if(!this.combo.element.find(e.target).length > 0) {
+        if (!this.combo.element.find(e.target).length > 0) {
             this.combo.hideView();
+        }
+    },
+
+    doAction: function (fontSize) {
+        var editor = this.options.editor.instance;
+        var range = editor.getRng();
+        var commonSize = 7;
+        if (!range.collapsed) {
+            this.doCommand(commonSize);
+            BI.each(document.getElementsByTagName("font"), function (idx, el) {
+                if (
+                    BI.contains($(el).parents(), editor.element[0]) &&
+                    el["size"] == commonSize
+                ) {
+                    $(el)
+                        .removeAttr("size")
+                        .css("font-size", fontSize + "px");
+                }
+            });
         }
     }
 });
-BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);/**
+BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);
+/**
  * 富文本编辑器
  *
  * Created by GUY on 2017/9/15.
@@ -11796,6 +12019,7 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(editor);
         return {
             type: "bi.combo",
+            container: o.container,
             toggle: false,
             trigger: "click",
             direction: "top,right",
@@ -11811,7 +12035,10 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor
+                    editor: this.editor,
+                    ref: function (_ref) {
+                        self.toolbar = _ref;
+                    }
                 }, o.toolbar),
                 height: 34,
                 stopPropagation: true,
@@ -11830,6 +12057,9 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
+        }
+        if(o.toolbar) {
+            this.editor.bindToolbar(this.toolbar);
         }
     },
 

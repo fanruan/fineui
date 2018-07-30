@@ -45,7 +45,7 @@
                 date = this.getBeginDate(date, obj);
             }
 
-            return date;
+            return BI.getDate(date.getFullYear(), date.getMonth(), date.getDate());
         },
 
         getBeginDate: function (date, obj) {

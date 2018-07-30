@@ -58,6 +58,7 @@ BI.MonthCombo = BI.inherit(BI.Widget, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: o.container,
             element: this,
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,

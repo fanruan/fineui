@@ -21,6 +21,7 @@ BI.RichEditorFontChooser = BI.inherit(BI.RichEditorAction, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            container: null,
             element: this,
             el: this.trigger,
             adjustLength: 1,

@@ -171,7 +171,7 @@ module.exports = function (grunt) {
                     "src/data/data.js",
                     "src/data/**/*.js"
                 ],
-                dest: "utils/utils.js"
+                dest: "dist/utils.js"
             }
         },
 
@@ -219,6 +219,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
+                    "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
                     "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
                         "src/base/formula/config.js",
                         "src/base/pane.js",
