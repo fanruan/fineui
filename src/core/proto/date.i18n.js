@@ -59,4 +59,7 @@ $(function () {
 
     /** Adds the number of days array to the Date object. */
     Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+    Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 });

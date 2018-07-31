@@ -133,5 +133,5 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 0
+    StartOfWeek: 1
 });
