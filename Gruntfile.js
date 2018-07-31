@@ -131,7 +131,7 @@ module.exports = function (grunt) {
                     "src/base/tree/asynctree.js",
                     "src/base/tree/parttree.js",
                     "src/base/**/*.js",
-                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js"],
+                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
             },
 
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
                         "src/base/tree/parttree.js",
                         "src/base/**/*.js",
                         "!src/base/formula/formulaeditor.js",
-                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js"]
+                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"]
                 }
             }
         },

@@ -114659,8 +114659,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     // Create the default BI.history.
     BI.history = new History;
-}());BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
-BI.i18n = {
+}());BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
     "BI-Multi_Date_YMD": "年/月/日",
@@ -114831,4 +114830,4 @@ BI.i18n = {
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
     "BI-Basic_Underline": "下划线"
-};
+};BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
