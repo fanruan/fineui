@@ -110,7 +110,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });

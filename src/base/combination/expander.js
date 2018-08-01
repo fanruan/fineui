@@ -106,7 +106,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                 case "click":
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
-                            if (self.expander.element.__isMouseInBounds__(e)) {
+                            if (self.element.find(e.target).length > 0) {
                                 if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
