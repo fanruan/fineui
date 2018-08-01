@@ -699,16 +699,6 @@
   content: "\e75e";
   color: inherit;
 }
-.less-font:hover .b-font:before,
-.less-font.hover .b-font:before {
-  content: "\e75e";
-  color: inherit;
-}
-.less-font:active .b-font:before,
-.less-font.active .b-font:before {
-  content: "\e75e";
-  color: #3f8ce8;
-}
 .less-font.disabled .b-font:before {
   content: "\e75e";
   color: inherit;
@@ -719,16 +709,6 @@
 .less-equal-font .b-font:before {
   content: "\e761";
   color: inherit;
-}
-.less-equal-font:hover .b-font:before,
-.less-equal-font.hover .b-font:before {
-  content: "\e761";
-  color: inherit;
-}
-.less-equal-font:active .b-font:before,
-.less-equal-font.active .b-font:before {
-  content: "\e761";
-  color: #3f8ce8;
 }
 .less-equal-font.disabled .b-font:before {
   content: "\e761";
