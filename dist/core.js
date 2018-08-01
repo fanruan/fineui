@@ -22741,36 +22741,20 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  * version: 0.5.3
  **/
 !(function () {
-    // Check `document` and `window` in case of server-side rendering
-    var _window;
-    if (typeof window !== "undefined") {
-        _window = window;
-    } else if (typeof self !== "undefined") {
-        _window = self;
-    } else {
-        _window = this;
-    }
+    var attachEvent = document.attachEvent,
+        stylesCreated = false;
 
-    var addEventListener = typeof document !== "undefined" && document.addEventListener;
-    var stylesCreated = false;
-
-    if (addEventListener) {
+    if (!attachEvent) {
         var requestFrame = (function () {
-            var raf = _window.requestAnimationFrame || _window.mozRequestAnimationFrame || _window.webkitRequestAnimationFrame ||
-                function (fn) {
-                    return _window.setTimeout(fn, 20);
-                };
-            return function (fn) {
-                return raf(fn);
-            };
+            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
+                function (fn) { return window.setTimeout(fn, 20); };
+            return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = _window.cancelAnimationFrame || _window.mozCancelAnimationFrame || _window.webkitCancelAnimationFrame ||
-                _window.clearTimeout;
-            return function (id) {
-                return cancel(id);
-            };
+            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
+                window.clearTimeout;
+            return function (id) { return cancel(id); };
         })();
 
         var resetTriggers = function (element) {
@@ -22861,7 +22845,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     };
 
     var addResizeListener = function (element, fn) {
-        if (addEventListener) {
+        if (attachEvent) element.attachEvent("onresize", fn);
+        else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
                 createStyles();
@@ -22880,21 +22865,16 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 });
             }
             element.__resizeListeners__.push(fn);
-
-        } else {
-            element.attachEvent("onresize", fn);
         }
     };
-
     var removeResizeListener = function (element, fn) {
-        if (addEventListener) {
+        if (attachEvent) element.detachEvent("onresize", fn);
+        else {
             element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
-                element.removeEventListener("scroll", scrollListener, true);
+                element.removeEventListener("scroll", scrollListener);
                 element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
             }
-        } else {
-            element.detachEvent("onresize", fn);
         }
     };
 
@@ -22909,7 +22889,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             removeResizeListener(widget.element[0], fn);
         }
     };
-}());
+})();
 
 (function () {
     function defaultComparator (a, b) {
