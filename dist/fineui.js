@@ -35325,11 +35325,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 },
                 set: function reactiveSetter(newVal) {
                     var value = childOb ? childOb.model : val;
-                    if (newVal === value || newVal !== newVal && value !== value) {
+                    if (newVal === value || (newVal !== newVal && value !== value)) {
                         return;
                     }
                     val = newVal;
                     childOb = !shallow && observe(newVal, observer, key);
+                    if (childOb && value && value.__ob__) {
+                        childOb._scopeDeps = value.__ob__._scopeDeps;
+                        childOb._deps = value.__ob__._deps;
+                    }
                     obj[key] = childOb ? childOb.model : newVal;
                     notify(model.__ob__, key, dep);
                 }
