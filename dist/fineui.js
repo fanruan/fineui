@@ -28267,9 +28267,11 @@ BI.extend(jQuery.fn, {
     },
 
     __isMouseInBounds__: function (e) {
-        var offset2Body = this.offset();
-        return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + this.outerWidth()
-        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight());
+        var offset2Body = this.get(0).getBoundingClientRect ? this.get(0).getBoundingClientRect() : this.offset();
+        var width = offset2Body.width || this.outerWidth();
+        var height = offset2Body.height || this.outerHeight();
+        return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + width
+        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + height);
     },
 
     __hasZIndexMask__: function (zindex) {
