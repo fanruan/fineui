@@ -9390,13 +9390,24 @@ jQuery.fn.offset = function( options ) {
 
 	// If we don't have gBCR, just use 0,0 rather than error
 	// BlackBerry 5, iOS 3 (original iPhone)
-	if ( typeof elem.getBoundingClientRect !== core_strundefined ) {
-		box = elem.getBoundingClientRect();
-	}
+	// if ( typeof elem.getBoundingClientRect !== core_strundefined ) {
+	// 	box = elem.getBoundingClientRect();
+	// }
+	// 解决transform下的offset问题
+	var el = elem,
+	offsetLeft = 0,
+	offsetTop  = 0;
+
+	do{
+		offsetLeft += el.offsetLeft;
+		offsetTop  += el.offsetTop;
+
+		el = el.offsetParent;
+	} while( el );
 	win = getWindow( doc );
 	return {
-		top: box.top  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),
-		left: box.left + ( win.pageXOffset || docElem.scrollLeft ) - ( docElem.clientLeft || 0 )
+		top: offsetTop  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),
+		left: offsetLeft + ( win.pageXOffset || docElem.scrollLeft ) - ( docElem.clientLeft || 0 )
 	};
 };
 
@@ -29510,6 +29521,9 @@ $(function () {
 
     /** Adds the number of days array to the Date object. */
     Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+    Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 });
 /** Constants used for time computations */
 Date.SECOND = 1000;
@@ -29558,18 +29572,17 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    // 周一是一周第一天
-    var week = d.getDay() === 0 ? 7 : d.getDay();
-    // var week = d.getDay();
+    var week = d.getDay();
+    var startOfWeek = BI.StartOfWeek % 7;
     if (this.getMonth() === 0 && this.getDate() <= week) {
         return 1;
     }
-    d.setDate(this.getDate() - (week - 1));
+    d.setDate(this.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
     var ms = d.valueOf(); // GMT
     d.setMonth(0);
     d.setDate(1);
     var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() !== 1) {
+    if (d.getDay() !== startOfWeek) {
         offset++;
     }
     return offset;
@@ -29640,12 +29653,14 @@ Date.prototype.getOffsetMonth = function (n) {
 // 获得本周的起始日期
 Date.prototype.getWeekStartDate = function () {
     var w = this.getDay();
-    return this.getOffsetDate(w === 0 ? -6 : 1 - w);
+    var startOfWeek = BI.StartOfWeek % 7;
+    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
 };
 // 得到本周的结束日期
 Date.prototype.getWeekEndDate = function () {
     var w = this.getDay();
-    return this.getOffsetDate(w === 0 ? 0 : 7 - w);
+    var startOfWeek = BI.StartOfWeek % 7;
+    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
 };
 
 /** Checks date and time equality */
@@ -30664,7 +30679,7 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 0
+    StartOfWeek: 1
 });BI.version = "2.0";/**
  * absolute实现的居中布局
  * @class BI.AbsoluteCenterLayout

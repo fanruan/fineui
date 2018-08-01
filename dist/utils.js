@@ -10144,7 +10144,7 @@ _.extend(BI, {
         Bottom: "bottom",
         Stretch: "stretch"
     },
-    StartOfWeek: 0
+    StartOfWeek: 1
 });/**
  * 对数组对象的扩展
  * @class Array
@@ -10640,18 +10640,17 @@ Date.prototype.getDayOfYear = function () {
 /** Returns the number of the week in year, as defined in ISO 8601. */
 Date.prototype.getWeekNumber = function () {
     var d = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    // 周一是一周第一天
-    var week = d.getDay() === 0 ? 7 : d.getDay();
-    // var week = d.getDay();
+    var week = d.getDay();
+    var startOfWeek = BI.StartOfWeek % 7;
     if (this.getMonth() === 0 && this.getDate() <= week) {
         return 1;
     }
-    d.setDate(this.getDate() - (week - 1));
+    d.setDate(this.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
     var ms = d.valueOf(); // GMT
     d.setMonth(0);
     d.setDate(1);
     var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() !== 1) {
+    if (d.getDay() !== startOfWeek) {
         offset++;
     }
     return offset;
@@ -10722,12 +10721,14 @@ Date.prototype.getOffsetMonth = function (n) {
 // 获得本周的起始日期
 Date.prototype.getWeekStartDate = function () {
     var w = this.getDay();
-    return this.getOffsetDate(w === 0 ? -6 : 1 - w);
+    var startOfWeek = BI.StartOfWeek % 7;
+    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
 };
 // 得到本周的结束日期
 Date.prototype.getWeekEndDate = function () {
     var w = this.getDay();
-    return this.getOffsetDate(w === 0 ? 0 : 7 - w);
+    var startOfWeek = BI.StartOfWeek % 7;
+    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
 };
 
 /** Checks date and time equality */

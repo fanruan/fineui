@@ -64,7 +64,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                                         text: o.header,
                                         textAlign: "left"
                                     },
-                                    left: 10,
+                                    left: 20,
                                     top: 0,
                                     right: 0,
                                     bottom: 0

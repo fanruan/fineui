@@ -5468,16 +5468,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   content: "\e64e";
   color: #999999;
 }
-.trigger-triangle-font:hover .b-font:before,
-.trigger-triangle-font.hover .b-font:before {
-  content: "\e64e";
-  color: #999999;
-}
-.trigger-triangle-font:active .b-font:before,
-.trigger-triangle-font.active .b-font:before {
-  content: "\e64e";
-  color: #3685f2;
-}
 .trigger-triangle-font.disabled .b-font:before {
   content: "\e64e";
   color: #999999;
