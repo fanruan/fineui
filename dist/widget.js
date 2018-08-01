@@ -10472,7 +10472,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });
@@ -11161,7 +11161,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });
@@ -16704,7 +16704,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });

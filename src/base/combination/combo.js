@@ -147,7 +147,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                     break;
                 case "click":
                     var debounce = BI.debounce(function (e) {
-                        if (self.element.find(e.target).length > 0) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 // if (!o.toggle && self.isViewVisible()) {
                                 //     return;
@@ -173,7 +173,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                     break;
                 case "click-hover":
                     var debounce = BI.debounce(function (e) {
-                        if (self.element.find(e.target).length > 0) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 // if (self.isViewVisible()) {
                                 //     return;

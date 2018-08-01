@@ -103,7 +103,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                 default :
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
-                            if (self.switcher.find(e.target).length > 0) {
+                            if (self.switcher.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.switcher.isEnabled()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {

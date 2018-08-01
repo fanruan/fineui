@@ -48,7 +48,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             }
             $(document).bind("mousedown." + self.getName(), function (e) {
-                if (BI.DOM.isExist(self) && !(self.element.find(e.target).length > 0)) {
+                if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
                     $(document).unbind("mousedown." + self.getName());
                     self.content.element.blur();
                 }

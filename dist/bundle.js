@@ -36318,7 +36318,7 @@ BI.Single = BI.inherit(BI.Widget, {
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
-                if (!(self.element.find(e.target).length > 0)) {
+                if (!self.element.__isMouseInBounds__(e)) {
                     if (BI.isNotNull(self.timeout)) {
                         clearTimeout(self.timeout);
                     }
@@ -36607,7 +36607,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
         this.element.on("mouseenter." + this.getName(), function (e) {
-            if (self.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e)) {
                 if (self.isEnabled() && !self._hover && (o.isShadowShowingOnSelected || !self.isSelected())) {
                     assertMask();
                     self.$mask.visible();
@@ -36615,7 +36615,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
         this.element.on("mousemove." + this.getName(), function (e) {
-            if (!(self.element.find(e.target).length > 0)) {
+            if (!self.element.__isMouseInBounds__(e)) {
                 if (self.isEnabled() && !self._hover) {
                     assertMask();
                     self.$mask.invisible();
@@ -36660,7 +36660,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         // if (e.button === 0) {
                         $(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
-                            if (BI.DOM.isExist(self) && !hand.find(e.target).length > 0 && mouseDown === true && !selected) {
+                            if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
                                 // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
@@ -39081,7 +39081,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                     break;
                 case "click":
                     var debounce = BI.debounce(function (e) {
-                        if (self.element.find(e.target).length > 0) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 // if (!o.toggle && self.isViewVisible()) {
                                 //     return;
@@ -39107,7 +39107,7 @@ BI.Combo = BI.inherit(BI.Widget, {
                     break;
                 case "click-hover":
                     var debounce = BI.debounce(function (e) {
-                        if (self.element.find(e.target).length > 0) {
+                        if (self.combo.element.__isMouseInBounds__(e)) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                 // if (self.isViewVisible()) {
                                 //     return;
@@ -39524,7 +39524,7 @@ BI.Expander = BI.inherit(BI.Widget, {
                 case "click":
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
-                            if (self.element.find(e.target).length > 0) {
+                            if (self.expander.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.isValid() && self.expander.isEnabled() && self.expander.isValid()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
@@ -40732,7 +40732,7 @@ BI.Switcher = BI.inherit(BI.Widget, {
                 default :
                     if (e) {
                         self.element.off(e + "." + self.getName()).on(e + "." + self.getName(), BI.debounce(function (e) {
-                            if (self.switcher.find(e.target).length > 0) {
+                            if (self.switcher.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.switcher.isEnabled()) {
                                     o.toggle ? self._toggle() : self._popupView();
                                     if (self.isExpanded()) {
@@ -54678,7 +54678,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             }
             $(document).bind("mousedown." + self.getName(), function (e) {
-                if (BI.DOM.isExist(self) && !(self.element.find(e.target).length > 0)) {
+                if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
                     $(document).unbind("mousedown." + self.getName());
                     self.content.element.blur();
                 }
@@ -98654,7 +98654,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });
@@ -99343,7 +99343,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });
@@ -104886,7 +104886,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0 && !self.numberCounter.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
                 self.numberCounter.hideView();
             }
         });

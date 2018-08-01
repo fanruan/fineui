@@ -76,7 +76,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
         this.element.on("mouseenter." + this.getName(), function (e) {
-            if (self.element.find(e.target).length > 0) {
+            if (self.element.__isMouseInBounds__(e)) {
                 if (self.isEnabled() && !self._hover && (o.isShadowShowingOnSelected || !self.isSelected())) {
                     assertMask();
                     self.$mask.visible();
@@ -84,7 +84,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
             }
         });
         this.element.on("mousemove." + this.getName(), function (e) {
-            if (!(self.element.find(e.target).length > 0)) {
+            if (!self.element.__isMouseInBounds__(e)) {
                 if (self.isEnabled() && !self._hover) {
                     assertMask();
                     self.$mask.invisible();
@@ -129,7 +129,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         // if (e.button === 0) {
                         $(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
-                            if (BI.DOM.isExist(self) && !hand.find(e.target).length > 0 && mouseDown === true && !selected) {
+                            if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
                                 // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }

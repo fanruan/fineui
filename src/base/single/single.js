@@ -77,7 +77,7 @@ BI.Single = BI.inherit(BI.Widget, {
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
-                if (!(self.element.find(e.target).length > 0)) {
+                if (!self.element.__isMouseInBounds__(e)) {
                     if (BI.isNotNull(self.timeout)) {
                         clearTimeout(self.timeout);
                     }
