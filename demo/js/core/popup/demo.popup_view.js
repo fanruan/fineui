@@ -23,6 +23,35 @@ Demo.Func = BI.inherit(BI.Widget, {
                     },
                     popup: {
                         type: "bi.popup_view",
+                        ref: function (_ref) {
+                            self.popupView = _ref;
+                        },
+                        tabs: [{
+                            type: "bi.text_button",
+                            value: "tab1",
+                            cls: "bi-border",
+                            handler: function () {
+                                BI.Msg.alert("", "点击tab1");
+                            }
+                        }, {
+                            type: "bi.text_button",
+                            value: "tab2",
+                            cls: "bi-border",
+                            handler: function () {
+                                BI.Msg.alert("", "点击tab2");
+                            }
+                        }],
+                        logic: {
+                            dynamic: true
+                        },
+                        tools: true,
+                        buttons: [{
+                            type: "bi.text_button",
+                            value: "getValue",
+                            handler: function () {
+                                BI.Msg.alert("getValue", JSON.stringify(self.popupView.getValue()));
+                            }
+                        }],
                         el: {
                             type: "bi.button_group",
                             layouts: [{
