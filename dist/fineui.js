@@ -9623,6 +9623,9 @@ jQuery.fn.offset = function( options ) {
 		offsetLeft += el.offsetLeft;
 		offsetTop  += el.offsetTop;
 
+        offsetLeft -= el.scrollLeft;
+        offsetTop  -= el.scrollTop;
+
 		el = el.offsetParent;
 	} while( el );
 	win = getWindow( doc );
@@ -29054,11 +29057,12 @@ BI.extend(BI.DOM, {
         ctx.fillText(param, 6 * ratio, 12 * ratio);
         $(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
+        // IE可以放大缩小所以要固定最大最小宽高
         return {
             width: w,
             height: 24,
             src: canvas.toDataURL("image/png"),
-            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px; width:" + w + "px;height: 24px",
+            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px; width:" + w + "px;height: 24px; max-width:" + w + "px;max-height: 24px; min-width:" + w + "px;min-height: 24px",
             param: param
         };
     }
