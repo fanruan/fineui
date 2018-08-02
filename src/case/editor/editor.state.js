@@ -56,7 +56,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 self.editor.focus();
                 self.editor.setValue("");
             },
-            title: BI.isNotNull(o.title) ? o.title : function () {
+            title: BI.isNotNull(o.tipText) ? o.tipText : function () {
                 var title = "";
                 if (BI.isString(self.stateValue)) {
                     title = self.stateValue;
