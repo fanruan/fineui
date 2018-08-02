@@ -9402,8 +9402,8 @@ jQuery.fn.offset = function( options ) {
 		offsetLeft += el.offsetLeft;
 		offsetTop  += el.offsetTop;
 
-        offsetLeft += el.scrollLeft;
-        offsetTop  += el.scrollTop;
+        offsetLeft -= el.scrollLeft;
+        offsetTop  -= el.scrollTop;
 
 		el = el.offsetParent;
 	} while( el );
