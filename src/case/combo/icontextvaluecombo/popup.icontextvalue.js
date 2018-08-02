@@ -17,7 +17,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
                 type: "bi.single_select_icon_text_item",
                 height: 24,
                 iconHeight: o.iconHeight,
-                iconWidth: o.iconWidth
+                iconWidth: o.iconWidth,
+                iconWrapperWidth: o.iconWrapperWidth
             }),
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
@@ -47,6 +48,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
             height: 24,
+            iconWrapperWidth: o.iconWrapperWidth,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
         });

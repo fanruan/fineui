@@ -10640,7 +10640,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -10814,8 +10815,10 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
+            cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 36
         });
     },
 
@@ -11410,7 +11413,9 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            cls: "bi-list-item-active",
+            iconWrapperWidth: 36
         });
     },
 
@@ -16864,8 +16869,10 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 

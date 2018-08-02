@@ -17446,6 +17446,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
+            iconWrapperWidth: null,
             iconHeight: null,
             iconWidth: null,
             textHgap: 0,
@@ -17472,7 +17473,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.icon_label",
-            width: o.height,
+            width: o.iconWrapperWidth || o.height,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight

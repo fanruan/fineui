@@ -25,6 +25,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.combo = this;
                     },
+                    attributes: {
+                        tabIndex: 0
+                    },
                     el: {
                         type: "bi.search_text_value_trigger",
                         ref: function () {
@@ -36,6 +39,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
+                        title: o.title,
                         listeners: [{
                             eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
                             action: function () {
@@ -46,14 +50,14 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }]
                     },
                     popup: {
-                        el:{
+                        el: {
                             type: "bi.text_value_combo_popup",
                             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                             value: o.value,
                             items: o.items,
                             ref: function () {
                                 self.popup = this;
-                                self.trigger.getSearcher().setAdapter(self.popup);
+                                // self.trigger.getSearcher().setAdapter(self.popup);
                             },
                             listeners: [{
                                 eventName: BI.TextValueComboPopup.EVENT_CHANGE,
@@ -69,7 +73,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            self.trigger.stopEditing();
+                            // self.trigger.stopEditing();
                             self.element.removeClass("combo-show");
                         }
                     }, {

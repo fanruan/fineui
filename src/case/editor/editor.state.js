@@ -55,6 +55,16 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 self._showInput();
                 self.editor.focus();
                 self.editor.setValue("");
+            },
+            title: BI.isNotNull(o.title) ? o.title : function () {
+                var title = "";
+                if (BI.isString(self.stateValue)) {
+                    title = self.stateValue;
+                }
+                if (BI.isArray(self.stateValue) && self.stateValue.length === 1) {
+                    title = self.stateValue[0];
+                }
+                return title;
             }
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
@@ -214,32 +224,23 @@ BI.StateEditor = BI.inherit(BI.Widget, {
     setState: function (v) {
         var o = this.options;
         BI.StateEditor.superclass.setValue.apply(this, arguments);
+        this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(o.text);
-                this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
         }
         if (BI.isString(v)) {
-            // if (BI.isEmpty(v)) {
-            //     this.text.setText(o.text);
-            //     this.text.setTitle("");
-            //     this.text.element.addClass("state-editor-infinite-text");
-            // } else {
             this.text.setText(v);
-            this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
-            // }
             return;
         }
         if (BI.isArray(v)) {
@@ -248,11 +249,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.element.addClass("state-editor-infinite-text");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
-                this.text.setTitle(v[0]);
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             }
         }
