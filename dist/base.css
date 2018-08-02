@@ -418,6 +418,10 @@
   background-color: #242640;
 }
 
+.bi-combo.bi-combo-popup {
+  display: block !important;
+  visibility: visible !important;
+}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
