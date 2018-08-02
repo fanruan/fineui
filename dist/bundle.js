@@ -28046,9 +28046,11 @@ BI.extend(jQuery.fn, {
     },
 
     __isMouseInBounds__: function (e) {
-        var offset2Body = this.offset();
-        return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + this.outerWidth()
-        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + this.outerHeight());
+        var offset2Body = this.get(0).getBoundingClientRect ? this.get(0).getBoundingClientRect() : this.offset();
+        var width = offset2Body.width || this.outerWidth();
+        var height = offset2Body.height || this.outerHeight();
+        return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + width
+        || e.pageY < offset2Body.top || e.pageY > offset2Body.top + height);
     },
 
     __hasZIndexMask__: function (zindex) {
@@ -98652,7 +98654,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
@@ -99341,7 +99343,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
@@ -104884,7 +104886,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
