@@ -2270,15 +2270,6 @@ textarea {
   background-color: #242640;
 }
 
-.bi-combo.bi-combo-popup {
-  display: block !important;
-  visibility: visible !important;
-}
-.bi-combo.bi-combo-popup:focus {
-  -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
-  -moz-box-shadow: 0 0 5px 2px #d7e7fc;
-  box-shadow: 0 0 5px 2px #d7e7fc;
-}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
@@ -2298,9 +2289,6 @@ textarea {
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-combo.bi-combo-popup:focus .bi-search-text-value-trigger {
-  border-color: #3685f2;
-}
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
   color: #ff4949;
@@ -2308,9 +2296,6 @@ textarea {
 
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
-}
-.bi-combo.bi-combo-popup:focus .bi-select-text-trigger {
-  border-color: #3685f2;
 }
 /*************BI.SearchEditor******************/
 .bi-search-editor {
@@ -4242,9 +4227,6 @@ ul.ztree.zTreeDragUL {
 .bi-multi-select-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-combo.bi-combo-popup:focus .bi-multi-select-trigger {
-  border-color: #3685f2;
-}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -4558,9 +4540,6 @@ ul.ztree.zTreeDragUL {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-}
-.bi-combo.bi-combo-popup:focus .bi-single-tree-trigger {
-  border-color: #3685f2;
 }
 .bi-date-interval.time-error .bi-input {
   color: #ff4949;
