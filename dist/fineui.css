@@ -249,6 +249,9 @@ a {
 a:focus {
   outline: 0;
 }
+div:focus {
+  outline: none;
+}
 input::-webkit-contacts-auto-fill-button {
   visibility: hidden;
   display: none !important;
@@ -3418,6 +3421,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
   word-break: break-word;
 }
+.bi-text:before {
+  content: '';
+  display: block;
+}
 .bi-bubble .bubble-text {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3835,6 +3842,15 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   vertical-align: top;
   display: inline-block;
 }
+.ztree li a:hover {
+  background-color: rgba(54, 133, 242, 0.06);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
+}
+.ztree li a:active {
+  color: #3685f2;
+  background-color: rgba(54, 133, 242, 0.06);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
+}
 .ztree li a.curSelectedNode_Edit {
   padding-top: 0px;
   background-color: #FFE6B0;
@@ -3917,6 +3933,18 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .ztree li span.button.chk.radio_true_part_focus {
   background-position: -42px -42px;
+}
+.ztree li span.button.chk.checkbox_true_full + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_full_focus + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_part + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_part_focus + a {
+  color: #3685f2;
 }
 .ztree li span.button.chk.radio_true_disable {
   background-position: -42px -56px;

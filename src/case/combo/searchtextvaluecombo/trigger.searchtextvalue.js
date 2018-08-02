@@ -27,7 +27,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             },
                             text: this._digest(o.value, o.items),
                             value: o.value,
-                            height: o.height
+                            height: o.height,
+                            tipText: ""
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",

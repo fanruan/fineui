@@ -19,6 +19,9 @@ a {
 a:focus {
   outline: 0;
 }
+div:focus {
+  outline: none;
+}
 input::-webkit-contacts-auto-fill-button {
   visibility: hidden;
   display: none !important;

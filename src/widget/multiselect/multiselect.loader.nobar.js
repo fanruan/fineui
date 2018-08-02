@@ -114,8 +114,10 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
+            cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 36
         });
     },
 

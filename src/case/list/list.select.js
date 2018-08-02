@@ -19,7 +19,8 @@ BI.SelectList = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn,
             onLoaded: BI.emptyFn,
             toolbar: {
-                type: "bi.multi_select_bar"
+                type: "bi.multi_select_bar",
+                iconWrapperWidth: 36
             },
             el: {
                 type: "bi.list_pane"
