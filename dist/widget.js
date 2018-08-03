@@ -3255,9 +3255,9 @@ BI.extend(BI.DynamicDateCard, {
         WORK_DAY: 6
     },
     OFFSET: {
-        CURRENT: "1",
-        BEGIN: "2",
-        END: "3"
+        CURRENT: 1,
+        BEGIN: 2,
+        END: 3
     }
 
 });BI.DynamicDateCombo = BI.inherit(BI.Single, {
