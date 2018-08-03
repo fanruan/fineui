@@ -111,8 +111,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                                 self.fireEvent("EVENT_CHANGE");
                             }
                         }]
-                    },
-                    bgap: 5
+                    }
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -138,16 +137,19 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         var self = this;
         var items = BI.map(values, function (idx, value) {
             return {
-                type: "bi.dynamic_date_param_item",
-                dateType: value.dateType,
-                value: value.value,
-                offset: value.offset,
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }]
+                el: {
+                    type: "bi.dynamic_date_param_item",
+                    dateType: value.dateType,
+                    value: value.value,
+                    offset: value.offset,
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }]
+                },
+                tgap: idx === 0 ? 5 : 0
             };
         });
 
@@ -335,9 +337,9 @@ BI.extend(BI.DynamicDateCard, {
         WORK_DAY: 6
     },
     OFFSET: {
-        CURRENT: 1,
-        BEGIN: 2,
-        END: 3
+        CURRENT: "1",
+        BEGIN: "2",
+        END: "3"
     }
 
 });
