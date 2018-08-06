@@ -41,6 +41,13 @@ textarea {
   }
 }
 
+.bi-focus-shadow {
+  &:focus-within, &:hover, &:focus {
+    border-color: @color-bi-border-highlight;
+    .box-shadow(0 0 5px 2px, @color-bi-blue-20);
+  }
+}
+
 .base-invalid {
   cursor: default !important;
 }

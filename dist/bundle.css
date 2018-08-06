@@ -312,6 +312,14 @@ textarea {
 .bi-theme-dark .base-disabled .b-font:before {
   color: #606479 !important;
 }
+.bi-focus-shadow:focus-within,
+.bi-focus-shadow:hover,
+.bi-focus-shadow:focus {
+  border-color: #3685f2;
+  -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
+  -moz-box-shadow: 0 0 5px 2px #d7e7fc;
+  box-shadow: 0 0 5px 2px #d7e7fc;
+}
 .base-invalid {
   cursor: default !important;
 }
@@ -2274,6 +2282,12 @@ textarea {
   display: block !important;
   visibility: visible !important;
 }
+.bi-combo.bi-combo-popup:focus,
+.bi-combo.bi-combo-popup:hover {
+  -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
+  -moz-box-shadow: 0 0 5px 2px #d7e7fc;
+  box-shadow: 0 0 5px 2px #d7e7fc;
+}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
@@ -2293,6 +2307,10 @@ textarea {
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
 }
+.bi-combo.bi-combo-popup .bi-search-text-value-trigger,
+.bi-combo:hover .bi-search-text-value-trigger {
+  border-color: #3685f2;
+}
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
   color: #ff4949;
@@ -2300,6 +2318,10 @@ textarea {
 
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
+}
+.bi-combo.bi-combo-popup .bi-select-text-trigger,
+.bi-combo:hover .bi-select-text-trigger {
+  border-color: #3685f2;
 }
 /*************BI.SearchEditor******************/
 .bi-search-editor {
@@ -4231,6 +4253,10 @@ ul.ztree.zTreeDragUL {
 .bi-multi-select-combo.combo-show .trigger-down {
   display: none;
 }
+.bi-combo.bi-combo-popup:focus .bi-multi-select-trigger,
+.bi-combo.bi-combo-popup:hover .bi-multi-select-trigger {
+  border-color: #3685f2;
+}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -4544,6 +4570,10 @@ ul.ztree.zTreeDragUL {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
+}
+.bi-combo.bi-combo-popup:focus .bi-single-tree-trigger,
+.bi-combo.bi-combo-popup:hover .bi-single-tree-trigger {
+  border-color: #3685f2;
 }
 .bi-date-interval.time-error .bi-input {
   color: #ff4949;

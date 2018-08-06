@@ -17353,14 +17353,14 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         var icon1 = BI.createWidget({
             type: "bi.icon_label",
             cls: o.iconCls1,
-            width: o.height,
+            width: o.leftIconWrapperWidth,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.height,
+            width: o.height
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -17369,7 +17369,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.icon_label",
                     cls: o.iconCls2,
-                    width: o.height,
+                    width: o.rightIconWrapperWidth,
                     height: o.height,
                     iconWidth: o.iconWidth,
                     iconHeight: o.iconHeight
