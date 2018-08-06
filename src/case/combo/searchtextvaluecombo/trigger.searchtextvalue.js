@@ -4,7 +4,7 @@
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        baseCls: "bi-search-text-value-trigger bi-border bi-focus-shadow",
         height: 24
     },
 

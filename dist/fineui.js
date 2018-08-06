@@ -53496,14 +53496,14 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         var icon1 = BI.createWidget({
             type: "bi.icon_label",
             cls: o.iconCls1,
-            width: o.height,
+            width: o.leftIconWrapperWidth,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.height,
+            width: o.height
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -53512,7 +53512,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.icon_label",
                     cls: o.iconCls2,
-                    width: o.height,
+                    width: o.rightIconWrapperWidth,
                     height: o.height,
                     iconWidth: o.iconWidth,
                     iconHeight: o.iconHeight
@@ -74504,6 +74504,58 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
 });
 
 BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);/**
+ * 专门为calendar的视觉加的button，作为私有button,不能配置任何属性，也不要用这个玩意
+ */
+BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "normal",
+                    text: o.text,
+                    value: o.value,
+                    ref: function () {
+                        self.text = this;
+                    }
+                },
+                left: o.lgap,
+                right: o.rgap,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    setSelected: function (b) {
+        BI.CalendarDateItem.superclass.setSelected.apply(this, arguments);
+        this.text.setSelected(b);
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    }
+});
+BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);/**
  * Created by GUY on 2015/8/28.
  * @class BI.Calendar
  * @extends BI.Widget
@@ -74592,7 +74644,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             items: items,
             layouts: [{
                 type: "bi.center",
-                hgap: 10,
+                lgap: 10,
                 vgap: 10
             }]
         });
@@ -74609,15 +74661,16 @@ BI.Calendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    type: "bi.calendar_date_item",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
                     height: 24,
                     value: o.year + "-" + month + "-" + td.text,
-                    disabled: td.lastMonth || td.nextMonth || td.disabled
+                    disabled: td.lastMonth || td.nextMonth || td.disabled,
+                    lgap: 10,
+                    rgap: 0
                     // selected: td.currentDay
                 });
             });
@@ -74631,7 +74684,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
                 rowSize: 24,
-                hgap: 10,
                 vgap: 10
             }))]
         });
@@ -79216,7 +79268,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        baseCls: "bi-search-text-value-trigger bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -88261,7 +88313,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border",
+            baseCls: "bi-select-text-trigger bi-border bi-focus-shadow",
             height: 24
         });
     },
@@ -89343,7 +89395,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 10,
+                left: 0,
                 right: 10
             }, {
                 el: {
@@ -93573,7 +93625,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border",
+            baseCls: "bi-search-editor bi-border bi-focus-shadow",
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -102660,7 +102712,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);/**
 BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border",
+            baseCls: "bi-number-editor bi-border bi-focus-shadow",
             validationChecker: function () {
                 return true;
             },

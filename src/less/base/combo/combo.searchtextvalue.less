@@ -27,12 +27,10 @@
   }
 }
 
-//.bi-combo {
-//  &.bi-combo-popup {
-//    &:focus {
-//      & .bi-search-text-value-trigger {
-//        border-color: @color-bi-border-highlight;
-//      }
-//    }
-//  }
-//}
+.bi-combo {
+  &.bi-combo-popup, &:hover{
+    & .bi-search-text-value-trigger {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+}

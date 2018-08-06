@@ -5,7 +5,7 @@
 BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border",
+            baseCls: "bi-number-editor bi-border bi-focus-shadow",
             validationChecker: function () {
                 return true;
             },

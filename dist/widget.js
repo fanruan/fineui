@@ -917,7 +917,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 10,
+                left: 0,
                 right: 10
             }, {
                 el: {
@@ -5147,7 +5147,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border",
+            baseCls: "bi-search-editor bi-border bi-focus-shadow",
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -14234,7 +14234,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);/**
 BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border",
+            baseCls: "bi-number-editor bi-border bi-focus-shadow",
             validationChecker: function () {
                 return true;
             },
