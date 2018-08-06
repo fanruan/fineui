@@ -313,12 +313,14 @@ textarea {
   color: #606479 !important;
 }
 .bi-focus-shadow:focus-within,
-.bi-focus-shadow:hover,
 .bi-focus-shadow:focus {
   border-color: #3685f2;
   -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
   -moz-box-shadow: 0 0 5px 2px #d7e7fc;
   box-shadow: 0 0 5px 2px #d7e7fc;
+}
+.bi-focus-shadow:hover {
+  border-color: #3685f2;
 }
 .base-invalid {
   cursor: default !important;
