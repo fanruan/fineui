@@ -447,8 +447,8 @@
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-combo.bi-combo-popup .bi-search-text-value-trigger,
-.bi-combo:hover .bi-search-text-value-trigger {
+.bi-combo.bi-combo-popup > .bi-search-text-value-trigger,
+.bi-combo:hover > .bi-search-text-value-trigger {
   border-color: #3685f2;
 }
 
@@ -459,8 +459,8 @@
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
-.bi-combo.bi-combo-popup .bi-select-text-trigger,
-.bi-combo:hover .bi-select-text-trigger {
+.bi-combo.bi-combo-popup > .bi-select-text-trigger,
+.bi-combo:hover > .bi-select-text-trigger {
   border-color: #3685f2;
 }
 /*************BI.SearchEditor******************/
