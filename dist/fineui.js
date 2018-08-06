@@ -35331,7 +35331,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 },
                 set: function reactiveSetter(newVal) {
                     var value = childOb ? childOb.model : val;
-                    if (newVal === value || (newVal !== newVal && value !== value)) {
+                    if (newVal === value || newVal !== newVal && value !== value) {
                         return;
                     }
                     val = newVal;
@@ -35525,7 +35525,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } catch (e) {
                 // if (this.user) {
                 // } else {
-                console.error(e);
+                // console.error(e)
                 // }
             } finally {
                 // "touch" every property so they are all tracked as
@@ -35594,13 +35594,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         try {
                             this.cb.call(this.vm, value, oldValue, options);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                     } else {
                         try {
                             this.cb.call(this.vm, value, oldValue, options);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                     }
                 }
