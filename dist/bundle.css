@@ -2283,7 +2283,7 @@ textarea {
   visibility: visible !important;
 }
 .bi-combo.bi-combo-popup:focus,
-.bi-combo.bi-combo-popup:hover {
+.bi-combo.bi-combo-popup:focus-within {
   -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
   -moz-box-shadow: 0 0 5px 2px #d7e7fc;
   box-shadow: 0 0 5px 2px #d7e7fc;
