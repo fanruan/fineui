@@ -8,7 +8,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20
+            height: 30
         });
     },
 
@@ -21,8 +21,8 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
             level: "ignore",
             minWidth: 0,
             text: BI.i18nText("BI-Formula_Insert"),
-            height: 20,
-            width: 30
+            height: o.height,
+            width: o.width
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
             self.addParam("参数");
