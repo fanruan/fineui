@@ -31,7 +31,8 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
             return BI.extend(btn, {
-                editor: o.editor
+                editor: o.editor,
+                height: 24
             });
         }));
         BI.createWidget({
@@ -39,7 +40,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
             element: this,
             items: buttons,
             hgap: 3,
-            vgap: 6
+            vgap: 5
         });
     },
 

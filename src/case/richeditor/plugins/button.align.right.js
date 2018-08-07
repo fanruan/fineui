@@ -21,8 +21,8 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             element: this,
             forceNotSelected: true,
             title: BI.i18nText("BI-Word_Align_Right"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {

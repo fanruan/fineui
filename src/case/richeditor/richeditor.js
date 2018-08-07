@@ -68,14 +68,11 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor,
-                    ref: function (_ref) {
-                        self.toolbar = _ref;
-                    }
+                    editor: this.editor
                 }, o.toolbar),
                 height: 34,
-                stopPropagation: true,
-                stopEvent: true
+                stopPropagation: false,
+                stopEvent: false
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -90,9 +87,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
-        }
-        if(o.toolbar) {
-            this.editor.bindToolbar(this.toolbar);
         }
     },
 

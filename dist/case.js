@@ -10798,7 +10798,8 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
             return BI.extend(btn, {
-                editor: o.editor
+                editor: o.editor,
+                height: 24
             });
         }));
         BI.createWidget({
@@ -10806,7 +10807,7 @@ BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
             element: this,
             items: buttons,
             hgap: 3,
-            vgap: 6
+            vgap: 5
         });
     },
 
@@ -10898,13 +10899,13 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             var t = e.target;
             var self = this;
             var found = false;
+            this.instance.saveRng();
             do {
                 if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
-                    this.instance.saveRng();
                     // 如果是点击在toolbar内恢复选取(IE中出现的问题)
                     BI.defer(function () {
                         self.instance.restoreRng();
@@ -11151,7 +11152,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             }
             this.ne.fireEvent("keyup", e);
 
-            if (e.keyCode !== 8) {
+            if (e.keyCode !== 8 && e.type !== "focus") {
                 return;
             }
             var newLine;
@@ -11366,8 +11367,8 @@ BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
             element: this,
             forceNotSelected: true,
             title: BI.i18nText("BI-Word_Align_Center"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-align-center-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -11403,8 +11404,8 @@ BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
             element: this,
             forceNotSelected: true,
             title: BI.i18nText("BI-Word_Align_Left"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-align-left-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -11440,8 +11441,8 @@ BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
             element: this,
             forceNotSelected: true,
             title: BI.i18nText("BI-Word_Align_Right"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-align-right-font"
         });
         this.align.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -11478,8 +11479,8 @@ BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
             type: "bi.icon_button",
             element: this,
             title: BI.i18nText("BI-Basic_Bold"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-bold-font"
         });
         this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -11534,8 +11535,8 @@ BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
             type: "bi.icon_button",
             element: this,
             title: BI.i18nText("BI-Basic_Italic"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-italic-font"
         });
         this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -11576,7 +11577,7 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
     _defaultConfig: function () {
         return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
             width: 20,
-            height: 20
+            height: 30
         });
     },
 
@@ -11589,8 +11590,8 @@ BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
             level: "ignore",
             minWidth: 0,
             text: BI.i18nText("BI-Formula_Insert"),
-            height: 20,
-            width: 30
+            height: o.height,
+            width: o.width
         });
         this.param.on(BI.Button.EVENT_CHANGE, function () {
             self.addParam("参数");
@@ -11626,8 +11627,8 @@ BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
             type: "bi.icon_button",
             element: this,
             title: BI.i18nText("BI-Basic_Underline"),
-            height: 20,
-            width: 20,
+            height: o.height,
+            width: o.width,
             cls: "text-toolbar-button bi-list-item-active text-underline-font"
         });
         this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
@@ -12118,14 +12119,11 @@ BI.RichEditor = BI.inherit(BI.Widget, {
             popup: {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor,
-                    ref: function (_ref) {
-                        self.toolbar = _ref;
-                    }
+                    editor: this.editor
                 }, o.toolbar),
                 height: 34,
-                stopPropagation: true,
-                stopEvent: true
+                stopPropagation: false,
+                stopEvent: false
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -12140,9 +12138,6 @@ BI.RichEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         if(BI.isNull(o.value)) {
             this.editor.setValue(o.value);
-        }
-        if(o.toolbar) {
-            this.editor.bindToolbar(this.toolbar);
         }
     },
 

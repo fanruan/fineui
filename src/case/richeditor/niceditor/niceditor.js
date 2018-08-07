@@ -67,13 +67,13 @@
             var t = e.target;
             var self = this;
             var found = false;
+            this.instance.saveRng();
             do {
                 if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
                     return;
                     // return false;
                 }
                 if (this.instance.checkToolbar(t)) {
-                    this.instance.saveRng();
                     // 如果是点击在toolbar内恢复选取(IE中出现的问题)
                     BI.defer(function () {
                         self.instance.restoreRng();
@@ -320,7 +320,7 @@
             }
             this.ne.fireEvent("keyup", e);
 
-            if (e.keyCode !== 8) {
+            if (e.keyCode !== 8 && e.type !== "focus") {
                 return;
             }
             var newLine;
