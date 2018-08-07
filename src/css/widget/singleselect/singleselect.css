@@ -1,0 +1,22 @@
+.bi-single-select-combo .single-select-trigger-icon-button {
+  font-size: 16px;
+}
+.bi-single-select-combo .trigger-up {
+  display: none;
+}
+.bi-single-select-combo .trigger-down {
+  display: block;
+}
+.bi-single-select-combo.combo-show .trigger-up {
+  display: block;
+}
+.bi-single-select-combo.combo-show .trigger-down {
+  display: none;
+}
+.bi-single-select-combo:hover .search-text-value-trigger {
+  border-color: #3685f2;
+}
+.bi-single-select-combo:focus .bi-combo.bi-combo-popup .bi-single-select-trigger,
+.bi-single-select-combo:focus-within .bi-combo.bi-combo-popup .bi-single-select-trigger {
+  border-color: #3685f2;
+}

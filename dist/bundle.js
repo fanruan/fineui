@@ -37566,6 +37566,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         if(BI.isNotNull(o.value)){
             this.setSelectedValue(o.value);
         }
+        if (BI.isIE9Below()) {
+            this.element.addClass("hack");
+        }
     },
 
     _createTree: function () {
@@ -102563,7 +102566,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -102574,7 +102577,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -108535,7 +108538,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select2",
+                    cls: "slider-button bi-list-item-select3",
                     ref: function () {
                         self.slider = this;
                     }
@@ -110372,7 +110375,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border",
+        baseCls: "bi-year-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -111105,7 +111108,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo  bi-border",
+        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -112133,7 +112136,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border",
+        baseCls: "bi-year-quarter-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期

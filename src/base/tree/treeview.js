@@ -33,6 +33,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         if(BI.isNotNull(o.value)){
             this.setSelectedValue(o.value);
         }
+        if (BI.isIE9Below()) {
+            this.element.addClass("hack");
+        }
     },
 
     _createTree: function () {

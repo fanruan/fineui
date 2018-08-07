@@ -22,14 +22,13 @@ Demo.Func = BI.inherit(BI.Widget, {
                 text: "bi-list-item-active2",
                 cls: "bi-list-item-active2 close-font"
             }, {
-                text: "bi-list-item-active3",
-                cls: "bi-list-item-active3 close-font"
-            }, {
                 text: "bi-list-item-select",
                 cls: "bi-list-item-select close-font"
+            }, {
+                text: "bi-list-item-select2",
+                cls: "bi-list-item-select2 close-font"
             }], {
                 type: "bi.icon_text_item",
-                disabled: true,
                 logic: {
                     dynamic: true
                 }
