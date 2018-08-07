@@ -162,9 +162,7 @@
                 type: "bi.default",
                 element: this,
                 scrolly: true,
-                items: [this.elm, this.e, {
-
-                }]
+                items: [this.elm, this.e]
             });
 
             this.ne.on("blur", BI.bind(this.blur, this));
