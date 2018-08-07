@@ -521,8 +521,8 @@ if (!window.BI) {
             return BI.isString(obj) && !BI.isEmptyString(obj);
         },
 
-        isWindow: function () {
-            return $.isWindow.apply($, arguments);
+        isWindow: function (obj) {
+            return obj != null && obj == obj.window;
         }
     });
 
@@ -805,7 +805,7 @@ if (!window.BI) {
         },
 
         isNumeric: function (number) {
-            return $.isNumeric(number);
+            return !isNaN( parseFloat(number) ) && isFinite( number );
         },
 
         isFloat: function (number) {
@@ -850,7 +850,7 @@ if (!window.BI) {
     // 字符串相关方法
     _.extend(BI, {
         trim: function () {
-            return $.trim.apply($, arguments);
+            return _.trim.apply(_, arguments);
         },
 
         toUpperCase: function (string) {
