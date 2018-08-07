@@ -12,7 +12,10 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             text: "",
             el: {},
             items: [],
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -21,7 +24,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
-            cls: "bi-border",
+            cls: "bi-border static-text-trigger",
             items: o.items,
             height: o.height,
             text: o.text,

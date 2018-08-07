@@ -3271,7 +3271,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -3508,6 +3508,10 @@ BI.extend(BI.DynamicDateCard, {
             default:
                 return true;
         }
+    },
+
+    _defaultState: function () {
+
     },
 
     setValue: function (v) {
@@ -4153,7 +4157,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -7668,7 +7672,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -8224,7 +8231,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9220,7 +9230,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9608,7 +9621,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9984,7 +10000,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -14271,7 +14290,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -14282,7 +14301,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -18512,7 +18531,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -18783,7 +18805,10 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -20237,7 +20262,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select2",
+                    cls: "slider-button bi-list-item-select3",
                     ref: function () {
                         self.slider = this;
                     }
@@ -22074,7 +22099,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border",
+        baseCls: "bi-year-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -22807,7 +22832,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo  bi-border",
+        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -23835,7 +23860,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border",
+        baseCls: "bi-year-quarter-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期

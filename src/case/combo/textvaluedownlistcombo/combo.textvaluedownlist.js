@@ -6,7 +6,10 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -22,6 +25,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
+            cls: "text-value-down-list-trigger",
             height: o.height,
             items: o.items,
             text: o.text,

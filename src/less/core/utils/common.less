@@ -42,11 +42,7 @@ textarea {
 }
 
 .bi-focus-shadow {
-  &:focus-within, &:focus {
-    border-color: @color-bi-border-highlight;
-    .box-shadow(0 0 5px 2px, @color-bi-blue-20);
-  }
-  &:hover {
+  &:focus-within, &:focus, &:hover {
     border-color: @color-bi-border-highlight;
   }
 }
@@ -586,104 +582,8 @@ textarea {
   }
 }
 
-//文字和背景hover和active时变化 hover和点击时边框变化，active后背景和边框变化
-.bi-list-item-active2 {
-  &:hover, &.hover {
-    color: @color-bi-text-black;
-    & .bi-input {
-      color: @color-bi-text-black;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-black;
-    }
-    &.bi-border {
-      border-color: @color-bi-border-highlight;
-    }
-  }
-  &:active {
-    color: @color-bi-text-highlight;
-    & .bi-input {
-      color: @color-bi-text-highlight;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-highlight;
-    }
-    &.bi-border {
-      border-color: @color-bi-border-highlight;
-    }
-  }
-  &.active {
-    color: @color-bi-text;
-    & .bi-input {
-      color: @color-bi-text;
-    }
-    & .bi-textarea {
-      color: @color-bi-text;
-    }
-    &.bi-border {
-      border-color: @color-bi-border-highlight;
-    }
-    background-color: @color-bi-background-highlight;
-  }
-  &.disabled {
-    &, &:hover, &:active {
-      background-color: transparent !important;
-      color: @color-bi-text-disabled !important;
-      & .bi-input {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-disabled !important;
-      }
-      & .bi-high-light {
-        color: @color-bi-text-disabled !important;
-      }
-    }
-  }
-}
-
-.bi-theme-dark {
-  .bi-list-item-active2 {
-    &:hover, &.hover {
-      color: @color-bi-text;
-      & .bi-input {
-        color: @color-bi-text;
-      }
-      & .bi-textarea {
-        color: @color-bi-text;
-      }
-      background-color: @color-bi-background-default-theme-dark;
-    }
-    &.active, &:active {
-      color: @color-bi-text-highlight;
-      & .bi-input {
-        color: @color-bi-text-highlight;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-highlight;
-      }
-      background-color: @color-bi-background-default-theme-dark;
-    }
-    &.disabled {
-      &, &:hover, &:active {
-        background-color: transparent !important;
-        color: @color-bi-text-disabled-theme-dark !important;
-        & .bi-input {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-        & .bi-textarea {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-        & .bi-high-light {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-      }
-    }
-  }
-}
-
 //文字和背景hover和active时变化 hover
-.bi-list-item-active3 {
+.bi-list-item-active2 {
   &:hover, &.hover {
     color: @color-bi-text-black;
     & .bi-input {
@@ -722,7 +622,7 @@ textarea {
 }
 
 .bi-theme-dark {
-  .bi-list-item-active3 {
+  .bi-list-item-active2 {
     &:hover, &.hover {
       color: @color-bi-text;
       & .bi-input {
@@ -880,13 +780,109 @@ textarea {
   }
 }
 
-//与bi-list-item-select的区别是背景是灰的
+//文字和背景hover和active时变化 hover和点击时边框变化，active后背景和边框变化
 .bi-list-item-select2 {
+  &:hover, &.hover {
+    color: @color-bi-text-black;
+    & .bi-input {
+      color: @color-bi-text-black;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-black;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &:active {
+    color: @color-bi-text-highlight;
+    & .bi-input {
+      color: @color-bi-text-highlight;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-highlight;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &.active {
+    color: @color-bi-text;
+    & .bi-input {
+      color: @color-bi-text;
+    }
+    & .bi-textarea {
+      color: @color-bi-text;
+    }
+    &.bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+    background-color: @color-bi-background-highlight;
+  }
+  &.disabled {
+    &, &:hover, &:active {
+      background-color: transparent !important;
+      color: @color-bi-text-disabled !important;
+      & .bi-input {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-disabled !important;
+      }
+      & .bi-high-light {
+        color: @color-bi-text-disabled !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-select2 {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-default-theme-dark;
+    }
+    &.active, &:active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      background-color: @color-bi-background-default-theme-dark;
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+    }
+  }
+}
+
+//与bi-list-item-select的区别是背景是灰的
+.bi-list-item-select3 {
   &:hover, &.hover {
     background-color: @color-bi-background-normal;
   }
   &:active, &.active {
-    color: @color-bi-text;
+    color: @color-bi-text-highlight;
     & .bi-input {
       color: @color-bi-text-highlight;
     }
@@ -894,9 +890,6 @@ textarea {
       color: @color-bi-text-highlight;
     }
     background-color: @color-bi-background-normal;
-    & .bi-high-light {
-      color: @color-bi-text;
-    }
   }
   &.disabled {
     &:hover, &.hover, &:active, &.active {

@@ -63,41 +63,89 @@
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full {
-  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part_focus {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full {
+  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full_focus {
+  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part_focus {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree.hack li span.button.chk.checkbox_false_full {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_false_part {
+.ztree.hack li span.button.chk.checkbox_false_full_focus {
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree.hack li span.button.chk.checkbox_false_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_false_part_focus {
+.ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_full {
+.ztree.hack li span.button.chk.checkbox_true_full {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_full_focus {
+.ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_part {
+.ztree.hack li span.button.chk.checkbox_true_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_part_focus {
+.ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
@@ -350,9 +398,8 @@
   content: "";
   background-color: #ffffff;
   transform: rotate(-45deg);
-  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  border-bottom: 1px solid #f2f4f7;
+  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-right {
   z-index: 1;
@@ -369,9 +416,8 @@
   content: "";
   background-color: #ffffff;
   transform: rotate(135deg);
-  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  border-bottom: 1px solid #f2f4f7;
+  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-top {
   z-index: 1;
@@ -388,9 +434,8 @@
   content: "";
   background-color: #ffffff;
   transform: rotate(45deg);
-  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  border-bottom: 1px solid #f2f4f7;
+  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom {
   z-index: 1;
@@ -407,9 +452,8 @@
   content: "";
   background-color: #ffffff;
   transform: rotate(-135deg);
-  -webkit-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  -moz-box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
-  box-shadow: 1px 1px 1px 0 rgba(35, 46, 64, 0.2);
+  border-bottom: 1px solid #f2f4f7;
+  border-right: 1px solid #f2f4f7;
 }
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-left:before,
 .bi-theme-dark .bi-bubble-combo.bubble-combo-triangle-right:before,
@@ -422,11 +466,10 @@
   display: block !important;
   visibility: visible !important;
 }
-.bi-combo.bi-combo-popup:focus,
-.bi-combo.bi-combo-popup:focus-within {
-  -webkit-box-shadow: 0 0 5px 2px #d7e7fc;
-  -moz-box-shadow: 0 0 5px 2px #d7e7fc;
-  box-shadow: 0 0 5px 2px #d7e7fc;
+.bi-combo.bi-combo-popup > .bi-border,
+.bi-combo.bi-combo-hover > .bi-border,
+.bi-combo:hover > .bi-border {
+  border-color: #3685f2;
 }
 
 .bi-search-text-value-combo .trigger-icon-button {
@@ -447,10 +490,10 @@
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-combo.bi-combo-popup > .bi-search-text-value-trigger,
-.bi-combo:hover > .bi-search-text-value-trigger {
+.bi-search-text-value-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
+
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
   color: #ff4949;
@@ -459,8 +502,14 @@
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
 }
-.bi-combo.bi-combo-popup > .bi-select-text-trigger,
-.bi-combo:hover > .bi-select-text-trigger {
+
+.bi-text-value-check-combo.bi-combo-popup > .bi-border,
+.bi-text-value-check-combo:hover > .bi-border {
+  border-color: #3685f2;
+}
+
+.bi-text-value-down-list-combo.bi-combo-popup > .bi-border,
+.bi-text-value-down-list-combo:hover > .bi-border {
   border-color: #3685f2;
 }
 /*************BI.SearchEditor******************/

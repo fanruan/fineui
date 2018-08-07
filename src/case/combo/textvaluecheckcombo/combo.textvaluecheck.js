@@ -6,11 +6,14 @@
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -19,6 +22,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,

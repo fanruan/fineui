@@ -27669,7 +27669,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         tooltip.visible();
         tooltip.element.height(tooltip.element[0].scrollHeight);
         this.showingTips[name] = true;
-        var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
+        // scale影响要计算在内
+        var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
+        var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
         if (x + tooltip.element.outerWidth() > $("body").outerWidth()) {
             x -= tooltip.element.outerWidth() + 15;
         }
@@ -37786,6 +37788,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         });
         if(BI.isNotNull(o.value)){
             this.setSelectedValue(o.value);
+        }
+        if (BI.isIE9Below()) {
+            this.element.addClass("hack");
         }
     },
 
@@ -78900,6 +78905,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
+            cls: "icon-text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -79050,7 +79056,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
-        warningTitle: ""
+        warningTitle: "",
+        attributes: {
+            tabIndex: 0
+        }
     },
 
     render: function () {
@@ -79066,11 +79075,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.combo = this;
                     },
-                    attributes: {
-                        tabIndex: 0
-                    },
                     el: {
                         type: "bi.search_text_value_trigger",
+                        cls: "search-text-value-trigger",
                         ref: function () {
                             self.trigger = this;
                         },
@@ -79268,7 +79275,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border bi-focus-shadow",
+        baseCls: "bi-search-text-value-trigger bi-border",
         height: 24
     },
 
@@ -79383,7 +79390,10 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             text: "",
             el: {},
             items: [],
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -79392,7 +79402,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
-            cls: "bi-border",
+            cls: "bi-border static-text-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -79446,11 +79456,14 @@ BI.shortcut("bi.static_combo", BI.StaticCombo);/**
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -79459,6 +79472,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -79671,6 +79685,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -79872,7 +79887,10 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -79888,6 +79906,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
+            cls: "text-value-down-list-trigger",
             height: o.height,
             items: o.items,
             text: o.text,
@@ -91749,7 +91768,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -91986,6 +92005,10 @@ BI.extend(BI.DynamicDateCard, {
             default:
                 return true;
         }
+    },
+
+    _defaultState: function () {
+
     },
 
     setValue: function (v) {
@@ -92631,7 +92654,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -96146,7 +96169,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -96702,7 +96728,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -97698,7 +97727,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -98086,7 +98118,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -98462,7 +98497,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -102749,7 +102787,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -102760,7 +102798,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -106990,7 +107028,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -107261,7 +107302,10 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -108715,7 +108759,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select2",
+                    cls: "slider-button bi-list-item-select3",
                     ref: function () {
                         self.slider = this;
                     }
@@ -110552,7 +110596,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border",
+        baseCls: "bi-year-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -111285,7 +111329,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo  bi-border",
+        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
@@ -112313,7 +112357,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border",
+        baseCls: "bi-year-quarter-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期

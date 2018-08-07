@@ -117,8 +117,7 @@
 .bi-multi-select-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-combo.bi-combo-popup:focus > .bi-multi-select-trigger,
-.bi-combo.bi-combo-popup:hover > .bi-multi-select-trigger {
+.bi-multi-select-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
 
@@ -136,6 +135,9 @@
 }
 .bi-multi-select-insert-combo.combo-show .trigger-down {
   display: none;
+}
+.bi-multi-select-insert-combo .bi-combo-hover > .bi-border {
+  border-color: #3685f2;
 }
 
 
@@ -375,7 +377,26 @@
   display: none;
 }
 .bi-combo.bi-combo-popup:focus > .bi-single-select-trigger,
-.bi-combo.bi-combo-popup:hover > .bi-single-select-trigger {
+.bi-combo.bi-combo-popup:hover > .bi-single-select-trigger,
+.bi-combo.bi-combo-popup:focus-within > .bi-single-select-trigger {
+  border-color: #3685f2;
+}
+.bi-single-select-combo .single-select-trigger-icon-button {
+  font-size: 16px;
+}
+.bi-single-select-combo .trigger-up {
+  display: none;
+}
+.bi-single-select-combo .trigger-down {
+  display: block;
+}
+.bi-single-select-combo.combo-show .trigger-up {
+  display: block;
+}
+.bi-single-select-combo.combo-show .trigger-down {
+  display: none;
+}
+.bi-single-select-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
 .bi-single-slider-label {

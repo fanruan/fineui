@@ -39,41 +39,89 @@
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full {
-  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_false_part_focus {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full {
+  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_full_focus {
+  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree li span.button.chk.checkbox_true_part_focus {
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
+  _background: none;
+}
+.ztree.hack li span.button.chk.checkbox_false_full {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_false_part {
+.ztree.hack li span.button.chk.checkbox_false_full_focus {
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
+  _background: none;
+}
+.ztree.hack li span.button.chk.checkbox_false_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_false_part_focus {
+.ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_full {
+.ztree.hack li span.button.chk.checkbox_true_full {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_full_focus {
+.ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_part {
+.ztree.hack li span.button.chk.checkbox_true_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;
 }
-.ztree li span.button.chk.checkbox_true_part_focus {
+.ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
   _background: none;

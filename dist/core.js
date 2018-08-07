@@ -27448,7 +27448,9 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         tooltip.visible();
         tooltip.element.height(tooltip.element[0].scrollHeight);
         this.showingTips[name] = true;
-        var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
+        // scale影响要计算在内
+        var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
+        var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
         if (x + tooltip.element.outerWidth() > $("body").outerWidth()) {
             x -= tooltip.element.outerWidth() + 15;
         }
