@@ -16,7 +16,3 @@
 .bi-single-select-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-single-select-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-single-select-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
-  border-color: #3685f2;
-}

@@ -2319,6 +2319,11 @@ textarea {
   display: block !important;
   visibility: visible !important;
 }
+.bi-combo.bi-combo-popup > .bi-border,
+.bi-combo.bi-combo-hover > .bi-border,
+.bi-combo:hover > .bi-border {
+  border-color: #3685f2;
+}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
@@ -2341,30 +2346,14 @@ textarea {
 .bi-search-text-value-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-search-text-value-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-search-text-value-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
-  border-color: #3685f2;
-}
 
-.bi-static-combo.bi-combo-popup > .bi-border,
-.bi-static-combo:hover > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
   color: #ff4949;
 }
-.bi-icon-text-value-combo.bi-combo-popup > .bi-border,
-.bi-icon-text-value-combo:hover > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
-}
-.bi-text-value-combo.bi-combo-popup > .bi-border,
-.bi-text-value-combo:hover > .bi-border {
-  border-color: #3685f2;
 }
 
 .bi-text-value-check-combo.bi-combo-popup > .bi-border,
@@ -4309,10 +4298,6 @@ ul.ztree.zTreeDragUL {
 .bi-multi-select-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-multi-select-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-multi-select-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -4330,10 +4315,6 @@ ul.ztree.zTreeDragUL {
   display: none;
 }
 .bi-multi-select-insert-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}
-.bi-multi-select-insert-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-multi-select-insert-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
   border-color: #3685f2;
 }
 
@@ -4594,10 +4575,6 @@ ul.ztree.zTreeDragUL {
   display: none;
 }
 .bi-single-select-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}
-.bi-single-select-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-single-select-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
   border-color: #3685f2;
 }
 .bi-single-slider-label {

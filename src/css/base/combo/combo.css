@@ -85,6 +85,11 @@
   display: block !important;
   visibility: visible !important;
 }
+.bi-combo.bi-combo-popup > .bi-border,
+.bi-combo.bi-combo-hover > .bi-border,
+.bi-combo:hover > .bi-border {
+  border-color: #3685f2;
+}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
@@ -107,30 +112,14 @@
 .bi-search-text-value-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-search-text-value-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-search-text-value-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
-  border-color: #3685f2;
-}
 
-.bi-static-combo.bi-combo-popup > .bi-border,
-.bi-static-combo:hover > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
   color: #ff4949;
 }
-.bi-icon-text-value-combo.bi-combo-popup > .bi-border,
-.bi-icon-text-value-combo:hover > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-text-value-combo.combo-error .bi-select-text-trigger .select-text-label {
   color: #ff4949;
-}
-.bi-text-value-combo.bi-combo-popup > .bi-border,
-.bi-text-value-combo:hover > .bi-border {
-  border-color: #3685f2;
 }
 
 .bi-text-value-check-combo.bi-combo-popup > .bi-border,

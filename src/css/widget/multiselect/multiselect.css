@@ -16,10 +16,6 @@
 .bi-multi-select-combo .bi-combo-hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-multi-select-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-multi-select-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -37,10 +33,6 @@
   display: none;
 }
 .bi-multi-select-insert-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}
-.bi-multi-select-insert-combo:focus .bi-combo.bi-combo-popup > .bi-border,
-.bi-multi-select-insert-combo:focus-within .bi-combo.bi-combo-popup > .bi-border {
   border-color: #3685f2;
 }
 

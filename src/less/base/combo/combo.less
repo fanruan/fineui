@@ -4,4 +4,9 @@
     display: block !important;
     visibility: visible !important;
   }
+  &.bi-combo-popup, &.bi-combo-hover, &:hover {
+    & > .bi-border {
+      border-color: @color-bi-border-highlight;
+    }
+  }
 }
