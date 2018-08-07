@@ -83841,7 +83841,7 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
             }
             this.ne.fireEvent("keyup", e);
 
-            if (e.keyCode !== 8 && e.type !== "focus") {
+            if (e.keyCode !== 8) {
                 return;
             }
             var newLine;
@@ -84809,7 +84809,12 @@ BI.RichEditor = BI.inherit(BI.Widget, {
                 el: BI.extend({
                     type: "bi.rich_editor_text_toolbar",
                     editor: this.editor
-                }, o.toolbar),
+                }, o.toolbar, {
+                    ref: function (_ref) {
+                        self.editor.bindToolbar(_ref);
+                        o.toolbar.ref && o.toolbar.ref(_ref);
+                    }
+                }),
                 height: 34,
                 stopPropagation: false,
                 stopEvent: false

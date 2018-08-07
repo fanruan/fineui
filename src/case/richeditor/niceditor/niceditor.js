@@ -320,7 +320,7 @@
             }
             this.ne.fireEvent("keyup", e);
 
-            if (e.keyCode !== 8 && e.type !== "focus") {
+            if (e.keyCode !== 8) {
                 return;
             }
             var newLine;
