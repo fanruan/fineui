@@ -28,8 +28,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             cls: "select-text-label",
             textAlign: "left",
             height: o.height,
-            text: o.text,
-            hgap: c.hgap
+            text: o.text
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
@@ -54,7 +53,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
             },
             {
                 el: this.text
@@ -80,8 +79,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 this.wrapper.resize();
             }
         }else{
-            if(iconItem.width !== (o.triggerWidth || o.height)) {
-                iconItem.width = (o.triggerWidth || o.height);
+            if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
+                iconItem.width = (o.iconWrapperWidth || o.height);
                 this.wrapper.resize();
             }
         }

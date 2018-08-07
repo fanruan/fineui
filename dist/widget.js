@@ -917,7 +917,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 10,
+                left: 0,
                 right: 10
             }, {
                 el: {
@@ -3029,8 +3029,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                                 self.fireEvent("EVENT_CHANGE");
                             }
                         }]
-                    },
-                    bgap: 5
+                    }
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -3056,16 +3055,19 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         var self = this;
         var items = BI.map(values, function (idx, value) {
             return {
-                type: "bi.dynamic_date_param_item",
-                dateType: value.dateType,
-                value: value.value,
-                offset: value.offset,
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }]
+                el: {
+                    type: "bi.dynamic_date_param_item",
+                    dateType: value.dateType,
+                    value: value.value,
+                    offset: value.offset,
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }]
+                },
+                tgap: idx === 0 ? 5 : 0
             };
         });
 
@@ -5145,7 +5147,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border",
+            baseCls: "bi-search-editor bi-border bi-focus-shadow",
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -10640,7 +10642,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -10814,8 +10817,10 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
+            cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 36
         });
     },
 
@@ -11410,7 +11415,9 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            cls: "bi-list-item-active",
+            iconWrapperWidth: 36
         });
     },
 
@@ -14227,7 +14234,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);/**
 BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border",
+            baseCls: "bi-number-editor bi-border bi-focus-shadow",
             validationChecker: function () {
                 return true;
             },
@@ -16864,8 +16871,10 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -17446,7 +17455,10 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -21173,7 +21185,10 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 

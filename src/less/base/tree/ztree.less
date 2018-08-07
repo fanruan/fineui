@@ -33,7 +33,14 @@
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
-  display: inline-block
+  display: inline-block;
+  &:hover {
+    .background-color(@color-bi-background-highlight, 6%);
+  }
+  &:active {
+    color: @color-bi-text-highlight;
+    .background-color(@color-bi-background-highlight, 6%);
+  }
 }
 
 .ztree li a.curSelectedNode {
@@ -134,7 +141,7 @@
 }
 
 .ztree li span.button.chk.radio_true_full_focus {
-  background-position: -42px -14px
+  background-position: -42px -14px;
 }
 
 .ztree li span.button.chk.radio_true_part {
@@ -143,6 +150,30 @@
 
 .ztree li span.button.chk.radio_true_part_focus {
   background-position: -42px -42px
+}
+
+.ztree li span.button.chk.checkbox_true_full {
+  & + a {
+    color: @color-bi-text-highlight;
+  }
+}
+
+.ztree li span.button.chk.checkbox_true_full_focus {
+  & + a {
+    color: @color-bi-text-highlight;
+  }
+}
+
+.ztree li span.button.chk.checkbox_true_part {
+  & + a {
+    color: @color-bi-text-highlight;
+  }
+}
+
+.ztree li span.button.chk.checkbox_true_part_focus {
+  & + a {
+    color: @color-bi-text-highlight;
+  }
 }
 
 .ztree li span.button.chk.radio_true_disable {

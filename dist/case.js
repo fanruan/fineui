@@ -164,7 +164,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             height: 24,
             logic: {
                 dynamic: false
-            }
+            },
+            iconWrapperWidth: 26
         });
     },
     _init: function () {
@@ -199,7 +200,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: 26
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
@@ -248,6 +249,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             element: this,
             cls: o.iconCls,
             once: o.once,
+            iconWrapperWidth: o.iconWrapperWidth,
             selected: o.selected,
             height: o.height,
             iconHeight: o.iconHeight,
@@ -1597,6 +1599,58 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
 });
 
 BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);/**
+ * 专门为calendar的视觉加的button，作为私有button,不能配置任何属性，也不要用这个玩意
+ */
+BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "normal",
+                    text: o.text,
+                    value: o.value,
+                    ref: function () {
+                        self.text = this;
+                    }
+                },
+                left: o.lgap,
+                right: o.rgap,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    setSelected: function (b) {
+        BI.CalendarDateItem.superclass.setSelected.apply(this, arguments);
+        this.text.setSelected(b);
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    }
+});
+BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);/**
  * Created by GUY on 2015/8/28.
  * @class BI.Calendar
  * @extends BI.Widget
@@ -1685,7 +1739,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             items: items,
             layouts: [{
                 type: "bi.center",
-                hgap: 10,
+                lgap: 10,
                 vgap: 10
             }]
         });
@@ -1702,15 +1756,16 @@ BI.Calendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    type: "bi.calendar_date_item",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
                     height: 24,
                     value: o.year + "-" + month + "-" + td.text,
-                    disabled: td.lastMonth || td.nextMonth || td.disabled
+                    disabled: td.lastMonth || td.nextMonth || td.disabled,
+                    lgap: 10,
+                    rgap: 0
                     // selected: td.currentDay
                 });
             });
@@ -1724,7 +1779,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
                 rowSize: 24,
-                hgap: 10,
                 vgap: 10
             }))]
         });
@@ -5929,7 +5983,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -5944,14 +6001,16 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             iconCls: o.iconCls,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
             items: o.items,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -6027,7 +6086,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
                 type: "bi.single_select_icon_text_item",
                 height: 24,
                 iconHeight: o.iconHeight,
-                iconWidth: o.iconWidth
+                iconWidth: o.iconWidth,
+                iconWrapperWidth: o.iconWrapperWidth
             }),
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
@@ -6057,6 +6117,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
             height: 24,
+            iconWrapperWidth: o.iconWrapperWidth,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
         });
@@ -6100,6 +6161,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.combo = this;
                     },
+                    attributes: {
+                        tabIndex: 0
+                    },
                     el: {
                         type: "bi.search_text_value_trigger",
                         ref: function () {
@@ -6111,6 +6175,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
+                        title: o.title,
                         listeners: [{
                             eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
                             action: function () {
@@ -6121,14 +6186,14 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }]
                     },
                     popup: {
-                        el:{
+                        el: {
                             type: "bi.text_value_combo_popup",
                             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                             value: o.value,
                             items: o.items,
                             ref: function () {
                                 self.popup = this;
-                                self.trigger.getSearcher().setAdapter(self.popup);
+                                // self.trigger.getSearcher().setAdapter(self.popup);
                             },
                             listeners: [{
                                 eventName: BI.TextValueComboPopup.EVENT_CHANGE,
@@ -6144,7 +6209,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            self.trigger.stopEditing();
+                            // self.trigger.stopEditing();
                             self.element.removeClass("combo-show");
                         }
                     }, {
@@ -6298,7 +6363,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        baseCls: "bi-search-text-value-trigger bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -6321,7 +6386,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             },
                             text: this._digest(o.value, o.items),
                             value: o.value,
-                            height: o.height
+                            height: o.height,
+                            tipText: ""
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",
@@ -6688,7 +6754,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -8045,6 +8114,16 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 self._showInput();
                 self.editor.focus();
                 self.editor.setValue("");
+            },
+            title: BI.isNotNull(o.tipText) ? o.tipText : function () {
+                var title = "";
+                if (BI.isString(self.stateValue)) {
+                    title = self.stateValue;
+                }
+                if (BI.isArray(self.stateValue) && self.stateValue.length === 1) {
+                    title = self.stateValue[0];
+                }
+                return title;
             }
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
@@ -8204,32 +8283,23 @@ BI.StateEditor = BI.inherit(BI.Widget, {
     setState: function (v) {
         var o = this.options;
         BI.StateEditor.superclass.setValue.apply(this, arguments);
+        this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(o.text);
-                this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
         }
         if (BI.isString(v)) {
-            // if (BI.isEmpty(v)) {
-            //     this.text.setText(o.text);
-            //     this.text.setTitle("");
-            //     this.text.element.addClass("state-editor-infinite-text");
-            // } else {
             this.text.setText(v);
-            this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
-            // }
             return;
         }
         if (BI.isArray(v)) {
@@ -8238,11 +8308,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.element.addClass("state-editor-infinite-text");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
-                this.text.setTitle(v[0]);
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             }
         }
@@ -9017,7 +9085,8 @@ BI.SelectList = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn,
             onLoaded: BI.emptyFn,
             toolbar: {
-                type: "bi.multi_select_bar"
+                type: "bi.multi_select_bar",
+                iconWrapperWidth: 36
             },
             el: {
                 type: "bi.list_pane"
@@ -13859,7 +13928,8 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             },
-            halfSelected: false
+            halfSelected: false,
+            iconWrapperWidth: 26
         });
     },
     _init: function () {
@@ -13912,7 +13982,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             type: "bi.htape",
             element: this,
             items: [{
-                width: 26,
+                width: o.iconWrapperWidth,
                 el: {
                     type: "bi.center_adapt",
                     items: [this.checkbox, this.half]
@@ -15137,8 +15207,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             cls: "select-text-label",
             textAlign: "left",
             height: o.height,
-            text: o.text,
-            hgap: c.hgap
+            text: o.text
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
@@ -15163,7 +15232,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
             },
             {
                 el: this.text
@@ -15189,8 +15258,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 this.wrapper.resize();
             }
         }else{
-            if(iconItem.width !== (o.triggerWidth || o.height)) {
-                iconItem.width = (o.triggerWidth || o.height);
+            if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
+                iconItem.width = (o.iconWrapperWidth || o.height);
                 this.wrapper.resize();
             }
         }
@@ -15227,7 +15296,8 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             iconCls: obj.iconCls,
             height: o.height,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
     },
 
@@ -15338,7 +15408,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border",
+            baseCls: "bi-select-text-trigger bi-border bi-focus-shadow",
             height: 24
         });
     },

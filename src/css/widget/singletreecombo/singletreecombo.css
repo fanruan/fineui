@@ -1,0 +1,4 @@
+.bi-combo.bi-combo-popup:focus > .bi-single-tree-trigger,
+.bi-combo.bi-combo-popup:hover > .bi-single-tree-trigger {
+  border-color: #3685f2;
+}

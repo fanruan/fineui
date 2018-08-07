@@ -13,6 +13,10 @@
 .bi-multi-select-combo.combo-show .trigger-down {
   display: none;
 }
+.bi-combo.bi-combo-popup:focus > .bi-multi-select-trigger,
+.bi-combo.bi-combo-popup:hover > .bi-multi-select-trigger {
+  border-color: #3685f2;
+}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;

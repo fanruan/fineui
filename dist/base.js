@@ -17353,14 +17353,14 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
         var icon1 = BI.createWidget({
             type: "bi.icon_label",
             cls: o.iconCls1,
-            width: o.height,
+            width: o.leftIconWrapperWidth,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
         var blank = BI.createWidget({
             type: "bi.layout",
-            width: o.height,
+            width: o.height
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -17369,7 +17369,7 @@ BI.IconTextIconItem = BI.inherit(BI.BasicButton, {
                 el: {
                     type: "bi.icon_label",
                     cls: o.iconCls2,
-                    width: o.height,
+                    width: o.rightIconWrapperWidth,
                     height: o.height,
                     iconWidth: o.iconWidth,
                     iconHeight: o.iconHeight
@@ -17446,6 +17446,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
+            iconWrapperWidth: null,
             iconHeight: null,
             iconWidth: null,
             textHgap: 0,
@@ -17472,7 +17473,7 @@ BI.IconTextItem = BI.inherit(BI.BasicButton, {
         });
         this.icon = BI.createWidget({
             type: "bi.icon_label",
-            width: o.height,
+            width: o.iconWrapperWidth || o.height,
             height: o.height,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight

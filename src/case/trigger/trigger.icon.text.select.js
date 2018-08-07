@@ -25,7 +25,8 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             iconCls: obj.iconCls,
             height: o.height,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
     },
 

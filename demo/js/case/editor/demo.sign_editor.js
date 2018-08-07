@@ -8,7 +8,7 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
     render: function () {
         var editor = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "bi-border",
+            cls: "bi-border bi-focus-shadow",
             validationChecker: function (v) {
                 return v != "abc";
             },

@@ -29,6 +29,15 @@
   vertical-align: top;
   display: inline-block;
 }
+.ztree li a:hover {
+  background-color: rgba(54, 133, 242, 0.06);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
+}
+.ztree li a:active {
+  color: #3685f2;
+  background-color: rgba(54, 133, 242, 0.06);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0f3685f2,endColorstr=#0f3685f2);
+}
 .ztree li a.curSelectedNode_Edit {
   padding-top: 0px;
   background-color: #FFE6B0;
@@ -111,6 +120,18 @@
 }
 .ztree li span.button.chk.radio_true_part_focus {
   background-position: -42px -42px;
+}
+.ztree li span.button.chk.checkbox_true_full + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_full_focus + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_part + a {
+  color: #3685f2;
+}
+.ztree li span.button.chk.checkbox_true_part_focus + a {
+  color: #3685f2;
 }
 .ztree li span.button.chk.radio_true_disable {
   background-position: -42px -56px;
