@@ -78363,7 +78363,7 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view"
+            baseCls: config.baseCls + " bi-bubble-popup-view bi-border"
         });
     },
     _init: function () {
@@ -78436,7 +78436,7 @@ BI.shortcut("bi.bubble_popup_view", BI.BubblePopupView);
 BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-bubble-bar-popup-view",
+            extraCls: "bi-bubble-bar-popup-view bi-border",
             buttons: [{value: BI.i18nText("BI-Basic_Cancel"), ghost: true}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
