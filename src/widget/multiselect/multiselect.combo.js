@@ -10,7 +10,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 

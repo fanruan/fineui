@@ -11,7 +11,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 

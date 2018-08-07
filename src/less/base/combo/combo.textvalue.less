@@ -1,18 +1,15 @@
 @import "../../index";
 
-.bi-text-value-combo{
+.bi-text-value-combo {
   &.combo-error {
     & .bi-select-text-trigger {
-      & .select-text-label{
+      & .select-text-label {
         color: @color-bi-text-failure;
       }
     }
   }
-}
-
-.bi-combo {
-  &.bi-combo-popup, &:hover{
-    & > .bi-select-text-trigger {
+  &.bi-combo-popup, &:hover {
+    & .text-value-trigger {
       border-color: @color-bi-border-highlight;
     }
   }

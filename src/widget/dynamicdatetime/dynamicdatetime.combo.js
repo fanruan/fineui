@@ -9,7 +9,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 

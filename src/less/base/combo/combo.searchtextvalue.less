@@ -27,10 +27,19 @@
   }
 }
 
-.bi-combo {
-  &.bi-combo-popup, &:hover{
-    & > .bi-search-text-value-trigger {
+.bi-search-text-value-combo {
+  &:hover {
+    & .search-text-value-trigger {
       border-color: @color-bi-border-highlight;
+    }
+  }
+  &:focus, &:focus-within {
+    & .bi-combo {
+      &.bi-combo-popup {
+        & .search-text-value-trigger {
+          border-color: @color-bi-border-highlight;
+        }
+      }
     }
   }
 }

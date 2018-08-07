@@ -5995,6 +5995,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
+            cls: "icon-text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6145,7 +6146,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
-        warningTitle: ""
+        warningTitle: "",
+        attributes: {
+            tabIndex: 0
+        }
     },
 
     render: function () {
@@ -6161,11 +6165,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.combo = this;
                     },
-                    attributes: {
-                        tabIndex: 0
-                    },
                     el: {
                         type: "bi.search_text_value_trigger",
+                        cls: "search-text-value-trigger",
                         ref: function () {
                             self.trigger = this;
                         },
@@ -6363,7 +6365,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border bi-focus-shadow",
+        baseCls: "bi-search-text-value-trigger bi-border",
         height: 24
     },
 
@@ -6478,7 +6480,10 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
             text: "",
             el: {},
             items: [],
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6487,7 +6492,7 @@ BI.StaticCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
-            cls: "bi-border",
+            cls: "bi-border static-text-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6541,11 +6546,14 @@ BI.shortcut("bi.static_combo", BI.StaticCombo);/**
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6554,6 +6562,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6766,6 +6775,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6967,7 +6977,10 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6983,6 +6996,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
+            cls: "text-value-down-list-trigger",
             height: o.height,
             items: o.items,
             text: o.text,
@@ -10979,7 +10993,9 @@ BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
                 type: "bi.default",
                 element: this,
                 scrolly: true,
-                items: [this.elm, this.e]
+                items: [this.elm, this.e, {
+
+                }]
             });
 
             this.ne.on("blur", BI.bind(this.blur, this));

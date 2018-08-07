@@ -9,7 +9,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -246,6 +246,10 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
             default:
                 return true;
         }
+    },
+
+    _defaultState: function () {
+
     },
 
     setValue: function (v) {

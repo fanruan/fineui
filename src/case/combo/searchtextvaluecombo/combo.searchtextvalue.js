@@ -9,7 +9,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
-        warningTitle: ""
+        warningTitle: "",
+        attributes: {
+            tabIndex: 0
+        }
     },
 
     render: function () {
@@ -25,11 +28,9 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     ref: function () {
                         self.combo = this;
                     },
-                    attributes: {
-                        tabIndex: 0
-                    },
                     el: {
                         type: "bi.search_text_value_trigger",
+                        cls: "search-text-value-trigger",
                         ref: function () {
                             self.trigger = this;
                         },

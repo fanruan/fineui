@@ -18,13 +18,17 @@
       display: none;
     }
   }
-}
-
-.bi-combo {
-  &.bi-combo-popup {
-    &:focus, &:hover {
-      & > .bi-multi-select-trigger {
-        border-color: @color-bi-border-highlight;
+  &:hover {
+    & .search-text-value-trigger {
+      border-color: @color-bi-border-highlight;
+    }
+  }
+  &:focus, &:focus-within {
+    & .bi-combo {
+      &.bi-combo-popup {
+        & .bi-multi-select-trigger {
+          border-color: @color-bi-border-highlight;
+        }
       }
     }
   }

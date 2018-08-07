@@ -3271,7 +3271,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -3508,6 +3508,10 @@ BI.extend(BI.DynamicDateCard, {
             default:
                 return true;
         }
+    },
+
+    _defaultState: function () {
+
     },
 
     setValue: function (v) {
@@ -4153,7 +4157,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 24
     },
 
@@ -7668,7 +7672,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -8224,7 +8231,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9220,7 +9230,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9608,7 +9621,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9984,7 +10000,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -18512,7 +18531,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -18783,7 +18805,10 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
