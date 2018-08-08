@@ -18302,7 +18302,7 @@ BI.Editor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Editor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-editor",
+            baseCls: "bi-editor bi-focus-shadow",
             hgap: 4,
             vgap: 2,
             lgap: 0,
