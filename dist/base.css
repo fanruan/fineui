@@ -488,9 +488,6 @@
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-search-text-value-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}
 
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
