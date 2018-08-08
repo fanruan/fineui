@@ -168,6 +168,7 @@ module.exports = function (grunt) {
                     "src/core/inject.js",
                     "src/core/utils/*.js",
 
+                    "utils/date.i18n.js",
                     "src/data/data.js",
                     "src/data/**/*.js"
                 ],
