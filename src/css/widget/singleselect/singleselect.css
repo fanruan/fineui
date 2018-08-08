@@ -13,6 +13,3 @@
 .bi-single-select-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-single-select-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}

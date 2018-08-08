@@ -15,10 +15,7 @@
   margin-left: 3px;
   margin-top: -3px;
   content: "";
-  background-color: #ffffff;
   transform: rotate(-45deg);
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-right {
   z-index: 1;
@@ -33,10 +30,7 @@
   margin-left: 3px;
   margin-top: 3px;
   content: "";
-  background-color: #ffffff;
   transform: rotate(135deg);
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-top {
   z-index: 1;
@@ -51,10 +45,7 @@
   margin-left: 3px;
   margin-top: -3px;
   content: "";
-  background-color: #ffffff;
   transform: rotate(45deg);
-  border-bottom: 1px solid #f2f4f7;
-  border-right: 1px solid #f2f4f7;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom {
   z-index: 1;
@@ -69,8 +60,13 @@
   margin-left: 3px;
   margin-top: 3px;
   content: "";
-  background-color: #ffffff;
   transform: rotate(-135deg);
+}
+.bi-bubble-combo .bubble-combo-triangle-left:before,
+.bi-bubble-combo.bubble-combo-triangle-right:before,
+.bi-bubble-combo .bubble-combo-triangle-top:before,
+.bi-bubble-combo .bubble-combo-triangle-bottom:before {
+  background-color: #ffffff;
   border-bottom: 1px solid #f2f4f7;
   border-right: 1px solid #f2f4f7;
 }
@@ -79,6 +75,8 @@
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-top:before,
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-bottom:before {
   background-color: #242640;
+  border-bottom: 1px solid #2F3149;
+  border-right: 1px solid #2F3149;
 }
 
 .bi-combo.bi-combo-popup {
@@ -108,9 +106,6 @@
 }
 .bi-search-text-value-combo.combo-show .trigger-down {
   display: none;
-}
-.bi-search-text-value-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
 }
 
 

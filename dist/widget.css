@@ -117,9 +117,6 @@
 .bi-multi-select-combo.combo-show .trigger-down {
   display: none;
 }
-.bi-multi-select-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
-}
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
@@ -135,9 +132,6 @@
 }
 .bi-multi-select-insert-combo.combo-show .trigger-down {
   display: none;
-}
-.bi-multi-select-insert-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
 }
 
 
@@ -395,9 +389,6 @@
 }
 .bi-single-select-combo.combo-show .trigger-down {
   display: none;
-}
-.bi-single-select-combo .bi-combo-hover > .bi-border {
-  border-color: #3685f2;
 }
 .bi-single-slider-label {
   min-height: 50px;
