@@ -408,7 +408,7 @@ textarea {
   border-radius: 2px;
 }
 .bi-font-bold {
-  font-weight: 600;
+  font-weight: 700;
 }
 .bi-theme-dark .bi-border {
   border: 1px solid #3a3c53;
@@ -2887,6 +2887,8 @@ li.CodeMirror-hint-active {
 .bi-message-title {
   font-size: 14px;
   cursor: pointer;
+  background-color: #F2F4F7;
+  color: #3d4d66;
 }
 .bi-message-text {
   font-size: 16px;
