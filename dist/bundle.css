@@ -2800,7 +2800,8 @@ div.CodeMirror-cursors {
   background: #d9d9d9;
 }
 .CodeMirror-focused .CodeMirror-selected {
-  background: rgba(54, 133, 242, 0.3);
+  background-color: rgba(54, 133, 242, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d3685f2,endColorstr=#4d3685f2);
 }
 .CodeMirror-crosshair {
   cursor: crosshair;
