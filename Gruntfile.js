@@ -131,7 +131,7 @@ module.exports = function (grunt) {
                     "src/base/tree/asynctree.js",
                     "src/base/tree/parttree.js",
                     "src/base/**/*.js",
-                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js", "!ui/js/date.i18n.js"],
+                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
             },
 
@@ -168,7 +168,7 @@ module.exports = function (grunt) {
                     "src/core/inject.js",
                     "src/core/utils/*.js",
 
-                    "ui/js/date.i18n.js",
+                    "utils/date.i18n.js",
                     "src/data/data.js",
                     "src/data/**/*.js"
                 ],
@@ -237,7 +237,7 @@ module.exports = function (grunt) {
                         "src/base/tree/parttree.js",
                         "src/base/**/*.js",
                         "!src/base/formula/formulaeditor.js",
-                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js", "!ui/js/date.i18n.js"]
+                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"]
                 }
             }
         },
