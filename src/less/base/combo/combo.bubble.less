@@ -21,6 +21,13 @@
     z-index: 1;
     .triangle-top();
   }
+  & .bubble-combo-triangle-left, &.bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
+    &:before {
+      background-color: @color-bi-background-default;
+      border-bottom: 1px solid @border-color-light-line;
+      border-right: 1px solid @border-color-light-line;
+    }
+  }
 }
 
 .bi-theme-dark {
@@ -28,6 +35,8 @@
     & .bubble-combo-triangle-left, &.bubble-combo-triangle-right, & .bubble-combo-triangle-top, & .bubble-combo-triangle-bottom {
       &:before {
         background-color: @color-bi-background-default-theme-dark;
+        border-bottom: 1px solid @border-color-light-line-theme-dark;
+        border-right: 1px solid @border-color-light-line-theme-dark;
       }
     }
   }
