@@ -71,6 +71,26 @@ textarea {
 .bi-theme-dark .bi-background .bi-textarea {
   color: #d6e0dc;
 }
+.bi-header-background {
+  background-color: #F2F4F7;
+  color: #3d4d66;
+}
+.bi-header-background .bi-input {
+  color: #3d4d66;
+}
+.bi-header-background .bi-textarea {
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background {
+  background-color: #2F3149;
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background .bi-input {
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background .bi-textarea {
+  color: #3d4d66;
+}
 .bi-card {
   background-color: #ffffff;
   color: #3d4d66;
@@ -127,7 +147,7 @@ textarea {
   border-radius: 2px;
 }
 .bi-font-bold {
-  font-weight: 600;
+  font-weight: 700;
 }
 .bi-theme-dark .bi-border {
   border: 1px solid #3a3c53;

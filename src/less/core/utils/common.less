@@ -80,6 +80,30 @@ textarea {
   }
 }
 
+.bi-header-background {
+  background-color: @color-bi-background-light-gray;
+  color: @color-bi-text-normal;
+  & .bi-input {
+    color: @color-bi-text-normal;
+  }
+  & .bi-textarea {
+    color: @color-bi-text-normal;
+  }
+}
+
+.bi-theme-dark {
+  .bi-header-background {
+    background-color: @color-bi-background-light-gray-theme-dark;
+    color: @color-bi-text-normal;
+    & .bi-input {
+      color: @color-bi-text-normal;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-normal;
+    }
+  }
+}
+
 //card
 .bi-card {
   background-color: @color-bi-background-default;
@@ -148,7 +172,7 @@ textarea {
 }
 
 .bi-font-bold {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .bi-theme-dark {
