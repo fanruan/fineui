@@ -51661,7 +51661,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             north: {
                 el: {
                     type: "bi.htape",
-                    cls: "bi-message-title bi-background",
+                    cls: "bi-message-title bi-header-background",
                     ref: function (_ref) {
                         self.dragger = _ref;
                     },
@@ -81713,7 +81713,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title bi-background bi-border",
+            cls: "popup-panel-title bi-header-background bi-border",
             height: 25,
             items: [{
                 el: {

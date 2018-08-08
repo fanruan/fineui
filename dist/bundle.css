@@ -352,6 +352,26 @@ textarea {
 .bi-theme-dark .bi-background .bi-textarea {
   color: #d6e0dc;
 }
+.bi-header-background {
+  background-color: #F2F4F7;
+  color: #3d4d66;
+}
+.bi-header-background .bi-input {
+  color: #3d4d66;
+}
+.bi-header-background .bi-textarea {
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background {
+  background-color: #2F3149;
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background .bi-input {
+  color: #3d4d66;
+}
+.bi-theme-dark .bi-header-background .bi-textarea {
+  color: #3d4d66;
+}
 .bi-card {
   background-color: #ffffff;
   color: #3d4d66;
@@ -3479,10 +3499,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
   word-break: break-word;
-}
-.bi-text:before {
-  content: '';
-  display: block;
 }
 .bi-bubble .bubble-text {
   -webkit-border-radius: 2px;
