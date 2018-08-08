@@ -46,7 +46,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             north: {
                 el: {
                     type: "bi.htape",
-                    cls: "bi-message-title bi-background",
+                    cls: "bi-message-title bi-header-background",
                     ref: function (_ref) {
                         self.dragger = _ref;
                     },

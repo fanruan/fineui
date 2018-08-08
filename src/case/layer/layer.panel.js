@@ -32,7 +32,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title bi-background bi-border",
+            cls: "popup-panel-title bi-header-background bi-border",
             height: 25,
             items: [{
                 el: {
