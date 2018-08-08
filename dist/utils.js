@@ -13136,6 +13136,25 @@ _.extend(BI.OB.prototype, {
         })(jo);
     };
 
+    BI.encodeURIComponent = function (url) {
+        BI.specialCharsMap = BI.specialCharsMap || {};
+        url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+            return BI.specialCharsMap[str] || str;
+        });
+        return window.encodeURIComponent(url);
+    };
+
+    BI.decodeURIComponent = function (url) {
+        var reserveSpecialCharsMap = {};
+        BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
+            reserveSpecialCharsMap[encodeChar] = initialChar;
+        });
+        url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+            return reserveSpecialCharsMap[str] || str;
+        });
+        return window.decodeURIComponent(url);
+    };
+
     BI.contentFormat = function (cv, fmt) {
         if (isEmpty(cv)) {
             // 原值为空，返回空字符
