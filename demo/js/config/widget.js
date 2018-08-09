@@ -68,26 +68,6 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.switch_tree"
 }, {
     pId: 4,
-    id: 404,
-    text: "table"
-}, {
-    pId: 404,
-    text: "bi.preview_table",
-    value: "demo.preview_table"
-}, {
-    pId: 404,
-    text: "bi.responsive_table",
-    value: "demo.responsive_table"
-}, {
-    pId: 404,
-    text: "bi.sequence_table",
-    value: "demo.sequence_table"
-}, {
-    pId: 404,
-    text: "bi.page_table",
-    value: "demo.page_table"
-}, {
-    pId: 4,
     id: 405,
     text: "下拉列表"
 }, {

@@ -551,7 +551,7 @@ Demo.Face = BI.inherit(BI.Widget, {
                 column: 0,
                 row: 0,
                 el: {
-                    type: "demo.preview"
+                    type: "bi.layout"
                 }
             }, {
                 column: 1,

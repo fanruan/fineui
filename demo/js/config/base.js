@@ -96,26 +96,6 @@ Demo.BASE_CONFIG = [{
     value: "demo.part_tree"
 }, {
     pId: 2,
-    id: 204,
-    text: "table"
-}, {
-    pId: 204,
-    text: "bi.table_view",
-    value: "demo.table_view"
-}, {
-    pId: 204,
-    text: "bi.grid_table",
-    value: "demo.grid_table"
-}, {
-    pId: 204,
-    text: "bi.collection_table",
-    value: "demo.collection_table"
-}, {
-    pId: 204,
-    text: "bi.resizable_table",
-    value: "demo.resizable_table"
-}, {
-    pId: 2,
     text: "bi.pager",
     value: "demo.pager"
 }, {

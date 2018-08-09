@@ -180,22 +180,6 @@ Demo.CASE_CONFIG = [{
     value: "demo.branch_relation"
 }, {
     pId: 3,
-    id: 308,
-    text: "table"
-}, {
-    pId: 308,
-    text: "bi.adaptive_table",
-    value: "demo.adaptive_table"
-}, {
-    pId: 308,
-    text: "bi.tree_table",
-    value: "demo.tree_table"
-}, {
-    pId: 308,
-    text: "bi.layer_tree_table",
-    value: "demo.layer_tree_table"
-}, {
-    pId: 3,
     id: 309,
     text: "pager"
 }, {

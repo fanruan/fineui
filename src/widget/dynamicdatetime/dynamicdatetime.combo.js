@@ -10,7 +10,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
-        height: 24
+        height: 22
     },
 
 
@@ -25,13 +25,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    width: opts.height,
+                    height: opts.height,
                     ref: function () {
                         self.changeIcon = this;
                     }
                 },
-                width: 24
+                width: opts.height
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -48,6 +48,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_time_trigger",
                             min: this.constants.DATE_MIN_VALUE,
                             max: this.constants.DATE_MAX_VALUE,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -195,8 +196,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                     el: {
                         type: "bi.icon_button",
                         cls: "bi-trigger-icon-button date-font",
-                        width: 24,
-                        height: 24,
+                        width: opts.height,
+                        height: opts.height,
                         listeners: [{
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
@@ -223,6 +224,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _checkDynamicValue: function (v) {
+        var o = this.options;
         var type = null;
         if (BI.isNotNull(v)) {
             type = v.type;
@@ -230,7 +232,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateTimeCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = o.height;
                 this.comboWrapper.resize();
                 break;
             default:

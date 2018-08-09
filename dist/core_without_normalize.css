@@ -940,6 +940,29 @@ textarea {
 .bi-list-item-select3.disabled.active {
   background-color: #ffffff !important;
 }
+.bi-theme-dark .bi-list-item-select3:hover,
+.bi-theme-dark .bi-list-item-select3.hover {
+  background-color: #191B2B;
+}
+.bi-theme-dark .bi-list-item-select3:active,
+.bi-theme-dark .bi-list-item-select3.active {
+  color: #3685f2;
+  background-color: #191B2B;
+}
+.bi-theme-dark .bi-list-item-select3:active .bi-input,
+.bi-theme-dark .bi-list-item-select3.active .bi-input {
+  color: #3685f2;
+}
+.bi-theme-dark .bi-list-item-select3:active .bi-textarea,
+.bi-theme-dark .bi-list-item-select3.active .bi-textarea {
+  color: #3685f2;
+}
+.bi-theme-dark .bi-list-item-select3.disabled:hover,
+.bi-theme-dark .bi-list-item-select3.disabled.hover,
+.bi-theme-dark .bi-list-item-select3.disabled:active,
+.bi-theme-dark .bi-list-item-select3.disabled.active {
+  background-color: #242640 !important;
+}
 .bi-theme-dark .bi-list-item-select:hover,
 .bi-theme-dark .bi-list-item-select.hover {
   color: #ffffff;

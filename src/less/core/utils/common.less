@@ -923,6 +923,29 @@ textarea {
 }
 
 .bi-theme-dark {
+  .bi-list-item-select3 {
+    &:hover, &.hover {
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &:active, &.active {
+      color: @color-bi-text-highlight;
+      & .bi-input {
+        color: @color-bi-text-highlight;
+      }
+      & .bi-textarea {
+        color: @color-bi-text-highlight;
+      }
+      background-color: @color-bi-background-normal-theme-dark;
+    }
+    &.disabled {
+      &:hover, &.hover, &:active, &.active {
+        background-color: @color-bi-background-default-theme-dark !important;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
   .bi-list-item-select {
     &:hover, &.hover {
       color: @color-bi-text;

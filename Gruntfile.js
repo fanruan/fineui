@@ -39,7 +39,6 @@ module.exports = function (grunt) {
             baseJs: {
                 src: [
                     "src/third/**/*.js",
-                    "src/base/formula/config.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
                     "src/base/single/text.js",
@@ -110,14 +109,8 @@ module.exports = function (grunt) {
                 dest: "dist/bundle.css"
             },
 
-            fineuiMinJs: {
-                src: ["dist/_fineui.min.js", "src/base/formula/formulaeditor.js"],
-                dest: "dist/fineui.min.js"
-            },
-
             fineuiJs: {
                 src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
-                    "src/base/formula/config.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
                     "src/base/single/text.js",
@@ -221,23 +214,7 @@ module.exports = function (grunt) {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
                     "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
-                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
-                        "src/base/formula/config.js",
-                        "src/base/pane.js",
-                        "src/base/single/single.js",
-                        "src/base/single/text.js",
-                        "src/base/single/button/button.basic.js",
-                        "src/base/single/button/button.node.js",
-                        "src/base/single/tip/tip.js",
-                        "src/base/combination/group.button.js",
-                        "src/base/combination/tree.button.js",
-                        "src/base/combination/map.button.js",
-                        "src/base/tree/treeview.js",
-                        "src/base/tree/asynctree.js",
-                        "src/base/tree/parttree.js",
-                        "src/base/**/*.js",
-                        "!src/base/formula/formulaeditor.js",
-                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"]
+                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
                 }
             }
         },

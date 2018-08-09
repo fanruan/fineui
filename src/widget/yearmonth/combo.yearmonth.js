@@ -5,7 +5,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -17,6 +17,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             type: "bi.dynamic_year_month_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
