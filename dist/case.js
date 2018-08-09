@@ -8470,7 +8470,109 @@ BI.Panel = BI.inherit(BI.Widget, {
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel", BI.Panel);/**
+BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
+
+    props: {
+        extraCls: "bi-line-segment-button bi-list-item-effect",
+        once: true,
+        readonly: true,
+        hgap: 10,
+        height: 25
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        return [{
+            type: "bi.label",
+            text: o.text,
+            height: o.height,
+            value: o.value,
+            hgap: o.hgap,
+            ref: function () {
+                self.text = this;
+            }
+        }, {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.layout",
+                    cls: "line-segment-button-line",
+                    height: 2,
+                    ref: function () {
+                        self.line = this;
+                    }
+                },
+                left: 0,
+                right: 0,
+                bottom: 0
+            }]
+        }];
+    },
+
+    setSelected: function (v) {
+        BI.LinearSegmentButton.superclass.setSelected.apply(this, arguments);
+        if (v) {
+            this.line.element.addClass("bi-high-light-background");
+        } else {
+            this.line.element.removeClass("bi-high-light-background");
+        }
+    },
+
+    setText: function (text) {
+        this.text.setText(text);
+    }
+});
+BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
+
+    props: {
+        baseCls: "bi-linear-segment bi-border-bottom",
+        items: [],
+        height: 29
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.button_group",
+            items: BI.createItems(o.items, {
+                type: "bi.linear_segment_button",
+                height: o.height - 1
+            }),
+            layout: [{
+                type: "bi.center"
+            }],
+            listeners: [{
+                eventName: "__EVENT_CHANGE__",
+                action: function () {
+                    self.fireEvent("__EVENT_CHANGE__", arguments);
+                }
+            }, {
+                eventName: "EVENT_CHANGE",
+                action: function () {
+                    self.fireEvent("EVENT_CHANGE");
+                }
+            }],
+            ref: function () {
+                self.buttonGroup = this;
+            }
+        };
+    },
+
+    setValue: function (v) {
+        this.buttonGroup.setValue(v);
+    },
+
+    setEnabledValue: function (v) {
+        this.buttonGroup.setEnabledValue(v);
+    },
+
+
+    getValue: function () {
+        return this.buttonGroup.getValue();
+    }
+});
+BI.shortcut("bi.linear_segment", BI.LinearSegment);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
