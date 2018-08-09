@@ -12,17 +12,6 @@
 .bi-dynamic-date-combo .date-font {
   font-size: 16px;
 }
-
-.bi-excel-table-header-cell {
-  font-weight: bold;
-}
-
-.bi-excel-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #e8eaed;
-}
-.bi-theme-dark .bi-excel-table > div.bottom-right > div > div > table {
-  border-right: 1px solid #3a3c53;
-}
 .bi-interactive-arrangement .interactive-arrangement-dragtag-line {
   z-index: 1000000000;
   background-color: #faaa39;
@@ -176,33 +165,6 @@
 }
 .bi-number-interval.number-error .bi-input {
   color: #ff4949 !important;
-}
-.bi-preview-table-cell {
-  min-height: 25px;
-  min-width: 80px;
-}
-
-.bi-preview-table-header-cell {
-  font-weight: bold;
-  min-height: 25px;
-  min-width: 80px;
-}
-
-.bi-preview-table {
-  -webkit-user-select: text;
-  -khtml-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  -o-user-select: text;
-  user-select: text;
-}
-.bi-preview-table > div > table > thead > tr.odd,
-.bi-preview-table > div > div > div > table > thead > tr.odd {
-  background-color: #f7f8fa;
-}
-.bi-theme-dark .bi-preview-table > div > table > thead > tr.odd,
-.bi-theme-dark .bi-preview-table > div > div > div > table > thead > tr.odd {
-  background-color: #191B2B;
 }
 .bi-quarter-trigger {
   -webkit-border-radius: 2px;

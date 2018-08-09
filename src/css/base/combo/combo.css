@@ -12,7 +12,7 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 2px;
   margin-top: -3px;
   content: "";
   transform: rotate(-45deg);
@@ -27,7 +27,7 @@
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 2px;
   margin-top: 3px;
   content: "";
   transform: rotate(135deg);
@@ -58,12 +58,12 @@
   width: 6px;
   height: 6px;
   margin-left: 3px;
-  margin-top: 3px;
+  margin-top: 2px;
   content: "";
   transform: rotate(-135deg);
 }
 .bi-bubble-combo .bubble-combo-triangle-left:before,
-.bi-bubble-combo.bubble-combo-triangle-right:before,
+.bi-bubble-combo .bubble-combo-triangle-right:before,
 .bi-bubble-combo .bubble-combo-triangle-top:before,
 .bi-bubble-combo .bubble-combo-triangle-bottom:before {
   background-color: #ffffff;
@@ -71,7 +71,7 @@
   border-right: 1px solid #f2f4f7;
 }
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-left:before,
-.bi-theme-dark .bi-bubble-combo.bubble-combo-triangle-right:before,
+.bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-right:before,
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-top:before,
 .bi-theme-dark .bi-bubble-combo .bubble-combo-triangle-bottom:before {
   background-color: #242640;

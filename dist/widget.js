@@ -2852,7 +2852,7 @@ BI.extend(BI.DynamicDateCard, {
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
-        height: 24
+        height: 22
     },
 
 
@@ -2867,13 +2867,13 @@ BI.extend(BI.DynamicDateCard, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    width: opts.height,
+                    height: opts.height,
                     ref: function () {
                         self.changeIcon = this;
                     }
                 },
-                width: 24
+                width: opts.height
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -2890,6 +2890,7 @@ BI.extend(BI.DynamicDateCard, {
                             type: "bi.dynamic_date_trigger",
                             min: this.constants.DATE_MIN_VALUE,
                             max: this.constants.DATE_MAX_VALUE,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -3034,8 +3035,8 @@ BI.extend(BI.DynamicDateCard, {
                     el: {
                         type: "bi.icon_button",
                         cls: "bi-trigger-icon-button date-font",
-                        width: 24,
-                        height: 24,
+                        width: opts.height,
+                        height: opts.height,
                         listeners: [{
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
@@ -3062,6 +3063,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     _checkDynamicValue: function (v) {
+        var o = this.options;
         var type = null;
         if (BI.isNotNull(v)) {
             type = v.type;
@@ -3069,7 +3071,7 @@ BI.extend(BI.DynamicDateCard, {
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = o.height;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -3738,7 +3740,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
-        height: 24
+        height: 22
     },
 
 
@@ -3753,13 +3755,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    width: opts.height,
+                    height: opts.height,
                     ref: function () {
                         self.changeIcon = this;
                     }
                 },
-                width: 24
+                width: opts.height
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -3776,6 +3778,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_time_trigger",
                             min: this.constants.DATE_MIN_VALUE,
                             max: this.constants.DATE_MAX_VALUE,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -3923,8 +3926,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                     el: {
                         type: "bi.icon_button",
                         cls: "bi-trigger-icon-button date-font",
-                        width: 24,
-                        height: 24,
+                        width: opts.height,
+                        height: opts.height,
                         listeners: [{
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
@@ -3951,6 +3954,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _checkDynamicValue: function (v) {
+        var o = this.options;
         var type = null;
         if (BI.isNotNull(v)) {
             type = v.type;
@@ -3958,7 +3962,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateTimeCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = o.height;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -13829,296 +13833,6 @@ BI.NumberInterval.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);/**
- * 预览表列
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTableCell
- * @extends BI.Widget
- */
-BI.PreviewTableCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table-cell",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTableCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: o.textAlign || "left",
-            whiteSpace: o.whiteSpace || "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            hgap: o.hgap || 5
-        });
-    }
-});
-BI.shortcut("bi.preview_table_cell", BI.PreviewTableCell);/**
- * 预览表
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTableHeaderCell
- * @extends BI.Widget
- */
-BI.PreviewTableHeaderCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table-header-cell",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTableHeaderCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: o.textAlign || "left",
-            whiteSpace: o.whiteSpace || "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            hgap: o.hgap || 5
-        });
-    }
-});
-BI.shortcut("bi.preview_table_header_cell", BI.PreviewTableHeaderCell);/**
- * 预览表
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTable
- * @extends BI.Widget
- */
-BI.PreviewTable = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table",
-            isNeedFreeze: false,
-            freezeCols: [],
-            rowSize: null,
-            columnSize: [],
-            headerRowSize: 30,
-            header: [],
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.table = BI.createWidget({
-            type: "bi.table_view",
-            element: this,
-            isNeedResize: false,
-
-            isResizeAdapt: false,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            rowSize: o.rowSize,
-            columnSize: o.columnSize,
-            headerRowSize: o.headerRowSize,
-
-            header: BI.map(o.header, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_header_cell"
-                    }, item);
-                });
-            }),
-            items: BI.map(o.items, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_cell"
-                    }, item);
-                });
-            })
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self._adjustColumns();
-        });
-        this._adjustColumns();
-    },
-
-    // 是否有自适应调节的列，即列宽为""
-    _hasAdaptCol: function (columnSize) {
-        return BI.any(columnSize, function (i, size) {
-            return size === "";
-        });
-    },
-
-    _isPercentage: function (columnSize) {
-        return columnSize[0] <= 1;
-    },
-
-    _adjustColumns: function () {
-        var self = this, o = this.options;
-        if (o.isNeedFreeze === true) {
-            // 如果存在百分比的情况
-            if (this._isPercentage(o.columnSize)) {
-                if (this._hasAdaptCol(o.columnSize)) {
-                    var findCols = [], remain = 0;
-                    BI.each(o.columnSize, function (i, size) {
-                        if (size === "") {
-                            findCols.push(i);
-                        } else {
-                            remain += size;
-                        }
-                    });
-                    remain = 1 - remain;
-                    var average = remain / findCols.length;
-                    BI.each(findCols, function (i, col) {
-                        o.columnSize[col] = average;
-                    });
-                }
-                var isRight = BI.first(o.freezeCols) !== 0;
-                var freezeSize = [], notFreezeSize = [];
-                BI.each(o.columnSize, function (i, size) {
-                    if (o.freezeCols.contains(i)) {
-                        freezeSize.push(size);
-                    } else {
-                        notFreezeSize.push(size);
-                    }
-                });
-                var sumFreezeSize = BI.sum(freezeSize), sumNotFreezeSize = BI.sum(notFreezeSize);
-                BI.each(freezeSize, function (i, size) {
-                    freezeSize[i] = size / sumFreezeSize;
-                });
-                BI.each(notFreezeSize, function (i, size) {
-                    notFreezeSize[i] = size / sumNotFreezeSize;
-                });
-                this.table.setRegionColumnSize(isRight ? ["fill", sumFreezeSize] : [sumFreezeSize, "fill"]);
-                this.table.setColumnSize(isRight ? (notFreezeSize.concat(freezeSize)) : (freezeSize.concat(notFreezeSize)));
-            }
-        } else {
-            // 如果存在自适应宽度的列或者是百分比计算的列，需要将整个表宽设为100%
-            if (this._hasAdaptCol(o.columnSize) || this._isPercentage(o.columnSize)) {
-                this.table.setRegionColumnSize(["100%"]);
-            }
-        }
-    },
-
-    setColumnSize: function (columnSize) {
-        return this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        return this.table.setHeaderColumnSize(columnSize);
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        return this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        return this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        return this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        return this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
-    populate: function (items, header) {
-        if (items) {
-            items = BI.map(items, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_cell"
-                    }, item);
-                });
-            });
-        }
-        if (header) {
-            header = BI.map(header, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_header_cell"
-                    }, item);
-                });
-            });
-        }
-        this.table.populate(items, header);
-        this._adjustColumns();
-    }
-});
-BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
-BI.shortcut("bi.preview_table", BI.PreviewTable);/**
  * 季度下拉框
  *
  * Created by GUY on 2015/8/28.
@@ -14388,371 +14102,6 @@ BI.QuarterTrigger.EVENT_START = "EVENT_START";
 BI.QuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.QuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.quarter_trigger", BI.QuarterTrigger);/**
- * 自适应宽度的表格
- *
- * Created by GUY on 2016/2/3.
- * @class BI.ResponisveTable
- * @extends BI.Widget
- */
-BI.ResponisveTable = BI.inherit(BI.Widget, {
-
-    _const: {
-        perColumnSize: 100
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.ResponisveTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-responsive-table",
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
-            logic: { // 冻结的页面布局逻辑
-                dynamic: false
-            },
-
-            isNeedMerge: false, // 是否需要合并单元格
-            mergeCols: [], // 合并的单元格列号
-            mergeRule: function (row1, row2) { // 合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
-
-            columnSize: [],
-            headerRowSize: 25,
-            footerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: false,
-
-            header: [],
-            footer: false,
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _init: function () {
-        BI.ResponisveTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.table = BI.createWidget({
-            type: "bi.table_view",
-            element: this,
-            logic: o.logic,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            headerRowSize: o.headerRowSize,
-            footerRowSize: o.footerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            header: o.header,
-            footer: o.footer,
-            items: o.items,
-            // 交叉表头
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self._initRegionSize();
-            self.table.resize();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self._resizeRegion();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            // important:在冻结并自适应列宽的情况下要随时变更表头宽度
-            if (o.isNeedResize === true && self._isAdaptiveColumn()) {
-                self._resizeHeader();
-            }
-            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
-            self._resizeBody();
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            self._resizeRegion();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    _initRegionSize: function () {
-        var o = this.options;
-        if (o.isNeedFreeze === true) {
-            var regionColumnSize = this.table.getRegionColumnSize();
-            var maxWidth = this.table.element.width();
-            if (!regionColumnSize[0] || (regionColumnSize[0] === "fill") || regionColumnSize[0] > maxWidth || regionColumnSize[1] > maxWidth) {
-                var freezeCols = o.freezeCols;
-                if (freezeCols.length === 0) {
-                    this.table.setRegionColumnSize([0, "fill"]);
-                } else if (freezeCols.length > 0 && freezeCols.length < o.columnSize.length) {
-                    var size = maxWidth / 3;
-                    if (freezeCols.length > o.columnSize.length / 2) {
-                        size = maxWidth * 2 / 3;
-                    }
-                    this.table.setRegionColumnSize([size, "fill"]);
-                } else {
-                    this.table.setRegionColumnSize(["fill", 0]);
-                }
-            }
-        }
-    },
-
-    _getBlockSize: function () {
-        var o = this.options;
-        var columnSize = this.table.getCalculateColumnSize();
-        if (o.isNeedFreeze === true) {
-            var columnSizeLeft = [], columnSizeRight = [];
-            BI.each(columnSize, function (i, size) {
-                if (o.freezeCols.contains(i)) {
-                    columnSizeLeft.push(size);
-                } else {
-                    columnSizeRight.push(size);
-                }
-            });
-            // 因为有边框，所以加上数组长度的参数调整
-            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length,
-                sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
-            return {
-                sumLeft: sumLeft,
-                sumRight: sumRight,
-                left: columnSizeLeft,
-                right: columnSizeRight
-            };
-        }
-        return {
-            size: columnSize,
-            sum: BI.sum(columnSize) + columnSize.length
-        };
-    },
-
-    _isAdaptiveColumn: function (columnSize) {
-        return !(BI.last(columnSize || this.table.getColumnSize()) > 1.05);
-    },
-
-    _resizeHeader: function () {
-        var self = this, o = this.options;
-        if (o.isNeedFreeze === true) {
-            // 若是当前处于自适应调节阶段
-            if (this._isAdaptiveColumn()) {
-                var columnSize = this.table.getCalculateColumnSize();
-                this.table.setHeaderColumnSize(columnSize);
-            } else {
-                var regionColumnSize = this.table.getClientRegionColumnSize();
-                var block = this._getBlockSize();
-                var sumLeft = block.sumLeft, sumRight = block.sumRight;
-                var columnSizeLeft = block.left, columnSizeRight = block.right;
-                columnSizeLeft[columnSizeLeft.length - 1] += regionColumnSize[0] - sumLeft;
-                columnSizeRight[columnSizeRight.length - 1] += regionColumnSize[1] - sumRight;
-
-                var newLeft = BI.clone(columnSizeLeft), newRight = BI.clone(columnSizeRight);
-                newLeft[newLeft.length - 1] = "";
-                newRight[newRight.length - 1] = "";
-                this.table.setColumnSize(newLeft.concat(newRight));
-
-                block = self._getBlockSize();
-                if (columnSizeLeft[columnSizeLeft.length - 1] < block.left[block.left.length - 1]) {
-                    columnSizeLeft[columnSizeLeft.length - 1] = block.left[block.left.length - 1];
-                }
-                if (columnSizeRight[columnSizeRight.length - 1] < block.right[block.right.length - 1]) {
-                    columnSizeRight[columnSizeRight.length - 1] = block.right[block.right.length - 1];
-                }
-
-                self.table.setColumnSize(columnSizeLeft.concat(columnSizeRight));
-            }
-        } else {
-            if (!this._isAdaptiveColumn()) {
-                var regionColumnSize = this.table.getClientRegionColumnSize();
-                var block = this._getBlockSize();
-                var sum = block.sum;
-                var size = block.size;
-
-                size[size.length - 1] += regionColumnSize[0] - sum;
-
-                var newSize = BI.clone(size);
-                newSize[newSize.length - 1] = "";
-                this.table.setColumnSize(newSize);
-                block = this._getBlockSize();
-
-                if (size[size.length - 1] < block.size[block.size.length - 1]) {
-                    size[size.length - 1] = block.size[block.size.length - 1];
-                }
-                this.table.setColumnSize(size);
-            }
-        }
-    },
-
-    _resizeBody: function () {
-        if (this._isAdaptiveColumn()) {
-            var columnSize = this.table.getCalculateColumnSize();
-            this.setColumnSize(columnSize);
-        }
-    },
-
-    _adjustRegion: function () {
-        var o = this.options;
-        var regionColumnSize = this.table.getCalculateRegionColumnSize();
-        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
-            var block = this._getBlockSize();
-            var sumLeft = block.sumLeft, sumRight = block.sumRight;
-            if (sumLeft < regionColumnSize[0] || regionColumnSize[0] >= (sumLeft + sumRight)) {
-                this.table.setRegionColumnSize([sumLeft, "fill"]);
-            }
-            this._resizeRegion();
-        }
-    },
-
-    _resizeRegion: function () {
-        var o = this.options;
-        var regionColumnSize = this.table.getCalculateRegionColumnSize();
-        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
-            var maxWidth = this.table.element.width();
-            if (regionColumnSize[0] < 15 || regionColumnSize[1] < 15) {
-                var freezeCols = o.freezeCols;
-                var size = maxWidth / 3;
-                if (freezeCols.length > o.columnSize.length / 2) {
-                    size = maxWidth * 2 / 3;
-                }
-                this.table.setRegionColumnSize([size, "fill"]);
-            }
-        }
-    },
-
-
-    resize: function () {
-        this.table.resize();
-        this._resizeRegion();
-        this._resizeHeader();
-    },
-
-    setColumnSize: function (columnSize) {
-        this.table.setColumnSize(columnSize);
-        this._adjustRegion();
-        this._resizeHeader();
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        this.table.setHeaderColumnSize(columnSize);
-        this._adjustRegion();
-        this._resizeHeader();
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.table.setRegionColumnSize(columnSize);
-        this._resizeHeader();
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
-    attr: function () {
-        BI.ResponisveTable.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    populate: function (items) {
-        var self = this, o = this.options;
-        this.table.populate.apply(this.table, arguments);
-        if (o.isNeedFreeze === true) {
-            BI.nextTick(function () {
-                self._initRegionSize();
-                self.table.resize();
-                self._resizeHeader();
-            });
-        }
-    }
-});
-BI.shortcut("bi.responsive_table", BI.ResponisveTable);/**
  *
  * @class BI.SearchMultiTextValueCombo
  * @extends BI.Single
@@ -20025,7 +19374,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -20036,6 +19385,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
             type: "bi.dynamic_year_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
@@ -20758,7 +20108,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -20770,6 +20120,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             type: "bi.dynamic_year_month_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
@@ -21786,7 +21137,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -21798,6 +21149,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_quarter_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
@@ -22188,7 +21540,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height
+                            width: o.height < 24 ? 24 : o.height
                         },
                         width: o.height}]
                 }]
