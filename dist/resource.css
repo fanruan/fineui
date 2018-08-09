@@ -952,11 +952,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trigger-triangle-font .b-font:before {
   content: "\e64e";
-  color: #999999;
+  color: inherit;
 }
 .trigger-triangle-font.disabled .b-font:before {
   content: "\e64e";
-  color: #999999;
+  color: inherit;
 }
 .pull-up-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');

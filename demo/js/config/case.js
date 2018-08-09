@@ -124,10 +124,6 @@ Demo.CASE_CONFIG = [{
     value: "demo.icon_combo"
 }, {
     pId: 306,
-    text: "bi.static_combo",
-    value: "demo.static_combo"
-}, {
-    pId: 306,
     text: "bi.text_value_combo",
     value: "demo.text_value_combo"
 }, {

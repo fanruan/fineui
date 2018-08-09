@@ -3,6 +3,13 @@
   &.bi-combo-popup {
     display: block !important;
     visibility: visible !important;
+    & > .bi-trigger {
+      & .bi-trigger-icon-button{
+        & .x-icon {
+          .rotate(180deg);
+        }
+      }
+    }
   }
   &.bi-combo-popup, &.bi-combo-hover, &:hover {
     & > .bi-border {

@@ -47,6 +47,12 @@
   transition: @transition;
 }
 
+.rotate(@rotate) {
+  -webkit-transform: rotate(@rotate);
+  -moz-transform: rotate(@rotate);
+  transform: rotate(@rotate);
+}
+
 //渐变
 .gradient(@start, @end) {
   background: @start; //不支持的用这个
