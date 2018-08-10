@@ -27908,13 +27908,11 @@ BI.extend(BI.Func, {
         BI.each(items, function (i, item) {
             item = BI.deepClone(item);
             t = BI.stripEL(item);
-            BI.some([t[param], t.text, t.value, t.name, t], function (index, t) {
-                text = t;
-
-                if (BI.isNotNull(text)) return true;
+            text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
+                return BI.isNotNull(val);
             });
 
-            if (BI.isObject(text)) return;
+            if (BI.isNull(text) || BI.isObject(text)) return;
 
             py = BI.makeFirstPY(text);
             text = BI.toUpperCase(text);
