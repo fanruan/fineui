@@ -45,7 +45,12 @@ BI.extend(BI.Func, {
         BI.each(items, function (i, item) {
             item = BI.deepClone(item);
             t = BI.stripEL(item);
-            text = t[param] || t.text || t.value || t.name || t;
+            text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
+                return BI.isNotNull(val);
+            });
+
+            if (BI.isNull(text) || BI.isObject(text)) return;
+
             py = BI.makeFirstPY(text);
             text = BI.toUpperCase(text);
             py = BI.toUpperCase(py);
