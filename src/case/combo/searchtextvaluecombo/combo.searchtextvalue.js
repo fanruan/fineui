@@ -75,12 +75,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
                             // self.trigger.stopEditing();
-                            self.element.removeClass("combo-show");
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                         action: function () {
-                            self.element.removeClass("combo-show").addClass("combo-show");
                             self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],

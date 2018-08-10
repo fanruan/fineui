@@ -48593,31 +48593,19 @@ BI.shortcut("bi.half_icon_button", BI.HalfIconButton);/**
  * Created by GUY on 2015/9/16.
  * @class BI.TriggerIconButton
  * @extends BI.IconButton
- *
- * attention: 不要加invisible, 不要单独拿出去用
  */
-BI.TriggerIconButton = BI.inherit(BI.BasicButton, {
+BI.TriggerIconButton = BI.inherit(BI.IconButton, {
 
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button"
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            extraCls: "pull-down-font"
         });
     },
 
     _init: function () {
         BI.TriggerIconButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [{
-                type: "bi.icon_button",
-                cls: "pull-down-font trigger-down"
-            }, {
-                type: "bi.icon_button",
-                cls: "pull-up-font trigger-up"
-            }]
-        });
     },
 
     doClick: function () {
@@ -53235,12 +53223,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
                             // self.trigger.stopEditing();
-                            self.element.removeClass("combo-show");
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                         action: function () {
-                            self.element.removeClass("combo-show").addClass("combo-show");
                             self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],
@@ -53388,7 +53374,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        extraCls: "bi-search-text-value-trigger bi-border",
         height: 24
     },
 
@@ -66574,12 +66560,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -66958,12 +66939,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -67349,12 +67325,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -70937,7 +70908,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             if (isSearching()) {
                 return;
             }
@@ -70950,7 +70920,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
@@ -72540,12 +72509,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -74302,12 +74266,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();

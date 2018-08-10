@@ -2360,6 +2360,11 @@ textarea {
   display: block !important;
   visibility: visible !important;
 }
+.bi-combo.bi-combo-popup > .bi-trigger .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
 .bi-combo.bi-combo-popup > .bi-border,
 .bi-combo.bi-combo-hover > .bi-border,
 .bi-combo:hover > .bi-border {
@@ -2372,17 +2377,10 @@ textarea {
 .bi-search-text-value-combo.combo-error .bi-search-text-value-trigger .bi-text-button {
   color: #ff4949;
 }
-.bi-search-text-value-combo .trigger-up {
-  display: none;
-}
-.bi-search-text-value-combo .trigger-down {
-  display: block;
-}
-.bi-search-text-value-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-search-text-value-combo.combo-show .trigger-down {
-  display: none;
+.bi-search-text-value-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
@@ -3437,33 +3435,19 @@ ul.ztree.zTreeDragUL {
 .bi-multi-select-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
-.bi-multi-select-combo .trigger-up {
-  display: none;
-}
-.bi-multi-select-combo .trigger-down {
-  display: block;
-}
-.bi-multi-select-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-select-combo.combo-show .trigger-down {
-  display: none;
+.bi-multi-select-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .bi-multi-select-insert-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
-.bi-multi-select-insert-combo .trigger-up {
-  display: none;
-}
-.bi-multi-select-insert-combo .trigger-down {
-  display: block;
-}
-.bi-multi-select-insert-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-select-insert-combo.combo-show .trigger-down {
-  display: none;
+.bi-multi-select-insert-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 
@@ -3488,17 +3472,10 @@ ul.ztree.zTreeDragUL {
 .bi-multi-tree-combo .multi-select-trigger-icon-button {
   font-size: 16px;
 }
-.bi-multi-tree-combo .trigger-up {
-  display: none;
-}
-.bi-multi-tree-combo .trigger-down {
-  display: block;
-}
-.bi-multi-tree-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-multi-tree-combo.combo-show .trigger-down {
-  display: none;
+.bi-multi-tree-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 .bi-multi-tree-popup .popup-view-tree {
   min-height: 170px;
@@ -3570,32 +3547,13 @@ ul.ztree.zTreeDragUL {
 .bi-search-multi-text-value-combo.combo-error .bi-multi-select-searcher .tip-text-style {
   color: #ff4949;
 }
-.bi-search-multi-text-value-combo .trigger-up {
-  display: none;
-}
-.bi-search-multi-text-value-combo .trigger-down {
-  display: block;
-}
-.bi-search-multi-text-value-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-search-multi-text-value-combo.combo-show .trigger-down {
-  display: none;
-}
 .bi-single-select-combo .single-select-trigger-icon-button {
   font-size: 16px;
 }
-.bi-single-select-combo .trigger-up {
-  display: none;
-}
-.bi-single-select-combo .trigger-down {
-  display: block;
-}
-.bi-single-select-combo.combo-show .trigger-up {
-  display: block;
-}
-.bi-single-select-combo.combo-show .trigger-down {
-  display: none;
+.bi-single-select-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 .bi-single-slider-label {
   min-height: 50px;
@@ -4655,11 +4613,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trigger-triangle-font .b-font:before {
   content: "\e64e";
-  color: #999999;
+  color: inherit;
 }
 .trigger-triangle-font.disabled .b-font:before {
   content: "\e64e";
-  color: #999999;
+  color: inherit;
 }
 .pull-up-font .b-font {
   *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
