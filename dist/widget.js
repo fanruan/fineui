@@ -244,10 +244,15 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.center_adapt",
                 items: [{
-                    type: "bi.horizontal",
-                    width: 100,
-                    rgap: 10,
-                    items: [this.year, this.month]
+                    el: {
+                        type: "bi.horizontal",
+                        width: 110,
+                        rgap: 10,
+                        items: [{
+                            el: this.year,
+                            lgap: 10
+                        }, this.month]
+                    }
                 }]
             }, {
                 el: {
@@ -497,8 +502,8 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 0,
-                right: 10
+                left: 5,
+                right: 5
             }, {
                 el: {
                     type: "bi.layout",
