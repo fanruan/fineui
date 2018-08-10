@@ -52,7 +52,7 @@ body .bi-button, #body .bi-button {
       &, & .b-font:before {
         color: @color-bi-text-highlight;
       }
-      background-color: @color-bi-background-default;
+      background-color: transparent;
       border-color: @color-bi-border-highlight;
     }
     &.clear {
@@ -196,6 +196,14 @@ body .bi-button, #body .bi-button {
         &:active{
           .background-color(@color-bi-background-default, 90%);
         }
+      }
+    }
+    &.button-ignore {
+      &:hover{
+        background-color: @color-bi-blue-5;
+      }
+      &:active{
+        background-color: @color-bi-blue-10;
       }
     }
     &.button-common.disabled{

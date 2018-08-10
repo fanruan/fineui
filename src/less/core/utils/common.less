@@ -94,12 +94,12 @@ textarea {
 .bi-theme-dark {
   .bi-header-background {
     background-color: @color-bi-background-light-gray-theme-dark;
-    color: @color-bi-text-normal;
+    color: @color-bi-text-normal-theme-dark;
     & .bi-input {
-      color: @color-bi-text-normal;
+      color: @color-bi-text-normal-theme-dark;
     }
     & .bi-textarea {
-      color: @color-bi-text-normal;
+      color: @color-bi-text-normal-theme-dark;
     }
   }
 }
@@ -167,18 +167,29 @@ textarea {
   border: 1px solid @color-bi-border-line;
 }
 
+.bi-theme-dark {
+  .bi-border {
+    border: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+//分割线
+.bi-split {
+  border: 1px solid @border-color-light-line;
+}
+
+.bi-theme-dark {
+  .bi-border {
+    border: 1px solid @border-color-light-line-theme-dark;
+  }
+}
+
 .bi-border-radius {
   .border-radius(2px);
 }
 
 .bi-font-bold {
   font-weight: 700;
-}
-
-.bi-theme-dark {
-  .bi-border {
-    border: 1px solid @color-bi-border-line-theme-dark;
-  }
 }
 
 .bi-border-left {
@@ -218,6 +229,46 @@ textarea {
 .bi-theme-dark {
   .bi-border-bottom {
     border-bottom: 1px solid @color-bi-border-line-theme-dark;
+  }
+}
+
+.bi-split-left {
+  border-left: 1px solid @border-color-light-line;
+}
+
+.bi-theme-dark {
+  .bi-split-left {
+    border-left: 1px solid @border-color-light-line-theme-dark;
+  }
+}
+
+.bi-split-right {
+  border-right: 1px solid @border-color-light-line;
+}
+
+.bi-theme-dark {
+  .bi-split-right {
+    border-right: 1px solid @border-color-light-line-theme-dark;
+  }
+}
+
+.bi-split-top {
+  border-top: 1px solid @border-color-light-line;
+}
+
+.bi-theme-dark {
+  .bi-split-top {
+    border-top: 1px solid @border-color-light-line-theme-dark;
+  }
+}
+
+.bi-border-bottom {
+  border-bottom: 1px solid @border-color-light-line;
+}
+
+.bi-theme-dark {
+  .bi-border-bottom {
+    border-bottom: 1px solid @border-color-light-line-theme-dark;
   }
 }
 
@@ -350,6 +401,19 @@ textarea {
   //  color: @color-bi-background-default;
   //}
   .background-color(@color-bi-background-black, 50%);
+}
+
+.bi-theme-dark {
+  .bi-z-index-mask {
+    //color: @color-bi-background-default;
+    //& .bi-input {
+    //  color: @color-bi-background-default;
+    //}
+    //& .bi-textarea {
+    //  color: @color-bi-background-default;
+    //}
+    .background-color(@background-color-normal-theme-dark, 80%);
+  }
 }
 
 //只有背景变化
