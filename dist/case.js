@@ -1727,7 +1727,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             items: items,
             layouts: [{
                 type: "bi.center",
-                lgap: 10,
+                hgap: 5,
                 vgap: 10
             }]
         });
@@ -1752,8 +1752,8 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     height: 24,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
-                    lgap: 10,
-                    rgap: 0
+                    lgap: 5,
+                    rgap: 5
                     // selected: td.currentDay
                 });
             });
