@@ -40468,6 +40468,9 @@ BI.Msg = function () {
                                                 //                                                    height: 50,
                                                 handler: function () {
                                                     close();
+                                                    if (BI.isFunction(callback)) {
+                                                        callback.apply(null, [false]);
+                                                    }
                                                 }
                                             },
                                             width: 60
@@ -63176,13 +63179,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             items: [
                 {
                     el: {
-                        type: "bi.center_adapt",
-                        cls: "search-font",
-                        items: [{
-                            el: {
-                                type: "bi.icon"
-                            }
-                        }]
+                        type: "bi.icon_label",
+                        cls: "search-font"
                     },
                     width: 24
                 },

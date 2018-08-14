@@ -127,6 +127,9 @@ BI.Msg = function () {
                                                 //                                                    height: 50,
                                                 handler: function () {
                                                     close();
+                                                    if (BI.isFunction(callback)) {
+                                                        callback.apply(null, [false]);
+                                                    }
                                                 }
                                             },
                                             width: 60

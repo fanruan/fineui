@@ -75,6 +75,23 @@
   -moz-border-radius: 8px;
   border-radius: 8px;
 }
+.bi-multi-select-insert-list .bi-search-editor {
+  -moz-border-radius-bottomleft: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.bi-multi-select-list .bi-search-editor {
+  -moz-border-radius-bottomleft: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #3685f2;
 }
