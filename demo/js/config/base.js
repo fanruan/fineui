@@ -56,28 +56,12 @@ Demo.BASE_CONFIG = [{
     value: "demo.editor"
 }, {
     pId: 202,
-    text: "bi.code_editor",
-    value: "demo.code_editor"
-}, {
-    pId: 202,
     text: "bi.multifile_editor",
     value: "demo.multifile_editor"
 }, {
     pId: 202,
     text: "bi.textarea_editor",
     value: "demo.textarea_editor"
-}, {
-    pId: 202,
-    text: "bi.sql_editor",
-    value: "demo.sql_editor"
-}, {
-    pId: 202,
-    text: "bi.formula_editor",
-    value: "demo.formula_editor"
-}, {
-    pId: 202,
-    text: "bi.rich_editor",
-    value: "demo.rich_editor"
 }, {
     pId: 2,
     id: 203,
@@ -98,12 +82,4 @@ Demo.BASE_CONFIG = [{
     pId: 2,
     text: "bi.pager",
     value: "demo.pager"
-}, {
-    pId: 2,
-    text: "bi.svg",
-    value: "demo.svg"
-}, {
-    pId: 2,
-    text: "bi.canvas",
-    value: "demo.canvas"
 }];
