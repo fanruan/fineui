@@ -13138,6 +13138,7 @@ _.extend(BI.OB.prototype, {
 
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
+        url = url || "";
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
@@ -13149,6 +13150,7 @@ _.extend(BI.OB.prototype, {
         BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
+        url = url || "";
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });

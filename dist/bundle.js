@@ -25567,6 +25567,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
+        url = url || "";
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
@@ -25578,6 +25579,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
+        url = url || "";
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
@@ -37068,6 +37070,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     node.halfCheck = false;
                 });
             }
+            var status = treeNode.getCheckStatus();
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            if(status.half === true && status.checked === true) {
+                treeNode.checked = false;
+            }
         }
 
         function onCheck (event, treeId, treeNode) {
@@ -37468,6 +37475,11 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
+            }
+            var status = treeNode.getCheckStatus();
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            if(status.half === true && status.checked === true) {
+                treeNode.checked = false;
             }
         }
 
@@ -40456,6 +40468,9 @@ BI.Msg = function () {
                                                 //                                                    height: 50,
                                                 handler: function () {
                                                     close();
+                                                    if (BI.isFunction(callback)) {
+                                                        callback.apply(null, [false]);
+                                                    }
                                                 }
                                             },
                                             width: 60
@@ -51262,7 +51277,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card color-chooser-trigger-content"
+            cls: "bi-card color-chooser-trigger-content" + (BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({
@@ -51284,7 +51299,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }, {
                 el: down,
-                right: 1,
+                right: -1,
                 bottom: 1
             }]
         });
@@ -63164,13 +63179,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             items: [
                 {
                     el: {
-                        type: "bi.center_adapt",
-                        cls: "search-font",
-                        items: [{
-                            el: {
-                                type: "bi.icon"
-                            }
-                        }]
+                        type: "bi.icon_label",
+                        cls: "search-font"
                     },
                     width: 24
                 },

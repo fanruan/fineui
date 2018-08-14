@@ -481,10 +481,10 @@ textarea {
 .bi-theme-dark .bi-split-top {
   border-top: 1px solid #2F3149;
 }
-.bi-border-bottom {
+.bi-split-bottom {
   border-bottom: 1px solid #f2f4f7;
 }
-.bi-theme-dark .bi-border-bottom {
+.bi-theme-dark .bi-split-bottom {
   border-bottom: 1px solid #2F3149;
 }
 .bi-keyword-red-mark {
@@ -2236,31 +2236,62 @@ textarea {
   _background: none;
 }
 .loading-background {
-  background: url('images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
+  background: url('images/2x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
+  background-size: contain;
   _background: none;
 }
 .auto-color-background {
+  background: url('images/2x/background/auto_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-background {
+  background: url('images/2x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-disabled-background {
+  background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-background {
+  background: url('images/2x/background/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('images/2x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-background.hack {
   background: url('images/1x/background/auto_color.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
   _background: none;
 }
-.auto-color-normal-background {
+.auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
   _background: none;
 }
-.auto-color-normal-disabled-background {
+.auto-color-normal-disabled-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
-.trans-color-background {
+.trans-color-background.hack {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
   _background: none;
 }
-.trans-color-disabled-background {
+.trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;
@@ -2271,11 +2302,23 @@ textarea {
   border-radius: 2px;
 }
 .bi-color-picker-editor.disabled .auto-color-normal-background {
+  background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-color-picker-editor.disabled .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
 .bi-color-picker-editor.disabled .trans-color-background {
+  background: url('images/2x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.bi-color-picker-editor.disabled .trans-color-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;
@@ -3513,6 +3556,23 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 8px;
   border-radius: 8px;
 }
+.bi-multi-select-insert-list .bi-search-editor {
+  -moz-border-radius-bottomleft: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.bi-multi-select-list .bi-search-editor {
+  -moz-border-radius-bottomleft: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
 .bi-multi-tree-check-pane .multi-tree-check-selected {
   color: #3685f2;
 }
@@ -4061,31 +4121,62 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .loading-background {
-  background: url('https://fanruan.coding.me/fineui/dist/images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/icon/loading.gif');
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/icon/loading.gif');
+  background-size: contain;
   _background: none;
 }
 .auto-color-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-disabled-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/background/auto_color_normal_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/background/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/background/trans_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('https://fanruan.coding.me/fineui/dist/images/2x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/2x/background/trans_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-background.hack {
   background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color.png');
   _background: none;
 }
-.auto-color-normal-background {
+.auto-color-normal-background.hack {
   background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal.png');
   _background: none;
 }
-.auto-color-normal-disabled-background {
+.auto-color-normal-disabled-background.hack {
   background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
-.trans-color-background {
+.trans-color-background.hack {
   background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/trans_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/trans_normal.png');
   _background: none;
 }
-.trans-color-disabled-background {
+.trans-color-disabled-background.hack {
   background: url('https://fanruan.coding.me/fineui/dist/images/1x/background/trans_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://fanruan.coding.me/fineui/dist/images/1x/background/trans_disable.png');
   _background: none;
