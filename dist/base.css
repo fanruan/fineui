@@ -576,10 +576,6 @@
 .bi-small-search-editor .search-font {
   font-size: 18px;
 }
-
-.bi-sign-initial-editor .sign-initial-editor-text {
-  font-size: 14px;
-}
 .bi-message-title {
   font-size: 14px;
   cursor: pointer;
@@ -1068,7 +1064,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
   color: #3685f2;
 }
-
 
 .bi-switch {
   -webkit-border-radius: 40px 40px 40px 40px;
