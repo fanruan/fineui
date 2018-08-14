@@ -70,7 +70,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 type: "bi.center_adapt",
                 items: [{
                     el: {
-                        type: "bi.horizontal",
+                        type: "bi.horizontal_float",
                         width: 50,
                         items: [{
                             el: this.year
