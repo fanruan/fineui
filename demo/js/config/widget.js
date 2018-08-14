@@ -63,10 +63,6 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.multilayer_select_level_tree",
     value: "demo.multilayer_select_level_tree"
 }, {
-    pId: 403,
-    text: "bi.switch_tree",
-    value: "demo.switch_tree"
-}, {
     pId: 4,
     id: 405,
     text: "下拉列表"
@@ -190,14 +186,6 @@ Demo.WIDGET_CONFIG = [{
     pId: 413,
     text: "bi.number_interval",
     value: "demo.number_interval"
-}, {
-    pId: 4,
-    id: 419,
-    text: "文件管理"
-}, {
-    pId: 419,
-    text: "bi.file_manager",
-    value: "demo.file_manager"
 }, {
     id: 420,
     text: "滚动sliders",
