@@ -485,10 +485,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
-                this.valueOne = valueOne;
+                this.valueOne = (this.valueOne <= this.valueTwo ? valueOne : valueTwo);
             }
             if (this._checkValidation(valueTwo)) {
-                this.valueTwo = valueTwo;
+                this.valueTwo = (this.valueOne <= this.valueTwo ? valueTwo : valueOne);
             }
             if (valueOne < this.min) {
                 this.valueOne = this.min;
