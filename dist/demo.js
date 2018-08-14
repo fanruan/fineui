@@ -319,54 +319,7 @@ BI.shortcut("demo.image_button", Demo.Button);Demo.Button = BI.inherit(BI.Widget
         };
     }
 });
-BI.shortcut("demo.text_button", Demo.Button);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-
-        var canvas = BI.createWidget({
-            type: "bi.canvas",
-            width: 500,
-            height: 600
-        });
-        canvas.rect(0, 0, 80, 100, "#7dbd2f");
-
-        canvas.line(80, 0, 100, 100, 200, 100, 300, 0, {
-            strokeStyle: "red",
-            lineWidth: 2
-        });
-
-        canvas.circle(150, 50, 20, "green");
-
-        // 渐变矩形
-        canvas.rect(0, 120, 80, 100, canvas.gradient(0, 120, 80, 220, "#FF0000", "#00FF00"));
-
-        // 空心图形
-        canvas.hollow(100, 120, 100, 220, 200, 120, {
-            strokeStyle: "blue"
-        });
-
-        // 实心图形
-        canvas.solid(100, 240, 200, 240, 150, 280, 200, 320, 100, 320, {
-            strokeStyle: "yellow",
-            fillStyle: "pink"
-        });
-
-        canvas.stroke();
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: canvas,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.canvas", Demo.Func);Demo.IconLabel = BI.inherit(BI.Widget, {
+BI.shortcut("demo.text_button", Demo.Button);Demo.IconLabel = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-bubble"
     },
@@ -663,70 +616,7 @@ BI.shortcut("demo.message", Demo.Message);Demo.Func = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.pager", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var svg = BI.createWidget({
-            type: "bi.svg",
-            width: 500,
-            height: 600
-        });
-
-        var circle = svg.circle(100, 100, 10);
-        circle.animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);
-
-        var el = svg.rect(10, 200, 300, 200);
-        el.transform("t100,100r45t-100,0");
-
-        svg.path("M10,10L50,50M50,10L10,50")
-            .attr({stroke: "red"});
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: svg,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.svg", Demo.Func);Demo.CodeEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
-        var editor = BI.createWidget({
-            type: "bi.code_editor",
-            cls: "mvc-border",
-            width: 600,
-            height: 400
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            hgap: 30,
-            vgap: 20,
-            items: [editor, {
-                type: "bi.button",
-                text: "getValue",
-                handler: function () {
-                    BI.Msg.toast(JSON.stringify(editor.getValue()));
-                }
-            }, {
-                type: "bi.button",
-                text: "setValue",
-                handler: function () {
-                    editor.setValue("测试数据");
-                }
-            }]
-        });
-    }
-});
-BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -827,26 +717,6 @@ BI.shortcut("demo.editor", Demo.Editor);Demo.CodeEditor = BI.inherit(BI.Widget, 
         baseCls: "demo-editor"
     },
     render: function () {
-        this.formula = BI.createWidget({
-            type: "bi.formula_editor",
-            width: 300,
-            height: 200,
-            value: "SUM(C5, 16, 26)"
-        });
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [this.formula],
-            hgap: 20,
-            vgap: 20
-        });
-    }
-});
-BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
         return {
             type: "bi.absolute",
             items: [{
@@ -867,99 +737,7 @@ BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit
         };
     }
 });
-BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-rich-editor"
-    },
-    render: function () {
-        var self = this;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.rich_editor",
-                    height: "100%",
-                    cls: "bi-border",
-                    ref: function () {
-                        self.editor = this;
-                    },
-                    toolbar: {
-                        type: "bi.rich_editor_text_toolbar",
-                        buttons: [
-                            {type: "bi.rich_editor_font_chooser"},
-                            {type: "bi.rich_editor_size_chooser"},
-                            {type: "bi.rich_editor_bold_button"},
-                            {type: "bi.rich_editor_italic_button"},
-                            {type: "bi.rich_editor_underline_button"},
-                            {type: "bi.rich_editor_color_chooser"},
-                            {
-                                type: "bi.rich_editor_background_color_chooser",
-                                listeners: [{
-                                    eventName: "EVENT_CHANGE",
-                                    action: function (backgroundColor) {
-                                        self.editor.element.css({
-                                            backgroundColor: backgroundColor,
-                                            color: BI.DOM.getContrastColor(backgroundColor)
-                                        });
-                                    }
-                                }]
-                            },
-                            {type: "bi.rich_editor_align_left_button"},
-                            {type: "bi.rich_editor_align_center_button"},
-                            {type: "bi.rich_editor_align_right_button"},
-                            {type: "bi.rich_editor_param_button"}
-                        ]
-                    }
-                },
-                left: 10,
-                top: 10,
-                bottom: 10,
-                right: 10
-            }]
-        });
-    },
-
-    mounted: function () {
-        var image = BI.DOM.getImage("测试");
-        var src = image.src;
-        var style = image.style;
-        this.editor.setValue("<div>这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据<img class=\"rich-editor-param\" width='" + image.width + "' height='" + image.height + "' src='" + src + "' style='" + style + "' /></div>");
-    }
-});
-BI.shortcut("demo.rich_editor", Demo.RichEditor);/**
- * Created by Windy on 2017/12/15.
- */
-Demo.SQLEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
-        var self = this;
-        this.formula = BI.createWidget({
-            type : 'bi.sql_editor',
-            supportParam: true,
-            width : 300,
-            height : 200,
-            value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
-        });
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [this.formula, {
-                type: "bi.button",
-                height: 24,
-                handler: function () {
-                    BI.Msg.alert("", self.formula.getValue());
-                }
-
-            }],
-            hgap: 20,
-            vgap: 20
-        })
-    }
-});
-BI.shortcut("demo.sql_editor", Demo.SQLEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -1875,47 +1653,6 @@ BI.shortcut("demo.click_item_effect", Demo.Func);Demo.Func = BI.inherit(BI.Widge
     },
 
     render: function () {
-        var editor = BI.createWidget({
-            type: "bi.text_editor",
-            width: 200,
-            height: 30,
-            value: "这是复制的内容"
-        });
-        var clipboard = BI.createWidget({
-            type: "bi.clipboard",
-            width: 100,
-            height: 100,
-            cls: "layout-bg1",
-            copy: function () {
-                return editor.getValue();
-            },
-
-            afterCopy: function () {
-                BI.Msg.toast(editor.getValue());
-            }
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: editor,
-                left: 100,
-                top: 50
-            }, {
-                el: clipboard,
-                left: 100,
-                top: 100
-            }]
-        });
-    }
-});
-BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
         return {
             type: "bi.absolute",
             items: [{
@@ -1974,40 +1711,6 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
     }
 });
 BI.shortcut("demo.color_chooser", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var canvas = BI.createWidget({
-            type: "bi.complex_canvas",
-            width: 500,
-            height: 600
-        });
-        canvas.branch(55, 100, 10, 10, 100, 10, 200, 10, {
-            offset: 20,
-            strokeStyle: "red",
-            lineWidth: 2
-        });
-
-        canvas.branch(220, 155, 120, 110, 150, 200, {
-            offset: 40
-        });
-
-        canvas.stroke();
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: canvas,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.complex_canvas", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -2131,38 +1834,6 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
 });
 
 BI.shortcut("demo.sign_editor", Demo.SignEditor);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.SignInitialEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    mounted: function () {
-        this.editor.setValue({
-            value: "123",
-            text: "sdga"
-        });
-    },
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.horizontal_adapt",
-            items: [{
-                type: "bi.sign_initial_editor",
-                ref: function () {
-                    self.editor = this;
-                },
-                cls: "layout-bg5",
-                text: "原始值",
-                width: 300
-            }],
-            vgap: 20
-
-        };
-    }
-});
-
-BI.shortcut("demo.sign_initial_editor", Demo.SignInitialEditor);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.SimpleStateEditor = BI.inherit(BI.Widget, {
@@ -2554,386 +2225,6 @@ BI.shortcut("demo.popup_panel", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var relation = BI.createWidget({
-            type: "bi.branch_relation",
-            items: [
-                {
-                    id: -1,
-                    value: "根目录",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 1,
-                    pId: -1,
-                    value: "第一级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 11,
-                    pId: 1,
-                    value: "第二级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 12,
-                    pId: 1,
-                    value: "第二级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 121,
-                    pId: 12,
-                    value: "第三级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 122,
-                    pId: 12,
-                    value: "第三级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 1211,
-                    pId: 121,
-                    value: "第四级目录",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 12111,
-                    pId: 1211,
-                    value: "第五级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 2,
-                    pId: -1,
-                    value: "第一级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 21,
-                    pId: 2,
-                    value: "第二级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 22,
-                    pId: 2,
-                    value: "第二级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 211,
-                    pId: 21,
-                    value: "第三级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 212,
-                    pId: 21,
-                    value: "第三级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 2111,
-                    pId: 211,
-                    value: "第四级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                }
-            ],
-
-            direction: BI.Direction.Right,
-            align: BI.HorizontalAlign.Right,
-
-            centerOffset: -50
-        });
-        BI.createWidget({
-            type: "bi.adaptive",
-            element: this,
-            items: [relation]
-        });
-    }
-});
-BI.shortcut("demo.branch_relation", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    _createBranchTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.branch_tree",
-            items: [{
-                el: {
-                    text: "且",
-                    value: "且1",
-                    cls: "layout-bg7"
-                },
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    el: {
-                        text: "或",
-                        value: "或2",
-                        cls: "layout-bg7"
-                    },
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        el: {
-                            text: "且",
-                            value: "且3",
-                            cls: "layout-bg7"
-                        },
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    _createBranchMapTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.branch_tree",
-            el: {
-                type: "bi.virtual_group"
-            },
-            items: [{
-                text: "且",
-                value: "且1",
-                cls: "layout-bg7",
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    text: "或",
-                    value: "或2",
-                    cls: "layout-bg7",
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        text: "且",
-                        value: "且3",
-                        cls: "layout-bg7",
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    render: function () {
-        var tree = this._createBranchTree();
-        var mapTree = this._createBranchMapTree();
-
-        function getItems () {
-            return [{
-                text: "且",
-                value: "且",
-                cls: "layout-bg7",
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字",
-                    value: "这里是一段文字"
-                }, {
-                    text: "或",
-                    value: "或2",
-                    cls: "layout-bg7",
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字",
-                        value: "这里是一段文字"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字",
-                        value: "这里是一段文字"
-                    }, {
-                        text: "且",
-                        value: "且3",
-                        cls: "layout-bg7",
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }];
-        }
-
-        BI.createWidget({
-            type: "bi.center",
-            element: this,
-            items: [{
-                type: "bi.vtape",
-                items: [{
-                    el: tree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", tree.getValue());
-                        }
-                    }
-                }]
-            }, {
-                type: "bi.vtape",
-                items: [{
-                    el: mapTree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "populate",
-                        handler: function () {
-                            mapTree.populate(getItems());
-                        }
-                    }
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", mapTree.getValue());
-                        }
-                    }
-                }]
-            }]
-        });
-    }
-});
-BI.shortcut("demo.branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
         var tree = BI.createWidget({
             type: "bi.display_tree",
             element: this
@@ -2971,108 +2262,6 @@ BI.shortcut("demo.branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.display_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    _createHandStandBranchTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.handstand_branch_tree",
-            expander: {},
-            el: {
-                layouts: [{
-                    type: "bi.horizontal_adapt",
-                    verticalAlign: BI.VerticalAlign.Top
-                }]
-            },
-            items: [{
-                el: {
-                    text: "且",
-                    value: "且1",
-                    cls: "layout-bg7"
-                },
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    el: {
-                        text: "或",
-                        value: "或2",
-                        cls: "layout-bg7"
-                    },
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        el: {
-                            text: "且",
-                            value: "且3",
-                            cls: "layout-bg7"
-                        },
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    render: function () {
-        var tree = this._createHandStandBranchTree();
-
-        BI.createWidget({
-            type: "bi.center",
-            element: this,
-            items: [{
-                type: "bi.vtape",
-                items: [{
-                    el: tree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", tree.getValue());
-                        }
-                    }
-                }]
-            }]
-        });
-    }
-});
-BI.shortcut("demo.handstand_branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -4147,28 +3336,12 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.editor"
 }, {
     pId: 202,
-    text: "bi.code_editor",
-    value: "demo.code_editor"
-}, {
-    pId: 202,
     text: "bi.multifile_editor",
     value: "demo.multifile_editor"
 }, {
     pId: 202,
     text: "bi.textarea_editor",
     value: "demo.textarea_editor"
-}, {
-    pId: 202,
-    text: "bi.sql_editor",
-    value: "demo.sql_editor"
-}, {
-    pId: 202,
-    text: "bi.formula_editor",
-    value: "demo.formula_editor"
-}, {
-    pId: 202,
-    text: "bi.rich_editor",
-    value: "demo.rich_editor"
 }, {
     pId: 2,
     id: 203,
@@ -4189,14 +3362,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 2,
     text: "bi.pager",
     value: "demo.pager"
-}, {
-    pId: 2,
-    text: "bi.svg",
-    value: "demo.svg"
-}, {
-    pId: 2,
-    text: "bi.canvas",
-    value: "demo.canvas"
 }];Demo.CASE_CONFIG = [{
     id: 3,
     text: "实例控件",
@@ -4231,10 +3396,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.sign_editor"
 }, {
     pId: 301,
-    text: "bi.sign_initial_editor",
-    value: "demo.sign_initial_editor"
-}, {
-    pId: 301,
     text: "bi.state_editor",
     value: "demo.state_editor"
 }, {
@@ -4257,14 +3418,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 302,
     text: "bi.lazy_loader",
     value: "demo.lazy_loader"
-}, {
-    pId: 302,
-    text: "bi.sort_list(排序)",
-    value: "demo.sort_list"
-}, {
-    pId: 302,
-    text: "bi.list_loader(排序)",
-    value: "demo.list_loader"
 }, {
     pId: 3,
     id: 303,
@@ -4351,14 +3504,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     text: "tree"
 }, {
     pId: 307,
-    text: "bi.branch_tree",
-    value: "demo.branch_tree"
-}, {
-    pId: 307,
-    text: "bi.handstand_branch_tree",
-    value: "demo.handstand_branch_tree"
-}, {
-    pId: 307,
     text: "bi.display_tree",
     value: "demo.display_tree"
 }, {
@@ -4369,10 +3514,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 307,
     text: "bi.level_tree",
     value: "demo.level_tree"
-}, {
-    pId: 307,
-    text: "bi.branch_relation",
-    value: "demo.branch_relation"
 }, {
     pId: 3,
     id: 309,
@@ -4389,14 +3530,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 3,
     text: "bi.calendar",
     value: "demo.calendar"
-}, {
-    pId: 3,
-    text: "bi.clipboard",
-    value: "demo.clipboard"
-}, {
-    pId: 3,
-    text: "bi.complex_canvas",
-    value: "demo.complex_canvas"
 }, {
     pId: 3,
     text: "bi.color_chooser",
@@ -4843,10 +3976,6 @@ Demo.FIX_CONFIG = [{
     text: "bi.multilayer_select_level_tree",
     value: "demo.multilayer_select_level_tree"
 }, {
-    pId: 403,
-    text: "bi.switch_tree",
-    value: "demo.switch_tree"
-}, {
     pId: 4,
     id: 405,
     text: "下拉列表"
@@ -4970,14 +4099,6 @@ Demo.FIX_CONFIG = [{
     pId: 413,
     text: "bi.number_interval",
     value: "demo.number_interval"
-}, {
-    pId: 4,
-    id: 419,
-    text: "文件管理"
-}, {
-    pId: 419,
-    text: "bi.file_manager",
-    value: "demo.file_manager"
 }, {
     id: 420,
     text: "滚动sliders",
@@ -12699,62 +11820,6 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
 });
 
 BI.shortcut("demo.single_level_tree", Demo.SingleLevelTree);/**
- * Created by Dailer on 2017/7/26.
- */
-
-
-Demo.SwitchTree = BI.inherit(BI.Widget, {
-
-    render: function () {
-        var self = this;
-        var tree = BI.createWidget({
-            type: "bi.switch_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE),
-            value: "第五级文件1"
-        });
-
-        return {
-            type: "bi.vtape",
-            items: [{
-                el: tree
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "点击切换",
-                    handler: function () {
-                        tree.switchSelect();
-                    }
-                },
-                height: 25
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "getValue",
-                    handler: function () {
-                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
-                    }
-                },
-                height: 25
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "setValue (第二级文件1)",
-                    handler: function () {
-                        tree.setValue(["第二级文件1"]);
-                    }
-                },
-                height: 25
-            }],
-            width: 500,
-            hgap: 300
-        };
-    }
-});
-
-BI.shortcut("demo.switch_tree", Demo.SwitchTree);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Year = BI.inherit(BI.Widget, {

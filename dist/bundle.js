@@ -34002,8 +34002,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-            // PhantomJS
-            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -34011,19 +34011,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 port.postMessage(1);
             };
         } else
-        /* istanbul ignore next */
-        if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
-            var p = Promise.resolve();
-            timerFunc = function timerFunc() {
-                p.then(nextTickHandler);
-            };
-        } else {
-            // fallback to setTimeout
-            timerFunc = function timerFunc() {
-                setTimeout(nextTickHandler, 0);
-            };
-        }
+            /* istanbul ignore next */
+            if (typeof Promise !== 'undefined' && isNative(Promise)) {
+                // use microtask in non-DOM environments, e.g. Weex
+                var p = Promise.resolve();
+                timerFunc = function timerFunc() {
+                    p.then(nextTickHandler);
+                };
+            } else {
+                // fallback to setTimeout
+                timerFunc = function timerFunc() {
+                    setTimeout(nextTickHandler, 0);
+                };
+            }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -34147,7 +34147,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     break;
             }
             var result = original.apply(this, args);
-            notify(ob.parent, ob.parentKey, ob.dep);
+            notify(ob.parent, ob.parentKey, ob.dep, true);
             return result;
         };
     });
@@ -34198,7 +34198,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -34214,7 +34214,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                    '\tEnd Function');
+                '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -34227,19 +34227,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                        //由于不知对方会传入什么,因此set, let都用上
-                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                    //由于不知对方会传入什么,因此set, let都用上
+                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -34257,7 +34257,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -34355,8 +34355,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
-    function notify(observer, key, dep) {
-        dep.notify({ observer: observer, key: key });
+    function notify(observer, key, dep, refresh) {
+        dep.notify({ observer: observer, key: key, refresh: refresh });
         if (observer) {
             //触发a.*绑定的依赖
             _.each(observer._deps, function (dep) {
@@ -34712,10 +34712,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                    // Deep watchers and watchers on Object/Arrays should fire even
-                    // when the value is the same, because the value may
-                    // have mutated.
-                    _.isArray(value) || this.deep) {
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -50882,7 +50882,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         }
                     }]
                 }, o.popup),
-                stopPropagation: false,
+                stopPropagation: true,
                 width: 230
             },
             value: o.value
@@ -64023,10 +64023,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
-                this.valueOne = valueOne;
+                this.valueOne = (this.valueOne <= this.valueTwo ? valueOne : valueTwo);
             }
             if (this._checkValidation(valueTwo)) {
-                this.valueTwo = valueTwo;
+                this.valueTwo = (this.valueOne <= this.valueTwo ? valueTwo : valueOne);
             }
             if (valueOne < this.min) {
                 this.valueOne = this.min;
@@ -74127,7 +74127,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo.item",
+            type: "bi.single_select_item",
             logic: {
                 dynamic: false
             },
@@ -74816,72 +74816,6 @@ BI.extend(BI.SingleSelectInsertCombo, {
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
- * guy
- * 单选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-single-select-radio-item",
-            logic: {
-                dynamic: false
-            },
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.SingleSelectComboItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.radio = BI.createWidget({
-            type: "bi.radio"
-        });
-        this.text = BI.createWidget({
-            type: "bi.label",
-            cls: "list-item-text",
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            textHeight: o.height,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            keyword: o.keyword,
-            value: o.value,
-            py: o.py
-        });
-
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic("horizontal", BI.extend(o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection("left", {
-                type: "bi.center_adapt",
-                items: [this.radio],
-                width: 26
-            }, this.text)
-        }))));
-    },
-
-    doRedMark: function () {
-        this.text.doRedMark.apply(this.text, arguments);
-    },
-
-    unRedMark: function () {
-        this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doClick: function () {
-        BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
-        this.radio.setSelected(this.isSelected());
-    },
-
-    setSelected: function (v) {
-        BI.SingleSelectComboItem.superclass.setSelected.apply(this, arguments);
-        this.radio.setSelected(v);
-
-    }
-});
-
-BI.shortcut("bi.single_select_combo.item", BI.SingleSelectComboItem);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
@@ -75119,7 +75053,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo.item",
+            type: "bi.single_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
