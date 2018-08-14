@@ -1798,6 +1798,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     node.halfCheck = false;
                 });
             }
+            var status = treeNode.getCheckStatus();
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            if(status.half === true && status.checked === true) {
+                treeNode.checked = false;
+            }
         }
 
         function onCheck (event, treeId, treeNode) {
@@ -2198,6 +2203,11 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
+            }
+            var status = treeNode.getCheckStatus();
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            if(status.half === true && status.checked === true) {
+                treeNode.checked = false;
             }
         }
 

@@ -481,10 +481,10 @@ textarea {
 .bi-theme-dark .bi-split-top {
   border-top: 1px solid #2F3149;
 }
-.bi-border-bottom {
+.bi-split-bottom {
   border-bottom: 1px solid #f2f4f7;
 }
-.bi-theme-dark .bi-border-bottom {
+.bi-theme-dark .bi-split-bottom {
   border-bottom: 1px solid #2F3149;
 }
 .bi-keyword-red-mark {
