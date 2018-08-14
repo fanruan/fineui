@@ -353,31 +353,62 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .loading-background {
-  background: url('images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
+  background: url('images/2x/icon/loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
+  background-size: contain;
   _background: none;
 }
 .auto-color-background {
+  background: url('images/2x/background/auto_color.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-background {
+  background: url('images/2x/background/auto_color_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-normal-disabled-background {
+  background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-background {
+  background: url('images/2x/background/trans_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_normal.png');
+  background-size: contain;
+  _background: none;
+}
+.trans-color-disabled-background {
+  background: url('images/2x/background/trans_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.auto-color-background.hack {
   background: url('images/1x/background/auto_color.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
   _background: none;
 }
-.auto-color-normal-background {
+.auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
   _background: none;
 }
-.auto-color-normal-disabled-background {
+.auto-color-normal-disabled-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
   _background: none;
 }
-.trans-color-background {
+.trans-color-background.hack {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
   _background: none;
 }
-.trans-color-disabled-background {
+.trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;

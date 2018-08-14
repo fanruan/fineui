@@ -256,25 +256,55 @@
 }
 
 .loading-background {
-  .imagePath(@icon-loading);
+  .image2xPath(@icon-loading);
 }
 
 .auto-color-background {
-  .imagePath(@background-auto-color);
+  .image2xPath(@background-auto-color);
 }
 
 .auto-color-normal-background {
-  .imagePath(@background-auto-color-normal);
+  .image2xPath(@background-auto-color-normal);
 }
 
 .auto-color-normal-disabled-background {
-  .imagePath(@background-auto-color-normal-disabled);
+  .image2xPath(@background-auto-color-normal-disabled);
 }
 
 .trans-color-background {
-  .imagePath(@background-trans-color);
+  .image2xPath(@background-trans-color);
 }
 
 .trans-color-disabled-background {
-  .imagePath(@background-trans-color-disabled);
+  .image2xPath(@background-trans-color-disabled);
+}
+
+.auto-color-background {
+  &.hack{
+    .imagePath(@background-auto-color);
+  }
+}
+
+.auto-color-normal-background {
+  &.hack{
+    .imagePath(@background-auto-color-normal);
+  }
+}
+
+.auto-color-normal-disabled-background {
+  &.hack{
+    .imagePath(@background-auto-color-normal-disabled);
+  }
+}
+
+.trans-color-background {
+  &.hack{
+    .imagePath(@background-trans-color);
+  }
+}
+
+.trans-color-disabled-background {
+  &.hack{
+    .imagePath(@background-trans-color-disabled);
+  }
 }
