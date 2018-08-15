@@ -12,9 +12,6 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #d0d4da inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #d0d4da inset;
-  -moz-box-shadow: 0px 0px 2px 1px #d0d4da inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #232e40;

@@ -10,7 +10,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -20,7 +20,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.colorContainer = BI.createWidget({
             type: "bi.htape",
-            cls: "bi-card color-chooser-trigger-content",
+            cls: "color-chooser-trigger-content",
             items: [{
                 type: "bi.icon_change_button",
                 ref: function (_ref) {
