@@ -9401,12 +9401,15 @@ jQuery.fn.offset = function( options ) {
 	do{
 		offsetLeft += el.offsetLeft;
 		offsetTop  += el.offsetTop;
-
-        offsetLeft -= el.scrollLeft;
-        offsetTop  -= el.scrollTop;
-
 		el = el.offsetParent;
 	} while( el );
+
+	var elm = elem;
+	do{
+		offsetLeft -= elm.scrollLeft || 0;
+		offsetTop  -= elm.scrollTop || 0;
+		elm = elm.parentNode;
+	} while( elm );
 	win = getWindow( doc );
 	return {
 		top: offsetTop  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),

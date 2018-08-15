@@ -4,7 +4,8 @@
   border-radius: 2px;
 }
 .bi-bubble .bubble-error {
-  background: #ffecec;
+  background-color: rgba(255, 73, 73, 0.1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1aff4949,endColorstr=#1aff4949);
   color: #ff4949;
 }
 .bi-bubble .bubble-common {
