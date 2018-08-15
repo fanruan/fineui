@@ -131,7 +131,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     }
 });
