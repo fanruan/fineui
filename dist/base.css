@@ -517,15 +517,9 @@
 .bi-combo:hover > .bi-border {
   border-color: #3685f2;
 }
-.bi-combo.disabled {
-  background-color: #F2F4F7;
-}
 .bi-combo.disabled.bi-combo-hover > .bi-border,
 .bi-combo.disabled:hover > .bi-border {
   border-color: #e8eaed;
-}
-.bi-theme-dark .bi-combo.disabled {
-  background-color: #2F3149;
 }
 .bi-theme-dark .bi-combo.disabled.bi-combo-hover > .bi-border,
 .bi-theme-dark .bi-combo.disabled:hover > .bi-border {
@@ -573,12 +567,6 @@
 .bi-search-editor .search-font {
   font-size: 16px;
 }
-.bi-search-editor.disabled {
-  background-color: #F2F4F7;
-}
-.bi-theme-dark .bi-search-editor.disabled {
-  background-color: #2F3149;
-}
 
 /*************BI.SearchEditor******************/
 .bi-small-search-editor .bi-editor {
@@ -595,12 +583,6 @@
 }
 .bi-small-search-editor .search-font {
   font-size: 18px;
-}
-.bi-small-search-editor.disabled {
-  background-color: #F2F4F7;
-}
-.bi-theme-dark .bi-small-search-editor.disabled {
-  background-color: #2F3149;
 }
 .bi-message-title {
   font-size: 14px;

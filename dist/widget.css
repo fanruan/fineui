@@ -121,12 +121,6 @@
 .bi-number-editor .pull-up-font {
   font-size: 12px;
 }
-.bi-number-editor.disabled {
-  background-color: #F2F4F7;
-}
-.bi-theme-dark .bi-number-editor.disabled {
-  background-color: #2F3149;
-}
 .bi-number-interval .number-interval-small-editor {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
