@@ -13,7 +13,7 @@ textarea {
 }
 
 .base-disabled {
-  cursor: default !important;
+  cursor: not-allowed !important;
   color: @color-bi-text-disabled !important;
   & .bi-input {
     color: @color-bi-text-disabled !important;
@@ -44,6 +44,21 @@ textarea {
 .bi-focus-shadow {
   &:focus-within, &:focus, &:hover {
     border-color: @color-bi-border-highlight;
+  }
+  &.disabled {
+    &:hover {
+      border-color: @border-color-line;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-focus-shadow {
+    &.disabled {
+      &:hover {
+        border-color: @border-color-line-theme-dark;
+      }
+    }
   }
 }
 

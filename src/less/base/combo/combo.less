@@ -16,4 +16,23 @@
       border-color: @color-bi-border-highlight;
     }
   }
+  &.disabled {
+    &.bi-combo-hover, &:hover {
+      & > .bi-border {
+        border-color: @border-color-line;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-combo {
+    &.disabled {
+      &.bi-combo-hover, &:hover {
+        & > .bi-border {
+          border-color: @border-color-line-theme-dark;
+        }
+      }
+    }
+  }
 }

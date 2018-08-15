@@ -38796,6 +38796,11 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        if (arg === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (arg === false) {
+            this.element.addClass("base-disabled disabled");
+        }
         !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
@@ -51489,7 +51494,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -51498,7 +51503,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card color-chooser-trigger-content" + (BI.isIE9Below() ? " hack" : "")
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({
@@ -51553,7 +51558,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -51563,7 +51568,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.colorContainer = BI.createWidget({
             type: "bi.htape",
-            cls: "bi-card color-chooser-trigger-content",
+            cls: "color-chooser-trigger-content",
             items: [{
                 type: "bi.icon_change_button",
                 ref: function (_ref) {

@@ -12,9 +12,6 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  box-shadow: 0px 0px 2px 1px #d0d4da inset;
-  -webkit-box-shadow: 0px 0px 2px 1px #d0d4da inset;
-  -moz-box-shadow: 0px 0px 2px 1px #d0d4da inset;
 }
 .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #232e40;
@@ -516,6 +513,14 @@
 .bi-combo.bi-combo-hover > .bi-border,
 .bi-combo:hover > .bi-border {
   border-color: #3685f2;
+}
+.bi-combo.disabled.bi-combo-hover > .bi-border,
+.bi-combo.disabled:hover > .bi-border {
+  border-color: #e8eaed;
+}
+.bi-theme-dark .bi-combo.disabled.bi-combo-hover > .bi-border,
+.bi-theme-dark .bi-combo.disabled:hover > .bi-border {
+  border-color: #3a3c53;
 }
 
 .bi-search-text-value-combo .trigger-icon-button {

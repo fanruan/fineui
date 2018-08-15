@@ -288,7 +288,7 @@ textarea {
   border: 1px solid #3a3c53;
 }
 .base-disabled {
-  cursor: default !important;
+  cursor: not-allowed !important;
   color: #9ea6b2 !important;
 }
 .base-disabled .bi-input {
@@ -316,6 +316,12 @@ textarea {
 .bi-focus-shadow:focus,
 .bi-focus-shadow:hover {
   border-color: #3685f2;
+}
+.bi-focus-shadow.disabled:hover {
+  border-color: #e8eaed;
+}
+.bi-theme-dark .bi-focus-shadow.disabled:hover {
+  border-color: #3a3c53;
 }
 .base-invalid {
   cursor: default !important;

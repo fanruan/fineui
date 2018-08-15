@@ -1318,6 +1318,7 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
             type: "bi.horizontal_auto",
             items: [{
                 type: "bi.search_text_value_combo",
+                disabled: true,
                 ref: function () {
                     combo = this;
                 },

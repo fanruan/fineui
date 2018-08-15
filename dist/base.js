@@ -3303,6 +3303,11 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        if (arg === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (arg === false) {
+            this.element.addClass("base-disabled disabled");
+        }
         !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
