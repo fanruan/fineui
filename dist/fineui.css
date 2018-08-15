@@ -317,6 +317,12 @@ textarea {
 .bi-focus-shadow:hover {
   border-color: #3685f2;
 }
+.bi-focus-shadow.disabled:hover {
+  border-color: #e8eaed;
+}
+.bi-theme-dark .bi-focus-shadow.disabled:hover {
+  border-color: #3a3c53;
+}
 .base-invalid {
   cursor: default !important;
 }
@@ -2447,6 +2453,20 @@ textarea {
 .bi-combo:hover > .bi-border {
   border-color: #3685f2;
 }
+.bi-combo.disabled {
+  background-color: #F2F4F7;
+}
+.bi-combo.disabled.bi-combo-hover > .bi-border,
+.bi-combo.disabled:hover > .bi-border {
+  border-color: #e8eaed;
+}
+.bi-theme-dark .bi-combo.disabled {
+  background-color: #2F3149;
+}
+.bi-theme-dark .bi-combo.disabled.bi-combo-hover > .bi-border,
+.bi-theme-dark .bi-combo.disabled:hover > .bi-border {
+  border-color: #3a3c53;
+}
 
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
@@ -2489,6 +2509,12 @@ textarea {
 .bi-search-editor .search-font {
   font-size: 16px;
 }
+.bi-search-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-search-editor.disabled {
+  background-color: #2F3149;
+}
 
 /*************BI.SearchEditor******************/
 .bi-small-search-editor .bi-editor {
@@ -2505,6 +2531,12 @@ textarea {
 }
 .bi-small-search-editor .search-font {
   font-size: 18px;
+}
+.bi-small-search-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-small-search-editor.disabled {
+  background-color: #2F3149;
 }
 .bi-message-title {
   font-size: 14px;
@@ -3596,6 +3628,12 @@ ul.ztree.zTreeDragUL {
 }
 .bi-number-editor .pull-up-font {
   font-size: 12px;
+}
+.bi-number-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-number-editor.disabled {
+  background-color: #2F3149;
 }
 .bi-number-interval .number-interval-small-editor {
   -moz-border-radius-topleft: 2px;

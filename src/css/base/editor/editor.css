@@ -10,6 +10,12 @@
 .bi-search-editor .search-font {
   font-size: 16px;
 }
+.bi-search-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-search-editor.disabled {
+  background-color: #2F3149;
+}
 
 /*************BI.SearchEditor******************/
 .bi-small-search-editor .bi-editor {
@@ -26,4 +32,10 @@
 }
 .bi-small-search-editor .search-font {
   font-size: 18px;
+}
+.bi-small-search-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-small-search-editor.disabled {
+  background-color: #2F3149;
 }

@@ -9,3 +9,9 @@
 .bi-number-editor .pull-up-font {
   font-size: 12px;
 }
+.bi-number-editor.disabled {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-number-editor.disabled {
+  background-color: #2F3149;
+}

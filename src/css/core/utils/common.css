@@ -36,6 +36,12 @@ textarea {
 .bi-focus-shadow:hover {
   border-color: #3685f2;
 }
+.bi-focus-shadow.disabled:hover {
+  border-color: #e8eaed;
+}
+.bi-theme-dark .bi-focus-shadow.disabled:hover {
+  border-color: #3a3c53;
+}
 .base-invalid {
   cursor: default !important;
 }
