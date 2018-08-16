@@ -298,5 +298,5 @@ module.exports = function (grunt) {
         grunt.task.run(defaultTask);
     });
     grunt.registerTask("min", ["clean", "less", "concat", "uglify", "cssmin"]);
-    grunt.registerTask("build", ["clean", "less", "concat", "uglify", "cssmin", "uglify", "concat"]);
+    grunt.registerTask("build", ["clean", "less", "cssmin", "concat", "uglify"]);
 };
