@@ -43827,6 +43827,7 @@ BI.CodeEditor = BI.inherit(BI.Single, {
     },
 
     insertParam: function (param) {
+        var o = this.options;
         var value = param;
         param = this.options.paramFormatter(param);
         var from = this.editor.getCursor();
@@ -43840,12 +43841,13 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
-        this.editor.focus();
+        !o.readOnly && this.editor.focus();
     },
 
     insertString: function (str) {
+        var o = this.options;
         this.editor.replaceSelection(str);
-        this.editor.focus();
+        !o.readOnly && this.editor.focus();
     },
 
     getValue: function () {
