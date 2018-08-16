@@ -9401,12 +9401,15 @@ jQuery.fn.offset = function( options ) {
 	do{
 		offsetLeft += el.offsetLeft;
 		offsetTop  += el.offsetTop;
-
-        offsetLeft -= el.scrollLeft;
-        offsetTop  -= el.scrollTop;
-
 		el = el.offsetParent;
 	} while( el );
+
+	var elm = elem;
+	do{
+		offsetLeft -= elm.scrollLeft || 0;
+		offsetTop  -= elm.scrollTop || 0;
+		elm = elm.parentNode;
+	} while( elm );
 	win = getWindow( doc );
 	return {
 		top: offsetTop  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),
@@ -57570,12 +57573,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);/**
+BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
+/**
  * guy
  * 异步树
  * @class BI.DisplayTree

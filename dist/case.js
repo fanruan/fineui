@@ -8941,12 +8941,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);/**
+BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
+/**
  * guy
  * 异步树
  * @class BI.DisplayTree
