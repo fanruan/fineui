@@ -46042,7 +46042,8 @@ BI.shortcut("bi.toast", BI.Toast);/**
  */
 BI.Tooltip = BI.inherit(BI.Tip, {
     _const: {
-        hgap: 10
+        hgap: 5,
+        vgap: 3
     },
 
     _defaultConfig: function () {
@@ -46096,8 +46097,9 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 20,
-                hgap: this._const.hgap
+                textHeight: 16,
+                hgap: this._const.hgap,
+                vgap: this._const.vgap
             });
         }
     },
@@ -55529,7 +55531,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title bi-header-background bi-border",
+            cls: "popup-panel-title bi-header-background",
             height: 25,
             items: [{
                 el: {
