@@ -58295,7 +58295,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
             },
             {
-                el: this.text
+                el: this.text,
+                lgap: BI.isEmptyString(o.iconCls) ? 5 : 0
             }, {
                 el: this.trigerButton,
                 width: o.triggerWidth || o.height
@@ -58312,14 +58313,17 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var o = this.options;
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
+        var textItem = this.wrapper.attr("items")[1];
         if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
             if(iconItem.width !== 0) {
                 iconItem.width = 0;
+                textItem.lgap = 5;
                 this.wrapper.resize();
             }
         }else{
             if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
                 iconItem.width = (o.iconWrapperWidth || o.height);
+                textItem.lgap = 0;
                 this.wrapper.resize();
             }
         }
@@ -68121,6 +68125,11 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -68915,6 +68924,11 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         this.storeValue = BI.deepClone(opts.value);
         this.button_group = BI.createWidget({
             type: "bi.select_list",
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             element: this,
             logic: {
                 dynamic: false

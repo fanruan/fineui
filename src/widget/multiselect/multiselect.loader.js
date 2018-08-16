@@ -33,6 +33,11 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {

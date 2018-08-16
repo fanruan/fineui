@@ -2,14 +2,27 @@
 
 .bi-slider-track {
   & .gray-track {
-    background-color: @color-bi-background-light-gray;
+    .background-color(@color-bi-background-light-black, 10%);
     .border-radius(3px);
   }
   & .blue-track {
     .border-radius(3px);
   }
   & .disabled-blue-track {
-    background-color: @background-color-dark-gray;
+    background-color: @color-bi-background-dark-gray;
     .border-radius(3px);
+  }
+}
+
+.bi-theme-dark {
+  .bi-slider-track {
+    & .gray-track {
+      .background-color(@color-bi-background-light-black-theme-dark, 10%);
+      .border-radius(3px);
+    }
+    & .disabled-blue-track {
+      background-color: @color-bi-background-dark-gray-theme-dark;
+      .border-radius(3px);
+    }
   }
 }
