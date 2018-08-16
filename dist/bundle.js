@@ -61274,7 +61274,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22
     },
 
@@ -77146,7 +77146,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
@@ -77326,7 +77326,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
