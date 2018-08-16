@@ -250,7 +250,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ["src/**/*.js", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,
@@ -278,7 +278,8 @@ module.exports = function (grunt) {
                     base: "./dist"
                 }
             }
-        }
+        },
+        clean: ["src/css", "demo/css"]
     });
 
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -288,13 +289,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-connect");
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
-    var defaultTask = ["less", "concat", "connect", "watch"];
+    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
         grunt.task.run(defaultTask);
     });
-    grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
-    grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
+    grunt.registerTask("min", ["clean", "less", "concat", "uglify", "cssmin"]);
+    grunt.registerTask("build", ["clean", "less", "concat", "uglify", "cssmin", "uglify", "concat"]);
 };
