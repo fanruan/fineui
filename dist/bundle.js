@@ -43841,12 +43841,14 @@ BI.CodeEditor = BI.inherit(BI.Single, {
         options.value = value;
         this.editor.markText(from, to, options);
         this.editor.replaceSelection(" ");
+        // BI-30202 只读状态不需要focus
         !o.readOnly && this.editor.focus();
     },
 
     insertString: function (str) {
         var o = this.options;
         this.editor.replaceSelection(str);
+        // BI-30202 只读状态不需要focus
         !o.readOnly && this.editor.focus();
     },
 
