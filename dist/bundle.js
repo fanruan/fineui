@@ -53364,7 +53364,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             items: o.items,
                             ref: function () {
                                 self.popup = this;
-                                // self.trigger.getSearcher().setAdapter(self.popup);
+                                self.trigger.getSearcher().setAdapter(self.popup);
                             },
                             listeners: [{
                                 eventName: BI.TextValueComboPopup.EVENT_CHANGE,

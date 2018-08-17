@@ -1130,69 +1130,69 @@ textarea::-webkit-scrollbar-thumb:hover {
   color: inherit;
 }
 .text-bold-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75b;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe697;');
 }
 .text-bold-font .b-font:before {
-  content: "\e75b";
+  content: "\e697";
   color: inherit;
 }
 .text-bold-font.disabled .b-font:before {
-  content: "\e75b";
+  content: "\e697";
   color: inherit;
 }
 .text-italic-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75c;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69d;');
 }
 .text-italic-font .b-font:before {
-  content: "\e75c";
+  content: "\e69d";
   color: inherit;
 }
 .text-italic-font.disabled .b-font:before {
-  content: "\e75c";
+  content: "\e69d";
   color: inherit;
 }
 .text-underline-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69c;');
 }
 .text-underline-font .b-font:before {
-  content: "\e75d";
+  content: "\e69c";
   color: inherit;
 }
 .text-underline-font.disabled .b-font:before {
-  content: "\e75d";
+  content: "\e69c";
   color: inherit;
 }
 .text-color-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75a;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe698;');
 }
 .text-color-font .b-font:before {
-  content: "\e75a";
+  content: "\e698";
   color: inherit;
 }
 .text-color-font.disabled .b-font:before {
-  content: "\e75a";
+  content: "\e698";
   color: inherit;
 }
 .text-background-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe758;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe699;');
 }
 .text-background-font .b-font:before {
-  content: "\e758";
+  content: "\e699";
   color: inherit;
 }
 .text-background-font.disabled .b-font:before {
-  content: "\e758";
+  content: "\e699";
   color: inherit;
 }
 .text-color-underline-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe75d;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe69a;');
 }
 .text-color-underline-font .b-font:before {
-  content: "\e75d";
+  content: "\e69a";
   color: inherit;
 }
 .text-color-underline-font.disabled .b-font:before {
-  content: "\e75d";
+  content: "\e69a";
   color: inherit;
 }
 .text-align-left-font .b-font {
