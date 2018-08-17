@@ -54830,6 +54830,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
+        this.text.doRedMark(this.options.keyword);
     },
 
     getValue: function () {
@@ -54863,7 +54864,8 @@ BI.ShelterEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ShelterEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.ShelterEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-BI.shortcut("bi.shelter_editor", BI.ShelterEditor);/**
+BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
+/**
  * 带标记的文本框
  * Created by GUY on 2015/8/28.
  * @class BI.SignEditor
