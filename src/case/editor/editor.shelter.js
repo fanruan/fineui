@@ -224,6 +224,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
+        this.text.doRedMark(this.options.keyword);
     },
 
     getValue: function () {
