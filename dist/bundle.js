@@ -55861,7 +55861,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-border-bottom",
+        baseCls: "bi-linear-segment bi-split-bottom",
         items: [],
         height: 29
     },
@@ -58931,7 +58931,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             }, {
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -59210,7 +59210,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -59291,7 +59291,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
             items: [{
                 el: {
                     type: "bi.linear_segment",
-                    cls: "bi-border-bottom",
+                    cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -59995,7 +59995,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
             items: [{
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -60083,7 +60083,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
             items: [{
                 el: {
                     type: "bi.linear_segment",
-                    cls: "bi-border-bottom",
+                    cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -60730,7 +60730,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     items: [{
                         el: {
                             type: "bi.layout",
-                            cls: "bi-down-list-spliter bi-border-top cursor-pointer",
+                            cls: "bi-down-list-spliter bi-split-top cursor-pointer",
                             height: 0
                         }
 
@@ -61698,7 +61698,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         textHeight: c.buttonHeight - 1,
@@ -61711,7 +61711,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
@@ -61727,7 +61727,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -61754,7 +61754,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -62471,7 +62471,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -62484,7 +62484,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
@@ -62500,7 +62500,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -62527,7 +62527,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),

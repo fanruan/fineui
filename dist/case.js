@@ -7227,7 +7227,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-border-bottom",
+        baseCls: "bi-linear-segment bi-split-bottom",
         items: [],
         height: 29
     },
