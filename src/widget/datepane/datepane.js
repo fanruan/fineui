@@ -11,7 +11,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
-                    cls: "bi-border-bottom",
+                    cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),

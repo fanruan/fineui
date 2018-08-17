@@ -4730,7 +4730,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             items: o.items,
                             ref: function () {
                                 self.popup = this;
-                                // self.trigger.getSearcher().setAdapter(self.popup);
+                                self.trigger.getSearcher().setAdapter(self.popup);
                             },
                             listeners: [{
                                 eventName: BI.TextValueComboPopup.EVENT_CHANGE,
@@ -7229,7 +7229,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-border-bottom",
+        baseCls: "bi-linear-segment bi-split-bottom",
         items: [],
         height: 29
     },
