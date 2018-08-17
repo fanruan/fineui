@@ -33,7 +33,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",

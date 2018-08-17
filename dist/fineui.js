@@ -46263,7 +46263,8 @@ BI.shortcut("bi.toast", BI.Toast);/**
  */
 BI.Tooltip = BI.inherit(BI.Tip, {
     _const: {
-        hgap: 10
+        hgap: 5,
+        vgap: 3
     },
 
     _defaultConfig: function () {
@@ -46317,8 +46318,9 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 20,
-                hgap: this._const.hgap
+                textHeight: 16,
+                hgap: this._const.hgap,
+                vgap: this._const.vgap
             });
         }
     },
@@ -55750,7 +55752,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title bi-header-background bi-border",
+            cls: "popup-panel-title bi-header-background",
             height: 25,
             items: [{
                 el: {
@@ -58293,7 +58295,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                 width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
             },
             {
-                el: this.text
+                el: this.text,
+                lgap: BI.isEmptyString(o.iconCls) ? 5 : 0
             }, {
                 el: this.trigerButton,
                 width: o.triggerWidth || o.height
@@ -58310,14 +58313,17 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var o = this.options;
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
+        var textItem = this.wrapper.attr("items")[1];
         if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
             if(iconItem.width !== 0) {
                 iconItem.width = 0;
+                textItem.lgap = 5;
                 this.wrapper.resize();
             }
         }else{
             if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
                 iconItem.width = (o.iconWrapperWidth || o.height);
+                textItem.lgap = 0;
                 this.wrapper.resize();
             }
         }
@@ -61495,7 +61501,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22
     },
 
@@ -68119,6 +68125,11 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -68913,6 +68924,11 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         this.storeValue = BI.deepClone(opts.value);
         this.button_group = BI.createWidget({
             type: "bi.select_list",
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             element: this,
             logic: {
                 dynamic: false
@@ -77367,7 +77383,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
@@ -77547,7 +77563,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
