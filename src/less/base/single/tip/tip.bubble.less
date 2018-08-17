@@ -6,8 +6,12 @@
   }
 
   & .bubble-error{
-    .background-color(@background-color-negative, 10%);
+    background: @color-bi-background-light-failure;
     color: @color-bi-text-failure;
+  }
+
+  .bi-theme-dark & .bubble-error {
+    background: @color-bi-background-dark-failure;
   }
 
   & .bubble-common{

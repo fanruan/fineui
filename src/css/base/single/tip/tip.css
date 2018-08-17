@@ -4,9 +4,11 @@
   border-radius: 2px;
 }
 .bi-bubble .bubble-error {
-  background-color: rgba(255, 73, 73, 0.1);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1aff4949,endColorstr=#1aff4949);
+  background: #ffecec;
   color: #ff4949;
+}
+.bi-theme-dark .bi-bubble .bubble-error {
+  background: #3A2940;
 }
 .bi-bubble .bubble-common {
   background: #eaf2fd;
