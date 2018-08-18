@@ -87,22 +87,10 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
-
 
     resize: function () {
         // console.log("horizontal layout do not need to resize");

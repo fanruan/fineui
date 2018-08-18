@@ -24339,6 +24339,10 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    appendFragment: function (frag) {
+        this.element.append(frag);
+    },
+
     _mountChildren: function () {
         var self = this;
         var frag = document.createDocumentFragment();
@@ -24350,7 +24354,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         });
         if (hasChild === true) {
-            this.element.append(frag);
+            this.appendFragment(frag);
         }
     },
 
@@ -30276,20 +30280,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {
@@ -30393,20 +30386,9 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {
@@ -30683,20 +30665,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     _getWrapper: function () {
@@ -31277,20 +31248,9 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -31362,20 +31322,9 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -31447,20 +31396,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -32590,22 +32528,10 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
-
 
     resize: function () {
         // console.log("horizontal layout do not need to resize");
@@ -33273,20 +33199,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return tr;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$table.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$table.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {

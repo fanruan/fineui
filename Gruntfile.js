@@ -250,7 +250,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ["src/**/*", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,
@@ -291,7 +291,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
+    var defaultTask = ["less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
