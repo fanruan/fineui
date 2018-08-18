@@ -21344,469 +21344,498 @@ _.extend(BI.OB.prototype, {
  *
  * @cfg {JSON} options 配置属性
  */
-BI.Widget = BI.inherit(BI.OB, {
-    _defaultConfig: function () {
-        return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
-            root: false,
-            tagName: "div",
-            attributes: null,
-            data: null,
 
-            tag: null,
-            disabled: false,
-            invisible: false,
-            invalid: false,
-            baseCls: "",
-            extraCls: "",
-            cls: ""
-        });
-    },
+!(function () {
+    var lazy = (typeof document !== 'undefined' &&
+        typeof document.documentMode === 'number') ||
+        (typeof navigator !== 'undefined' &&
+            typeof navigator.userAgent === 'string' &&
+            /\bEdge\/\d/.test(navigator.userAgent));
+    BI.Widget = BI.inherit(BI.OB, {
+        _defaultConfig: function () {
+            return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
+                root: false,
+                tagName: "div",
+                attributes: null,
+                data: null,
 
-    beforeInit: null,
+                tag: null,
+                disabled: false,
+                invisible: false,
+                invalid: false,
+                baseCls: "",
+                extraCls: "",
+                cls: ""
+            });
+        },
 
-    // 生命周期函数
-    beforeCreate: null,
+        beforeInit: null,
 
-    created: null,
+        // 生命周期函数
+        beforeCreate: null,
 
-    render: null,
+        created: null,
 
-    beforeMount: null,
+        render: null,
 
-    mounted: null,
+        beforeMount: null,
 
-    shouldUpdate: null,
+        mounted: null,
 
-    update: function () {
-    },
+        shouldUpdate: null,
 
-    beforeDestroy: null,
+        update: function () {
+        },
 
-    destroyed: null,
+        beforeDestroy: null,
 
-    _init: function () {
-        BI.Widget.superclass._init.apply(this, arguments);
-        this._initRoot();
-        this._initElementWidth();
-        this._initElementHeight();
-        this._initVisual();
-        this._initState();
-        if (this.beforeInit) {
-            this.__asking = true;
-            this.beforeInit(BI.bind(this._render, this));
-            if (this.__asking === true) {
-                this.__async = true;
+        destroyed: null,
+
+        _init: function () {
+            BI.Widget.superclass._init.apply(this, arguments);
+            this._initRoot();
+            this._initElementWidth();
+            this._initElementHeight();
+            this._initVisual();
+            this._initState();
+            if (this.isVisible()) {
+                if (this.beforeInit) {
+                    this.__asking = true;
+                    this.beforeInit(BI.bind(this._render, this));
+                    if (this.__asking === true) {
+                        this.__async = true;
+                    }
+                } else {
+                    this._render();
+                }
+                this.rendered = true
             }
-        } else {
-            this._render();
-        }
-    },
+            if (this._isRoot) {
+                this._mount()
+            }
+        },
 
-    _render: function () {
-        this.__asking = false;
-        this.beforeCreate && this.beforeCreate();
-        this._initElement();
-        this._initEffects();
-        this.created && this.created();
-    },
+        _render: function () {
+            this.__asking = false;
+            this.beforeCreate && this.beforeCreate();
+            this._initElement();
+            this._initEffects();
+            this.created && this.created();
+        },
 
-    /**
-     * 初始化根节点
-     * @private
-     */
-    _initRoot: function () {
-        var o = this.options;
-        this.widgetName = o.widgetName || BI.uniqueId("widget");
-        this._isRoot = o.root;
-        if (BI.isWidget(o.element)) {
-            if (o.element instanceof BI.Widget) {
-                this._parent = o.element;
-                this._parent.addWidget(this.widgetName, this);
-            } else {
+        /**
+         * 初始化根节点
+         * @private
+         */
+        _initRoot: function () {
+            var o = this.options;
+            this.widgetName = o.widgetName || BI.uniqueId("widget");
+            this._isRoot = o.root;
+            if (BI.isWidget(o.element)) {
+                if (o.element instanceof BI.Widget) {
+                    this._parent = o.element;
+                    this._parent.addWidget(this.widgetName, this);
+                } else {
+                    this._isRoot = true;
+                }
+                this.element = this.options.element.element;
+            } else if (o.element) {
+                // if (o.root !== true) {
+                //     throw new Error("root is a required property");
+                // }
+                this.element = $(o.element);
                 this._isRoot = true;
+            } else {
+                this.element = $(document.createElement(o.tagName));
             }
-            this.element = this.options.element.element;
-        } else if (o.element) {
-            // if (o.root !== true) {
-            //     throw new Error("root is a required property");
-            // }
-            this.element = $(o.element);
-            this._isRoot = true;
-        } else {
-            this.element = $(document.createElement(o.tagName));
-        }
-        this.element._isWidget = true;
-        if (o.baseCls || o.extraCls || o.cls) {
-            this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
-        }
-        if (o.attributes) {
-            this.element.attr(o.attributes);
-        }
-        if (o.data) {
-            this.element.data(o.data);
-        }
-        this._children = {};
-    },
-
-    _initElementWidth: function () {
-        var o = this.options;
-        if (BI.isWidthOrHeight(o.width)) {
-            this.element.css("width", o.width);
-        }
-    },
-
-    _initElementHeight: function () {
-        var o = this.options;
-        if (BI.isWidthOrHeight(o.height)) {
-            this.element.css("height", o.height);
-        }
-    },
-
-    _initVisual: function () {
-        var o = this.options;
-        if (o.invisible) {
-            // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
-            this.element.css("display", "none");
-        }
-    },
-
-    _initEffects: function () {
-        var o = this.options;
-        if (o.disabled || o.invalid) {
-            if (this.options.disabled) {
-                this.setEnable(false);
+            this.element._isWidget = true;
+            if (o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
             }
-            if (this.options.invalid) {
-                this.setValid(false);
+            if (o.attributes) {
+                this.element.attr(o.attributes);
             }
-        }
-    },
+            if (o.data) {
+                this.element.data(o.data);
+            }
+            this._children = {};
+        },
 
-    _initState: function () {
-        this._isMounted = false;
-    },
+        _initElementWidth: function () {
+            var o = this.options;
+            if (BI.isWidthOrHeight(o.width)) {
+                this.element.css("width", o.width);
+            }
+        },
 
-    _initElement: function () {
-        var self = this;
-        var els = this.render && this.render();
-        if (BI.isPlainObject(els)) {
-            els = [els];
-        }
-        if (BI.isArray(els)) {
-            BI.each(els, function (i, el) {
-                BI.createWidget(el, {
-                    element: self
+        _initElementHeight: function () {
+            var o = this.options;
+            if (BI.isWidthOrHeight(o.height)) {
+                this.element.css("height", o.height);
+            }
+        },
+
+        _initVisual: function () {
+            var o = this.options;
+            if (o.invisible) {
+                // 用display属性做显示和隐藏，否则jquery会在显示时将display设为block会覆盖掉display:flex属性
+                this.element.css("display", "none");
+            }
+        },
+
+        _initEffects: function () {
+            var o = this.options;
+            if (o.disabled || o.invalid) {
+                if (this.options.disabled) {
+                    this.setEnable(false);
+                }
+                if (this.options.invalid) {
+                    this.setValid(false);
+                }
+            }
+        },
+
+        _initState: function () {
+            this._isMounted = false;
+        },
+
+        _initElement: function () {
+            var self = this;
+            var els = this.render && this.render();
+            if (BI.isPlainObject(els)) {
+                els = [els];
+            }
+            if (BI.isArray(els)) {
+                BI.each(els, function (i, el) {
+                    BI.createWidget(el, {
+                        element: self
+                    });
                 });
-            });
-        }
-        // if (this._isRoot === true || !(this instanceof BI.Layout)) {
-        this._mount();
-        // }
-    },
-
-    _setParent: function (parent) {
-        this._parent = parent;
-    },
-
-    _mount: function () {
-        var self = this;
-        var isMounted = this._isMounted;
-        if (isMounted || !this.isVisible() || this.__asking === true) {
-            return;
-        }
-        if (this._isRoot === true) {
-            isMounted = true;
-        } else if (this._parent && this._parent._isMounted === true) {
-            isMounted = true;
-        }
-        if (!isMounted) {
-            return;
-        }
-        this.beforeMount && this.beforeMount();
-        this._isMounted = true;
-        this._mountChildren && this._mountChildren();
-        BI.each(this._children, function (i, widget) {
-            !self.isEnabled() && widget._setEnable(false);
-            !self.isValid() && widget._setValid(false);
-            widget._mount && widget._mount();
-        });
-        this.mounted && this.mounted();
-    },
-
-    _mountChildren: null,
-
-    isMounted: function () {
-        return this._isMounted;
-    },
-
-    setWidth: function (w) {
-        this.options.width = w;
-        this._initElementWidth();
-    },
-
-    setHeight: function (h) {
-        this.options.height = h;
-        this._initElementHeight();
-    },
-
-    _setEnable: function (enable) {
-        if (enable === true) {
-            this.options.disabled = false;
-        } else if (enable === false) {
-            this.options.disabled = true;
-        }
-        // 递归将所有子组件使能
-        BI.each(this._children, function (i, child) {
-            !child._manualSetEnable && child._setEnable && child._setEnable(enable);
-        });
-    },
-
-    _setValid: function (valid) {
-        if (valid === true) {
-            this.options.invalid = false;
-        } else if (valid === false) {
-            this.options.invalid = true;
-        }
-        // 递归将所有子组件使有效
-        BI.each(this._children, function (i, child) {
-            !child._manualSetValid && child._setValid && child._setValid(valid);
-        });
-    },
-
-    _setVisible: function (visible) {
-        if (visible === true) {
-            this.options.invisible = false;
-        } else if (visible === false) {
-            this.options.invisible = true;
-        }
-    },
-
-    setEnable: function (enable) {
-        this._manualSetEnable = true;
-        this._setEnable(enable);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-    },
-
-    setVisible: function (visible) {
-        this._setVisible(visible);
-        if (visible === true) {
-            // 用this.element.show()会把display属性改成block
-            this.element.css("display", "");
-            this._mount();
-        } else if (visible === false) {
-            this.element.css("display", "none");
-        }
-        this.fireEvent(BI.Events.VIEW, visible);
-    },
-
-    setValid: function (valid) {
-        this._manualSetValid = true;
-        this._setValid(valid);
-        if (valid === true) {
-            this.element.removeClass("base-invalid invalid");
-        } else if (valid === false) {
-            this.element.addClass("base-invalid invalid");
-        }
-    },
-
-    doBehavior: function () {
-        var args = arguments;
-        // 递归将所有子组件使有效
-        BI.each(this._children, function (i, child) {
-            child.doBehavior && child.doBehavior.apply(child, args);
-        });
-    },
-
-    getWidth: function () {
-        return this.options.width;
-    },
-
-    getHeight: function () {
-        return this.options.height;
-    },
-
-    isValid: function () {
-        return !this.options.invalid;
-    },
-
-    addWidget: function (name, widget) {
-        var self = this;
-        if (name instanceof BI.Widget) {
-            widget = name;
-            name = widget.getName();
-        }
-        if (BI.isKey(name)) {
-            name = name + "";
-        }
-        name = name || widget.getName() || BI.uniqueId("widget");
-        if (this._children[name]) {
-            throw new Error("name has already been existed");
-        }
-        widget._setParent && widget._setParent(this);
-        widget.on(BI.Events.DESTROY, function () {
-            BI.remove(self._children, this);
-        });
-        return (this._children[name] = widget);
-    },
-
-    getWidgetByName: function (name) {
-        if (!BI.isKey(name) || name === this.getName()) {
-            return this;
-        }
-        name = name + "";
-        var widget = void 0, other = {};
-        BI.any(this._children, function (i, wi) {
-            if (i === name) {
-                widget = wi;
-                return true;
             }
-            other[i] = wi;
-        });
-        if (!widget) {
-            BI.any(other, function (i, wi) {
-                return (widget = wi.getWidgetByName(i));
+            // if (this._isRoot === true || !(this instanceof BI.Layout)) {
+            this._mount();
+            // }
+        },
+
+        _setParent: function (parent) {
+            this._parent = parent;
+        },
+
+        _mount: function () {
+            var self = this;
+            var isMounted = this._isMounted;
+            if (this._isMounting || isMounted || !this.isVisible() || this.__asking === true) {
+                return;
+            }
+            if (this._isRoot === true) {
+                isMounted = true;
+            } else if (this._parent && this._parent._isMounted === true) {
+                isMounted = true;
+            }
+            if (!isMounted) {
+                return;
+            }
+            this._isMounting = true
+            if (!this.rendered) {
+                if (this.beforeInit) {
+                    this.__asking = true;
+                    this.beforeInit(BI.bind(this._render, this));
+                    if (this.__asking === true) {
+                        this.__async = true;
+                    }
+                } else {
+                    this._render();
+                }
+            }
+
+            this.beforeMount && this.beforeMount();
+            this._isMounted = true;
+            lazy && this._mountChildren && this._mountChildren();
+            BI.each(this._children, function (i, widget) {
+                !self.isEnabled() && widget._setEnable(false);
+                !self.isValid() && widget._setValid(false);
+                widget._mount && widget._mount();
             });
-        }
-        return widget;
-    },
+            !lazy && this._mountChildren && this._mountChildren();
+            this.mounted && this.mounted();
+            this._isMounting = false
+        },
 
-    removeWidget: function (nameOrWidget) {
-        var self = this;
-        if (BI.isWidget(nameOrWidget)) {
-            BI.remove(this._children, nameOrWidget);
-        } else {
-            delete this._children[nameOrWidget];
-        }
-    },
+        _mountChildren: null,
 
-    hasWidget: function (name) {
-        return this._children[name] != null;
-    },
+        isMounted: function () {
+            return this._isMounted;
+        },
 
-    getName: function () {
-        return this.widgetName;
-    },
+        setWidth: function (w) {
+            this.options.width = w;
+            this._initElementWidth();
+        },
 
-    setTag: function (tag) {
-        this.options.tag = tag;
-    },
+        setHeight: function (h) {
+            this.options.height = h;
+            this._initElementHeight();
+        },
 
-    getTag: function () {
-        return this.options.tag;
-    },
-
-    attr: function (key, value) {
-        var self = this;
-        if (BI.isPlainObject(key)) {
-            BI.each(key, function (k, v) {
-                self.attr(k, v);
+        _setEnable: function (enable) {
+            if (enable === true) {
+                this.options.disabled = false;
+            } else if (enable === false) {
+                this.options.disabled = true;
+            }
+            // 递归将所有子组件使能
+            BI.each(this._children, function (i, child) {
+                !child._manualSetEnable && child._setEnable && child._setEnable(enable);
             });
-            return;
+        },
+
+        _setValid: function (valid) {
+            if (valid === true) {
+                this.options.invalid = false;
+            } else if (valid === false) {
+                this.options.invalid = true;
+            }
+            // 递归将所有子组件使有效
+            BI.each(this._children, function (i, child) {
+                !child._manualSetValid && child._setValid && child._setValid(valid);
+            });
+        },
+
+        _setVisible: function (visible) {
+            if (visible === true) {
+                this.options.invisible = false;
+            } else if (visible === false) {
+                this.options.invisible = true;
+            }
+        },
+
+        setEnable: function (enable) {
+            this._manualSetEnable = true;
+            this._setEnable(enable);
+            if (enable === true) {
+                this.element.removeClass("base-disabled disabled");
+            } else if (enable === false) {
+                this.element.addClass("base-disabled disabled");
+            }
+        },
+
+        setVisible: function (visible) {
+            this._setVisible(visible);
+            if (visible === true) {
+                // 用this.element.show()会把display属性改成block
+                this.element.css("display", "");
+                this._mount();
+            } else if (visible === false) {
+                this.element.css("display", "none");
+            }
+            this.fireEvent(BI.Events.VIEW, visible);
+        },
+
+        setValid: function (valid) {
+            this._manualSetValid = true;
+            this._setValid(valid);
+            if (valid === true) {
+                this.element.removeClass("base-invalid invalid");
+            } else if (valid === false) {
+                this.element.addClass("base-invalid invalid");
+            }
+        },
+
+        doBehavior: function () {
+            var args = arguments;
+            // 递归将所有子组件使有效
+            BI.each(this._children, function (i, child) {
+                child.doBehavior && child.doBehavior.apply(child, args);
+            });
+        },
+
+        getWidth: function () {
+            return this.options.width;
+        },
+
+        getHeight: function () {
+            return this.options.height;
+        },
+
+        isValid: function () {
+            return !this.options.invalid;
+        },
+
+        addWidget: function (name, widget) {
+            var self = this;
+            if (name instanceof BI.Widget) {
+                widget = name;
+                name = widget.getName();
+            }
+            if (BI.isKey(name)) {
+                name = name + "";
+            }
+            name = name || widget.getName() || BI.uniqueId("widget");
+            if (this._children[name]) {
+                throw new Error("name has already been existed");
+            }
+            widget._setParent && widget._setParent(this);
+            widget.on(BI.Events.DESTROY, function () {
+                BI.remove(self._children, this);
+            });
+            return (this._children[name] = widget);
+        },
+
+        getWidgetByName: function (name) {
+            if (!BI.isKey(name) || name === this.getName()) {
+                return this;
+            }
+            name = name + "";
+            var widget = void 0, other = {};
+            BI.any(this._children, function (i, wi) {
+                if (i === name) {
+                    widget = wi;
+                    return true;
+                }
+                other[i] = wi;
+            });
+            if (!widget) {
+                BI.any(other, function (i, wi) {
+                    return (widget = wi.getWidgetByName(i));
+                });
+            }
+            return widget;
+        },
+
+        removeWidget: function (nameOrWidget) {
+            var self = this;
+            if (BI.isWidget(nameOrWidget)) {
+                BI.remove(this._children, nameOrWidget);
+            } else {
+                delete this._children[nameOrWidget];
+            }
+        },
+
+        hasWidget: function (name) {
+            return this._children[name] != null;
+        },
+
+        getName: function () {
+            return this.widgetName;
+        },
+
+        setTag: function (tag) {
+            this.options.tag = tag;
+        },
+
+        getTag: function () {
+            return this.options.tag;
+        },
+
+        attr: function (key, value) {
+            var self = this;
+            if (BI.isPlainObject(key)) {
+                BI.each(key, function (k, v) {
+                    self.attr(k, v);
+                });
+                return;
+            }
+            if (BI.isNotNull(value)) {
+                return this.options[key] = value;
+            }
+            return this.options[key];
+        },
+
+        getText: function () {
+
+        },
+
+        setText: function (text) {
+
+        },
+
+        getValue: function () {
+
+        },
+
+        setValue: function (value) {
+
+        },
+
+        isEnabled: function () {
+            return !this.options.disabled;
+        },
+
+        isVisible: function () {
+            return !this.options.invisible;
+        },
+
+        disable: function () {
+            this.setEnable(false);
+        },
+
+        enable: function () {
+            this.setEnable(true);
+        },
+
+        valid: function () {
+            this.setValid(true);
+        },
+
+        invalid: function () {
+            this.setValid(false);
+        },
+
+        invisible: function () {
+            this.setVisible(false);
+        },
+
+        visible: function () {
+            this.setVisible(true);
+        },
+
+        __d: function () {
+            this.beforeDestroy && this.beforeDestroy();
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this._parent = null;
+            this._isMounted = false;
+            this.destroyed && this.destroyed();
+        },
+
+        _unMount: function () {
+            this.__d();
+            this.fireEvent(BI.Events.UNMOUNT);
+            this.purgeListeners();
+        },
+
+        isolate: function () {
+            if (this._parent) {
+                this._parent.removeWidget(this);
+            }
+            BI.DOM.hang([this]);
+        },
+
+        empty: function () {
+            BI.each(this._children, function (i, widget) {
+                widget && widget._unMount && widget._unMount();
+            });
+            this._children = {};
+            this.element.empty();
+        },
+
+        _destroy: function () {
+            this.__d();
+            this.element.destroy();
+            this.purgeListeners();
+        },
+
+        destroy: function () {
+            this.__d();
+            this.element.destroy();
+            this.fireEvent(BI.Events.DESTROY);
+            this._purgeRef();
+            this.purgeListeners();
         }
-        if (BI.isNotNull(value)) {
-            return this.options[key] = value;
-        }
-        return this.options[key];
-    },
-
-    getText: function () {
-
-    },
-
-    setText: function (text) {
-
-    },
-
-    getValue: function () {
-
-    },
-
-    setValue: function (value) {
-
-    },
-
-    isEnabled: function () {
-        return !this.options.disabled;
-    },
-
-    isVisible: function () {
-        return !this.options.invisible;
-    },
-
-    disable: function () {
-        this.setEnable(false);
-    },
-
-    enable: function () {
-        this.setEnable(true);
-    },
-
-    valid: function () {
-        this.setValid(true);
-    },
-
-    invalid: function () {
-        this.setValid(false);
-    },
-
-    invisible: function () {
-        this.setVisible(false);
-    },
-
-    visible: function () {
-        this.setVisible(true);
-    },
-
-    __d: function () {
-        this.beforeDestroy && this.beforeDestroy();
-        BI.each(this._children, function (i, widget) {
-            widget && widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this._parent = null;
-        this._isMounted = false;
-        this.destroyed && this.destroyed();
-    },
-
-    _unMount: function () {
-        this.__d();
-        this.fireEvent(BI.Events.UNMOUNT);
-        this.purgeListeners();
-    },
-
-    isolate: function () {
-        if (this._parent) {
-            this._parent.removeWidget(this);
-        }
-        BI.DOM.hang([this]);
-    },
-
-    empty: function () {
-        BI.each(this._children, function (i, widget) {
-            widget && widget._unMount && widget._unMount();
-        });
-        this._children = {};
-        this.element.empty();
-    },
-
-    _destroy: function () {
-        this.__d();
-        this.element.destroy();
-        this.purgeListeners();
-    },
-
-    destroy: function () {
-        this.__d();
-        this.element.destroy();
-        this.fireEvent(BI.Events.DESTROY);
-        this._purgeRef();
-        this.purgeListeners();
-    }
-});(function () {
+    });
+})();(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
@@ -81324,7 +81353,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
-    function initWatch (vm, watch) {
+    function initWatch(vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -81338,7 +81367,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         }
     }
 
-    function createWatcher (vm, keyOrFn, handler) {
+    function createWatcher(vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
             store: vm.store
         });
@@ -81347,24 +81376,24 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     var target = null;
     var targetStack = [];
 
-    function pushTarget (_target) {
+    function pushTarget(_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
-    function popTarget () {
+    function popTarget() {
         Fix.Model.target = target = targetStack.pop();
     }
 
     var context = null;
     var contextStack = [];
 
-    function pushContext (_context) {
+    function pushContext(_context) {
         if (context) contextStack.push(context);
         Fix.Model.context = context = _context;
     }
 
-    function popContext () {
+    function popContext() {
         Fix.Model.context = context = contextStack.pop();
     }
 
@@ -81385,7 +81414,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         }, options);
     };
 
-    function findStore (widget) {
+    function findStore(widget) {
         if (target != null) {
             return target;
         }
@@ -81431,12 +81460,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         };
     });
 
-    var _init = BI.Widget.prototype._init;
-    BI.Widget.prototype._init = function () {
-        var self = this;
+    function createStore() {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (!this._storeCreated && window.Fix && this._store && this.isVisible()) {
             var store = findStore(this.options.context || this.options.element);
+            this._storeCreated = true;
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -81453,6 +81481,13 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             }
             needPop = true;
         }
+        return needPop;
+    }
+
+    var _init = BI.Widget.prototype._init;
+    BI.Widget.prototype._init = function () {
+        var self = this;
+        var needPop = createStore.call(this);
         _init.apply(this, arguments);
         needPop && popTarget();
     };
@@ -81491,6 +81526,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     _.each(["_mount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
+            createStore.call(this);
             this.store && pushTarget(this.store);
             var res = old.apply(this, arguments);
             this.store && popTarget();
