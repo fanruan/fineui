@@ -21572,6 +21572,7 @@ _.extend(BI.OB.prototype, {
         (typeof navigator !== "undefined" &&
             typeof navigator.userAgent === "string" &&
             /\bEdge\/\d/.test(navigator.userAgent));
+
     BI.Widget = BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -21780,6 +21781,7 @@ _.extend(BI.OB.prototype, {
             lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
             this._isMounting = false;
+            return true;
         },
 
         _mountChildren: null,
