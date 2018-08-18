@@ -7,10 +7,10 @@
  */
 
 !(function () {
-    var lazy = (typeof document !== 'undefined' &&
-        typeof document.documentMode === 'number') ||
-        (typeof navigator !== 'undefined' &&
-            typeof navigator.userAgent === 'string' &&
+    var lazy = (typeof document !== "undefined" &&
+        typeof document.documentMode === "number") ||
+        (typeof navigator !== "undefined" &&
+            typeof navigator.userAgent === "string" &&
             /\bEdge\/\d/.test(navigator.userAgent));
     BI.Widget = BI.inherit(BI.OB, {
         _defaultConfig: function () {
@@ -60,6 +60,7 @@
             this._initVisual();
             this._initState();
             if (this.isVisible()) {
+                this.rendered = true;
                 if (this.beforeInit) {
                     this.__asking = true;
                     this.beforeInit(BI.bind(this._render, this));
@@ -69,10 +70,9 @@
                 } else {
                     this._render();
                 }
-                this.rendered = true
             }
             if (this._isRoot) {
-                this._mount()
+                this._mount();
             }
         },
 
@@ -196,7 +196,7 @@
             if (!isMounted) {
                 return;
             }
-            this._isMounting = true
+            this._isMounting = true;
             if (!this.rendered) {
                 if (this.beforeInit) {
                     this.__asking = true;
@@ -219,7 +219,7 @@
             });
             lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
-            this._isMounting = false
+            this._isMounting = false;
         },
 
         _mountChildren: null,

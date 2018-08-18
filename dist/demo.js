@@ -965,7 +965,79 @@ BI.shortcut("demo.toast", Demo.Toast);Demo.Func = BI.inherit(BI.Widget, {
         baseCls: "demo-func"
     },
 
+    mounted: function () {
+        this.partTree.stroke({
+            keyword: "1"
+        });
+    },
+
     render: function () {
+        var self = this;
+        return {
+            type: "bi.vtape",
+            items: [{
+                type: "bi.label",
+                height: 50,
+                text: "先初始化一份数据，然后再异步获取数据的树"
+            }, {
+                type: "bi.part_tree",
+                ref: function (_ref) {
+                    self.partTree = _ref;
+                },
+                paras: {
+                    selectedValues: {"1": {}, "2": {"1": {}}}
+                },
+                itemsCreator: function (op, callback) {
+                    if (op.type === BI.TreeView.REQ_TYPE_INIT_DATA) {
+                        callback({
+                            items: [{
+                                id: "1",
+                                text: 1,
+                                isParent: true,
+                                open: true
+                            }, {
+                                id: "11",
+                                pId: "1",
+                                text: 11,
+                                isParent: true,
+                                open: true
+                            }, {
+                                id: "111",
+                                pId: "11",
+                                text: 111,
+                                isParent: true
+                            }, {
+                                id: "2",
+                                text: 2
+                            }, {
+                                id: "3",
+                                text: 3
+                            }],
+                            hasNext: BI.isNull(op.id)
+                        });
+                        return;
+                    }
+                    callback({
+                        items: [{
+                            id: (op.id || "") + "1",
+                            pId: op.id,
+                            text: 1,
+                            isParent: true
+                        }, {
+                            id: (op.id || "") + "2",
+                            pId: op.id,
+                            text: 2
+                        }, {
+                            id: (op.id || "") + "3",
+                            pId: op.id,
+                            text: 3
+                        }],
+                        hasNext: BI.isNull(op.id)
+                    });
+                }
+            }]
+        };
+
     }
 });
 BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
@@ -974,7 +1046,9 @@ BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this.syncTree.stroke();
+        this.syncTree.stroke({
+            keyword: "1"
+        });
     },
 
     render: function () {
@@ -991,7 +1065,7 @@ BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     self.syncTree = _ref;
                 },
                 paras: {
-                    selectedValues: {"_0": {}, "_5": {"_5_0": {}}}
+                    selectedValues: {"1": {}, "2": {"1": {}}}
                 },
                 itemsCreator: function (op, callback) {
                     callback({
@@ -2867,143 +2941,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-face"
-    },
-
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.absolute",
-            items: [{
-                el: {
-                    type: "bi.sequence_table",
-                    ref: function () {
-                        self.table = this;
-                    },
-                    isNeedFreeze: null,
-                    isNeedMerge: false,
-                    summaryCellStyleGetter: function (isLast) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    sequenceCellStyleGetter: function (index) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    headerCellStyleGetter: function () {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    el: {
-                        type: "bi.adaptive_table",
-                        el: {
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.grid_table"
-                            }
-                        }
-                    },
-                    sequence: {
-                        type: "bi.sequence_table_list_number",
-                        pageSize: 100,
-                        sequenceHeaderCreator: function () {
-                            return {
-                                type: "bi.normal_sequence_header_cell",
-                                styleGetter: function () {
-                                    return {
-                                        background: "rgb(4, 177, 194)",
-                                        color: "#ffffff",
-                                        fontWeight: "bold"
-                                    };
-                                }
-                            };
-                        }
-                    },
-                    itemsCreator: function (op, populate) {
-                    }
-                },
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        };
-    },
-
-    mounted: function () {
-        var self = this;
-        if (BI.isNull(BI.isExpanded)) {
-            BI.isExpanded = false;
-        } else if (!BI.isExpanded) {
-            TABLE_ITEMS = this._expandData(TABLE_ITEMS, 3);
-            TABLE_HEADER = this._expandHeadData(TABLE_HEADER, 3);
-            BI.isExpanded = true;
-        }
-        this._resizeHandler = BI.debounce(function () {
-            var width = self.element.width(), height = self.element.height();
-            if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
-                self.table.setWidth(width);
-                self.table.setHeight(height);
-                self.table.populate();
-            }
-        }, 0);
-        BI.ResizeDetector.addResizeListener(this, function () {
-            self._resizeHandler();
-        });
-        this.table.setWidth(this.element.width());
-        this.table.setHeight(this.element.height());
-        this.table.attr("columnSize", BI.makeArray(TABLE_HEADER[0].length, ""));
-        this.table.attr("minColumnSize", BI.makeArray(TABLE_HEADER[0].length, 60));
-        this.table.attr("isNeedFreeze", true);
-        this.table.attr("freezeCols", []);
-        this.table.attr("showSequence", true);
-        this.table.attr("headerRowSize", 15);
-        this.table.attr("rowSize", 15);
-        this.table.populate(TABLE_ITEMS, TABLE_HEADER);
-    },
-    
-    _expandData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var m = 0; m < times - 1; m++) {
-            BI.each(items, function (i, row) {
-                copy.push(row);
-            });
-        }
-        
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n % 100], function (j, item) {
-                    copy[n].push(item);
-                });
-            }
-        }
-        return copy;
-    },
-
-    _expandHeadData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n], function (j, item) {
-                    copy[n].push(item);
-                });
-            }
-        }
-        return copy;
-    }
-});
-BI.shortcut("demo.large_table", Demo.Face);/**
+BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);/**
  * created by young
  * 默认风格表格——表头
  */
@@ -3553,10 +3491,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 100000,
     text: "自定义一棵树",
     value: "demo.platform_level_tree"
-}, {
-    pId: 100000,
-    text: "大表格",
-    value: "demo.large_table"
 }, {
     pId: 100000,
     text: "可以排序的树",
