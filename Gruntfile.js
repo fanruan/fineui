@@ -8,14 +8,14 @@ module.exports = function (grunt) {
                 separator: ""
             },
             polyfillJs: {
-                src: ["src/polyfill/**/*.js"],
+                src: ["src/core/foundation.js", "src/polyfill/**/*.js"],
                 dest: "dist/polyfill.js"
             },
             coreJs: {
                 src: [
+                    "src/core/foundation.js",
                     "src/core/jquery.js",
                     "src/core/lodash.js",
-                    "src/core/foundation.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
                     "src/core/ob.js",
@@ -147,8 +147,8 @@ module.exports = function (grunt) {
             },
             utilsJs: {
                 src: [
-                    "src/core/lodash.js",
                     "src/core/foundation.js",
+                    "src/core/lodash.js",
                     "src/core/var.js",
                     "src/core/proto/array.js",
                     "src/core/proto/number.js",

@@ -1,4 +1,22 @@
-/*!
+/**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
+}/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -19704,24 +19722,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
 }.call(this));
 /**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-var _global;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (_global.BI == null) {
-    _global.BI = {};
-}/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
