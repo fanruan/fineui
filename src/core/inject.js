@@ -2,7 +2,7 @@
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -10,7 +10,7 @@
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -18,7 +18,7 @@
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -26,7 +26,7 @@
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -34,7 +34,7 @@
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -104,7 +104,7 @@
                                 try {
                                     bfns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -118,7 +118,7 @@
                                 try {
                                     afns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -182,7 +182,7 @@
                 try {
                     act(event, config);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         },
@@ -192,7 +192,7 @@
                 try {
                     act.apply(null, args);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         }

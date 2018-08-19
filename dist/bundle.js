@@ -21873,7 +21873,7 @@ _.extend(BI.OB.prototype, {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
-            console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
     };
@@ -28273,7 +28273,7 @@ BI.extend(BI.DOM, {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -28281,7 +28281,7 @@ BI.extend(BI.DOM, {
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -28289,7 +28289,7 @@ BI.extend(BI.DOM, {
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -28297,7 +28297,7 @@ BI.extend(BI.DOM, {
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -28305,7 +28305,7 @@ BI.extend(BI.DOM, {
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -28375,7 +28375,7 @@ BI.extend(BI.DOM, {
                                 try {
                                     bfns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -28389,7 +28389,7 @@ BI.extend(BI.DOM, {
                                 try {
                                     afns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -28453,7 +28453,7 @@ BI.extend(BI.DOM, {
                 try {
                     act(event, config);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         },
@@ -28463,7 +28463,7 @@ BI.extend(BI.DOM, {
                 try {
                     act.apply(null, args);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         }
