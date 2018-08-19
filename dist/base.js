@@ -72,7 +72,7 @@
 
 
     function handler (event) {
-        var orgEvent   = event || window.event,
+        var orgEvent   = event || _global.event,
             args       = slice.call(arguments, 1),
             delta      = 0,
             deltaX     = 0,
@@ -1720,8 +1720,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + _global.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + _global.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return "&" + param;
         }
@@ -9211,7 +9211,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -9322,7 +9322,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || window.event);}
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
                         }
                         if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
@@ -9342,7 +9342,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 iframe.onload = onload;
                 iframe.onerror = function (event) {
                     if (isFunction(handler.onerror)) {
-                        handler.onerror(rpe, event || window.event);
+                        handler.onerror(rpe, event || _global.event);
                     }
                 };
                 iframe.onreadystatechange = function () {
@@ -9364,7 +9364,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         });
                     }
                 };
-                form.setAttribute("action", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName));
+                form.setAttribute("action", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName));
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);

@@ -4,6 +4,16 @@
 /**
  * 初始化BI对象
  */
-if (window.BI == null) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
 }

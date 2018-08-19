@@ -1,6 +1,6 @@
 // 修复ie9下sort方法的bug
-!function (window) {
-    var ua = window.navigator.userAgent.toLowerCase(),
+!function (_global) {
+    var ua = _global.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
@@ -25,7 +25,7 @@
                 return this;
             }
             return _sort.call(this);
-            
+
         };
     }
-}(window);
+}(_global);

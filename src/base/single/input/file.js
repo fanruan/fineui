@@ -153,7 +153,7 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -264,7 +264,7 @@
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || window.event);}
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
                         }
                         if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
@@ -284,7 +284,7 @@
                 iframe.onload = onload;
                 iframe.onerror = function (event) {
                     if (isFunction(handler.onerror)) {
-                        handler.onerror(rpe, event || window.event);
+                        handler.onerror(rpe, event || _global.event);
                     }
                 };
                 iframe.onreadystatechange = function () {
@@ -306,7 +306,7 @@
                         });
                     }
                 };
-                form.setAttribute("action", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName));
+                form.setAttribute("action", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName));
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);

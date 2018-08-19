@@ -99,7 +99,7 @@ if (!Array.prototype.lastIndexOf) {
  * Created by wang on 15/6/23.
  */
 // 解决console未定义问题 guy
-window.console = window.console || (function () {
+_global.console = _global.console || (function () {
     var c = {};
     c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
             = c.clear = c.exception = c.trace = c.assert = function () {
@@ -109,7 +109,7 @@ window.console = window.console || (function () {
 /*
  * 前端缓存
  */
-window.localStorage || (window.localStorage = {
+_global.localStorage || (_global.localStorage = {
     items: {},
     setItem: function (k, v) {
         BI.Cache.addCookie(k, v);
@@ -190,8 +190,8 @@ if(!Date.now) {
         this.set = {};
     };
 }// 修复ie9下sort方法的bug
-!function (window) {
-    var ua = window.navigator.userAgent.toLowerCase(),
+!function (_global) {
+    var ua = _global.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
@@ -216,7 +216,7 @@ if(!Date.now) {
                 return this;
             }
             return _sort.call(this);
-            
+
         };
     }
-}(window);
+}(_global);

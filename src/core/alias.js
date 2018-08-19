@@ -1,6 +1,16 @@
 (function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -528,7 +538,7 @@
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -581,7 +591,7 @@
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
-        return window.encodeURIComponent(url);
+        return _global.encodeURIComponent(url);
     };
 
     BI.decodeURIComponent = function (url) {
@@ -593,7 +603,7 @@
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
-        return window.decodeURIComponent(url);
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {

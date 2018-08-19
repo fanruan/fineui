@@ -19709,16 +19709,35 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 /**
  * 初始化BI对象
  */
-if (window.BI == null) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
 }/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -20446,11 +20465,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -21196,7 +21215,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
+    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -22850,14 +22869,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
     if (!attachEvent) {
         var requestFrame = (function () {
-            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                function (fn) { return window.setTimeout(fn, 20); };
+            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
+                function (fn) { return _global.setTimeout(fn, 20); };
             return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                window.clearTimeout;
+            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
+                _global.clearTimeout;
             return function (id) { return cancel(id); };
         })();
 
@@ -23325,7 +23344,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         return Math.floor(node / 2);
     };
 
-    var Int32Array = window.Int32Array || function (size) {
+    var Int32Array = _global.Int32Array || function (size) {
         var xs = [];
         for (var i = size - 1; i >= 0; --i) {
             xs[i] = 0;
@@ -25007,8 +25026,18 @@ BI.ShowAction = BI.inherit(BI.Action, {
         callback && callback();
     }
 });(function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -25536,7 +25565,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -25589,7 +25618,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
-        return window.encodeURIComponent(url);
+        return _global.encodeURIComponent(url);
     };
 
     BI.decodeURIComponent = function (url) {
@@ -25601,7 +25630,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
-        return window.decodeURIComponent(url);
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {
@@ -27382,9 +27411,9 @@ BI.extend(jQuery.fn, {
         var computedStyle = void 0;
 
         // W3C Standard
-        if (window.getComputedStyle) {
+        if (_global.getComputedStyle) {
             // In certain cases such as within an iframe in FF3, this returns null.
-            computedStyle = window.getComputedStyle(node, null);
+            computedStyle = _global.getComputedStyle(node, null);
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }
@@ -29666,14 +29695,14 @@ _.extend(String.prototype, {
     }
 };!(function () {
     var cancelAnimationFrame =
-        window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        window.msCancelAnimationFrame ||
-        window.clearTimeout;
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
 
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
 
     BI.MouseMoveTracker = function (onMove, onMoveEnd, domNode) {
@@ -29774,7 +29803,7 @@ _.extend(String.prototype, {
     var PIXEL_STEP = 10;
     var LINE_HEIGHT = 40;
     var PAGE_HEIGHT = 800;
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
     function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,

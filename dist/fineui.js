@@ -99,7 +99,7 @@ if (!Array.prototype.lastIndexOf) {
  * Created by wang on 15/6/23.
  */
 // 解决console未定义问题 guy
-window.console = window.console || (function () {
+_global.console = _global.console || (function () {
     var c = {};
     c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
             = c.clear = c.exception = c.trace = c.assert = function () {
@@ -109,7 +109,7 @@ window.console = window.console || (function () {
 /*
  * 前端缓存
  */
-window.localStorage || (window.localStorage = {
+_global.localStorage || (_global.localStorage = {
     items: {},
     setItem: function (k, v) {
         BI.Cache.addCookie(k, v);
@@ -190,8 +190,8 @@ if(!Date.now) {
         this.set = {};
     };
 }// 修复ie9下sort方法的bug
-!function (window) {
-    var ua = window.navigator.userAgent.toLowerCase(),
+!function (_global) {
+    var ua = _global.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
@@ -216,10 +216,10 @@ if(!Date.now) {
                 return this;
             }
             return _sort.call(this);
-            
+
         };
     }
-}(window);/*!
+}(_global);/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -19930,16 +19930,35 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 /**
  * 初始化BI对象
  */
-if (window.BI == null) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
 }/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -20667,11 +20686,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -21417,7 +21436,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
+    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -23071,14 +23090,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
     if (!attachEvent) {
         var requestFrame = (function () {
-            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                function (fn) { return window.setTimeout(fn, 20); };
+            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
+                function (fn) { return _global.setTimeout(fn, 20); };
             return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                window.clearTimeout;
+            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
+                _global.clearTimeout;
             return function (id) { return cancel(id); };
         })();
 
@@ -23546,7 +23565,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         return Math.floor(node / 2);
     };
 
-    var Int32Array = window.Int32Array || function (size) {
+    var Int32Array = _global.Int32Array || function (size) {
         var xs = [];
         for (var i = size - 1; i >= 0; --i) {
             xs[i] = 0;
@@ -25228,8 +25247,18 @@ BI.ShowAction = BI.inherit(BI.Action, {
         callback && callback();
     }
 });(function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -25757,7 +25786,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -25810,7 +25839,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
-        return window.encodeURIComponent(url);
+        return _global.encodeURIComponent(url);
     };
 
     BI.decodeURIComponent = function (url) {
@@ -25822,7 +25851,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
-        return window.decodeURIComponent(url);
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {
@@ -27603,9 +27632,9 @@ BI.extend(jQuery.fn, {
         var computedStyle = void 0;
 
         // W3C Standard
-        if (window.getComputedStyle) {
+        if (_global.getComputedStyle) {
             // In certain cases such as within an iframe in FF3, this returns null.
-            computedStyle = window.getComputedStyle(node, null);
+            computedStyle = _global.getComputedStyle(node, null);
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }
@@ -29887,14 +29916,14 @@ _.extend(String.prototype, {
     }
 };!(function () {
     var cancelAnimationFrame =
-        window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        window.msCancelAnimationFrame ||
-        window.clearTimeout;
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
 
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
 
     BI.MouseMoveTracker = function (onMove, onMoveEnd, domNode) {
@@ -29995,7 +30024,7 @@ _.extend(String.prototype, {
     var PIXEL_STEP = 10;
     var LINE_HEIGHT = 40;
     var PAGE_HEIGHT = 800;
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
     function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,
@@ -35494,7 +35523,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
     function handler (event) {
-        var orgEvent   = event || window.event,
+        var orgEvent   = event || _global.event,
             args       = slice.call(arguments, 1),
             delta      = 0,
             deltaX     = 0,
@@ -37142,8 +37171,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + _global.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + _global.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return "&" + param;
         }
@@ -44633,7 +44662,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
                 if (!xhr.upload) {
                     var rpe = {loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true};
                     rpe.interval = setInterval(function () {
@@ -44744,7 +44773,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || window.event);}
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
                         }
                         if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
@@ -44764,7 +44793,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 iframe.onload = onload;
                 iframe.onerror = function (event) {
                     if (isFunction(handler.onerror)) {
-                        handler.onerror(rpe, event || window.event);
+                        handler.onerror(rpe, event || _global.event);
                     }
                 };
                 iframe.onreadystatechange = function () {
@@ -44786,7 +44815,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         });
                     }
                 };
-                form.setAttribute("action", handler.url + "&filename=" + window.encodeURIComponent(handler.file.fileName));
+                form.setAttribute("action", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName));
                 form.setAttribute("target", iframe.id);
                 form.setAttribute("method", "post");
                 form.appendChild(handler.file);
@@ -82026,8 +82055,8 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
         // Ensure that `History` can be used outside of the browser.
         if (typeof window !== "undefined") {
-            this.location = window.location;
-            this.history = window.history;
+            this.location = _global.location;
+            this.history = _global.history;
         }
     };
 
@@ -82145,7 +82174,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             }
 
             // Add a cross-platform `addEventListener` shim for older browsers.
-            var addEventListener = window.addEventListener || function (eventName, listener) {
+            var addEventListener = _global.addEventListener || function (eventName, listener) {
                 return attachEvent("on" + eventName, listener);
             };
 
@@ -82166,7 +82195,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         // but possibly useful for unit testing Routers.
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
-            var removeEventListener = window.removeEventListener || function (eventName, listener) {
+            var removeEventListener = _global.removeEventListener || function (eventName, listener) {
                 return detachEvent("on" + eventName, listener);
             };
 

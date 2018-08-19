@@ -114,8 +114,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + _global.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + _global.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return "&" + param;
         }
