@@ -108,9 +108,8 @@
 
     function createStore() {
         var needPop = false;
-        if (!this._storeCreated && window.Fix && this._store && this.isVisible()) {
+        if (window.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
-            this._storeCreated = true;
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -172,7 +171,6 @@
     _.each(["_mount"], function (name) {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
-            createStore.call(this);
             this.store && pushTarget(this.store);
             var res = old.apply(this, arguments);
             this.store && popTarget();

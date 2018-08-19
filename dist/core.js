@@ -21399,20 +21399,14 @@ _.extend(BI.OB.prototype, {
             this._initElementHeight();
             this._initVisual();
             this._initState();
-            if (this.isVisible()) {
-                this.rendered = true;
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
+            if (this.beforeInit) {
+                this.__asking = true;
+                this.beforeInit(BI.bind(this._render, this));
+                if (this.__asking === true) {
+                    this.__async = true;
                 }
-            }
-            if (this._isRoot) {
-                this._mount();
+            } else {
+                this._render();
             }
         },
 
@@ -21525,7 +21519,7 @@ _.extend(BI.OB.prototype, {
         _mount: function () {
             var self = this;
             var isMounted = this._isMounted;
-            if (this._isMounting || isMounted || !this.isVisible() || this.__asking === true) {
+            if (isMounted || this.__asking === true) {
                 return;
             }
             if (this._isRoot === true) {
@@ -21536,19 +21530,6 @@ _.extend(BI.OB.prototype, {
             if (!isMounted) {
                 return;
             }
-            this._isMounting = true;
-            if (!this.rendered) {
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
-                }
-            }
-
             this.beforeMount && this.beforeMount();
             this._isMounted = true;
             !lazy && this._mountChildren && this._mountChildren();
@@ -21559,7 +21540,6 @@ _.extend(BI.OB.prototype, {
             });
             lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
-            this._isMounting = false;
             return true;
         },
 
