@@ -20179,7 +20179,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -21094,6 +21094,9 @@ if (!_global.BI) {
     // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             if (this.__isIE == null) {
                 this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
             }
@@ -21101,6 +21104,9 @@ if (!_global.BI) {
         },
 
         getIEVersion: function () {
+            if(!_global.navigator) {
+                return 0;
+            }
             if (this.__IEVersion != null) {
                 return this.__IEVersion;
             }
@@ -21128,38 +21134,65 @@ if (!_global.BI) {
         },
 
         isEdge: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         },
 
         isMac: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
 
         isWindows: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
+            if(!_global.document) {
+                return false;
+            }
             var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
@@ -22864,10 +22897,10 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
             var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
                 function (fn) { return _global.setTimeout(fn, 20); };
@@ -26070,12 +26103,6 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         return ob;
 
     });
-    // IE8下滚动条用原生的
-    $(function () {
-        if (BI.isIE9Below()) {
-            BI.GridTableScrollbar.SIZE = 18;
-        }
-    });
 }());/**
  * guy
  * 控制器
@@ -26702,7 +26729,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        $(window).resize(fn);
+        _global.$ && $(window).resize(fn);
     },
 
     _resize: function (ev) {
@@ -28863,7 +28890,7 @@ _.extend(Array.prototype, {
         }
     }
 });
-$(function () {
+_global.$ && $(function () {
     // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),

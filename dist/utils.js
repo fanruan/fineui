@@ -11401,7 +11401,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -12316,6 +12316,9 @@ if (!_global.BI) {
     // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             if (this.__isIE == null) {
                 this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
             }
@@ -12323,6 +12326,9 @@ if (!_global.BI) {
         },
 
         getIEVersion: function () {
+            if(!_global.navigator) {
+                return 0;
+            }
             if (this.__IEVersion != null) {
                 return this.__IEVersion;
             }
@@ -12350,38 +12356,65 @@ if (!_global.BI) {
         },
 
         isEdge: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         },
 
         isMac: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
 
         isWindows: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
+            if(!_global.document) {
+                return false;
+            }
             var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
@@ -14645,10 +14678,10 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
             var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
                 function (fn) { return _global.setTimeout(fn, 20); };

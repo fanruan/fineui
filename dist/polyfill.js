@@ -1,22 +1,4 @@
-/**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-var _global;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (_global.BI == null) {
-    _global.BI = {};
-}// Production steps of ECMA-262, Edition 5, 15.4.4.14
+// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement, fromIndex) {
@@ -208,8 +190,8 @@ if(!Date.now) {
         this.set = {};
     };
 }// 修复ie9下sort方法的bug
-!function (_global) {
-    var ua = _global.navigator.userAgent.toLowerCase(),
+!function (window) {
+    var ua = window.navigator.userAgent.toLowerCase(),
         reg = /msie|applewebkit.+safari/;
     if (reg.test(ua)) {
         var _sort = Array.prototype.sort;
@@ -237,4 +219,4 @@ if(!Date.now) {
 
         };
     }
-}(_global);
+}(window);

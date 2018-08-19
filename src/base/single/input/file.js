@@ -6,7 +6,7 @@
  * @extends BI.Single
  * @abstract
  */
-(function () {
+(function (document) {
 
     /**
      * @description normalize input.files. create if not present, add item method if not present
@@ -614,4 +614,4 @@
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
     BI.File.EVENT_UPLOADED = "EVENT_UPLOADED";
     BI.shortcut("bi.file", BI.File);
-})();
+})(_global.document || {});

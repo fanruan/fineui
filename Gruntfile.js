@@ -8,7 +8,7 @@ module.exports = function (grunt) {
                 separator: ""
             },
             polyfillJs: {
-                src: ["src/core/foundation.js", "src/polyfill/**/*.js"],
+                src: ["src/polyfill/**/*.js"],
                 dest: "dist/polyfill.js"
             },
             coreJs: {
@@ -126,6 +126,52 @@ module.exports = function (grunt) {
                     "src/base/**/*.js",
                     "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
+            },
+
+            fineuiWithoutJqueryAndPolyfillJs: {
+                src: ["src/core/foundation.js",
+                    "src/core/lodash.js",
+                    // 'src/core/mvc/**/*.js',
+                    "src/core/base.js",
+                    "src/core/ob.js",
+                    "src/core/widget.js",
+                    // 'src/core/model.js',
+                    // 'src/core/view.js',
+                    "src/core/shortcut.js",
+                    "src/core/utils/*.js",
+                    "src/core/behavior/behavior.js",
+                    "src/core/wrapper/layout.js",
+                    "src/core/plugin.js",
+                    "src/core/**/*.js",
+                    "!src/core/jquery.js",
+                    "!src/core/func/dom.js",
+                    "!src/core/proto/jquery.js",
+                    "!src/core/proto/event.js",
+
+                    "src/data/data.js",
+                    "src/data/**/*.js",
+
+                    "dist/fix/fix.js",
+                    "src/base/pane.js",
+                    "src/base/single/single.js",
+                    "src/base/single/text.js",
+                    "src/base/single/button/button.basic.js",
+                    "src/base/single/button/button.node.js",
+                    "src/base/single/tip/tip.js",
+                    "src/base/combination/group.button.js",
+                    "src/base/combination/tree.button.js",
+                    "src/base/combination/map.button.js",
+                    "src/base/**/*.js",
+                    "!src/base/tree/**/*.js",
+                    "!src/base/single/input/file.js",
+
+                    "src/case/combo/popup.bubble.js",
+                    "src/case/**/*.js",
+                    "!src/case/colorchooser/**/*.js",
+                    "!src/case/tree/tree.display.js",
+
+                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                dest: "dist/fineui_without_jquery_polyfill.js"
             },
 
             fineuiCss: {

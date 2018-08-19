@@ -24,12 +24,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var hasProto = '__proto__' in {};
 
     var isIE = function isIE() {
+        if (typeof navigator === "undefined") {
+            return false;
+        }
         return (/(msie|trident)/i.test(navigator.userAgent.toLowerCase())
         );
     };
 
     var getIEVersion = function getIEVersion() {
         var version = 0;
+        if (typeof navigator === "undefined") {
+            return false;
+        }
         var agent = navigator.userAgent.toLowerCase();
         var v1 = agent.match(/(?:msie\s([\w.]+))/);
         var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);

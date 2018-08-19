@@ -8,10 +8,10 @@
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
             var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
                 function (fn) { return _global.setTimeout(fn, 20); };
