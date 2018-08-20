@@ -65607,7 +65607,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-single-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            chooseType: BI.Selection.Single
         });
     },
 
@@ -65686,7 +65687,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
             el: {
                 type: "bi.button_tree",
-                chooseType: BI.Selection.Single,
+                chooseType: o.chooseType,
                 layouts: [{
                     type: "bi.vertical"
                 }]
@@ -65704,7 +65705,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             element: this,
             scrollable: true,
             items: [this.tree]
-        })
+        });
     },
 
     populate: function (nodes) {
