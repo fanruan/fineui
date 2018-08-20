@@ -8,7 +8,7 @@ module.exports = function (grunt) {
                 separator: ""
             },
             polyfillJs: {
-                src: ["src/polyfill/**/*.js"],
+                src: ["src/core/foundation.js", "src/polyfill/**/*.js"],
                 dest: "dist/polyfill.js"
             },
             coreJs: {
@@ -335,7 +335,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-connect");
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks("grunt-contrib-clean");
 
     var defaultTask = ["less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
