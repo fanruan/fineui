@@ -3532,7 +3532,7 @@ ul.ztree.zTreeDragUL {
 }
 
 .bi-interval-slider {
-  min-height: 70px;
+  min-height: 50px;
 }
 .bi-month-trigger {
   -webkit-border-radius: 2px;

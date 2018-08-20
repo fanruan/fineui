@@ -47558,7 +47558,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
                     }]
                 }],
                 rgap: c.EDITOR_R_GAP,
-                height: 70
+                height: c.SLIDER_HEIGHT
             },
             top: 0,
             left: 0,
