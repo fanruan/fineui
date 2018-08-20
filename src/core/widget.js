@@ -180,7 +180,7 @@
         _mount: function () {
             var self = this;
             var isMounted = this._isMounted;
-            if (isMounted || this.__asking === true) {
+            if (isMounted || !this.isVisible() || this.__asking === true) {
                 return;
             }
             if (this._isRoot === true) {
