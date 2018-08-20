@@ -26070,39 +26070,6 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         return ob;
 
     });
-    // 注册滚动条
-    BI.Plugin.registerWidget("bi.grid_table_scrollbar", function (ob) {
-        if (BI.isIE9Below()) {
-            return BI.extend(ob, {type: "bi.native_table_scrollbar"});
-        }
-        return ob;
-
-    });
-    BI.Plugin.registerWidget("bi.grid_table_horizontal_scrollbar", function (ob) {
-        if (BI.isIE9Below()) {
-            return BI.extend(ob, {type: "bi.native_table_horizontal_scrollbar"});
-        }
-        return ob;
-
-    });
-
-    // 注册控件
-    BI.Plugin.registerWidget("bi.grid_table", function (ob) {
-        // 非chrome下滚动条滑动效果不好，禁止掉
-        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
-            return BI.extend(ob, {type: "bi.quick_grid_table"});
-        }
-        return ob;
-
-    });
-    BI.Plugin.registerWidget("bi.collection_table", function (ob) {
-        // 非chrome下滚动条滑动效果不好，禁止掉
-        if (!(BI.isChrome() && BI.isWindows() && !BI.isEdge())) {
-            return BI.extend(ob, {type: "bi.quick_collection_table"});
-        }
-        return ob;
-
-    });
 }());/**
  * guy
  * 控制器
@@ -52710,7 +52677,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
         return BI.createWidget({
             type: "bi.right_vertical_adapt",
-            height: 40,
+            height: 44,
             hgap: 10,
             bgap: 10,
             items: items
