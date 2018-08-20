@@ -8,7 +8,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
+    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };

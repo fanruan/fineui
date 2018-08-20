@@ -63,6 +63,10 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    appendFragment: function (frag) {
+        this.element.append(frag);
+    },
+
     _mountChildren: function () {
         var self = this;
         var frag = document.createDocumentFragment();
@@ -74,7 +78,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         });
         if (hasChild === true) {
-            this.element.append(frag);
+            this.appendFragment(frag);
         }
     },
 

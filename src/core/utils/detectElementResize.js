@@ -8,19 +8,19 @@
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
-            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                function (fn) { return window.setTimeout(fn, 20); };
+            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
+                function (fn) { return _global.setTimeout(fn, 20); };
             return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                window.clearTimeout;
+            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
+                _global.clearTimeout;
             return function (id) { return cancel(id); };
         })();
 

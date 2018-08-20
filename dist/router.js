@@ -318,8 +318,8 @@
 
         // Ensure that `History` can be used outside of the browser.
         if (typeof window !== "undefined") {
-            this.location = window.location;
-            this.history = window.history;
+            this.location = _global.location;
+            this.history = _global.history;
         }
     };
 
@@ -437,7 +437,7 @@
             }
 
             // Add a cross-platform `addEventListener` shim for older browsers.
-            var addEventListener = window.addEventListener || function (eventName, listener) {
+            var addEventListener = _global.addEventListener || function (eventName, listener) {
                 return attachEvent("on" + eventName, listener);
             };
 
@@ -458,7 +458,7 @@
         // but possibly useful for unit testing Routers.
         stop: function () {
             // Add a cross-platform `removeEventListener` shim for older browsers.
-            var removeEventListener = window.removeEventListener || function (eventName, listener) {
+            var removeEventListener = _global.removeEventListener || function (eventName, listener) {
                 return detachEvent("on" + eventName, listener);
             };
 

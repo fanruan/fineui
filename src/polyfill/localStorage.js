@@ -1,7 +1,7 @@
 /*
  * 前端缓存
  */
-window.localStorage || (window.localStorage = {
+_global.localStorage || (_global.localStorage = {
     items: {},
     setItem: function (k, v) {
         BI.Cache.addCookie(k, v);

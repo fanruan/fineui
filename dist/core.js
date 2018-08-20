@@ -1,4 +1,22 @@
-/*!
+/**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
+}/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
  *
@@ -19704,21 +19722,22 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     }
 }.call(this));
 /**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-if (window.BI == null) {
-    window.BI = {};
-}/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -20160,7 +20179,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -20446,11 +20465,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -21075,6 +21094,9 @@ if (!window.BI) {
     // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             if (this.__isIE == null) {
                 this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
             }
@@ -21082,6 +21104,9 @@ if (!window.BI) {
         },
 
         getIEVersion: function () {
+            if(!_global.navigator) {
+                return 0;
+            }
             if (this.__IEVersion != null) {
                 return this.__IEVersion;
             }
@@ -21109,38 +21134,65 @@ if (!window.BI) {
         },
 
         isEdge: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         },
 
         isMac: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
 
         isWindows: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
+            if(!_global.document) {
+                return false;
+            }
             var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
@@ -21196,7 +21248,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
+    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -21346,11 +21398,12 @@ _.extend(BI.OB.prototype, {
  */
 
 !(function () {
-    var lazy = (typeof document !== 'undefined' &&
-        typeof document.documentMode === 'number') ||
-        (typeof navigator !== 'undefined' &&
-            typeof navigator.userAgent === 'string' &&
+    var lazy = (typeof document !== "undefined" &&
+        typeof document.documentMode === "number") ||
+        (typeof navigator !== "undefined" &&
+            typeof navigator.userAgent === "string" &&
             /\bEdge\/\d/.test(navigator.userAgent));
+
     BI.Widget = BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -21398,20 +21451,14 @@ _.extend(BI.OB.prototype, {
             this._initElementHeight();
             this._initVisual();
             this._initState();
-            if (this.isVisible()) {
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
+            if (this.beforeInit) {
+                this.__asking = true;
+                this.beforeInit(BI.bind(this._render, this));
+                if (this.__asking === true) {
+                    this.__async = true;
                 }
-                this.rendered = true
-            }
-            if (this._isRoot) {
-                this._mount()
+            } else {
+                this._render();
             }
         },
 
@@ -21524,7 +21571,7 @@ _.extend(BI.OB.prototype, {
         _mount: function () {
             var self = this;
             var isMounted = this._isMounted;
-            if (this._isMounting || isMounted || !this.isVisible() || this.__asking === true) {
+            if (isMounted || this.__asking === true) {
                 return;
             }
             if (this._isRoot === true) {
@@ -21535,30 +21582,17 @@ _.extend(BI.OB.prototype, {
             if (!isMounted) {
                 return;
             }
-            this._isMounting = true
-            if (!this.rendered) {
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
-                }
-            }
-
             this.beforeMount && this.beforeMount();
             this._isMounted = true;
-            lazy && this._mountChildren && this._mountChildren();
+            !lazy && this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount();
             });
-            !lazy && this._mountChildren && this._mountChildren();
+            lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
-            this._isMounting = false
+            return true;
         },
 
         _mountChildren: null,
@@ -21839,7 +21873,7 @@ _.extend(BI.OB.prototype, {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
-            console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
     };
@@ -22863,19 +22897,19 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
-            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                function (fn) { return window.setTimeout(fn, 20); };
+            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
+                function (fn) { return _global.setTimeout(fn, 20); };
             return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                window.clearTimeout;
+            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
+                _global.clearTimeout;
             return function (id) { return cancel(id); };
         })();
 
@@ -23343,7 +23377,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         return Math.floor(node / 2);
     };
 
-    var Int32Array = window.Int32Array || function (size) {
+    var Int32Array = _global.Int32Array || function (size) {
         var xs = [];
         for (var i = size - 1; i >= 0; --i) {
             xs[i] = 0;
@@ -24368,6 +24402,10 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    appendFragment: function (frag) {
+        this.element.append(frag);
+    },
+
     _mountChildren: function () {
         var self = this;
         var frag = document.createDocumentFragment();
@@ -24379,7 +24417,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         });
         if (hasChild === true) {
-            this.element.append(frag);
+            this.appendFragment(frag);
         }
     },
 
@@ -25021,8 +25059,18 @@ BI.ShowAction = BI.inherit(BI.Action, {
         callback && callback();
     }
 });(function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -25550,7 +25598,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -25603,7 +25651,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
-        return window.encodeURIComponent(url);
+        return _global.encodeURIComponent(url);
     };
 
     BI.decodeURIComponent = function (url) {
@@ -25615,7 +25663,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
-        return window.decodeURIComponent(url);
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {
@@ -26054,12 +26102,6 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         }
         return ob;
 
-    });
-    // IE8下滚动条用原生的
-    $(function () {
-        if (BI.isIE9Below()) {
-            BI.GridTableScrollbar.SIZE = 18;
-        }
     });
 }());/**
  * guy
@@ -26687,7 +26729,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        $(window).resize(fn);
+        _global.$ && $(window).resize(fn);
     },
 
     _resize: function (ev) {
@@ -27396,9 +27438,9 @@ BI.extend(jQuery.fn, {
         var computedStyle = void 0;
 
         // W3C Standard
-        if (window.getComputedStyle) {
+        if (_global.getComputedStyle) {
             // In certain cases such as within an iframe in FF3, this returns null.
-            computedStyle = window.getComputedStyle(node, null);
+            computedStyle = _global.getComputedStyle(node, null);
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }
@@ -28231,7 +28273,7 @@ BI.extend(BI.DOM, {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -28239,7 +28281,7 @@ BI.extend(BI.DOM, {
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -28247,7 +28289,7 @@ BI.extend(BI.DOM, {
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -28255,7 +28297,7 @@ BI.extend(BI.DOM, {
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -28263,7 +28305,7 @@ BI.extend(BI.DOM, {
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -28333,7 +28375,7 @@ BI.extend(BI.DOM, {
                                 try {
                                     bfns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -28347,7 +28389,7 @@ BI.extend(BI.DOM, {
                                 try {
                                     afns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -28411,7 +28453,7 @@ BI.extend(BI.DOM, {
                 try {
                     act(event, config);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         },
@@ -28421,7 +28463,7 @@ BI.extend(BI.DOM, {
                 try {
                     act.apply(null, args);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         }
@@ -28848,7 +28890,7 @@ _.extend(Array.prototype, {
         }
     }
 });
-$(function () {
+_global.$ && $(function () {
     // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
@@ -29680,14 +29722,14 @@ _.extend(String.prototype, {
     }
 };!(function () {
     var cancelAnimationFrame =
-        window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        window.msCancelAnimationFrame ||
-        window.clearTimeout;
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
 
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
 
     BI.MouseMoveTracker = function (onMove, onMoveEnd, domNode) {
@@ -29788,7 +29830,7 @@ _.extend(String.prototype, {
     var PIXEL_STEP = 10;
     var LINE_HEIGHT = 40;
     var PAGE_HEIGHT = 800;
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
     function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,
@@ -30305,20 +30347,9 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {
@@ -30422,20 +30453,9 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {
@@ -30712,20 +30732,9 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
 
     _getWrapper: function () {
@@ -31306,20 +31315,9 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -31391,20 +31389,9 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -31476,20 +31463,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         return w;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$wrapper.append(frag);
-            this.element.append(this.$wrapper);
-        }
+    appendFragment: function (frag) {
+        this.$wrapper.append(frag);
+        this.element.append(this.$wrapper);
     },
 
     _getWrapper: function () {
@@ -32619,22 +32595,10 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return td;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$tr.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$tr.append(frag);
+        this.element.append(this.$table);
     },
-
 
     resize: function () {
         // console.log("horizontal layout do not need to resize");
@@ -33302,20 +33266,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return tr;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$table.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$table.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {

@@ -2,7 +2,7 @@
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
-            console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
     };

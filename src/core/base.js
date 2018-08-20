@@ -3,9 +3,18 @@
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -447,7 +456,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -733,11 +742,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -1362,6 +1371,9 @@ if (!window.BI) {
     // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             if (this.__isIE == null) {
                 this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
             }
@@ -1369,6 +1381,9 @@ if (!window.BI) {
         },
 
         getIEVersion: function () {
+            if(!_global.navigator) {
+                return 0;
+            }
             if (this.__IEVersion != null) {
                 return this.__IEVersion;
             }
@@ -1396,38 +1411,65 @@ if (!window.BI) {
         },
 
         isEdge: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         },
 
         isMac: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
 
         isWindows: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
+            if(!_global.document) {
+                return false;
+            }
             var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],

@@ -13,9 +13,9 @@ module.exports = function (grunt) {
             },
             coreJs: {
                 src: [
+                    "src/core/foundation.js",
                     "src/core/jquery.js",
                     "src/core/lodash.js",
-                    "src/core/foundation.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
                     "src/core/ob.js",
@@ -128,6 +128,52 @@ module.exports = function (grunt) {
                 dest: "dist/fineui.js"
             },
 
+            fineuiWithoutJqueryAndPolyfillJs: {
+                src: ["src/core/foundation.js",
+                    "src/core/lodash.js",
+                    // 'src/core/mvc/**/*.js',
+                    "src/core/base.js",
+                    "src/core/ob.js",
+                    "src/core/widget.js",
+                    // 'src/core/model.js',
+                    // 'src/core/view.js',
+                    "src/core/shortcut.js",
+                    "src/core/utils/*.js",
+                    "src/core/behavior/behavior.js",
+                    "src/core/wrapper/layout.js",
+                    "src/core/plugin.js",
+                    "src/core/**/*.js",
+                    "!src/core/jquery.js",
+                    "!src/core/func/dom.js",
+                    "!src/core/proto/jquery.js",
+                    "!src/core/proto/event.js",
+
+                    "src/data/data.js",
+                    "src/data/**/*.js",
+
+                    "dist/fix/fix.js",
+                    "src/base/pane.js",
+                    "src/base/single/single.js",
+                    "src/base/single/text.js",
+                    "src/base/single/button/button.basic.js",
+                    "src/base/single/button/button.node.js",
+                    "src/base/single/tip/tip.js",
+                    "src/base/combination/group.button.js",
+                    "src/base/combination/tree.button.js",
+                    "src/base/combination/map.button.js",
+                    "src/base/**/*.js",
+                    "!src/base/tree/**/*.js",
+                    "!src/base/single/input/file.js",
+
+                    "src/case/combo/popup.bubble.js",
+                    "src/case/**/*.js",
+                    "!src/case/colorchooser/**/*.js",
+                    "!src/case/tree/tree.display.js",
+
+                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                dest: "dist/fineui_without_jquery_polyfill.js"
+            },
+
             fineuiCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
                 dest: "dist/fineui.css"
@@ -147,8 +193,8 @@ module.exports = function (grunt) {
             },
             utilsJs: {
                 src: [
-                    "src/core/lodash.js",
                     "src/core/foundation.js",
+                    "src/core/lodash.js",
                     "src/core/var.js",
                     "src/core/proto/array.js",
                     "src/core/proto/number.js",
@@ -250,7 +296,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ["src/**/*", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,
@@ -291,12 +337,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
+    var defaultTask = ["less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
         grunt.task.run(defaultTask);
     });
-    grunt.registerTask("min", ["clean", "less", "concat", "uglify", "cssmin"]);
     grunt.registerTask("build", ["clean", "less", "cssmin", "concat", "uglify"]);
 };

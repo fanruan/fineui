@@ -9558,12 +9558,15 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [this.button_group],
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Top), BI.extend({
+            scrolly: true,
             vgap: 5
-        });
+        }, opts.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Top, this.button_group)
+        }))));
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });

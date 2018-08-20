@@ -1,4 +1,22 @@
 /**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
+}/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
  * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim"`
@@ -10089,14 +10107,6 @@
     }
 }.call(this));
 /**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-if (window.BI == null) {
-    window.BI = {};
-}/**
  * 常量
  */
 
@@ -10938,9 +10948,18 @@ Function.prototype.after = function (func) {
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -11382,7 +11401,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -11668,11 +11687,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -12297,6 +12316,9 @@ if (!window.BI) {
     // 浏览器相关方法
     _.extend(BI, {
         isIE: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             if (this.__isIE == null) {
                 this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
             }
@@ -12304,6 +12326,9 @@ if (!window.BI) {
         },
 
         getIEVersion: function () {
+            if(!_global.navigator) {
+                return 0;
+            }
             if (this.__IEVersion != null) {
                 return this.__IEVersion;
             }
@@ -12331,38 +12356,65 @@ if (!window.BI) {
         },
 
         isEdge: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /edge/i.test(navigator.userAgent.toLowerCase());
         },
 
         isChrome: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /chrome/i.test(navigator.userAgent.toLowerCase());
         },
 
         isFireFox: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /firefox/i.test(navigator.userAgent.toLowerCase());
         },
 
         isOpera: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /opera/i.test(navigator.userAgent.toLowerCase());
         },
 
         isSafari: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /safari/i.test(navigator.userAgent.toLowerCase());
         },
 
         isKhtml: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         },
 
         isMac: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /macintosh|mac os x/i.test(navigator.userAgent);
         },
 
         isWindows: function () {
+            if(!_global.navigator) {
+                return false;
+            }
             return /windows|win32/i.test(navigator.userAgent);
         },
 
         isSupportCss3: function (style) {
+            if(!_global.document) {
+                return false;
+            }
             var prefix = ["webkit", "Moz", "ms", "o"],
                 i, len,
                 humpString = [],
@@ -12418,7 +12470,7 @@ BI.OB = function (config) {
     if (BI.isFunction(this.props)) {
         props = this.props(config);
     }
-    this.options = (window.$ || window._).extend(this._defaultConfig(config), props, config);
+    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
     this._init();
     this._initRef();
 };
@@ -12560,8 +12612,18 @@ _.extend(BI.OB.prototype, {
         this.purgeListeners();
     }
 });(function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -13089,7 +13151,7 @@ _.extend(BI.OB.prototype, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -13142,7 +13204,7 @@ _.extend(BI.OB.prototype, {
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             return BI.specialCharsMap[str] || str;
         });
-        return window.encodeURIComponent(url);
+        return _global.encodeURIComponent(url);
     };
 
     BI.decodeURIComponent = function (url) {
@@ -13154,7 +13216,7 @@ _.extend(BI.OB.prototype, {
         url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
-        return window.decodeURIComponent(url);
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {
@@ -13444,7 +13506,7 @@ _.extend(BI.OB.prototype, {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
-            console.error("constant:[" + xtype + "] has been registed");
+            _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
         constantInjection[xtype] = cls;
     };
@@ -13452,7 +13514,7 @@ _.extend(BI.OB.prototype, {
     var modelInjection = {};
     BI.model = function (xtype, cls) {
         if (modelInjection[xtype] != null) {
-            console.error("model:[" + xtype + "] has been registed");
+            _global.console && console.error("model:[" + xtype + "] has been registed");
         }
         modelInjection[xtype] = cls;
     };
@@ -13460,7 +13522,7 @@ _.extend(BI.OB.prototype, {
     var storeInjection = {};
     BI.store = function (xtype, cls) {
         if (storeInjection[xtype] != null) {
-            console.error("store:[" + xtype + "] has been registed");
+            _global.console && console.error("store:[" + xtype + "] has been registed");
         }
         storeInjection[xtype] = cls;
     };
@@ -13468,7 +13530,7 @@ _.extend(BI.OB.prototype, {
     var serviceInjection = {};
     BI.service = function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
-            console.error("service:[" + xtype + "] has been registed");
+            _global.console && console.error("service:[" + xtype + "] has been registed");
         }
         serviceInjection[xtype] = cls;
     };
@@ -13476,7 +13538,7 @@ _.extend(BI.OB.prototype, {
     var providerInjection = {};
     BI.provider = function (xtype, cls) {
         if (providerInjection[xtype] != null) {
-            console.error("provider:[" + xtype + "] has been registed");
+            _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
         providerInjection[xtype] = cls;
     };
@@ -13546,7 +13608,7 @@ _.extend(BI.OB.prototype, {
                                 try {
                                     bfns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -13560,7 +13622,7 @@ _.extend(BI.OB.prototype, {
                                 try {
                                     afns[i].apply(inst, arguments);
                                 } catch (e) {
-                                    console.error(e);
+                                    _global.console && console.error(e);
                                 }
                             }
                         };
@@ -13624,7 +13686,7 @@ _.extend(BI.OB.prototype, {
                 try {
                     act(event, config);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         },
@@ -13634,7 +13696,7 @@ _.extend(BI.OB.prototype, {
                 try {
                     act.apply(null, args);
                 } catch (e) {
-                    console.error(e);
+                    _global.console && console.error(e);
                 }
             });
         }
@@ -14616,19 +14678,19 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
  * version: 0.5.3
  **/
 !(function () {
-    var attachEvent = document.attachEvent,
+    var attachEvent = _global.document && _global.document.attachEvent,
         stylesCreated = false;
 
-    if (!attachEvent) {
+    if (_global.document && !attachEvent) {
         var requestFrame = (function () {
-            var raf = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-                function (fn) { return window.setTimeout(fn, 20); };
+            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
+                function (fn) { return _global.setTimeout(fn, 20); };
             return function (fn) { return raf(fn); };
         })();
 
         var cancelFrame = (function () {
-            var cancel = window.cancelAnimationFrame || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame ||
-                window.clearTimeout;
+            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
+                _global.clearTimeout;
             return function (id) { return cancel(id); };
         })();
 
@@ -15096,7 +15158,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         return Math.floor(node / 2);
     };
 
-    var Int32Array = window.Int32Array || function (size) {
+    var Int32Array = _global.Int32Array || function (size) {
         var xs = [];
         for (var i = size - 1; i >= 0; --i) {
             xs[i] = 0;

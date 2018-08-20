@@ -18,7 +18,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        $(window).resize(fn);
+        _global.$ && $(window).resize(fn);
     },
 
     _resize: function (ev) {

@@ -72,7 +72,7 @@
 
 
     function handler (event) {
-        var orgEvent   = event || window.event,
+        var orgEvent   = event || _global.event,
             args       = slice.call(arguments, 1),
             delta      = 0,
             deltaX     = 0,

@@ -90,9 +90,9 @@ BI.extend(jQuery.fn, {
         var computedStyle = void 0;
 
         // W3C Standard
-        if (window.getComputedStyle) {
+        if (_global.getComputedStyle) {
             // In certain cases such as within an iframe in FF3, this returns null.
-            computedStyle = window.getComputedStyle(node, null);
+            computedStyle = _global.getComputedStyle(node, null);
             if (computedStyle) {
                 return computedStyle.getPropertyValue(BI.hyphenate(name));
             }

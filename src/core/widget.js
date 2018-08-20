@@ -7,11 +7,12 @@
  */
 
 !(function () {
-    var lazy = (typeof document !== 'undefined' &&
-        typeof document.documentMode === 'number') ||
-        (typeof navigator !== 'undefined' &&
-            typeof navigator.userAgent === 'string' &&
+    var lazy = (typeof document !== "undefined" &&
+        typeof document.documentMode === "number") ||
+        (typeof navigator !== "undefined" &&
+            typeof navigator.userAgent === "string" &&
             /\bEdge\/\d/.test(navigator.userAgent));
+
     BI.Widget = BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -59,20 +60,14 @@
             this._initElementHeight();
             this._initVisual();
             this._initState();
-            if (this.isVisible()) {
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
+            if (this.beforeInit) {
+                this.__asking = true;
+                this.beforeInit(BI.bind(this._render, this));
+                if (this.__asking === true) {
+                    this.__async = true;
                 }
-                this.rendered = true
-            }
-            if (this._isRoot) {
-                this._mount()
+            } else {
+                this._render();
             }
         },
 
@@ -185,7 +180,7 @@
         _mount: function () {
             var self = this;
             var isMounted = this._isMounted;
-            if (this._isMounting || isMounted || !this.isVisible() || this.__asking === true) {
+            if (isMounted || this.__asking === true) {
                 return;
             }
             if (this._isRoot === true) {
@@ -196,30 +191,17 @@
             if (!isMounted) {
                 return;
             }
-            this._isMounting = true
-            if (!this.rendered) {
-                if (this.beforeInit) {
-                    this.__asking = true;
-                    this.beforeInit(BI.bind(this._render, this));
-                    if (this.__asking === true) {
-                        this.__async = true;
-                    }
-                } else {
-                    this._render();
-                }
-            }
-
             this.beforeMount && this.beforeMount();
             this._isMounted = true;
-            lazy && this._mountChildren && this._mountChildren();
+            !lazy && this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount();
             });
-            !lazy && this._mountChildren && this._mountChildren();
+            lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
-            this._isMounting = false
+            return true;
         },
 
         _mountChildren: null,
