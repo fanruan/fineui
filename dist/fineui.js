@@ -1,4 +1,22 @@
-// Production steps of ECMA-262, Edition 5, 15.4.4.14
+/**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {};
+}// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement, fromIndex) {
