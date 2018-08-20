@@ -107,7 +107,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
         return BI.createWidget({
             type: "bi.right_vertical_adapt",
-            height: 40,
+            height: 44,
             hgap: 10,
             bgap: 10,
             items: items

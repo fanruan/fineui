@@ -20,7 +20,6 @@
   "scripts": {
     "grunt": "grunt",
     "start": "node server.js",
-    "uglify": "grunt min",
     "build": "grunt build",
     "compile": "grunt compile"
   },
