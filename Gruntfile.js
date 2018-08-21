@@ -337,7 +337,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-clean");
 
-    var defaultTask = ["less", "concat", "connect", "watch"];
+    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
