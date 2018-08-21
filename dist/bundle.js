@@ -62644,7 +62644,7 @@ BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-date-time-select bi-border-top"
+        baseCls: "bi-date-time-select bi-split-top"
     },
 
     render: function () {
@@ -77593,7 +77593,7 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.htape",
-                cls: "bi-border-top bi-border-bottom",
+                cls: "bi-split-top bi-split-bottom",
                 height: 30,
                 items: [{
                     el: {
@@ -77869,7 +77869,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -77883,7 +77883,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         textHeight: c.buttonHeight - 1,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -77898,7 +77898,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -77936,7 +77936,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -78345,7 +78345,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 }]
             }, {
                 type: "bi.button_group",
-                cls: "bi-border-top",
+                cls: "bi-split-top",
                 behaviors: o.behaviors,
                 ref: function () {
                     self.month = this;
@@ -78627,7 +78627,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -78640,7 +78640,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
@@ -78656,7 +78656,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -78694,7 +78694,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Month"),
@@ -79629,7 +79629,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -79642,7 +79642,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
@@ -79658,7 +79658,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -79696,7 +79696,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Quarter"),
