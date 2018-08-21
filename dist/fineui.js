@@ -79300,7 +79300,7 @@ BI.DynamicYearMonthTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 26,
+        height: 24,
         width: 25,
         lgap: 15,
         offset: -15,

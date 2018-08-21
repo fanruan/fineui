@@ -1,6 +1,6 @@
 BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 26,
+        height: 24,
         width: 25,
         lgap: 15,
         offset: -15,
