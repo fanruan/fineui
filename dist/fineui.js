@@ -21637,12 +21637,6 @@ _.extend(BI.OB.prototype, {
  */
 
 !(function () {
-    var lazy = (typeof document !== "undefined" &&
-        typeof document.documentMode === "number") ||
-        (typeof navigator !== "undefined" &&
-            typeof navigator.userAgent === "string" &&
-            /\bEdge\/\d/.test(navigator.userAgent));
-
     BI.Widget = BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -21823,13 +21817,12 @@ _.extend(BI.OB.prototype, {
             }
             this.beforeMount && this.beforeMount();
             this._isMounted = true;
-            !lazy && this._mountChildren && this._mountChildren();
+            this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount();
             });
-            lazy && this._mountChildren && this._mountChildren();
             this.mounted && this.mounted();
             return true;
         },
