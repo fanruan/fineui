@@ -602,7 +602,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 dynamic: true
             },
             tab: {
-                cls: "year-popup-navigation bi-high-light bi-border-top",
+                cls: "year-popup-navigation bi-high-light bi-split-top",
                 height: 24,
                 items: [backBtn, preBtn]
             },
