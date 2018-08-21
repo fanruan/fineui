@@ -81,7 +81,7 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.htape",
-                cls: "bi-border-top bi-border-bottom",
+                cls: "bi-split-top bi-split-bottom",
                 height: 30,
                 items: [{
                     el: {
