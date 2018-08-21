@@ -11956,7 +11956,7 @@ _.extend(BI.OB.prototype, {
         _mount: function () {
             var self = this;
             var isMounted = this._isMounted;
-            if (isMounted || this.__asking === true) {
+            if (isMounted || !this.isVisible() || this.__asking === true) {
                 return;
             }
             if (this._isRoot === true) {
@@ -18293,6 +18293,9 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
     },
 
     loadStyle: function (name, styleString) {
+        if(!_global.document) {
+            return;
+        }
         var d = document, styles = d.createElement("style");
         d.getElementsByTagName("head")[0].appendChild(styles);
         styles.setAttribute("type", "text/css");
