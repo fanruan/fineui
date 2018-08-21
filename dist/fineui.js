@@ -9647,30 +9647,30 @@ jQuery.fn.offset = function( options ) {
 
 	// If we don't have gBCR, just use 0,0 rather than error
 	// BlackBerry 5, iOS 3 (original iPhone)
-	// if ( typeof elem.getBoundingClientRect !== core_strundefined ) {
-	// 	box = elem.getBoundingClientRect();
-	// }
-	// 解决transform下的offset问题
-	var el = elem,
-	offsetLeft = 0,
-	offsetTop  = 0;
+	if ( typeof elem.getBoundingClientRect !== core_strundefined ) {
+		box = elem.getBoundingClientRect();
+	}
+	// 解决transform下的offset问题(先恢复)
+	// var el = elem,
+	// offsetLeft = 0,
+	// offsetTop  = 0;
 
-	do{
-		offsetLeft += el.offsetLeft;
-		offsetTop  += el.offsetTop;
-		el = el.offsetParent;
-	} while( el );
+	// do{
+	// 	offsetLeft += el.offsetLeft;
+	// 	offsetTop  += el.offsetTop;
+	// 	el = el.offsetParent;
+	// } while( el );
 
-	var elm = elem;
-	do{
-		offsetLeft -= elm.scrollLeft || 0;
-		offsetTop  -= elm.scrollTop || 0;
-		elm = elm.parentNode;
-	} while( elm );
+	// var elm = elem;
+	// do{
+	// 	offsetLeft -= elm.scrollLeft || 0;
+	// 	offsetTop  -= elm.scrollTop || 0;
+	// 	elm = elm.parentNode;
+	// } while( elm );
 	win = getWindow( doc );
 	return {
-		top: offsetTop  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),
-		left: offsetLeft + ( win.pageXOffset || docElem.scrollLeft ) - ( docElem.clientLeft || 0 )
+		top: box.top  + ( win.pageYOffset || docElem.scrollTop )  - ( docElem.clientTop  || 0 ),
+		left: box.left + ( win.pageXOffset || docElem.scrollLeft ) - ( docElem.clientLeft || 0 )
 	};
 };
 
