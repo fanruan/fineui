@@ -2328,7 +2328,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
             value: o.value,
-            cls: "bi-background bi-border-bottom",
+            cls: "bi-header-background bi-border-bottom",
             height: 30
         });
 
@@ -2404,6 +2404,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border-top",
             container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
@@ -3084,7 +3085,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 32,
+            width: 30,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -3103,8 +3104,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.none = BI.createWidget({
             type: "bi.icon_button",
             cls: "auto-color-icon",
-            width: 24,
-            height: 24,
+            width: 16,
+            height: 16,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Basic_Auto")
@@ -3125,8 +3126,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent = BI.createWidget({
             type: "bi.icon_button",
             cls: "trans-color-icon",
-            width: 24,
-            height: 24,
+            width: 16,
+            height: 16,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Transparent_Color")
@@ -3177,14 +3178,16 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                         width: 30
                     }, {
                         el: this.transparent,
-                        width: 24
+                        width: 16,
+                        lgap: 5
                     }, {
                         el: this.none,
-                        width: 24
+                        width: 16,
+                        lgap: 5
                     }]
                 },
                 left: 10,
-                right: 20,
+                right: 10,
                 top: 0,
                 bottom: 0
             }]
