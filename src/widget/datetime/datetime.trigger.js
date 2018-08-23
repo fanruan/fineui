@@ -30,10 +30,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             type: "bi.htape",
             element: this,
             items: [{
+                el: this.text
+            },{
                 el: BI.createWidget(),
                 width: o.height
-            }, {
-                el: this.text
             }]
         });
         this.setValue(o.value);
