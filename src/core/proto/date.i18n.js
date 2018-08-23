@@ -1,4 +1,4 @@
-_global.$ && $(function () {
+BI.prepares.push(function () {
     // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
