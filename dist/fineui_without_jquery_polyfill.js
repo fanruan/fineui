@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
     _global = this;
 }
 if (_global.BI == null) {
-    _global.BI = {};
+    _global.BI = {prepares: []};
 }/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
@@ -12267,6 +12267,10 @@ _.extend(BI.OB.prototype, {
     };
 
     BI.createWidget = function (item, options, context) {
+        // 先把准备环境准备好
+        while(BI.prepares && BI.prepares.length > 0) {
+            BI.prepares.shift()();
+        }
         var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {
@@ -18648,7 +18652,7 @@ _.extend(Array.prototype, {
         }
     }
 });
-_global.$ && $(function () {
+BI.prepares.push(function () {
     // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
@@ -18851,25 +18855,7 @@ Date.prototype.getWeekEndDate = function () {
     return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
 };
 
-/** Checks date and time equality */
-Date.prototype.equalsTo = function (date) {
-    return ((this.getFullYear() == date.getFullYear()) &&
-    (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == date.getDate()) &&
-    (this.getHours() == date.getHours()) &&
-    (this.getMinutes() == date.getMinutes()) &&
-    (this.getSeconds() == date.getSeconds()));
-};
-
-/** Set only the year, month, date parts (keep existing time) */
-Date.prototype.setDateOnly = function (date) {
-    var tmp = BI.getDate(date);
-    this.setDate(1);
-    this.setFullYear(tmp.getFullYear());
-    this.setMonth(tmp.getMonth());
-    this.setDate(tmp.getDate());
-};
-/** Prints the date in a string according to the given format. */
+// 格式化打印日期
 Date.prototype.print = function (str) {
     var m = this.getMonth();
     var d = this.getDate();
