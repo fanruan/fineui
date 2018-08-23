@@ -59492,7 +59492,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
                 }, {
                     el: triggerBtn,
                     top: 0,
-                    left: 0
+                    right: 0
                 }]
             }]
         });
@@ -59829,10 +59829,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             type: "bi.htape",
             element: this,
             items: [{
+                el: this.text
+            },{
                 el: BI.createWidget(),
                 width: o.height
-            }, {
-                el: this.text
             }]
         });
         this.setValue(o.value);
@@ -59858,7 +59858,8 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     }
 
 });
-BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
+BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
+BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.StaticDateTimePaneCard.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -72665,6 +72666,10 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
+                /**
+                 * 在存在标红的情况，如果popover没有发生改变就确认需要同步trigger的值，否则对外value值和trigger样式不统一
+                 */
+                assertShowValue();
                 self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
