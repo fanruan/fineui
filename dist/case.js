@@ -2339,6 +2339,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
+            cls: "bi-border-bottom bi-border-right",
             items: [[{
                 value: "",
                 disabled: true
