@@ -215,6 +215,8 @@ module.exports = function (grunt) {
             }
         },
 
+
+
         less: {
             demo: {
                 expand: true,
@@ -254,7 +256,7 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
-                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\n"
+                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n"
             },
             dist: {
                 files: {
@@ -292,6 +294,23 @@ module.exports = function (grunt) {
                     module: true,
                     document: true
                 }
+            }
+        },
+        copy: {
+            js: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "dist",
+                        src: [
+                            "fineui.js"
+                        ],
+                        dest: "dist/",
+                        rename: function (dest, src) {
+                            return dest + src.replace(".js", ".min.js");
+                        }
+                    }
+                ]
             }
         },
         watch: {
@@ -336,6 +355,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-copy");
 
     var defaultTask = ["clean", "less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
@@ -344,4 +364,5 @@ module.exports = function (grunt) {
         grunt.task.run(defaultTask);
     });
     grunt.registerTask("build", ["clean", "less", "cssmin", "concat", "uglify"]);
+    grunt.registerTask("fake-build", ["clean", "less", "cssmin", "concat", "copy"]);
 };
