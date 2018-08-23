@@ -72904,6 +72904,10 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
+                /**
+                 * 在存在标红的情况，如果popover没有发生改变就确认需要同步trigger的值，否则对外value值和trigger样式不统一
+                 */
+                assertShowValue();
                 self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
