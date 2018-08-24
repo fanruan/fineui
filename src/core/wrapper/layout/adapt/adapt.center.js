@@ -18,7 +18,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",
@@ -27,7 +27,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },

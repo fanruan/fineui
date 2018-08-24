@@ -420,7 +420,7 @@ BI.Single = BI.inherit(BI.Widget, {
             clearTimeout(this.timeout);
         }
         this._hideTooltip();
-        $(this.element).unbind("mouseenter.title" + this.getName())
+        this.element.unbind("mouseenter.title" + this.getName())
             .unbind("mousemove.title" + this.getName())
             .unbind("mouseleave.title" + this.getName());
         this._hoverBinded = false;
@@ -736,14 +736,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var selected = false;
                     hand.mousedown(function (e) {
                         // if (e.button === 0) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
                             if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
                                 // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                             // }
                         });
                         if (mouseDown === true) {
@@ -765,7 +765,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         selected = false;
-                        $(document).unbind("mouseup." + self.getName());
+                        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         // }
                     });
                     break;
@@ -776,11 +776,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var mouseDown = false;
                     var interval;
                     hand.mousedown(function (e) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             interval && clearInterval(interval);
                             interval = null;
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         });
                         if (mouseDown === true) {
                             return;
@@ -1010,7 +1010,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     },
 
     empty: function () {
-        $(document).unbind("mouseup." + this.getName());
+        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
     },
 
@@ -5093,7 +5093,7 @@ BI.Msg = function () {
         },
         toast: function (message, options, context) {
             options = options || {};
-            context = context || $("body");
+            context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
             var toast = BI.createWidget({
@@ -5123,7 +5123,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = $("<div class=\"bi-z-index-mask\">").css({
+            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -5132,7 +5132,7 @@ BI.Msg = function () {
                 bottom: 0,
                 opacity: 0.5
             }).appendTo("body");
-            $pop = $("<div class=\"bi-message-depend\">").css({
+            $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
                 top: 0,
@@ -5659,7 +5659,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         this.startY = 0;
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             var size = self._calculateSize();
-            var W = $("body").width(), H = $("body").height();
+            var W = BI.Widget._renderEngine.createElement("body").width(), H = BI.Widget._renderEngine.createElement("body").height();
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({
@@ -8804,9 +8804,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._focus();
                 self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             }
-            $(document).bind("mousedown." + self.getName(), function (e) {
+            BI.Widget._renderEngine.createElement(document).bind("mousedown." + self.getName(), function (e) {
                 if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
-                    $(document).unbind("mousedown." + self.getName());
+                    BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
                     self.content.element.blur();
                 }
             });
@@ -8816,7 +8816,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._blur();
                 self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
             }
-            $(document).unbind("mousedown." + self.getName());
+            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
             self.setValue(o.value);
@@ -8956,7 +8956,7 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<iframe frameborder='0' src='" + o.src + "'>");
+        this.options.element = BI.Widget._renderEngine.createElement("<iframe frameborder='0' src='" + o.src + "'>");
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
@@ -9008,7 +9008,7 @@ BI.Img = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<img src='" + o.src + "'>");
+        this.options.element = BI.Widget._renderEngine.createElement("<img src='" + o.src + "'>");
         BI.Img.superclass._init.apply(this, arguments);
     },
 
@@ -9639,7 +9639,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         },
 
         select: function () {
-            $(this.wrap.dom.input).click();
+            BI.Widget._renderEngine.createElement(this.wrap.dom.input).click();
         },
 
         upload: function (handler) {
