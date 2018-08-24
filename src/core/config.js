@@ -45,4 +45,4 @@ BI.prepares.push(function () {
         return ob;
 
     });
-}());
+});
