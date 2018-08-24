@@ -13,7 +13,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexCenterLayout.superclass.render.apply(this, arguments);
-        this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
 
