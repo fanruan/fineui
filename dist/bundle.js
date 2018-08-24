@@ -26036,7 +26036,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         });
     }
 });// 工程配置
-(function () {
+BI.prepares.push(function () {
     // 注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
@@ -37732,14 +37732,17 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     }
 });
 
-BI.shortcut("bi.part_tree", BI.PartTree);BI.Resizers = new BI.ResizeController();
-BI.Layers = new BI.LayerController();
-BI.Maskers = new BI.MaskersController();
-BI.Bubbles = new BI.BubblesController();
-BI.Tooltips = new BI.TooltipsController();
-BI.Popovers = new BI.PopoverController();
-BI.Broadcasts = new BI.BroadcastController();
-BI.StyleLoaders = new BI.StyleLoaderManager();/**
+BI.shortcut("bi.part_tree", BI.PartTree);BI.prepares.push(function () {
+    BI.Resizers = new BI.ResizeController();
+    BI.Layers = new BI.LayerController();
+    BI.Maskers = new BI.MaskersController();
+    BI.Bubbles = new BI.BubblesController();
+    BI.Tooltips = new BI.TooltipsController();
+    BI.Popovers = new BI.PopoverController();
+    BI.Broadcasts = new BI.BroadcastController();
+    BI.StyleLoaders = new BI.StyleLoaderManager();
+});
+/**
  * CollectionView
  *
  * Created by GUY on 2016/1/15.

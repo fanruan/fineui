@@ -1,5 +1,5 @@
 // 工程配置
-(function () {
+BI.prepares.push(function () {
     // 注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
