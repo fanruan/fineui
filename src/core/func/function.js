@@ -100,7 +100,7 @@ BI.extend(BI.DOM, {
     },
 
     isExist: function (obj) {
-        return BI.Widget._renderEngine("body").find(obj.element).length > 0;
+        return BI.Widget._renderEngine.createElement("body").find(obj.element).length > 0;
     },
 
     // 预加载图片
@@ -276,7 +276,7 @@ BI.extend(BI.DOM, {
     },
 
     getTextSizeWidth: function (text, fontSize) {
-        var span = BI.Widget._renderEngine("<span></span>").addClass("text-width-span").appendTo($("body"));
+        var span = BI.Widget._renderEngine.createElement("<span></span>").addClass("text-width-span").appendTo($("body"));
 
         if (fontSize == null) {
             fontSize = 12;
@@ -294,7 +294,7 @@ BI.extend(BI.DOM, {
     // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
-            var ul = BI.Widget._renderEngine("<div>").width(50).height(50).css({
+            var ul = BI.Widget._renderEngine.createElement("<div>").width(50).height(50).css({
                 position: "absolute",
                 top: "-9999px",
                 overflow: "scroll"
@@ -308,7 +308,7 @@ BI.extend(BI.DOM, {
     getImage: function (param, fillStyle, backgroundColor) {
         var canvas = document.createElement("canvas");
         var ratio = 2;
-        BI.Widget._renderEngine("body").append(canvas);
+        BI.Widget._renderEngine.createElement("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
         canvas.width = w * ratio;
         canvas.height = 24 * ratio;
@@ -318,7 +318,7 @@ BI.extend(BI.DOM, {
         ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6 * ratio, 12 * ratio);
-        BI.Widget._renderEngine(canvas).destroy();
+        BI.Widget._renderEngine.createElement(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
         // IE可以放大缩小所以要固定最大最小宽高
         return {
