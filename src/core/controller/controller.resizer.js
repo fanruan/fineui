@@ -18,7 +18,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        _global.$ && $(window).resize(fn);
+        BI.Widget._renderEngine.createElement(window).resize(fn);
     },
 
     _resize: function (ev) {

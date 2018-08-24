@@ -49,7 +49,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             w = from.element;
         }
         if (BI.isNotEmptyString(w)) {
-            w = $(w);
+            w = BI.Widget._renderEngine.createElement(w);
         }
         if (this.has(name)) {
             return this.get(name);

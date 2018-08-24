@@ -21486,10 +21486,10 @@ _.extend(BI.OB.prototype, {
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
                 // }
-                this.element = $(o.element);
+                this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
-                this.element = $(document.createElement(o.tagName));
+                this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
             if (o.baseCls || o.extraCls || o.cls) {
@@ -21862,6 +21862,21 @@ _.extend(BI.OB.prototype, {
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
             this.purgeListeners();
+        }
+    });
+    BI.Widget.registerRenderEngine = function (engine) {
+        BI.Widget._renderEngine = engine;
+    };
+    BI.Widget.registerRenderEngine({
+        createElement: function (widget) {
+            if(BI.isWidget(widget)) {
+                var o = widget.options;
+                if (o.element) {
+                    return $(o.element);
+                }
+                return $(document.createElement(o.tagName));
+            }
+            return $(widget);
         }
     });
 })();(function () {
@@ -26023,7 +26038,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         });
     }
 });// 工程配置
-(function () {
+BI.prepares.push(function () {
     // 注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
@@ -26069,7 +26084,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         return ob;
 
     });
-}());/**
+});/**
  * guy
  * 控制器
  * Controller层超类
@@ -26412,7 +26427,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             w = from.element;
         }
         if (BI.isNotEmptyString(w)) {
-            w = $(w);
+            w = BI.Widget._renderEngine.createElement(w);
         }
         if (this.has(name)) {
             return this.get(name);
@@ -26629,7 +26644,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
-            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
             var w = popover.element.width(), h = popover.element.height();
             var left = (W - w) / 2, top = (H - h) / 2;
             if (left < 0) {
@@ -26695,7 +26710,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        _global.$ && $(window).resize(fn);
+        BI.Widget._renderEngine.createElement(window).resize(fn);
     },
 
     _resize: function (ev) {
@@ -26834,10 +26849,10 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         // var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
         // var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
         var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
-        if (x + tooltip.element.outerWidth() > $("body").outerWidth()) {
+        if (x + tooltip.element.outerWidth() > BI.Widget._renderEngine.createElement("body").outerWidth()) {
             x -= tooltip.element.outerWidth() + 15;
         }
-        if (y + tooltip.element.outerHeight() > $("body").outerHeight()) {
+        if (y + tooltip.element.outerHeight() > BI.Widget._renderEngine.createElement("body").outerHeight()) {
             y -= tooltip.element.outerHeight() + 15;
             !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {
@@ -28006,7 +28021,7 @@ BI.extend(BI.DOM, {
     },
 
     isExist: function (obj) {
-        return $("body").find(obj.element).length > 0;
+        return BI.Widget._renderEngine.createElement("body").find(obj.element).length > 0;
     },
 
     // 预加载图片
@@ -28182,7 +28197,7 @@ BI.extend(BI.DOM, {
     },
 
     getTextSizeWidth: function (text, fontSize) {
-        var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
+        var span = BI.Widget._renderEngine.createElement("<span></span>").addClass("text-width-span").appendTo($("body"));
 
         if (fontSize == null) {
             fontSize = 12;
@@ -28200,11 +28215,11 @@ BI.extend(BI.DOM, {
     // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
-            var ul = $("<div>").width(50).height(50).css({
+            var ul = BI.Widget._renderEngine.createElement("<div>").width(50).height(50).css({
                 position: "absolute",
                 top: "-9999px",
                 overflow: "scroll"
-            }).appendTo($("body"));
+            }).appendTo("body");
             this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
             ul.destroy();
         }
@@ -28214,7 +28229,7 @@ BI.extend(BI.DOM, {
     getImage: function (param, fillStyle, backgroundColor) {
         var canvas = document.createElement("canvas");
         var ratio = 2;
-        $("body").append(canvas);
+        BI.Widget._renderEngine.createElement("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
         canvas.width = w * ratio;
         canvas.height = 24 * ratio;
@@ -28224,7 +28239,7 @@ BI.extend(BI.DOM, {
         ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6 * ratio, 12 * ratio);
-        $(canvas).destroy();
+        BI.Widget._renderEngine.createElement(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
         // IE可以放大缩小所以要固定最大最小宽高
         return {
@@ -30230,7 +30245,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",
@@ -30239,7 +30254,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -30338,7 +30353,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             "white-space": "nowrap",
@@ -30346,7 +30361,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -30615,7 +30630,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
             height: "100%",
@@ -30624,7 +30639,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -31256,7 +31271,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexCenterLayout.superclass.render.apply(this, arguments);
-        this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
 
@@ -31310,7 +31325,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -31384,7 +31399,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -32480,14 +32495,14 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -33124,7 +33139,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",

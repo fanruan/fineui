@@ -101,7 +101,7 @@ BI.Single = BI.inherit(BI.Widget, {
             clearTimeout(this.timeout);
         }
         this._hideTooltip();
-        $(this.element).unbind("mouseenter.title" + this.getName())
+        this.element.unbind("mouseenter.title" + this.getName())
             .unbind("mousemove.title" + this.getName())
             .unbind("mouseleave.title" + this.getName());
         this._hoverBinded = false;

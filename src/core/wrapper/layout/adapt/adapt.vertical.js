@@ -18,7 +18,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
             height: "100%",
@@ -27,7 +27,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
