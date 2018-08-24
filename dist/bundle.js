@@ -16,6 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
+} else {
+    _global.BI.prepares = [];
 }/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -38382,7 +38384,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         // BI-10290 公式combo双击公式内容会收起
-        if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
+        if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
@@ -41210,7 +41212,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
         return BI.createWidget({
             type: "bi.center",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(o.buttons, {
                 once: false,
@@ -55431,7 +55433,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
