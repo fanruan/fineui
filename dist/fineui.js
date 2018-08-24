@@ -26321,7 +26321,7 @@ BI.prepares.push(function () {
         return ob;
 
     });
-}());/**
+});/**
  * guy
  * 控制器
  * Controller层超类
