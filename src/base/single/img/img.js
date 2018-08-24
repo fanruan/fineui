@@ -19,7 +19,7 @@ BI.Img = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<img src='" + o.src + "'>");
+        this.options.element = BI.Widget._renderEngine.createElement("<img src='" + o.src + "'>");
         BI.Img.superclass._init.apply(this, arguments);
     },
 

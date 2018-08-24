@@ -93,10 +93,10 @@
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
                 // }
-                this.element = $(o.element);
+                this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
-                this.element = $(document.createElement(o.tagName));
+                this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
             if (o.baseCls || o.extraCls || o.cls) {
@@ -469,6 +469,21 @@
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
             this.purgeListeners();
+        }
+    });
+    BI.Widget.registerRenderEngine = function (engine) {
+        BI.Widget._renderEngine = engine;
+    };
+    BI.Widget.registerRenderEngine({
+        createElement: function (widget) {
+            if(BI.isWidget(widget)) {
+                var o = widget.options;
+                if (o.element) {
+                    return $(o.element);
+                }
+                return $(document.createElement(o.tagName));
+            }
+            return $(widget);
         }
     });
 })();

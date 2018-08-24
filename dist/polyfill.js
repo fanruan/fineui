@@ -15,7 +15,9 @@ if (typeof window !== "undefined") {
     _global = this;
 }
 if (_global.BI == null) {
-    _global.BI = {};
+    _global.BI = {prepares: []};
+} else {
+    _global.BI.prepares = [];
 }// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
 if (!Array.prototype.indexOf) {

@@ -137,25 +137,7 @@ Date.prototype.getWeekEndDate = function () {
     return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
 };
 
-/** Checks date and time equality */
-Date.prototype.equalsTo = function (date) {
-    return ((this.getFullYear() == date.getFullYear()) &&
-    (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == date.getDate()) &&
-    (this.getHours() == date.getHours()) &&
-    (this.getMinutes() == date.getMinutes()) &&
-    (this.getSeconds() == date.getSeconds()));
-};
-
-/** Set only the year, month, date parts (keep existing time) */
-Date.prototype.setDateOnly = function (date) {
-    var tmp = BI.getDate(date);
-    this.setDate(1);
-    this.setFullYear(tmp.getFullYear());
-    this.setMonth(tmp.getMonth());
-    this.setDate(tmp.getDate());
-};
-/** Prints the date in a string according to the given format. */
+// 格式化打印日期
 Date.prototype.print = function (str) {
     var m = this.getMonth();
     var d = this.getDate();

@@ -19,7 +19,7 @@ BI.Msg = function () {
         },
         toast: function (message, options, context) {
             options = options || {};
-            context = context || $("body");
+            context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
             var toast = BI.createWidget({
@@ -49,7 +49,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = $("<div class=\"bi-z-index-mask\">").css({
+            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -58,7 +58,7 @@ BI.Msg = function () {
                 bottom: 0,
                 opacity: 0.5
             }).appendTo("body");
-            $pop = $("<div class=\"bi-message-depend\">").css({
+            $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
                 top: 0,

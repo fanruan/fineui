@@ -582,7 +582,7 @@
         },
 
         select: function () {
-            $(this.wrap.dom.input).click();
+            BI.Widget._renderEngine.createElement(this.wrap.dom.input).click();
         },
 
         upload: function (handler) {

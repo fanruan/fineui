@@ -30,7 +30,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         this.startY = 0;
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             var size = self._calculateSize();
-            var W = $("body").width(), H = $("body").height();
+            var W = BI.Widget._renderEngine.createElement("body").width(), H = BI.Widget._renderEngine.createElement("body").height();
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({

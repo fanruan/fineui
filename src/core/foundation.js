@@ -15,5 +15,7 @@ if (typeof window !== "undefined") {
     _global = this;
 }
 if (_global.BI == null) {
-    _global.BI = {};
+    _global.BI = {prepares: []};
+} else {
+    _global.BI.prepares = [];
 }

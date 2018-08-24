@@ -12,15 +12,9 @@ Documentation
 
 http://fanruan.coding.me/fineui-doc/
 
-### API
-
-GithubPages: [https://fanruan.github.io/fineui](https://fanruan.github.io/fineui)
-
-CodingPages: [http://fanruan.coding.me/fineui](http://fanruan.coding.me/fineui)
-
 ### Demo
 
-CodingPages: [http://fanruan.coding.me/fineui/dist/index.html](http://fanruan.coding.me/fineui/dist/index.html)
+CodingPages: [http://fanruan.coding.me/fineui](http://fanruan.coding.me/fineui)
 
 
 License

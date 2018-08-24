@@ -23,7 +23,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
         this.populate(this.options.items);
     },
 

@@ -23,7 +23,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
     },
 

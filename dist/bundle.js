@@ -15,7 +15,9 @@ if (typeof window !== "undefined") {
     _global = this;
 }
 if (_global.BI == null) {
-    _global.BI = {};
+    _global.BI = {prepares: []};
+} else {
+    _global.BI.prepares = [];
 }/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
@@ -21484,10 +21486,10 @@ _.extend(BI.OB.prototype, {
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
                 // }
-                this.element = $(o.element);
+                this.element = BI.Widget._renderEngine.createElement(this);
                 this._isRoot = true;
             } else {
-                this.element = $(document.createElement(o.tagName));
+                this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
             if (o.baseCls || o.extraCls || o.cls) {
@@ -21862,6 +21864,21 @@ _.extend(BI.OB.prototype, {
             this.purgeListeners();
         }
     });
+    BI.Widget.registerRenderEngine = function (engine) {
+        BI.Widget._renderEngine = engine;
+    };
+    BI.Widget.registerRenderEngine({
+        createElement: function (widget) {
+            if(BI.isWidget(widget)) {
+                var o = widget.options;
+                if (o.element) {
+                    return $(o.element);
+                }
+                return $(document.createElement(o.tagName));
+            }
+            return $(widget);
+        }
+    });
 })();(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
@@ -21882,6 +21899,10 @@ _.extend(BI.OB.prototype, {
     };
 
     BI.createWidget = function (item, options, context) {
+        // 先把准备环境准备好
+        while(BI.prepares && BI.prepares.length > 0) {
+            BI.prepares.shift()();
+        }
         var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {
@@ -26017,7 +26038,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         });
     }
 });// 工程配置
-(function () {
+BI.prepares.push(function () {
     // 注册布局
     var isSupportFlex = BI.isSupportCss3("flex");
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
@@ -26063,7 +26084,7 @@ BI.RedMarkBehavior = BI.inherit(BI.Behavior, {
         return ob;
 
     });
-}());/**
+});/**
  * guy
  * 控制器
  * Controller层超类
@@ -26406,7 +26427,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             w = from.element;
         }
         if (BI.isNotEmptyString(w)) {
-            w = $(w);
+            w = BI.Widget._renderEngine.createElement(w);
         }
         if (this.has(name)) {
             return this.get(name);
@@ -26623,7 +26644,7 @@ BI.PopoverController = BI.inherit(BI.Controller, {
             this.floatContainer[name].visible();
             var popover = this.get(name);
             popover.show && popover.show();
-            var W = $(this.options.render).width(), H = $(this.options.render).height();
+            var W = BI.Widget._renderEngine.createElement(this.options.render).width(), H = BI.Widget._renderEngine.createElement(this.options.render).height();
             var w = popover.element.width(), h = popover.element.height();
             var left = (W - w) / 2, top = (H - h) / 2;
             if (left < 0) {
@@ -26689,7 +26710,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        _global.$ && $(window).resize(fn);
+        BI.Widget._renderEngine.createElement(window).resize(fn);
     },
 
     _resize: function (ev) {
@@ -26828,10 +26849,10 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         // var scale = context.element.offset().left / context.element.get(0).getBoundingClientRect().left;
         // var x = (e.pageX || e.clientX) * scale + 15, y = (e.pageY || e.clientY) * scale + 15;
         var x = (e.pageX || e.clientX) + 15, y = (e.pageY || e.clientY) + 15;
-        if (x + tooltip.element.outerWidth() > $("body").outerWidth()) {
+        if (x + tooltip.element.outerWidth() > BI.Widget._renderEngine.createElement("body").outerWidth()) {
             x -= tooltip.element.outerWidth() + 15;
         }
-        if (y + tooltip.element.outerHeight() > $("body").outerHeight()) {
+        if (y + tooltip.element.outerHeight() > BI.Widget._renderEngine.createElement("body").outerHeight()) {
             y -= tooltip.element.outerHeight() + 15;
             !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {
@@ -28000,7 +28021,7 @@ BI.extend(BI.DOM, {
     },
 
     isExist: function (obj) {
-        return $("body").find(obj.element).length > 0;
+        return BI.Widget._renderEngine.createElement("body").find(obj.element).length > 0;
     },
 
     // 预加载图片
@@ -28176,7 +28197,7 @@ BI.extend(BI.DOM, {
     },
 
     getTextSizeWidth: function (text, fontSize) {
-        var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
+        var span = BI.Widget._renderEngine.createElement("<span></span>").addClass("text-width-span").appendTo($("body"));
 
         if (fontSize == null) {
             fontSize = 12;
@@ -28194,11 +28215,11 @@ BI.extend(BI.DOM, {
     // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
-            var ul = $("<div>").width(50).height(50).css({
+            var ul = BI.Widget._renderEngine.createElement("<div>").width(50).height(50).css({
                 position: "absolute",
                 top: "-9999px",
                 overflow: "scroll"
-            }).appendTo($("body"));
+            }).appendTo("body");
             this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
             ul.destroy();
         }
@@ -28208,7 +28229,7 @@ BI.extend(BI.DOM, {
     getImage: function (param, fillStyle, backgroundColor) {
         var canvas = document.createElement("canvas");
         var ratio = 2;
-        $("body").append(canvas);
+        BI.Widget._renderEngine.createElement("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
         canvas.width = w * ratio;
         canvas.height = 24 * ratio;
@@ -28218,7 +28239,7 @@ BI.extend(BI.DOM, {
         ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6 * ratio, 12 * ratio);
-        $(canvas).destroy();
+        BI.Widget._renderEngine.createElement(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
         // IE可以放大缩小所以要固定最大最小宽高
         return {
@@ -28854,7 +28875,7 @@ _.extend(Array.prototype, {
         }
     }
 });
-_global.$ && $(function () {
+BI.prepares.push(function () {
     // 牵扯到国际化这些常量在页面加载后再生效
     // full day names
     Date._DN = [BI.i18nText("BI-Basic_Sunday"),
@@ -29057,25 +29078,7 @@ Date.prototype.getWeekEndDate = function () {
     return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
 };
 
-/** Checks date and time equality */
-Date.prototype.equalsTo = function (date) {
-    return ((this.getFullYear() == date.getFullYear()) &&
-    (this.getMonth() == date.getMonth()) &&
-    (this.getDate() == date.getDate()) &&
-    (this.getHours() == date.getHours()) &&
-    (this.getMinutes() == date.getMinutes()) &&
-    (this.getSeconds() == date.getSeconds()));
-};
-
-/** Set only the year, month, date parts (keep existing time) */
-Date.prototype.setDateOnly = function (date) {
-    var tmp = BI.getDate(date);
-    this.setDate(1);
-    this.setFullYear(tmp.getFullYear());
-    this.setMonth(tmp.getMonth());
-    this.setDate(tmp.getDate());
-};
-/** Prints the date in a string according to the given format. */
+// 格式化打印日期
 Date.prototype.print = function (str) {
     var m = this.getMonth();
     var d = this.getDate();
@@ -30242,7 +30245,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",
@@ -30251,7 +30254,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -30350,7 +30353,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             "white-space": "nowrap",
@@ -30358,7 +30361,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -30627,7 +30630,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
             height: "100%",
@@ -30636,7 +30639,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -31268,7 +31271,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FlexCenterLayout.superclass.render.apply(this, arguments);
-        this.$wrapper = $("<div>").addClass("flex-wrapper-center-layout-wrapper");
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-center-layout-wrapper");
         this.populate(this.options.items);
     },
 
@@ -31322,7 +31325,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-horizontal-layout-wrapper " + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -31396,7 +31399,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = $("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -32492,14 +32495,14 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
         });
-        this.$tr = $("<tr>");
+        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
         this.$tr.appendTo(this.$table);
         this.populate(this.options.items);
     },
@@ -33136,7 +33139,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",
@@ -35647,7 +35650,7 @@ BI.Single = BI.inherit(BI.Widget, {
             clearTimeout(this.timeout);
         }
         this._hideTooltip();
-        $(this.element).unbind("mouseenter.title" + this.getName())
+        this.element.unbind("mouseenter.title" + this.getName())
             .unbind("mousemove.title" + this.getName())
             .unbind("mouseleave.title" + this.getName());
         this._hoverBinded = false;
@@ -35963,14 +35966,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var selected = false;
                     hand.mousedown(function (e) {
                         // if (e.button === 0) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
                             if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
                                 // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                             // }
                         });
                         if (mouseDown === true) {
@@ -35992,7 +35995,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         selected = false;
-                        $(document).unbind("mouseup." + self.getName());
+                        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         // }
                     });
                     break;
@@ -36003,11 +36006,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var mouseDown = false;
                     var interval;
                     hand.mousedown(function (e) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             interval && clearInterval(interval);
                             interval = null;
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         });
                         if (mouseDown === true) {
                             return;
@@ -36237,7 +36240,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     },
 
     empty: function () {
-        $(document).unbind("mouseup." + this.getName());
+        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
     },
 
@@ -37731,14 +37734,17 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     }
 });
 
-BI.shortcut("bi.part_tree", BI.PartTree);BI.Resizers = new BI.ResizeController();
-BI.Layers = new BI.LayerController();
-BI.Maskers = new BI.MaskersController();
-BI.Bubbles = new BI.BubblesController();
-BI.Tooltips = new BI.TooltipsController();
-BI.Popovers = new BI.PopoverController();
-BI.Broadcasts = new BI.BroadcastController();
-BI.StyleLoaders = new BI.StyleLoaderManager();/**
+BI.shortcut("bi.part_tree", BI.PartTree);BI.prepares.push(function () {
+    BI.Resizers = new BI.ResizeController();
+    BI.Layers = new BI.LayerController();
+    BI.Maskers = new BI.MaskersController();
+    BI.Bubbles = new BI.BubblesController();
+    BI.Tooltips = new BI.TooltipsController();
+    BI.Popovers = new BI.PopoverController();
+    BI.Broadcasts = new BI.BroadcastController();
+    BI.StyleLoaders = new BI.StyleLoaderManager();
+});
+/**
  * CollectionView
  *
  * Created by GUY on 2016/1/15.
@@ -38380,7 +38386,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // BI-10290 公式combo双击公式内容会收起
         if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
-            || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+            || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -38401,7 +38407,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
         this.element.removeClass(this.options.comboClass);
 
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
@@ -38414,8 +38420,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.adjustHeight();
 
         this.element.addClass(this.options.comboClass);
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-        $(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
@@ -38583,7 +38589,7 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     destroy: function () {
-        $(document).unbind("mousedown." + this.getName())
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
@@ -40320,7 +40326,7 @@ BI.Msg = function () {
         },
         toast: function (message, options, context) {
             options = options || {};
-            context = context || $("body");
+            context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
             var toast = BI.createWidget({
@@ -40350,7 +40356,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = $("<div class=\"bi-z-index-mask\">").css({
+            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -40359,7 +40365,7 @@ BI.Msg = function () {
                 bottom: 0,
                 opacity: 0.5
             }).appendTo("body");
-            $pop = $("<div class=\"bi-message-depend\">").css({
+            $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
                 top: 0,
@@ -40886,7 +40892,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         this.startY = 0;
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             var size = self._calculateSize();
-            var W = $("body").width(), H = $("body").height();
+            var W = BI.Widget._renderEngine.createElement("body").width(), H = BI.Widget._renderEngine.createElement("body").height();
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({
@@ -41206,7 +41212,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
         return BI.createWidget({
             type: "bi.center",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(o.buttons, {
                 once: false,
@@ -44031,9 +44037,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._focus();
                 self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             }
-            $(document).bind("mousedown." + self.getName(), function (e) {
+            BI.Widget._renderEngine.createElement(document).bind("mousedown." + self.getName(), function (e) {
                 if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
-                    $(document).unbind("mousedown." + self.getName());
+                    BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
                     self.content.element.blur();
                 }
             });
@@ -44043,7 +44049,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._blur();
                 self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
             }
-            $(document).unbind("mousedown." + self.getName());
+            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
             self.setValue(o.value);
@@ -44183,7 +44189,7 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<iframe frameborder='0' src='" + o.src + "'>");
+        this.options.element = BI.Widget._renderEngine.createElement("<iframe frameborder='0' src='" + o.src + "'>");
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
@@ -44235,7 +44241,7 @@ BI.Img = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = $("<img src='" + o.src + "'>");
+        this.options.element = BI.Widget._renderEngine.createElement("<img src='" + o.src + "'>");
         BI.Img.superclass._init.apply(this, arguments);
     },
 
@@ -44866,7 +44872,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         },
 
         select: function () {
-            $(this.wrap.dom.input).click();
+            BI.Widget._renderEngine.createElement(this.wrap.dom.input).click();
         },
 
         upload: function (handler) {
@@ -55427,7 +55433,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
