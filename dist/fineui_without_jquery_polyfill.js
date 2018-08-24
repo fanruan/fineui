@@ -51835,7 +51835,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - 10);
     },
 
     resetWidth: function (w) {
