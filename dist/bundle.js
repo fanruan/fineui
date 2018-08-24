@@ -16,6 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
+} else {
+    _global.BI.prepares = [];
 }/*!
  * jQuery JavaScript Library v1.9.1
  * http://jquery.com/
