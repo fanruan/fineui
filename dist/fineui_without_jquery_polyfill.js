@@ -29838,7 +29838,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
         return BI.createWidget({
             type: "bi.center",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(o.buttons, {
                 once: false,
@@ -39326,7 +39326,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
