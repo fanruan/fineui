@@ -28019,7 +28019,7 @@ BI.extend(BI.DOM, {
     },
 
     isExist: function (obj) {
-        return $("body").find(obj.element).length > 0;
+        return BI.Widget._renderEngine("body").find(obj.element).length > 0;
     },
 
     // 预加载图片
@@ -28195,7 +28195,7 @@ BI.extend(BI.DOM, {
     },
 
     getTextSizeWidth: function (text, fontSize) {
-        var span = $("<span></span>").addClass("text-width-span").appendTo($("body"));
+        var span = BI.Widget._renderEngine("<span></span>").addClass("text-width-span").appendTo($("body"));
 
         if (fontSize == null) {
             fontSize = 12;
@@ -28213,11 +28213,11 @@ BI.extend(BI.DOM, {
     // 获取滚动条的宽度
     getScrollWidth: function () {
         if (this._scrollWidth == null) {
-            var ul = $("<div>").width(50).height(50).css({
+            var ul = BI.Widget._renderEngine("<div>").width(50).height(50).css({
                 position: "absolute",
                 top: "-9999px",
                 overflow: "scroll"
-            }).appendTo($("body"));
+            }).appendTo("body");
             this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
             ul.destroy();
         }
@@ -28227,7 +28227,7 @@ BI.extend(BI.DOM, {
     getImage: function (param, fillStyle, backgroundColor) {
         var canvas = document.createElement("canvas");
         var ratio = 2;
-        $("body").append(canvas);
+        BI.Widget._renderEngine("body").append(canvas);
         var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
         canvas.width = w * ratio;
         canvas.height = 24 * ratio;
@@ -28237,7 +28237,7 @@ BI.extend(BI.DOM, {
         ctx.fillStyle = fillStyle || "#3D4D66";
         ctx.textBaseline = "middle";
         ctx.fillText(param, 6 * ratio, 12 * ratio);
-        $(canvas).destroy();
+        BI.Widget._renderEngine(canvas).destroy();
         var backColor = backgroundColor || "#EAF2FD";
         // IE可以放大缩小所以要固定最大最小宽高
         return {
@@ -38384,7 +38384,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         // BI-10290 公式combo双击公式内容会收起
         if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
-            || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+            || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -38405,7 +38405,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
         this.element.removeClass(this.options.comboClass);
 
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
@@ -38418,8 +38418,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.adjustHeight();
 
         this.element.addClass(this.options.comboClass);
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-        $(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+        BI.Widget._renderEngine(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
@@ -38587,7 +38587,7 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     destroy: function () {
-        $(document).unbind("mousedown." + this.getName())
+        BI.Widget._renderEngine(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
