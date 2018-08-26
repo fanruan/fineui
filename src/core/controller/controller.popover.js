@@ -138,5 +138,19 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         delete this.floatContainer[name];
         delete this.floatOpened[name];
         return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(this.floatContainer, function (name, container) {
+            container.destroy();
+            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
+        });
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindexMap = {};
+        return this;
     }
 });
