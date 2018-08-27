@@ -3703,7 +3703,8 @@ ul.ztree.zTreeDragUL {
 }
 .bi-single-slider-button .slider-button {
   cursor: ew-resize;
-  border: 2px solid #3685f2;
+  border-width: 2px;
+  border-style: solid;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
@@ -3734,6 +3735,17 @@ ul.ztree.zTreeDragUL {
   height: 16px;
   top: 6px;
   left: -8px;
+}
+.bi-theme-dark .bi-single-slider-button .slider-button {
+  background-color: #242640;
+}
+.bi-theme-dark .bi-single-slider-button .slider-button:hover,
+.bi-theme-dark .bi-single-slider-button .slider-button.hover {
+  background-color: #191B2B;
+}
+.bi-theme-dark .bi-single-slider-button .slider-button.disabled:hover,
+.bi-theme-dark .bi-single-slider-button .slider-button.disabled.hover {
+  background-color: #191B2B;
 }
 .bi-slider-track .gray-track {
   background-color: rgba(61, 77, 102, 0.1);
