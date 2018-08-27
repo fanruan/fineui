@@ -11477,154 +11477,6 @@ if (!_global.BI) {
 
         }
     });
-
-    // 浏览器相关方法
-    _.extend(BI, {
-        isIE: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            if (this.__isIE == null) {
-                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
-            }
-            return this.__isIE;
-        },
-
-        getIEVersion: function () {
-            if(!_global.navigator) {
-                return 0;
-            }
-            if (this.__IEVersion != null) {
-                return this.__IEVersion;
-            }
-            var version = 0;
-            var agent = navigator.userAgent.toLowerCase();
-            var v1 = agent.match(/(?:msie\s([\w.]+))/);
-            var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
-            if (v1 && v2 && v1[1] && v2[1]) {
-                version = Math.max(v1[1] * 1, v2[1] * 1);
-            } else if (v1 && v1[1]) {
-                version = v1[1] * 1;
-            } else if (v2 && v2[1]) {
-                version = v2[1] * 1;
-            } else {
-                version = 0;
-            }
-            return this.__IEVersion = version;
-        },
-
-        isIE9Below: function () {
-            if (!BI.isIE()) {
-                return false;
-            }
-            return this.getIEVersion() < 9;
-        },
-
-        isEdge: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /edge/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isChrome: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /chrome/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isFireFox: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /firefox/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isOpera: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /opera/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isSafari: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /safari/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isKhtml: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
-        },
-
-        isMac: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /macintosh|mac os x/i.test(navigator.userAgent);
-        },
-
-        isWindows: function () {
-            if(!_global.navigator) {
-                return false;
-            }
-            return /windows|win32/i.test(navigator.userAgent);
-        },
-
-        isSupportCss3: function (style) {
-            if(!_global.document) {
-                return false;
-            }
-            var prefix = ["webkit", "Moz", "ms", "o"],
-                i, len,
-                humpString = [],
-                htmlStyle = document.documentElement.style,
-                _toHumb = function (string) {
-                    return string.replace(/-(\w)/g, function ($0, $1) {
-                        return $1.toUpperCase();
-                    });
-                };
-
-            for (i in prefix) {
-                humpString.push(_toHumb(prefix[i] + "-" + style));
-            }
-            humpString.push(_toHumb(style));
-
-            for (i = 0, len = humpString.length; i < len; i++) {
-                if (humpString[i] in htmlStyle) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    });
-    // BI请求
-    _.extend(BI, {
-
-        ajax: function (option) {
-            option || (option = {});
-            var async = option.async;
-            option.data = BI.cjkEncodeDO(option.data || {});
-
-            $.ajax({
-                url: option.url,
-                type: "POST",
-                data: option.data,
-                async: async,
-                error: option.error,
-                complete: function (res, status) {
-                    if (BI.isFunction(option.complete)) {
-                        option.complete(BI.jsonDecode(res.responseText), status);
-                    }
-                }
-            });
-        }
-    });
 })();/**
  * 客户端观察者，主要处理事件的添加、删除、执行等
  * @class BI.OB
@@ -13286,166 +13138,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             return _mkPYRslt(arrResult);
         }
     });
-})();/**
- * Detect Element Resize.
- * Forked in order to guard against unsafe 'window' and 'document' references.
- *
- * https://github.com/sdecima/javascript-detect-element-resize
- * Sebastian Decima
- *
- * version: 0.5.3
- **/
-!(function () {
-    var attachEvent = _global.document && _global.document.attachEvent,
-        stylesCreated = false;
-
-    if (_global.document && !attachEvent) {
-        var requestFrame = (function () {
-            var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
-                function (fn) { return _global.setTimeout(fn, 20); };
-            return function (fn) { return raf(fn); };
-        })();
-
-        var cancelFrame = (function () {
-            var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
-                _global.clearTimeout;
-            return function (id) { return cancel(id); };
-        })();
-
-        var resetTriggers = function (element) {
-            var triggers = element.__resizeTriggers__,
-                expand = triggers.firstElementChild,
-                contract = triggers.lastElementChild,
-                expandChild = expand.firstElementChild;
-            contract.scrollLeft = contract.scrollWidth;
-            contract.scrollTop = contract.scrollHeight;
-            expandChild.style.width = expand.offsetWidth + 1 + "px";
-            expandChild.style.height = expand.offsetHeight + 1 + "px";
-            expand.scrollLeft = expand.scrollWidth;
-            expand.scrollTop = expand.scrollHeight;
-        };
-
-        var checkTriggers = function (element) {
-            return element.offsetWidth !== element.__resizeLast__.width ||
-                element.offsetHeight !== element.__resizeLast__.height;
-        };
-
-        var scrollListener = function (e) {
-            var element = this;
-            resetTriggers(this);
-            if (this.__resizeRAF__) cancelFrame(this.__resizeRAF__);
-            this.__resizeRAF__ = requestFrame(function () {
-                if (checkTriggers(element)) {
-                    element.__resizeLast__.width = element.offsetWidth;
-                    element.__resizeLast__.height = element.offsetHeight;
-                    element.__resizeListeners__.forEach(function (fn) {
-                        fn.call(element, e);
-                    });
-                }
-            });
-        };
-
-        /* Detect CSS Animations support to detect element display/re-attach */
-        var animation = false,
-            animationstring = "animation",
-            keyframeprefix = "",
-            animationstartevent = "animationstart",
-            domPrefixes = "Webkit Moz O ms".split(" "),
-            startEvents = "webkitAnimationStart animationstart oAnimationStart MSAnimationStart".split(" "),
-            pfx = "";
-        {
-            var elm = document.createElement("fakeelement");
-            if (elm.style.animationName !== undefined) {
-                animation = true;
-            }
-
-            if (animation === false) {
-                for (var i = 0; i < domPrefixes.length; i++) {
-                    if (elm.style[domPrefixes[i] + "AnimationName"] !== undefined) {
-                        pfx = domPrefixes[i];
-                        animationstring = pfx + "Animation";
-                        keyframeprefix = "-" + pfx.toLowerCase() + "-";
-                        animationstartevent = startEvents[i];
-                        animation = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        var animationName = "resizeanim";
-        var animationKeyframes = "@" + keyframeprefix + "keyframes " + animationName + " { from { opacity: 0; } to { opacity: 0; } } ";
-        var animationStyle = keyframeprefix + "animation: 1ms " + animationName + "; ";
-    }
-
-    var createStyles = function () {
-        if (!stylesCreated) {
-            // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
-            var css = (animationKeyframes ? animationKeyframes : "") +
-                    ".resize-triggers { " + (animationStyle ? animationStyle : "") + "visibility: hidden; opacity: 0; } " +
-                    ".resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }",
-                head = document.head || document.getElementsByTagName("head")[0],
-                style = document.createElement("style");
-
-            style.type = "text/css";
-            if (style.styleSheet) {
-                style.styleSheet.cssText = css;
-            } else {
-                style.appendChild(document.createTextNode(css));
-            }
-
-            head.appendChild(style);
-            stylesCreated = true;
-        }
-    };
-
-    var addResizeListener = function (element, fn) {
-        if (attachEvent) element.attachEvent("onresize", fn);
-        else {
-            if (!element.__resizeTriggers__) {
-                if (getComputedStyle(element).position === "static") element.style.position = "relative";
-                createStyles();
-                element.__resizeLast__ = {};
-                element.__resizeListeners__ = [];
-                (element.__resizeTriggers__ = document.createElement("div")).className = "resize-triggers";
-                element.__resizeTriggers__.innerHTML = "<div class=\"expand-trigger\"><div></div></div>" +
-                    "<div class=\"contract-trigger\"></div>";
-                element.appendChild(element.__resizeTriggers__);
-                resetTriggers(element);
-                element.addEventListener("scroll", scrollListener, true);
-
-                /* Listen for a css animation to detect element display/re-attach */
-                animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function (e) {
-                    if (e.animationName === animationName) {resetTriggers(element);}
-                });
-            }
-            element.__resizeListeners__.push(fn);
-        }
-    };
-    var removeResizeListener = function (element, fn) {
-        if (attachEvent) element.detachEvent("onresize", fn);
-        else {
-            element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
-            if (!element.__resizeListeners__.length) {
-                element.removeEventListener("scroll", scrollListener);
-                element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
-            }
-        }
-    };
-
-    BI.ResizeDetector = {
-        addResizeListener: function (widget, fn) {
-            addResizeListener(widget.element[0], fn);
-            return function () {
-                removeResizeListener(widget.element[0], fn);
-            };
-        },
-        removeResizeListener: function (widget, fn) {
-            removeResizeListener(widget.element[0], fn);
-        }
-    };
 })();
-
 (function () {
     function defaultComparator (a, b) {
         return a < b;
@@ -13631,61 +13324,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             return array;
         }
     };
-})();_.extend(BI, {
-    $import: function () {
-        var _LOADED = {}; // alex:保存加载过的
-        function loadReady (src, must) {
-            var $scripts = $("head script, body script");
-            $.each($scripts, function (i, item) {
-                if (item.src.indexOf(src) != -1) {
-                    _LOADED[src] = true;
-                }
-            });
-            var $links = $("head link");
-            $.each($links, function (i, item) {
-                if (item.href.indexOf(src) != -1 && must) {
-                    _LOADED[src] = false;
-                    $(item).remove();
-                }
-            });
-        }
-
-        // must=true 强行加载
-        return function (src, ext, must) {
-            loadReady(src, must);
-            // alex:如果已经加载过了的,直接return
-            if (_LOADED[src] === true) {
-                return;
-            }
-            if (ext === "css") {
-                var link = document.createElement("link");
-                link.rel = "stylesheet";
-                link.type = "text/css";
-                link.href = src;
-                var head = document.getElementsByTagName("head")[0];
-                head.appendChild(link);
-                _LOADED[src] = true;
-            } else {
-                // alex:这里用同步调用的方式,必须等待ajax完成
-                $.ajax({
-                    url: src,
-                    dataType: "script", // alex:指定dataType为script,jquery会帮忙做globalEval的事情
-                    async: false,
-                    cache: true,
-                    complete: function (res, status) {
-                        /*
-                         * alex:发现jquery会很智能地判断一下返回的数据类型是不是script,然后做一个globalEval
-                         * 所以当status为success时就不需要再把其中的内容加到script里面去了
-                         */
-                        if (status == "success") {
-                            _LOADED[src] = true;
-                        }
-                    }
-                });
-            }
-        };
-    }()
-});
+})();
 !(function () {
     BI.LRU = function (limit) {
         this.size = 0;
@@ -17790,261 +17429,6 @@ BI.extend(BI.Func, {
         };
     }
 });
-
-/**
- * 对DOM操作的通用函数
- * @type {{}}
- */
-BI.DOM = {};
-BI.extend(BI.DOM, {
-
-    /**
-     * 把dom数组或元素悬挂起来,使其不对html产生影响
-     * @param dom
-     */
-    hang: function (doms) {
-        if (BI.isEmpty(doms)) {
-            return;
-        }
-        var frag = document.createDocumentFragment();
-        BI.each(doms, function (i, dom) {
-            dom instanceof BI.Widget && (dom = dom.element);
-            dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
-        });
-        return frag;
-    },
-
-    isExist: function (obj) {
-        return BI.Widget._renderEngine.createElement("body").find(obj.element).length > 0;
-    },
-
-    // 预加载图片
-    preloadImages: function (srcArray, onload) {
-        var count = 0, images = [];
-
-        function complete () {
-            count++;
-            if (count >= srcArray.length) {
-                onload();
-            }
-        }
-
-        BI.each(srcArray, function (i, src) {
-            images[i] = new Image();
-            images[i].src = src;
-            images[i].onload = function () {
-                complete();
-            };
-            images[i].onerror = function () {
-                complete();
-            };
-        });
-    },
-
-    isColor: function (color) {
-        return color && (this.isRGBColor(color) || this.isHexColor(color));
-    },
-
-    isRGBColor: function (color) {
-        if (!color) {
-            return false;
-        }
-        return color.substr(0, 3) === "rgb";
-    },
-
-    isHexColor: function (color) {
-        if (!color) {
-            return false;
-        }
-        return color[0] === "#" && color.length === 7;
-    },
-
-    isDarkColor: function (hex) {
-        if (!hex || !this.isHexColor(hex)) {
-            return false;
-        }
-        var rgb = this.rgb2json(this.hex2rgb(hex));
-        var grayLevel = Math.round(rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114);
-        if (grayLevel < 192/** 网上给的是140**/) {
-            return true;
-        }
-        return false;
-    },
-
-    // 获取对比颜色
-    getContrastColor: function (color) {
-        if (!color || !this.isColor(color)) {
-            return "";
-        }
-        if (this.isDarkColor(color)) {
-            return "#ffffff";
-        }
-        return "#1a1a1a";
-    },
-
-    rgb2hex: function (rgbColour) {
-        if (!rgbColour || rgbColour.substr(0, 3) != "rgb") {
-            return "";
-        }
-        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-        var red = BI.parseInt(rgbValues[0]);
-        var green = BI.parseInt(rgbValues[1]);
-        var blue = BI.parseInt(rgbValues[2]);
-
-        var hexColour = "#" + this.int2hex(red) + this.int2hex(green) + this.int2hex(blue);
-
-        return hexColour;
-    },
-
-    rgb2json: function (rgbColour) {
-        if (!rgbColour) {
-            return {};
-        }
-        if (!this.isRGBColor(rgbColour)) {
-            return {};
-        }
-        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-        return {
-            r: BI.parseInt(rgbValues[0]),
-            g: BI.parseInt(rgbValues[1]),
-            b: BI.parseInt(rgbValues[2])
-        };
-    },
-
-    rgba2json: function (rgbColour) {
-        if (!rgbColour) {
-            return {};
-        }
-        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-        return {
-            r: BI.parseInt(rgbValues[0]),
-            g: BI.parseInt(rgbValues[1]),
-            b: BI.parseInt(rgbValues[2]),
-            a: BI.parseFloat(rgbValues[3])
-        };
-    },
-
-    json2rgb: function (rgb) {
-        if (!BI.isKey(rgb.r) || !BI.isKey(rgb.g) || !BI.isKey(rgb.b)) {
-            return "";
-        }
-        return "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
-    },
-
-    json2rgba: function (rgba) {
-        if (!BI.isKey(rgba.r) || !BI.isKey(rgba.g) || !BI.isKey(rgba.b)) {
-            return "";
-        }
-        return "rgba(" + rgba.r + "," + rgba.g + "," + rgba.b + "," + rgba.a + ")";
-    },
-
-    int2hex: function (strNum) {
-        var hexdig = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
-
-        return hexdig[strNum >>> 4] + "" + hexdig[strNum & 15];
-    },
-
-    hex2rgb: function (color) {
-        if (!color) {
-            return "";
-        }
-        if (!this.isHexColor(color)) {
-            return color;
-        }
-        var tempValue = "rgb(", colorArray;
-
-        if (color.length === 7) {
-            colorArray = [BI.parseInt("0x" + color.substring(1, 3)),
-                BI.parseInt("0x" + color.substring(3, 5)),
-                BI.parseInt("0x" + color.substring(5, 7))];
-        } else if (color.length === 4) {
-            colorArray = [BI.parseInt("0x" + color.substring(1, 2)),
-                BI.parseInt("0x" + color.substring(2, 3)),
-                BI.parseInt("0x" + color.substring(3, 4))];
-        }
-        tempValue += colorArray[0] + ",";
-        tempValue += colorArray[1] + ",";
-        tempValue += colorArray[2] + ")";
-
-        return tempValue;
-    },
-
-    rgba2rgb: function (rgbColour, BGcolor) {
-        if (BI.isNull(BGcolor)) {
-            BGcolor = 1;
-        }
-        if (rgbColour.substr(0, 4) != "rgba") {
-            return "";
-        }
-        var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
-        if (rgbValues.length < 4) {
-            return "";
-        }
-        var R = BI.parseFloat(rgbValues[0]);
-        var G = BI.parseFloat(rgbValues[1]);
-        var B = BI.parseFloat(rgbValues[2]);
-        var A = BI.parseFloat(rgbValues[3]);
-
-        return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
-            Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
-            Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
-    },
-
-    getTextSizeWidth: function (text, fontSize) {
-        var span = BI.Widget._renderEngine.createElement("<span></span>").addClass("text-width-span").appendTo($("body"));
-
-        if (fontSize == null) {
-            fontSize = 12;
-        }
-        fontSize = fontSize + "px";
-
-        span.css("font-size", fontSize).text(text);
-
-        var width = span.width();
-        span.remove();
-
-        return width;
-    },
-
-    // 获取滚动条的宽度
-    getScrollWidth: function () {
-        if (this._scrollWidth == null) {
-            var ul = BI.Widget._renderEngine.createElement("<div>").width(50).height(50).css({
-                position: "absolute",
-                top: "-9999px",
-                overflow: "scroll"
-            }).appendTo("body");
-            this._scrollWidth = ul[0].offsetWidth - ul[0].clientWidth;
-            ul.destroy();
-        }
-        return this._scrollWidth;
-    },
-
-    getImage: function (param, fillStyle, backgroundColor) {
-        var canvas = document.createElement("canvas");
-        var ratio = 2;
-        BI.Widget._renderEngine.createElement("body").append(canvas);
-        var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
-        canvas.width = w * ratio;
-        canvas.height = 24 * ratio;
-        var ctx = canvas.getContext("2d");
-        // ctx.fillStyle = "#EAF2FD";
-        ctx.font = 12 * ratio + "px Georgia";
-        ctx.fillStyle = fillStyle || "#3D4D66";
-        ctx.textBaseline = "middle";
-        ctx.fillText(param, 6 * ratio, 12 * ratio);
-        BI.Widget._renderEngine.createElement(canvas).destroy();
-        var backColor = backgroundColor || "#EAF2FD";
-        // IE可以放大缩小所以要固定最大最小宽高
-        return {
-            width: w,
-            height: 24,
-            src: canvas.toDataURL("image/png"),
-            style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px; width:" + w + "px;height: 24px; max-width:" + w + "px;max-height: 24px; min-width:" + w + "px;min-height: 24px",
-            param: param
-        };
-    }
-});
 (function () {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
@@ -19378,43 +18762,7 @@ _.extend(String.prototype, {
         }
         return location;
     }
-});BI.EventListener = {
-    listen: function listen (target, eventType, callback) {
-        if (target.addEventListener) {
-            target.addEventListener(eventType, callback, false);
-            return {
-                remove: function remove () {
-                    target.removeEventListener(eventType, callback, false);
-                }
-            };
-        } else if (target.attachEvent) {
-            target.attachEvent("on" + eventType, callback);
-            return {
-                remove: function remove () {
-                    target.detachEvent("on" + eventType, callback);
-                }
-            };
-        }
-    },
-
-    capture: function capture (target, eventType, callback) {
-        if (target.addEventListener) {
-            target.addEventListener(eventType, callback, true);
-            return {
-                remove: function remove () {
-                    target.removeEventListener(eventType, callback, true);
-                }
-            };
-        }
-        return {
-            remove: BI.emptyFn
-        };
-        
-    },
-
-    registerDefault: function registerDefault () {
-    }
-};!(function () {
+});!(function () {
     var cancelAnimationFrame =
         _global.cancelAnimationFrame ||
         _global.webkitCancelAnimationFrame ||
@@ -65415,4 +64763,175 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         };
     }
     BI.watch = Fix.watch;
-}());BI.resourceURL = "file?path=/com/fr/web/ui/resource";
+}());BI.i18n = {
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Custom_Color": "自定义颜色",
+    "BI-Numerical_Interval_Input_Data": "请输入数值",
+    "BI-Please_Input_Natural_Number": "请输入非负整数",
+    "BI-No_More_Data": "无更多数据",
+    "BI-Basic_Altogether": "共",
+    "BI-Basic_Sunday": "星期日",
+    "BI-Widget_Background_Colour": "组件背景",
+    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Multi_Date_Month": "月",
+    "BI-No_Selected_Item": "没有可选项",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
+    "BI-Less_And_Equal": "小于等于",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Font_Size": "字号",
+    "BI-Basic_Total": "共",
+    "BI-Already_Selected": "已选择",
+    "BI-Formula_Insert": "插入",
+    "BI-Select_All": "全选",
+    "BI-Basic_Tuesday": "星期二",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Load_More": "点击加载更多数据",
+    "BI-Basic_September": "九月",
+    "BI-Current_Is_Last_Page": "当前已是最后一页",
+    "BI-Basic_Auto": "自动",
+    "BI-Basic_Count": "个",
+    "BI-Basic_Value": "值",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
+    "BI-Basic_More": "更多",
+    "BI-Basic_Wednesday": "星期三",
+    "BI-Basic_Bold": "加粗",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Basic_March": "三月",
+    "BI-Current_Is_First_Page": "当前已是第一页",
+    "BI-Basic_Thursday": "星期四",
+    "BI-Basic_Prompt": "提示",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Row_Header": "行表头",
+    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_January": "一月",
+    "BI-Basic_June": "六月",
+    "BI-Basic_July": "七月",
+    "BI-Basic_April": "四月",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Week": "周",
+    "BI-Click_Blank_To_Select": "点击\"空格键\"选中完全匹配项",
+    "BI-Basic_August": "八月",
+    "BI-Word_Align_Left": "文字居左",
+    "BI-Basic_November": "十一月",
+    "BI-Font_Colour": "字体颜色",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Select_Part": "部分选择",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Less_Than": "小于",
+    "BI-Basic_February": "二月",
+    "BI-Multi_Date_Year": "年",
+    "BI-Number_Index": "序号",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Next_Page": "下一页",
+    "BI-Right_Page": "向右翻页",
+    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
+    "BI-Basic_December": "十二月",
+    "BI-Basic_Saturday": "星期六",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Basic_October": "十月",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Save": "保存",
+    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
+    "BI-Previous_Page": "上一页",
+    "BI-No_Select": "搜索结果为空",
+    "BI-Basic_Clears": "清空",
+    "BI-Created_By_Me": "我创建的",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Word_Align_Right": "文字居右",
+    "BI-Summary_Values": "汇总",
+    "BI-Basic_Clear": "清除",
+    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Up_Page": "向上翻页",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Selected_Data": "已选数据：",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Check_Selected": "查看已选",
+    "BI-Basic_Search": "搜索",
+    "BI-Basic_May": "五月",
+    "BI-Continue_Select": "继续选择",
+    "BI-Please_Input_Positive_Integer": "请输入正整数",
+    "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Basic_Friday": "星期五",
+    "BI-Down_Page": "向下翻页",
+    "BI-Basic_Monday": "星期一",
+    "BI-Left_Page": "向左翻页",
+    "BI-Transparent_Color": "透明",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Time_Interval_Error_Text": "请保证开始时间早于/等于结束时间",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Tiao_Data": "条数据",
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Dynamic_Title": "动态时间",
+    "BI-Basic_Year": "年",
+    "BI-Basic_Single_Quarter": "季",
+    "BI-Basic_Month": "月",
+    "BI-Basic_Week": "周",
+    "BI-Basic_Day": "天",
+    "BI-Basic_Work_Day": "工作日",
+    "BI-Basic_Front": "前",
+    "BI-Basic_Behind": "后",
+    "BI-Basic_Empty": "空",
+    "BI-Basic_Month_End": "月末",
+    "BI-Basic_Month_Begin": "月初",
+    "BI-Basic_Year_End": "年末",
+    "BI-Basic_Year_Begin": "年初",
+    "BI-Basic_Quarter_End": "季末",
+    "BI-Basic_Quarter_Begin": "季初",
+    "BI-Basic_Week_End": "周末",
+    "BI-Basic_Week_Begin": "周初",
+    "BI-Basic_Current_Day": "当天",
+    "BI-Basic_Begin_Start": "初",
+    "BI-Basic_End_Stop": "末",
+    "BI-Basic_Current_Year": "今年",
+    "BI-Basic_Year_Fen": "年份",
+    "BI-Basic_Current_Month": "本月",
+    "BI-Basic_Current_Quarter": "本季度",
+    "BI-Basic_Year_Month": "年月",
+    "BI-Basic_Year_Quarter": "年季度",
+    "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
+    "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00",
+    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
+    "BI-Basic_Or": "或",
+    "BI-Basic_And": "且",
+    "BI-Conf_Add_Formula": "添加公式",
+    "BI-Conf_Add_Condition": "添加条件",
+    "BI-Conf_Formula_And": "且公式条件",
+    "BI-Conf_Formula_Or": "或公式条件",
+    "BI-Conf_Condition_And": "且条件",
+    "BI-Conf_Condition_Or": "或条件",
+    "BI-Microsoft_YaHei": "微软雅黑",
+    "BI-Apple_Light": "苹方-light",
+    "BI-Font_Family": "字体",
+    "BI-Basic_Please_Input_Content": "请输入内容",
+    "BI-Word_Align_Center": "文字居中",
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
+    "BI-More_Than": "大于",
+    "BI-More_And_Equal": "大于等于",
+    "BI-Please_Enter_SQL": "请输入SQL",
+    "BI-Basic_Click_To_Add_Text": "+点击新增\"{R1}\"",
+    "BI-Basic_Please_Select": "请选择",
+    "BI-Basic_Font_Color": "文字颜色",
+    "BI-Basic_Background_Color": "背景色",
+    "BI-Basic_Underline": "下划线"
+};BI.resourceURL = "file?path=/com/fr/web/ui/resource";
