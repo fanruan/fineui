@@ -50,27 +50,43 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        var loadingAnimation = BI.createWidget({
+            type: "bi.horizontal",
+            cls: "bi-loading-widget",
+            height: 60,
+            width: 60,
+            hgap: 10,
+            vgap: 5,
+            items: [{
+                type: "bi.layout",
+                cls: "rect1",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect2",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect3",
+                height: 50,
+                width: 5
+            }]
+        });
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: "bi.vtape",
+                    type: "bi.center_adapt",
                     items: [{
-                        el: {
-                            type: "bi.layout",
-                            cls: "loading-background"
-                        },
-                        height: 30
+                        el: loadingAnimation
                     }],
                     element: BI.Layers.make(this.getName(), this)
                 });
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = BI.createWidget({
-                type: "bi.layout",
-                cls: "loading-background",
-                height: 30
-            });
+            this._loading = loadingAnimation;
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
                 type: "bi.absolute",

@@ -4,3 +4,26 @@
   min-height: 25px;
   .background-color(@color-bi-background-normal, 0);
 }
+
+.bi-loading-widget {
+  &>div {
+      .background-color(@background-color-highlight, 90%);
+      .border-radius(2.5px);
+      animation: loading-widget 0.8s infinite linear;
+  }
+  & .rect2 {
+      animation-delay: -0.2s;
+  }
+  & .rect3 {
+      animation-delay: -0.4s;
+  }
+
+  @keyframes loading-widget {
+      0%, 100% {
+          transform: scaleY(0.3);
+      }
+      50% {
+          transform: scaleY(1);
+      }
+  }
+}
