@@ -8,45 +8,21 @@
     &>div {
         .background-color(@background-color-highlight, 90%);
         .border-radius(2.5px);
-        -webkit-animation: loading-widget 0.8s infinite linear;
-        -moz-animation: loading-widget 0.8s infinite linear;
-        animation: loading-widget 0.8s infinite linear;
+        .animation(loading-widget 0.8s infinite linear);
     }
     & .rect2 {
-        -webkit-animation-delay: -0.2s;
-        -moz-animation-delay: -0.2s;
-        animation-delay: -0.2s;
+        .animation-delay(-0.2s);
     }
     & .rect3 {
-        -webkit-animation-delay: -0.4s;
-        -moz-animation-delay: -0.4s;
-        animation-delay: -0.4s;
+        .animation-delay(-0.4s);
     }
-    @-webkit-keyframes loading-widget {
+    .keyframes (loading-widget, {
         0%,
         100% {
-            -webkit-transform: scaleY(0.3);
+            .transform (scaleY(0.3));
         }
         50% {
-            -webkit-transform: scaleY(1);
+            .transform (scaleY(1));
         }
-    }
-    @-moz-keyframes loading-widget {
-        0%,
-        100% {
-            -moz-transform: scaleY(0.3);
-        }
-        50% {
-            -moz-transform: scaleY(1);
-        }
-    }
-    @keyframes loading-widget {
-        0%,
-        100% {
-            transform: scaleY(0.3);
-        }
-        50% {
-            transform: scaleY(1);
-        }
-    }
+    });
 }
