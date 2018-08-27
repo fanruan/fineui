@@ -24785,7 +24785,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._children = {};
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
-            var key = node.key == null ? i : node.key;
+            var key = node.key == null ? self._getChildName(i) : node.key;
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -24803,7 +24803,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? index : opt.key;
+            var key = opt.key == null ? self._getChildName(index) : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -24817,7 +24817,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? startIdx : node.key;
+                var key = node.key == null ? self._getChildName(startIdx) : node.key;
                 children[key]._destroy();
             }
         }
@@ -24825,9 +24825,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
-            var insertKey = BI.isKey(insert.key) ? insert.key : index;
+            var insertKey = BI.isKey(insert.key) ? insert.key : self._getChildName(index);
             if (before && children[before.key]) {
-                var beforeKey = BI.isKey(before.key) ? before.key : index;
+                var beforeKey = BI.isKey(before.key) ? before.key : self._getChildName(index);
                 var next;
                 if (isNext) {
                     next = children[beforeKey].element.next();
@@ -26533,6 +26533,17 @@ BI.LayerController = BI.inherit(BI.Controller, {
         delete this.layerManager[name];
         delete this.layouts[name];
         return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
+        return this;
     }
 });/**
  * 遮罩面板, z-index在1亿层级
@@ -26688,6 +26699,20 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         delete this.zindexMap[name];
         delete this.floatContainer[name];
         delete this.floatOpened[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(this.floatContainer, function (name, container) {
+            container.destroy();
+            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
+        });
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindexMap = {};
         return this;
     }
 });/**
@@ -38384,7 +38409,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         // BI-10290 公式combo双击公式内容会收起
-        if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
+        if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
@@ -41093,7 +41118,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             maxWidth: "auto",
             minWidth: 100,
             // maxHeight: 200,
-            minHeight: 25,
+            minHeight: 24,
             lgap: 0,
             rgap: 0,
             tgap: 0,
@@ -41237,10 +41262,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
-            tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
-            toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
-            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"});
+            tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
+            toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        this.view.resetHeight ? this.view.resetHeight(resetHeight) :
+            this.view.element.css({"max-height": resetHeight + "px"});
     },
 
     setValue: function (selectedValues) {
@@ -68012,7 +68038,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - 10);
     },
 
     resetWidth: function (w) {
@@ -76025,7 +76051,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select3",
+                    cls: "slider-button bi-list-item-select3 bi-high-light-border",
                     ref: function () {
                         self.slider = this;
                     }

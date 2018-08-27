@@ -3154,7 +3154,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         // BI-10290 公式combo双击公式内容会收起
-        if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
+        if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
@@ -5863,7 +5863,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             maxWidth: "auto",
             minWidth: 100,
             // maxHeight: 200,
-            minHeight: 25,
+            minHeight: 24,
             lgap: 0,
             rgap: 0,
             tgap: 0,
@@ -6007,10 +6007,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
-            tabHeight = this.tab ? (this.tab.attr("height") || 25) : 0,
-            toolHeight = ((this.tool && this.tool.attr("height")) || 25) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        this.view.resetHeight ? this.view.resetHeight(h - tbHeight - tabHeight - toolHeight - 2) :
-            this.view.element.css({"max-height": (h - tbHeight - tabHeight - toolHeight - 2) + "px"});
+            tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
+            toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        this.view.resetHeight ? this.view.resetHeight(resetHeight) :
+            this.view.element.css({"max-height": resetHeight + "px"});
     },
 
     setValue: function (selectedValues) {

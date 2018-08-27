@@ -24785,7 +24785,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._children = {};
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
-            var key = node.key == null ? i : node.key;
+            var key = node.key == null ? self._getChildName(i) : node.key;
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -24803,7 +24803,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? index : opt.key;
+            var key = opt.key == null ? self._getChildName(index) : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -24817,7 +24817,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? startIdx : node.key;
+                var key = node.key == null ? self._getChildName(startIdx) : node.key;
                 children[key]._destroy();
             }
         }
@@ -24825,9 +24825,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
-            var insertKey = BI.isKey(insert.key) ? insert.key : index;
+            var insertKey = BI.isKey(insert.key) ? insert.key : self._getChildName(index);
             if (before && children[before.key]) {
-                var beforeKey = BI.isKey(before.key) ? before.key : index;
+                var beforeKey = BI.isKey(before.key) ? before.key : self._getChildName(index);
                 var next;
                 if (isNext) {
                     next = children[beforeKey].element.next();
@@ -26533,6 +26533,17 @@ BI.LayerController = BI.inherit(BI.Controller, {
         delete this.layerManager[name];
         delete this.layouts[name];
         return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
+        return this;
     }
 });/**
  * 遮罩面板, z-index在1亿层级
@@ -26688,6 +26699,20 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         delete this.zindexMap[name];
         delete this.floatContainer[name];
         delete this.floatOpened[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(this.floatContainer, function (name, container) {
+            container.destroy();
+            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
+        });
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindexMap = {};
         return this;
     }
 });/**
