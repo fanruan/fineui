@@ -14,7 +14,6 @@ module.exports = function (grunt) {
             coreJs: {
                 src: [
                     "src/core/foundation.js",
-                    "src/core/jquery.js",
                     "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
@@ -23,7 +22,7 @@ module.exports = function (grunt) {
                     // 'src/core/model.js',
                     // 'src/core/view.js',
                     "src/core/shortcut.js",
-                    "src/core/utils/*.js",
+                    "src/core/utils/**/*.js",
                     "src/core/behavior/behavior.js",
                     "src/core/wrapper/layout.js",
                     "src/core/plugin.js",
@@ -47,7 +46,6 @@ module.exports = function (grunt) {
                     "src/base/single/tip/tip.js",
                     "src/base/combination/group.button.js",
                     "src/base/combination/tree.button.js",
-                    "src/base/combination/map.button.js",
                     "src/base/tree/treeview.js",
                     "src/base/tree/asynctree.js",
                     "src/base/tree/parttree.js",
@@ -65,8 +63,6 @@ module.exports = function (grunt) {
             },
             widgetJs: {
                 src: [
-                    "src/widget/paramsettingcombo/popup.param.js",
-                    "src/widget/sequencetable/treenumber.sequencetable.js",
                     "src/widget/**/*.js",
                     "src/component/**/*.js"
                 ],
@@ -110,20 +106,7 @@ module.exports = function (grunt) {
             },
 
             fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
-                    "src/base/pane.js",
-                    "src/base/single/single.js",
-                    "src/base/single/text.js",
-                    "src/base/single/button/button.basic.js",
-                    "src/base/single/button/button.node.js",
-                    "src/base/single/tip/tip.js",
-                    "src/base/combination/group.button.js",
-                    "src/base/combination/tree.button.js",
-                    "src/base/combination/map.button.js",
-                    "src/base/tree/treeview.js",
-                    "src/base/tree/asynctree.js",
-                    "src/base/tree/parttree.js",
-                    "src/base/**/*.js",
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
                     "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
             },
@@ -143,10 +126,7 @@ module.exports = function (grunt) {
                     "src/core/wrapper/layout.js",
                     "src/core/plugin.js",
                     "src/core/**/*.js",
-                    "!src/core/jquery.js",
-                    "!src/core/func/dom.js",
-                    "!src/core/proto/jquery.js",
-                    "!src/core/proto/event.js",
+                    "!src/core/platform/dom/**/*.js",
 
                     "src/data/data.js",
                     "src/data/**/*.js",
@@ -170,7 +150,7 @@ module.exports = function (grunt) {
                     "!src/case/colorchooser/**/*.js",
                     "!src/case/tree/tree.display.js",
 
-                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
                 dest: "dist/fineui_without_jquery_polyfill.js"
             },
 
