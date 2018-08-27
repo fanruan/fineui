@@ -3,7 +3,8 @@
 .bi-single-slider-button {
   & .slider-button {
     cursor: ew-resize;
-    border: 2px solid @color-bi-border-highlight;
+    border-width: 2px;
+    border-style: solid;
     .border-radius(8px);
     background-color: @color-bi-background-default;
     height: 16px;
@@ -26,6 +27,22 @@
         height: 16px;
         top: 6px;
         left: -8px;
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-single-slider-button {
+    & .slider-button {
+      background-color: @color-bi-background-default-theme-dark;
+      &:hover, &.hover {
+        background-color: @color-bi-background-normal-theme-dark;
+      }
+      &.disabled {
+        &:hover, &.hover {
+          background-color: @color-bi-background-normal-theme-dark;
+        }
       }
     }
   }

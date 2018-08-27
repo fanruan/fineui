@@ -10,7 +10,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var self = this;
         var widget = BI.createWidget({
             type: "bi.multi_select_insert_combo",
-            itemsCreator: BI.bind(this._itemsCreator, this),
+            //itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
                 type: 1,
@@ -72,14 +72,47 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         }, 1000);
     },
 
+    _createTreeCombo: function () {
+        var items = BI.deepClone(Demo.CONSTANTS.TREE);
+        return {
+            type: "bi.multi_tree_combo",
+            itemsCreator: function (options, callback) {
+                // 根据不同的类型处理相应的结果
+                switch (options.type) {
+                    case BI.TreeView.REQ_TYPE_INIT_DATA:
+                        break;
+                    case BI.TreeView.REQ_TYPE_ADJUST_DATA:
+                        break;
+                    case BI.TreeView.REQ_TYPE_SELECT_DATA:
+                        break;
+                    case BI.TreeView.REQ_TYPE_GET_SELECTED_DATA:
+                        break;
+                    default :
+                        break;
+                }
+                callback({
+                    items: items
+                });
+            },
+            width: 200,
+            value: {
+                "根目录": {}
+            }
+        };
+    },
+
     render: function () {
         return {
             type: "bi.absolute",
             scrolly: false,
             items: [{
                 el: this._createMultiSelectCombo(),
-                right: "50%",
-                top: 10
+                right: "40%",
+                top: 200
+            }, {
+                el: this._createTreeCombo(),
+                right: "60%",
+                top: 200
             }]
         };
     }
