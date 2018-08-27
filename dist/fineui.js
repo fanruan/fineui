@@ -12347,7 +12347,7 @@ _.extend(BI.OB.prototype, {
     };
     BI.Widget.registerRenderEngine({
         createElement: function (widget) {
-            if(BI.isWidget(widget)) {
+            if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
                     return $(o.element);
@@ -12355,6 +12355,9 @@ _.extend(BI.OB.prototype, {
                 return $(document.createElement(o.tagName));
             }
             return $(widget);
+        },
+        createFragment: function () {
+            return document.createDocumentFragment();
         }
     });
 })();(function () {
@@ -14941,7 +14944,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _mountChildren: function () {
         var self = this;
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
         BI.each(this._children, function (i, widget) {
             if (widget.element !== self.element) {
@@ -15170,7 +15173,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     addItems: function (items) {
         var self = this, o = this.options;
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item);
@@ -15188,7 +15191,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     prependItems: function (items) {
         var self = this;
         items = items || [];
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
             this._addItemAt(0, items[i]);
@@ -18737,7 +18740,7 @@ BI.extend(BI.DOM, {
         if (BI.isEmpty(doms)) {
             return;
         }
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         BI.each(doms, function (i, dom) {
             dom instanceof BI.Widget && (dom = dom.element);
             dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
@@ -37132,10 +37135,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             this.setSelectedValue(o.value);
         }
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     },
@@ -41886,7 +41889,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 this.cache[i].destroyed = true;
             }
         }
-        var firstFragment = document.createDocumentFragment(), lastFragment = document.createDocumentFragment();
+        var firstFragment = BI.Widget._renderEngine.createFragment(), lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
             var index = this.cache[i].index;
@@ -44432,7 +44435,7 @@ BI.Icon = BI.inherit(BI.Single, {
     },
     _init: function () {
         BI.Icon.superclass._init.apply(this, arguments);
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     }
@@ -51513,7 +51516,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "color-chooser-trigger-content" + (BI.isIE9Below() ? " hack" : "")
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below && BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({

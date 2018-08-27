@@ -1636,10 +1636,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             this.setSelectedValue(o.value);
         }
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     },
@@ -6390,7 +6390,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 this.cache[i].destroyed = true;
             }
         }
-        var firstFragment = document.createDocumentFragment(), lastFragment = document.createDocumentFragment();
+        var firstFragment = BI.Widget._renderEngine.createFragment(), lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
             var index = this.cache[i].index;
@@ -8936,7 +8936,7 @@ BI.Icon = BI.inherit(BI.Single, {
     },
     _init: function () {
         BI.Icon.superclass._init.apply(this, arguments);
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     }

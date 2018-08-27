@@ -13,7 +13,7 @@ BI.Icon = BI.inherit(BI.Single, {
     },
     _init: function () {
         BI.Icon.superclass._init.apply(this, arguments);
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     }

@@ -476,7 +476,7 @@
     };
     BI.Widget.registerRenderEngine({
         createElement: function (widget) {
-            if(BI.isWidget(widget)) {
+            if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
                     return $(o.element);
@@ -484,6 +484,9 @@
                 return $(document.createElement(o.tagName));
             }
             return $(widget);
+        },
+        createFragment: function () {
+            return document.createDocumentFragment();
         }
     });
 })();
