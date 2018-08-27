@@ -64735,7 +64735,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         });
     });
 
-    if (BI.isIE9Below()) {
+    if (BI.isIE9Below && BI.isIE9Below()) {
         _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
             "sortBy", "groupBy", "indexBy", "countBy", "partition",
             "keys", "allKeys", "values", "pairs", "invert",
