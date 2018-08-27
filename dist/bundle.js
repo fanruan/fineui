@@ -15941,7 +15941,12 @@ BI.ShowAction = BI.inherit(BI.Action, {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
-            return BI.specialCharsMap[str] || str;
+            switch (str) {
+                case "\\":
+                    return BI.specialCharsMap["\\\\"] || str;
+                default:
+                    return BI.specialCharsMap[str] || str;
+            }
         });
         return _global.encodeURIComponent(url);
     };
@@ -44043,7 +44048,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 0,
                 right: 3,
-                top: 0,
+                top: 6,
                 bottom: 5
             }]
         });
