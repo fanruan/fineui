@@ -155,5 +155,16 @@ BI.LayerController = BI.inherit(BI.Controller, {
         delete this.layerManager[name];
         delete this.layouts[name];
         return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
+        return this;
     }
 });

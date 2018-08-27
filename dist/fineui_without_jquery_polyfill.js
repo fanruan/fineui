@@ -16557,6 +16557,17 @@ BI.LayerController = BI.inherit(BI.Controller, {
         delete this.layerManager[name];
         delete this.layouts[name];
         return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
+        return this;
     }
 });/**
  * 遮罩面板, z-index在1亿层级
@@ -16712,6 +16723,20 @@ BI.PopoverController = BI.inherit(BI.Controller, {
         delete this.zindexMap[name];
         delete this.floatContainer[name];
         delete this.floatOpened[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(this.floatContainer, function (name, container) {
+            container.destroy();
+            self.modal && self.floatContainer[name].element.__releaseZIndexMask__(self.zindexMap[name]);
+        });
+        this.floatManager = {};
+        this.floatLayer = {};
+        this.floatContainer = {};
+        this.floatOpened = {};
+        this.zindexMap = {};
         return this;
     }
 });/**
@@ -59196,7 +59221,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select3",
+                    cls: "slider-button bi-list-item-select3 bi-high-light-border",
                     ref: function () {
                         self.slider = this;
                     }
