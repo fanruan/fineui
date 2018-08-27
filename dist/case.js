@@ -2655,7 +2655,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "color-chooser-trigger-content" + (BI.isIE9Below() ? " hack" : "")
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below && BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({

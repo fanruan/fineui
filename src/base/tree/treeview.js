@@ -30,10 +30,10 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             this.setSelectedValue(o.value);
         }
-        if (BI.isIE9Below()) {
+        if (BI.isIE9Below && BI.isIE9Below()) {
             this.element.addClass("hack");
         }
     },
