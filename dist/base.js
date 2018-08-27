@@ -8793,7 +8793,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 0,
                 right: 3,
-                top: 0,
+                top: 6,
                 bottom: 5
             }]
         });
