@@ -13,7 +13,7 @@ BI.extend(BI.DOM, {
         if (BI.isEmpty(doms)) {
             return;
         }
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         BI.each(doms, function (i, dom) {
             dom instanceof BI.Widget && (dom = dom.element);
             dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
