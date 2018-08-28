@@ -5673,7 +5673,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             BI.Resizers._resize();
         }, function () {
             self.tracker.releaseMouseMoves();
-        }, window);
+        }, _global);
         var items = {
             north: {
                 el: {

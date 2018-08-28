@@ -41203,7 +41203,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             BI.Resizers._resize();
         }, function () {
             self.tracker.releaseMouseMoves();
-        }, window);
+        }, _global);
         var items = {
             north: {
                 el: {
@@ -81770,7 +81770,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     function createStore() {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
             if (store) {
                 pushTarget(store);
@@ -81802,7 +81802,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             needPop = true;
             pushTarget(this.store);
             initWatch(this, this.watch);

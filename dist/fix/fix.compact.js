@@ -108,7 +108,7 @@
 
     function createStore() {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
             if (store) {
                 pushTarget(store);
@@ -140,7 +140,7 @@
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             needPop = true;
             pushTarget(this.store);
             initWatch(this, this.watch);
