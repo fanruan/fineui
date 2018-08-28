@@ -12365,9 +12365,8 @@ _.extend(BI.OB.prototype, {
     BI.mount = function (widget, container) {
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
-            return widget._mount(true, false, false);
         }
-        return widget._mount(true, true, false);
+        return widget._mount(true, false, false);
     };
 })();(function () {
     var kv = {};
