@@ -35450,10 +35450,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             this._init();
             initState(this, state);
+            initMixins(this, mixins);
+            initMethods(this, actions);
             initComputed(this, computed);
             initWatch(this, watch$$1);
-            initMethods(this, actions);
-            initMixins(this, mixins);
             this.created && this.created();
             if (this.$$model) {
                 return this.model;
