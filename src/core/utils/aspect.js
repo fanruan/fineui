@@ -1,4 +1,4 @@
-(function (window, undefined) {
+!(function () {
     function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -60,4 +60,4 @@
 
     return BI.aspect;
 
-})(window);
+})();

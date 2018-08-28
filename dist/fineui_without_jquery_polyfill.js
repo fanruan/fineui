@@ -12175,7 +12175,7 @@ _.extend(BI.OB.prototype, {
         throw new Error("无法根据item创建组件");
     };
 
-})();(function (window, undefined) {
+})();!(function () {
     function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -12237,7 +12237,7 @@ _.extend(BI.OB.prototype, {
 
     return BI.aspect;
 
-})(window);
+})();
 !(function () {
 
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
