@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license
@@ -16974,7 +16975,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        BI.Widget._renderEngine.createElement(window).resize(fn);
+        BI.Widget._renderEngine.createElement(_global).resize(fn);
     },
 
     _resize: function (ev) {

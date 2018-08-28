@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
@@ -257,7 +258,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license
@@ -17215,7 +17217,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        BI.Widget._renderEngine.createElement(window).resize(fn);
+        BI.Widget._renderEngine.createElement(_global).resize(fn);
     },
 
     _resize: function (ev) {
@@ -41201,7 +41203,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             BI.Resizers._resize();
         }, function () {
             self.tracker.releaseMouseMoves();
-        }, window);
+        }, _global);
         var items = {
             north: {
                 el: {
@@ -81768,7 +81770,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     function createStore() {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
             if (store) {
                 pushTarget(store);
@@ -81800,7 +81802,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             needPop = true;
             pushTarget(this.store);
             initWatch(this, this.watch);
