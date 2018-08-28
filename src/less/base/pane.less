@@ -5,15 +5,15 @@
 }
 
 .bi-loading-widget {
-    &>div {
+    div {
         .background-color(@background-color-highlight, 90%);
         .border-radius(2.5px);
         .animation(loading-widget 0.8s infinite linear);
     }
-    & .rect2 {
+    .rect2 {
         .animation-delay(-0.2s);
     }
-    & .rect3 {
+    .rect3 {
         .animation-delay(-0.4s);
     }
     .keyframes (loading-widget, {

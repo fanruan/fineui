@@ -74,22 +74,28 @@ BI.Pane = BI.inherit(BI.Widget, {
                 width: 5
             }]
         });
+        var loadingGif = BI.createWidget({
+            type: "bi.layout",
+            cls: "loading-background",
+            height: 30
+        });
+        var loadingEffect = (BI.isIE() && BI.getIEVersion() < 10) ? loadingGif : loadingAnimation;
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: "bi.center_adapt",
+                    type: "bi.absolute_center_adapt",
                     items: [{
-                        el: loadingAnimation
+                        el: loadingEffect
                     }],
                     element: BI.Layers.make(this.getName(), this)
                 });
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = loadingAnimation;
+            this._loading = loadingEffect;
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
-                type: "bi.absolute",
+                type: "bi.absolute_center_adapt",
                 element: this,
                 items: [{
                     el: this._loading,
