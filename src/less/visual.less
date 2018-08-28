@@ -255,3 +255,46 @@
     transform: rotate(-45deg);
   }
 }
+
+// css3 animation
+.keyframes(@name, @frames) {
+  @-webkit-keyframes @name {
+      @frames();
+  }
+  @-moz-keyframes @name {
+      @frames();
+  }
+  @-ms-keyframes @name {
+      @frames();
+  }
+  @-o-keyframes @name {
+      @frames();
+  }
+  @keyframes @name {
+      @frames();
+  }
+}
+
+.animation(@attr) {
+  -webkit-animation: @attr;
+  -moz-animation: @attr;
+  -ms-animation: @attr;
+  -o-animation: @attr;
+  animation: @attr;
+}
+
+.animation-delay(@attr) {
+  -webkit-animation-delay: @attr;
+  -moz-animation-delay: @attr;
+  -ms-animation-delay: @attr;
+  -o-animation-delay: @attr;
+  animation-delay: @attr;
+}
+
+.transform(@attr) {
+  -webkit-transform: @attr;
+  -moz-transform: @attr;
+  -o-transform: @attr;
+  -ms-transform: @attr;
+  transform: @attr;
+}
