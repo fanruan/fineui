@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
@@ -257,7 +258,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license

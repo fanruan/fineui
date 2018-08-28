@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license
