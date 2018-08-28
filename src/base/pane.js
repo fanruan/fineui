@@ -52,7 +52,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
-            cls: "bi-loading-widget",
+            cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 60,
             width: 60,
             hgap: 10,
@@ -74,7 +74,6 @@ BI.Pane = BI.inherit(BI.Widget, {
                 width: 5
             }]
         });
-        (BI.isIE() && BI.getIEVersion() < 10) && loadingAnimation.element.addClass("hack");
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
