@@ -12044,29 +12044,28 @@ _.extend(BI.OB.prototype, {
             this._parent = parent;
         },
 
-        _mount: function () {
+        /**
+         *
+         * @param force 是否强制挂载子节点
+         * @param deep 子节点是否也是按照当前force处理
+         * @param lifeHook 生命周期钩子触不触发，默认触发
+         * @returns {boolean}
+         * @private
+         */
+        _mount: function (force, deep, lifeHook) {
             var self = this;
-            var isMounted = this._isMounted;
-            if (isMounted || !this.isVisible() || this.__asking === true) {
-                return;
+            if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
+                return false;
             }
-            if (this._isRoot === true) {
-                isMounted = true;
-            } else if (this._parent && this._parent._isMounted === true) {
-                isMounted = true;
-            }
-            if (!isMounted) {
-                return;
-            }
-            this.beforeMount && this.beforeMount();
+            lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount();
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook);
             });
-            this.mounted && this.mounted();
+            lifeHook !== false && this.mounted && this.mounted();
             return true;
         },
 
@@ -12362,6 +12361,14 @@ _.extend(BI.OB.prototype, {
             return document.createDocumentFragment();
         }
     });
+
+    BI.mount = function (widget, container) {
+        if (container) {
+            BI.Widget._renderEngine.createElement(container).append(widget.element);
+            return widget._mount(true, false, false);
+        }
+        return widget._mount(true, true, false);
+    };
 })();(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
