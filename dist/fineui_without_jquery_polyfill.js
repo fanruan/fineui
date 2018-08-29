@@ -24410,6 +24410,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
                     type: "bi.absolute_center_adapt",
+                    cls: "loading-container",
                     items: [{
                         el: loadingAnimation
                     }],
@@ -24423,6 +24424,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
                 element: this,
+                cls: "loading-container",
                 items: [{
                     el: this._loading,
                     left: 0,
