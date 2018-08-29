@@ -1583,7 +1583,7 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                         cls: "dot-e-font"
                     }, {
                         text: BI.i18nText("BI-Basic_Average_Value"),
-                        value: 4,
+                        value: 5,
                         cls: "dot-e-font"
                     }]
                 }]]
@@ -11400,7 +11400,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         normalSingleSlider.populate();
 
         var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider",
+            type: "bi.single_slider_label",
             width: o.width,
             height: o.height,
             digit: 0,
