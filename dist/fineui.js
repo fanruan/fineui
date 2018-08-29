@@ -12049,10 +12049,11 @@ _.extend(BI.OB.prototype, {
          * @param force 是否强制挂载子节点
          * @param deep 子节点是否也是按照当前force处理
          * @param lifeHook 生命周期钩子触不触发，默认触发
+         * @param predicate 递归每个widget的回调
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook) {
+        _mount: function (force, deep, lifeHook, predicate) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
@@ -12063,9 +12064,10 @@ _.extend(BI.OB.prototype, {
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
+            predicate && predicate(this);
             return true;
         },
 
@@ -12362,11 +12364,11 @@ _.extend(BI.OB.prototype, {
         }
     });
 
-    BI.mount = function (widget, container) {
+    BI.mount = function (widget, container, predicate) {
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
         }
-        return widget._mount(true, false, false);
+        return widget._mount(true, false, false, predicate);
     };
 })();(function () {
     var kv = {};
@@ -35787,30 +35789,46 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        var loadingAnimation = BI.createWidget({
+            type: "bi.horizontal",
+            cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            height: 60,
+            width: 60,
+            hgap: 10,
+            vgap: 5,
+            items: [{
+                type: "bi.layout",
+                cls: "rect1",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect2",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect3",
+                height: 50,
+                width: 5
+            }]
+        });
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: "bi.vtape",
+                    type: "bi.absolute_center_adapt",
                     items: [{
-                        el: {
-                            type: "bi.layout",
-                            cls: "loading-background"
-                        },
-                        height: 30
+                        el: loadingAnimation
                     }],
                     element: BI.Layers.make(this.getName(), this)
                 });
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = BI.createWidget({
-                type: "bi.layout",
-                cls: "loading-background",
-                height: 30
-            });
+            this._loading = loadingAnimation;
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
-                type: "bi.absolute",
+                type: "bi.absolute_center_adapt",
                 element: this,
                 items: [{
                     el: this._loading,

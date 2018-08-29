@@ -11807,10 +11807,11 @@ _.extend(BI.OB.prototype, {
          * @param force 是否强制挂载子节点
          * @param deep 子节点是否也是按照当前force处理
          * @param lifeHook 生命周期钩子触不触发，默认触发
+         * @param predicate 递归每个widget的回调
          * @returns {boolean}
          * @private
          */
-        _mount: function (force, deep, lifeHook) {
+        _mount: function (force, deep, lifeHook, predicate) {
             var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
@@ -11821,9 +11822,10 @@ _.extend(BI.OB.prototype, {
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount(deep ? force : false, deep, lifeHook);
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
+            predicate && predicate(this);
             return true;
         },
 
@@ -12120,11 +12122,11 @@ _.extend(BI.OB.prototype, {
         }
     });
 
-    BI.mount = function (widget, container) {
+    BI.mount = function (widget, container, predicate) {
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
         }
-        return widget._mount(true, false, false);
+        return widget._mount(true, false, false, predicate);
     };
 })();(function () {
     var kv = {};
