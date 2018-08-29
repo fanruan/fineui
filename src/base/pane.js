@@ -74,6 +74,9 @@ BI.Pane = BI.inherit(BI.Widget, {
                 width: 5
             }]
         });
+        // pane在同步方式下由items决定tipText的显示与否
+        // loading的异步情况下由loaded前对面板的populate的时机决定
+        this.setTipVisible(false);
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
