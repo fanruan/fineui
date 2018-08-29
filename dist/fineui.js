@@ -12366,7 +12366,7 @@ _.extend(BI.OB.prototype, {
 
     BI.mount = function (widget, container, predicate, hydrate) {
         if(hydrate === true){
-            // 将widget的element元素都挂载好
+            // 将widget的element元素都挂载好，并建立相互关系
             var res = widget._mount(true, false, false, function(w){
                 var ws = w.element.data("__widgets");
                 if(!ws) {
@@ -12374,6 +12374,7 @@ _.extend(BI.OB.prototype, {
                 }
                 ws.push(w);
                 w.element.data("__widgets", ws);
+                predicate && predicate.apply(this, arguments);
             });
             // 将新的dom树属性（事件等）patch到已存在的dom上
             var c = BI.Widget._renderEngine.createElement;
