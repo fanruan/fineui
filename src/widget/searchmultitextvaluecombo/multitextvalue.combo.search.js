@@ -282,6 +282,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -294,9 +295,11 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -352,6 +355,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -359,6 +363,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
