@@ -491,10 +491,10 @@
         }
     });
 
-    BI.mount = function (widget, container) {
+    BI.mount = function (widget, container, predicate) {
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
         }
-        return widget._mount(true, false, false);
+        return widget._mount(true, false, false, predicate);
     };
 })();
