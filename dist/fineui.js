@@ -76788,10 +76788,9 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -76818,7 +76817,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 self._setSliderPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
                 v = o.digit === false ? v : v.toFixed(o.digit);
-                self.label.setValue(v);
+                self.label.setValue(v + o.unit);
                 self.value = v;
                 self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             }
@@ -76890,7 +76889,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
