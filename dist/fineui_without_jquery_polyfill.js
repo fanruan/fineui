@@ -12122,7 +12122,33 @@ _.extend(BI.OB.prototype, {
         }
     });
 
-    BI.mount = function (widget, container, predicate) {
+    BI.mount = function (widget, container, predicate, hydrate) {
+        if(hydrate === true){
+            // 将widget的element元素都挂载好，并建立相互关系
+            var res = widget._mount(true, false, false, function(w){
+                var ws = w.element.data("__widgets");
+                if(!ws) {
+                    ws = [];
+                }
+                ws.push(w);
+                w.element.data("__widgets", ws);
+                predicate && predicate.apply(this, arguments);
+            });
+            // 将新的dom树属性（事件等）patch到已存在的dom上
+            var c = BI.Widget._renderEngine.createElement;
+            BI.DOM.patchProps(widget.element, c(c(container).children()[0]));
+
+            var triggerLifeHook = function (w) {
+                w.beforeMount && w.beforeMount();
+                w.mounted && w.mounted();
+                BI.each(w._children, function (i, child) {
+                    triggerLifeHook(child);
+                });
+            };
+            //最后触发组件树生命周期函数
+            triggerLifeHook(widget);
+            return res;
+        }
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
         }
@@ -24249,12 +24275,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            initMixins(this, mixins);
             this._init();
             initState(this, state);
-            initMixins(this, mixins);
-            initMethods(this, actions);
             initComputed(this, computed);
             initWatch(this, watch$$1);
+            initMethods(this, actions);
             this.created && this.created();
             if (this.$$model) {
                 return this.model;
