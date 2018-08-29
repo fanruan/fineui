@@ -2,7 +2,9 @@
 @import "../resource/background";
 .bi-pane {
     min-height: 55px;
-    .background-color(@color-bi-background-normal, 0);
+    & .loading-container {
+        .background-color(@color-bi-background-normal, 0);
+    }
 }
 
 .bi-loading-widget {
