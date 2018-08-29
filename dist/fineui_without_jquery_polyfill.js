@@ -24403,6 +24403,9 @@ BI.Pane = BI.inherit(BI.Widget, {
                 width: 5
             }]
         });
+        // pane在同步方式下由items决定tipText的显示与否
+        // loading的异步情况下由loaded后对面板的populate的时机决定
+        this.setTipVisible(false);
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
@@ -50010,6 +50013,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -50022,9 +50026,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -50078,6 +50084,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -50085,6 +50092,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -50408,6 +50416,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -50420,9 +50429,11 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -50453,6 +50464,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    // value更新的时候assist也需要更新
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -50460,6 +50473,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -50794,6 +50808,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -50806,9 +50821,11 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -50839,6 +50856,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -50846,6 +50864,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -55981,6 +56000,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -55993,9 +56013,11 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -56051,6 +56073,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -56058,6 +56081,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -59692,10 +59716,9 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -59722,7 +59745,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 self._setSliderPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
                 v = o.digit === false ? v : v.toFixed(o.digit);
-                self.label.setValue(v);
+                self.label.setValue(v + o.unit);
                 self.value = v;
                 self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             }
@@ -59794,7 +59817,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
