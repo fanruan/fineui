@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license
@@ -11801,29 +11802,28 @@ _.extend(BI.OB.prototype, {
             this._parent = parent;
         },
 
-        _mount: function () {
+        /**
+         *
+         * @param force 是否强制挂载子节点
+         * @param deep 子节点是否也是按照当前force处理
+         * @param lifeHook 生命周期钩子触不触发，默认触发
+         * @returns {boolean}
+         * @private
+         */
+        _mount: function (force, deep, lifeHook) {
             var self = this;
-            var isMounted = this._isMounted;
-            if (isMounted || !this.isVisible() || this.__asking === true) {
-                return;
+            if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
+                return false;
             }
-            if (this._isRoot === true) {
-                isMounted = true;
-            } else if (this._parent && this._parent._isMounted === true) {
-                isMounted = true;
-            }
-            if (!isMounted) {
-                return;
-            }
-            this.beforeMount && this.beforeMount();
+            lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
                 !self.isEnabled() && widget._setEnable(false);
                 !self.isValid() && widget._setValid(false);
-                widget._mount && widget._mount();
+                widget._mount && widget._mount(deep ? force : false, deep, lifeHook);
             });
-            this.mounted && this.mounted();
+            lifeHook !== false && this.mounted && this.mounted();
             return true;
         },
 
@@ -12106,7 +12106,7 @@ _.extend(BI.OB.prototype, {
     };
     BI.Widget.registerRenderEngine({
         createElement: function (widget) {
-            if(BI.isWidget(widget)) {
+            if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
                     return $(o.element);
@@ -12114,8 +12114,18 @@ _.extend(BI.OB.prototype, {
                 return $(document.createElement(o.tagName));
             }
             return $(widget);
+        },
+        createFragment: function () {
+            return document.createDocumentFragment();
         }
     });
+
+    BI.mount = function (widget, container) {
+        if (container) {
+            BI.Widget._renderEngine.createElement(container).append(widget.element);
+        }
+        return widget._mount(true, false, false);
+    };
 })();(function () {
     var kv = {};
     BI.shortcut = function (xtype, cls) {
@@ -12172,7 +12182,7 @@ _.extend(BI.OB.prototype, {
         throw new Error("无法根据item创建组件");
     };
 
-})();(function (window, undefined) {
+})();!(function () {
     function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -12234,7 +12244,7 @@ _.extend(BI.OB.prototype, {
 
     return BI.aspect;
 
-})(window);
+})();
 !(function () {
 
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -14700,7 +14710,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _mountChildren: function () {
         var self = this;
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
         BI.each(this._children, function (i, widget) {
             if (widget.element !== self.element) {
@@ -14929,7 +14939,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     addItems: function (items) {
         var self = this, o = this.options;
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item);
@@ -14947,7 +14957,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     prependItems: function (items) {
         var self = this;
         items = items || [];
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
             this._addItemAt(0, items[i]);
@@ -15941,7 +15951,12 @@ BI.ShowAction = BI.inherit(BI.Action, {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
-            return BI.specialCharsMap[str] || str;
+            switch (str) {
+                case "\\":
+                    return BI.specialCharsMap["\\\\"] || str;
+                default:
+                    return BI.specialCharsMap[str] || str;
+            }
         });
         return _global.encodeURIComponent(url);
     };
@@ -16966,7 +16981,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        BI.Widget._renderEngine.createElement(window).resize(fn);
+        BI.Widget._renderEngine.createElement(_global).resize(fn);
     },
 
     _resize: function (ev) {
@@ -18491,7 +18506,7 @@ BI.extend(BI.DOM, {
         if (BI.isEmpty(doms)) {
             return;
         }
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         BI.each(doms, function (i, dom) {
             dom instanceof BI.Widget && (dom = dom.element);
             dom instanceof $ && dom[0] && frag.appendChild(dom[0]);

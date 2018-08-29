@@ -1069,6 +1069,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return watchers;
     }
 
+    var mixinInjection = {};
+
+    function getMixins(type) {
+        return mixinInjection[type];
+    }
+
+    function mixin(xtype, cls) {
+        mixinInjection[xtype] = _.cloneDeep(cls);
+    }
+
     var computedWatcherOptions = { lazy: true };
 
     function initState(vm, state) {
@@ -1171,6 +1181,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         for (var key in methods) {
             vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
         }
+    }
+
+    function initMixins(vm, mixins) {
+        mixins = mixins || [];
+
+        _.each(mixins.reverse(), function (mixinType) {
+            var mixin$$1 = getMixins(mixinType);
+
+            for (var key in mixin$$1) {
+                if (typeof mixin$$1[key] !== "function") continue;
+
+                if (_.has(vm, key)) continue;
+
+                vm[key] = _.bind(mixin$$1[key], vm.$$model ? vm.model : vm);
+            }
+        });
     }
 
     function defineProps(vm, keys) {
@@ -1300,14 +1326,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var watch$$1 = this.watch;
             var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
+            var mixins = this.mixins;
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             this._init();
             initState(this, state);
+            initMixins(this, mixins);
+            initMethods(this, actions);
             initComputed(this, computed);
             initWatch(this, watch$$1);
-            initMethods(this, actions);
             this.created && this.created();
             if (this.$$model) {
                 return this.model;
@@ -1364,6 +1392,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
+    exports.mixin = mixin;
     exports.Model = Model;
     exports.observerState = observerState;
     exports.Observer = Observer;

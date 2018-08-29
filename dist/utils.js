@@ -16,7 +16,8 @@ if (typeof window !== "undefined") {
 }
 if (_global.BI == null) {
     _global.BI = {prepares: []};
-} else {
+}
+if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }/**
  * @license
@@ -13038,7 +13039,12 @@ _.extend(BI.OB.prototype, {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
         url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
-            return BI.specialCharsMap[str] || str;
+            switch (str) {
+                case "\\":
+                    return BI.specialCharsMap["\\\\"] || str;
+                default:
+                    return BI.specialCharsMap[str] || str;
+            }
         });
         return _global.encodeURIComponent(url);
     };
@@ -13538,7 +13544,7 @@ _.extend(BI.OB.prototype, {
         }
     };
 })();
-(function (window, undefined) {
+!(function () {
     function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -13600,7 +13606,7 @@ _.extend(BI.OB.prototype, {
 
     return BI.aspect;
 
-})(window);
+})();
 !(function () {
 
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

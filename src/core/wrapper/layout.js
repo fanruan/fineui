@@ -69,7 +69,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _mountChildren: function () {
         var self = this;
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
         BI.each(this._children, function (i, widget) {
             if (widget.element !== self.element) {
@@ -298,7 +298,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     addItems: function (items) {
         var self = this, o = this.options;
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item);
@@ -316,7 +316,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     prependItems: function (items) {
         var self = this;
         items = items || [];
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
             this._addItemAt(0, items[i]);
