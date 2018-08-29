@@ -39,7 +39,7 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                         cls: "dot-e-font"
                     }, {
                         text: BI.i18nText("BI-Basic_Average_Value"),
-                        value: 4,
+                        value: 5,
                         cls: "dot-e-font"
                     }]
                 }]]

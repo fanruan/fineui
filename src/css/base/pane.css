@@ -344,6 +344,8 @@
 }
 .bi-pane {
   min-height: 55px;
+}
+.bi-pane .loading-container {
   background-color: rgba(247, 248, 250, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00f7f8fa,endColorstr=#00f7f8fa);
 }
