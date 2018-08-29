@@ -491,7 +491,32 @@
         }
     });
 
-    BI.mount = function (widget, container, predicate) {
+    BI.mount = function (widget, container, predicate, hydrate) {
+        if(hydrate === true){
+            // 将widget的element元素都挂载好
+            var res = widget._mount(true, false, false, function(w){
+                var ws = w.element.data("__widgets");
+                if(!ws) {
+                    ws = [];
+                }
+                ws.push(w);
+                w.element.data("__widgets", ws);
+            });
+            // 将新的dom树属性（事件等）patch到已存在的dom上
+            var c = BI.Widget._renderEngine.createElement;
+            BI.DOM.patchProps(widget.element, c(c(container).children()[0]));
+
+            var triggerLifeHook = function (w) {
+                w.beforeMount && w.beforeMount();
+                w.mounted && w.mounted();
+                BI.each(w._children, function (i, child) {
+                    triggerLifeHook(child);
+                });
+            };
+            //最后触发组件树生命周期函数
+            triggerLifeHook(widget);
+            return res;
+        }
         if (container) {
             BI.Widget._renderEngine.createElement(container).append(widget.element);
         }
