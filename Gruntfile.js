@@ -126,7 +126,7 @@ module.exports = function (grunt) {
                     "src/core/wrapper/layout.js",
                     "src/core/plugin.js",
                     "src/core/**/*.js",
-                    "!src/core/platform/dom/**/*.js",
+                    "!src/core/platform/web/**/*.js",
 
                     "src/data/data.js",
                     "src/data/**/*.js",
