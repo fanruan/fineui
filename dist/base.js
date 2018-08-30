@@ -660,18 +660,22 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _init: function () {
         BI.BasicButton.superclass._init.apply(this, arguments);
         var opts = this.options;
-        if (opts.selected === true) {
-            BI.nextTick(BI.bind(function () {
-                this.setSelected(opts.selected);
-            }, this));
-        }
-        BI.nextTick(BI.bind(this.bindEvent, this));
-
         if (opts.shadow) {
             this._createShadow();
         }
         if (opts.level) {
             this.element.addClass("button-" + opts.level);
+        }
+    },
+
+    _mount: function () {
+        var _mount = BI.BasicButton.superclass._mount.apply(this, arguments);
+        if(_mount === true) {
+            var o = this.options;
+            if (o.selected === true) {
+                this.setSelected(o.selected);
+            }
+            this.bindEvent();
         }
     },
 
@@ -831,8 +835,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
         // 之后的300ms点击无效
         var onClick = BI.debounce(this._doClick, BI.EVENT_RESPONSE_TIME, {
-            "leading": true,
-            "trailing": false
+            leading: true,
+            trailing: false
         });
 
         function ev (e) {
@@ -1058,10 +1062,13 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 
     _init: function () {
         BI.NodeButton.superclass._init.apply(this, arguments);
-        var self = this;
-        BI.nextTick(function () {
-            self.setOpened(self.isOpened());
-        });
+    },
+
+    _mount: function () {
+        var _mount = BI.NodeButton.superclass._mount.apply(this, arguments);
+        if(_mount === true) {
+            this.setOpened(this.isOpened());
+        }
     },
 
     doClick: function () {
@@ -2596,11 +2603,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -5338,11 +5347,13 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
