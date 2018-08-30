@@ -212,7 +212,7 @@ if (jQuery) {
 
         __releaseZIndexMask__: function (zindex) {
             if (zindex && this.zIndexMask[zindex]) {
-                this.indexMask.remove(this.zIndexMask[zindex]);
+                BI.remove(this.indexMask, this.zIndexMask[zindex]);
                 this.zIndexMask[zindex].destroy();
                 return;
             }

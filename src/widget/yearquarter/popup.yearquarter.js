@@ -78,7 +78,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%Q");
+            date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -146,7 +146,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     switch (v) {
                         case BI.DynamicYearQuarterCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
+                            self.year.setValue({year: date.getFullYear(), quarter: BI.getQuarter(date)});
                             self._setInnerValue();
                             break;
                         case BI.DynamicYearQuarterCombo.Dynamic:

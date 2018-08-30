@@ -47,7 +47,7 @@ if (!_global.BI) {
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
                     var key = "{R" + i + "}";
-                    localeText = localeText.replaceAll(key, arguments[i] + "");
+                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                 }
             }
             return localeText;
@@ -307,13 +307,13 @@ if (!_global.BI) {
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
@@ -645,7 +645,7 @@ if (!_global.BI) {
                 }
             }
             for (var b in other) {
-                if (this.has(other, b) && !used.contains(b)) {
+                if (this.has(other, b) && !BI.contains(used, b)) {
                     result.push(b);
                 }
             }
@@ -1131,7 +1131,7 @@ if (!_global.BI) {
             if (ar.length <= 2) {
                 return MM >= 1 && MM <= 12;
             }
-            var MD = Date._MD.slice(0);
+            var MD = BI.Date._MD.slice(0);
             MD[1] = BI.isLeapYear(YY) ? 29 : 28;
             return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
         },
@@ -1178,7 +1178,7 @@ if (!_global.BI) {
                     case "%b":
                     case "%B":
                         for (j = 0; j < 12; ++j) {
-                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                                 m = j;
                                 break;
                             }
@@ -1239,7 +1239,7 @@ if (!_global.BI) {
                 if (a[i].search(/[a-zA-Z]+/) != -1) {
                     var t = -1;
                     for (j = 0; j < 12; ++j) {
-                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                        if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                             t = j;
                             break;
                         }

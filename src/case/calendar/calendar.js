@@ -29,7 +29,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        var MD = Date._MD.slice(0);
+        var MD = BI.Date._MD.slice(0);
         MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         // 日期所在月第一天
@@ -74,7 +74,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Calendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var items = BI.map(Date._SDN.slice(0, 7), function (i, value) {
+        var items = BI.map(BI.Date._SDN.slice(0, 7), function (i, value) {
             return {
                 type: "bi.label",
                 height: 24,
@@ -146,7 +146,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(-1 * (day + 1));
+        var newDate = BI.getOffsetDate(De, -1 * (day + 1));
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -155,7 +155,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(42 - day);
+        var newDate = BI.getOffsetDate(De, 42 - day);
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 

@@ -10245,45 +10245,7 @@ _.extend(BI, {
         Stretch: "stretch"
     },
     StartOfWeek: 1
-});/**
- * 对数组对象的扩展
- * @class Array
- */
-_.extend(Array.prototype, {
-    contains: function (o) {
-        return this.indexOf(o) > -1;
-    },
-
-    /**
-     * 从数组中移除指定的值，如果值不在数组中，则不产生任何效果
-     * @param {Object} o 要移除的值
-     * @return {Array} 移除制定值后的数组
-     */
-    remove: function (o) {
-        var index = this.indexOf(o);
-        if (index !== -1) {
-            this.splice(index, 1);
-        }
-        return this;
-    },
-
-    pushArray: function (array) {
-        for (var i = 0; i < array.length; i++) {
-            this.push(array[i]);
-        }
-    },
-    pushDistinct: function (obj) {
-        if (!this.contains(obj)) {
-            this.push(obj);
-        }
-    },
-    pushDistinctArray: function (array) {
-        for (var i = 0, len = array.length; i < len; i++) {
-            this.pushDistinct(array[i]);
-        }
-    }
-});
-if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
+});if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
     (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
     (function () {
@@ -10424,511 +10386,7 @@ if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
         };
 
     })();
-}
-
-
-/**
- ** 加法函数，用来得到精确的加法结果
- ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
- ** 调用：accAdd(arg1,arg2)
- ** 返回值：arg1加上arg2的精确结果
- **/
-function accAdd (arg1, arg2) {
-    var r1, r2, m, c;
-    try {
-        r1 = arg1.toString().split(".")[1].length;
-    } catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split(".")[1].length;
-    } catch (e) {
-        r2 = 0;
-    }
-    c = Math.abs(r1 - r2);
-    m = Math.pow(10, Math.max(r1, r2));
-    if (c > 0) {
-        var cm = Math.pow(10, c);
-        if (r1 > r2) {
-            arg1 = Number(arg1.toString().replace(".", ""));
-            arg2 = Number(arg2.toString().replace(".", "")) * cm;
-        } else {
-            arg1 = Number(arg1.toString().replace(".", "")) * cm;
-            arg2 = Number(arg2.toString().replace(".", ""));
-        }
-    } else {
-        arg1 = Number(arg1.toString().replace(".", ""));
-        arg2 = Number(arg2.toString().replace(".", ""));
-    }
-    return (arg1 + arg2) / m;
-}
-
-// 给Number类型增加一个add方法，调用起来更加方便。
-Number.prototype.add = function (arg) {
-    return accAdd(arg, this);
-};
-/**
- ** 减法函数，用来得到精确的减法结果
- ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
- ** 调用：accSub(arg1,arg2)
- ** 返回值：arg1加上arg2的精确结果
- **/
-function accSub (arg1, arg2) {
-    var r1, r2, m, n;
-    try {
-        r1 = arg1.toString().split(".")[1].length;
-    } catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split(".")[1].length;
-    } catch (e) {
-        r2 = 0;
-    }
-    m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
-    n = (r1 >= r2) ? r1 : r2;
-    return ((arg1 * m - arg2 * m) / m).toFixed(n);
-}
-
-// 给Number类型增加一个mul方法，调用起来更加方便。
-Number.prototype.sub = function (arg) {
-    return accSub(this, arg);
-};
-/**
- ** 乘法函数，用来得到精确的乘法结果
- ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
- ** 调用：accMul(arg1,arg2)
- ** 返回值：arg1乘以 arg2的精确结果
- **/
-function accMul (arg1, arg2) {
-    var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
-    try {
-        m += s1.split(".")[1].length;
-    } catch (e) {
-    }
-    try {
-        m += s2.split(".")[1].length;
-    } catch (e) {
-    }
-    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
-}
-
-// 给Number类型增加一个mul方法，调用起来更加方便。
-Number.prototype.mul = function (arg) {
-    return accMul(arg, this);
-};
-
-/**
- * Return digits length of a number
- * @param {*number} num Input number
- */
-function digitLength (num) {
-    // Get digit length of e
-    var eSplit = num.toString().split(/[eE]/);
-    var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
-    return len > 0 ? len : 0;
-}
-/**
- * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
- * @param {*number} num 输入数
- */
-function float2Fixed (num) {
-    if (num.toString().indexOf("e") === -1) {
-        return Number(num.toString().replace(".", ""));
-    }
-    var dLen = digitLength(num);
-    return dLen > 0 ? num * Math.pow(10, dLen) : num;
-}
-
-/**
- * 精确乘法
- */
-function times (num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    var baseNum = digitLength(num1) + digitLength(num2);
-    var leftValue = num1Changed * num2Changed;
-    return leftValue / Math.pow(10, baseNum);
-}
-
-/**
- * 精确除法
- */
-function accDivide (num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
-}
-
-// 给Number类型增加一个div方法，调用起来更加方便。
-Number.prototype.div = function (arg) {
-    return accDivide(this, arg);
-};/**
- * 对字符串对象的扩展
- * @class String
- */
-_.extend(String.prototype, {
-
-    /**
-     * 判断字符串是否已指定的字符串开始
-     * @param {String} startTag   指定的开始字符串
-     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
-     */
-    startWith: function (startTag) {
-        if (startTag == null || startTag == "" || this.length === 0 || startTag.length > this.length) {
-            return false;
-        }
-        return this.substr(0, startTag.length) == startTag;
-    },
-    /**
-     * 判断字符串是否以指定的字符串结束
-     * @param {String} endTag 指定的字符串
-     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
-     */
-    endWith: function (endTag) {
-        if (endTag == null || endTag == "" || this.length === 0 || endTag.length > this.length) {
-            return false;
-        }
-        return this.substring(this.length - endTag.length) == endTag;
-    },
-
-    /**
-     * 获取url中指定名字的参数
-     * @param {String} name 参数的名字
-     * @return {String} 参数的值
-     */
-    getQuery: function (name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-        var r = this.substr(this.indexOf("?") + 1).match(reg);
-        if (r) {
-            return unescape(r[2]);
-        }
-        return null;
-    },
-
-    /**
-     * 给url加上给定的参数
-     * @param {Object} paras 参数对象，是一个键值对对象
-     * @return {String} 添加了给定参数的url
-     */
-    appendQuery: function (paras) {
-        if (!paras) {
-            return this;
-        }
-        var src = this;
-        // 没有问号说明还没有参数
-        if (src.indexOf("?") === -1) {
-            src += "?";
-        }
-        // 如果以问号结尾，说明没有其他参数
-        if (src.endWith("?") !== false) {
-        } else {
-            src += "&";
-        }
-        _.each(paras, function (value, name) {
-            if (typeof(name) === "string") {
-                src += name + "=" + value + "&";
-            }
-        });
-        src = src.substr(0, src.length - 1);
-        return src;
-    },
-    /**
-     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
-     * @param {String} s1 要替换的字符串的正则表达式
-     * @param {String} s2 替换的结果字符串
-     * @returns {String} 替换后的字符串
-     */
-    replaceAll: function (s1, s2) {
-        return this.replace(new RegExp(s1, "gm"), s2);
-    },
-    /**
-     * 总是让字符串以指定的字符开头
-     * @param {String} start 指定的字符
-     * @returns {String} 以指定字符开头的字符串
-     */
-    perfectStart: function (start) {
-        if (this.startWith(start)) {
-            return this;
-        }
-        return start + this;
-
-    },
-
-    /**
-     * 获取字符串中某字符串的所有项位置数组
-     * @param {String} sub 子字符串
-     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
-     */
-    allIndexOf: function (sub) {
-        if (typeof sub !== "string") {
-            return [];
-        }
-        var str = this;
-        var location = [];
-        var offset = 0;
-        while (str.length > 0) {
-            var loc = str.indexOf(sub);
-            if (loc === -1) {
-                break;
-            }
-            location.push(offset + loc);
-            str = str.substring(loc + sub.length, str.length);
-            offset += loc + sub.length;
-        }
-        return location;
-    }
-});
-/** Constants used for time computations */
-Date.SECOND = 1000;
-Date.MINUTE = 60 * Date.SECOND;
-Date.HOUR = 60 * Date.MINUTE;
-Date.DAY = 24 * Date.HOUR;
-Date.WEEK = 7 * Date.DAY;
-
-/**
- * 获取时区
- * @returns {String}
- */
-Date.prototype.getTimezone = function () {
-    return this.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
-};
-
-/** Returns the number of days in the current month */
-Date.prototype.getMonthDays = function (month) {
-    var year = this.getFullYear();
-    if (typeof month === "undefined") {
-        month = this.getMonth();
-    }
-    if (((0 == (year % 4)) && ( (0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
-        return 29;
-    }
-    return Date._MD[month];
-
-};
-
-/**
- * 获取每月的最后一天
- * @returns {Date}
- */
-Date.prototype.getLastDateOfMonth = function () {
-    return BI.getDate(this.getFullYear(), this.getMonth(), this.getMonthDays());
-};
-
-/** Returns the number of day in the year. */
-Date.prototype.getDayOfYear = function () {
-    var now = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var then = BI.getDate(this.getFullYear(), 0, 0, 0, 0, 0);
-    var time = now - then;
-    return Math.floor(time / Date.DAY);
-};
-
-/** Returns the number of the week in year, as defined in ISO 8601. */
-Date.prototype.getWeekNumber = function () {
-    var d = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var week = d.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    if (this.getMonth() === 0 && this.getDate() <= week) {
-        return 1;
-    }
-    d.setDate(this.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
-    var ms = d.valueOf(); // GMT
-    d.setMonth(0);
-    d.setDate(1);
-    var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() !== startOfWeek) {
-        offset++;
-    }
-    return offset;
-};
-
-Date.prototype.getQuarter = function () {
-    return Math.floor(this.getMonth() / 3) + 1;
-};
-
-// 离当前时间多少天的时间
-Date.prototype.getOffsetDate = function (offset) {
-    return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
-};
-
-Date.prototype.getOffsetQuarter = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    var day = dt.getDate();
-    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1).getMonthDays();
-    if (day > monthDay) {
-        day = monthDay;
-    }
-    dt.setDate(day);
-    dt.setMonth(dt.getMonth() + parseInt(n) * 3);
-    return dt;
-};
-
-// 得到本季度的起始月份
-Date.prototype.getQuarterStartMonth = function () {
-    var quarterStartMonth = 0;
-    var nowMonth = this.getMonth();
-    if (nowMonth < 3) {
-        quarterStartMonth = 0;
-    }
-    if (2 < nowMonth && nowMonth < 6) {
-        quarterStartMonth = 3;
-    }
-    if (5 < nowMonth && nowMonth < 9) {
-        quarterStartMonth = 6;
-    }
-    if (nowMonth > 8) {
-        quarterStartMonth = 9;
-    }
-    return quarterStartMonth;
-};
-// 获得本季度的起始日期
-Date.prototype.getQuarterStartDate = function () {
-    return BI.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
-};
-// 得到本季度的结束日期
-Date.prototype.getQuarterEndDate = function () {
-    var quarterEndMonth = this.getQuarterStartMonth() + 2;
-    return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-
-// 指定日期n个月之前或之后的日期
-Date.prototype.getOffsetMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    var day = dt.getDate();
-    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
-    if (day > monthDay) {
-        day = monthDay;
-    }
-    dt.setDate(day);
-    dt.setMonth(dt.getMonth() + parseInt(n));
-    return dt;
-};
-
-// 获得本周的起始日期
-Date.prototype.getWeekStartDate = function () {
-    var w = this.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
-};
-// 得到本周的结束日期
-Date.prototype.getWeekEndDate = function () {
-    var w = this.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
-};
-
-// 格式化打印日期
-Date.prototype.print = function (str) {
-    var m = this.getMonth();
-    var d = this.getDate();
-    var y = this.getFullYear();
-    var yWith4number = y + "";
-    while (yWith4number.length < 4) {
-        yWith4number = "0" + yWith4number;
-    }
-    var wn = this.getWeekNumber();
-    var qr = this.getQuarter();
-    var w = this.getDay();
-    var s = {};
-    var hr = this.getHours();
-    var pm = (hr >= 12);
-    var ir = (pm) ? (hr - 12) : hr;
-    var dy = this.getDayOfYear();
-    if (ir == 0) {
-        ir = 12;
-    }
-    var min = this.getMinutes();
-    var sec = this.getSeconds();
-    s["%a"] = Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
-    s["%A"] = Date._DN[w]; // full weekday name
-    s["%b"] = Date._SMN[m]; // abbreviated month name [FIXME: I18N]
-    s["%B"] = Date._MN[m]; // full month name
-    // FIXME: %c : preferred date and time representation for the current locale
-    s["%C"] = 1 + Math.floor(y / 100); // the century number
-    s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
-    s["%e"] = d; // the day of the month (range 1 to 31)
-    // FIXME: %D : american date style: %m/%d/%y
-    // FIXME: %E, %F, %G, %g, %h (man strftime)
-    s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
-    s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
-    s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-    s["%k"] = hr;		// hour, range 0 to 23 (24h format)
-    s["%l"] = ir;		// hour, range 1 to 12 (12h format)
-    s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
-    s["%x"] = m + 1; // month, range 1 to 12
-    s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
-    s["%n"] = "\n";		// a newline character
-    s["%p"] = pm ? "PM" : "AM";
-    s["%P"] = pm ? "pm" : "am";
-    // FIXME: %r : the time in am/pm notation %I:%M:%S %p
-    // FIXME: %R : the time in 24-hour notation %H:%M
-    s["%s"] = Math.floor(this.getTime() / 1000);
-    s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
-    s["%t"] = "\t";		// a tab character
-    // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
-    s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
-    s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
-    s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
-    // FIXME: %x : preferred date representation for the current locale without the time
-    // FIXME: %X : preferred time representation for the current locale without the date
-    s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
-    s["%Y"] = yWith4number;		// year with the century
-    s["%%"] = "%";		// a literal '%' character
-    s["%Q"] = qr;
-
-    var re = /%./g;
-    if (!BI.isKhtml()) {
-        return str.replace(re, function (par) {
-            return s[par] || par;
-        });
-    }
-
-    var a = str.match(re);
-    for (var i = 0; i < a.length; i++) {
-        var tmp = s[a[i]];
-        if (tmp) {
-            re = new RegExp(a[i], "g");
-            str = str.replace(re, tmp);
-        }
-    }
-
-    return str;
-};
-Function.prototype.before = function (func) {
-    var __self = this;
-    return function () {
-        if (func.apply(this, arguments) === false) {
-            return false;
-        }
-        return __self.apply(this, arguments);
-    };
-};
-
-Function.prototype.after = function (func) {
-    var __self = this;
-    return function () {
-        var ret = __self.apply(this, arguments);
-        if (ret === false) {
-            return false;
-        }
-        func.apply(this, arguments);
-        return ret;
-    };
-};/**
+}/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
@@ -10977,7 +10435,7 @@ if (!_global.BI) {
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
                     var key = "{R" + i + "}";
-                    localeText = localeText.replaceAll(key, arguments[i] + "");
+                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                 }
             }
             return localeText;
@@ -11237,13 +10695,13 @@ if (!_global.BI) {
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
@@ -11575,7 +11033,7 @@ if (!_global.BI) {
                 }
             }
             for (var b in other) {
-                if (this.has(other, b) && !used.contains(b)) {
+                if (this.has(other, b) && !BI.contains(used, b)) {
                     result.push(b);
                 }
             }
@@ -12061,7 +11519,7 @@ if (!_global.BI) {
             if (ar.length <= 2) {
                 return MM >= 1 && MM <= 12;
             }
-            var MD = Date._MD.slice(0);
+            var MD = BI.Date._MD.slice(0);
             MD[1] = BI.isLeapYear(YY) ? 29 : 28;
             return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
         },
@@ -12108,7 +11566,7 @@ if (!_global.BI) {
                     case "%b":
                     case "%B":
                         for (j = 0; j < 12; ++j) {
-                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                                 m = j;
                                 break;
                             }
@@ -12169,7 +11627,7 @@ if (!_global.BI) {
                 if (a[i].search(/[a-zA-Z]+/) != -1) {
                     var t = -1;
                     for (j = 0; j < 12; ++j) {
-                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                        if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                             t = j;
                             break;
                         }
@@ -13038,7 +12496,7 @@ _.extend(BI.OB.prototype, {
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
-        url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             switch (str) {
                 case "\\":
                     return BI.specialCharsMap["\\\\"] || str;
@@ -13055,7 +12513,7 @@ _.extend(BI.OB.prototype, {
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
         url = url || "";
-        url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
         return _global.decodeURIComponent(url);
@@ -13212,7 +12670,7 @@ _.extend(BI.OB.prototype, {
             var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
             switch (ch) {
                 case "E": // 星期
-                    str = Date._DN[date.getDay()];
+                    str = BI.Date._DN[date.getDay()];
                     break;
                 case "y": // 年
                     if (len <= 3) {
@@ -13223,7 +12681,7 @@ _.extend(BI.OB.prototype, {
                     break;
                 case "M": // 月
                     if (len > 2) {
-                        str = Date._MN[date.getMonth()];
+                        str = BI.Date._MN[date.getMonth()];
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
@@ -13273,7 +12731,7 @@ _.extend(BI.OB.prototype, {
                     str = date.getHours() < 12 ? "am" : "pm";
                     break;
                 case "z":
-                    str = date.getTimezone();
+                    str = BI.getTimezone(date);
                     break;
                 default:
                     str = jfmt.str;
@@ -13404,7 +12862,9 @@ _.extend(BI.OB.prototype, {
         if (BI.isFunction(type)) {
             globalAction.push(type);
             return function () {
-                BI.remove(globalAction, actionFn);
+                BI.remove(globalAction, function (idx) {
+                    return globalAction.indexOf(actionFn) === idx;
+                });
             };
         }
         if (!actions[type]) {
@@ -13412,7 +12872,9 @@ _.extend(BI.OB.prototype, {
         }
         actions[type].push(actionFn);
         return function () {
-            actions[type].remove(actionFn);
+            BI.remove(actions[type], function (idx) {
+                return actions[type].indexOf(actionFn) === idx;
+            });
             if (actions[type].length === 0) {
                 delete actions[type];
             }
@@ -14968,11 +14430,11 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         constructor: BI.Queue,
 
         contains: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         indexOf: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         getElementByIndex: function (index) {
@@ -15002,7 +14464,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         },
 
         remove: function (v) {
-            this.array.remove(v);
+            BI.remove(this.array, v);
         },
 
         splice: function () {
@@ -15716,7 +15178,8 @@ BI.Region.prototype = {
  */
 // 牵扯到国际化这些常量在页面加载后再生效
 // full day names
-Date._DN = ["星期日",
+BI.Date = BI.Date || {};
+BI.Date._DN = ["星期日",
     "星期一",
     "星期二",
     "星期三",
@@ -15726,7 +15189,7 @@ Date._DN = ["星期日",
     "星期日"];
 
 // short day names
-Date._SDN = ["日",
+BI.Date._SDN = ["日",
     "一",
     "二",
     "三",
@@ -15736,10 +15199,10 @@ Date._SDN = ["日",
     "日"];
 
 // Monday first, etc.
-Date._FD = 1;
+BI.Date._FD = 1;
 
 // full month namesdat
-Date._MN = [
+BI.Date._MN = [
     "一月",
     "二月",
     "三月",
@@ -15754,7 +15217,7 @@ Date._MN = [
     "十二月",];
 
 // short month names
-Date._SMN = [0,
+BI.Date._SMN = [0,
     1,
     2,
     3,
@@ -15767,16 +15230,16 @@ Date._SMN = [0,
     10,
     11];
 
-Date._QN = ["", "第1季度",
+BI.Date._QN = ["", "第1季度",
     "第2季度",
     "第3季度",
     "第4季度"];
 
 /** Adds the number of days array to the Date object. */
-Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];/**
+BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];/**
  * 缓冲池
  * @type {{Buffer: {}}}
  */

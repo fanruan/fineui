@@ -588,7 +588,7 @@
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
-        url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             switch (str) {
                 case "\\":
                     return BI.specialCharsMap["\\\\"] || str;
@@ -605,7 +605,7 @@
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
         url = url || "";
-        url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
         return _global.decodeURIComponent(url);
@@ -762,7 +762,7 @@
             var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
             switch (ch) {
                 case "E": // 星期
-                    str = Date._DN[date.getDay()];
+                    str = BI.Date._DN[date.getDay()];
                     break;
                 case "y": // 年
                     if (len <= 3) {
@@ -773,7 +773,7 @@
                     break;
                 case "M": // 月
                     if (len > 2) {
-                        str = Date._MN[date.getMonth()];
+                        str = BI.Date._MN[date.getMonth()];
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
@@ -823,7 +823,7 @@
                     str = date.getHours() < 12 ? "am" : "pm";
                     break;
                 case "z":
-                    str = date.getTimezone();
+                    str = BI.getTimezone(date);
                     break;
                 default:
                     str = jfmt.str;

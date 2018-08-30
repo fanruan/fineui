@@ -176,7 +176,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }

@@ -246,7 +246,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var newItems = [], newChildren = {};
         for (var i = 0, len = this.options.items.length; i < len; i++) {
             var child = this._children[this._getChildName(i)];
-            if (indexes.contains(i)) {
+            if (BI.contains(indexes, i)) {
                 child && deleted.push(child);
             } else {
                 newChildren[this._getChildName(newItems.length)] = child;

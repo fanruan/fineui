@@ -51,15 +51,15 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                            value.second || 0), "%Y-%X-%d %H:%M:%S");
                 }
             }
         });
@@ -120,15 +120,15 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date ||
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date ||
 
-            BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+            BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -153,19 +153,19 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -241,8 +241,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                        value.second || 0), "%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }

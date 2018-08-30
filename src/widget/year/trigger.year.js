@@ -105,7 +105,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y");
+        var dateStr = BI.print(date, "%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -122,7 +122,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y");
+                var dateStr = BI.print(date, "%Y");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:

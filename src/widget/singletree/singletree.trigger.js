@@ -33,7 +33,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _checkTitle: function () {
         var self = this, val = this.getValue();
         BI.any(this.options.items, function (i, item) {
-            if (val.contains(item.value)) {
+            if (BI.contains(val, item.value)) {
                 self.trigger.setTitle(item.text || item.value);
                 return true;
             }

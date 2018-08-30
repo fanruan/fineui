@@ -127,8 +127,8 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -175,9 +175,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%Q");
+        var dateStr = BI.print(date, "%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
-        this.quarterEditor.setValue(date.getQuarter());
+        this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 

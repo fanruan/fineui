@@ -10158,7 +10158,7 @@ if (!_global.BI) {
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
                     var key = "{R" + i + "}";
-                    localeText = localeText.replaceAll(key, arguments[i] + "");
+                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                 }
             }
             return localeText;
@@ -10418,13 +10418,13 @@ if (!_global.BI) {
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
@@ -10756,7 +10756,7 @@ if (!_global.BI) {
                 }
             }
             for (var b in other) {
-                if (this.has(other, b) && !used.contains(b)) {
+                if (this.has(other, b) && !BI.contains(used, b)) {
                     result.push(b);
                 }
             }
@@ -11242,7 +11242,7 @@ if (!_global.BI) {
             if (ar.length <= 2) {
                 return MM >= 1 && MM <= 12;
             }
-            var MD = Date._MD.slice(0);
+            var MD = BI.Date._MD.slice(0);
             MD[1] = BI.isLeapYear(YY) ? 29 : 28;
             return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
         },
@@ -11289,7 +11289,7 @@ if (!_global.BI) {
                     case "%b":
                     case "%B":
                         for (j = 0; j < 12; ++j) {
-                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                                 m = j;
                                 break;
                             }
@@ -11350,7 +11350,7 @@ if (!_global.BI) {
                 if (a[i].search(/[a-zA-Z]+/) != -1) {
                     var t = -1;
                     for (j = 0; j < 12; ++j) {
-                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                        if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                             t = j;
                             break;
                         }
@@ -13888,11 +13888,11 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         constructor: BI.Queue,
 
         contains: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         indexOf: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         getElementByIndex: function (index) {
@@ -13922,7 +13922,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         },
 
         remove: function (v) {
-            this.array.remove(v);
+            BI.remove(this.array, v);
         },
 
         splice: function () {
@@ -14915,7 +14915,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var newItems = [], newChildren = {};
         for (var i = 0, len = this.options.items.length; i < len; i++) {
             var child = this._children[this._getChildName(i)];
-            if (indexes.contains(i)) {
+            if (BI.contains(indexes, i)) {
                 child && deleted.push(child);
             } else {
                 newChildren[this._getChildName(newItems.length)] = child;
@@ -15982,7 +15982,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
-        url = url.replaceAll(BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             switch (str) {
                 case "\\":
                     return BI.specialCharsMap["\\\\"] || str;
@@ -15999,7 +15999,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
         url = url || "";
-        url = url.replaceAll(BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url, BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
         return _global.decodeURIComponent(url);
@@ -16156,7 +16156,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
             var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
             switch (ch) {
                 case "E": // 星期
-                    str = Date._DN[date.getDay()];
+                    str = BI.Date._DN[date.getDay()];
                     break;
                 case "y": // 年
                     if (len <= 3) {
@@ -16167,7 +16167,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     break;
                 case "M": // 月
                     if (len > 2) {
-                        str = Date._MN[date.getMonth()];
+                        str = BI.Date._MN[date.getMonth()];
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
@@ -16217,7 +16217,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
                     str = date.getHours() < 12 ? "am" : "pm";
                     break;
                 case "z":
-                    str = date.getTimezone();
+                    str = BI.getTimezone(date);
                     break;
                 default:
                     str = jfmt.str;
@@ -16419,7 +16419,11 @@ BI.BroadcastController = BI.inherit(BI.Controller, {
     },
 
     remove: function (name, fn) {
+        var self = this;
         if (fn) {
+            BI.remove(this._broadcasts[name], function (idx) {
+                return self._broadcasts[name].indexOf(fn) === idx;
+            });
             this._broadcasts[name].remove(fn);
             if (this._broadcasts[name].length === 0) {
                 delete this._broadcasts[name];
@@ -17632,6 +17636,311 @@ _.extend(BI, {
         AEMAIL: "afteremail"
     }
 });/**
+ * 对数组对象的扩展
+ * @class Array
+ */
+_.extend(BI, {
+
+    pushArray: function (sArray, array) {
+        for (var i = 0; i < array.length; i++) {
+            sArray.push(array[i]);
+        }
+    },
+    pushDistinct: function (sArray, obj) {
+        if (!BI.contains(obj)) {
+            sArray.push(obj);
+        }
+    },
+    pushDistinctArray: function (sArray, array) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            sArray.pushDistinct(array[i]);
+        }
+    }
+});
+BI.prepares.push(function () {
+    BI.Date = BI.Date || {};
+    // 牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
+
+    // short day names
+    BI.Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
+        BI.i18nText("BI-Basic_Simple_Monday"),
+        BI.i18nText("BI-Basic_Simple_Tuesday"),
+        BI.i18nText("BI-Basic_Simple_Wednesday"),
+        BI.i18nText("BI-Basic_Simple_Thursday"),
+        BI.i18nText("BI-Basic_Simple_Friday"),
+        BI.i18nText("BI-Basic_Simple_Saturday"),
+        BI.i18nText("BI-Basic_Simple_Sunday")];
+
+    // Monday first, etc.
+    BI.Date._FD = 1;
+
+    // full month namesdat
+    BI.Date._MN = [
+        BI.i18nText("BI-Basic_January"),
+        BI.i18nText("BI-Basic_February"),
+        BI.i18nText("BI-Basic_March"),
+        BI.i18nText("BI-Basic_April"),
+        BI.i18nText("BI-Basic_May"),
+        BI.i18nText("BI-Basic_June"),
+        BI.i18nText("BI-Basic_July"),
+        BI.i18nText("BI-Basic_August"),
+        BI.i18nText("BI-Basic_September"),
+        BI.i18nText("BI-Basic_October"),
+        BI.i18nText("BI-Basic_November"),
+        BI.i18nText("BI-Basic_December")];
+
+    // short month names
+    BI.Date._SMN = [0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11];
+
+    BI.Date._QN = ["", BI.i18nText("BI-Quarter_1"),
+        BI.i18nText("BI-Quarter_2"),
+        BI.i18nText("BI-Quarter_3"),
+        BI.i18nText("BI-Quarter_4")];
+
+    /** Adds the number of days array to the Date object. */
+    BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+    BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+});/** Constants used for time computations */
+BI.Date = BI.Date || {};
+BI.Date.SECOND = 1000;
+BI.Date.MINUTE = 60 * BI.Date.SECOND;
+BI.Date.HOUR = 60 * BI.Date.MINUTE;
+BI.Date.DAY = 24 * BI.Date.HOUR;
+BI.Date.WEEK = 7 * BI.Date.DAY;
+
+_.extend(BI, {
+    /**
+     * 获取时区
+     * @returns {String}
+     */
+    getTimezone: function (date) {
+        return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
+    },
+
+    /** Returns the number of days in the current month */
+    getMonthDays: function (date, month) {
+        var year = date.getFullYear();
+        if (typeof month === "undefined") {
+            month = date.getMonth();
+        }
+        if (((0 == (year % 4)) && ((0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
+            return 29;
+        }
+        return BI.Date._MD[month];
+
+    },
+
+    /**
+     * 获取每月的最后一天
+     * @returns {Date}
+     */
+    getLastDateOfMonth: function (date) {
+        return BI.getDate(date.getFullYear(), date.getMonth(), BI.getMonthDays(date));
+    },
+
+    /** Returns the number of day in the year. */
+    getDayOfYear: function (date) {
+        var now = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var then = BI.getDate(date.getFullYear(), 0, 0, 0, 0, 0);
+        var time = now - then;
+        return Math.floor(time / BI.Date.DAY);
+    },
+
+    /** Returns the number of the week in year, as defined in ISO 8601. */
+    getWeekNumber: function (date) {
+        var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var week = d.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        if (date.getMonth() === 0 && date.getDate() <= week) {
+            return 1;
+        }
+        d.setDate(date.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
+        var ms = d.valueOf(); // GMT
+        d.setMonth(0);
+        d.setDate(1);
+        var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
+        if (d.getDay() !== startOfWeek) {
+            offset++;
+        }
+        return offset;
+    },
+
+    getQuarter: function (date) {
+        return Math.floor(date.getMonth() / 3) + 1;
+    },
+
+    // 离当前时间多少天的时间
+    getOffsetDate: function (date, offset) {
+        return BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()) + offset * 864e5);
+    },
+
+    getOffsetQuarter: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n) * 3);
+        return dt;
+    },
+
+    // 得到本季度的起始月份
+    getQuarterStartMonth: function (date) {
+        var quarterStartMonth = 0;
+        var nowMonth = date.getMonth();
+        if (nowMonth < 3) {
+            quarterStartMonth = 0;
+        }
+        if (2 < nowMonth && nowMonth < 6) {
+            quarterStartMonth = 3;
+        }
+        if (5 < nowMonth && nowMonth < 9) {
+            quarterStartMonth = 6;
+        }
+        if (nowMonth > 8) {
+            quarterStartMonth = 9;
+        }
+        return quarterStartMonth;
+    },
+    // 获得本季度的起始日期
+    getQuarterStartDate: function (date) {
+        return BI.getDate(date.getFullYear(), BI.getQuarterStartMonth(date), 1);
+    },
+    // 得到本季度的结束日期
+    getQuarterEndDate: function (date) {
+        var quarterEndMonth = BI.getQuarterStartMonth(date) + 2;
+        return BI.getDate(date.getFullYear(), quarterEndMonth, BI.getMonthDays(date, quarterEndMonth));
+    },
+
+    // 指定日期n个月之前或之后的日期
+    getOffsetMonth: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n));
+        return dt;
+    },
+
+    // 获得本周的起始日期
+    getWeekStartDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
+    },
+    // 得到本周的结束日期
+    getWeekEndDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
+    },
+
+    // 格式化打印日期
+    print: function (date, str) {
+        var m = date.getMonth();
+        var d = date.getDate();
+        var y = date.getFullYear();
+        var yWith4number = y + "";
+        while (yWith4number.length < 4) {
+            yWith4number = "0" + yWith4number;
+        }
+        var wn = BI.getWeekNumber(date);
+        var qr = BI.getQuarter(date);
+        var w = date.getDay();
+        var s = {};
+        var hr = date.getHours();
+        var pm = (hr >= 12);
+        var ir = (pm) ? (hr - 12) : hr;
+        var dy = BI.getDayOfYear(date);
+        if (ir == 0) {
+            ir = 12;
+        }
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        s["%a"] = BI.Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
+        s["%A"] = BI.Date._DN[w]; // full weekday name
+        s["%b"] = BI.Date._SMN[m]; // abbreviated month name [FIXME: I18N]
+        s["%B"] = BI.Date._MN[m]; // full month name
+        // FIXME: %c : preferred date and time representation for the current locale
+        s["%C"] = 1 + Math.floor(y / 100); // the century number
+        s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
+        s["%e"] = d; // the day of the month (range 1 to 31)
+        // FIXME: %D : american date style: %m/%d/%y
+        // FIXME: %E, %F, %G, %g, %h (man strftime)
+        s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
+        s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
+        s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
+        s["%k"] = hr;		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir;		// hour, range 1 to 12 (12h format)
+        s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
+        s["%x"] = m + 1; // month, range 1 to 12
+        s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
+        s["%n"] = "\n";		// a newline character
+        s["%p"] = pm ? "PM" : "AM";
+        s["%P"] = pm ? "pm" : "am";
+        // FIXME: %r : the time in am/pm notation %I:%M:%S %p
+        // FIXME: %R : the time in 24-hour notation %H:%M
+        s["%s"] = Math.floor(date.getTime() / 1000);
+        s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
+        s["%t"] = "\t";		// a tab character
+        // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
+        s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
+        s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
+        s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
+        // FIXME: %x : preferred date representation for the current locale without the time
+        // FIXME: %X : preferred time representation for the current locale without the date
+        s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
+        s["%Y"] = yWith4number;		// year with the century
+        s["%%"] = "%";		// a literal '%' character
+        s["%Q"] = qr;
+
+        var re = /%./g;
+        if (!BI.isKhtml()) {
+            return str.replace(re, function (par) {
+                return s[par] || par;
+            });
+        }
+
+        var a = str.match(re);
+        for (var i = 0; i < a.length; i++) {
+            var tmp = s[a[i]];
+            if (tmp) {
+                re = new RegExp(a[i], "g");
+                str = str.replace(re, tmp);
+            }
+        }
+
+        return str;
+    }
+});
+/**
  * 基本的函数
  * Created by GUY on 2015/6/24.
  */
@@ -17708,7 +18017,307 @@ BI.extend(BI.Func, {
         };
     }
 });
-(function () {
+
+_.extend(BI, {
+    beforeFunc: function (sFunc, func) {
+        var __self = sFunc;
+        return function () {
+            if (func.apply(sFunc, arguments) === false) {
+                return false;
+            }
+            return __self.apply(sFunc, arguments);
+        };
+    },
+
+    afterFunc: function (func) {
+        var __self = sFunc;
+        return function () {
+            var ret = __self.apply(sFunc, arguments);
+            if (ret === false) {
+                return false;
+            }
+            func.apply(sFunc, arguments);
+            return ret;
+        };
+    }
+});_.extend(BI, {
+    // 给Number类型增加一个add方法，调用起来更加方便。
+    add: function (num, arg) {
+        return accAdd(arg, num);
+
+        /**
+         ** 加法函数，用来得到精确的加法结果
+         ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
+         ** 调用：accAdd(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accAdd (arg1, arg2) {
+            var r1, r2, m, c;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
+            }
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
+            }
+            c = Math.abs(r1 - r2);
+            m = Math.pow(10, Math.max(r1, r2));
+            if (c > 0) {
+                var cm = Math.pow(10, c);
+                if (r1 > r2) {
+                    arg1 = Number(arg1.toString().replace(".", ""));
+                    arg2 = Number(arg2.toString().replace(".", "")) * cm;
+                } else {
+                    arg1 = Number(arg1.toString().replace(".", "")) * cm;
+                    arg2 = Number(arg2.toString().replace(".", ""));
+                }
+            } else {
+                arg1 = Number(arg1.toString().replace(".", ""));
+                arg2 = Number(arg2.toString().replace(".", ""));
+            }
+            return (arg1 + arg2) / m;
+        }
+    },
+
+    // 给Number类型增加一个sub方法，调用起来更加方便。
+    sub: function (num, arg) {
+        return accSub(num, arg);
+
+        /**
+         ** 减法函数，用来得到精确的减法结果
+         ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
+         ** 调用：accSub(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accSub (arg1, arg2) {
+            var r1, r2, m, n;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
+            }
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
+            }
+            m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
+            n = (r1 >= r2) ? r1 : r2;
+            return ((arg1 * m - arg2 * m) / m).toFixed(n);
+        }
+    },
+
+    // 给Number类型增加一个mul方法，调用起来更加方便。
+    mul: function (num, arg) {
+        return accMul(arg, num);
+
+        /**
+         ** 乘法函数，用来得到精确的乘法结果
+         ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
+         ** 调用：accMul(arg1,arg2)
+         ** 返回值：arg1乘以 arg2的精确结果
+         **/
+        function accMul (arg1, arg2) {
+            var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+            try {
+                m += s1.split(".")[1].length;
+            } catch (e) {
+            }
+            try {
+                m += s2.split(".")[1].length;
+            } catch (e) {
+            }
+            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+        }
+    },
+    
+    // 给Number类型增加一个div方法，调用起来更加方便。
+    div: function (num, arg) {
+        return accDivide(num, arg);
+
+        /**
+         * Return digits length of a number
+         * @param {*number} num Input number
+         */
+        function digitLength (num) {
+            // Get digit length of e
+            var eSplit = num.toString().split(/[eE]/);
+            var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
+            return len > 0 ? len : 0;
+        }
+        /**
+         * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
+         * @param {*number} num 输入数
+         */
+        function float2Fixed (num) {
+            if (num.toString().indexOf("e") === -1) {
+                return Number(num.toString().replace(".", ""));
+            }
+            var dLen = digitLength(num);
+            return dLen > 0 ? num * Math.pow(10, dLen) : num;
+        }
+
+        /**
+         * 精确乘法
+         */
+        function times (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            var baseNum = digitLength(num1) + digitLength(num2);
+            var leftValue = num1Changed * num2Changed;
+            return leftValue / Math.pow(10, baseNum);
+        }
+
+        /**
+         * 精确除法
+         */
+        function accDivide (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
+        }
+    }
+
+});/**
+ * 对字符串对象的扩展
+ * @class String
+ */
+_.extend(BI, {
+
+    /**
+     * 判断字符串是否已指定的字符串开始
+     * @param str source字符串
+     * @param {String} startTag   指定的开始字符串
+     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
+     */
+    startWith: function (str, startTag) {
+        str = str || "";
+        if (startTag == null || startTag == "" || str.length === 0 || startTag.length > str.length) {
+            return false;
+        }
+        return str.substr(0, startTag.length) == startTag;
+    },
+    /**
+     * 判断字符串是否以指定的字符串结束
+     * @param str source字符串
+     * @param {String} endTag 指定的字符串
+     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
+     */
+    endWith: function (str, endTag) {
+        if (endTag == null || endTag == "" || str.length === 0 || endTag.length > str.length) {
+            return false;
+        }
+        return str.substring(str.length - endTag.length) == endTag;
+    },
+
+    /**
+     * 获取url中指定名字的参数
+     * @param str source字符串
+     * @param {String} name 参数的名字
+     * @return {String} 参数的值
+     */
+    getQuery: function (str, name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = str.substr(str.indexOf("?") + 1).match(reg);
+        if (r) {
+            return unescape(r[2]);
+        }
+        return null;
+    },
+
+    /**
+     * 给url加上给定的参数
+     * @param str source字符串
+     * @param {Object} paras 参数对象，是一个键值对对象
+     * @return {String} 添加了给定参数的url
+     */
+    appendQuery: function (str, paras) {
+        if (!paras) {
+            return str;
+        }
+        var src = str;
+        // 没有问号说明还没有参数
+        if (src.indexOf("?") === -1) {
+            src += "?";
+        }
+        // 如果以问号结尾，说明没有其他参数
+        if (src.endWith("?") !== false) {
+        } else {
+            src += "&";
+        }
+        _.each(paras, function (value, name) {
+            if (typeof(name) === "string") {
+                src += name + "=" + value + "&";
+            }
+        });
+        src = src.substr(0, src.length - 1);
+        return src;
+    },
+    /**
+     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
+     * @param str source字符串
+     * @param {String} s1 要替换的字符串的正则表达式
+     * @param {String} s2 替换的结果字符串
+     * @returns {String} 替换后的字符串
+     */
+    replaceAll: function (str, s1, s2) {
+        return str.replace(new RegExp(s1, "gm"), s2);
+    },
+    /**
+     * 总是让字符串以指定的字符开头
+     * @param str source字符串
+     * @param {String} start 指定的字符
+     * @returns {String} 以指定字符开头的字符串
+     */
+    perfectStart: function (str, start) {
+        if (str.startWith(start)) {
+            return str;
+        }
+        return start + str;
+
+    },
+
+    /**
+     * 获取字符串中某字符串的所有项位置数组
+     * @param str source字符串
+     * @param {String} sub 子字符串
+     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
+     */
+    allIndexOf: function (str, sub) {
+        if (typeof sub !== "string") {
+            return [];
+        }
+        var location = [];
+        var offset = 0;
+        while (str.length > 0) {
+            var loc = str.indexOf(sub);
+            if (loc === -1) {
+                break;
+            }
+            location.push(offset + loc);
+            str = str.substring(loc + sub.length, str.length);
+            offset += loc + sub.length;
+        }
+        return location;
+    }
+});(function () {
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
@@ -17768,7 +18377,9 @@ BI.extend(BI.Func, {
         if (BI.isFunction(type)) {
             globalAction.push(type);
             return function () {
-                BI.remove(globalAction, actionFn);
+                BI.remove(globalAction, function (idx) {
+                    return globalAction.indexOf(actionFn) === idx;
+                });
             };
         }
         if (!actions[type]) {
@@ -17776,7 +18387,9 @@ BI.extend(BI.Func, {
         }
         actions[type].push(actionFn);
         return function () {
-            actions[type].remove(actionFn);
+            BI.remove(actions[type], function (idx) {
+                return actions[type].indexOf(actionFn) === idx;
+            });
             if (actions[type].length === 0) {
                 delete actions[type];
             }
@@ -29220,7 +29833,7 @@ $.extend($.Event.prototype, {
 
         __releaseZIndexMask__: function (zindex) {
             if (zindex && this.zIndexMask[zindex]) {
-                this.indexMask.remove(this.zIndexMask[zindex]);
+                BI.remove(this.indexMask, this.zIndexMask[zindex]);
                 this.zIndexMask[zindex].destroy();
                 return;
             }
@@ -29284,345 +29897,7 @@ _.extend(BI, {
             }
         };
     }()
-});/**
- * 对数组对象的扩展
- * @class Array
- */
-_.extend(Array.prototype, {
-    contains: function (o) {
-        return this.indexOf(o) > -1;
-    },
-
-    /**
-     * 从数组中移除指定的值，如果值不在数组中，则不产生任何效果
-     * @param {Object} o 要移除的值
-     * @return {Array} 移除制定值后的数组
-     */
-    remove: function (o) {
-        var index = this.indexOf(o);
-        if (index !== -1) {
-            this.splice(index, 1);
-        }
-        return this;
-    },
-
-    pushArray: function (array) {
-        for (var i = 0; i < array.length; i++) {
-            this.push(array[i]);
-        }
-    },
-    pushDistinct: function (obj) {
-        if (!this.contains(obj)) {
-            this.push(obj);
-        }
-    },
-    pushDistinctArray: function (array) {
-        for (var i = 0, len = array.length; i < len; i++) {
-            this.pushDistinct(array[i]);
-        }
-    }
-});
-BI.prepares.push(function () {
-    // 牵扯到国际化这些常量在页面加载后再生效
-    // full day names
-    Date._DN = [BI.i18nText("BI-Basic_Sunday"),
-        BI.i18nText("BI-Basic_Monday"),
-        BI.i18nText("BI-Basic_Tuesday"),
-        BI.i18nText("BI-Basic_Wednesday"),
-        BI.i18nText("BI-Basic_Thursday"),
-        BI.i18nText("BI-Basic_Friday"),
-        BI.i18nText("BI-Basic_Saturday"),
-        BI.i18nText("BI-Basic_Sunday")];
-
-    // short day names
-    Date._SDN = [BI.i18nText("BI-Basic_Simple_Sunday"),
-        BI.i18nText("BI-Basic_Simple_Monday"),
-        BI.i18nText("BI-Basic_Simple_Tuesday"),
-        BI.i18nText("BI-Basic_Simple_Wednesday"),
-        BI.i18nText("BI-Basic_Simple_Thursday"),
-        BI.i18nText("BI-Basic_Simple_Friday"),
-        BI.i18nText("BI-Basic_Simple_Saturday"),
-        BI.i18nText("BI-Basic_Simple_Sunday")];
-
-    // Monday first, etc.
-    Date._FD = 1;
-
-    // full month namesdat
-    Date._MN = [
-        BI.i18nText("BI-Basic_January"),
-        BI.i18nText("BI-Basic_February"),
-        BI.i18nText("BI-Basic_March"),
-        BI.i18nText("BI-Basic_April"),
-        BI.i18nText("BI-Basic_May"),
-        BI.i18nText("BI-Basic_June"),
-        BI.i18nText("BI-Basic_July"),
-        BI.i18nText("BI-Basic_August"),
-        BI.i18nText("BI-Basic_September"),
-        BI.i18nText("BI-Basic_October"),
-        BI.i18nText("BI-Basic_November"),
-        BI.i18nText("BI-Basic_December")];
-
-    // short month names
-    Date._SMN = [0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11];
-
-    Date._QN = ["", BI.i18nText("BI-Quarter_1"),
-        BI.i18nText("BI-Quarter_2"),
-        BI.i18nText("BI-Quarter_3"),
-        BI.i18nText("BI-Quarter_4")];
-
-    /** Adds the number of days array to the Date object. */
-    Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-    // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-    Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
-});
-/** Constants used for time computations */
-Date.SECOND = 1000;
-Date.MINUTE = 60 * Date.SECOND;
-Date.HOUR = 60 * Date.MINUTE;
-Date.DAY = 24 * Date.HOUR;
-Date.WEEK = 7 * Date.DAY;
-
-/**
- * 获取时区
- * @returns {String}
- */
-Date.prototype.getTimezone = function () {
-    return this.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
-};
-
-/** Returns the number of days in the current month */
-Date.prototype.getMonthDays = function (month) {
-    var year = this.getFullYear();
-    if (typeof month === "undefined") {
-        month = this.getMonth();
-    }
-    if (((0 == (year % 4)) && ( (0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
-        return 29;
-    }
-    return Date._MD[month];
-
-};
-
-/**
- * 获取每月的最后一天
- * @returns {Date}
- */
-Date.prototype.getLastDateOfMonth = function () {
-    return BI.getDate(this.getFullYear(), this.getMonth(), this.getMonthDays());
-};
-
-/** Returns the number of day in the year. */
-Date.prototype.getDayOfYear = function () {
-    var now = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var then = BI.getDate(this.getFullYear(), 0, 0, 0, 0, 0);
-    var time = now - then;
-    return Math.floor(time / Date.DAY);
-};
-
-/** Returns the number of the week in year, as defined in ISO 8601. */
-Date.prototype.getWeekNumber = function () {
-    var d = BI.getDate(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    var week = d.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    if (this.getMonth() === 0 && this.getDate() <= week) {
-        return 1;
-    }
-    d.setDate(this.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
-    var ms = d.valueOf(); // GMT
-    d.setMonth(0);
-    d.setDate(1);
-    var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-    if (d.getDay() !== startOfWeek) {
-        offset++;
-    }
-    return offset;
-};
-
-Date.prototype.getQuarter = function () {
-    return Math.floor(this.getMonth() / 3) + 1;
-};
-
-// 离当前时间多少天的时间
-Date.prototype.getOffsetDate = function (offset) {
-    return BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()) + offset * 864e5);
-};
-
-Date.prototype.getOffsetQuarter = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    var day = dt.getDate();
-    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1).getMonthDays();
-    if (day > monthDay) {
-        day = monthDay;
-    }
-    dt.setDate(day);
-    dt.setMonth(dt.getMonth() + parseInt(n) * 3);
-    return dt;
-};
-
-// 得到本季度的起始月份
-Date.prototype.getQuarterStartMonth = function () {
-    var quarterStartMonth = 0;
-    var nowMonth = this.getMonth();
-    if (nowMonth < 3) {
-        quarterStartMonth = 0;
-    }
-    if (2 < nowMonth && nowMonth < 6) {
-        quarterStartMonth = 3;
-    }
-    if (5 < nowMonth && nowMonth < 9) {
-        quarterStartMonth = 6;
-    }
-    if (nowMonth > 8) {
-        quarterStartMonth = 9;
-    }
-    return quarterStartMonth;
-};
-// 获得本季度的起始日期
-Date.prototype.getQuarterStartDate = function () {
-    return BI.getDate(this.getFullYear(), this.getQuarterStartMonth(), 1);
-};
-// 得到本季度的结束日期
-Date.prototype.getQuarterEndDate = function () {
-    var quarterEndMonth = this.getQuarterStartMonth() + 2;
-    return BI.getDate(this.getFullYear(), quarterEndMonth, this.getMonthDays(quarterEndMonth));
-};
-
-// 指定日期n个月之前或之后的日期
-Date.prototype.getOffsetMonth = function (n) {
-    var dt = BI.getDate(BI.getTime(this.getFullYear(), this.getMonth(), this.getDate(), this.getHours(), this.getMinutes(), this.getSeconds()));
-    var day = dt.getDate();
-    var monthDay = BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1).getMonthDays();
-    if (day > monthDay) {
-        day = monthDay;
-    }
-    dt.setDate(day);
-    dt.setMonth(dt.getMonth() + parseInt(n));
-    return dt;
-};
-
-// 获得本周的起始日期
-Date.prototype.getWeekStartDate = function () {
-    var w = this.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
-};
-// 得到本周的结束日期
-Date.prototype.getWeekEndDate = function () {
-    var w = this.getDay();
-    var startOfWeek = BI.StartOfWeek % 7;
-    return this.getOffsetDate(Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
-};
-
-// 格式化打印日期
-Date.prototype.print = function (str) {
-    var m = this.getMonth();
-    var d = this.getDate();
-    var y = this.getFullYear();
-    var yWith4number = y + "";
-    while (yWith4number.length < 4) {
-        yWith4number = "0" + yWith4number;
-    }
-    var wn = this.getWeekNumber();
-    var qr = this.getQuarter();
-    var w = this.getDay();
-    var s = {};
-    var hr = this.getHours();
-    var pm = (hr >= 12);
-    var ir = (pm) ? (hr - 12) : hr;
-    var dy = this.getDayOfYear();
-    if (ir == 0) {
-        ir = 12;
-    }
-    var min = this.getMinutes();
-    var sec = this.getSeconds();
-    s["%a"] = Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
-    s["%A"] = Date._DN[w]; // full weekday name
-    s["%b"] = Date._SMN[m]; // abbreviated month name [FIXME: I18N]
-    s["%B"] = Date._MN[m]; // full month name
-    // FIXME: %c : preferred date and time representation for the current locale
-    s["%C"] = 1 + Math.floor(y / 100); // the century number
-    s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
-    s["%e"] = d; // the day of the month (range 1 to 31)
-    // FIXME: %D : american date style: %m/%d/%y
-    // FIXME: %E, %F, %G, %g, %h (man strftime)
-    s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
-    s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
-    s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-    s["%k"] = hr;		// hour, range 0 to 23 (24h format)
-    s["%l"] = ir;		// hour, range 1 to 12 (12h format)
-    s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
-    s["%x"] = m + 1; // month, range 1 to 12
-    s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
-    s["%n"] = "\n";		// a newline character
-    s["%p"] = pm ? "PM" : "AM";
-    s["%P"] = pm ? "pm" : "am";
-    // FIXME: %r : the time in am/pm notation %I:%M:%S %p
-    // FIXME: %R : the time in 24-hour notation %H:%M
-    s["%s"] = Math.floor(this.getTime() / 1000);
-    s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
-    s["%t"] = "\t";		// a tab character
-    // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
-    s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
-    s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
-    s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
-    // FIXME: %x : preferred date representation for the current locale without the time
-    // FIXME: %X : preferred time representation for the current locale without the date
-    s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
-    s["%Y"] = yWith4number;		// year with the century
-    s["%%"] = "%";		// a literal '%' character
-    s["%Q"] = qr;
-
-    var re = /%./g;
-    if (!BI.isKhtml()) {
-        return str.replace(re, function (par) {
-            return s[par] || par;
-        });
-    }
-
-    var a = str.match(re);
-    for (var i = 0; i < a.length; i++) {
-        var tmp = s[a[i]];
-        if (tmp) {
-            re = new RegExp(a[i], "g");
-            str = str.replace(re, tmp);
-        }
-    }
-
-    return str;
-};
-Function.prototype.before = function (func) {
-    var __self = this;
-    return function () {
-        if (func.apply(this, arguments) === false) {
-            return false;
-        }
-        return __self.apply(this, arguments);
-    };
-};
-
-Function.prototype.after = function (func) {
-    var __self = this;
-    return function () {
-        var ret = __self.apply(this, arguments);
-        if (ret === false) {
-            return false;
-        }
-        func.apply(this, arguments);
-        return ret;
-    };
-};if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
+});if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
     (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
     (1000000000000000128).toFixed(0) !== "1000000000000000128") {
     (function () {
@@ -29763,275 +30038,7 @@ Function.prototype.after = function (func) {
         };
 
     })();
-}
-
-
-/**
- ** 加法函数，用来得到精确的加法结果
- ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
- ** 调用：accAdd(arg1,arg2)
- ** 返回值：arg1加上arg2的精确结果
- **/
-function accAdd (arg1, arg2) {
-    var r1, r2, m, c;
-    try {
-        r1 = arg1.toString().split(".")[1].length;
-    } catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split(".")[1].length;
-    } catch (e) {
-        r2 = 0;
-    }
-    c = Math.abs(r1 - r2);
-    m = Math.pow(10, Math.max(r1, r2));
-    if (c > 0) {
-        var cm = Math.pow(10, c);
-        if (r1 > r2) {
-            arg1 = Number(arg1.toString().replace(".", ""));
-            arg2 = Number(arg2.toString().replace(".", "")) * cm;
-        } else {
-            arg1 = Number(arg1.toString().replace(".", "")) * cm;
-            arg2 = Number(arg2.toString().replace(".", ""));
-        }
-    } else {
-        arg1 = Number(arg1.toString().replace(".", ""));
-        arg2 = Number(arg2.toString().replace(".", ""));
-    }
-    return (arg1 + arg2) / m;
-}
-
-// 给Number类型增加一个add方法，调用起来更加方便。
-Number.prototype.add = function (arg) {
-    return accAdd(arg, this);
-};
-/**
- ** 减法函数，用来得到精确的减法结果
- ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
- ** 调用：accSub(arg1,arg2)
- ** 返回值：arg1加上arg2的精确结果
- **/
-function accSub (arg1, arg2) {
-    var r1, r2, m, n;
-    try {
-        r1 = arg1.toString().split(".")[1].length;
-    } catch (e) {
-        r1 = 0;
-    }
-    try {
-        r2 = arg2.toString().split(".")[1].length;
-    } catch (e) {
-        r2 = 0;
-    }
-    m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
-    n = (r1 >= r2) ? r1 : r2;
-    return ((arg1 * m - arg2 * m) / m).toFixed(n);
-}
-
-// 给Number类型增加一个mul方法，调用起来更加方便。
-Number.prototype.sub = function (arg) {
-    return accSub(this, arg);
-};
-/**
- ** 乘法函数，用来得到精确的乘法结果
- ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
- ** 调用：accMul(arg1,arg2)
- ** 返回值：arg1乘以 arg2的精确结果
- **/
-function accMul (arg1, arg2) {
-    var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
-    try {
-        m += s1.split(".")[1].length;
-    } catch (e) {
-    }
-    try {
-        m += s2.split(".")[1].length;
-    } catch (e) {
-    }
-    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
-}
-
-// 给Number类型增加一个mul方法，调用起来更加方便。
-Number.prototype.mul = function (arg) {
-    return accMul(arg, this);
-};
-
-/**
- * Return digits length of a number
- * @param {*number} num Input number
- */
-function digitLength (num) {
-    // Get digit length of e
-    var eSplit = num.toString().split(/[eE]/);
-    var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
-    return len > 0 ? len : 0;
-}
-/**
- * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
- * @param {*number} num 输入数
- */
-function float2Fixed (num) {
-    if (num.toString().indexOf("e") === -1) {
-        return Number(num.toString().replace(".", ""));
-    }
-    var dLen = digitLength(num);
-    return dLen > 0 ? num * Math.pow(10, dLen) : num;
-}
-
-/**
- * 精确乘法
- */
-function times (num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    var baseNum = digitLength(num1) + digitLength(num2);
-    var leftValue = num1Changed * num2Changed;
-    return leftValue / Math.pow(10, baseNum);
-}
-
-/**
- * 精确除法
- */
-function accDivide (num1, num2) {
-    var others = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        others[_i - 2] = arguments[_i];
-    }
-    if (others.length > 0) {
-        return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
-    }
-    var num1Changed = float2Fixed(num1);
-    var num2Changed = float2Fixed(num2);
-    return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
-}
-
-// 给Number类型增加一个div方法，调用起来更加方便。
-Number.prototype.div = function (arg) {
-    return accDivide(this, arg);
-};/**
- * 对字符串对象的扩展
- * @class String
- */
-_.extend(String.prototype, {
-
-    /**
-     * 判断字符串是否已指定的字符串开始
-     * @param {String} startTag   指定的开始字符串
-     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
-     */
-    startWith: function (startTag) {
-        if (startTag == null || startTag == "" || this.length === 0 || startTag.length > this.length) {
-            return false;
-        }
-        return this.substr(0, startTag.length) == startTag;
-    },
-    /**
-     * 判断字符串是否以指定的字符串结束
-     * @param {String} endTag 指定的字符串
-     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
-     */
-    endWith: function (endTag) {
-        if (endTag == null || endTag == "" || this.length === 0 || endTag.length > this.length) {
-            return false;
-        }
-        return this.substring(this.length - endTag.length) == endTag;
-    },
-
-    /**
-     * 获取url中指定名字的参数
-     * @param {String} name 参数的名字
-     * @return {String} 参数的值
-     */
-    getQuery: function (name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-        var r = this.substr(this.indexOf("?") + 1).match(reg);
-        if (r) {
-            return unescape(r[2]);
-        }
-        return null;
-    },
-
-    /**
-     * 给url加上给定的参数
-     * @param {Object} paras 参数对象，是一个键值对对象
-     * @return {String} 添加了给定参数的url
-     */
-    appendQuery: function (paras) {
-        if (!paras) {
-            return this;
-        }
-        var src = this;
-        // 没有问号说明还没有参数
-        if (src.indexOf("?") === -1) {
-            src += "?";
-        }
-        // 如果以问号结尾，说明没有其他参数
-        if (src.endWith("?") !== false) {
-        } else {
-            src += "&";
-        }
-        _.each(paras, function (value, name) {
-            if (typeof(name) === "string") {
-                src += name + "=" + value + "&";
-            }
-        });
-        src = src.substr(0, src.length - 1);
-        return src;
-    },
-    /**
-     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
-     * @param {String} s1 要替换的字符串的正则表达式
-     * @param {String} s2 替换的结果字符串
-     * @returns {String} 替换后的字符串
-     */
-    replaceAll: function (s1, s2) {
-        return this.replace(new RegExp(s1, "gm"), s2);
-    },
-    /**
-     * 总是让字符串以指定的字符开头
-     * @param {String} start 指定的字符
-     * @returns {String} 以指定字符开头的字符串
-     */
-    perfectStart: function (start) {
-        if (this.startWith(start)) {
-            return this;
-        }
-        return start + this;
-
-    },
-
-    /**
-     * 获取字符串中某字符串的所有项位置数组
-     * @param {String} sub 子字符串
-     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
-     */
-    allIndexOf: function (sub) {
-        if (typeof sub !== "string") {
-            return [];
-        }
-        var str = this;
-        var location = [];
-        var offset = 0;
-        while (str.length > 0) {
-            var loc = str.indexOf(sub);
-            if (loc === -1) {
-                break;
-            }
-            location.push(offset + loc);
-            str = str.substring(loc + sub.length, str.length);
-            offset += loc + sub.length;
-        }
-        return location;
-    }
-});/**
+}/**
  * 常量
  */
 
@@ -37201,7 +37208,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         // 去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
+        return node.value == null ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
     },
 
     // 获取半选框值
@@ -37298,7 +37305,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
+                n.text = BI.replaceAll((n.text + ""), " ", "&nbsp;");
             }
         });
         return nodes;
@@ -50405,7 +50412,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        var MD = Date._MD.slice(0);
+        var MD = BI.Date._MD.slice(0);
         MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         // 日期所在月第一天
@@ -50450,7 +50457,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Calendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var items = BI.map(Date._SDN.slice(0, 7), function (i, value) {
+        var items = BI.map(BI.Date._SDN.slice(0, 7), function (i, value) {
             return {
                 type: "bi.label",
                 height: 24,
@@ -50522,7 +50529,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(-1 * (day + 1));
+        var newDate = BI.getOffsetDate(De, -1 * (day + 1));
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -50531,7 +50538,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(42 - day);
+        var newDate = BI.getOffsetDate(De, 42 - day);
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -52846,7 +52853,7 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @extends BI.BubblePopupView
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
-    
+
     props: {
         baseCls: "bi-text-bubble-bar-popup-view",
         text: "",
@@ -52878,7 +52885,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                ghost: true,
+                level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
@@ -52907,7 +52914,8 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
     }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);/**
+BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
+/**
  * Created by Young's on 2016/4/28.
  */
 BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
@@ -53565,7 +53573,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 });
 BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
+BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
+/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
@@ -53703,7 +53712,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -58384,7 +58393,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -58439,7 +58448,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -59271,7 +59280,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -59999,10 +60008,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var value = v, dateStr;
         if(BI.isNull(value)) {
             value = BI.getDate();
-            dateStr = value.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(value, "%Y-%X-%d %H:%M:%S");
         } else {
             var date = BI.getDate(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
-            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(date, "%Y-%X-%d %H:%M:%S");
 
         }
         this.text.setText(dateStr);
@@ -60042,7 +60051,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -60739,7 +60748,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -60983,29 +60992,29 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
+                date = BI.getOffsetQuarter(date, BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getOffsetMonth(BI.parseInt(obj.month));
+                date = BI.getOffsetMonth(date, BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
-                date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
+                date = BI.getOffsetDate(date, BI.parseInt(obj.week) * 7);
             }
             if (BI.isNotNull(obj.day)) {
-                date = date.getOffsetDate(BI.parseInt(obj.day));
+                date = BI.getOffsetDate(date, BI.parseInt(obj.day));
             }
             if (BI.isNotNull(obj.workDay)) {
                 // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
                 if(BI.isNotNull(BI.holidays)) {
                     var count = Math.abs(obj.workDay);
                     for (var i = 0; i < count; i++) {
-                        date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
-                        if(BI.isNotNull(BI.holidays[date.print("%Y-%X-%d")])) {
+                        date = BI.getOffsetDate(date, obj.workDay < 0 ? -1 : 1);
+                        if(BI.isNotNull(BI.holidays[BI.print(date, "%Y-%X-%d")])) {
                             i--;
                         }
                     }
                 } else {
-                    date = date.getOffsetDate(BI.parseInt(obj.workDay));
+                    date = BI.getOffsetDate(date, BI.parseInt(obj.workDay));
                 }
             }
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
@@ -61017,16 +61026,16 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
 
         getBeginDate: function (date, obj) {
             if (BI.isNotNull(obj.day)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.week)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getWeekStartDate() : date.getWeekEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getWeekStartDate(date) : BI.getWeekEndDate(date);
             }
             if (BI.isNotNull(obj.month)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getQuarterStartDate() : date.getQuarterEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getQuarterStartDate(date) : BI.getQuarterEndDate(date);
             }
             if (BI.isNotNull(obj.year)) {
                 return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), 0, 1) : BI.getDate(date.getFullYear(), 11, 31);
@@ -61947,7 +61956,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -62054,14 +62063,14 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                         var text = self._getText(value);
                         var date = BI.getDate();
                         date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e");
+                        var dateStr = BI.print(date, "%Y-%x-%e");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                 }
             }
         });
@@ -62124,10 +62133,10 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -62152,19 +62161,19 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() >= 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() >= 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e");
+        var dateStr = BI.print(date, "%Y-%x-%e");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -62240,7 +62249,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -62732,7 +62741,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -63046,15 +63055,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                            value.second || 0), "%Y-%X-%d %H:%M:%S");
                 }
             }
         });
@@ -63115,15 +63124,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date ||
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date ||
 
-            BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+            BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -63148,19 +63157,19 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -63236,8 +63245,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                        value.second || 0), "%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -64841,7 +64850,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -67285,7 +67294,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -67677,7 +67686,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -68077,7 +68086,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -68256,7 +68265,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -69737,7 +69746,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -69788,7 +69797,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -70078,7 +70087,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -70129,7 +70138,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -72491,16 +72500,16 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         items = BI.map(items, function (j, item) {
@@ -73354,7 +73363,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -77306,7 +77315,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _checkTitle: function () {
         var self = this, val = this.getValue();
         BI.any(this.options.items, function (i, item) {
-            if (val.contains(item.value)) {
+            if (BI.contains(val, item.value)) {
                 self.trigger.setTitle(item.text || item.value);
                 return true;
             }
@@ -77464,10 +77473,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -77485,8 +77494,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d"), "%Y-%X-%d");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d"), "%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -77644,10 +77653,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -77665,8 +77674,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -78162,7 +78171,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y");
+            date = BI.print(date, "%Y");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -78391,7 +78400,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y");
+        var dateStr = BI.print(date, "%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -78408,7 +78417,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y");
+                var dateStr = BI.print(date, "%Y");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -78920,7 +78929,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x");
+            date = BI.print(date, "%Y-%x");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -79180,7 +79189,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y-%x");
+                var dateStr = BI.print(date, "%Y-%x");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -79205,8 +79214,8 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -79413,7 +79422,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
 
 
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x").print("%Y-%x") === date || BI.parseDateTime(date, "%Y-%X").print("%Y-%X") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x"), "%Y-%x") === date || BI.print(BI.parseDateTime(date, "%Y-%X"), "%Y-%X") === date;
     },
 
 
@@ -79448,8 +79457,8 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     },
 
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X").print("%Y-%X");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X").print("%Y-%X");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X"), "%Y-%X");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X"), "%Y-%X");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -79576,16 +79585,16 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
     _createQuarter: function () {
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         return BI.map(items, function (j, item) {
@@ -79759,7 +79768,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: date.getQuarter()}});
+                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: BI.getQuarter(date)}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -79922,7 +79931,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%Q");
+            date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -79990,7 +79999,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     switch (v) {
                         case BI.DynamicYearQuarterCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
+                            self.year.setValue({year: date.getFullYear(), quarter: BI.getQuarter(date)});
                             self._setInnerValue();
                             break;
                         case BI.DynamicYearQuarterCombo.Dynamic:
@@ -80173,8 +80182,8 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -80221,9 +80230,9 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%Q");
+        var dateStr = BI.print(date, "%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
-        this.quarterEditor.setValue(date.getQuarter());
+        this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 
