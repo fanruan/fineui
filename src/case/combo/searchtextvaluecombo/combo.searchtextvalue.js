@@ -9,6 +9,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
+        extraCls: "",
         warningTitle: "",
         attributes: {
             tabIndex: 0
@@ -30,7 +31,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     },
                     el: {
                         type: "bi.search_text_value_trigger",
-                        cls: "search-text-value-trigger",
+                        cls: "search-text-value-trigger " + this.options.extraCls,
                         ref: function () {
                             self.trigger = this;
                         },

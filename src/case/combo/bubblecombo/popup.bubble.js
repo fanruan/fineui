@@ -124,7 +124,7 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @extends BI.BubblePopupView
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
-    
+
     props: {
         baseCls: "bi-text-bubble-bar-popup-view",
         text: "",
@@ -156,7 +156,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                ghost: true,
+                level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
