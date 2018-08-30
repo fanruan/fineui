@@ -18536,6 +18536,7 @@ BI.prepares.push(function () {
                     toElement.on(eventKey, handler);
                 });
             });
+            toElement.data(fromElement.data());
             var fromChildren = fromElement.children(), toChildren = toElement.children();
             if(fromChildren.length !== toChildren.length) {
                 throw new Error("不匹配");
