@@ -55890,7 +55890,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-border-bottom",
+                cls: "panel-title bi-header-background bi-border-bottom",
                 height: 29,
                 items: {
                     left: [this.text],
@@ -55909,7 +55909,8 @@ BI.Panel = BI.inherit(BI.Widget, {
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.panel", BI.Panel);
+BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 
     props: {
         extraCls: "bi-line-segment-button bi-list-item-effect",
