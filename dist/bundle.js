@@ -19148,12 +19148,10 @@ BI.prepares.push(function () {
             var elemData = jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
-                var handlers = event.handlers;
-                BI.each(handlers, function (i, handler) {
-                    toElement.on(eventKey, handler);
+                BI.each(event, function (i, handler) {
+                    toElement.on(eventKey + (handler.namespace ? ("." + handler.namespace) : ""), handler);
                 });
             });
-            toElement.data(fromElement.data());
             var fromChildren = fromElement.children(), toChildren = toElement.children();
             if(fromChildren.length !== toChildren.length) {
                 throw new Error("不匹配");
