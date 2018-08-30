@@ -217,6 +217,21 @@
             }
             return values;
         };
+        BI.extend = function () {
+            var args = Array.prototype.slice.call(arguments);
+            if (args.length < 1) {
+                return {};
+            }
+            var object = args[0];
+            var i = 1;
+            while (i < args.length) {
+                BI.each(args[i], function (key, v) {
+                    object[key] = v;
+                });
+                i++;
+            }
+            return object;
+        };
         BI.size = function (ob) {
             if (BI.isPlainObject(ob) && ob.__ob__) {
                 return BI.keys(ob).length;
