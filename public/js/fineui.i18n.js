@@ -168,5 +168,20 @@ BI.i18n = {
     "BI-Basic_Please_Select": "请选择",
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
-    "BI-Basic_Underline": "下划线"
+    "BI-Basic_Underline": "下划线",
+    "BI-Basic_Param_Month": "{R1}月",
+    "BI-Basic_Param_Day": "{R1}日",
+    "BI-Basic_Param_Quarter": "{R1}季度",
+    "BI-Basic_Param_Week_Count": "第{R1}周",
+    "BI-Basic_Param_Hour": "{R1}时",
+    "BI-Basic_Param_Minute": "{R1}分",
+    "BI-Basic_Param_Second": "{R1}秒",
+    "BI-Basic_Param_Year": "{R1}年",
+    "BI-Basic_Date_Day": "日",
+    "BI-Basic_Hour_Sin": "时",
+    "BI-Basic_Seconds": "秒",
+    "BI-Basic_Minute": "分",
+    "BI-Basic_Wan": "万",
+    "BI-Basic_Million": "百万",
+    "BI-Basic_Billion": "亿"
 };
