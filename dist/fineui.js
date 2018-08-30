@@ -15218,10 +15218,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         });
-        this._getWrapper().append(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().append(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     prependItems: function (items) {
@@ -15237,10 +15239,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         }
-        this._getWrapper().prepend(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().prepend(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     getValue: function () {
@@ -19391,6 +19395,7 @@ BI.prepares.push(function () {
                     toElement.on(eventKey, handler);
                 });
             });
+            toElement.data(fromElement.data());
             var fromChildren = fromElement.children(), toChildren = toElement.children();
             if(fromChildren.length !== toChildren.length) {
                 throw new Error("不匹配");
@@ -38189,11 +38194,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -40931,11 +40938,13 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -53086,7 +53095,7 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @extends BI.BubblePopupView
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
-    
+
     props: {
         baseCls: "bi-text-bubble-bar-popup-view",
         text: "",
@@ -53118,7 +53127,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                ghost: true,
+                level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
@@ -53147,7 +53156,8 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
     }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);/**
+BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
+/**
  * Created by Young's on 2016/4/28.
  */
 BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
@@ -53805,7 +53815,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 });
 BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
+BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
+/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
@@ -56134,7 +56145,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-border-bottom",
+                cls: "panel-title bi-header-background bi-border-bottom",
                 height: 29,
                 items: {
                     left: [this.text],
@@ -56153,7 +56164,8 @@ BI.Panel = BI.inherit(BI.Widget, {
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.panel", BI.Panel);
+BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 
     props: {
         extraCls: "bi-line-segment-button bi-list-item-effect",

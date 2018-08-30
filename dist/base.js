@@ -2596,11 +2596,13 @@ BI.CollectionView = BI.inherit(BI.Widget, {
             this._calculateSizeAndPositionData();
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var  o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 
@@ -5338,11 +5340,13 @@ BI.GridView = BI.inherit(BI.Widget, {
         if (o.items.length > 0) {
             this._populate();
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
         if (o.scrollLeft !== 0 || o.scrollTop !== 0) {
-            BI.nextTick(function () {
-                self.element.scrollTop(o.scrollTop);
-                self.element.scrollLeft(o.scrollLeft);
-            });
+            this.element.scrollTop(o.scrollTop);
+            this.element.scrollLeft(o.scrollLeft);
         }
     },
 

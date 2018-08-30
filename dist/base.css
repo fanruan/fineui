@@ -526,6 +526,11 @@
 .bi-search-text-value-combo .trigger-icon-button {
   font-size: 16px;
 }
+.bi-search-text-value-combo .search-text-value-trigger {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
 .bi-search-text-value-combo.combo-error .bi-search-text-value-trigger .bi-text-button {
   color: #ff4949;
 }
@@ -621,9 +626,6 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-}
-.bi-panel .panel-title {
-  background-color: #F2F4F7;
 }
 .bi-panel .panel-title .panel-title-text {
   cursor: text;
