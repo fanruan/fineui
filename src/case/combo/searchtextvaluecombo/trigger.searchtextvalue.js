@@ -69,7 +69,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });

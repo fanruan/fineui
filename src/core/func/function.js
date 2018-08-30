@@ -75,3 +75,27 @@ BI.extend(BI.Func, {
         };
     }
 });
+
+_.extend(BI, {
+    beforeFunc: function (sFunc, func) {
+        var __self = sFunc;
+        return function () {
+            if (func.apply(sFunc, arguments) === false) {
+                return false;
+            }
+            return __self.apply(sFunc, arguments);
+        };
+    },
+
+    afterFunc: function (func) {
+        var __self = sFunc;
+        return function () {
+            var ret = __self.apply(sFunc, arguments);
+            if (ret === false) {
+                return false;
+            }
+            func.apply(sFunc, arguments);
+            return ret;
+        };
+    }
+});

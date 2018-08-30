@@ -54,7 +54,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {

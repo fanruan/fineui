@@ -58,7 +58,9 @@
         if (BI.isFunction(type)) {
             globalAction.push(type);
             return function () {
-                BI.remove(globalAction, actionFn);
+                BI.remove(globalAction, function (idx) {
+                    return globalAction.indexOf(actionFn) === idx;
+                });
             };
         }
         if (!actions[type]) {
@@ -66,7 +68,9 @@
         }
         actions[type].push(actionFn);
         return function () {
-            actions[type].remove(actionFn);
+            BI.remove(actions[type], function (idx) {
+                return actions[type].indexOf(actionFn) === idx;
+            });
             if (actions[type].length === 0) {
                 delete actions[type];
             }

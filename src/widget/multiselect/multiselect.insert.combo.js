@@ -220,7 +220,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);

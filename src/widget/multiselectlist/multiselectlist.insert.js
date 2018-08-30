@@ -56,7 +56,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -107,7 +107,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);

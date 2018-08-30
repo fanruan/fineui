@@ -39,7 +39,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = Demo.CONSTANTS.ITEMS;
+        var items = [];
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);

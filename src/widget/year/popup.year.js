@@ -85,7 +85,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y");
+            date = BI.print(date, "%Y");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }

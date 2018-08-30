@@ -746,7 +746,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -1474,10 +1474,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var value = v, dateStr;
         if(BI.isNull(value)) {
             value = BI.getDate();
-            dateStr = value.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(value, "%Y-%X-%d %H:%M:%S");
         } else {
             var date = BI.getDate(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
-            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(date, "%Y-%X-%d %H:%M:%S");
 
         }
         this.text.setText(dateStr);
@@ -1517,7 +1517,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -2214,7 +2214,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -2458,29 +2458,29 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
+                date = BI.getOffsetQuarter(date, BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getOffsetMonth(BI.parseInt(obj.month));
+                date = BI.getOffsetMonth(date, BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
-                date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
+                date = BI.getOffsetDate(date, BI.parseInt(obj.week) * 7);
             }
             if (BI.isNotNull(obj.day)) {
-                date = date.getOffsetDate(BI.parseInt(obj.day));
+                date = BI.getOffsetDate(date, BI.parseInt(obj.day));
             }
             if (BI.isNotNull(obj.workDay)) {
                 // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
                 if(BI.isNotNull(BI.holidays)) {
                     var count = Math.abs(obj.workDay);
                     for (var i = 0; i < count; i++) {
-                        date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
-                        if(BI.isNotNull(BI.holidays[date.print("%Y-%X-%d")])) {
+                        date = BI.getOffsetDate(date, obj.workDay < 0 ? -1 : 1);
+                        if(BI.isNotNull(BI.holidays[BI.print(date, "%Y-%X-%d")])) {
                             i--;
                         }
                     }
                 } else {
-                    date = date.getOffsetDate(BI.parseInt(obj.workDay));
+                    date = BI.getOffsetDate(date, BI.parseInt(obj.workDay));
                 }
             }
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
@@ -2492,16 +2492,16 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
 
         getBeginDate: function (date, obj) {
             if (BI.isNotNull(obj.day)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.week)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getWeekStartDate() : date.getWeekEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getWeekStartDate(date) : BI.getWeekEndDate(date);
             }
             if (BI.isNotNull(obj.month)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getQuarterStartDate() : date.getQuarterEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getQuarterStartDate(date) : BI.getQuarterEndDate(date);
             }
             if (BI.isNotNull(obj.year)) {
                 return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), 0, 1) : BI.getDate(date.getFullYear(), 11, 31);
@@ -3422,7 +3422,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -3529,14 +3529,14 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                         var text = self._getText(value);
                         var date = BI.getDate();
                         date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e");
+                        var dateStr = BI.print(date, "%Y-%x-%e");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                 }
             }
         });
@@ -3599,10 +3599,10 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -3627,19 +3627,19 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() >= 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() >= 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e");
+        var dateStr = BI.print(date, "%Y-%x-%e");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -3715,7 +3715,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -4207,7 +4207,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -4521,15 +4521,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                            value.second || 0), "%Y-%X-%d %H:%M:%S");
                 }
             }
         });
@@ -4590,15 +4590,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date ||
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date ||
 
-            BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+            BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -4623,19 +4623,19 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -4711,8 +4711,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                        value.second || 0), "%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -6316,7 +6316,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -8760,7 +8760,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -9152,7 +9152,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -9552,7 +9552,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -9731,7 +9731,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -11212,7 +11212,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -11263,7 +11263,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -11553,7 +11553,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -11604,7 +11604,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -13966,16 +13966,16 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         items = BI.map(items, function (j, item) {
@@ -14829,7 +14829,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -18781,7 +18781,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _checkTitle: function () {
         var self = this, val = this.getValue();
         BI.any(this.options.items, function (i, item) {
-            if (val.contains(item.value)) {
+            if (BI.contains(val, item.value)) {
                 self.trigger.setTitle(item.text || item.value);
                 return true;
             }
@@ -18939,10 +18939,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -18960,8 +18960,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d"), "%Y-%X-%d");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d"), "%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -19119,10 +19119,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -19140,8 +19140,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -19637,7 +19637,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y");
+            date = BI.print(date, "%Y");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -19866,7 +19866,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y");
+        var dateStr = BI.print(date, "%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -19883,7 +19883,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y");
+                var dateStr = BI.print(date, "%Y");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -20395,7 +20395,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x");
+            date = BI.print(date, "%Y-%x");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -20655,7 +20655,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y-%x");
+                var dateStr = BI.print(date, "%Y-%x");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -20680,8 +20680,8 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -20888,7 +20888,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
 
 
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x").print("%Y-%x") === date || BI.parseDateTime(date, "%Y-%X").print("%Y-%X") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x"), "%Y-%x") === date || BI.print(BI.parseDateTime(date, "%Y-%X"), "%Y-%X") === date;
     },
 
 
@@ -20923,8 +20923,8 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     },
 
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X").print("%Y-%X");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X").print("%Y-%X");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X"), "%Y-%X");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X"), "%Y-%X");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -21051,16 +21051,16 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
     _createQuarter: function () {
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         return BI.map(items, function (j, item) {
@@ -21234,7 +21234,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: date.getQuarter()}});
+                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: BI.getQuarter(date)}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -21397,7 +21397,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%Q");
+            date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -21465,7 +21465,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     switch (v) {
                         case BI.DynamicYearQuarterCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
+                            self.year.setValue({year: date.getFullYear(), quarter: BI.getQuarter(date)});
                             self._setInnerValue();
                             break;
                         case BI.DynamicYearQuarterCombo.Dynamic:
@@ -21648,8 +21648,8 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -21696,9 +21696,9 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%Q");
+        var dateStr = BI.print(date, "%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
-        this.quarterEditor.setValue(date.getQuarter());
+        this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 

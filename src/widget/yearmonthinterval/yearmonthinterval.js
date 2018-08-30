@@ -111,7 +111,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
 
 
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x").print("%Y-%x") === date || BI.parseDateTime(date, "%Y-%X").print("%Y-%X") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x"), "%Y-%x") === date || BI.print(BI.parseDateTime(date, "%Y-%X"), "%Y-%X") === date;
     },
 
 
@@ -146,8 +146,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     },
 
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X").print("%Y-%X");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X").print("%Y-%X");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X"), "%Y-%X");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X"), "%Y-%X");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
