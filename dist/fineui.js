@@ -12374,7 +12374,7 @@ _.extend(BI.OB.prototype, {
                     if (!ws) {
                         ws = [];
                     }
-                    ws.push(w);
+                    ws.push(child);
                     child.element.data("__widgets", ws);
                 });
                 predicate && predicate.apply(this, arguments);
