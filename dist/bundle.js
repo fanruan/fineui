@@ -81753,6 +81753,21 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             }
             return values;
         };
+        BI.extend = function () {
+            var args = Array.prototype.slice.call(arguments);
+            if (args.length < 1) {
+                return {};
+            }
+            var object = args[0];
+            var i = 1;
+            while (i < args.length) {
+                BI.each(args[i], function (key, v) {
+                    object[key] = v;
+                });
+                i++;
+            }
+            return object;
+        };
         BI.size = function (ob) {
             if (BI.isPlainObject(ob) && ob.__ob__) {
                 return BI.keys(ob).length;
@@ -82521,5 +82536,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_Please_Select": "请选择",
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
-    "BI-Basic_Underline": "下划线"
+    "BI-Basic_Underline": "下划线",
+    "BI-Basic_Param_Month": "{R1}月",
+    "BI-Basic_Param_Day": "{R1}日",
+    "BI-Basic_Param_Quarter": "{R1}季度",
+    "BI-Basic_Param_Week_Count": "第{R1}周",
+    "BI-Basic_Param_Hour": "{R1}时",
+    "BI-Basic_Param_Minute": "{R1}分",
+    "BI-Basic_Param_Second": "{R1}秒",
+    "BI-Basic_Param_Year": "{R1}年",
+    "BI-Basic_Date_Day": "日",
+    "BI-Basic_Hour_Sin": "时",
+    "BI-Basic_Seconds": "秒",
+    "BI-Basic_Minute": "分",
+    "BI-Basic_Wan": "万",
+    "BI-Basic_Million": "百万",
+    "BI-Basic_Billion": "亿"
 };BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
