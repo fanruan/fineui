@@ -15218,10 +15218,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         });
-        this._getWrapper().append(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().append(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     prependItems: function (items) {
@@ -15237,10 +15239,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         }
-        this._getWrapper().prepend(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().prepend(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     getValue: function () {
