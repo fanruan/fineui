@@ -9,7 +9,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -18,20 +21,23 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
+            cls: "icon-text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
             iconCls: o.iconCls,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
             items: o.items,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());

@@ -7,6 +7,9 @@
   background: #ffecec;
   color: #ff4949;
 }
+.bi-theme-dark .bi-bubble .bubble-error {
+  background: #3A2940;
+}
 .bi-bubble .bubble-common {
   background: #eaf2fd;
   color: #3685f2;

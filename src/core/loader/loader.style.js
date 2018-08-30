@@ -15,6 +15,9 @@ BI.StyleLoaderManager = BI.inherit(BI.OB, {
     },
 
     loadStyle: function (name, styleString) {
+        if(!_global.document) {
+            return;
+        }
         var d = document, styles = d.createElement("style");
         d.getElementsByTagName("head")[0].appendChild(styles);
         styles.setAttribute("type", "text/css");

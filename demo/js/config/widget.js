@@ -63,30 +63,6 @@ Demo.WIDGET_CONFIG = [{
     text: "bi.multilayer_select_level_tree",
     value: "demo.multilayer_select_level_tree"
 }, {
-    pId: 403,
-    text: "bi.switch_tree",
-    value: "demo.switch_tree"
-}, {
-    pId: 4,
-    id: 404,
-    text: "table"
-}, {
-    pId: 404,
-    text: "bi.preview_table",
-    value: "demo.preview_table"
-}, {
-    pId: 404,
-    text: "bi.responsive_table",
-    value: "demo.responsive_table"
-}, {
-    pId: 404,
-    text: "bi.sequence_table",
-    value: "demo.sequence_table"
-}, {
-    pId: 404,
-    text: "bi.page_table",
-    value: "demo.page_table"
-}, {
     pId: 4,
     id: 405,
     text: "下拉列表"
@@ -210,14 +186,6 @@ Demo.WIDGET_CONFIG = [{
     pId: 413,
     text: "bi.number_interval",
     value: "demo.number_interval"
-}, {
-    pId: 4,
-    id: 419,
-    text: "文件管理"
-}, {
-    pId: 419,
-    text: "bi.file_manager",
-    value: "demo.file_manager"
 }, {
     id: 420,
     text: "滚动sliders",

@@ -47,6 +47,12 @@
   transition: @transition;
 }
 
+.rotate(@rotate) {
+  -webkit-transform: rotate(@rotate);
+  -moz-transform: rotate(@rotate);
+  transform: rotate(@rotate);
+}
+
 //渐变
 .gradient(@start, @end) {
   background: @start; //不支持的用这个
@@ -195,11 +201,9 @@
     width: 6px;
     height: 6px;
     margin-left: 3px;
-    margin-top: 3px;
+    margin-top: 2px;
     content: "";
-    background-color: #ffffff;
     transform: rotate(-135deg);
-    .box-shadow(1px 1px 1px 0, fade(#232E40, 20));
   }
 }
 
@@ -215,9 +219,7 @@
     margin-left: 3px;
     margin-top: -3px;
     content: "";
-    background-color: #ffffff;
     transform: rotate(45deg);
-    .box-shadow(1px 1px 1px 0, fade(#232E40, 20));
   }
 
 }
@@ -231,12 +233,10 @@
     position: absolute;
     width: 6px;
     height: 6px;
-    margin-left: 3px;
+    margin-left: 2px;
     margin-top: 3px;
     content: "";
-    background-color: #ffffff;
     transform: rotate(135deg);
-    .box-shadow(1px 1px 1px 0, fade(#232E40, 20));
   }
 }
 
@@ -249,11 +249,52 @@
     position: absolute;
     width: 6px;
     height: 6px;
-    margin-left: 3px;
+    margin-left: 2px;
     margin-top: -3px;
     content: "";
-    background-color: #ffffff;
     transform: rotate(-45deg);
-    .box-shadow(1px 1px 1px 0, fade(#232E40, 20));
   }
+}
+
+// css3 animation
+.keyframes(@name, @frames) {
+  @-webkit-keyframes @name {
+      @frames();
+  }
+  @-moz-keyframes @name {
+      @frames();
+  }
+  @-ms-keyframes @name {
+      @frames();
+  }
+  @-o-keyframes @name {
+      @frames();
+  }
+  @keyframes @name {
+      @frames();
+  }
+}
+
+.animation(@attr) {
+  -webkit-animation: @attr;
+  -moz-animation: @attr;
+  -ms-animation: @attr;
+  -o-animation: @attr;
+  animation: @attr;
+}
+
+.animation-delay(@attr) {
+  -webkit-animation-delay: @attr;
+  -moz-animation-delay: @attr;
+  -ms-animation-delay: @attr;
+  -o-animation-delay: @attr;
+  animation-delay: @attr;
+}
+
+.transform(@attr) {
+  -webkit-transform: @attr;
+  -moz-transform: @attr;
+  -o-transform: @attr;
+  -ms-transform: @attr;
+  transform: @attr;
 }

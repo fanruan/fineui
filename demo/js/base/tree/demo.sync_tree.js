@@ -4,7 +4,9 @@ Demo.Func = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this.syncTree.stroke();
+        this.syncTree.stroke({
+            keyword: "1"
+        });
     },
 
     render: function () {
@@ -21,7 +23,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     self.syncTree = _ref;
                 },
                 paras: {
-                    selectedValues: {"_0": {}, "_5": {"_5_0": {}}}
+                    selectedValues: {"1": {}, "2": {"1": {}}}
                 },
                 itemsCreator: function (op, callback) {
                     callback({

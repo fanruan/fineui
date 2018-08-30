@@ -11,7 +11,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -20,6 +23,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,

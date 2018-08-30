@@ -1,7 +1,7 @@
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-date-time-select bi-border-top"
+        baseCls: "bi-date-time-select bi-split-top"
     },
 
     render: function () {

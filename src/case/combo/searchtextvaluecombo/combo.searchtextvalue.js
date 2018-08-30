@@ -9,7 +9,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
-        warningTitle: ""
+        warningTitle: "",
+        attributes: {
+            tabIndex: 0
+        }
     },
 
     render: function () {
@@ -27,6 +30,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     },
                     el: {
                         type: "bi.search_text_value_trigger",
+                        cls: "search-text-value-trigger",
                         ref: function () {
                             self.trigger = this;
                         },
@@ -36,6 +40,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
+                        title: o.title,
                         listeners: [{
                             eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
                             action: function () {
@@ -46,7 +51,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }]
                     },
                     popup: {
-                        el:{
+                        el: {
                             type: "bi.text_value_combo_popup",
                             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                             value: o.value,
@@ -69,13 +74,11 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            self.trigger.stopEditing();
-                            self.element.removeClass("combo-show");
+                            // self.trigger.stopEditing();
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                         action: function () {
-                            self.element.removeClass("combo-show").addClass("combo-show");
                             self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],

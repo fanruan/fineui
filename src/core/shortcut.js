@@ -2,7 +2,7 @@
     var kv = {};
     BI.shortcut = function (xtype, cls) {
         if (kv[xtype] != null) {
-            console.error("shortcut:[" + xtype + "] has been registed");
+            _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
         kv[xtype] = cls;
     };
@@ -18,6 +18,10 @@
     };
 
     BI.createWidget = function (item, options, context) {
+        // 先把准备环境准备好
+        while(BI.prepares && BI.prepares.length > 0) {
+            BI.prepares.shift()();
+        }
         var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {

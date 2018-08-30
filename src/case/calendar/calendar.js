@@ -29,7 +29,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        var MD = Date._MD.slice(0);
+        var MD = BI.Date._MD.slice(0);
         MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         // 日期所在月第一天
@@ -74,7 +74,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Calendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var items = BI.map(Date._SDN.slice(0, 7), function (i, value) {
+        var items = BI.map(BI.Date._SDN.slice(0, 7), function (i, value) {
             return {
                 type: "bi.label",
                 height: 24,
@@ -87,7 +87,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             items: items,
             layouts: [{
                 type: "bi.center",
-                hgap: 10,
+                hgap: 5,
                 vgap: 10
             }]
         });
@@ -104,15 +104,16 @@ BI.Calendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    type: "bi.calendar_date_item",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
                     height: 24,
                     value: o.year + "-" + month + "-" + td.text,
-                    disabled: td.lastMonth || td.nextMonth || td.disabled
+                    disabled: td.lastMonth || td.nextMonth || td.disabled,
+                    lgap: 5,
+                    rgap: 5
                     // selected: td.currentDay
                 });
             });
@@ -126,7 +127,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
                 rowSize: 24,
-                hgap: 10,
                 vgap: 10
             }))]
         });
@@ -146,7 +146,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(-1 * (day + 1));
+        var newDate = BI.getOffsetDate(De, -1 * (day + 1));
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -155,7 +155,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(42 - day);
+        var newDate = BI.getOffsetDate(De, 42 - day);
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 

@@ -8,16 +8,16 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
     _createQuarter: function () {
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         return BI.map(items, function (j, item) {

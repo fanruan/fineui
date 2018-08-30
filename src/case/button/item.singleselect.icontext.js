@@ -20,6 +20,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             element: this,
             cls: o.iconCls,
             once: o.once,
+            iconWrapperWidth: o.iconWrapperWidth,
             selected: o.selected,
             height: o.height,
             iconHeight: o.iconHeight,

@@ -136,7 +136,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y-%x");
+                var dateStr = BI.print(date, "%Y-%x");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -161,8 +161,8 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {

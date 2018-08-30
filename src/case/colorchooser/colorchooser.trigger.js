@@ -10,7 +10,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -19,7 +19,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card color-chooser-trigger-content"
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below && BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({
@@ -41,7 +41,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }, {
                 el: down,
-                right: 1,
+                right: -1,
                 bottom: 1
             }]
         });

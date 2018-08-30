@@ -4,6 +4,8 @@
 
 //默认字体颜色
 @color-bi-text-normal: @font-color-normal;
+//默认字体颜色深色系
+@color-bi-text-normal-theme-dark: @font-color-normal-theme-dark;
 //黑色字体颜色
 @color-bi-text-black: @font-color-black;
 //深色主题默认字体颜色
@@ -12,6 +14,8 @@
 @color-bi-text-gray: @font-color-gray;
 //浅灰色字体
 @color-bi-text-light-gray: @font-color-light-gray;
+//深色浅灰色字体
+@color-bi-text-light-gray-theme-dark: @font-color-light-gray-theme-dark;
 //白色字体颜色
 @color-bi-text: @font-color-white;
 //灰化字体颜色
@@ -42,12 +46,22 @@
 @color-bi-background-default-theme-dark: @background-color-default-theme-dark;
 //黑色背景
 @color-bi-background-black: @background-color-black;
+//浅黑色背景
+@color-bi-background-light-black: @background-color-light-black;
+//深色系浅黑色背景
+@color-bi-background-light-black-theme-dark: @background-color-light-black-theme-dark;
 //深灰色背景
 @color-bi-background-dark-gray: @background-color-dark-gray;
+//深色系深灰色背景
+@color-bi-background-dark-gray-theme-dark: @background-color-dark-gray-theme-dark;
 //灰色背景(浅)
 @color-bi-background-light-gray: @background-color-light-gray;
+//深色主题灰色背景
+@color-bi-background-light-gray-theme-dark: @background-color-light-gray-theme-dark;
 //灰化背景
 @color-bi-background-disabled: @background-color-disabled;
+//深色主题灰化背景
+@color-bi-background-disabled-theme-dark: @background-color-disabled-theme-dark;
 //成功背景色
 @color-bi-background-success: @background-color-dark-success;
 //成功背景色(浅)
@@ -56,6 +70,8 @@
 @color-bi-background-failure: @background-color-negative;
 //失败背景色(浅)
 @color-bi-background-light-failure: @background-color-light-negative;
+//失败背景色(深)
+@color-bi-background-dark-failure: @background-color-dark-negative;
 //警示背景色
 @color-bi-background-warning: @background-color-warning;
 //警示背景色(浅)
@@ -73,7 +89,7 @@
 @color-bi-border-line: @border-color-line;
 //深色系边框线色
 @color-bi-border-line-theme-dark: @border-color-line-theme-dark;
-//灰化分割线
+//灰化边框
 @color-bi-border-disabled: @border-color-disabled;
 //成功边框色
 @color-bi-border-success: @border-color-success;
@@ -110,8 +126,8 @@
 @color-bi-blue-60: fade(@font-color-highlight, 60);
 @color-bi-blue-40: fade(@font-color-highlight, 40);
 @color-bi-blue-30: fade(@font-color-highlight, 30);
-@color-bi-blue-20: @background-color-medium-highlight;
-@color-bi-blue-10: @background-color-light-highlight;
+@color-bi-blue-20: fade(@font-color-highlight, 20);
+@color-bi-blue-10: fade(@font-color-highlight, 10);
 @color-bi-blue-5: fade(@font-color-highlight, 5);
 
 //light-blue

@@ -1,11 +1,11 @@
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border",
+        baseCls: "bi-year-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -16,6 +16,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {

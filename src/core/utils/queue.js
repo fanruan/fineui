@@ -8,11 +8,11 @@
         constructor: BI.Queue,
 
         contains: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         indexOf: function (v) {
-            return this.array.contains(v);
+            return BI.contains(this.array, v);
         },
 
         getElementByIndex: function (index) {
@@ -42,7 +42,7 @@
         },
 
         remove: function (v) {
-            this.array.remove(v);
+            BI.remove(this.array, v);
         },
 
         splice: function () {

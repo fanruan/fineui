@@ -7,8 +7,10 @@
   "devDependencies": {
     "express": "^4.15.2",
     "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-cssmin": "^1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
@@ -19,9 +21,9 @@
   "scripts": {
     "grunt": "grunt",
     "start": "node server.js",
-    "uglify": "grunt min",
     "build": "grunt build",
-    "compile": "grunt compile"
+    "compile": "grunt compile",
+    "fake": "grunt fake-build"
   },
   "repository": {
     "type": "git",

@@ -50,31 +50,52 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        var loadingAnimation = BI.createWidget({
+            type: "bi.horizontal",
+            cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            height: 60,
+            width: 60,
+            hgap: 10,
+            vgap: 5,
+            items: [{
+                type: "bi.layout",
+                cls: "rect1",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect2",
+                height: 50,
+                width: 5
+            }, {
+                type: "bi.layout",
+                cls: "rect3",
+                height: 50,
+                width: 5
+            }]
+        });
+        // pane在同步方式下由items决定tipText的显示与否
+        // loading的异步情况下由loaded后对面板的populate的时机决定
+        this.setTipVisible(false);
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: "bi.vtape",
+                    type: "bi.absolute_center_adapt",
+                    cls: "loading-container",
                     items: [{
-                        el: {
-                            type: "bi.layout",
-                            cls: "loading-background"
-                        },
-                        height: 30
+                        el: loadingAnimation
                     }],
                     element: BI.Layers.make(this.getName(), this)
                 });
             }
             BI.Layers.show(self.getName());
         } else if (BI.isNull(this._loading)) {
-            this._loading = BI.createWidget({
-                type: "bi.layout",
-                cls: "loading-background",
-                height: 30
-            });
+            this._loading = loadingAnimation;
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
-                type: "bi.absolute",
+                type: "bi.absolute_center_adapt",
                 element: this,
+                cls: "loading-container",
                 items: [{
                     el: this._loading,
                     left: 0,

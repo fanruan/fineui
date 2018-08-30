@@ -18,7 +18,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
             value: o.value,
-            cls: "bi-background bi-border-bottom",
+            cls: "bi-header-background bi-border-bottom",
             height: 30
         });
 
@@ -29,6 +29,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
+            cls: "bi-border-bottom bi-border-right",
             items: [[{
                 value: "",
                 disabled: true
@@ -94,6 +95,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border-top",
             container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,

@@ -548,19 +548,15 @@ Demo.Face = BI.inherit(BI.Widget, {
         return {
             type: "bi.grid",
             items: [[{
-                column: 0,
-                row: 0,
-                el: {
-                    type: "demo.preview"
-                }
-            }, {
-                column: 1,
-                row: 0,
                 el: {
                     type: "bi.vertical",
-                    cls: "face-config bi-border-left",
+                    cls: "face-config bi-border-right",
                     items: [this._createBaseConfig(),
                         this._createCommonConfig()]
+                }
+            }, {
+                el: {
+                    type: "bi.layout"
                 }
             }]]
         };

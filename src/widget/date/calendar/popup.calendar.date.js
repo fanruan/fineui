@@ -86,12 +86,12 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 10,
-                right: 10
+                left: 5,
+                right: 5
             }, {
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,

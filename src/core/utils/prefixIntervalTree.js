@@ -4,7 +4,7 @@
         return Math.floor(node / 2);
     };
 
-    var Int32Array = window.Int32Array || function (size) {
+    var Int32Array = _global.Int32Array || function (size) {
         var xs = [];
         for (var i = size - 1; i >= 0; --i) {
             xs[i] = 0;

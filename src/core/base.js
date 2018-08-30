@@ -3,9 +3,18 @@
  * Create By GUY 2014\11\17
  *
  */
-
-if (!window.BI) {
-    window.BI = {};
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (!_global.BI) {
+    _global.BI = {};
 }
 
 !(function (undefined) {
@@ -38,7 +47,7 @@ if (!window.BI) {
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
                     var key = "{R" + i + "}";
-                    localeText = localeText.replaceAll(key, arguments[i] + "");
+                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                 }
             }
             return localeText;
@@ -298,13 +307,13 @@ if (!window.BI) {
             var i;
             if (BI.isArray(obj)) {
                 for (i = 0; i < obj.length; i++) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         obj.splice(i--, 1);
                     }
                 }
             } else {
                 BI.each(obj, function (i, v) {
-                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && target.contains(obj[i]))) {
+                    if ((isFunction && target.apply(context, [i, obj[i]]) === true) || (!isFunction && BI.contains(target, obj[i]))) {
                         delete obj[i];
                     }
                 });
@@ -447,7 +456,7 @@ if (!window.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -521,8 +530,8 @@ if (!window.BI) {
             return BI.isString(obj) && !BI.isEmptyString(obj);
         },
 
-        isWindow: function () {
-            return $.isWindow.apply($, arguments);
+        isWindow: function (obj) {
+            return obj != null && obj == obj.window;
         }
     });
 
@@ -636,7 +645,7 @@ if (!window.BI) {
                 }
             }
             for (var b in other) {
-                if (this.has(other, b) && !used.contains(b)) {
+                if (this.has(other, b) && !BI.contains(used, b)) {
                     result.push(b);
                 }
             }
@@ -733,11 +742,11 @@ if (!window.BI) {
     });
     _.extend(BI, {
         getTime: function () {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
+            if (_global.performance && _global.performance.now) {
+                return _global.performance.now();
             }
-            if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
+            if (_global.performance && _global.performance.webkitNow) {
+                return _global.performance.webkitNow();
             }
             if (Date.now) {
                 return Date.now();
@@ -805,7 +814,7 @@ if (!window.BI) {
         },
 
         isNumeric: function (number) {
-            return $.isNumeric(number);
+            return !isNaN( parseFloat(number) ) && isFinite( number );
         },
 
         isFloat: function (number) {
@@ -850,7 +859,7 @@ if (!window.BI) {
     // 字符串相关方法
     _.extend(BI, {
         trim: function () {
-            return $.trim.apply($, arguments);
+            return _.trim.apply(_, arguments);
         },
 
         toUpperCase: function (string) {
@@ -1122,7 +1131,7 @@ if (!window.BI) {
             if (ar.length <= 2) {
                 return MM >= 1 && MM <= 12;
             }
-            var MD = Date._MD.slice(0);
+            var MD = BI.Date._MD.slice(0);
             MD[1] = BI.isLeapYear(YY) ? 29 : 28;
             return MM >= 1 && MM <= 12 && DD <= MD[MM - 1];
         },
@@ -1169,7 +1178,7 @@ if (!window.BI) {
                     case "%b":
                     case "%B":
                         for (j = 0; j < 12; ++j) {
-                            if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                            if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                                 m = j;
                                 break;
                             }
@@ -1230,7 +1239,7 @@ if (!window.BI) {
                 if (a[i].search(/[a-zA-Z]+/) != -1) {
                     var t = -1;
                     for (j = 0; j < 12; ++j) {
-                        if (Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
+                        if (BI.Date._MN[j].substr(0, a[i].length).toLowerCase() == a[i].toLowerCase()) {
                             t = j;
                             break;
                         }
@@ -1356,121 +1365,6 @@ if (!window.BI) {
             }
             return dt.getTime();
 
-        }
-    });
-
-    // 浏览器相关方法
-    _.extend(BI, {
-        isIE: function () {
-            if (this.__isIE == null) {
-                this.__isIE = /(msie|trident)/i.test(navigator.userAgent.toLowerCase());
-            }
-            return this.__isIE;
-        },
-
-        getIEVersion: function () {
-            if (this.__IEVersion != null) {
-                return this.__IEVersion;
-            }
-            var version = 0;
-            var agent = navigator.userAgent.toLowerCase();
-            var v1 = agent.match(/(?:msie\s([\w.]+))/);
-            var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
-            if (v1 && v2 && v1[1] && v2[1]) {
-                version = Math.max(v1[1] * 1, v2[1] * 1);
-            } else if (v1 && v1[1]) {
-                version = v1[1] * 1;
-            } else if (v2 && v2[1]) {
-                version = v2[1] * 1;
-            } else {
-                version = 0;
-            }
-            return this.__IEVersion = version;
-        },
-
-        isIE9Below: function () {
-            if (!BI.isIE()) {
-                return false;
-            }
-            return this.getIEVersion() < 9;
-        },
-
-        isEdge: function () {
-            return /edge/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isChrome: function () {
-            return /chrome/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isFireFox: function () {
-            return /firefox/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isOpera: function () {
-            return /opera/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isSafari: function () {
-            return /safari/i.test(navigator.userAgent.toLowerCase());
-        },
-
-        isKhtml: function () {
-            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
-        },
-
-        isMac: function () {
-            return /macintosh|mac os x/i.test(navigator.userAgent);
-        },
-
-        isWindows: function () {
-            return /windows|win32/i.test(navigator.userAgent);
-        },
-
-        isSupportCss3: function (style) {
-            var prefix = ["webkit", "Moz", "ms", "o"],
-                i, len,
-                humpString = [],
-                htmlStyle = document.documentElement.style,
-                _toHumb = function (string) {
-                    return string.replace(/-(\w)/g, function ($0, $1) {
-                        return $1.toUpperCase();
-                    });
-                };
-
-            for (i in prefix) {
-                humpString.push(_toHumb(prefix[i] + "-" + style));
-            }
-            humpString.push(_toHumb(style));
-
-            for (i = 0, len = humpString.length; i < len; i++) {
-                if (humpString[i] in htmlStyle) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    });
-    // BI请求
-    _.extend(BI, {
-
-        ajax: function (option) {
-            option || (option = {});
-            var async = option.async;
-            option.data = BI.cjkEncodeDO(option.data || {});
-
-            $.ajax({
-                url: option.url,
-                type: "POST",
-                data: option.data,
-                async: async,
-                error: option.error,
-                complete: function (res, status) {
-                    if (BI.isFunction(option.complete)) {
-                        option.complete(BI.jsonDecode(res.responseText), status);
-                    }
-                }
-            });
         }
     });
 })();

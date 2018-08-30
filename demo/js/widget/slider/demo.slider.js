@@ -45,7 +45,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         normalSingleSlider.populate();
 
         var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider",
+            type: "bi.single_slider_label",
             width: o.width,
             height: o.height,
             digit: 0,

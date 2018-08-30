@@ -33,7 +33,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -47,7 +47,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         textHeight: c.buttonHeight - 1,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -62,7 +62,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -85,7 +85,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y");
+            date = BI.print(date, "%Y");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -100,7 +100,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),

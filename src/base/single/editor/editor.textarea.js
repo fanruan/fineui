@@ -32,7 +32,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 },
                 left: 0,
                 right: 3,
-                top: 0,
+                top: 6,
                 bottom: 5
             }]
         });
@@ -47,9 +47,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._focus();
                 self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             }
-            $(document).bind("mousedown." + self.getName(), function (e) {
+            BI.Widget._renderEngine.createElement(document).bind("mousedown." + self.getName(), function (e) {
                 if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
-                    $(document).unbind("mousedown." + self.getName());
+                    BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
                     self.content.element.blur();
                 }
             });
@@ -59,7 +59,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 self._blur();
                 self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
             }
-            $(document).unbind("mousedown." + self.getName());
+            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
             self.setValue(o.value);

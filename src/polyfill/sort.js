@@ -25,7 +25,7 @@
                 return this;
             }
             return _sort.call(this);
-            
+
         };
     }
 }(window);

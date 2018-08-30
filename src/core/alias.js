@@ -1,6 +1,16 @@
 (function () {
-    if (!window.BI) {
-        window.BI = {};
+    var _global;
+    if (typeof window !== "undefined") {
+        _global = window;
+    } else if (typeof global !== "undefined") {
+        _global = global;
+    } else if (typeof self !== "undefined") {
+        _global = self;
+    } else {
+        _global = this;
+    }
+    if (!_global.BI) {
+        _global.BI = {};
     }
 
     function isEmpty (value) {
@@ -528,7 +538,7 @@
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : window.JSON.parse(text);
+            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -573,6 +583,32 @@
 
             return o;
         })(jo);
+    };
+
+    BI.encodeURIComponent = function (url) {
+        BI.specialCharsMap = BI.specialCharsMap || {};
+        url = url || "";
+        url = BI.replaceAll(url, BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+            switch (str) {
+                case "\\":
+                    return BI.specialCharsMap["\\\\"] || str;
+                default:
+                    return BI.specialCharsMap[str] || str;
+            }
+        });
+        return _global.encodeURIComponent(url);
+    };
+
+    BI.decodeURIComponent = function (url) {
+        var reserveSpecialCharsMap = {};
+        BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
+            reserveSpecialCharsMap[encodeChar] = initialChar;
+        });
+        url = url || "";
+        url = BI.replaceAll(url, BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+            return reserveSpecialCharsMap[str] || str;
+        });
+        return _global.decodeURIComponent(url);
     };
 
     BI.contentFormat = function (cv, fmt) {
@@ -726,7 +762,7 @@
             var str = jfmt.str, len = jfmt.len, ch = jfmt["char"];
             switch (ch) {
                 case "E": // 星期
-                    str = Date._DN[date.getDay()];
+                    str = BI.Date._DN[date.getDay()];
                     break;
                 case "y": // 年
                     if (len <= 3) {
@@ -737,7 +773,7 @@
                     break;
                 case "M": // 月
                     if (len > 2) {
-                        str = Date._MN[date.getMonth()];
+                        str = BI.Date._MN[date.getMonth()];
                     } else if (len < 2) {
                         str = date.getMonth() + 1;
                     } else {
@@ -787,7 +823,7 @@
                     str = date.getHours() < 12 ? "am" : "pm";
                     break;
                 case "z":
-                    str = date.getTimezone();
+                    str = BI.getTimezone(date);
                     break;
                 default:
                     str = jfmt.str;

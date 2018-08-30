@@ -1,4 +1,25 @@
-// Production steps of ECMA-262, Edition 5, 15.4.4.14
+/**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+var _global;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {prepares: []};
+}
+if(_global.BI.prepares == null) {
+    _global.BI.prepares = [];
+}// Production steps of ECMA-262, Edition 5, 15.4.4.14
 // Reference: http://es5.github.io/#x15.4.4.14
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (searchElement, fromIndex) {
@@ -99,7 +120,7 @@ if (!Array.prototype.lastIndexOf) {
  * Created by wang on 15/6/23.
  */
 // 解决console未定义问题 guy
-window.console = window.console || (function () {
+_global.console = _global.console || (function () {
     var c = {};
     c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
             = c.clear = c.exception = c.trace = c.assert = function () {
@@ -109,7 +130,7 @@ window.console = window.console || (function () {
 /*
  * 前端缓存
  */
-window.localStorage || (window.localStorage = {
+_global.localStorage || (_global.localStorage = {
     items: {},
     setItem: function (k, v) {
         BI.Cache.addCookie(k, v);
@@ -216,7 +237,7 @@ if(!Date.now) {
                 return this;
             }
             return _sort.call(this);
-            
+
         };
     }
 }(window);

@@ -23,6 +23,11 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         this.storeValue = BI.deepClone(opts.value);
         this.button_group = BI.createWidget({
             type: "bi.select_list",
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             element: this,
             logic: {
                 dynamic: false
@@ -87,7 +92,9 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            cls: "bi-list-item-active",
+            iconWrapperWidth: 36
         });
     },
 

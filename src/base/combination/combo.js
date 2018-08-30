@@ -261,9 +261,9 @@ BI.Combo = BI.inherit(BI.Widget, {
         //     return;
         // }
         // BI-10290 公式combo双击公式内容会收起
-        if ((this.element.find(e.target).length > 0 && e.type !== "mousewheel")
+        if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
-            || e.target.className === "CodeMirror-cursor" || $(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+            || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -284,7 +284,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
         this.element.removeClass(this.options.comboClass);
 
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
@@ -297,8 +297,8 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.adjustHeight();
 
         this.element.addClass(this.options.comboClass);
-        $(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
-        $(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
+        BI.Widget._renderEngine.createElement(document).bind("mousedown." + this.getName(), BI.bind(this._hideIf, this)).bind("mousewheel." + this.getName(), BI.bind(this._hideIf, this));
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
@@ -413,6 +413,11 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _setEnable: function (arg) {
         BI.Combo.superclass._setEnable.apply(this, arguments);
+        if (arg === true) {
+            this.element.removeClass("base-disabled disabled");
+        } else if (arg === false) {
+            this.element.addClass("base-disabled disabled");
+        }
         !arg && this.element.removeClass(this.options.hoverClass);
         !arg && this.isViewVisible() && this._hideView();
     },
@@ -461,7 +466,7 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     destroy: function () {
-        $(document).unbind("mousedown." + this.getName())
+        BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())

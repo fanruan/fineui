@@ -25,7 +25,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.TdLayout.superclass.render.apply(this, arguments);
-        this.$table = $("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
+        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             width: "100%",
             height: "100%",
@@ -119,20 +119,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
         return tr;
     },
 
-    _mountChildren: function () {
-        var self = this;
-        var frag = document.createDocumentFragment();
-        var hasChild = false;
-        BI.each(this._children, function (i, widget) {
-            if (widget.element !== self.element) {
-                frag.appendChild(widget.element[0]);
-                hasChild = true;
-            }
-        });
-        if (hasChild === true) {
-            this.$table.append(frag);
-            this.element.append(this.$table);
-        }
+    appendFragment: function (frag) {
+        this.$table.append(frag);
+        this.element.append(this.$table);
     },
 
     resize: function () {

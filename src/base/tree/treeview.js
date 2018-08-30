@@ -30,8 +30,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             this.setSelectedValue(o.value);
+        }
+        if (BI.isIE9Below && BI.isIE9Below()) {
+            this.element.addClass("hack");
         }
     },
 
@@ -111,8 +114,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             treeNode.times = treeNode.times || 1;
             var param = "id=" + treeNode.id
                 + "&times=" + (treeNode.times++)
-                + "&parentValues= " + window.encodeURIComponent(BI.jsonEncode(parentNode))
-                + "&checkState=" + window.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
+                + "&parentValues= " + _global.encodeURIComponent(BI.jsonEncode(parentNode))
+                + "&checkState=" + _global.encodeURIComponent(BI.jsonEncode(treeNode.getCheckStatus()));
 
             return "&" + param;
         }
@@ -189,6 +192,11 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     node.halfCheck = false;
                 });
             }
+            var status = treeNode.getCheckStatus();
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            if(status.half === true && status.checked === true) {
+                treeNode.checked = false;
+            }
         }
 
         function onCheck (event, treeId, treeNode) {
@@ -217,7 +225,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
 
     _getNodeValue: function (node) {
         // 去除标红
-        return node.value == null ? node.text.replace(/<[^>]+>/g, "").replaceAll("&nbsp;", " ") : node.value;
+        return node.value == null ? BI.replaceAll(node.text.replace(/<[^>]+>/g, ""), "&nbsp;", " ") : node.value;
     },
 
     // 获取半选框值
@@ -314,7 +322,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = (n.text + "").replaceAll(" ", "&nbsp;");
+                n.text = BI.replaceAll((n.text + ""), " ", "&nbsp;");
             }
         });
         return nodes;

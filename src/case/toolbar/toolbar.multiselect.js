@@ -17,7 +17,8 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             },
-            halfSelected: false
+            halfSelected: false,
+            iconWrapperWidth: 26
         });
     },
     _init: function () {
@@ -70,7 +71,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             type: "bi.htape",
             element: this,
             items: [{
-                width: 26,
+                width: o.iconWrapperWidth,
                 el: {
                     type: "bi.center_adapt",
                     items: [this.checkbox, this.half]
@@ -130,7 +131,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     }
 });

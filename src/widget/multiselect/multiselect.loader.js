@@ -33,6 +33,11 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -74,7 +79,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -98,12 +103,15 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [this.button_group],
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Top), BI.extend({
+            scrolly: true,
             vgap: 5
-        });
+        }, opts.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Top, this.button_group)
+        }))));
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -118,7 +126,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -167,7 +176,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - 10);
     },
 
     resetWidth: function (w) {

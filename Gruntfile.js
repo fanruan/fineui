@@ -8,14 +8,13 @@ module.exports = function (grunt) {
                 separator: ""
             },
             polyfillJs: {
-                src: ["src/polyfill/**/*.js"],
+                src: ["src/core/foundation.js", "src/polyfill/**/*.js"],
                 dest: "dist/polyfill.js"
             },
             coreJs: {
                 src: [
-                    "src/core/jquery.js",
-                    "src/core/lodash.js",
                     "src/core/foundation.js",
+                    "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
                     "src/core/ob.js",
@@ -23,7 +22,7 @@ module.exports = function (grunt) {
                     // 'src/core/model.js',
                     // 'src/core/view.js',
                     "src/core/shortcut.js",
-                    "src/core/utils/*.js",
+                    "src/core/utils/**/*.js",
                     "src/core/behavior/behavior.js",
                     "src/core/wrapper/layout.js",
                     "src/core/plugin.js",
@@ -39,7 +38,6 @@ module.exports = function (grunt) {
             baseJs: {
                 src: [
                     "src/third/**/*.js",
-                    "src/base/formula/config.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
                     "src/base/single/text.js",
@@ -48,7 +46,6 @@ module.exports = function (grunt) {
                     "src/base/single/tip/tip.js",
                     "src/base/combination/group.button.js",
                     "src/base/combination/tree.button.js",
-                    "src/base/combination/map.button.js",
                     "src/base/tree/treeview.js",
                     "src/base/tree/asynctree.js",
                     "src/base/tree/parttree.js",
@@ -66,8 +63,6 @@ module.exports = function (grunt) {
             },
             widgetJs: {
                 src: [
-                    "src/widget/paramsettingcombo/popup.param.js",
-                    "src/widget/sequencetable/treenumber.sequencetable.js",
                     "src/widget/**/*.js",
                     "src/component/**/*.js"
                 ],
@@ -110,14 +105,33 @@ module.exports = function (grunt) {
                 dest: "dist/bundle.css"
             },
 
-            fineuiMinJs: {
-                src: ["dist/_fineui.min.js", "src/base/formula/formulaeditor.js"],
-                dest: "dist/fineui.min.js"
+            fineuiJs: {
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
+                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                dest: "dist/fineui.js"
             },
 
-            fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
-                    "src/base/formula/config.js",
+            fineuiWithoutJqueryAndPolyfillJs: {
+                src: ["src/core/foundation.js",
+                    "src/core/lodash.js",
+                    // 'src/core/mvc/**/*.js',
+                    "src/core/base.js",
+                    "src/core/ob.js",
+                    "src/core/widget.js",
+                    // 'src/core/model.js',
+                    // 'src/core/view.js',
+                    "src/core/shortcut.js",
+                    "src/core/utils/*.js",
+                    "src/core/behavior/behavior.js",
+                    "src/core/wrapper/layout.js",
+                    "src/core/plugin.js",
+                    "src/core/**/*.js",
+                    "!src/core/platform/web/**/*.js",
+
+                    "src/data/data.js",
+                    "src/data/**/*.js",
+
+                    "dist/fix/fix.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
                     "src/base/single/text.js",
@@ -127,12 +141,17 @@ module.exports = function (grunt) {
                     "src/base/combination/group.button.js",
                     "src/base/combination/tree.button.js",
                     "src/base/combination/map.button.js",
-                    "src/base/tree/treeview.js",
-                    "src/base/tree/asynctree.js",
-                    "src/base/tree/parttree.js",
                     "src/base/**/*.js",
-                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
-                dest: "dist/fineui.js"
+                    "!src/base/tree/**/*.js",
+                    "!src/base/single/input/file.js",
+
+                    "src/case/combo/popup.bubble.js",
+                    "src/case/**/*.js",
+                    "!src/case/colorchooser/**/*.js",
+                    "!src/case/tree/tree.display.js",
+
+                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
+                dest: "dist/fineui_without_jquery_polyfill.js"
             },
 
             fineuiCss: {
@@ -154,8 +173,8 @@ module.exports = function (grunt) {
             },
             utilsJs: {
                 src: [
-                    "src/core/lodash.js",
                     "src/core/foundation.js",
+                    "src/core/lodash.js",
                     "src/core/var.js",
                     "src/core/proto/array.js",
                     "src/core/proto/number.js",
@@ -168,12 +187,16 @@ module.exports = function (grunt) {
                     "src/core/inject.js",
                     "src/core/utils/*.js",
 
+                    "utils/date.i18n.js",
+                    "public/js/fineui.i18n.js",
                     "src/data/data.js",
                     "src/data/**/*.js"
                 ],
                 dest: "dist/utils.js"
             }
         },
+
+
 
         less: {
             demo: {
@@ -214,29 +237,13 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
-                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"dd-mm-yyyy\") %> */\n"
+                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n"
             },
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
                     "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
-                    "dist/_fineui.min.js": ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "src/third/**/*.js",
-                        "src/base/formula/config.js",
-                        "src/base/pane.js",
-                        "src/base/single/single.js",
-                        "src/base/single/text.js",
-                        "src/base/single/button/button.basic.js",
-                        "src/base/single/button/button.node.js",
-                        "src/base/single/tip/tip.js",
-                        "src/base/combination/group.button.js",
-                        "src/base/combination/tree.button.js",
-                        "src/base/combination/map.button.js",
-                        "src/base/tree/treeview.js",
-                        "src/base/tree/asynctree.js",
-                        "src/base/tree/parttree.js",
-                        "src/base/**/*.js",
-                        "!src/base/formula/formulaeditor.js",
-                        "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"]
+                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
                 }
             }
         },
@@ -270,9 +277,26 @@ module.exports = function (grunt) {
                 }
             }
         },
+        copy: {
+            js: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "dist",
+                        src: [
+                            "fineui.js"
+                        ],
+                        dest: "dist/",
+                        rename: function (dest, src) {
+                            return dest + src.replace(".js", ".min.js");
+                        }
+                    }
+                ]
+            }
+        },
         watch: {
             scripts: {
-                files: ["src/**/*.js", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,
@@ -296,11 +320,11 @@ module.exports = function (grunt) {
             },
             server: {
                 options: {
-                    port: 9001,
-                    base: "./dist"
+                    port: 9001
                 }
             }
-        }
+        },
+        clean: ["src/css", "demo/css"]
     });
 
     grunt.loadNpmTasks("grunt-contrib-uglify");
@@ -310,13 +334,15 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-connect");
+    grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-copy");
 
-    var defaultTask = ["less", "concat", "connect", "watch"];
+    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
         grunt.task.run(defaultTask);
     });
-    grunt.registerTask("min", ["less", "concat", "uglify", "cssmin"]);
-    grunt.registerTask("build", ["less", "concat", "uglify", "cssmin", "uglify", "concat"]);
+    grunt.registerTask("build", ["clean", "less", "cssmin", "concat", "uglify"]);
+    grunt.registerTask("fake-build", ["clean", "less", "cssmin", "concat", "copy"]);
 };

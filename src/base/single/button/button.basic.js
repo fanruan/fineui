@@ -127,14 +127,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var selected = false;
                     hand.mousedown(function (e) {
                         // if (e.button === 0) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             // if (e.button === 0) {
                             if (BI.DOM.isExist(self) && !hand.__isMouseInBounds__(e) && mouseDown === true && !selected) {
                                 // self.setSelected(!self.isSelected());
                                 self._trigger();
                             }
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                             // }
                         });
                         if (mouseDown === true) {
@@ -156,7 +156,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                         }
                         mouseDown = false;
                         selected = false;
-                        $(document).unbind("mouseup." + self.getName());
+                        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         // }
                     });
                     break;
@@ -167,11 +167,11 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     var mouseDown = false;
                     var interval;
                     hand.mousedown(function (e) {
-                        $(document).bind("mouseup." + self.getName(), function (e) {
+                        BI.Widget._renderEngine.createElement(document).bind("mouseup." + self.getName(), function (e) {
                             interval && clearInterval(interval);
                             interval = null;
                             mouseDown = false;
-                            $(document).unbind("mouseup." + self.getName());
+                            BI.Widget._renderEngine.createElement(document).unbind("mouseup." + self.getName());
                         });
                         if (mouseDown === true) {
                             return;
@@ -238,7 +238,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                                 },
                                 popup: {
                                     type: "bi.text_bubble_bar_popup_view",
-                                    cls: "popup-content",
                                     text: getBubble(),
                                     ref: function () {
                                         popup = this;
@@ -402,7 +401,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     },
 
     empty: function () {
-        $(document).unbind("mouseup." + this.getName());
+        BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
     },
 

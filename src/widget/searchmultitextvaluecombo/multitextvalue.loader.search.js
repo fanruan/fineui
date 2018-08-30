@@ -75,7 +75,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -111,8 +111,10 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 

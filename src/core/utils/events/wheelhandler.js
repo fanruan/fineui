@@ -2,7 +2,7 @@
     var PIXEL_STEP = 10;
     var LINE_HEIGHT = 40;
     var PAGE_HEIGHT = 800;
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
     function normalizeWheel (/* object*/event) /* object*/ {
         var sX = 0,

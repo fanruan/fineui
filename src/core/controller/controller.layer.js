@@ -49,7 +49,7 @@ BI.LayerController = BI.inherit(BI.Controller, {
             w = from.element;
         }
         if (BI.isNotEmptyString(w)) {
-            w = $(w);
+            w = BI.Widget._renderEngine.createElement(w);
         }
         if (this.has(name)) {
             return this.get(name);
@@ -154,6 +154,17 @@ BI.LayerController = BI.inherit(BI.Controller, {
         this.layouts[name].destroy();
         delete this.layerManager[name];
         delete this.layouts[name];
+        return this;
+    },
+
+    removeAll: function () {
+        var self = this;
+        BI.each(BI.keys(this.layerManager), function (index, name) {
+            self.layerManager[name].destroy();
+            self.layouts[name].destroy();
+        });
+        this.layerManager = {};
+        this.layouts = {};
         return this;
     }
 });

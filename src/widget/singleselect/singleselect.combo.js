@@ -10,7 +10,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -127,12 +130,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();

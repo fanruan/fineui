@@ -32,10 +32,6 @@ Demo.CASE_CONFIG = [{
     value: "demo.sign_editor"
 }, {
     pId: 301,
-    text: "bi.sign_initial_editor",
-    value: "demo.sign_initial_editor"
-}, {
-    pId: 301,
     text: "bi.state_editor",
     value: "demo.state_editor"
 }, {
@@ -58,14 +54,6 @@ Demo.CASE_CONFIG = [{
     pId: 302,
     text: "bi.lazy_loader",
     value: "demo.lazy_loader"
-}, {
-    pId: 302,
-    text: "bi.sort_list(排序)",
-    value: "demo.sort_list"
-}, {
-    pId: 302,
-    text: "bi.list_loader(排序)",
-    value: "demo.list_loader"
 }, {
     pId: 3,
     id: 303,
@@ -124,10 +112,6 @@ Demo.CASE_CONFIG = [{
     value: "demo.icon_combo"
 }, {
     pId: 306,
-    text: "bi.static_combo",
-    value: "demo.static_combo"
-}, {
-    pId: 306,
     text: "bi.text_value_combo",
     value: "demo.text_value_combo"
 }, {
@@ -156,14 +140,6 @@ Demo.CASE_CONFIG = [{
     text: "tree"
 }, {
     pId: 307,
-    text: "bi.branch_tree",
-    value: "demo.branch_tree"
-}, {
-    pId: 307,
-    text: "bi.handstand_branch_tree",
-    value: "demo.handstand_branch_tree"
-}, {
-    pId: 307,
     text: "bi.display_tree",
     value: "demo.display_tree"
 }, {
@@ -174,26 +150,6 @@ Demo.CASE_CONFIG = [{
     pId: 307,
     text: "bi.level_tree",
     value: "demo.level_tree"
-}, {
-    pId: 307,
-    text: "bi.branch_relation",
-    value: "demo.branch_relation"
-}, {
-    pId: 3,
-    id: 308,
-    text: "table"
-}, {
-    pId: 308,
-    text: "bi.adaptive_table",
-    value: "demo.adaptive_table"
-}, {
-    pId: 308,
-    text: "bi.tree_table",
-    value: "demo.tree_table"
-}, {
-    pId: 308,
-    text: "bi.layer_tree_table",
-    value: "demo.layer_tree_table"
 }, {
     pId: 3,
     id: 309,
@@ -210,14 +166,6 @@ Demo.CASE_CONFIG = [{
     pId: 3,
     text: "bi.calendar",
     value: "demo.calendar"
-}, {
-    pId: 3,
-    text: "bi.clipboard",
-    value: "demo.clipboard"
-}, {
-    pId: 3,
-    text: "bi.complex_canvas",
-    value: "demo.complex_canvas"
 }, {
     pId: 3,
     text: "bi.color_chooser",

@@ -319,54 +319,7 @@ BI.shortcut("demo.image_button", Demo.Button);Demo.Button = BI.inherit(BI.Widget
         };
     }
 });
-BI.shortcut("demo.text_button", Demo.Button);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-
-        var canvas = BI.createWidget({
-            type: "bi.canvas",
-            width: 500,
-            height: 600
-        });
-        canvas.rect(0, 0, 80, 100, "#7dbd2f");
-
-        canvas.line(80, 0, 100, 100, 200, 100, 300, 0, {
-            strokeStyle: "red",
-            lineWidth: 2
-        });
-
-        canvas.circle(150, 50, 20, "green");
-
-        // 渐变矩形
-        canvas.rect(0, 120, 80, 100, canvas.gradient(0, 120, 80, 220, "#FF0000", "#00FF00"));
-
-        // 空心图形
-        canvas.hollow(100, 120, 100, 220, 200, 120, {
-            strokeStyle: "blue"
-        });
-
-        // 实心图形
-        canvas.solid(100, 240, 200, 240, 150, 280, 200, 320, 100, 320, {
-            strokeStyle: "yellow",
-            fillStyle: "pink"
-        });
-
-        canvas.stroke();
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: canvas,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.canvas", Demo.Func);Demo.IconLabel = BI.inherit(BI.Widget, {
+BI.shortcut("demo.text_button", Demo.Button);Demo.IconLabel = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-bubble"
     },
@@ -663,70 +616,7 @@ BI.shortcut("demo.message", Demo.Message);Demo.Func = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.pager", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var svg = BI.createWidget({
-            type: "bi.svg",
-            width: 500,
-            height: 600
-        });
-
-        var circle = svg.circle(100, 100, 10);
-        circle.animate({fill: "#223fa3", stroke: "#000", "stroke-width": 80, "stroke-opacity": 0.5}, 2000);
-
-        var el = svg.rect(10, 200, 300, 200);
-        el.transform("t100,100r45t-100,0");
-
-        svg.path("M10,10L50,50M50,10L10,50")
-            .attr({stroke: "red"});
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: svg,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.svg", Demo.Func);Demo.CodeEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
-        var editor = BI.createWidget({
-            type: "bi.code_editor",
-            cls: "mvc-border",
-            width: 600,
-            height: 400
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            hgap: 30,
-            vgap: 20,
-            items: [editor, {
-                type: "bi.button",
-                text: "getValue",
-                handler: function () {
-                    BI.Msg.toast(JSON.stringify(editor.getValue()));
-                }
-            }, {
-                type: "bi.button",
-                text: "setValue",
-                handler: function () {
-                    editor.setValue("测试数据");
-                }
-            }]
-        });
-    }
-});
-BI.shortcut("demo.code_editor", Demo.CodeEditor);Demo.Editor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -827,26 +717,6 @@ BI.shortcut("demo.editor", Demo.Editor);Demo.CodeEditor = BI.inherit(BI.Widget, 
         baseCls: "demo-editor"
     },
     render: function () {
-        this.formula = BI.createWidget({
-            type: "bi.formula_editor",
-            width: 300,
-            height: 200,
-            value: "SUM(C5, 16, 26)"
-        });
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [this.formula],
-            hgap: 20,
-            vgap: 20
-        });
-    }
-});
-BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
         return {
             type: "bi.absolute",
             items: [{
@@ -867,99 +737,7 @@ BI.shortcut("demo.formula_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit
         };
     }
 });
-BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.RichEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-rich-editor"
-    },
-    render: function () {
-        var self = this;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.rich_editor",
-                    height: "100%",
-                    cls: "bi-border",
-                    ref: function () {
-                        self.editor = this;
-                    },
-                    toolbar: {
-                        type: "bi.rich_editor_text_toolbar",
-                        buttons: [
-                            {type: "bi.rich_editor_font_chooser"},
-                            {type: "bi.rich_editor_size_chooser"},
-                            {type: "bi.rich_editor_bold_button"},
-                            {type: "bi.rich_editor_italic_button"},
-                            {type: "bi.rich_editor_underline_button"},
-                            {type: "bi.rich_editor_color_chooser"},
-                            {
-                                type: "bi.rich_editor_background_color_chooser",
-                                listeners: [{
-                                    eventName: "EVENT_CHANGE",
-                                    action: function (backgroundColor) {
-                                        self.editor.element.css({
-                                            backgroundColor: backgroundColor,
-                                            color: BI.DOM.getContrastColor(backgroundColor)
-                                        });
-                                    }
-                                }]
-                            },
-                            {type: "bi.rich_editor_align_left_button"},
-                            {type: "bi.rich_editor_align_center_button"},
-                            {type: "bi.rich_editor_align_right_button"},
-                            {type: "bi.rich_editor_param_button"}
-                        ]
-                    }
-                },
-                left: 10,
-                top: 10,
-                bottom: 10,
-                right: 10
-            }]
-        });
-    },
-
-    mounted: function () {
-        var image = BI.DOM.getImage("测试");
-        var src = image.src;
-        var style = image.style;
-        this.editor.setValue("<div>这是一条<font size=\"4\" color=\"#009de3\">测试</font>数据<img class=\"rich-editor-param\" width='" + image.width + "' height='" + image.height + "' src='" + src + "' style='" + style + "' /></div>");
-    }
-});
-BI.shortcut("demo.rich_editor", Demo.RichEditor);/**
- * Created by Windy on 2017/12/15.
- */
-Demo.SQLEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-editor"
-    },
-    render: function () {
-        var self = this;
-        this.formula = BI.createWidget({
-            type : 'bi.sql_editor',
-            supportParam: true,
-            width : 300,
-            height : 200,
-            value : "select * from DEMO_CONTRACT where 合同类型 = ${长期协议} and 购买数量 = sum([1,2,3,4])"
-        });
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [this.formula, {
-                type: "bi.button",
-                height: 24,
-                handler: function () {
-                    BI.Msg.alert("", self.formula.getValue());
-                }
-
-            }],
-            hgap: 20,
-            vgap: 20
-        })
-    }
-});
-BI.shortcut("demo.sql_editor", Demo.SQLEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },
@@ -997,546 +775,7 @@ BI.shortcut("demo.sql_editor", Demo.SQLEditor);Demo.CodeEditor = BI.inherit(BI.W
         });
     }
 });
-BI.shortcut("demo.textarea_editor", Demo.CodeEditor);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var items = [], header = [], columnSize = [];
-
-        var rowCount = 100, columnCount = 100;
-        for (var i = 0; i < 1; i++) {
-            header[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                header[i][j] = {
-                    type: "bi.label",
-                    text: "表头" + i + "-" + j
-                };
-                columnSize[j] = 100;
-            }
-        }
-        for (var i = 0; i < rowCount; i++) {
-            items[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                items[i][j] = {
-                    type: "bi.label",
-                    text: (i < 3 ? 0 : i) + "-" + j
-                };
-            }
-        }
-
-        var table = BI.createWidget({
-            type: "bi.resizable_table",
-            el: {
-                type: "bi.collection_table"
-            },
-            width: 600,
-            height: 500,
-            isResizeAdapt: true,
-            isNeedResize: true,
-            isNeedMerge: true,
-            mergeCols: [0, 1],
-            mergeRule: function (col1, col2) {
-                return BI.isEqual(col1, col2);
-            },
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            columnSize: columnSize,
-            items: items,
-            header: header
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: table,
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.collection_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var items = [], header = [], columnSize = [];
-
-        var rowCount = 100, columnCount = 100;
-        for (var i = 0; i < 1; i++) {
-            header[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                header[i][j] = {
-                    type: "bi.label",
-                    text: "表头" + i + "-" + j
-                };
-                columnSize[j] = 100;
-            }
-        }
-        for (var i = 0; i < rowCount; i++) {
-            items[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                items[i][j] = {
-                    type: "bi.label",
-                    text: (i < 3 ? 0 : i) + "-" + j
-                };
-            }
-        }
-
-        var table = BI.createWidget({
-            type: "bi.resizable_table",
-            el: {
-                type: "bi.grid_table"
-            },
-            width: 600,
-            height: 500,
-            isResizeAdapt: true,
-            isNeedResize: true,
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            columnSize: columnSize,
-            items: items,
-            header: header
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: table,
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.grid_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var items = [], header = [], columnSize = [];
-
-        var rowCount = 100, columnCount = 100;
-        for (var i = 0; i < 1; i++) {
-            header[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                header[i][j] = {
-                    type: "bi.label",
-                    text: "表头" + i + "-" + j
-                };
-                columnSize[j] = 100;
-            }
-        }
-        for (var i = 0; i < rowCount; i++) {
-            items[i] = [];
-            for (var j = 0; j < columnCount; j++) {
-                items[i][j] = {
-                    type: "bi.label",
-                    text: (i < 3 ? 0 : i) + "-" + j
-                };
-            }
-        }
-
-        var table = BI.createWidget({
-            type: "bi.resizable_table",
-            el: {
-                type: "bi.grid_table"
-            },
-            width: 600,
-            height: 500,
-            isResizeAdapt: true,
-            isNeedResize: true,
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            columnSize: columnSize,
-            items: items,
-            header: header
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: table,
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.resizable_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-    render: function () {
-        var items = [[{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第三行第一列"
-        }, {
-            text: "第三行第二列"
-        }, {
-            text: "第三行第三列"
-        }], [{
-            text: "第四行第一列"
-        }, {
-            text: "第四行第二列"
-        }, {
-            text: "第四行第三列"
-        }], [{
-            text: "第五行第一列"
-        }, {
-            text: "第五行第二列"
-        }, {
-            text: "第五行第三列"
-        }], [{
-            text: "第六行第一列"
-        }, {
-            text: "第六行第二列"
-        }, {
-            text: "第六行第三列"
-        }], [{
-            text: "第七行第一列"
-        }, {
-            text: "第七行第二列"
-        }, {
-            text: "第七行第三列"
-        }], [{
-            text: "第八行第一列"
-        }, {
-            text: "第八行第二列"
-        }, {
-            text: "第八行第三列"
-        }], [{
-            text: "第九行第一列"
-        }, {
-            text: "第九行第二列"
-        }, {
-            text: "第九行第三列"
-        }], [{
-            text: "第十行第一列"
-        }, {
-            text: "第十行第二列"
-        }, {
-            text: "第十行第三列"
-        }], [{
-            text: "第十一行第一列"
-        }, {
-            text: "第十一行第二列"
-        }, {
-            text: "第十一行第三列"
-        }], [{
-            text: "第十二行第一列"
-        }, {
-            text: "第十二行第二列"
-        }, {
-            text: "第十二行第三列"
-        }], [{
-            text: "第十三行第一列"
-        }, {
-            text: "第十三行第二列"
-        }, {
-            text: "第十三行第三列"
-        }], [{
-            text: "第十四行第一列"
-        }, {
-            text: "第十四行第二列"
-        }, {
-            text: "第十四行第三列"
-        }], [{
-            text: "第十五行第一列"
-        }, {
-            text: "第十五行第二列"
-        }, {
-            text: "第十五行第三列"
-        }], [{
-            text: "第十六行第一列"
-        }, {
-            text: "第十六行第二列"
-        }, {
-            text: "第十六行第三列"
-        }], [{
-            text: "第十七行第一列"
-        }, {
-            text: "第十七行第二列"
-        }, {
-            text: "第十七行第三列"
-        }], [{
-            text: "第十八行第一列"
-        }, {
-            text: "第十八行第二列"
-        }, {
-            text: "第十八行第三列"
-        }]];
-
-
-        var items2 = [[{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第二列"
-        }, {
-            text: "第一行第三列"
-        }, {
-            text: "第一行第四列"
-        }, {
-            text: "第一行第五列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第二行第二列"
-        }, {
-            text: "第二行第三列"
-        }, {
-            text: "第二行第四列"
-        }, {
-            text: "第二行第五列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第二行第二列"
-        }, {
-            text: "第三行第三列"
-        }, {
-            text: "第三行第四列"
-        }, {
-            text: "第三行第五列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第四行第二列"
-        }, {
-            text: "第四行第三列"
-        }, {
-            text: "第四行第四列"
-        }, {
-            text: "第四行第五列"
-        }],
-
-
-        [{
-            text: "第五行第一列"
-        }, {
-            text: "第五行第一列"
-        }, {
-            text: "第五行第三列"
-        }, {
-            text: "第五行第四列"
-        }, {
-            text: "第五行第五列"
-        }], [{
-            text: "第六行第一列"
-        }, {
-            text: "第六行第一列"
-        }, {
-            text: "第六行第三列"
-        }, {
-            text: "第六行第四列"
-        }, {
-            text: "第六行第五列"
-        }], [{
-            text: "第七行第一列"
-        }, {
-            text: "第七行第二列"
-        }, {
-            text: "第七行第三列"
-        }, {
-            text: "第七行第四列"
-        }, {
-            text: "第七行第五列"
-        }], [{
-            text: "第八行第一列"
-        }, {
-            text: "第八行第二列"
-        }, {
-            text: "第八行第三列"
-        }, {
-            text: "第八行第四列"
-        }, {
-            text: "第八行第五列"
-        }], [{
-            text: "第九行第一列"
-        }, {
-            text: "第九行第二列"
-        }, {
-            text: "第九行第三列"
-        }, {
-            text: "第九行第四列"
-        }, {
-            text: "第九行第五列"
-        }], [{
-            text: "第十行第一列"
-        }, {
-            text: "第十行第二列"
-        }, {
-            text: "第十行第三列"
-        }, {
-            text: "第十行第四列"
-        }, {
-            text: "第十行第五列"
-        }], [{
-            text: "第十一行第一列"
-        }, {
-            text: "第十一行第二列"
-        }, {
-            text: "第十一行第三列"
-        }, {
-            text: "第十一行第四列"
-        }, {
-            text: "第十一行第五列"
-        }], [{
-            text: "第十二行第一列"
-        }, {
-            text: "第十二行第二列"
-        }, {
-            text: "第十二行第三列"
-        }, {
-            text: "第十二行第四列"
-        }, {
-            text: "第十二行第五列"
-        }], [{
-            text: "第十三行第一列"
-        }, {
-            text: "第十三行第二列"
-        }, {
-            text: "第十三行第三列"
-        }, {
-            text: "第十三行第四列"
-        }, {
-            text: "第十三行第五列"
-        }], [{
-            text: "第十四行第一列"
-        }, {
-            text: "第十四行第二列"
-        }, {
-            text: "第十四行第三列"
-        }, {
-            text: "第十四行第四列"
-        }, {
-            text: "第十四行第五列"
-        }]];
-
-        var header = [[{
-            text: "表头1"
-        }, {
-            text: "表头2"
-        }, {
-            text: "表头3"
-        }]];
-
-        var header2 = [[{
-            text: "表头1"
-        }, {
-            text: "表头2"
-        }, {
-            text: "表头3"
-        }, {
-            text: "表头4"
-        }, {
-            text: "表头5"
-        }]];
-
-        var table1 = BI.createWidget({
-            type: "bi.table_view",
-            isNeedResize: true,
-            isNeedMerge: true,
-            mergeCols: [0, 1],
-            columnSize: [100, 200, 300],
-            items: items,
-            header: header
-        });
-        var table2 = BI.createWidget({
-            type: "bi.table_view",
-            isNeedMerge: true,
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            mergeCols: [0, 1],
-            columnSize: [100, 200, 300, 400, 500],
-            items: items2,
-            header: header2
-        });
-        var table3 = BI.createWidget({
-            type: "bi.table_view",
-            isNeedMerge: true,
-            isNeedFreeze: true,
-            freezeCols: [4],
-            mergeCols: [0, 1],
-            columnSize: [100, 200, 300, 400, 100],
-            items: items2,
-            header: header2
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 2,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: table1
-                    }, {
-                        column: 1,
-                        row: 0,
-                        el: table2
-                    }, {
-                        column: 0,
-                        row: 1,
-                        el: table3
-                    }, {
-                        column: 1,
-                        row: 1,
-                        el: {
-                            type: "bi.vertical",
-                            items: [{
-                                type: "bi.button",
-                                text: "第一个表setColumnSize([300, 200, 100])",
-                                handler: function () {
-                                    table1.setColumnSize([300, 200, 100]);
-                                }
-                            }, {
-                                type: "bi.button",
-                                text: "第二个表setColumnSize([50, 100, 150, 200, 250])",
-                                handler: function () {
-                                    table2.setColumnSize([50, 100, 150, 200, 250]);
-                                }
-                            }, {
-                                type: "bi.button",
-                                text: "第三个表setColumnSize([50, 100, 150, 200, 50])",
-                                handler: function () {
-                                    table3.setColumnSize([50, 100, 150, 200, 50]);
-                                }
-                            }],
-                            vgap: 10
-                        }
-                    }]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.table_view", Demo.Func);Demo.Bubble = BI.inherit(BI.Widget, {
+BI.shortcut("demo.textarea_editor", Demo.CodeEditor);Demo.Bubble = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-bubble"
     },
@@ -1726,7 +965,79 @@ BI.shortcut("demo.toast", Demo.Toast);Demo.Func = BI.inherit(BI.Widget, {
         baseCls: "demo-func"
     },
 
+    mounted: function () {
+        this.partTree.stroke({
+            keyword: "1"
+        });
+    },
+
     render: function () {
+        var self = this;
+        return {
+            type: "bi.vtape",
+            items: [{
+                type: "bi.label",
+                height: 50,
+                text: "先初始化一份数据，然后再异步获取数据的树"
+            }, {
+                type: "bi.part_tree",
+                ref: function (_ref) {
+                    self.partTree = _ref;
+                },
+                paras: {
+                    selectedValues: {"1": {}, "2": {"1": {}}}
+                },
+                itemsCreator: function (op, callback) {
+                    if (op.type === BI.TreeView.REQ_TYPE_INIT_DATA) {
+                        callback({
+                            items: [{
+                                id: "1",
+                                text: 1,
+                                isParent: true,
+                                open: true
+                            }, {
+                                id: "11",
+                                pId: "1",
+                                text: 11,
+                                isParent: true,
+                                open: true
+                            }, {
+                                id: "111",
+                                pId: "11",
+                                text: 111,
+                                isParent: true
+                            }, {
+                                id: "2",
+                                text: 2
+                            }, {
+                                id: "3",
+                                text: 3
+                            }],
+                            hasNext: BI.isNull(op.id)
+                        });
+                        return;
+                    }
+                    callback({
+                        items: [{
+                            id: (op.id || "") + "1",
+                            pId: op.id,
+                            text: 1,
+                            isParent: true
+                        }, {
+                            id: (op.id || "") + "2",
+                            pId: op.id,
+                            text: 2
+                        }, {
+                            id: (op.id || "") + "3",
+                            pId: op.id,
+                            text: 3
+                        }],
+                        hasNext: BI.isNull(op.id)
+                    });
+                }
+            }]
+        };
+
     }
 });
 BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
@@ -1735,7 +1046,9 @@ BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this.syncTree.stroke();
+        this.syncTree.stroke({
+            keyword: "1"
+        });
     },
 
     render: function () {
@@ -1752,7 +1065,7 @@ BI.shortcut("demo.part_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     self.syncTree = _ref;
                 },
                 paras: {
-                    selectedValues: {"_0": {}, "_5": {"_5_0": {}}}
+                    selectedValues: {"1": {}, "2": {"1": {}}}
                 },
                 itemsCreator: function (op, callback) {
                     callback({
@@ -2170,50 +1483,6 @@ Demo.SearchTextValueCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.search_text_value_combo", Demo.SearchTextValueCombo);/**
  * Created by Dailer on 2017/7/11.
  */
-Demo.StaticCombo = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-
-    beforeMount: function () {
-        this.refs.setValue(2);
-    },
-
-    render: function () {
-
-        var self = this;
-
-        return {
-            type: "bi.horizontal_auto",
-            items: [{
-                type: "bi.static_combo",
-                text: "Value 不变",
-                width: 300,
-                ref: function (_ref) {
-                    self.refs = _ref;
-                },
-                items: [
-                    {
-                        text: "MVC-1",
-                        value: 1
-                    }, {
-                        text: "MVC-2",
-                        value: 2
-                    }, {
-                        text: "MVC-3",
-                        value: 3
-                    }
-                ]
-            }],
-            vgap: 20
-        };
-    }
-});
-
-BI.shortcut("demo.static_combo", Demo.StaticCombo);/**
- * Created by Dailer on 2017/7/11.
- */
 Demo.TextValueCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: ""
@@ -2314,7 +1583,7 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                         cls: "dot-e-font"
                     }, {
                         text: BI.i18nText("BI-Basic_Average_Value"),
-                        value: 4,
+                        value: 5,
                         cls: "dot-e-font"
                     }]
                 }]]
@@ -2437,14 +1706,13 @@ BI.shortcut("demo.calendar", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 text: "bi-list-item-active2",
                 cls: "bi-list-item-active2 close-font"
             }, {
-                text: "bi-list-item-active3",
-                cls: "bi-list-item-active3 close-font"
-            }, {
                 text: "bi-list-item-select",
                 cls: "bi-list-item-select close-font"
+            }, {
+                text: "bi-list-item-select2",
+                cls: "bi-list-item-select2 close-font"
             }], {
                 type: "bi.icon_text_item",
-                disabled: true,
                 logic: {
                     dynamic: true
                 }
@@ -2459,53 +1727,11 @@ BI.shortcut("demo.click_item_effect", Demo.Func);Demo.Func = BI.inherit(BI.Widge
     },
 
     render: function () {
-        var editor = BI.createWidget({
-            type: "bi.text_editor",
-            width: 200,
-            height: 30,
-            value: "这是复制的内容"
-        });
-        var clipboard = BI.createWidget({
-            type: "bi.clipboard",
-            width: 100,
-            height: 100,
-            cls: "layout-bg1",
-            copy: function () {
-                return editor.getValue();
-            },
-
-            afterCopy: function () {
-                BI.Msg.toast(editor.getValue());
-            }
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: editor,
-                left: 100,
-                top: 50
-            }, {
-                el: clipboard,
-                left: 100,
-                top: 100
-            }]
-        });
-    }
-});
-BI.shortcut("demo.clipboard", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
         return {
             type: "bi.absolute",
             items: [{
                 el: {
                     type: "bi.color_chooser_popup",
-                    disabled: true,
                     cls: "bi-card"
                 },
                 left: 100,
@@ -2558,40 +1784,6 @@ BI.shortcut("demo.color_chooser_popup", Demo.Func);Demo.Func = BI.inherit(BI.Wid
     }
 });
 BI.shortcut("demo.color_chooser", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var canvas = BI.createWidget({
-            type: "bi.complex_canvas",
-            width: 500,
-            height: 600
-        });
-        canvas.branch(55, 100, 10, 10, 100, 10, 200, 10, {
-            offset: 20,
-            strokeStyle: "red",
-            lineWidth: 2
-        });
-
-        canvas.branch(220, 155, 120, 110, 150, 200, {
-            offset: 40
-        });
-
-        canvas.stroke();
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: canvas,
-                left: 100,
-                top: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.complex_canvas", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -2696,7 +1888,7 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
     render: function () {
         var editor = BI.createWidget({
             type: "bi.sign_editor",
-            cls: "bi-border",
+            cls: "bi-border bi-focus-shadow",
             validationChecker: function (v) {
                 return v != "abc";
             },
@@ -2715,38 +1907,6 @@ Demo.SignEditor = BI.inherit(BI.Widget, {
 });
 
 BI.shortcut("demo.sign_editor", Demo.SignEditor);/**
- * Created by Dailer on 2017/7/11.
- */
-Demo.SignInitialEditor = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-    mounted: function () {
-        this.editor.setValue({
-            value: "123",
-            text: "sdga"
-        });
-    },
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.horizontal_adapt",
-            items: [{
-                type: "bi.sign_initial_editor",
-                ref: function () {
-                    self.editor = this;
-                },
-                cls: "layout-bg5",
-                text: "原始值",
-                width: 300
-            }],
-            vgap: 20
-
-        };
-    }
-});
-
-BI.shortcut("demo.sign_initial_editor", Demo.SignInitialEditor);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.SimpleStateEditor = BI.inherit(BI.Widget, {
@@ -3138,841 +2298,6 @@ BI.shortcut("demo.popup_panel", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var items = [[{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第三行第一列"
-        }, {
-            text: "第三行第二列"
-        }, {
-            text: "第三行第三列"
-        }], [{
-            text: "第四行第一列"
-        }, {
-            text: "第四行第二列"
-        }, {
-            text: "第四行第三列"
-        }], [{
-            text: "第五行第一列"
-        }, {
-            text: "第五行第二列"
-        }, {
-            text: "第五行第三列"
-        }], [{
-            text: "第六行第一列"
-        }, {
-            text: "第六行第二列"
-        }, {
-            text: "第六行第三列"
-        }], [{
-            text: "第七行第一列"
-        }, {
-            text: "第七行第二列"
-        }, {
-            text: "第七行第三列"
-        }], [{
-            text: "第八行第一列"
-        }, {
-            text: "第八行第二列"
-        }, {
-            text: "第八行第三列"
-        }], [{
-            text: "第九行第一列"
-        }, {
-            text: "第九行第二列"
-        }, {
-            text: "第九行第三列"
-        }], [{
-            text: "第十行第一列"
-        }, {
-            text: "第十行第二列"
-        }, {
-            text: "第十行第三列"
-        }], [{
-            text: "第十一行第一列"
-        }, {
-            text: "第十一行第二列"
-        }, {
-            text: "第十一行第三列"
-        }], [{
-            text: "第十二行第一列"
-        }, {
-            text: "第十二行第二列"
-        }, {
-            text: "第十二行第三列"
-        }], [{
-            text: "第十三行第一列"
-        }, {
-            text: "第十三行第二列"
-        }, {
-            text: "第十三行第三列"
-        }], [{
-            text: "第十四行第一列"
-        }, {
-            text: "第十四行第二列"
-        }, {
-            text: "第十四行第三列"
-        }], [{
-            text: "第十五行第一列"
-        }, {
-            text: "第十五行第二列"
-        }, {
-            text: "第十五行第三列"
-        }], [{
-            text: "第十六行第一列"
-        }, {
-            text: "第十六行第二列"
-        }, {
-            text: "第十六行第三列"
-        }], [{
-            text: "第十七行第一列"
-        }, {
-            text: "第十七行第二列"
-        }, {
-            text: "第十七行第三列"
-        }], [{
-            text: "第十八行第一列"
-        }, {
-            text: "第十八行第二列"
-        }, {
-            text: "第十八行第三列"
-        }]];
-
-        var header = [[{
-            text: "表头1"
-        }, {
-            text: "表头2"
-        }, {
-            text: "表头3"
-        }]];
-
-        var table = BI.createWidget({
-            type: "bi.adaptive_table",
-            el: {
-                type: "bi.resizable_table",
-                el: {
-                    type: "bi.grid_table"
-                }
-            },
-            width: 600,
-            height: 400,
-            minColumnSize: [100, 100, 100],
-            columnSize: [100, 100, 100],
-            header: header,
-            items: items
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 1,
-                    items: [[{
-                        el: table
-                    }]]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.adaptive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1",
-                    children: [{
-                        text: "叶节点1",
-                        values: [{text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 112}]
-                    }, {
-                        text: "叶节点2",
-                        values: [{text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 122}]
-                    }],
-                    values: [{text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 1102}]
-                }, {
-                    text: "子节点2",
-                    children: [{
-                        text: "叶节点3",
-                        values: [{text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 132}]
-                    }, {
-                        text: "叶节点4",
-                        values: [{text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 142}]
-                    }],
-                    values: [{text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 1202}]
-                }, {
-                    text: "子节点3",
-                    children: [{
-                        text: "叶节点5",
-                        values: [{text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 152}]
-                    }],
-                    values: [{text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 1302}]
-                }],
-                values: [{text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 11002}]
-            }, {
-                text: "节点2",
-                values: [{text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 12002}]
-            }],
-            values: [{text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 112002}]
-        }];
-
-        var header = [{
-            text: "header1"
-        }, {
-            text: "header2"
-        }, {
-            text: "header3"
-        }, {
-            text: "金额",
-            tag: 1
-        }, {
-            text: "金额",
-            tag: 2
-        }, {
-            text: "金额",
-            tag: 3
-        }, {
-            text: "金额",
-            tag: 4
-        }, {
-            text: "金额",
-            tag: 5
-        }, {
-            text: "金额",
-            tag: 6
-        }, {
-            text: "金额",
-            tag: 7
-        }];
-
-        var crossHeader = [{
-            text: "cross1"
-        }, {
-            text: "cross2"
-        }];
-
-        var crossItems = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1"
-                }, {
-                    text: "子节点2"
-                }],
-                values: [0]
-            }, {
-                text: "节点2",
-                children: [{
-                    text: "子节点3"
-                }, {
-                    text: "子节点4"
-                }],
-                values: [0]
-            }],
-            values: [0]
-        }];
-
-        var table = BI.createWidget({
-            type: "bi.layer_tree_table",
-            el: {
-                type: "bi.adaptive_table",
-                el: {
-                    type: "bi.resizable_table",
-                    el: {
-                        type: "bi.collection_table",
-                        mergeRule: function (col1, col2) {
-                            return BI.isEqual(col1, col2);
-                        }
-                    }
-                }
-            },
-            width: 600,
-            height: 400,
-            isNeedFreeze: true,
-            isNeedMerge: true,
-            freezeCols: [0, 1, 2],
-            mergeCols: [0, 1, 2],
-            minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            header: header,
-            items: items,
-            crossHeader: crossHeader,
-            crossItems: crossItems
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 1,
-                    items: [[{
-                        el: table
-                    }]]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.layer_tree_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1",
-                    children: [{
-                        text: "叶节点1",
-                        values: [{text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 112}]
-                    }, {
-                        text: "叶节点2",
-                        values: [{text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 122}]
-                    }],
-                    values: [{text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 1102}]
-                }, {
-                    text: "子节点2",
-                    children: [{
-                        text: "叶节点3",
-                        values: [{text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 132}]
-                    }, {
-                        text: "叶节点4",
-                        values: [{text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 142}]
-                    }],
-                    values: [{text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 1202}]
-                }, {
-                    text: "子节点3",
-                    children: [{
-                        text: "叶节点5",
-                        values: [{text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 152}]
-                    }],
-                    values: [{text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 1302}]
-                }],
-                values: [{text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 11002}]
-            }, {
-                text: "节点2",
-                values: [{text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 12002}]
-            }],
-            values: [{text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 112002}]
-        }];
-
-        var header = [{
-            text: "header1"
-        }, {
-            text: "header2"
-        }, {
-            text: "header3"
-        }, {
-            text: "金额",
-            tag: 1
-        }, {
-            text: "金额",
-            tag: 2
-        }, {
-            text: "金额",
-            tag: 3
-        }, {
-            text: "金额",
-            tag: 4
-        }, {
-            text: "金额",
-            tag: 5
-        }, {
-            text: "金额",
-            tag: 6
-        }, {
-            text: "金额",
-            tag: 7
-        }];
-
-        var crossHeader = [{
-            text: "cross1"
-        }, {
-            text: "cross2"
-        }];
-
-        var crossItems = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1"
-                }, {
-                    text: "子节点2"
-                }],
-                values: [0]
-            }, {
-                text: "节点2",
-                children: [{
-                    text: "子节点3"
-                }, {
-                    text: "子节点4"
-                }],
-                values: [0]
-            }],
-            values: [0]
-        }];
-
-        var table = BI.createWidget({
-            type: "bi.tree_table",
-            el: {
-                type: "bi.adaptive_table",
-                el: {
-                    type: "bi.resizable_table",
-                    el: {
-                        type: "bi.collection_table",
-                        mergeRule: function (col1, col2) {
-                            return BI.isEqual(col1, col2);
-                        }
-                    }
-                }
-            },
-            width: 600,
-            height: 400,
-            isNeedFreeze: true,
-            isNeedMerge: true,
-            freezeCols: [0, 1, 2],
-            mergeCols: [0, 1, 2],
-            minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            header: header,
-            items: items,
-            crossHeader: crossHeader,
-            crossItems: crossItems
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 1,
-                    items: [[{
-                        el: table
-                    }]]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.tree_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var relation = BI.createWidget({
-            type: "bi.branch_relation",
-            items: [
-                {
-                    id: -1,
-                    value: "根目录",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 1,
-                    pId: -1,
-                    value: "第一级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 11,
-                    pId: 1,
-                    value: "第二级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 12,
-                    pId: 1,
-                    value: "第二级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 121,
-                    pId: 12,
-                    value: "第三级目录1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 122,
-                    pId: 12,
-                    value: "第三级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 1211,
-                    pId: 121,
-                    value: "第四级目录",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 12111,
-                    pId: 1211,
-                    value: "第五级文件1",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 2,
-                    pId: -1,
-                    value: "第一级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 21,
-                    pId: 2,
-                    value: "第二级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 22,
-                    pId: 2,
-                    value: "第二级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 211,
-                    pId: 21,
-                    value: "第三级目录2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 212,
-                    pId: 21,
-                    value: "第三级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                },
-                {
-                    id: 2111,
-                    pId: 211,
-                    value: "第四级文件2",
-                    type: "bi.text_button",
-                    cls: "layout-bg2",
-                    width: 180,
-                    height: 100
-                }
-            ],
-
-            direction: BI.Direction.Right,
-            align: BI.HorizontalAlign.Right,
-
-            centerOffset: -50
-        });
-        BI.createWidget({
-            type: "bi.adaptive",
-            element: this,
-            items: [relation]
-        });
-    }
-});
-BI.shortcut("demo.branch_relation", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    _createBranchTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.branch_tree",
-            items: [{
-                el: {
-                    text: "且",
-                    value: "且1",
-                    cls: "layout-bg7"
-                },
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    el: {
-                        text: "或",
-                        value: "或2",
-                        cls: "layout-bg7"
-                    },
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        el: {
-                            text: "且",
-                            value: "且3",
-                            cls: "layout-bg7"
-                        },
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    _createBranchMapTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.branch_tree",
-            el: {
-                type: "bi.virtual_group"
-            },
-            items: [{
-                text: "且",
-                value: "且1",
-                cls: "layout-bg7",
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    text: "或",
-                    value: "或2",
-                    cls: "layout-bg7",
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        text: "且",
-                        value: "且3",
-                        cls: "layout-bg7",
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    render: function () {
-        var tree = this._createBranchTree();
-        var mapTree = this._createBranchMapTree();
-
-        function getItems () {
-            return [{
-                text: "且",
-                value: "且",
-                cls: "layout-bg7",
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字",
-                    value: "这里是一段文字"
-                }, {
-                    text: "或",
-                    value: "或2",
-                    cls: "layout-bg7",
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字",
-                        value: "这里是一段文字"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字",
-                        value: "这里是一段文字"
-                    }, {
-                        text: "且",
-                        value: "且3",
-                        cls: "layout-bg7",
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }];
-        }
-
-        BI.createWidget({
-            type: "bi.center",
-            element: this,
-            items: [{
-                type: "bi.vtape",
-                items: [{
-                    el: tree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", tree.getValue());
-                        }
-                    }
-                }]
-            }, {
-                type: "bi.vtape",
-                items: [{
-                    el: mapTree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "populate",
-                        handler: function () {
-                            mapTree.populate(getItems());
-                        }
-                    }
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", mapTree.getValue());
-                        }
-                    }
-                }]
-            }]
-        });
-    }
-});
-BI.shortcut("demo.branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
         var tree = BI.createWidget({
             type: "bi.display_tree",
             element: this
@@ -4010,108 +2335,6 @@ BI.shortcut("demo.branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.display_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    _createHandStandBranchTree: function () {
-        var tree = BI.createWidget({
-            type: "bi.handstand_branch_tree",
-            expander: {},
-            el: {
-                layouts: [{
-                    type: "bi.horizontal_adapt",
-                    verticalAlign: BI.VerticalAlign.Top
-                }]
-            },
-            items: [{
-                el: {
-                    text: "且",
-                    value: "且1",
-                    cls: "layout-bg7"
-                },
-                children: [{
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1",
-                    value: "这里是一段文字1"
-                }, {
-                    el: {
-                        text: "或",
-                        value: "或2",
-                        cls: "layout-bg7"
-                    },
-                    children: [{
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1435",
-                        value: "这里是一段文字1435"
-                    }, {
-                        type: "bi.label",
-                        height: 30,
-                        textAlign: "left",
-                        text: "这里是一段文字1xx",
-                        value: "这里是一段文字1xx"
-                    }, {
-                        el: {
-                            text: "且",
-                            value: "且3",
-                            cls: "layout-bg7"
-                        },
-                        children: [{
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件",
-                            value: "可以理解为一个条件"
-                        }, {
-                            type: "bi.label",
-                            height: 30,
-                            textAlign: "left",
-                            text: "可以理解为一个条件v",
-                            value: "可以理解为一个条件v"
-                        }]
-                    }]
-                }, {
-                    type: "bi.label",
-                    height: 30,
-                    textAlign: "left",
-                    text: "这里是一段文字1xa",
-                    value: "这里是一段文字1xa"
-                }]
-            }]
-        });
-        return tree;
-    },
-
-    render: function () {
-        var tree = this._createHandStandBranchTree();
-
-        BI.createWidget({
-            type: "bi.center",
-            element: this,
-            items: [{
-                type: "bi.vtape",
-                items: [{
-                    el: tree
-                }, {
-                    height: 30,
-                    el: {
-                        type: "bi.button",
-                        height: 30,
-                        text: "getValue",
-                        handler: function () {
-                            BI.Msg.alert("", tree.getValue());
-                        }
-                    }
-                }]
-            }]
-        });
-    }
-});
-BI.shortcut("demo.handstand_branch_tree", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -4717,143 +2940,7 @@ BI.DetailTableHeader = BI.inherit(BI.Widget, {
         }
     }
 });
-BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);Demo.Face = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-face"
-    },
-
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.absolute",
-            items: [{
-                el: {
-                    type: "bi.sequence_table",
-                    ref: function () {
-                        self.table = this;
-                    },
-                    isNeedFreeze: null,
-                    isNeedMerge: false,
-                    summaryCellStyleGetter: function (isLast) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    sequenceCellStyleGetter: function (index) {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    headerCellStyleGetter: function () {
-                        return {
-                            background: "rgb(4, 177, 194)",
-                            color: "#ffffff",
-                            fontWeight: "bold"
-                        };
-                    },
-                    el: {
-                        type: "bi.adaptive_table",
-                        el: {
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.grid_table"
-                            }
-                        }
-                    },
-                    sequence: {
-                        type: "bi.sequence_table_list_number",
-                        pageSize: 100,
-                        sequenceHeaderCreator: function () {
-                            return {
-                                type: "bi.normal_sequence_header_cell",
-                                styleGetter: function () {
-                                    return {
-                                        background: "rgb(4, 177, 194)",
-                                        color: "#ffffff",
-                                        fontWeight: "bold"
-                                    };
-                                }
-                            };
-                        }
-                    },
-                    itemsCreator: function (op, populate) {
-                    }
-                },
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        };
-    },
-
-    mounted: function () {
-        var self = this;
-        if (BI.isNull(BI.isExpanded)) {
-            BI.isExpanded = false;
-        } else if (!BI.isExpanded) {
-            TABLE_ITEMS = this._expandData(TABLE_ITEMS, 3);
-            TABLE_HEADER = this._expandHeadData(TABLE_HEADER, 3);
-            BI.isExpanded = true;
-        }
-        this._resizeHandler = BI.debounce(function () {
-            var width = self.element.width(), height = self.element.height();
-            if (self.table.getWidth() !== width || self.table.getHeight() !== height) {
-                self.table.setWidth(width);
-                self.table.setHeight(height);
-                self.table.populate();
-            }
-        }, 0);
-        BI.ResizeDetector.addResizeListener(this, function () {
-            self._resizeHandler();
-        });
-        this.table.setWidth(this.element.width());
-        this.table.setHeight(this.element.height());
-        this.table.attr("columnSize", BI.makeArray(TABLE_HEADER[0].length, ""));
-        this.table.attr("minColumnSize", BI.makeArray(TABLE_HEADER[0].length, 60));
-        this.table.attr("isNeedFreeze", true);
-        this.table.attr("freezeCols", []);
-        this.table.attr("showSequence", true);
-        this.table.attr("headerRowSize", 15);
-        this.table.attr("rowSize", 15);
-        this.table.populate(TABLE_ITEMS, TABLE_HEADER);
-    },
-    
-    _expandData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var m = 0; m < times - 1; m++) {
-            BI.each(items, function (i, row) {
-                copy.push(row);
-            });
-        }
-        
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n % 100], function (j, item) {
-                    copy[n].push(item);
-                });
-            }
-        }
-        return copy;
-    },
-
-    _expandHeadData: function (items, times) {
-        var copy = BI.deepClone(items);
-        for (var n = 0; n < copy.length; n++) {
-            for (var m = 0; m < times - 1; m++) {
-                BI.each(items[n], function (j, item) {
-                    copy[n].push(item);
-                });
-            }
-        }
-        return copy;
-    }
-});
-BI.shortcut("demo.large_table", Demo.Face);/**
+BI.shortcut("bi.detail_table_header", BI.DetailTableHeader);/**
  * created by young
  * 默认风格表格——表头
  */
@@ -5186,28 +3273,12 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.editor"
 }, {
     pId: 202,
-    text: "bi.code_editor",
-    value: "demo.code_editor"
-}, {
-    pId: 202,
     text: "bi.multifile_editor",
     value: "demo.multifile_editor"
 }, {
     pId: 202,
     text: "bi.textarea_editor",
     value: "demo.textarea_editor"
-}, {
-    pId: 202,
-    text: "bi.sql_editor",
-    value: "demo.sql_editor"
-}, {
-    pId: 202,
-    text: "bi.formula_editor",
-    value: "demo.formula_editor"
-}, {
-    pId: 202,
-    text: "bi.rich_editor",
-    value: "demo.rich_editor"
 }, {
     pId: 2,
     id: 203,
@@ -5226,36 +3297,8 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.part_tree"
 }, {
     pId: 2,
-    id: 204,
-    text: "table"
-}, {
-    pId: 204,
-    text: "bi.table_view",
-    value: "demo.table_view"
-}, {
-    pId: 204,
-    text: "bi.grid_table",
-    value: "demo.grid_table"
-}, {
-    pId: 204,
-    text: "bi.collection_table",
-    value: "demo.collection_table"
-}, {
-    pId: 204,
-    text: "bi.resizable_table",
-    value: "demo.resizable_table"
-}, {
-    pId: 2,
     text: "bi.pager",
     value: "demo.pager"
-}, {
-    pId: 2,
-    text: "bi.svg",
-    value: "demo.svg"
-}, {
-    pId: 2,
-    text: "bi.canvas",
-    value: "demo.canvas"
 }];Demo.CASE_CONFIG = [{
     id: 3,
     text: "实例控件",
@@ -5290,10 +3333,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.sign_editor"
 }, {
     pId: 301,
-    text: "bi.sign_initial_editor",
-    value: "demo.sign_initial_editor"
-}, {
-    pId: 301,
     text: "bi.state_editor",
     value: "demo.state_editor"
 }, {
@@ -5316,14 +3355,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 302,
     text: "bi.lazy_loader",
     value: "demo.lazy_loader"
-}, {
-    pId: 302,
-    text: "bi.sort_list(排序)",
-    value: "demo.sort_list"
-}, {
-    pId: 302,
-    text: "bi.list_loader(排序)",
-    value: "demo.list_loader"
 }, {
     pId: 3,
     id: 303,
@@ -5382,10 +3413,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.icon_combo"
 }, {
     pId: 306,
-    text: "bi.static_combo",
-    value: "demo.static_combo"
-}, {
-    pId: 306,
     text: "bi.text_value_combo",
     value: "demo.text_value_combo"
 }, {
@@ -5414,14 +3441,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     text: "tree"
 }, {
     pId: 307,
-    text: "bi.branch_tree",
-    value: "demo.branch_tree"
-}, {
-    pId: 307,
-    text: "bi.handstand_branch_tree",
-    value: "demo.handstand_branch_tree"
-}, {
-    pId: 307,
     text: "bi.display_tree",
     value: "demo.display_tree"
 }, {
@@ -5432,26 +3451,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 307,
     text: "bi.level_tree",
     value: "demo.level_tree"
-}, {
-    pId: 307,
-    text: "bi.branch_relation",
-    value: "demo.branch_relation"
-}, {
-    pId: 3,
-    id: 308,
-    text: "table"
-}, {
-    pId: 308,
-    text: "bi.adaptive_table",
-    value: "demo.adaptive_table"
-}, {
-    pId: 308,
-    text: "bi.tree_table",
-    value: "demo.tree_table"
-}, {
-    pId: 308,
-    text: "bi.layer_tree_table",
-    value: "demo.layer_tree_table"
 }, {
     pId: 3,
     id: 309,
@@ -5468,14 +3467,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 3,
     text: "bi.calendar",
     value: "demo.calendar"
-}, {
-    pId: 3,
-    text: "bi.clipboard",
-    value: "demo.clipboard"
-}, {
-    pId: 3,
-    text: "bi.complex_canvas",
-    value: "demo.complex_canvas"
 }, {
     pId: 3,
     text: "bi.color_chooser",
@@ -5499,10 +3490,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 100000,
     text: "自定义一棵树",
     value: "demo.platform_level_tree"
-}, {
-    pId: 100000,
-    text: "大表格",
-    value: "demo.large_table"
 }, {
     pId: 100000,
     text: "可以排序的树",
@@ -5922,30 +3909,6 @@ Demo.FIX_CONFIG = [{
     text: "bi.multilayer_select_level_tree",
     value: "demo.multilayer_select_level_tree"
 }, {
-    pId: 403,
-    text: "bi.switch_tree",
-    value: "demo.switch_tree"
-}, {
-    pId: 4,
-    id: 404,
-    text: "table"
-}, {
-    pId: 404,
-    text: "bi.preview_table",
-    value: "demo.preview_table"
-}, {
-    pId: 404,
-    text: "bi.responsive_table",
-    value: "demo.responsive_table"
-}, {
-    pId: 404,
-    text: "bi.sequence_table",
-    value: "demo.sequence_table"
-}, {
-    pId: 404,
-    text: "bi.page_table",
-    value: "demo.page_table"
-}, {
     pId: 4,
     id: 405,
     text: "下拉列表"
@@ -6069,14 +4032,6 @@ Demo.FIX_CONFIG = [{
     pId: 413,
     text: "bi.number_interval",
     value: "demo.number_interval"
-}, {
-    pId: 4,
-    id: 419,
-    text: "文件管理"
-}, {
-    pId: 419,
-    text: "bi.file_manager",
-    value: "demo.file_manager"
 }, {
     id: 420,
     text: "滚动sliders",
@@ -9473,19 +7428,15 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
         return {
             type: "bi.grid",
             items: [[{
-                column: 0,
-                row: 0,
-                el: {
-                    type: "demo.preview"
-                }
-            }, {
-                column: 1,
-                row: 0,
                 el: {
                     type: "bi.vertical",
-                    cls: "face-config bi-border-left",
+                    cls: "face-config bi-border-right",
                     items: [this._createBaseConfig(),
                         this._createCommonConfig()]
+                }
+            }, {
+                el: {
+                    type: "bi.layout"
                 }
             }]]
         };
@@ -12452,7 +10403,7 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
                         action: function () {
                             var value = this.getValue();
                             var date = new Date(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
-                            var dateStr = date.print("%Y-%X-%d %H:%M:%S");
+                            var dateStr = BI.print(date, "%Y-%X-%d %H:%M:%S");
                             BI.Msg.alert("日期", dateStr);
                         }
                     }, {
@@ -12677,60 +10628,7 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
     }
 });
 
-BI.shortcut("demo.text_editor", Demo.TextEditor);/* 文件管理导航
- Created by dailer on 2017 / 7 / 21.
- */
-Demo.FileManager = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: ""
-    },
-
-    render: function () {
-        var items = [{
-            id: "1",
-            value: "1",
-            text: "根目录",
-            lastModify: 1454316355142
-        }, {
-            id: "11",
-            pId: "1",
-            value: "11",
-            text: "第一级子目录1",
-            lastModify: 1454316355142
-        }, {
-            id: "12",
-            pId: "1",
-            value: "12",
-            text: "第一级子目录2",
-            lastModify: 1454316355142
-        }, {
-            id: "111",
-            pId: "11",
-            value: "111",
-            text: "第二级子目录",
-            lastModify: 1454316355142
-        }, {
-            id: "121",
-            pId: "111",
-            buildUrl: "www.baidu.com",
-            value: "121",
-            text: "文件1",
-            lastModify: 1454316355142
-        }, {
-            id: "122",
-            pId: "111",
-            buildUrl: "www.baidu.com",
-            value: "122",
-            text: "文件2",
-            lastModify: 1454316355142
-        }];
-        return {
-            type: "bi.file_manager",
-            items: items
-        };
-    }
-});
-BI.shortcut("demo.file_manager", Demo.FileManager);/**
+BI.shortcut("demo.text_editor", Demo.TextEditor);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Month = BI.inherit(BI.Widget, {
@@ -12813,7 +10711,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = Demo.CONSTANTS.ITEMS;
+        var items = [];
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
@@ -12902,7 +10800,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = Demo.CONSTANTS.ITEMS;
+        var items = [];
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
@@ -13502,7 +11400,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         normalSingleSlider.populate();
 
         var singleSliderLabel = BI.createWidget({
-            type: "bi.single_slider",
+            type: "bi.single_slider_label",
             width: o.width,
             height: o.height,
             digit: 0,
@@ -13583,769 +11481,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.slider", Demo.Slider);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [{
-            children: [{
-                type: "bi.page_table_cell",
-                text: "node1",
-                children: [{
-                    type: "bi.page_table_cell",
-                    text: "childnode1",
-                    values: [{type: "bi.page_table_cell", text: 101}, {
-                        type: "bi.page_table_cell",
-                        text: 102
-                    }, {type: "bi.page_table_cell", text: 101}, {
-                        type: "bi.page_table_cell",
-                        text: 102
-                    }, {type: "bi.page_table_cell", text: 101}]
-                }, {
-                    type: "bi.page_table_cell",
-                    text: "childnode2",
-                    values: [{type: "bi.page_table_cell", text: 201}, {
-                        type: "bi.page_table_cell",
-                        text: 202
-                    }, {type: "bi.page_table_cell", text: 201}, {
-                        type: "bi.page_table_cell",
-                        text: 202
-                    }, {type: "bi.page_table_cell", text: 201}]
-                }],
-                values: [{type: "bi.page_table_cell", text: 1001}, {
-                    type: "bi.page_table_cell",
-                    text: 1002
-                }, {type: "bi.page_table_cell", text: 1001}, {
-                    type: "bi.page_table_cell",
-                    text: 1002
-                }, {type: "bi.page_table_cell", text: 1001}]
-            }], values: [{type: "bi.page_table_cell", text: 12001}, {
-                type: "bi.page_table_cell",
-                text: 12002
-            }, {type: "bi.page_table_cell", text: 12001}, {
-                type: "bi.page_table_cell",
-                text: 12002
-            }, {type: "bi.page_table_cell", text: 12001}]
-        }];
-
-        var header = [{
-            type: "bi.page_table_cell",
-            text: "header1"
-        }, {
-            type: "bi.page_table_cell",
-            text: "header2"
-        }, {
-            type: "bi.page_table_cell",
-            text: "jine",
-            tag: 1
-        }, {
-            type: "bi.page_table_cell",
-            text: "jine",
-            tag: 2
-        }, {
-            type: "bi.page_table_cell",
-            text: "jine",
-            tag: 3
-        }, {
-            type: "bi.page_table_cell",
-            text: "金额汇总",
-            tag: 4
-        }, {
-            type: "bi.page_table_cell",
-            text: "金额汇总2",
-            tag: 5
-        }];
-
-        var crossHeader = [{
-            type: "bi.page_table_cell",
-            text: "cross1"
-        }, {
-            type: "bi.page_table_cell",
-            text: "cross2"
-        }];
-
-        var crossItems = [{
-            children: [{
-                type: "bi.page_table_cell",
-                text: "node1",
-                values: [1, 2, 3]
-            }, {
-                type: "bi.page_table_cell",
-                text: "node3",
-                values: [1, 2]
-            }]
-            // values: [1, 2]
-        }];
-
-        var table1 = BI.createWidget({
-            type: "bi.page_table",
-            el: {
-                type: "bi.sequence_table",
-                showSequence: true,
-                el: {
-                    type: "bi.dynamic_summary_tree_table",
-                    el: {
-                        type: "bi.adaptive_table",
-                        el: {
-                            type: "bi.resizable_table",
-                            el: {
-                                type: "bi.collection_table"
-                            }
-                        }
-                    }
-                },
-                sequence: {
-                    type: "bi.sequence_table_dynamic_number"
-                }
-            },
-            summaryCellStyleGetter: function (isLast) {
-                return isLast ? {
-                    backgroundColor: "#6495ED",
-                    color: "#ffffff"
-                } : {
-                    backgroundColor: "#B0C4DE",
-                    color: "#ffffff"
-                };
-            },
-            sequenceCellStyleGetter: function (index) {
-                return {
-                    backgroundColor: "#87CEEB",
-                    color: "#ffffff"
-                };
-            },
-            headerCellStyleGetter: function () {
-                return {
-                    backgroundColor: "#6495ED",
-                    color: "#ffffff"
-                };
-            },
-            pager: {
-                horizontal: {
-                    pages: false, // 总页数
-                    curr: 1, // 初始化当前页， pages为数字时可用
-
-                    hasPrev: function (page) {
-                        return page > 1;
-                    },
-                    hasNext: function (page) {
-                        return page < 3;
-                    }
-                },
-                vertical: {
-                    pages: false, // 总页数
-                    curr: 1, // 初始化当前页， pages为数字时可用
-
-                    hasPrev: function (page) {
-                        return page > 1;
-                    },
-                    hasNext: function (page) {
-                        return page < 3;
-                    }
-                }
-            },
-            itemsCreator: function (op, populate) {
-                var vpage = op.vpage || "";
-                var hpage = op.hpage || "";
-                BI.each(header, function (i, h) {
-                    h.text = h.text + "V" + vpage + "H" + hpage;
-                });
-                populate(items, header, crossItems, crossHeader);
-            },
-            width: 600,
-            height: 400,
-            columnSize: [100, 100, 100, 100, 100, 100, 100],
-            minColumnSize: [100, 100, 100, 100, 100, 100, 100],
-            isNeedMerge: true,
-            isNeedFreeze: true,
-            mergeCols: [0, 1],
-            mergeRule: function (col1, col2) {
-                if (col1 === col2) {
-                    return true;
-                }
-                if (col1.tag && col2.tag) {
-                    return col1.tag === col2.tag;
-                }
-                return col1 === col2;
-            },
-            freezeCols: [0, 1],
-            header: header,
-            items: items,
-            crossHeader: crossHeader,
-            crossItems: crossItems
-        });
-        table1.populate();
-        // table1.populate(items, header, crossItems, crossHeader);
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 1,
-                    items: [[{
-                        el: table1
-                    }]]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.page_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [[{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第二列"
-        }, {
-            text: "第一行第三列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第二行第二列"
-        }, {
-            text: "第二行第三列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第三行第二列"
-        }, {
-            text: "第三行第三列"
-        }], [{
-            text: "第二行第一列"
-        }, {
-            text: "第四行第二列"
-        }, {
-            text: "第四行第三列"
-        }], [{
-            text: "第五行第一列"
-        }, {
-            text: "第五行第二列"
-        }, {
-            text: "第五行第三列"
-        }], [{
-            text: "第六行第一列"
-        }, {
-            text: "第六行第二列"
-        }, {
-            text: "第六行第三列"
-        }], [{
-            text: "第七行第一列"
-        }, {
-            text: "第七行第二列"
-        }, {
-            text: "第七行第三列"
-        }], [{
-            text: "第八行第一列"
-        }, {
-            text: "第八行第二列"
-        }, {
-            text: "第八行第三列"
-        }], [{
-            text: "第九行第一列"
-        }, {
-            text: "第九行第二列"
-        }, {
-            text: "第九行第三列"
-        }], [{
-            text: "第十行第一列"
-        }, {
-            text: "第十行第二列"
-        }, {
-            text: "第十行第三列"
-        }], [{
-            text: "第十一行第一列"
-        }, {
-            text: "第十一行第二列"
-        }, {
-            text: "第十一行第三列"
-        }], [{
-            text: "第十二行第一列"
-        }, {
-            text: "第十二行第二列"
-        }, {
-            text: "第十二行第三列"
-        }], [{
-            text: "第十三行第一列"
-        }, {
-            text: "第十三行第二列"
-        }, {
-            text: "第十三行第三列"
-        }], [{
-            text: "第十四行第一列"
-        }, {
-            text: "第十四行第二列"
-        }, {
-            text: "第十四行第三列"
-        }], [{
-            text: "第十五行第一列"
-        }, {
-            text: "第十五行第二列"
-        }, {
-            text: "第十五行第三列"
-        }], [{
-            text: "第十六行第一列"
-        }, {
-            text: "第十六行第二列"
-        }, {
-            text: "第十六行第三列"
-        }], [{
-            text: "第十七行第一列"
-        }, {
-            text: "第十七行第二列"
-        }, {
-            text: "第十七行第三列"
-        }], [{
-            text: "第十八行第一列"
-        }, {
-            text: "第十八行第二列"
-        }, {
-            text: "第十八行第三列"
-        }]];
-
-        var header = [[{
-            text: "表头1"
-        }, {
-            text: "表头2"
-        }, {
-            text: "表头3"
-        }]];
-
-        var table1 = BI.createWidget({
-            type: "bi.preview_table",
-            columnSize: ["", "", ""],
-            header: header,
-            items: items
-        });
-        var table2 = BI.createWidget({
-            type: "bi.preview_table",
-            header: header,
-            columnSize: [100, "", 50],
-            items: items
-        });
-        var table3 = BI.createWidget({
-            type: "bi.preview_table",
-            header: header,
-            columnSize: [0.2, 0.4, 0.4],
-            headerRowSize: 30,
-            items: items
-        });
-        var table4 = BI.createWidget({
-            type: "bi.preview_table",
-            header: header,
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            columnSize: [0.2, "", 0.4],
-            items: items
-        });
-        var table5 = BI.createWidget({
-            type: "bi.preview_table",
-            header: header,
-            isNeedFreeze: true,
-            freezeCols: [0, 1],
-            columnSize: [200, 100, ""],
-            items: items
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 3,
-                    rows: 2,
-                    items: [[{
-                        el: {
-                            type: "bi.absolute",
-                            items: [{
-                                el: table1,
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }]
-                        }
-                    }, {
-                        el: {
-                            type: "bi.absolute",
-                            items: [{
-                                el: table2,
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }]
-                        }
-                    }, {
-                        el: {
-                            type: "bi.absolute",
-                            items: [{
-                                el: table3,
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }]
-                        }
-                    }], [{
-                        el: {
-                            type: "bi.absolute",
-                            items: [{
-                                el: table4,
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }]
-                        }
-                    }, {
-                        el: {
-                            type: "bi.absolute",
-                            items: [{
-                                el: table5,
-                                left: 5,
-                                right: 5,
-                                top: 5,
-                                bottom: 5
-                            }]
-                        }
-                    }]]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.preview_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [[{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }, {
-            text: "第一行第一列"
-        }], [{
-            text: "第三行第一列"
-        }, {
-            text: "第三行第二列"
-        }, {
-            text: "第三行第三列"
-        }], [{
-            text: "第四行第一列"
-        }, {
-            text: "第四行第二列"
-        }, {
-            text: "第四行第三列"
-        }], [{
-            text: "第五行第一列"
-        }, {
-            text: "第五行第二列"
-        }, {
-            text: "第五行第三列"
-        }], [{
-            text: "第六行第一列"
-        }, {
-            text: "第六行第二列"
-        }, {
-            text: "第六行第三列"
-        }], [{
-            text: "第七行第一列"
-        }, {
-            text: "第七行第二列"
-        }, {
-            text: "第七行第三列"
-        }], [{
-            text: "第八行第一列"
-        }, {
-            text: "第八行第二列"
-        }, {
-            text: "第八行第三列"
-        }], [{
-            text: "第九行第一列"
-        }, {
-            text: "第九行第二列"
-        }, {
-            text: "第九行第三列"
-        }], [{
-            text: "第十行第一列"
-        }, {
-            text: "第十行第二列"
-        }, {
-            text: "第十行第三列"
-        }], [{
-            text: "第十一行第一列"
-        }, {
-            text: "第十一行第二列"
-        }, {
-            text: "第十一行第三列"
-        }], [{
-            text: "第十二行第一列"
-        }, {
-            text: "第十二行第二列"
-        }, {
-            text: "第十二行第三列"
-        }], [{
-            text: "第十三行第一列"
-        }, {
-            text: "第十三行第二列"
-        }, {
-            text: "第十三行第三列"
-        }], [{
-            text: "第十四行第一列"
-        }, {
-            text: "第十四行第二列"
-        }, {
-            text: "第十四行第三列"
-        }], [{
-            text: "第十五行第一列"
-        }, {
-            text: "第十五行第二列"
-        }, {
-            text: "第十五行第三列"
-        }], [{
-            text: "第十六行第一列"
-        }, {
-            text: "第十六行第二列"
-        }, {
-            text: "第十六行第三列"
-        }], [{
-            text: "第十七行第一列"
-        }, {
-            text: "第十七行第二列"
-        }, {
-            text: "第十七行第三列"
-        }], [{
-            text: "第十八行第一列"
-        }, {
-            text: "第十八行第二列"
-        }, {
-            text: "第十八行第三列"
-        }]];
-
-
-        var header = [[{
-            text: "表头1"
-        }, {
-            text: "表头2"
-        }, {
-            text: "表头3"
-        }]];
-
-
-        var table1 = BI.createWidget({
-            type: "bi.responsive_table",
-            isNeedMerge: true,
-            isNeedFreeze: true,
-            mergeCols: [0, 1],
-            items: [],
-            header: []
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.tab",
-                    showIndex: 1,
-                    cardCreator: function (v) {
-                        switch (v) {
-                            case 1:
-                                table1.attr("columnSize", ["", "", ""]);
-                                table1.populate(items, header);
-                                return table1;
-                        }
-                    }
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }]
-        });
-    }
-});
-BI.shortcut("demo.responsive_table", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-func"
-    },
-
-    render: function () {
-        var items = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1",
-                    children: [{
-                        text: "叶节点1",
-                        values: [{text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 11}, {text: 12}, {text: 112}]
-                    }, {
-                        text: "叶节点2",
-                        values: [{text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 21}, {text: 22}, {text: 122}]
-                    }],
-                    values: [{text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 101}, {text: 102}, {text: 1102}]
-                }, {
-                    text: "子节点2",
-                    children: [{
-                        text: "叶节点3",
-                        values: [{text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 31}, {text: 32}, {text: 132}]
-                    }, {
-                        text: "叶节点4",
-                        values: [{text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 41}, {text: 42}, {text: 142}]
-                    }],
-                    values: [{text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 201}, {text: 202}, {text: 1202}]
-                }, {
-                    text: "子节点3",
-                    children: [{
-                        text: "叶节点5",
-                        values: [{text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 51}, {text: 52}, {text: 152}]
-                    }],
-                    values: [{text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 301}, {text: 302}, {text: 1302}]
-                }],
-                values: [{text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 1001}, {text: 1002}, {text: 11002}]
-            }, {
-                text: "节点2",
-                values: [{text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 2001}, {text: 2002}, {text: 12002}]
-            }],
-            values: [{text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 12001}, {text: 12002}, {text: 112002}]
-        }];
-
-        var header = [{
-            text: "header1"
-        }, {
-            text: "header2"
-        }, {
-            text: "header3"
-        }, {
-            text: "金额",
-            tag: 1
-        }, {
-            text: "金额",
-            tag: 2
-        }, {
-            text: "金额",
-            tag: 3
-        }, {
-            text: "金额",
-            tag: 4
-        }, {
-            text: "金额",
-            tag: 5
-        }, {
-            text: "金额",
-            tag: 6
-        }, {
-            text: "金额",
-            tag: 7
-        }];
-
-        var crossHeader = [{
-            text: "cross1"
-        }, {
-            text: "cross2"
-        }];
-
-        var crossItems = [{
-            children: [{
-                text: "节点1",
-                children: [{
-                    text: "子节点1"
-                }, {
-                    text: "子节点2"
-                }],
-                values: [0]
-            }, {
-                text: "节点2",
-                children: [{
-                    text: "子节点3"
-                }, {
-                    text: "子节点4"
-                }],
-                values: [0]
-            }],
-            values: [0]
-        }];
-        var table = BI.createWidget({
-            type: "bi.sequence_table",
-            el: {
-                type: "bi.tree_table",
-                el: {
-                    type: "bi.adaptive_table",
-                    el: {
-                        type: "bi.resizable_table",
-                        el: {
-                            type: "bi.collection_table"
-                        }
-                    }
-                }
-            },
-            sequence: {
-                type: "bi.sequence_table_tree_number"
-            },
-            showSequence: true,
-            width: 600,
-            height: 400,
-            isNeedResize: true,
-            isNeedMerge: true,
-            mergeRule: function (row1, row2) {
-                return row1 === row2;
-            },
-            columnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            minColumnSize: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100],
-            isNeedFreeze: true,
-            freezeCols: [0, 1, 2],
-            mergeCols: [0, 1, 2],
-            header: header,
-            items: items,
-            crossHeader: crossHeader,
-            crossItems: crossItems
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 1,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: table
-                    }]
-                },
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 50
-            }]
-        });
-    }
-});
-BI.shortcut("demo.sequence_table", Demo.Func);/**
+BI.shortcut("demo.slider", Demo.Slider);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.TimeInterval = BI.inherit(BI.Widget, {
@@ -14613,62 +11749,6 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
 });
 
 BI.shortcut("demo.single_level_tree", Demo.SingleLevelTree);/**
- * Created by Dailer on 2017/7/26.
- */
-
-
-Demo.SwitchTree = BI.inherit(BI.Widget, {
-
-    render: function () {
-        var self = this;
-        var tree = BI.createWidget({
-            type: "bi.switch_tree",
-            items: BI.deepClone(Demo.CONSTANTS.TREE),
-            value: "第五级文件1"
-        });
-
-        return {
-            type: "bi.vtape",
-            items: [{
-                el: tree
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "点击切换",
-                    handler: function () {
-                        tree.switchSelect();
-                    }
-                },
-                height: 25
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "getValue",
-                    handler: function () {
-                        BI.Msg.alert("", JSON.stringify(tree.getValue()));
-                    }
-                },
-                height: 25
-            }, {
-                el: {
-                    type: "bi.button",
-                    height: 25,
-                    text: "setValue (第二级文件1)",
-                    handler: function () {
-                        tree.setValue(["第二级文件1"]);
-                    }
-                },
-                height: 25
-            }],
-            width: 500,
-            hgap: 300
-        };
-    }
-});
-
-BI.shortcut("demo.switch_tree", Demo.SwitchTree);/**
  * Created by Dailer on 2017/7/11.
  */
 Demo.Year = BI.inherit(BI.Widget, {

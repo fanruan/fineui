@@ -15,7 +15,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 

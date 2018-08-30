@@ -117,31 +117,19 @@ BI.shortcut("bi.half_icon_button", BI.HalfIconButton);/**
  * Created by GUY on 2015/9/16.
  * @class BI.TriggerIconButton
  * @extends BI.IconButton
- *
- * attention: 不要加invisible, 不要单独拿出去用
  */
-BI.TriggerIconButton = BI.inherit(BI.BasicButton, {
+BI.TriggerIconButton = BI.inherit(BI.IconButton, {
 
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button"
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            extraCls: "pull-down-font"
         });
     },
 
     _init: function () {
         BI.TriggerIconButton.superclass._init.apply(this, arguments);
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [{
-                type: "bi.icon_button",
-                cls: "pull-down-font trigger-down"
-            }, {
-                type: "bi.icon_button",
-                cls: "pull-up-font trigger-up"
-            }]
-        });
     },
 
     doClick: function () {
@@ -164,7 +152,8 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             height: 24,
             logic: {
                 dynamic: false
-            }
+            },
+            iconWrapperWidth: 26
         });
     },
     _init: function () {
@@ -199,7 +188,7 @@ BI.MultiSelectItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.checkbox],
-                width: 26
+                width: o.iconWrapperWidth
             }, this.text)
         }))));
     },
@@ -248,6 +237,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
             element: this,
             cls: o.iconCls,
             once: o.once,
+            iconWrapperWidth: o.iconWrapperWidth,
             selected: o.selected,
             height: o.height,
             iconHeight: o.iconHeight,
@@ -1597,6 +1587,58 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
 });
 
 BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);/**
+ * 专门为calendar的视觉加的button，作为私有button,不能配置任何属性，也不要用这个玩意
+ */
+BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
+
+    render: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.absolute",
+            items: [{
+                el: {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "normal",
+                    text: o.text,
+                    value: o.value,
+                    ref: function () {
+                        self.text = this;
+                    }
+                },
+                left: o.lgap,
+                right: o.rgap,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+    },
+
+    setValue: function () {
+        if (!this.isReadOnly()) {
+            this.text.setValue.apply(this.text, arguments);
+        }
+    },
+
+    setSelected: function (b) {
+        BI.CalendarDateItem.superclass.setSelected.apply(this, arguments);
+        this.text.setSelected(b);
+    },
+
+    getValue: function () {
+        return this.text.getValue();
+    }
+});
+BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);/**
  * Created by GUY on 2015/8/28.
  * @class BI.Calendar
  * @extends BI.Widget
@@ -1627,7 +1669,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];
 
-        var MD = Date._MD.slice(0);
+        var MD = BI.Date._MD.slice(0);
         MD[1] = BI.isLeapYear(log.ymd[0]) ? 29 : 28;
 
         // 日期所在月第一天
@@ -1672,7 +1714,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Calendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var items = BI.map(Date._SDN.slice(0, 7), function (i, value) {
+        var items = BI.map(BI.Date._SDN.slice(0, 7), function (i, value) {
             return {
                 type: "bi.label",
                 height: 24,
@@ -1685,7 +1727,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
             items: items,
             layouts: [{
                 type: "bi.center",
-                hgap: 10,
+                hgap: 5,
                 vgap: 10
             }]
         });
@@ -1702,15 +1744,16 @@ BI.Calendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
                 return BI.extend(td, {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
+                    type: "bi.calendar_date_item",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
                     height: 24,
                     value: o.year + "-" + month + "-" + td.text,
-                    disabled: td.lastMonth || td.nextMonth || td.disabled
+                    disabled: td.lastMonth || td.nextMonth || td.disabled,
+                    lgap: 5,
+                    rgap: 5
                     // selected: td.currentDay
                 });
             });
@@ -1724,7 +1767,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
                 rowSize: 24,
-                hgap: 10,
                 vgap: 10
             }))]
         });
@@ -1744,7 +1786,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(-1 * (day + 1));
+        var newDate = BI.getOffsetDate(De, -1 * (day + 1));
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -1753,7 +1795,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var Y = o.year, M = o.month, De = BI.getDate(), day = De.getDay();
         Y = Y | 0;
         De.setFullYear(Y, M, 1);
-        var newDate = De.getOffsetDate(42 - day);
+        var newDate = BI.getOffsetDate(De, 42 - day);
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
     },
 
@@ -1941,97 +1983,6 @@ BI.extend(BI.YearCalendar, {
 });
 
 BI.shortcut("bi.year_calendar", BI.YearCalendar);/**
- * 绘制一些较复杂的canvas
- *
- * Created by GUY on 2015/11/24.
- * @class BI.ComplexCanvas
- * @extends BI.Widget
- */
-BI.ComplexCanvas = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ComplexCanvas.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-complex-canvas"
-        });
-    },
-
-
-    _init: function () {
-        BI.ComplexCanvas.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.canvas = BI.createWidget({
-            type: "bi.canvas",
-            element: this,
-            width: o.width,
-            height: o.height
-        });
-    },
-
-    // 绘制树枝节点
-    branch: function (x0, y0, x1, y1, x2, y2) {
-        var self = this, args = [].slice.call(arguments);
-        if (args.length <= 5) {
-            return this.canvas.line.apply(this.canvas, arguments);
-        }
-        var options;
-        if (BI.isOdd(args.length)) {
-            options = BI.last(args);
-            args = BI.initial(args);
-        }
-        args = [].slice.call(args, 2);
-        var odd = BI.filter(args, function (i) {
-            return i % 2 === 0;
-        });
-        var even = BI.filter(args, function (i) {
-            return i % 2 !== 0;
-        });
-        options || (options = {});
-        var offset = options.offset || 20;
-        if ((y0 > y1 && y0 > y2) || (y0 < y1 && y0 < y2)) {
-            if (y0 > y1 && y0 > y2) {
-                var y = Math.max.apply(this, even) + offset;
-            } else {
-                var y = Math.min.apply(this, even) - offset;
-            }
-            var minx = Math.min.apply(this, odd);
-            var minix = BI.indexOf(odd, minx);
-            var maxx = Math.max.apply(this, odd);
-            var maxix = BI.indexOf(odd, maxx);
-            this.canvas.line(minx, even[minix], minx, y, maxx, y, maxx, even[maxix], options);
-            BI.each(odd, function (i, dot) {
-                if (i !== maxix && i !== minix) {
-                    self.canvas.line(dot, even[i], dot, y, options);
-                }
-            });
-            this.canvas.line(x0, y, x0, y0, options);
-            return;
-        }
-        if ((x0 > x1 && x0 > x2) || (x0 < x1 && x0 < x2)) {
-            if (x0 > x1 && x0 > x2) {
-                var x = Math.max.apply(this, odd) + offset;
-            } else {
-                var x = Math.min.apply(this, odd) - offset;
-            }
-            var miny = Math.min.apply(this, even);
-            var miniy = BI.indexOf(even, miny);
-            var maxy = Math.max.apply(this, even);
-            var maxiy = BI.indexOf(even, maxy);
-            this.canvas.line(odd[miniy], miny, x, miny, x, maxy, odd[maxiy], maxy, options);
-            BI.each(even, function (i, dot) {
-                if (i !== miniy && i !== maxiy) {
-                    self.canvas.line(odd[i], dot, x, dot, options);
-                }
-            });
-            this.canvas.line(x, y0, x0, y0, options);
-            return;
-        }
-    },
-
-    stroke: function (callback) {
-        this.canvas.stroke(callback);
-    }
-});
-
-BI.shortcut("bi.complex_canvas", BI.ComplexCanvas);/**
  * Created by roy on 15/10/16.
  * 右与下箭头切换的树节点
  */
@@ -2182,1369 +2133,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);/* !
- * clipboard.js v1.6.1
- * https://zenorocha.github.io/clipboard.js
- *
- * Licensed MIT © Zeno Rocha
- */
-try {// IE8下会抛错
-    (function (f) {
-        if (typeof exports === "object" && typeof module !== "undefined") {
-            module.exports = f();
-        } else if (typeof define === "function" && define.amd) {
-            define([], f);
-        } else {
-            var g;
-            if (typeof window !== "undefined") {
-                g = window;
-            } else if (typeof global !== "undefined") {
-                g = global;
-            } else if (typeof self !== "undefined") {
-                g = self;
-            } else {
-                g = this;
-            }
-            g.Clipboard = f();
-        }
-    })(function () {
-        var define, module, exports;
-        return (function e (t, n, r) {
-            function s (o, u) {
-                if (!n[o]) {
-                    if (!t[o]) {
-                        var a = typeof require === "function" && require;
-                        if (!u && a)return a(o, !0);
-                        if (i)return i(o, !0);
-                        var f = new Error("Cannot find module '" + o + "'");
-                        throw f.code = "MODULE_NOT_FOUND", f;
-                    }
-                    var l = n[o] = {exports: {}};
-                    t[o][0].call(l.exports, function (e) {
-                        var n = t[o][1][e];
-                        return s(n ? n : e);
-                    }, l, l.exports, e, t, n, r);
-                }
-                return n[o].exports;
-            }
-
-            var i = typeof require === "function" && require;
-            for (var o = 0; o < r.length; o++)s(r[o]);
-            return s;
-        })({
-            1: [function (require, module, exports) {
-                var DOCUMENT_NODE_TYPE = 9;
-
-                /**
-                 * A polyfill for Element.matches()
-                 */
-                if (typeof Element !== "undefined" && !Element.prototype.matches) {
-                    var proto = Element.prototype;
-
-                    proto.matches = proto.matchesSelector ||
-                        proto.mozMatchesSelector ||
-                        proto.msMatchesSelector ||
-                        proto.oMatchesSelector ||
-                        proto.webkitMatchesSelector;
-                }
-
-                /**
-                 * Finds the closest parent that matches a selector.
-                 *
-                 * @param {Element} element
-                 * @param {String} selector
-                 * @return {Function}
-                 */
-                function closest (element, selector) {
-                    while (element && element.nodeType !== DOCUMENT_NODE_TYPE) {
-                        if (element.matches(selector)) return element;
-                        element = element.parentNode;
-                    }
-                }
-
-                module.exports = closest;
-
-            }, {}], 2: [function (require, module, exports) {
-                var closest = require("./closest");
-
-                /**
-                 * Delegates event to a selector.
-                 *
-                 * @param {Element} element
-                 * @param {String} selector
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @param {Boolean} useCapture
-                 * @return {Object}
-                 */
-                function delegate (element, selector, type, callback, useCapture) {
-                    var listenerFn = listener.apply(this, arguments);
-
-                    element.addEventListener(type, listenerFn, useCapture);
-
-                    return {
-                        destroy: function () {
-                            element.removeEventListener(type, listenerFn, useCapture);
-                        }
-                    };
-                }
-
-                /**
-                 * Finds closest match and invokes callback.
-                 *
-                 * @param {Element} element
-                 * @param {String} selector
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @return {Function}
-                 */
-                function listener (element, selector, type, callback) {
-                    return function (e) {
-                        e.delegateTarget = closest(e.target, selector);
-
-                        if (e.delegateTarget) {
-                            callback.call(element, e);
-                        }
-                    };
-                }
-
-                module.exports = delegate;
-
-            }, {"./closest": 1}], 3: [function (require, module, exports) {
-                /**
-                 * Check if argument is a HTML element.
-                 *
-                 * @param {Object} value
-                 * @return {Boolean}
-                 */
-                exports.node = function (value) {
-                    return value !== undefined
-                        && value instanceof HTMLElement
-                        && value.nodeType === 1;
-                };
-
-                /**
-                 * Check if argument is a list of HTML elements.
-                 *
-                 * @param {Object} value
-                 * @return {Boolean}
-                 */
-                exports.nodeList = function (value) {
-                    var type = Object.prototype.toString.call(value);
-
-                    return value !== undefined
-                        && (type === "[object NodeList]" || type === "[object HTMLCollection]")
-                        && ("length" in value)
-                        && (value.length === 0 || exports.node(value[0]));
-                };
-
-                /**
-                 * Check if argument is a string.
-                 *
-                 * @param {Object} value
-                 * @return {Boolean}
-                 */
-                exports.string = function (value) {
-                    return typeof value === "string"
-                        || value instanceof String;
-                };
-
-                /**
-                 * Check if argument is a function.
-                 *
-                 * @param {Object} value
-                 * @return {Boolean}
-                 */
-                exports.fn = function (value) {
-                    var type = Object.prototype.toString.call(value);
-
-                    return type === "[object Function]";
-                };
-
-            }, {}], 4: [function (require, module, exports) {
-                var is = require("./is");
-                var delegate = require("delegate");
-
-                /**
-                 * Validates all params and calls the right
-                 * listener function based on its target type.
-                 *
-                 * @param {String|HTMLElement|HTMLCollection|NodeList} target
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @return {Object}
-                 */
-                function listen (target, type, callback) {
-                    if (!target && !type && !callback) {
-                        throw new Error("Missing required arguments");
-                    }
-
-                    if (!is.string(type)) {
-                        throw new TypeError("Second argument must be a String");
-                    }
-
-                    if (!is.fn(callback)) {
-                        throw new TypeError("Third argument must be a Function");
-                    }
-
-                    if (is.node(target)) {
-                        return listenNode(target, type, callback);
-                    } else if (is.nodeList(target)) {
-                        return listenNodeList(target, type, callback);
-                    } else if (is.string(target)) {
-                        return listenSelector(target, type, callback);
-                    }
-
-                    throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");
-
-                }
-
-                /**
-                 * Adds an event listener to a HTML element
-                 * and returns a remove listener function.
-                 *
-                 * @param {HTMLElement} node
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @return {Object}
-                 */
-                function listenNode (node, type, callback) {
-                    node.addEventListener(type, callback);
-
-                    return {
-                        destroy: function () {
-                            node.removeEventListener(type, callback);
-                        }
-                    };
-                }
-
-                /**
-                 * Add an event listener to a list of HTML elements
-                 * and returns a remove listener function.
-                 *
-                 * @param {NodeList|HTMLCollection} nodeList
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @return {Object}
-                 */
-                function listenNodeList (nodeList, type, callback) {
-                    Array.prototype.forEach.call(nodeList, function (node) {
-                        node.addEventListener(type, callback);
-                    });
-
-                    return {
-                        destroy: function () {
-                            Array.prototype.forEach.call(nodeList, function (node) {
-                                node.removeEventListener(type, callback);
-                            });
-                        }
-                    };
-                }
-
-                /**
-                 * Add an event listener to a selector
-                 * and returns a remove listener function.
-                 *
-                 * @param {String} selector
-                 * @param {String} type
-                 * @param {Function} callback
-                 * @return {Object}
-                 */
-                function listenSelector (selector, type, callback) {
-                    return delegate(document.body, selector, type, callback);
-                }
-
-                module.exports = listen;
-
-            }, {"./is": 3, delegate: 2}], 5: [function (require, module, exports) {
-                function select (element) {
-                    var selectedText;
-
-                    if (element.nodeName === "SELECT") {
-                        element.focus();
-
-                        selectedText = element.value;
-                    } else if (element.nodeName === "INPUT" || element.nodeName === "TEXTAREA") {
-                        var isReadOnly = element.hasAttribute("readonly");
-
-                        if (!isReadOnly) {
-                            element.setAttribute("readonly", "");
-                        }
-
-                        element.select();
-                        element.setSelectionRange(0, element.value.length);
-
-                        if (!isReadOnly) {
-                            element.removeAttribute("readonly");
-                        }
-
-                        selectedText = element.value;
-                    } else {
-                        if (element.hasAttribute("contenteditable")) {
-                            element.focus();
-                        }
-
-                        var selection = window.getSelection();
-                        var range = document.createRange();
-
-                        range.selectNodeContents(element);
-                        selection.removeAllRanges();
-                        selection.addRange(range);
-
-                        selectedText = selection.toString();
-                    }
-
-                    return selectedText;
-                }
-
-                module.exports = select;
-
-            }, {}], 6: [function (require, module, exports) {
-                function E () {
-                    // Keep this empty so it's easier to inherit from
-                    // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
-                }
-
-                E.prototype = {
-                    on: function (name, callback, ctx) {
-                        var e = this.e || (this.e = {});
-
-                        (e[name] || (e[name] = [])).push({
-                            fn: callback,
-                            ctx: ctx
-                        });
-
-                        return this;
-                    },
-
-                    once: function (name, callback, ctx) {
-                        var self = this;
-
-                        function listener () {
-                            self.off(name, listener);
-                            callback.apply(ctx, arguments);
-                        }
-
-                        listener._ = callback;
-                        return this.on(name, listener, ctx);
-                    },
-
-                    emit: function (name) {
-                        var data = [].slice.call(arguments, 1);
-                        var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
-                        var i = 0;
-                        var len = evtArr.length;
-
-                        for (i; i < len; i++) {
-                            evtArr[i].fn.apply(evtArr[i].ctx, data);
-                        }
-
-                        return this;
-                    },
-
-                    off: function (name, callback) {
-                        var e = this.e || (this.e = {});
-                        var evts = e[name];
-                        var liveEvents = [];
-
-                        if (evts && callback) {
-                            for (var i = 0, len = evts.length; i < len; i++) {
-                                if (evts[i].fn !== callback && evts[i].fn._ !== callback) {liveEvents.push(evts[i]);}
-                            }
-                        }
-
-                        // Remove event from queue to prevent memory leak
-                        // Suggested by https://github.com/lazd
-                        // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
-
-                        (liveEvents.length)
-                            ? e[name] = liveEvents
-                            : delete e[name];
-
-                        return this;
-                    }
-                };
-
-                module.exports = E;
-
-            }, {}], 7: [function (require, module, exports) {
-                (function (global, factory) {
-                    if (typeof define === "function" && define.amd) {
-                        define(["module", "select"], factory);
-                    } else if (typeof exports !== "undefined") {
-                        factory(module, require("select"));
-                    } else {
-                        var mod = {
-                            exports: {}
-                        };
-                        factory(mod, global.select);
-                        global.clipboardAction = mod.exports;
-                    }
-                })(this, function (module, _select) {
-                    "use strict";
-
-                    var _select2 = _interopRequireDefault(_select);
-
-                    function _interopRequireDefault (obj) {
-                        return obj && obj.__esModule ? obj : {
-                            "default": obj
-                        };
-                    }
-
-                    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
-                        return typeof obj;
-                    } : function (obj) {
-                        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-                    };
-
-                    function _classCallCheck (instance, Constructor) {
-                        if (!(instance instanceof Constructor)) {
-                            throw new TypeError("Cannot call a class as a function");
-                        }
-                    }
-
-                    var _createClass = function () {
-                        function defineProperties (target, props) {
-                            for (var i = 0; i < props.length; i++) {
-                                var descriptor = props[i];
-                                descriptor.enumerable = descriptor.enumerable || false;
-                                descriptor.configurable = true;
-                                if ("value" in descriptor) descriptor.writable = true;
-                                Object.defineProperty(target, descriptor.key, descriptor);
-                            }
-                        }
-
-                        return function (Constructor, protoProps, staticProps) {
-                            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-                            if (staticProps) defineProperties(Constructor, staticProps);
-                            return Constructor;
-                        };
-                    }();
-
-                    var ClipboardAction = function () {
-                        /**
-                         * @param {Object} options
-                         */
-                        function ClipboardAction (options) {
-                            _classCallCheck(this, ClipboardAction);
-
-                            this.resolveOptions(options);
-                            this.initSelection();
-                        }
-
-                        /**
-                         * Defines base properties passed from constructor.
-                         * @param {Object} options
-                         */
-
-
-                        _createClass(ClipboardAction, [{
-                            key: "resolveOptions",
-                            value: function resolveOptions () {
-                                var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-                                this.action = options.action;
-                                this.emitter = options.emitter;
-                                this.target = options.target;
-                                this.text = options.text;
-                                this.trigger = options.trigger;
-
-                                this.selectedText = "";
-                            }
-                        }, {
-                            key: "initSelection",
-                            value: function initSelection () {
-                                if (this.text) {
-                                    this.selectFake();
-                                } else if (this.target) {
-                                    this.selectTarget();
-                                }
-                            }
-                        }, {
-                            key: "selectFake",
-                            value: function selectFake () {
-                                var _this = this;
-
-                                var isRTL = document.documentElement.getAttribute("dir") == "rtl";
-
-                                this.removeFake();
-
-                                this.fakeHandlerCallback = function () {
-                                    return _this.removeFake();
-                                };
-                                this.fakeHandler = document.body.addEventListener("click", this.fakeHandlerCallback) || true;
-
-                                this.fakeElem = document.createElement("textarea");
-                                // Prevent zooming on iOS
-                                this.fakeElem.style.fontSize = "12pt";
-                                // Reset box model
-                                this.fakeElem.style.border = "0";
-                                this.fakeElem.style.padding = "0";
-                                this.fakeElem.style.margin = "0";
-                                // Move element out of screen horizontally
-                                this.fakeElem.style.position = "absolute";
-                                this.fakeElem.style[isRTL ? "right" : "left"] = "-9999px";
-                                // Move element to the same position vertically
-                                var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-                                this.fakeElem.style.top = yPosition + "px";
-
-                                this.fakeElem.setAttribute("readonly", "");
-                                this.fakeElem.value = this.text;
-
-                                document.body.appendChild(this.fakeElem);
-
-                                this.selectedText = (0, _select2["default"])(this.fakeElem);
-                                this.copyText();
-                            }
-                        }, {
-                            key: "removeFake",
-                            value: function removeFake () {
-                                if (this.fakeHandler) {
-                                    document.body.removeEventListener("click", this.fakeHandlerCallback);
-                                    this.fakeHandler = null;
-                                    this.fakeHandlerCallback = null;
-                                }
-
-                                if (this.fakeElem) {
-                                    document.body.removeChild(this.fakeElem);
-                                    this.fakeElem = null;
-                                }
-                            }
-                        }, {
-                            key: "selectTarget",
-                            value: function selectTarget () {
-                                this.selectedText = (0, _select2["default"])(this.target);
-                                this.copyText();
-                            }
-                        }, {
-                            key: "copyText",
-                            value: function copyText () {
-                                var succeeded = void 0;
-
-                                try {
-                                    succeeded = document.execCommand(this.action);
-                                } catch (err) {
-                                    succeeded = false;
-                                }
-
-                                this.handleResult(succeeded);
-                            }
-                        }, {
-                            key: "handleResult",
-                            value: function handleResult (succeeded) {
-                                this.emitter.emit(succeeded ? "success" : "error", {
-                                    action: this.action,
-                                    text: this.selectedText,
-                                    trigger: this.trigger,
-                                    clearSelection: this.clearSelection.bind(this)
-                                });
-                            }
-                        }, {
-                            key: "clearSelection",
-                            value: function clearSelection () {
-                                if (this.target) {
-                                    this.target.blur();
-                                }
-
-                                window.getSelection().removeAllRanges();
-                            }
-                        }, {
-                            key: "destroy",
-                            value: function destroy () {
-                                this.removeFake();
-                            }
-                        }, {
-                            key: "action",
-                            set: function set () {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "copy";
-
-                                this._action = action;
-
-                                if (this._action !== "copy" && this._action !== "cut") {
-                                    throw new Error("Invalid \"action\" value, use either \"copy\" or \"cut\"");
-                                }
-                            },
-                            get: function get () {
-                                return this._action;
-                            }
-                        }, {
-                            key: "target",
-                            set: function set (target) {
-                                if (target !== undefined) {
-                                    if (target && (typeof target === "undefined" ? "undefined" : _typeof(target)) === "object" && target.nodeType === 1) {
-                                        if (this.action === "copy" && target.hasAttribute("disabled")) {
-                                            throw new Error("Invalid \"target\" attribute. Please use \"readonly\" instead of \"disabled\" attribute");
-                                        }
-
-                                        if (this.action === "cut" && (target.hasAttribute("readonly") || target.hasAttribute("disabled"))) {
-                                            throw new Error("Invalid \"target\" attribute. You can't cut text from elements with \"readonly\" or \"disabled\" attributes");
-                                        }
-
-                                        this._target = target;
-                                    } else {
-                                        throw new Error("Invalid \"target\" value, use a valid Element");
-                                    }
-                                }
-                            },
-                            get: function get () {
-                                return this._target;
-                            }
-                        }]);
-
-                        return ClipboardAction;
-                    }();
-
-                    module.exports = ClipboardAction;
-                });
-
-            }, {select: 5}], 8: [function (require, module, exports) {
-                (function (global, factory) {
-                    if (typeof define === "function" && define.amd) {
-                        define(["module", "./clipboard-action", "tiny-emitter", "good-listener"], factory);
-                    } else if (typeof exports !== "undefined") {
-                        factory(module, require("./clipboard-action"), require("tiny-emitter"), require("good-listener"));
-                    } else {
-                        var mod = {
-                            exports: {}
-                        };
-                        factory(mod, global.clipboardAction, global.tinyEmitter, global.goodListener);
-                        global.clipboard = mod.exports;
-                    }
-                })(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
-                    "use strict";
-
-                    var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
-
-                    var _tinyEmitter2 = _interopRequireDefault(_tinyEmitter);
-
-                    var _goodListener2 = _interopRequireDefault(_goodListener);
-
-                    function _interopRequireDefault (obj) {
-                        return obj && obj.__esModule ? obj : {
-                            "default": obj
-                        };
-                    }
-
-                    function _classCallCheck (instance, Constructor) {
-                        if (!(instance instanceof Constructor)) {
-                            throw new TypeError("Cannot call a class as a function");
-                        }
-                    }
-
-                    var _createClass = function () {
-                        function defineProperties (target, props) {
-                            for (var i = 0; i < props.length; i++) {
-                                var descriptor = props[i];
-                                descriptor.enumerable = descriptor.enumerable || false;
-                                descriptor.configurable = true;
-                                if ("value" in descriptor) descriptor.writable = true;
-                                Object.defineProperty(target, descriptor.key, descriptor);
-                            }
-                        }
-
-                        return function (Constructor, protoProps, staticProps) {
-                            if (protoProps) defineProperties(Constructor.prototype, protoProps);
-                            if (staticProps) defineProperties(Constructor, staticProps);
-                            return Constructor;
-                        };
-                    }();
-
-                    function _possibleConstructorReturn (self, call) {
-                        if (!self) {
-                            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-                        }
-
-                        return call && (typeof call === "object" || typeof call === "function") ? call : self;
-                    }
-
-                    function _inherits (subClass, superClass) {
-                        if (typeof superClass !== "function" && superClass !== null) {
-                            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-                        }
-
-                        subClass.prototype = Object.create(superClass && superClass.prototype, {
-                            constructor: {
-                                value: subClass,
-                                enumerable: false,
-                                writable: true,
-                                configurable: true
-                            }
-                        });
-                        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-                    }
-
-                    var Clipboard = function (_Emitter) {
-                        _inherits(Clipboard, _Emitter);
-
-                        /**
-                         * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
-                         * @param {Object} options
-                         */
-                        function Clipboard (trigger, options) {
-                            _classCallCheck(this, Clipboard);
-
-                            var _this = _possibleConstructorReturn(this, (Clipboard.__proto__ || Object.getPrototypeOf(Clipboard)).call(this));
-
-                            _this.resolveOptions(options);
-                            _this.listenClick(trigger);
-                            return _this;
-                        }
-
-                        /**
-                         * Defines if attributes would be resolved using internal setter functions
-                         * or custom functions that were passed in the constructor.
-                         * @param {Object} options
-                         */
-
-
-                        _createClass(Clipboard, [{
-                            key: "resolveOptions",
-                            value: function resolveOptions () {
-                                var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-                                this.action = typeof options.action === "function" ? options.action : this.defaultAction;
-                                this.target = typeof options.target === "function" ? options.target : this.defaultTarget;
-                                this.text = typeof options.text === "function" ? options.text : this.defaultText;
-                            }
-                        }, {
-                            key: "listenClick",
-                            value: function listenClick (trigger) {
-                                var _this2 = this;
-
-                                this.listener = (0, _goodListener2["default"])(trigger, "click", function (e) {
-                                    return _this2.onClick(e);
-                                });
-                            }
-                        }, {
-                            key: "onClick",
-                            value: function onClick (e) {
-                                var trigger = e.delegateTarget || e.currentTarget;
-
-                                if (this.clipboardAction) {
-                                    this.clipboardAction = null;
-                                }
-
-                                this.clipboardAction = new _clipboardAction2["default"]({
-                                    action: this.action(trigger),
-                                    target: this.target(trigger),
-                                    text: this.text(trigger),
-                                    trigger: trigger,
-                                    emitter: this
-                                });
-                            }
-                        }, {
-                            key: "defaultAction",
-                            value: function defaultAction (trigger) {
-                                return getAttributeValue("action", trigger);
-                            }
-                        }, {
-                            key: "defaultTarget",
-                            value: function defaultTarget (trigger) {
-                                var selector = getAttributeValue("target", trigger);
-
-                                if (selector) {
-                                    return document.querySelector(selector);
-                                }
-                            }
-                        }, {
-                            key: "defaultText",
-                            value: function defaultText (trigger) {
-                                return getAttributeValue("text", trigger);
-                            }
-                        }, {
-                            key: "destroy",
-                            value: function destroy () {
-                                this.listener.destroy();
-
-                                if (this.clipboardAction) {
-                                    this.clipboardAction.destroy();
-                                    this.clipboardAction = null;
-                                }
-                            }
-                        }], [{
-                            key: "isSupported",
-                            value: function isSupported () {
-                                var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ["copy", "cut"];
-
-                                var actions = typeof action === "string" ? [action] : action;
-                                var support = !!document.queryCommandSupported;
-
-                                actions.forEach(function (action) {
-                                    support = support && !!document.queryCommandSupported(action);
-                                });
-
-                                return support;
-                            }
-                        }]);
-
-                        return Clipboard;
-                    }(_tinyEmitter2["default"]);
-
-                    /**
-                     * Helper function to retrieve attribute value.
-                     * @param {String} suffix
-                     * @param {Element} element
-                     */
-                    function getAttributeValue (suffix, element) {
-                        var attribute = "data-clipboard-" + suffix;
-
-                        if (!element.hasAttribute(attribute)) {
-                            return;
-                        }
-
-                        return element.getAttribute(attribute);
-                    }
-
-                    module.exports = Clipboard;
-                });
-
-            }, {"./clipboard-action": 7, "good-listener": 4, "tiny-emitter": 6}]
-        }, {}, [8])(8);
-    });
-} catch (e) {
-    /*
-     * zClip :: jQuery ZeroClipboard v1.1.1
-     * http://steamdev.com/zclip
-     *
-     * Copyright 2011, SteamDev
-     * Released under the MIT license.
-     * http://www.opensource.org/licenses/mit-license.php
-     *
-     * Date: Wed Jun 01, 2011
-     */
-
-
-    (function ($) {
-
-        $.fn.zclip = function (params) {
-
-            if (typeof params === "object" && !params.length) {
-
-                var settings = $.extend({
-
-                    path: "ZeroClipboard.swf",
-                    copy: null,
-                    beforeCopy: null,
-                    afterCopy: null,
-                    clickAfter: true,
-                    setHandCursor: true,
-                    setCSSEffects: true
-
-                }, params);
-
-
-                return this.each(function () {
-
-                    var o = $(this);
-
-                    if (o.is(":visible") && (typeof settings.copy === "string" || $.isFunction(settings.copy))) {
-
-                        ZeroClipboard.setMoviePath(settings.path);
-                        var clip = new ZeroClipboard.Client();
-
-                        if ($.isFunction(settings.copy)) {
-                            o.bind("zClip_copy", settings.copy);
-                        }
-                        if ($.isFunction(settings.beforeCopy)) {
-                            o.bind("zClip_beforeCopy", settings.beforeCopy);
-                        }
-                        if ($.isFunction(settings.afterCopy)) {
-                            o.bind("zClip_afterCopy", settings.afterCopy);
-                        }
-
-                        clip.setHandCursor(settings.setHandCursor);
-                        clip.setCSSEffects(settings.setCSSEffects);
-                        clip.addEventListener("mouseOver", function (client) {
-                            o.trigger("mouseenter");
-                        });
-                        clip.addEventListener("mouseOut", function (client) {
-                            o.trigger("mouseleave");
-                        });
-                        clip.addEventListener("mouseDown", function (client) {
-
-                            o.trigger("mousedown");
-
-                            if (!$.isFunction(settings.copy)) {
-                                clip.setText(settings.copy);
-                            } else {
-                                clip.setText(o.triggerHandler("zClip_copy"));
-                            }
-
-                            if ($.isFunction(settings.beforeCopy)) {
-                                o.trigger("zClip_beforeCopy");
-                            }
-
-                        });
-
-                        clip.addEventListener("complete", function (client, text) {
-
-                            if ($.isFunction(settings.afterCopy)) {
-
-                                o.trigger("zClip_afterCopy");
-
-                            } else {
-                                if (text.length > 500) {
-                                    text = text.substr(0, 500) + "...\n\n(" + (text.length - 500) + " characters not shown)";
-                                }
-
-                                o.removeClass("hover");
-                                alert("Copied text to clipboard:\n\n " + text);
-                            }
-
-                            if (settings.clickAfter) {
-                                o.trigger("click");
-                            }
-
-                        });
-
-
-                        clip.glue(o[0], o.parent()[0]);
-
-                        $(window).bind("load resize", function () {
-                            clip.reposition();
-                        });
-
-
-                    }
-
-                });
-
-            } else if (typeof params === "string") {
-
-                return this.each(function () {
-
-                    var o = $(this);
-
-                    params = params.toLowerCase();
-                    var zclipId = o.data("zclipId");
-                    var clipElm = $("#" + zclipId + ".zclip");
-
-                    if (params == "remove") {
-
-                        clipElm.remove();
-                        o.removeClass("active hover");
-
-                    } else if (params == "hide") {
-
-                        clipElm.hide();
-                        o.removeClass("active hover");
-
-                    } else if (params == "show") {
-
-                        clipElm.show();
-
-                    }
-
-                });
-
-            }
-
-        };
-
-
-    })(jQuery);
-
-
-    // ZeroClipboard
-    // Simple Set Clipboard System
-    // Author: Joseph Huckaby
-    var ZeroClipboard = {
-
-        version: "1.0.7",
-        clients: {},
-        // registered upload clients on page, indexed by id
-        moviePath: "ZeroClipboard.swf",
-        // URL to movie
-        nextId: 1,
-        // ID of next movie
-        $: function (thingy) {
-            // simple DOM lookup utility function
-            if (typeof(thingy) === "string") thingy = document.getElementById(thingy);
-            if (!thingy.addClass) {
-                // extend element with a few useful methods
-                thingy.hide = function () {
-                    this.style.display = "none";
-                };
-                thingy.show = function () {
-                    this.style.display = "";
-                };
-                thingy.addClass = function (name) {
-                    this.removeClass(name);
-                    this.className += " " + name;
-                };
-                thingy.removeClass = function (name) {
-                    var classes = this.className.split(/\s+/);
-                    var idx = -1;
-                    for (var k = 0; k < classes.length; k++) {
-                        if (classes[k] == name) {
-                            idx = k;
-                            k = classes.length;
-                        }
-                    }
-                    if (idx > -1) {
-                        classes.splice(idx, 1);
-                        this.className = classes.join(" ");
-                    }
-                    return this;
-                };
-                thingy.hasClass = function (name) {
-                    return !!this.className.match(new RegExp("\\s*" + name + "\\s*"));
-                };
-            }
-            return thingy;
-        },
-
-        setMoviePath: function (path) {
-            // set path to ZeroClipboard.swf
-            this.moviePath = path;
-        },
-
-        dispatch: function (id, eventName, args) {
-            // receive event from flash movie, send to client
-            var client = this.clients[id];
-            if (client) {
-                client.receiveEvent(eventName, args);
-            }
-        },
-
-        register: function (id, client) {
-            // register new client to receive events
-            this.clients[id] = client;
-        },
-
-        getDOMObjectPosition: function (obj, stopObj) {
-            // get absolute coordinates for dom element
-            var info = {
-                left: 0,
-                top: 0,
-                width: obj.width ? obj.width : obj.offsetWidth,
-                height: obj.height ? obj.height : obj.offsetHeight
-            };
-
-            if (obj && (obj != stopObj)) {
-                info.left += obj.offsetLeft;
-                info.top += obj.offsetTop;
-            }
-
-            return info;
-        },
-
-        Client: function (elem) {
-            // constructor for new simple upload client
-            this.handlers = {};
-
-            // unique ID
-            this.id = ZeroClipboard.nextId++;
-            this.movieId = "ZeroClipboardMovie_" + this.id;
-
-            // register client with singleton to receive flash events
-            ZeroClipboard.register(this.id, this);
-
-            // create movie
-            if (elem) this.glue(elem);
-        }
-    };
-
-    ZeroClipboard.Client.prototype = {
-
-        id: 0,
-        // unique ID for us
-        ready: false,
-        // whether movie is ready to receive events or not
-        movie: null,
-        // reference to movie object
-        clipText: "",
-        // text to copy to clipboard
-        handCursorEnabled: true,
-        // whether to show hand cursor, or default pointer cursor
-        cssEffects: true,
-        // enable CSS mouse effects on dom container
-        handlers: null,
-        // user event handlers
-        glue: function (elem, appendElem, stylesToAdd) {
-            // glue to DOM element
-            // elem can be ID or actual DOM element object
-            this.domElement = ZeroClipboard.$(elem);
-
-            // float just above object, or zIndex 99 if dom element isn't set
-            var zIndex = 99;
-            if (this.domElement.style.zIndex) {
-                zIndex = parseInt(this.domElement.style.zIndex, 10) + 1;
-            }
-
-            if (typeof(appendElem) === "string") {
-                appendElem = ZeroClipboard.$(appendElem);
-            } else if (typeof(appendElem) === "undefined") {
-                appendElem = document.getElementsByTagName("body")[0];
-            }
-
-            // find X/Y position of domElement
-            var box = ZeroClipboard.getDOMObjectPosition(this.domElement, appendElem);
-
-            // create floating DIV above element
-            this.div = document.createElement("div");
-            this.div.className = "zclip";
-            this.div.id = "zclip-" + this.movieId;
-            $(this.domElement).data("zclipId", "zclip-" + this.movieId);
-            var style = this.div.style;
-            style.position = "absolute";
-            style.left = "" + box.left + "px";
-            style.top = "" + box.top + "px";
-            style.width = "" + box.width + "px";
-            style.height = "" + box.height + "px";
-            style.zIndex = zIndex;
-
-            if (typeof(stylesToAdd) === "object") {
-                for (addedStyle in stylesToAdd) {
-                    style[addedStyle] = stylesToAdd[addedStyle];
-                }
-            }
-
-            // style.backgroundColor = '#f00'; // debug
-            appendElem.appendChild(this.div);
-
-            this.div.innerHTML = this.getHTML(box.width, box.height);
-        },
-
-        getHTML: function (width, height) {
-            // return HTML for movie
-            var html = "";
-            var flashvars = "id=" + this.id + "&width=" + width + "&height=" + height;
-
-            if (navigator.userAgent.match(/MSIE/)) {
-                // IE gets an OBJECT tag
-                var protocol = location.href.match(/^https/i) ? "https://" : "http://";
-                html += "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" codebase=\"" + protocol + "download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0\" width=\"" + width + "\" height=\"" + height + "\" id=\"" + this.movieId + "\" align=\"middle\"><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"false\" /><param name=\"movie\" value=\"" + ZeroClipboard.moviePath + "\" /><param name=\"loop\" value=\"false\" /><param name=\"menu\" value=\"false\" /><param name=\"quality\" value=\"best\" /><param name=\"bgcolor\" value=\"#ffffff\" /><param name=\"flashvars\" value=\"" + flashvars + "\"/><param name=\"wmode\" value=\"transparent\"/></object>";
-            } else {
-                // all other browsers get an EMBED tag
-                html += "<embed id=\"" + this.movieId + "\" src=\"" + ZeroClipboard.moviePath + "\" loop=\"false\" menu=\"false\" quality=\"best\" bgcolor=\"#ffffff\" width=\"" + width + "\" height=\"" + height + "\" name=\"" + this.movieId + "\" align=\"middle\" allowScriptAccess=\"always\" allowFullScreen=\"false\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" flashvars=\"" + flashvars + "\" wmode=\"transparent\" />";
-            }
-            return html;
-        },
-
-        hide: function () {
-            // temporarily hide floater offscreen
-            if (this.div) {
-                this.div.style.left = "-2000px";
-            }
-        },
-
-        show: function () {
-            // show ourselves after a call to hide()
-            this.reposition();
-        },
-
-        destroy: function () {
-            // destroy control and floater
-            if (this.domElement && this.div) {
-                this.hide();
-                this.div.innerHTML = "";
-
-                var body = document.getElementsByTagName("body")[0];
-                try {
-                    body.removeChild(this.div);
-                } catch (e) {
-
-                }
-
-                this.domElement = null;
-                this.div = null;
-            }
-        },
-
-        reposition: function (elem) {
-            // reposition our floating div, optionally to new container
-            // warning: container CANNOT change size, only position
-            if (elem) {
-                this.domElement = ZeroClipboard.$(elem);
-                if (!this.domElement) this.hide();
-            }
-
-            if (this.domElement && this.div) {
-                var box = ZeroClipboard.getDOMObjectPosition(this.domElement);
-                var style = this.div.style;
-                style.left = "" + box.left + "px";
-                style.top = "" + box.top + "px";
-            }
-        },
-
-        setText: function (newText) {
-            // set text to be copied to clipboard
-            this.clipText = newText;
-            if (this.ready) {
-                this.movie.setText(newText);
-            }
-        },
-
-        addEventListener: function (eventName, func) {
-            // add user event listener for event
-            // event types: load, queueStart, fileStart, fileComplete, queueComplete, progress, error, cancel
-            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
-            if (!this.handlers[eventName]) {
-                this.handlers[eventName] = [];
-            }
-            this.handlers[eventName].push(func);
-        },
-
-        setHandCursor: function (enabled) {
-            // enable hand cursor (true), or default arrow cursor (false)
-            this.handCursorEnabled = enabled;
-            if (this.ready) {
-                this.movie.setHandCursor(enabled);
-            }
-        },
-
-        setCSSEffects: function (enabled) {
-            // enable or disable CSS effects on DOM container
-            this.cssEffects = !!enabled;
-        },
-
-        receiveEvent: function (eventName, args) {
-            // receive event from flash
-            eventName = eventName.toString().toLowerCase().replace(/^on/, "");
-
-            // special behavior for certain events
-            switch (eventName) {
-                case "load":
-                    // movie claims it is ready, but in IE this isn't always the case...
-                    // bug fix: Cannot extend EMBED DOM elements in Firefox, must use traditional function
-                    this.movie = document.getElementById(this.movieId);
-                    if (!this.movie) {
-                        var self = this;
-                        setTimeout(function () {
-                            self.receiveEvent("load", null);
-                        }, 1);
-                        return;
-                    }
-
-                    // firefox on pc needs a "kick" in order to set these in certain cases
-                    if (!this.ready && navigator.userAgent.match(/Firefox/) && navigator.userAgent.match(/Windows/)) {
-                        var self = this;
-                        setTimeout(function () {
-                            self.receiveEvent("load", null);
-                        }, 100);
-                        this.ready = true;
-                        return;
-                    }
-
-                    this.ready = true;
-                    try {
-                        this.movie.setText(this.clipText);
-                    } catch (e) {
-                    }
-                    try {
-                        this.movie.setHandCursor(this.handCursorEnabled);
-                    } catch (e) {
-                    }
-                    break;
-
-                case "mouseover":
-                    if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass("hover");
-                        if (this.recoverActive) {
-                            this.domElement.addClass("active");
-                        }
-
-
-                    }
-
-
-                    break;
-
-                case "mouseout":
-                    if (this.domElement && this.cssEffects) {
-                        this.recoverActive = false;
-                        if (this.domElement.hasClass("active")) {
-                            this.domElement.removeClass("active");
-                            this.recoverActive = true;
-                        }
-                        this.domElement.removeClass("hover");
-
-                    }
-                    break;
-
-                case "mousedown":
-                    if (this.domElement && this.cssEffects) {
-                        this.domElement.addClass("active");
-                    }
-                    break;
-
-                case "mouseup":
-                    if (this.domElement && this.cssEffects) {
-                        this.domElement.removeClass("active");
-                        this.recoverActive = false;
-                    }
-                    break;
-            } // switch eventName
-            if (this.handlers[eventName]) {
-                for (var idx = 0, len = this.handlers[eventName].length; idx < len; idx++) {
-                    var func = this.handlers[eventName][idx];
-
-                    if (typeof(func) === "function") {
-                        // actual function reference
-                        func(this, args);
-                    } else if ((typeof(func) === "object") && (func.length == 2)) {
-                        // PHP style object + method, i.e. [myObject, 'myMethod']
-                        func[0][func[1]](this, args);
-                    } else if (typeof(func) === "string") {
-                        // name of function
-                        window[func](this, args);
-                    }
-                } // foreach event handler defined
-            } // user defined handler for event
-        }
-
-    };
-}/**
- * 复制
- * Created by GUY on 2016/2/16.
- * @class BI.ClipBoard
- * @extends BI.BasicButton
- */
-BI.ClipBoard = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        return BI.extend(BI.ClipBoard.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-clipboard",
-            el: {
-                type: "bi.layout"
-            },
-            copy: BI.emptyFn,
-            afterCopy: BI.emptyFn
-        });
-    },
-
-    _init: function () {
-        BI.ClipBoard.superclass._init.apply(this, arguments);
-        BI.createWidget(this.options.el, {
-            element: this
-        });
-    },
-
-    mounted: function () {
-        var self = this, o = this.options;
-        if (window.Clipboard) {
-            this.clipboard = new Clipboard(this.element[0], {
-                text: function () {
-                    return BI.isFunction(o.copy) ? o.copy() : o.copy;
-                }
-            });
-            this.clipboard.on("success", o.afterCopy);
-        } else {
-            this.element.zclip({
-                path: BI.resourceURL + "/ZeroClipboard.swf",
-                copy: o.copy,
-                beforeCopy: o.beforeCopy,
-                afterCopy: o.afterCopy
-            });
-        }
-    },
-
-    destroyed: function () {
-        this.clipboard && this.clipboard.destroy();
-    }
-});
-
-BI.shortcut("bi.clipboard", BI.ClipBoard);/**
+BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);/**
  * 自定义选色
  *
  * Created by GUY on 2015/11/17.
@@ -3669,7 +2258,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         }
                     }]
                 }, o.popup),
-                stopPropagation: false,
+                stopPropagation: true,
                 width: 230
             },
             value: o.value
@@ -3739,7 +2328,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.colorEditor = BI.createWidget(o.editor, {
             type: "bi.color_picker_editor",
             value: o.value,
-            cls: "bi-background bi-border-bottom",
+            cls: "bi-header-background bi-border-bottom",
             height: 30
         });
 
@@ -3750,6 +2339,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
+            cls: "bi-border-bottom bi-border-right",
             items: [[{
                 value: "",
                 disabled: true
@@ -3815,6 +2405,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.more = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border-top",
             container: null,
             direction: "right,top",
             isNeedAdjustHeight: false,
@@ -4055,7 +2646,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -4064,7 +2655,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         BI.ColorChooserTrigger.superclass._init.apply(this, arguments);
         this.colorContainer = BI.createWidget({
             type: "bi.layout",
-            cls: "bi-card color-chooser-trigger-content"
+            cls: "color-chooser-trigger-content" + (BI.isIE9Below && BI.isIE9Below() ? " hack" : "")
         });
 
         var down = BI.createWidget({
@@ -4086,7 +2677,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
                 bottom: 3
             }, {
                 el: down,
-                right: 1,
+                right: -1,
                 bottom: 1
             }]
         });
@@ -4119,7 +2710,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger",
+            baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
             height: 24
         });
     },
@@ -4129,7 +2720,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         this.colorContainer = BI.createWidget({
             type: "bi.htape",
-            cls: "bi-card color-chooser-trigger-content",
+            cls: "color-chooser-trigger-content",
             items: [{
                 type: "bi.icon_change_button",
                 ref: function (_ref) {
@@ -4495,7 +3086,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 32,
+            width: 30,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -4514,8 +3105,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.none = BI.createWidget({
             type: "bi.icon_button",
             cls: "auto-color-icon",
-            width: 24,
-            height: 24,
+            width: 16,
+            height: 16,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Basic_Auto")
@@ -4536,8 +3127,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         this.transparent = BI.createWidget({
             type: "bi.icon_button",
             cls: "trans-color-icon",
-            width: 24,
-            height: 24,
+            width: 16,
+            height: 16,
             iconWidth: 16,
             iconHeight: 16,
             title: BI.i18nText("BI-Transparent_Color")
@@ -4588,14 +3179,16 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                         width: 30
                     }, {
                         el: this.transparent,
-                        width: 24
+                        width: 16,
+                        lgap: 5
                     }, {
                         el: this.none,
-                        width: 24
+                        width: 16,
+                        lgap: 5
                     }]
                 },
                 left: 10,
-                right: 20,
+                right: 10,
                 top: 0,
                 bottom: 0
             }]
@@ -5500,7 +4093,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         });
         return BI.createWidget({
             type: "bi.right_vertical_adapt",
-            height: 40,
+            height: 44,
             hgap: 10,
             bgap: 10,
             items: items
@@ -5517,7 +4110,7 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @extends BI.BubblePopupView
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
-    
+
     props: {
         baseCls: "bi-text-bubble-bar-popup-view",
         text: "",
@@ -5549,7 +4142,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 type: "bi.button",
                 value: BI.i18nText("BI-Basic_Cancel"),
-                ghost: true,
+                level: "ignore",
                 height: 24,
                 handler: function () {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
@@ -5578,7 +4171,8 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
     }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);/**
+BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
+/**
  * Created by Young's on 2016/4/28.
  */
 BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
@@ -5929,7 +4523,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             iconHeight: null,
             iconWidth: null,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -5938,20 +4535,23 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
+            cls: "icon-text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
             iconCls: o.iconCls,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
             items: o.items,
             value: o.value,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
         this.popup.on(BI.IconTextValueComboPopup.EVENT_CHANGE, function () {
             self.setValue(self.popup.getValue());
@@ -6027,7 +4627,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
                 type: "bi.single_select_icon_text_item",
                 height: 24,
                 iconHeight: o.iconHeight,
-                iconWidth: o.iconWidth
+                iconWidth: o.iconWidth,
+                iconWrapperWidth: o.iconWrapperWidth
             }),
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             layouts: [{
@@ -6057,6 +4658,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
             height: 24,
+            iconWrapperWidth: o.iconWrapperWidth,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
         });
@@ -6084,7 +4686,10 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         text: "",
         items: [],
         tipType: "",
-        warningTitle: ""
+        warningTitle: "",
+        attributes: {
+            tabIndex: 0
+        }
     },
 
     render: function () {
@@ -6102,6 +4707,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     },
                     el: {
                         type: "bi.search_text_value_trigger",
+                        cls: "search-text-value-trigger",
                         ref: function () {
                             self.trigger = this;
                         },
@@ -6111,6 +4717,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         value: o.value,
                         tipType: o.tipType,
                         warningTitle: o.warningTitle,
+                        title: o.title,
                         listeners: [{
                             eventName: BI.SearchTextValueTrigger.EVENT_CHANGE,
                             action: function () {
@@ -6121,7 +4728,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                         }]
                     },
                     popup: {
-                        el:{
+                        el: {
                             type: "bi.text_value_combo_popup",
                             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
                             value: o.value,
@@ -6144,13 +4751,11 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            self.trigger.stopEditing();
-                            self.element.removeClass("combo-show");
+                            // self.trigger.stopEditing();
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                         action: function () {
-                            self.element.removeClass("combo-show").addClass("combo-show");
                             self.fireEvent(BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW);
                         }
                     }],
@@ -6225,7 +4830,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
 });
 BI.SearchTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SearchTextValueCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);/**
+BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
+/**
  * Created by Windy on 2018/2/5.
  */
 BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
@@ -6298,7 +4904,7 @@ BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);/*
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        extraCls: "bi-search-text-value-trigger bi-border",
         height: 24
     },
 
@@ -6321,7 +4927,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             },
                             text: this._digest(o.value, o.items),
                             value: o.value,
-                            height: o.height
+                            height: o.height,
+                            tipText: ""
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",
@@ -6362,7 +4969,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -6399,75 +5006,6 @@ BI.SearchTextValueTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SearchTextValueTrigger.EVENT_START = "EVENT_START";
 BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);/**
- * 单选combo
- *
- * @class BI.StaticCombo
- * @extend BI.Widget
- */
-BI.StaticCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.StaticCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-static-combo",
-            height: 24,
-            text: "",
-            el: {},
-            items: [],
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
-        });
-    },
-
-    _init: function () {
-        BI.StaticCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.trigger = BI.createWidget({
-            type: "bi.text_trigger",
-            cls: "bi-border",
-            items: o.items,
-            height: o.height,
-            text: o.text,
-            readonly: true
-        });
-        this.popup = BI.createWidget({
-            type: "bi.text_value_combo_popup",
-            textAlign: o.textAlign,
-            chooseType: o.chooseType,
-            items: o.items,
-            value: o.value
-        });
-        this.popup.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.popup.on(BI.TextValueComboPopup.EVENT_CHANGE, function () {
-            self.combo.hideView();
-            self.fireEvent(BI.StaticCombo.EVENT_CHANGE, arguments);
-        });
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            element: this,
-            adjustLength: 2,
-            container: o.container,
-            el: this.trigger,
-            popup: {
-                el: this.popup
-            }
-        });
-    },
-
-    populate: function (items) {
-        this.combo.populate(items);
-    },
-
-    setValue: function (v) {
-        this.popup.setValue(v);
-    },
-
-    getValue: function () {
-        var value = this.popup.getValue();
-        return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
-    }
-});
-BI.StaticCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.static_combo", BI.StaticCombo);/**
  * @class BI.TextValueCheckCombo
  * @extend BI.Widget
  * combo : text + icon, popup : check + text
@@ -6475,11 +5013,14 @@ BI.shortcut("bi.static_combo", BI.StaticCombo);/**
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseClass: "bi-text-value-check-combo",
+            baseCls: "bi-text-value-check-combo",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6488,6 +5029,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6688,7 +5230,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6697,6 +5242,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
+            cls: "text-value-trigger",
             items: o.items,
             height: o.height,
             text: o.text,
@@ -6898,7 +5444,10 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-value-down-list-combo",
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -6914,6 +5463,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         }
         this.trigger = BI.createWidget({
             type: "bi.down_list_select_text_trigger",
+            cls: "text-value-down-list-trigger",
             height: o.height,
             items: o.items,
             text: o.text,
@@ -7259,7 +5809,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: 4
+            hgap: o.hgap
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -7431,6 +5981,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
+        this.text.doRedMark(this.options.keyword);
     },
 
     getValue: function () {
@@ -7464,273 +6015,8 @@ BI.ShelterEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.ShelterEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.ShelterEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-BI.shortcut("bi.shelter_editor", BI.ShelterEditor);/**
- * Created by User on 2017/7/28.
- */
-BI.SignInitialEditor = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.SignInitialEditor.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-sign-initial-editor",
-            hgap: 4,
-            vgap: 2,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            validationChecker: BI.emptyFn,
-            quitChecker: BI.emptyFn,
-            allowBlank: true,
-            watermark: "",
-            errorText: "",
-            value: "",
-            text: "",
-            height: 24
-        });
-    },
-
-    _init: function () {
-        BI.SignInitialEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.editor",
-            height: o.height,
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
-            value: o.value,
-            validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker,
-            allowBlank: o.allowBlank,
-            watermark: o.watermark,
-            errorText: o.errorText
-        });
-        this.text = BI.createWidget({
-            type: "bi.text_button",
-            cls: "sign-editor-text",
-            title: o.title,
-            warningTitle: o.warningTitle,
-            tipType: o.tipType,
-            textAlign: "left",
-            height: o.height,
-            hgap: 4,
-            handler: function () {
-                self._showInput();
-                self.editor.focus();
-                self.editor.selectAll();
-            }
-        });
-        this.text.on(BI.TextButton.EVENT_CHANGE, function () {
-            BI.nextTick(function () {
-                self.fireEvent(BI.SignInitialEditor.EVENT_CLICK_LABEL);
-            });
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.text,
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }]
-        });
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_FOCUS, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_BLUR, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_BLUR, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_CLICK, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_CLICK, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_CHANGE, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_KEY_DOWN, function (v) {
-            self.fireEvent(BI.SignInitialEditor.EVENT_KEY_DOWN, arguments);
-        });
-
-        this.editor.on(BI.Editor.EVENT_VALID, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_VALID, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
-            self._showHint();
-            self._checkText();
-            self.fireEvent(BI.SignInitialEditor.EVENT_CONFIRM, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_START, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_START, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_PAUSE, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_STOP, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_STOP, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_SPACE, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_SPACE, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_ERROR, function () {
-            self._checkText();
-            self.fireEvent(BI.SignInitialEditor.EVENT_ERROR, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_ENTER, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_ENTER, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_RESTRICT, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_RESTRICT, arguments);
-        });
-        this.editor.on(BI.Editor.EVENT_EMPTY, function () {
-            self.fireEvent(BI.SignInitialEditor.EVENT_EMPTY, arguments);
-        });
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
-            items: [this.editor]
-        });
-        this._showHint();
-        self._checkText();
-    },
-
-    _checkText: function () {
-        var o = this.options;
-        BI.nextTick(BI.bind(function () {
-            if (this.editor.getValue() === "") {
-                this.text.setValue(o.watermark || "");
-                this.text.element.addClass("bi-water-mark");
-            } else {
-                var v = this.editor.getValue();
-                v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
-                this.text.setValue(v);
-                this.text.element.removeClass("bi-water-mark");
-            }
-        }, this));
-    },
-
-    _showInput: function () {
-        this.editor.visible();
-        this.text.invisible();
-    },
-
-    _showHint: function () {
-        this.editor.invisible();
-        this.text.visible();
-    },
-
-    setTitle: function (title) {
-        this.text.setTitle(title);
-    },
-
-    setWarningTitle: function (title) {
-        this.text.setWarningTitle(title);
-    },
-
-    focus: function () {
-        this._showInput();
-        this.editor.focus();
-    },
-
-    blur: function () {
-        this.editor.blur();
-        this._showHint();
-        this._checkText();
-    },
-
-    doRedMark: function () {
-        if (this.editor.getValue() === "" && BI.isKey(this.options.watermark)) {
-            return;
-        }
-        this.text.doRedMark.apply(this.text, arguments);
-    },
-
-    unRedMark: function () {
-        this.text.unRedMark.apply(this.text, arguments);
-    },
-
-    doHighLight: function () {
-        if (this.editor.getValue() === "" && BI.isKey(this.options.watermark)) {
-            return;
-        }
-        this.text.doHighLight.apply(this.text, arguments);
-    },
-
-    unHighLight: function () {
-        this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    isValid: function () {
-        return this.editor.isValid();
-    },
-
-    setErrorText: function (text) {
-        this.editor.setErrorText(text);
-    },
-
-    getErrorText: function () {
-        return this.editor.getErrorText();
-    },
-
-    isEditing: function () {
-        return this.editor.isEditing();
-    },
-
-    getLastValidValue: function () {
-        return this.editor.getLastValidValue();
-    },
-
-    setValue: function (v) {
-        var o = this.options;
-        this.editor.setValue(v.value);
-        o.text = v.text || o.text;
-        this._checkText();
-    },
-
-    getValue: function () {
-        return {
-            value: this.editor.getValue(),
-            text: this.options.text
-        };
-    },
-
-    getState: function () {
-        return this.text.getValue();
-    },
-
-    setState: function (v) {
-        var o = this.options;
-        this._showHint();
-        v = (BI.isEmpty(v) || v == o.text) ? o.text : v + "(" + o.text + ")";
-        this.text.setValue(v);
-    }
-});
-BI.SignInitialEditor.EVENT_CHANGE = "EVENT_CHANGE";
-BI.SignInitialEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.SignInitialEditor.EVENT_BLUR = "EVENT_BLUR";
-BI.SignInitialEditor.EVENT_CLICK = "EVENT_CLICK";
-BI.SignInitialEditor.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
-BI.SignInitialEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
-
-BI.SignInitialEditor.EVENT_START = "EVENT_START";
-BI.SignInitialEditor.EVENT_PAUSE = "EVENT_PAUSE";
-BI.SignInitialEditor.EVENT_STOP = "EVENT_STOP";
-BI.SignInitialEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.SignInitialEditor.EVENT_VALID = "EVENT_VALID";
-BI.SignInitialEditor.EVENT_ERROR = "EVENT_ERROR";
-BI.SignInitialEditor.EVENT_ENTER = "EVENT_ENTER";
-BI.SignInitialEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.SignInitialEditor.EVENT_SPACE = "EVENT_SPACE";
-BI.SignInitialEditor.EVENT_EMPTY = "EVENT_EMPTY";
-
-BI.shortcut("bi.sign_initial_editor", BI.SignInitialEditor);/**
+BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
+/**
  * 带标记的文本框
  * Created by GUY on 2015/8/28.
  * @class BI.SignEditor
@@ -8045,6 +6331,16 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 self._showInput();
                 self.editor.focus();
                 self.editor.setValue("");
+            },
+            title: BI.isNotNull(o.tipText) ? o.tipText : function () {
+                var title = "";
+                if (BI.isString(self.stateValue)) {
+                    title = self.stateValue;
+                }
+                if (BI.isArray(self.stateValue) && self.stateValue.length === 1) {
+                    title = self.stateValue[0];
+                }
+                return title;
             }
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
@@ -8204,32 +6500,23 @@ BI.StateEditor = BI.inherit(BI.Widget, {
     setState: function (v) {
         var o = this.options;
         BI.StateEditor.superclass.setValue.apply(this, arguments);
+        this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(o.text);
-                this.text.setTitle("");
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
         }
         if (BI.isString(v)) {
-            // if (BI.isEmpty(v)) {
-            //     this.text.setText(o.text);
-            //     this.text.setTitle("");
-            //     this.text.element.addClass("state-editor-infinite-text");
-            // } else {
             this.text.setText(v);
-            this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
-            // }
             return;
         }
         if (BI.isArray(v)) {
@@ -8238,11 +6525,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.element.addClass("state-editor-infinite-text");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
-                this.text.setTitle(v[0]);
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.setTitle("");
                 this.text.element.removeClass("state-editor-infinite-text");
             }
         }
@@ -8559,7 +6844,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
 
         this.buttongroup = BI.createWidget({
             type: "bi.button_group",
-            cls: "list-view-toolbar bi-high-light bi-border-top",
+            cls: "list-view-toolbar bi-high-light bi-split-top",
             height: 24,
             items: BI.createItems(text, {
                 type: "bi.text_button",
@@ -8620,7 +6905,7 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
         });
         return BI.createWidget({
             type: "bi.htape",
-            cls: "popup-panel-title bi-background bi-border",
+            cls: "popup-panel-title bi-header-background",
             height: 25,
             items: [{
                 el: {
@@ -8875,7 +7160,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.left_right_vertical_adapt",
-                cls: "panel-title bi-border-bottom",
+                cls: "panel-title bi-header-background bi-border-bottom",
                 height: 29,
                 items: {
                     left: [this.text],
@@ -8894,7 +7179,8 @@ BI.Panel = BI.inherit(BI.Widget, {
 });
 BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
 
-BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.panel", BI.Panel);
+BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 
     props: {
         extraCls: "bi-line-segment-button bi-list-item-effect",
@@ -8950,7 +7236,7 @@ BI.shortcut("bi.panel", BI.Panel);BI.LinearSegmentButton = BI.inherit(BI.BasicBu
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-border-bottom",
+        baseCls: "bi-linear-segment bi-split-bottom",
         items: [],
         height: 29
     },
@@ -9017,7 +7303,8 @@ BI.SelectList = BI.inherit(BI.Widget, {
             hasNext: BI.emptyFn,
             onLoaded: BI.emptyFn,
             toolbar: {
-                type: "bi.multi_select_bar"
+                type: "bi.multi_select_bar",
+                iconWrapperWidth: 36
             },
             el: {
                 type: "bi.list_pane"
@@ -10419,1670 +8706,6 @@ BI.DetailPager = BI.inherit(BI.Widget, {
 BI.DetailPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);/**
- *
- * Created by GUY on 2017/09/18.
- * @class BI.TextToolbar
- * @extends BI.Widget
- */
-BI.RichEditorAction = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAction.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "",
-            used: true
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAction.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        o.editor.on(BI.NicEditor.EVENT_SELECTED, function (e) {
-            if (o.used === true) {
-                self.setEnable(true);
-                self.checkNodes(e.target);
-                self.key(e);
-            }
-        });
-        // o.editor.on(BI.NicEditor.EVENT_BLUR, function () {
-        //     self.setEnable(false);
-        // });
-        // o.editor.on(BI.NicEditor.EVENT_KEYDOWN, BI.bind(this.keydown, this));
-        // if (o.used === false) {
-        //     this.setEnable(false);
-        // }
-    },
-
-    checkNodes: function (e) {
-        if (!e) {
-            return false;
-        }
-        var elm = e;
-        do {
-            if (this.options.tags && this.options.tags.contains(elm.nodeName)) {
-                this.activate();
-                return true;
-            }
-        } while (elm = elm.parentNode && elm.className && elm.className.indexOf("bi-nic-editor") >= -1);
-        elm = e;
-        while (elm.nodeType == 3) {
-            elm = elm.parentNode;
-        }
-        if (this.options.css) {
-            for (var itm in this.options.css) {
-                if (this.options.css[itm] == null) {
-                    this.activate($(elm).css(itm));
-                    return true;
-                }
-                if ($(elm).css(itm) == this.options.css[itm]) {
-                    this.activate();
-                    return true;
-                }
-            }
-        }
-        this.deactivate();
-        return false;
-    },
-
-    start: function () {
-
-    },
-
-    key: function () {
-
-    },
-
-    keydown: function () {
-    },
-
-    hideIf: function (e) {
-
-    },
-
-    activate: function () {
-    },
-
-    deactivate: function () {
-    },
-
-    doCommand: function (args) {
-        // 执行命令前先恢复选区
-        this.options.editor.instance.restoreRng();
-
-        if (this.options.command) {
-            this.options.editor.nicCommand(this.options.command, args);
-        }
-    }
-});/**
- *
- * Created by GUY on 2017/09/18.
- * @class BI.RichEditorParamAction
- * @extends BI.Widget
- */
-BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {
-            paramFormatter: function (v) {
-                return v;
-            }
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorParamAction.superclass._init.apply(this, arguments);
-    },
-
-    // _createBlankNode: function () {
-    //     return $("<span>").html("&nbsp;");
-    // },
-
-    // _addBlank: function ($param) {
-    //     var o = this.options;
-    //     var instance = o.editor.selectedInstance;
-    //     var next = $param.next();
-    //     if (next.length === 0) {
-    //         var nextNode = this._createBlankNode();
-    //         $param.after(nextNode);
-    //         instance.setFocus(nextNode[0]);
-    //     } else {
-    //         instance.setFocus(next[0]);
-    //     }
-    // },
-    //
-    // _get$Sel: function () {
-    //     var o = this.options;
-    //     var instance = o.editor.selectedInstance;
-    //     var sel = $(instance.selElm());
-    //     return sel;
-    // },
-
-    addParam: function (param) {
-        var o = this.options;
-        var instance = o.editor.instance;
-        var image = new Image();
-        var name = o.paramFormatter(param);
-        var attrs = BI.DOM.getImage(name);
-        image.src = attrs.src;
-        image.alt = param;
-        $(image).addClass("rich-editor-param");
-        $(image).attr("style", attrs.style);
-        $(image).attr("name", name);
-        instance.insertHTML($("<div>").append(image).html());
-        // var sel = this._get$Sel();
-        // var wrapper = o.editor.instance.getElm().element;
-        // if (wrapper.find(sel).length <= 0) {
-        //     wrapper.append(image);
-        // } else {
-        //     sel.after(image);
-        // }
-        // this._addBlank($(image));
-    }
-});
-
-// /**
-//  *
-//  * Created by GUY on 2017/09/18.
-//  * @class BI.RichEditorParamAction
-//  * @extends BI.Widget
-//  */
-// BI.RichEditorParamAction = BI.inherit(BI.RichEditorAction, {
-//     _defaultConfig: function () {
-//         return BI.extend(BI.RichEditorParamAction.superclass._defaultConfig.apply(this, arguments), {});
-//     },
-//
-//     _init: function () {
-//         BI.RichEditorParamAction.superclass._init.apply(this, arguments);
-//     },
-//
-//     _isParam: function (sel) {
-//         return sel.attr("data-type") === "param";
-//     },
-//
-//     _createBlankNode: function () {
-//         return $("<span>").html("&nbsp;");
-//     },
-//
-//     _addBlank: function ($param) {
-//         var o = this.options;
-//         var instance = o.editor.selectedInstance;
-//         var next = $param.next();
-//         if (next.length === 0 || this._isParam(next)) {
-//             var preNode = this._createBlankNode();
-//             var nextNode = this._createBlankNode();
-//             $param.before(preNode);
-//             $param.after(nextNode);
-//             instance.setFocus(nextNode[0]);
-//         } else {
-//             instance.setFocus(next[0]);
-//         }
-//     },
-//
-//     _get$Sel: function () {
-//         var o = this.options;
-//         var instance = o.editor.selectedInstance;
-//         var sel = $(instance.selElm());
-//         if (sel[0].nodeType === 3 && this._isParam(sel.parent())) {
-//             sel = sel.parent();
-//         }
-//         return sel;
-//     },
-//
-//     addParam: function (param) {
-//         var o = this.options;
-//         var sel = this._get$Sel();
-//         var $param = $("<span>").attr({
-//             "data-type": "param",
-//             "data-value": param
-//         }).css({
-//             color: "white",
-//             backgroundColor: "#009de3",
-//             padding: "0 5px"
-//         }).text(param).keydown(function (e) {
-//             if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-//                 $param.destroy();
-//             }
-//             e.stopEvent();
-//             return false;
-//         });
-//         var wrapper = o.editor.instance.getElm().element;
-//         if (wrapper.find(sel).length <= 0) {
-//             wrapper.append($param);
-//         } else {
-//             sel.after($param);
-//         }
-//         this._addBlank($param);
-//     },
-//
-//     keydown: function (e) {
-//         var o = this.options;
-//         var sel = this._get$Sel();
-//         if (e.keyCode === 229) {// 中文输入法
-//             if (this._isParam(sel)) {
-//                 this._addBlank(sel);
-//                 e.stopEvent();
-//                 return false;
-//             }
-//         }
-//         if (BI.Key[e.keyCode] || e.keyCode === BI.KeyCode.TAB || e.keyCode === BI.KeyCode.ENTER || e.keyCode === BI.KeyCode.SPACE) {
-//             if (this._isParam(sel)) {
-//                 e.stopEvent();
-//                 return false;
-//             }
-//         }
-//         if (e.keyCode === BI.KeyCode.BACKSPACE || e.keyCode === BI.KeyCode.DELETE) {
-//             if (this._isParam(sel)) {
-//                 sel.destroy();
-//                 e.preventDefault();
-//                 return false;
-//             }
-//         }
-//     },
-//
-//     key: function (e) {
-//     }
-// });
-
-/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorTextToolbar
- * @extends BI.Widget
- */
-BI.RichEditorTextToolbar = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorTextToolbar.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-text-toolbar",
-            buttons: [
-                {type: "bi.rich_editor_font_chooser"},
-                {type: "bi.rich_editor_size_chooser"},
-                {type: "bi.rich_editor_bold_button"},
-                {type: "bi.rich_editor_italic_button"},
-                {type: "bi.rich_editor_underline_button"},
-                {type: "bi.rich_editor_color_chooser"},
-                {type: "bi.rich_editor_background_color_chooser"},
-                {type: "bi.rich_editor_align_left_button"},
-                {type: "bi.rich_editor_align_center_button"},
-                {type: "bi.rich_editor_align_right_button"},
-                {type: "bi.rich_editor_param_button"}
-            ],
-            height: 34
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorTextToolbar.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var buttons = BI.createWidgets(BI.map(o.buttons, function (i, btn) {
-            return BI.extend(btn, {
-                editor: o.editor
-            });
-        }));
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: buttons,
-            hgap: 3,
-            vgap: 6
-        });
-    },
-
-    mounted: function () {
-        var self = this;
-        if (BI.isIE9Below()) {// IE8下必须要设置unselectable才能不blur输入框
-            this.element.mousedown(function () {
-                self._noSelect(self.element[0]);
-            });
-            this._noSelect(this.element[0]);
-        }
-    },
-
-    _noSelect: function (element) {
-        if (element.setAttribute && element.nodeName.toLowerCase() != "input" && element.nodeName.toLowerCase() != "textarea") {
-            element.setAttribute("unselectable", "on");
-        }
-        for (var i = 0; i < element.childNodes.length; i++) {
-            this._noSelect(element.childNodes[i]);
-        }
-    }
-});
-BI.shortcut("bi.rich_editor_text_toolbar", BI.RichEditorTextToolbar);/**
- * 富文本编辑器
- *
- * Created by GUY on 2017/9/15.
- * @class BI.NicEditor
- * @extends BI.Widget
- */
-!(function () {
-    function isIE11Below () {
-        if (!BI.isIE()) {
-            return false;
-        }
-        return BI.getIEVersion() < 11;
-    }
-    BI.NicEditor = BI.inherit(BI.Widget, {
-        _defaultConfig: function () {
-            return BI.extend(BI.NicEditor.superclass._defaultConfig.apply(this, arguments), {
-                baseCls: "bi-nic-editor"
-            });
-        },
-        _init: function () {
-            BI.NicEditor.superclass._init.apply(this, arguments);
-            var o = this.options;
-            $(document).bind("mousedown." + this.getName(), BI.bind(this.selectCheck, this));
-            BI.createWidget({
-                type: "bi.vertical",
-                element: this,
-                items: [this.instance = this.addInstance()]
-            });
-        },
-
-        addInstance: function () {
-            var o = this.options;
-            var conf = {
-                ne: this,
-                height: o.height,
-                maxHeight: o.maxHeight ? o.maxHeight : null,
-                readOnly: o.readOnly
-            };
-            if (this.element[0].contentEditable || !!window.opera) {
-                var newInstance = new nicEditorInstance(conf);
-            } else {
-                console.error("不支持此浏览器");
-            }
-            return newInstance;
-        },
-
-        insertElem: function ($elem) {
-            if (this.selectedInstance) {
-                this.selectedInstance.insertElem($elem);
-            }
-        },
-
-        insertHTML: function (html) {
-            if (this.selectedInstance) {
-                this.selectedInstance.insertHTML(html);
-            }
-        },
-
-        nicCommand: function (cmd, args) {
-            if (this.selectedInstance) {
-                this.selectedInstance.nicCommand(cmd, args);
-            }
-        },
-
-        selectCheck: function (e) {
-            var t = e.target;
-            var self = this;
-            var found = false;
-            do {
-                if (t.nodeName !== "svg" && t.className && t.className.indexOf && t.className.indexOf(prefix) != -1) {
-                    return;
-                    // return false;
-                }
-                if (this.instance.checkToolbar(t)) {
-                    this.instance.saveRng();
-                    // 如果是点击在toolbar内恢复选取(IE中出现的问题)
-                    BI.defer(function () {
-                        self.instance.restoreRng();
-                    });
-                    return;
-                }
-            } while (t = t.parentNode);
-            this.fireEvent("blur", t);
-            this.lastSelectedInstance = this.selectedInstance || this.lastSelectedInstance;
-            this.selectedInstance = null;
-            // return false;
-        },
-
-        focus: function () {
-            this.instance.focus();
-        },
-
-        bindToolbar: function (toolbar) {
-            this.instance.bindToolbar(toolbar);
-        },
-
-        setValue: function (v) {
-            v = v || ( isIE11Below() ? "" : "<br>");
-            v = v.startWith("<p") ? v : "<p>" + v + "</p>";
-            this.instance.setContent(v);
-        },
-
-        getValue: function () {
-            return this.instance.getContent();
-        },
-
-        getContentHeight: function () {
-            return this.instance.getContentHeight();
-        },
-
-        getInstance: function () {
-            return this.instance;
-        },
-
-        destroyed: function () {
-            $(document).unbind("mousedown." + this.getName());
-        }
-    });
-    BI.NicEditor.EVENT_SELECTED = "selected";
-    BI.NicEditor.EVENT_BLUR = "blur";
-    BI.NicEditor.EVENT_FOCUS = "focus";
-    BI.NicEditor.EVENT_KEYDOWN = "keydown";
-    BI.NicEditor.EVENT_KEYUP = "keyup";
-    BI.shortcut("bi.nic_editor", BI.NicEditor);
-
-    var prefix = "niceditor-";
-
-    var nicEditorInstance = BI.inherit(BI.Layout, {
-        isSelected: false,
-        _init: function () {
-            nicEditorInstance.superclass._init.apply(this, arguments);
-            var o = this.options;
-            var initValue = o.value || "<br>";
-            initValue = initValue.startWith("<p>") ? initValue : "<p>" + initValue + "</p>";
-            this.ne = this.options.ne;
-            this.elm = BI.createWidget({
-                type: "bi.layout",
-                width: o.width - 8,
-                scrollable: false
-            });
-            this.elm.element.css({
-                minHeight: BI.isNumber(o.height) ? (o.height - 8) + "px" : o.height,
-                outline: "none",
-                padding: "0 10px",
-                wordWrap: "break-word"
-            }).html(initValue);
-
-            if(o.readOnly) {
-                this.elm.element.attr("contentEditable", false);
-                this.elm.element.css("word-break", "break-all");
-            }
-
-            this.element.css("maxHeight", (o.maxHeight) ? o.maxHeight + "px" : null);
-
-            this.e = BI.createWidget({
-                type: "bi.layout",
-                invisible: true,
-                tagName: "textarea"
-            });
-            BI.createWidget({
-                type: "bi.default",
-                element: this,
-                scrolly: true,
-                items: [this.elm, this.e]
-            });
-
-            this.ne.on("blur", BI.bind(this.blur, this));
-
-            this.start();
-            this.blur();
-        },
-
-        start: function () {
-            this.elm.element.attr("contentEditable", this.options.readOnly !== true);
-            if (this.getContent() == "") {
-                // this.setContent("<br />");
-            }
-            this.instanceDoc = document.defaultView;
-            this.elm.element.on("mousedown", BI.bind(this.selected, this));
-            this.elm.element.on("keydown", BI.bind(this.keyDown, this));
-            this.elm.element.on("focus", BI.bind(this.selected, this));
-            this.elm.element.on("blur", BI.bind(this.blur, this));
-            this.elm.element.on("keyup", BI.bind(this.selected, this));
-            this.ne.fireEvent("add");
-        },
-
-        getSel: function () {
-            return (window.getSelection) ? window.getSelection() : document.selection;
-        },
-
-        getRng: function () {
-            var s = this.getSel();
-            if (!s || s.rangeCount === 0) {
-                return;
-            }
-            return (s.rangeCount > 0) ? s.getRangeAt(0) : s.createRange();
-        },
-
-        selRng: function (rng, s) {
-            if (window.getSelection) {
-                s.removeAllRanges();
-                s.addRange(rng);
-            } else {
-                rng.select();
-            }
-        },
-
-        selElm: function () {
-            var r = this.getRng();
-            if (!r) {
-                return;
-            }
-            if (r.startContainer) {
-                var contain = r.startContainer;
-                if (r.cloneContents().childNodes.length == 1) {
-                    for (var i = 0; i < contain.childNodes.length; i++) {
-                        var rng = contain.childNodes[i].ownerDocument.createRange();
-                        rng.selectNode(contain.childNodes[i]);
-                        if (r.compareBoundaryPoints(Range.START_TO_START, rng) != 1 &&
-                            r.compareBoundaryPoints(Range.END_TO_END, rng) != -1) {
-                            return contain.childNodes[i];
-                        }
-                    }
-                }
-                return contain;
-            }
-            return (this.getSel().type == "Control") ? r.item(0) : r.parentElement();
-
-        },
-
-        saveRng: function () {
-            var range = this.getRng();
-            if (!this._isChildOf(this.getSelectionContainerElem(range), this.element[0])) {
-                return;
-            }
-            this.savedRange = range;
-            this.savedSel = this.getSel();
-        },
-
-        getSelectionContainerElem: function (range) {
-            if (range) {
-                var elem = range.commonAncestorContainer;
-                return elem.nodeType === 1 ? elem : elem.parentNode;
-            }
-        },
-
-        setFocus: function (el) {
-            try {
-                el.focus();
-            } catch (e) {
-
-            }
-            if (!window.getSelection) {
-                var rng;
-                try {
-                    el.focus();
-                } catch (e) {
-
-                }
-                rng = document.selection.createRange();
-                rng.moveStart("character", -el.innerText.length);
-                var text = rng.text;
-                for (var i = 0; i < el.innerText.length; i++) {
-                    if (el.innerText.substring(0, i + 1) == text.substring(text.length - i - 1, text.length)) {
-                        result = i + 1;
-                    }
-                }
-            } else {
-                var range = document.createRange();
-                range.selectNodeContents(el);
-                range.collapse(false);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        },
-
-        restoreRng: function () {
-            if (this.savedRange) {
-                this.selRng(this.savedRange, this.savedSel);
-            }
-        },
-
-        restoreRngAndClearRange: function () {
-            if (this.savedRange) {
-                this.savedRange.setStart(this.savedRange.endContainer, this.savedRange.endOffset);
-                this.selRng(this.savedRange, this.savedSel);
-            }
-        },
-
-        keyDown: function (e, t) {
-            if (e.keyCode === 8) {
-                var html = this.elm.element.html().toLowerCase().trim();
-                if (html === "<p><br></p>" || html === "<p></p>") {
-                    e.preventDefault()
-                    return;
-                }
-            }
-            this.ne.fireEvent("keydown", e);
-        },
-
-        selected: function (e) {
-            var t = e.target;
-            if (!t && !(t = this.selElm())) {
-                t = this.selElm();
-            }
-            if (!e.ctrlKey) {
-                var selInstance = this.ne.selectedInstance;
-                if (selInstance != this) {
-                    if (selInstance) {
-                        this.ne.fireEvent("blur", e);
-                    }
-                    this.ne.selectedInstance = this;
-                    this.ne.fireEvent("focus", e);
-                }
-                this.ne.fireEvent("selected", e);
-                this.isFocused = true;
-                this.elm.element.addClass(prefix + "selected");
-            }
-            this.ne.fireEvent("keyup", e);
-
-            if (e.keyCode !== 8) {
-                return;
-            }
-            var newLine;
-            var html = this.elm.element.html().toLowerCase().trim();
-            if (!html || html === '<br>') {
-                newLine = $(this._getNewLine());
-                this.elm.element.html('');
-                this.elm.element.append(newLine);
-                this.setFocus(newLine[0]);
-            }
-            // return false;
-        },
-
-        focus: function () {
-            this.setFocus(this.elm.element[0]);
-            this.nicCommand("selectAll");
-        },
-
-        blur: function () {
-            this.isFocused = false;
-            this.elm.element.removeClass(prefix + "selected");
-        },
-
-        saveContent: function () {
-            this.ne.fireEvent("save");
-            this.e.element.value(this.getContent());
-        },
-
-        getElm: function () {
-            return this.elm;
-        },
-
-        getContent: function () {
-            this.content = this.getElm().element.html();
-            this.ne.fireEvent("get");
-            return this.content;
-        },
-
-        getContentHeight: function () {
-            return this.elm.element.height();
-        },
-
-        setContent: function (e) {
-            this.content = e;
-            this.ne.fireEvent("set");
-            this.elm.element.html(this.content);
-        },
-
-        insertElem: function ($elem) {
-            var range = this.getRng();
-
-            if (range.insertNode) {
-                range.deleteContents();
-                range.insertNode($elem);
-            }
-        },
-
-        insertHTML: function (html) {
-            var range = this.savedRange || this.getRng();
-
-            try {
-                // w3c
-                if (document.queryCommandState("insertHTML")) {
-                    this.nicCommand("insertHTML", html);
-                } else {
-                    throw new Error("Does not support this command");
-                }
-            } catch(e) {
-                if (range.insertNode) {
-                    // IE
-                    range.deleteContents();
-                    range.insertNode($(html)[0]);
-                } else if (range.pasteHTML) {
-                    // IE <= 10
-                    range.pasteHTML(html);
-                }
-            }
-        },
-
-        bindToolbar: function (toolbar) {
-            this.toolbar = toolbar;
-        },
-
-        checkToolbar: function (element) {
-            return this.toolbar && this.toolbar.element[0] === element;
-        },
-
-        nicCommand: function (cmd, args) {
-            document.execCommand(cmd, false, args);
-        },
-
-        initSelection: function (newLine) {
-            var newLineHtml = this._getNewLine();
-            var el = this.elm.element;
-            var children = el.children();
-            if (!children.length) {
-                // 如果编辑器区域无内容，添加一个空行，重新设置选区
-                el.append(newLineHtml);
-                this.initSelection();
-                return;
-            }
-            
-            var last = children.last();
-
-            if (newLine) {
-                // 新增一个空行
-                var html = last.html().toLowerCase();
-                var nodeName = last.nodeName;
-                if ((html !== "<br>" && html !== "<br\/>") || nodeName !== "P") {
-                    // 最后一个元素不是空行，添加一个空行，重新设置选区
-                    el.append(newLineHtml);
-                    this.initSelection();
-                    return;
-                }
-            }
-
-            this.setFocus(last[0]);
-        },
-
-        _getNewLine: function () {
-            return isIE11Below() ? "<p></p>" : "<p><br></p>";
-        },
-
-        _isChildOf: function(child, parent) {
-            var parentNode;
-            if(child && parent) {
-                parentNode = child.parentNode;
-                while(parentNode) {
-                    if(parent === parentNode) {
-                        return true;
-                    }
-                    parentNode = parentNode.parentNode;
-                }
-            }
-            return false;
-        }
-    });
-}());
-/**
- * 颜色选择trigger
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBackgroundChooserTrigger
- * @extends BI.Widget
- */
-BI.RichEditorBackgroundChooserTrigger = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.RichEditorBackgroundChooserTrigger.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBackgroundChooserTrigger.superclass._init.apply(this, arguments);
-        this.font = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Background_Color"),
-            cls: "text-background-font"
-        });
-
-        // this.underline = BI.createWidget({
-        //     type: "bi.icon_button",
-        //     cls: "text-color-underline-font"
-        // });
-
-        // BI.createWidget({
-        //     type: "bi.absolute",
-        //     element: this,
-        //     items: [{
-        //         el: this.font,
-        //         top: 2,
-        //         left: 2
-        //     }, {
-        //         el: this.underline,
-        //         top: 7,
-        //         left: 2
-        //     }]
-        // });
-    },
-
-    setValue: function (color) {
-        this.font.element.css("color", color);
-    },
-
-    getValue: function () {
-        return this.font.element.css("color");
-    }
-});
-BI.shortcut("bi.rich_editor_background_color_chooser_trigger", BI.RichEditorBackgroundChooserTrigger);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignCenterButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignCenterButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignCenterButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifycenter"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignCenterButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Center"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-center-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_center_button", BI.RichEditorAlignCenterButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignLeftButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignLeftButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignLeftButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifyleft"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignLeftButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Left"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-left-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_left_button", BI.RichEditorAlignLeftButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorAlignRightButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorAlignRightButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorAlignRightButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "justifyright"
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorAlignRightButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.align = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            forceNotSelected: true,
-            title: BI.i18nText("BI-Word_Align_Right"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-align-right-font"
-        });
-        this.align.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_align_right_button", BI.RichEditorAlignRightButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBoldButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorBoldButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorBoldButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Bold",
-            tags: ["B", "STRONG"],
-            css: {fontWeight: "bold"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBoldButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.bold = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Bold"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-bold-font"
-        });
-        this.bold.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-
-    checkNodes: function (e) {
-        var self = this;
-        try {
-            BI.defer(function() {
-                if(document.queryCommandState("bold") ) {
-                    self.activate();
-                } else {
-                    self.deactivate();
-                }
-            });
-        } catch (error) {
-            BI.RichEditorBoldButton.superclass.checkNodes(e);
-        }
-    },
-
-    activate: function () {
-        this.bold.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.bold.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_bold_button", BI.RichEditorBoldButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorItalicButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorItalicButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorItalicButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Italic",
-            tags: ["EM", "I"],
-            css: {fontStyle: "italic"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorItalicButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.italic = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Italic"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-italic-font"
-        });
-        this.italic.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-
-    checkNodes: function (e) {
-        var self = this;
-        try {
-            BI.defer(function() {
-                if(document.queryCommandState("italic") ) {
-                    self.activate();
-                } else {
-                    self.deactivate();
-                }
-            });
-        } catch (error) {
-            BI.RichEditorBoldButton.superclass.checkNodes(e);
-        }
-    },
-
-    activate: function () {
-        this.italic.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.italic.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_italic_button", BI.RichEditorItalicButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorParamButton
- * @extends BI.RichEditorParamAction
- */
-BI.RichEditorParamButton = BI.inherit(BI.RichEditorParamAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorParamButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorParamButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.param = BI.createWidget({
-            type: "bi.button",
-            element: this,
-            level: "ignore",
-            minWidth: 0,
-            text: BI.i18nText("BI-Formula_Insert"),
-            height: 20,
-            width: 30
-        });
-        this.param.on(BI.Button.EVENT_CHANGE, function () {
-            self.addParam("参数");
-        });
-    },
-    activate: function () {
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_param_button", BI.RichEditorParamButton);/**
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorItalicButton
- * @extends BI.RichEditorAction
- */
-BI.RichEditorUnderlineButton = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorUnderlineButton.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "Underline",
-            tags: ["U"],
-            css: {textDecoration: "underline"}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorUnderlineButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.underline = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Underline"),
-            height: 20,
-            width: 20,
-            cls: "text-toolbar-button bi-list-item-active text-underline-font"
-        });
-        this.underline.on(BI.IconButton.EVENT_CHANGE, function () {
-            self.doCommand();
-        });
-    },
-
-    checkNodes: function (e) {
-        var self = this;
-        try {
-            BI.defer(function() {
-                if(document.queryCommandState("underline") ) {
-                    self.activate();
-                } else {
-                    self.deactivate();
-                }
-            });
-        } catch (error) {
-            BI.RichEditorBoldButton.superclass.checkNodes(e);
-        }
-    },
-
-    activate: function () {
-        this.underline.setSelected(true);
-    },
-
-    deactivate: function () {
-        this.underline.setSelected(false);
-    }
-});
-BI.shortcut("bi.rich_editor_underline_button", BI.RichEditorUnderlineButton);/**
- * 颜色选择trigger
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorColorChooserTrigger
- * @extends BI.Widget
- */
-BI.RichEditorColorChooserTrigger = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.RichEditorColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorColorChooserTrigger.superclass._init.apply(this, arguments);
-        this.font = BI.createWidget({
-            type: "bi.icon_button",
-            element: this,
-            title: BI.i18nText("BI-Basic_Font_Color"),
-            cls: "text-color-font"
-        });
-
-        // this.underline = BI.createWidget({
-        //     type: "bi.icon_button",
-        //     cls: "text-color-underline-font"
-        // });
-
-        // BI.createWidget({
-        //     type: "bi.absolute",
-        //     element: this,
-        //     items: [{
-        //         el: this.font,
-        //         top: 2,
-        //         left: 2
-        //     }, {
-        //         el: this.underline,
-        //         top: 7,
-        //         left: 2
-        //     }]
-        // });
-    },
-
-    setValue: function (color) {
-        this.font.element.css("color", color);
-    },
-
-    getValue: function () {
-        return this.font.element.css("color");
-    }
-});
-BI.shortcut("bi.rich_editor_color_chooser_trigger", BI.RichEditorColorChooserTrigger);/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorBackgroundColorChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorBackgroundColorChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorBackgroundColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorBackgroundColorChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.colorchooser = BI.createWidget({
-            type: "bi.color_chooser",
-            container: null,
-            element: this,
-            width: o.width,
-            height: o.height,
-            el: {
-                type: "bi.rich_editor_background_color_chooser_trigger",
-                title: BI.i18nText("BI-Widget_Background_Colour"),
-                cls: "text-toolbar-button"
-            }
-        });
-        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
-            var backgroundColor = this.getValue();
-            self.fireEvent("EVENT_CHANGE", backgroundColor);
-        });
-    },
-
-    hideIf: function (e) {
-        if(!this.colorchooser.element.find(e.target).length > 0) {
-            this.colorchooser.hideView();
-        }
-    },
-
-    deactivate: function () {
-    }
-});
-BI.shortcut("bi.rich_editor_background_color_chooser", BI.RichEditorBackgroundColorChooser);/**
- * 颜色选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorColorChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorColorChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            width: 20,
-            height: 20,
-            command: "foreColor",
-            css: {color: null}
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorColorChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.colorchooser = BI.createWidget({
-            type: "bi.color_chooser",
-            container: null,
-            element: this,
-            width: o.width,
-            height: o.height,
-            el: {
-                type: "bi.rich_editor_color_chooser_trigger",
-                title: BI.i18nText("BI-Font_Colour"),
-                cls: "text-toolbar-button"
-            }
-        });
-        this.colorchooser.on(BI.ColorChooser.EVENT_CHANGE, function () {
-            var value = this.getValue();
-            // 用span代替font
-            if(BI.isIE() && BI.getIEVersion() < 11) {
-                self.doCommand(this.getValue());
-            } else {
-                document.execCommand('styleWithCSS', null, true);
-                self.doCommand(this.getValue() || "inherit");
-                document.execCommand('styleWithCSS', null, false);
-            }
-        });
-
-    },
-
-    hideIf: function (e) {
-        if (!this.colorchooser.element.find(e.target).length > 0) {
-            this.colorchooser.hideView();
-        }
-    },
-
-    activate: function (rgb) {
-        this.colorchooser.setValue(BI.DOM.rgb2hex(rgb));
-    },
-
-    deactivate: function () {
-        this.colorchooser.setValue("");
-    }
-});
-BI.shortcut("bi.rich_editor_color_chooser", BI.RichEditorColorChooser);BI.RichEditorFontChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditorFontChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-rich-editor-font-chooser bi-border bi-card",
-            command: "FontName",
-            width: 100,
-            height: 24
-        });
-    },
-
-    _init: function () {
-        BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.trigger = BI.createWidget({
-            type: "bi.text_trigger",
-            readonly: true,
-            height: o.height,
-            triggerWidth: 16,
-            text: BI.i18nText("BI-Font_Family")
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: null,
-            element: this,
-            el: this.trigger,
-            adjustLength: 1,
-            popup: {
-                minWidth: 70,
-                el: {
-                    type: "bi.button_group",
-                    items: BI.createItems([{
-                        value: "MicrosoftYaHei",
-                        text: BI.i18nText("BI-Microsoft_YaHei")
-                    }, {
-                        value: "PingFangSC-Light",
-                        text: BI.i18nText("BI-Apple_Light")
-                    }, {
-                        value: "ArialMT",
-                        text: "Arial"
-                    }, {
-                        value: "Verdana",
-                        text: "Verdana"
-                    }], {
-                        type: "bi.single_select_item"
-                    }),
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
-                }
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
-            var val = this.getValue()[0];
-            self.doCommand(val);
-            this.hideView();
-            this.setValue([]);
-        });
-    },
-
-    hideIf: function (e) {
-        if(!this.combo.element.find(e.target).length > 0) {
-            this.combo.hideView();
-        }
-    }
-});
-BI.shortcut("bi.rich_editor_font_chooser", BI.RichEditorFontChooser);/**
- * 字体大小选择
- *
- * Created by GUY on 2015/11/26.
- * @class BI.RichEditorSizeChooser
- * @extends BI.RichEditorAction
- */
-BI.RichEditorSizeChooser = BI.inherit(BI.RichEditorAction, {
-    _defaultConfig: function () {
-        return BI.extend(
-            BI.RichEditorSizeChooser.superclass._defaultConfig.apply(
-                this,
-                arguments
-            ),
-            {
-                baseCls: "bi-rich-editor-size-chooser bi-border bi-card",
-                command: "FontSize",
-                width: 50,
-                height: 24
-            }
-        );
-    },
-
-    _items: [
-        {
-            value: 12,
-            text: 12
-        },
-        {
-            value: 13,
-            text: 13
-        },
-        {
-            value: 14,
-            text: 14
-        },
-        {
-            value: 16,
-            text: 16
-        },
-        {
-            value: 18,
-            text: 18
-        },
-        {
-            value: 20,
-            text: 20
-        },
-        {
-            value: 22,
-            text: 22
-        },
-        {
-            value: 24,
-            text: 24
-        },
-        {
-            value: 26,
-            text: 26
-        },
-        {
-            value: 28,
-            text: 28
-        },
-        {
-            value: 30,
-            text: 30
-        },
-        {
-            value: 32,
-            text: 32
-        },
-        {
-            value: 34,
-            text: 34
-        },
-        {
-            value: 36,
-            text: 36
-        },
-        {
-            value: 38,
-            text: 38
-        },
-        {
-            value: 40,
-            text: 40
-        },
-        {
-            value: 64,
-            text: 64
-        },
-        {
-            value: 128,
-            text: 128
-        }
-    ],
-
-    _init: function () {
-        BI.RichEditorSizeChooser.superclass._init.apply(this, arguments);
-        var self = this,
-            o = this.options;
-        this.trigger = BI.createWidget({
-            type: "bi.text_trigger",
-            readonly: true,
-            height: o.height,
-            triggerWidth: 16,
-            text: BI.i18nText("BI-Font_Size")
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: null,
-            element: this,
-            el: this.trigger,
-            adjustLength: 1,
-            popup: {
-                maxWidth: 70,
-                minWidth: 70,
-                el: {
-                    type: "bi.button_group",
-                    items: BI.createItems(this._items, {
-                        type: "bi.single_select_item"
-                    }),
-                    layouts: [
-                        {
-                            type: "bi.vertical"
-                        }
-                    ]
-                }
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_CHANGE, function () {
-            var val = this.getValue()[0];
-            self.doAction(val);
-            this.hideView();
-            this.setValue([]);
-        });
-    },
-
-    hideIf: function (e) {
-        if (!this.combo.element.find(e.target).length > 0) {
-            this.combo.hideView();
-        }
-    },
-
-    doAction: function (fontSize) {
-        var editor = this.options.editor.instance;
-        var range = editor.getRng();
-        var commonSize = 7;
-        if (!range.collapsed) {
-            this.doCommand(commonSize);
-            BI.each(document.getElementsByTagName("font"), function (idx, el) {
-                if (
-                    BI.contains($(el).parents(), editor.element[0]) &&
-                    el["size"] == commonSize
-                ) {
-                    $(el)
-                        .removeAttr("size")
-                        .css("font-size", fontSize + "px");
-                }
-            });
-        }
-    }
-});
-BI.shortcut("bi.rich_editor_size_chooser", BI.RichEditorSizeChooser);
-/**
- * 富文本编辑器
- *
- * Created by GUY on 2017/9/15.
- * @class BI.RichEditor
- * @extends BI.Widget
- */
-BI.RichEditor = BI.inherit(BI.Widget, {
-
-    props: {
-        baseCls: "bi-rich-editor bi-textarea",
-        toolbar: {},
-        readOnly: false
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.RichEditor.superclass._defaultConfig.apply(this, arguments), {
-            adjustLength: 1,
-            adjustXOffset: 0,
-            adjustYOffset: 0
-        });
-    },
-
-    render: function () {
-        var self = this, o = this.options;
-        var editor = {
-            type: "bi.nic_editor",
-            width: o.width,
-            height: o.height,
-            readOnly: o.readOnly,
-            ref: function () {
-                self.editor = this;
-            },
-            listeners: [{
-                eventName: BI.NicEditor.EVENT_BLUR,
-                action: function () {
-                    self.fireEvent(BI.RichEditor.EVENT_CONFIRM);
-                }
-            }, {
-                eventName: BI.NicEditor.EVENT_FOCUS,
-                action: function () {
-                    if (!o.readOnly && !self.combo.isViewVisible()) {
-                        self.combo.showView();
-                    }
-                    self.fireEvent(BI.RichEditor.EVENT_FOCUS);
-                }
-            }]
-        };
-        if(o.readOnly) {
-            return editor;
-        }
-        this.editor = BI.createWidget(editor);
-        return {
-            type: "bi.combo",
-            container: o.container,
-            toggle: false,
-            trigger: "click",
-            direction: "top,right",
-            isNeedAdjustWidth: false,
-            isNeedAdjustHeight: false,
-            adjustLength: o.adjustLength,
-            adjustXOffset: o.adjustXOffset,
-            adjustYOffset: o.adjustYOffset,
-            ref: function () {
-                self.combo = this;
-            },
-            el: this.editor,
-            popup: {
-                el: BI.extend({
-                    type: "bi.rich_editor_text_toolbar",
-                    editor: this.editor,
-                    ref: function (_ref) {
-                        self.toolbar = _ref;
-                    }
-                }, o.toolbar),
-                height: 34,
-                stopPropagation: true,
-                stopEvent: true
-            },
-            listeners: [{
-                eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
-                action: function () {
-                    self.fireEvent(BI.RichEditor.EVENT_AFTER_HIDEVIEW);
-                }
-            }]
-        };
-    },
-
-    mounted: function () {
-        var o = this.options;
-        if(BI.isNull(o.value)) {
-            this.editor.setValue(o.value);
-        }
-        if(o.toolbar) {
-            this.editor.bindToolbar(this.toolbar);
-        }
-    },
-
-    focus: function () {
-        this.editor.focus();
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(v);
-    },
-
-    getValue: function () {
-        return this.editor.getValue();
-    },
-
-    getContentHeight: function () {
-        return this.editor.getContentHeight();
-    }
-});
-BI.RichEditor.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
-BI.RichEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.RichEditor.EVENT_FOCUS = "EVENT_FOCUS";
-BI.shortcut("bi.rich_editor", BI.RichEditor);/**
  * 分段控件使用的button
  *
  * Created by GUY on 2015/9/7.
@@ -12195,1652 +8818,6 @@ BI.Segment = BI.inherit(BI.Widget, {
 });
 BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);/**
- * 自适应宽度的表格
- *
- * Created by GUY on 2016/2/3.
- * @class BI.AdaptiveTable
- * @extends BI.Widget
- */
-BI.AdaptiveTable = BI.inherit(BI.Widget, {
-
-    _const: {
-        perColumnSize: 100
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.AdaptiveTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-adaptive-table",
-            el: {
-                type: "bi.resizable_table"
-            },
-            isNeedResize: true,
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
-
-            isNeedMerge: false, // 是否需要合并单元格
-            mergeCols: [], // 合并的单元格列号
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-
-            headerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            header: [],
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _init: function () {
-        BI.AdaptiveTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        var data = this._digest();
-        this.table = BI.createWidget(o.el, {
-            type: "bi.resizable_table",
-            element: this,
-            width: o.width,
-            height: o.height,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: false,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: data.freezeCols,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: data.columnSize,
-
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: data.regionColumnSize,
-
-            header: o.header,
-            items: o.items,
-            // 交叉表头
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            self._populate();
-            self.table.populate();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.columnSize = this.getColumnSize();
-            self._populate();
-            self.table.populate();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    _getFreezeColLength: function () {
-        var o = this.options;
-        return o.isNeedFreeze === true ? BI.clamp(o.freezeCols.length, 0, o.columnSize.length) : 0;
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var columnSize = o.columnSize.slice();
-        var regionColumnSize = o.regionColumnSize.slice();
-        var freezeCols = o.freezeCols.slice();
-        var regionSize = o.regionColumnSize[0];
-        var freezeColLength = this._getFreezeColLength();
-        if (!regionSize || regionSize > o.width - 10 || regionSize < 10) {
-            var rs = BI.sum(columnSize, function (i, size) {
-                if (i < freezeColLength) {
-                    return size;
-                }
-                return 0;
-            });
-            regionSize = BI.clamp(rs, 1 / 5 * o.width, 4 / 5 * o.width);
-        }
-        if (freezeColLength === 0) {
-            regionSize = 0;
-        }
-        if (freezeCols.length >= columnSize.length) {
-            freezeCols = [];
-        }
-        if (!BI.isNumber(columnSize[0])) {
-            columnSize = o.minColumnSize.slice();
-        }
-        var summaryFreezeColumnSize = 0, summaryColumnSize = 0;
-        BI.each(columnSize, function (i, size) {
-            if (i < freezeColLength) {
-                summaryFreezeColumnSize += size;
-            }
-            summaryColumnSize += size;
-        });
-        if (freezeColLength > 0) {
-            columnSize[freezeColLength - 1] = BI.clamp(regionSize - (summaryFreezeColumnSize - columnSize[freezeColLength - 1]),
-                o.minColumnSize[freezeColLength - 1] || 10, o.maxColumnSize[freezeColLength - 1] || Number.MAX_VALUE);
-        }
-        if (columnSize.length > 0) {
-            columnSize[columnSize.length - 1] = BI.clamp(o.width - BI.GridTableScrollbar.SIZE - regionSize - (summaryColumnSize - summaryFreezeColumnSize - columnSize[columnSize.length - 1]),
-                o.minColumnSize[columnSize.length - 1] || 10, o.maxColumnSize[columnSize.length - 1] || Number.MAX_VALUE);
-        }
-        regionColumnSize[0] = regionSize;
-
-        return {
-            freezeCols: freezeCols,
-            columnSize: columnSize,
-            regionColumnSize: regionColumnSize
-        };
-    },
-
-    _populate: function () {
-        var o = this.options;
-        var data = this._digest();
-        o.regionColumnSize = data.regionColumnSize;
-        o.columnSize = data.columnSize;
-        this.table.setColumnSize(data.columnSize);
-        this.table.setRegionColumnSize(data.regionColumnSize);
-        this.table.attr("freezeCols", data.freezeCols);
-    },
-
-    setWidth: function (width) {
-        BI.AdaptiveTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.AdaptiveTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    setRegionColumnSize: function (regionColumnSize) {
-        this.options.regionColumnSize = regionColumnSize;
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    attr: function (key, value) {
-        var v = BI.AdaptiveTable.superclass.attr.apply(this, arguments);
-        if (key === "freezeCols") {
-            return v;
-        }
-        return this.table.attr.apply(this.table, arguments);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    populate: function (items) {
-        var self = this, o = this.options;
-        this._populate();
-        this.table.populate.apply(this.table, arguments);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.AdaptiveTable.superclass.destroy.apply(this, arguments);
-    }
-});
-BI.shortcut("bi.adaptive_table", BI.AdaptiveTable);/**
- *
- * 层级树状结构的表格
- *
- * Created by GUY on 2016/8/12.
- * @class BI.DynamicSummaryLayerTreeTable
- * @extends BI.Widget
- */
-BI.DynamicSummaryLayerTreeTable = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DynamicSummaryLayerTreeTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-dynamic-summary-layer-tree-table",
-
-            el: {
-                type: "bi.resizable_table"
-            },
-            isNeedResize: true, // 是否需要调整列宽
-            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
-
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
-
-            isNeedMerge: true, // 是否需要合并单元格
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-            headerRowSize: 25,
-            footerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            // 行表头
-            rowHeaderCreator: null,
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            footer: false,
-            items: [],
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _getVDeep: function () {
-        return this.options.crossHeader.length;// 纵向深度
-    },
-
-    _getHDeep: function () {
-        var o = this.options;
-        return Math.max(o.mergeCols.length, o.freezeCols.length, BI.TableTree.maxDeep(o.items) - 1);
-    },
-
-    _createHeader: function (vDeep) {
-        var self = this, o = this.options;
-        var header = o.header || [], crossHeader = o.crossHeader || [];
-        var items = BI.TableTree.formatCrossItems(o.crossItems, vDeep, o.headerCellStyleGetter);
-        var result = [];
-        BI.each(items, function (row, node) {
-            var c = [crossHeader[row]];
-            result.push(c.concat(node || []));
-        });
-        var rowHeaderCreator = BI.isFunction(o.rowHeaderCreator) ? o.rowHeaderCreator() : o.rowHeaderCreator;
-        if (header && header.length > 0) {
-            var newHeader = this._formatColumns(header);
-            var deep = this._getHDeep();
-            if (deep <= 0) {
-                newHeader.unshift(rowHeaderCreator || {
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                });
-            } else {
-                newHeader[0] = rowHeaderCreator || {
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                };
-            }
-            result.push(newHeader);
-        }
-        return result;
-    },
-
-    _formatItems: function (nodes, header, deep) {
-        var self = this, o = this.options;
-        var result = [];
-
-        function track (node, layer) {
-            node.type || (node.type = "bi.layer_tree_table_cell");
-            node.layer = layer;
-            var next = [node];
-            next = next.concat(node.values || []);
-            if (next.length > 0) {
-                result.push(next);
-            }
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    track(child, layer + 1);
-                });
-            }
-        }
-
-        BI.each(nodes, function (i, node) {
-            BI.each(node.children, function (j, c) {
-                track(c, 0);
-            });
-            if (BI.isArray(node.values)) {
-                var next = [{
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Summary_Values"),
-                    styleGetter: function () {
-                        return o.summaryCellStyleGetter(true);
-                    }
-                }].concat(node.values);
-                result.push(next);
-            }
-        });
-        return BI.DynamicSummaryTreeTable.formatSummaryItems(result, header, o.crossItems, 1);
-    },
-
-    _formatColumns: function (columns, deep) {
-        if (BI.isNotEmptyArray(columns)) {
-            deep = deep || this._getHDeep();
-            return columns.slice(Math.max(0, deep - 1));
-        }
-        return columns;
-    },
-
-    _formatFreezeCols: function () {
-        if (this.options.freezeCols.length > 0) {
-            return [0];
-        }
-        return [];
-    },
-
-    _formatColumnSize: function (columnSize, deep) {
-        if (columnSize.length <= 0) {
-            return [];
-        }
-        var result = [0];
-        deep = deep || this._getHDeep();
-        BI.each(columnSize, function (i, size) {
-            if (i < deep) {
-                result[0] += size;
-                return;
-            }
-            result.push(size);
-        });
-        return result;
-    },
-
-    _recomputeColumnSize: function () {
-        var o = this.options;
-        o.regionColumnSize = this.table.getRegionColumnSize();
-        var columnSize = this.table.getColumnSize().slice();
-        if (o.freezeCols.length > 1) {
-            for (var i = 0; i < o.freezeCols.length - 1; i++) {
-                columnSize.splice(1, 0, 0);
-            }
-        }
-        o.columnSize = columnSize;
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = this._createHeader(vDeep);
-        var data = this._formatItems(o.items, header, deep);
-        var columnSize = o.columnSize.slice();
-        var minColumnSize = o.minColumnSize.slice();
-        var maxColumnSize = o.maxColumnSize.slice();
-        BI.removeAt(columnSize, data.deletedCols);
-        BI.removeAt(minColumnSize, data.deletedCols);
-        BI.removeAt(maxColumnSize, data.deletedCols);
-        return {
-            header: data.header,
-            items: data.items,
-            columnSize: this._formatColumnSize(columnSize, deep),
-            minColumnSize: this._formatColumns(minColumnSize, deep),
-            maxColumnSize: this._formatColumns(maxColumnSize, deep),
-            freezeCols: this._formatFreezeCols()
-        };
-    },
-
-    _init: function () {
-        BI.DynamicSummaryLayerTreeTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var data = this._digest();
-        this.table = BI.createWidget(o.el, {
-            type: "bi.resizable_table",
-            element: this,
-            width: o.width,
-            height: o.height,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: data.freezeCols,
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: [],
-            mergeRule: o.mergeRule,
-            columnSize: data.columnSize,
-            minColumnSize: data.minColumnSize,
-            maxColumnSize: data.maxColumnSize,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-            regionColumnSize: o.regionColumnSize,
-            header: data.header,
-            items: data.items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            self._recomputeColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            self._recomputeColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    setWidth: function (width) {
-        BI.DynamicSummaryLayerTreeTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.DynamicSummaryLayerTreeTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-    },
-
-    getColumnSize: function () {
-        return this.options.columnSize;
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.regionColumnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    attr: function (key, value) {
-        var self = this;
-        if (BI.isObject(key)) {
-            BI.each(key, function (k, v) {
-                self.attr(k, v);
-            });
-            return;
-        }
-        BI.DynamicSummaryLayerTreeTable.superclass.attr.apply(this, arguments);
-        switch (key) {
-            case "columnSize":
-            case "minColumnSize":
-            case "maxColumnSize":
-            case "freezeCols":
-            case "mergeCols":
-                return;
-        }
-        this.table.attr.apply(this.table, [key, value]);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        if (items) {
-            o.items = items;
-        }
-        if (header) {
-            o.header = header;
-        }
-        if (crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        var data = this._digest();
-        this.table.setColumnSize(data.columnSize);
-        this.table.attr("minColumnSize", data.minColumnSize);
-        this.table.attr("maxColumnSize", data.maxColumnSize);
-        this.table.attr("freezeCols", data.freezeCols);
-        this.table.populate(data.items, data.header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.DynamicSummaryLayerTreeTable.superclass.destroy.apply(this, arguments);
-    }
-});
-
-BI.shortcut("bi.dynamic_summary_layer_tree_table", BI.DynamicSummaryLayerTreeTable);/**
- *
- * 树状结构的表格
- *
- * Created by GUY on 2015/8/12.
- * @class BI.DynamicSummaryTreeTable
- * @extends BI.Widget
- */
-BI.DynamicSummaryTreeTable = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DynamicSummaryTreeTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-dynamic-summary-tree-table",
-            el: {
-                type: "bi.resizable_table"
-            },
-
-            isNeedResize: true, // 是否需要调整列宽
-            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
-
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
-
-            isNeedMerge: true, // 是否需要合并单元格
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-            headerRowSize: 25,
-            footerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            footer: false,
-            items: [],
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _getVDeep: function () {
-        return this.options.crossHeader.length;// 纵向深度
-    },
-
-    _getHDeep: function () {
-        var o = this.options;
-        return Math.max(o.mergeCols.length, o.freezeCols.length, BI.TableTree.maxDeep(o.items) - 1);
-    },
-
-    _init: function () {
-        BI.DynamicSummaryTreeTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var data = this._digest();
-        this.table = BI.createWidget(o.el, {
-            type: "bi.resizable_table",
-            element: this,
-            width: o.width,
-            height: o.height,
-
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            minColumnSize: o.minColumnSize,
-            maxColumnSize: o.maxColumnSize,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            header: data.header,
-            items: data.items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            var columnSize = this.getColumnSize();
-            var length = o.columnSize.length - columnSize.length;
-            o.columnSize = columnSize.slice();
-            o.columnSize  = o.columnSize.concat(BI.makeArray(length, 0));
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            var columnSize = this.getColumnSize();
-            var length = o.columnSize.length - columnSize.length;
-            o.columnSize = columnSize.slice();
-            o.columnSize  = o.columnSize.concat(BI.makeArray(length, 0));
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = BI.TableTree.formatHeader(o.header, o.crossHeader, o.crossItems, deep, vDeep, o.headerCellStyleGetter);
-        var items = BI.DynamicSummaryTreeTable.formatHorizontalItems(o.items, deep, false, o.summaryCellStyleGetter);
-        var data = BI.DynamicSummaryTreeTable.formatSummaryItems(items, header, o.crossItems, deep);
-        var columnSize = o.columnSize.slice();
-        var minColumnSize = o.minColumnSize.slice();
-        var maxColumnSize = o.maxColumnSize.slice();
-        BI.removeAt(columnSize, data.deletedCols);
-        BI.removeAt(minColumnSize, data.deletedCols);
-        BI.removeAt(maxColumnSize, data.deletedCols);
-        return {
-            header: data.header,
-            items: data.items,
-            columnSize: columnSize,
-            minColumnSize: minColumnSize,
-            maxColumnSize: maxColumnSize
-        };
-    },
-
-    setWidth: function (width) {
-        BI.DynamicSummaryTreeTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.DynamicSummaryTreeTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-    },
-
-    getColumnSize: function () {
-        return this.options.columnSize;
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.regionColumnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    attr: function (key) {
-        BI.DynamicSummaryTreeTable.superclass.attr.apply(this, arguments);
-        switch (key) {
-            case "minColumnSize":
-            case "maxColumnSize":
-                return;
-        }
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        if (items) {
-            o.items = items;
-        }
-        if (header) {
-            o.header = header;
-        }
-        if (crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        var data = this._digest();
-        this.table.setColumnSize(data.columnSize);
-        this.table.attr("minColumnSize", data.minColumnSize);
-        this.table.attr("maxColumnSize", data.maxColumnSize);
-        this.table.populate(data.items, data.header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.DynamicSummaryTreeTable.superclass.destroy.apply(this, arguments);
-    }
-});
-
-BI.extend(BI.DynamicSummaryTreeTable, {
-
-    formatHorizontalItems: function (nodes, deep, isCross, styleGetter) {
-        var result = [];
-
-        function track (store, node) {
-            var next;
-            if (BI.isArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    var next;
-                    if (store != -1) {
-                        next = store.slice();
-                        next.push(node);
-                    } else {
-                        next = [];
-                    }
-                    track(next, child);
-                });
-                if (store != -1) {
-                    next = store.slice();
-                    next.push(node);
-                } else {
-                    next = [];
-                }
-                if ((store == -1 || node.children.length > 1) && BI.isNotEmptyArray(node.values)) {
-                    var summary = {
-                        text: BI.i18nText("BI-Summary_Values"),
-                        type: "bi.table_style_cell",
-                        styleGetter: function () {
-                            return styleGetter(store === -1);
-                        }
-                    };
-                    for (var i = next.length; i < deep; i++) {
-                        next.push(summary);
-                    }
-                    if (!isCross) {
-                        next = next.concat(node.values);
-                    }
-                    if (next.length > 0) {
-                        if (!isCross) {
-                            result.push(next);
-                        } else {
-                            for (var k = 0, l = node.values.length; k < l; k++) {
-                                result.push(next);
-                            }
-                        }
-                    }
-                }
-                return;
-            }
-            if (store != -1) {
-                next = store.slice();
-                for (var i = next.length; i < deep; i++) {
-                    next.push(node);
-                }
-            } else {
-                next = [];
-            }
-            if (!isCross && BI.isArray(node.values)) {
-                next = next.concat(node.values);
-            }
-            if (isCross && BI.isArray(node.values)) {
-                for (var i = 0, len = node.values.length; i < len - 1; i++) {
-                    if (next.length > 0) {
-                        result.push(next);
-                    }
-                }
-            }
-            if (next.length > 0) {
-                result.push(next);
-            }
-        }
-
-        BI.each(nodes, function (i, node) {
-            track(-1, node);
-        });
-        // 填充空位
-        BI.each(result, function (i, line) {
-            var last = BI.last(line);
-            for (var j = line.length; j < deep; j++) {
-                line.push(last);
-            }
-        });
-        return result;
-    },
-
-    formatSummaryItems: function (items, header, crossItems, deep) {
-        // 求纵向需要去除的列
-        var cols = [];
-        var leaf = 0;
-
-        function track (node) {
-            if (BI.isArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    track(child);
-                });
-                if (BI.isNotEmptyArray(node.values)) {
-                    if (node.children.length === 1) {
-                        for (var i = 0; i < node.values.length; i++) {
-                            cols.push(leaf + i + deep);
-                        }
-                    }
-                    leaf += node.values.length;
-                }
-                return;
-            }
-            if (node.values && node.values.length > 1) {
-                leaf += node.values.length;
-            } else {
-                leaf++;
-            }
-        }
-
-        BI.each(crossItems, function (i, node) {
-            track(node);
-        });
-
-        if (cols.length > 0) {
-            var nHeader = [], nItems = [];
-            BI.each(header, function (i, node) {
-                var nNode = node.slice();
-                BI.removeAt(nNode, cols);
-                nHeader.push(nNode);
-            });
-            BI.each(items, function (i, node) {
-                var nNode = node.slice();
-                BI.removeAt(nNode, cols);
-                nItems.push(nNode);
-            });
-            header = nHeader;
-            items = nItems;
-        }
-        return {items: items, header: header, deletedCols: cols};
-    }
-});
-
-BI.shortcut("bi.dynamic_summary_tree_table", BI.DynamicSummaryTreeTable);/**
- * Created by GUY on 2016/5/7.
- * @class BI.LayerTreeTableCell
- * @extends BI.Single
- */
-BI.LayerTreeTableCell = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerTreeTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-layer-tree-table-cell",
-            layer: 0,
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.LayerTreeTableCell.superclass._init.apply(this, arguments);
-        var o = this.options;
-        BI.createWidget({
-            type: "bi.label",
-            element: this.element,
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            height: o.height,
-            text: o.text,
-            value: o.value,
-            lgap: 5 + 30 * o.layer,
-            rgap: 5
-        });
-    }
-});
-
-BI.shortcut("bi.layer_tree_table_cell", BI.LayerTreeTableCell);/**
- *
- * 层级树状结构的表格
- *
- * Created by GUY on 2016/5/7.
- * @class BI.LayerTreeTable
- * @extends BI.Widget
- */
-BI.LayerTreeTable = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.LayerTreeTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-layer-tree-table",
-            el: {
-                type: "bi.resizable_table"
-            },
-
-            isNeedResize: false, // 是否需要调整列宽
-            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
-
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
-
-            isNeedMerge: true, // 是否需要合并单元格
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-
-            headerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            rowHeaderCreator: null,
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            items: [],
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _getVDeep: function () {
-        return this.options.crossHeader.length;// 纵向深度
-    },
-
-    _getHDeep: function () {
-        var o = this.options;
-        return Math.max(o.mergeCols.length, o.freezeCols.length, BI.TableTree.maxDeep(o.items) - 1);
-    },
-
-    _createHeader: function (vDeep) {
-        var self = this, o = this.options;
-        var header = o.header || [], crossHeader = o.crossHeader || [];
-        var items = BI.TableTree.formatCrossItems(o.crossItems, vDeep, o.headerCellStyleGetter);
-        var result = [];
-        BI.each(items, function (row, node) {
-            var c = [crossHeader[row]];
-            result.push(c.concat(node || []));
-        });
-        if (header && header.length > 0) {
-            var newHeader = this._formatColumns(header);
-            var deep = this._getHDeep();
-            if (deep <= 0) {
-                newHeader.unshift(o.rowHeaderCreator || {
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                });
-            } else {
-                newHeader[0] = o.rowHeaderCreator || {
-                    type: "bi.table_style_cell",
-                    text: BI.i18nText("BI-Row_Header"),
-                    styleGetter: o.headerCellStyleGetter
-                };
-            }
-            result.push(newHeader);
-        }
-        return result;
-    },
-
-    _formatItems: function (nodes) {
-        var self = this, o = this.options;
-        var result = [];
-
-        function track (node, layer) {
-            node.type || (node.type = "bi.layer_tree_table_cell");
-            node.layer = layer;
-            var next = [node];
-            next = next.concat(node.values || []);
-            if (next.length > 0) {
-                result.push(next);
-            }
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    track(child, layer + 1);
-                });
-            }
-        }
-
-        BI.each(nodes, function (i, node) {
-            BI.each(node.children, function (j, c) {
-                track(c, 0);
-            });
-            if (BI.isArray(node.values)) {
-                var next = [{
-                    type: "bi.table_style_cell", text: BI.i18nText("BI-Summary_Values"), styleGetter: function () {
-                        return o.summaryCellStyleGetter(true);
-                    }
-                }].concat(node.values);
-                result.push(next);
-            }
-        });
-        return result;
-    },
-
-    _formatColumns: function (columns, deep) {
-        if (BI.isNotEmptyArray(columns)) {
-            deep = deep || this._getHDeep();
-            return columns.slice(Math.max(0, deep - 1));
-        }
-        return columns;
-    },
-
-    _formatFreezeCols: function () {
-        if (this.options.freezeCols.length > 0) {
-            return [0];
-        }
-        return [];
-    },
-
-    _formatColumnSize: function (columnSize, deep) {
-        if (columnSize.length <= 0) {
-            return [];
-        }
-        var result = [0];
-        deep = deep || this._getHDeep();
-        BI.each(columnSize, function (i, size) {
-            if (i < deep) {
-                result[0] += size;
-                return;
-            }
-            result.push(size);
-        });
-        return result;
-    },
-
-    _digest: function () {
-        var o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        return {
-            header: this._createHeader(vDeep),
-            items: this._formatItems(o.items),
-            columnSize: this._formatColumnSize(o.columnSize, deep),
-            minColumnSize: this._formatColumns(o.minColumnSize, deep),
-            maxColumnSize: this._formatColumns(o.maxColumnSize, deep),
-            freezeCols: this._formatFreezeCols()
-        };
-    },
-
-    _init: function () {
-        BI.LayerTreeTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        var data = this._digest();
-        this.table = BI.createWidget(o.el, {
-            type: "bi.resizable_table",
-            element: this,
-            width: o.width,
-            height: o.height,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: data.freezeCols,
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: [],
-            mergeRule: o.mergeRule,
-            columnSize: data.columnSize,
-            minColumnSize: data.minColumnSize,
-            maxColumnSize: data.maxColumnSize,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-            regionColumnSize: o.regionColumnSize,
-            header: data.header,
-            items: data.items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    setWidth: function (width) {
-        BI.LayerTreeTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.LayerTreeTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-    },
-
-    getColumnSize: function () {
-        var columnSize = this.table.getColumnSize();
-        var deep = this._getHDeep();
-        var pre = [];
-        if (deep > 0) {
-            pre = BI.makeArray(deep, columnSize[0] / deep);
-        }
-        return pre.concat(columnSize.slice(1));
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.regionColumnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    attr: function (key, value) {
-        var self = this;
-        if (BI.isObject(key)) {
-            BI.each(key, function (k, v) {
-                self.attr(k, v);
-            });
-            return;
-        }
-        BI.LayerTreeTable.superclass.attr.apply(this, arguments);
-        switch (key) {
-            case "columnSize":
-            case "minColumnSize":
-            case "maxColumnSize":
-            case "freezeCols":
-            case "mergeCols":
-                return;
-        }
-        this.table.attr.apply(this.table, [key, value]);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        o.items = items || [];
-        if (header) {
-            o.header = header;
-        }
-        if (crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        var data = this._digest();
-        this.table.setColumnSize(data.columnSize);
-        this.table.attr("freezeCols", data.freezeCols);
-        this.table.attr("minColumnSize", data.minColumnSize);
-        this.table.attr("maxColumnSize", data.maxColumnSize);
-        this.table.populate(data.items, data.header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.LayerTreeTable.superclass.destroy.apply(this, arguments);
-    }
-});
-
-BI.shortcut("bi.layer_tree_table", BI.LayerTreeTable);/**
- *
- * Created by GUY on 2016/5/26.
- * @class BI.TableStyleCell
- * @extends BI.Single
- */
-BI.TableStyleCell = BI.inherit(BI.Single, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.TableStyleCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-table-style-cell",
-            styleGetter: BI.emptyFn
-        });
-    },
-
-    _init: function () {
-        BI.TableStyleCell.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.text = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            height: o.height,
-            textAlign: "left",
-            forceCenter: true,
-            hgap: 5,
-            text: o.text
-        });
-        this._digestStyle();
-    },
-
-    _digestStyle: function () {
-        var o = this.options;
-        var style = o.styleGetter();
-        if (style) {
-            this.text.element.css(style);
-        }
-    },
-
-    setText: function (text) {
-        this.text.setText(text);
-    },
-
-    populate: function () {
-        this._digestStyle();
-    }
-});
-BI.shortcut("bi.table_style_cell", BI.TableStyleCell);/**
- *
- * 树状结构的表格
- *
- * Created by GUY on 2015/9/22.
- * @class BI.TableTree
- * @extends BI.Widget
- */
-BI.TableTree = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.TableTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-table-tree",
-            el: {
-                type: "bi.resizable_table"
-            },
-            isNeedResize: true, // 是否需要调整列宽
-            isResizeAdapt: true, // 是否需要在调整列宽或区域宽度的时候它们自适应变化
-
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为tree时生效
-
-            isNeedMerge: true, // 是否需要合并单元格
-            mergeCols: [],
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-            headerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            items: [],
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _getVDeep: function () {
-        return this.options.crossHeader.length;// 纵向深度
-    },
-
-    _getHDeep: function () {
-        var o = this.options;
-        return Math.max(o.mergeCols.length, o.freezeCols.length, BI.TableTree.maxDeep(o.items) - 1);
-    },
-
-    _init: function () {
-        BI.TableTree.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        var data = this._digest();
-        this.table = BI.createWidget(o.el, {
-            type: "bi.resizable_table",
-            element: this,
-            width: o.width,
-            height: o.height,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            minColumnSize: o.minColumnSize,
-            maxColumnSize: o.maxColumnSize,
-
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            header: data.header,
-            items: data.items
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    _digest: function () {
-        var self = this, o = this.options;
-        var deep = this._getHDeep();
-        var vDeep = this._getVDeep();
-        var header = BI.TableTree.formatHeader(o.header, o.crossHeader, o.crossItems, deep, vDeep, o.headerCellStyleGetter);
-        var items = BI.TableTree.formatItems(o.items, deep, false, o.summaryCellStyleGetter);
-        return {
-            header: header,
-            items: items
-        };
-    },
-
-    setWidth: function (width) {
-        BI.TableTree.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.TableTree.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-        this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.regionColumnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    attr: function () {
-        BI.TableTree.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        if (items) {
-            o.items = items || [];
-        }
-        if (header) {
-            o.header = header;
-        }
-        if (crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        var data = this._digest();
-        this.table.populate(data.items, data.header);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.TableTree.superclass.destroy.apply(this, arguments);
-    }
-});
-
-BI.extend(BI.TableTree, {
-    formatHeader: function (header, crossHeader, crossItems, hDeep, vDeep, styleGetter) {
-        var items = BI.TableTree.formatCrossItems(crossItems, vDeep, styleGetter);
-        var result = [];
-        for (var i = 0; i < vDeep; i++) {
-            var c = [];
-            for (var j = 0; j < hDeep; j++) {
-                c.push(crossHeader[i]);
-            }
-            result.push(c.concat(items[i] || []));
-        }
-        if (header && header.length > 0) {
-            result.push(header);
-        }
-        return result;
-    },
-
-    formatItems: function (nodes, deep, isCross, styleGetter) {
-        var self = this;
-        var result = [];
-
-        function track (store, node) {
-            var next;
-            if (BI.isArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    var next;
-                    if (store != -1) {
-                        next = store.slice();
-                        next.push(node);
-                    } else {
-                        next = [];
-                    }
-                    track(next, child);
-                });
-                if (store != -1) {
-                    next = store.slice();
-                    next.push(node);
-                } else {
-                    next = [];
-                }
-                if (/** (store == -1 || node.children.length > 1) &&**/ BI.isNotEmptyArray(node.values)) {
-                    var summary = {
-                        text: BI.i18nText("BI-Summary_Values"),
-                        type: "bi.table_style_cell",
-                        styleGetter: function () {
-                            return styleGetter(store === -1);
-                        }
-                    };
-                    for (var i = next.length; i < deep; i++) {
-                        next.push(summary);
-                    }
-                    if (!isCross) {
-                        next = next.concat(node.values);
-                    }
-                    if (next.length > 0) {
-                        if (!isCross) {
-                            result.push(next);
-                        } else {
-                            for (var k = 0, l = node.values.length; k < l; k++) {
-                                result.push(next);
-                            }
-                        }
-                    }
-                }
-
-                return;
-            }
-            if (store != -1) {
-                next = store.slice();
-                for (var i = next.length; i < deep; i++) {
-                    next.push(node);
-                }
-            } else {
-                next = [];
-            }
-            if (!isCross && BI.isArray(node.values)) {
-                next = next.concat(node.values);
-            }
-            if (isCross && BI.isArray(node.values)) {
-                for (var i = 0, len = node.values.length; i < len - 1; i++) {
-                    if (next.length > 0) {
-                        result.push(next);
-                    }
-                }
-            }
-            if (next.length > 0) {
-                result.push(next);
-            }
-        }
-
-        BI.each(nodes, function (i, node) {
-            track(-1, node);
-        });
-        // 填充空位
-        BI.each(result, function (i, line) {
-            var last = BI.last(line);
-            for (var j = line.length; j < deep; j++) {
-                line.push(last);
-            }
-        });
-        return result;
-    },
-
-    formatCrossItems: function (nodes, deep, styleGetter) {
-        var items = BI.TableTree.formatItems(nodes, deep, true, styleGetter);
-        return BI.unzip(items);
-    },
-
-    maxDeep: function (nodes) {
-        function track (deep, node) {
-            var d = deep;
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    d = Math.max(d, track(deep + 1, child));
-                });
-            }
-            return d;
-        }
-
-        var deep = 1;
-        if (BI.isObject(nodes)) {
-            BI.each(nodes, function (i, node) {
-                deep = Math.max(deep, track(1, node));
-            });
-        }
-        return deep;
-    }
-});
-
-BI.shortcut("bi.tree_table", BI.TableTree);/**
  * guy
  * 复选导航条
  * Created by GUY on 2015/8/25.
@@ -13859,7 +8836,8 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             isHalfCheckedBySelectedValue: function (selectedValues) {
                 return selectedValues.length > 0;
             },
-            halfSelected: false
+            halfSelected: false,
+            iconWrapperWidth: 26
         });
     },
     _init: function () {
@@ -13912,7 +8890,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
             type: "bi.htape",
             element: this,
             items: [{
-                width: 26,
+                width: o.iconWrapperWidth,
                 el: {
                     type: "bi.center_adapt",
                     items: [this.checkbox, this.half]
@@ -13972,707 +8950,13 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.MultiSelectBar.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE);
+            this.fireEvent(BI.MultiSelectBar.EVENT_CHANGE, this.isSelected(), this);
         }
     }
 });
 BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
-BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);/**
- * 表关联树
- *
- * Created by GUY on 2015/12/15.
- * @class BI.BranchRelation
- * @extends BI.Widget
- */
-BI.BranchRelation = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.BranchRelation.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-branch-relation-tree",
-            items: [],
-
-            centerOffset: 0, // 重心偏移量
-            direction: BI.Direction.Bottom,
-            align: BI.VerticalAlign.Top
-        });
-    },
-
-    _init: function () {
-        BI.BranchRelation.superclass._init.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    // 树分层
-    _stratification: function () {
-        var levels = [];
-        this.tree.recursion(function (node, route) {
-            // node.isRoot = route.length <= 1;
-            node.leaf = node.isLeaf();
-            if (!levels[route.length - 1]) {
-                levels[route.length - 1] = [];
-            }
-            levels[route.length - 1].push(node);
-        });
-        return levels;
-    },
-
-    // 计算所有节点的叶子结点个数
-    _calculateLeaves: function () {
-        var count = 0;
-
-        function track (node) {
-            var c = 0;
-            if (node.isLeaf()) {
-                return 1;
-            }
-            BI.each(node.getChildren(), function (i, child) {
-                c += track(child);
-            });
-            node.set("leaves", c);
-            return c;
-        }
-
-        count = track(this.tree.getRoot());
-        return count;
-    },
-
-    // 树平移
-    _translate: function (levels) {
-        var adjust = [];
-        var maxLevel = levels.length;
-        BI.each(levels, function (i, nodes) {
-            if (!adjust[i]) {
-                adjust[i] = [];
-            }
-            BI.each(nodes, function (j, node) {
-                if (node.isLeaf() && i < maxLevel - 1) {
-                    var newNode = new BI.Node(BI.UUID());
-                    // newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
-                    newNode.isNew = true;
-                    // 把node向下一层移
-                    var tar = 0;
-                    if (j > 0) {
-                        var c = nodes[j - 1].getLastChild();
-                        tar = levels[i + 1].indexOf(c) + 1;
-                    }
-                    levels[i + 1].splice(tar, 0, node);
-                    // 新增一个临时树节点
-                    var index = node.parent.getChildIndex(node.id);
-                    node.parent.removeChildByIndex(index);
-                    node.parent.addChild(newNode, index);
-                    newNode.addChild(node);
-                    adjust[i].push(newNode);
-                    nodes[j] = newNode;
-                } else {
-                    adjust[i].push(node);
-                }
-            });
-        });
-        return adjust;
-    },
-
-    // 树补白
-    _fill: function (levels) {
-        var adjust = [];
-        var maxLevel = levels.length;
-        BI.each(levels, function (i, nodes) {
-            if (!adjust[i]) {
-                adjust[i] = [];
-            }
-            BI.each(nodes, function (j, node) {
-                if (node.isLeaf() && i < maxLevel - 1) {
-                    var newNode = new BI.Node(BI.UUID());
-                    newNode.leaf = true;
-                    newNode.width = node.width;
-                    newNode.height = node.height;
-                    newNode.isNew = true;
-                    // 把node向下一层移
-                    var tar = 0;
-                    if (j > 0) {
-                        var c = nodes[j - 1].getLastChild();
-                        tar = levels[i + 1].indexOf(c) + 1;
-                    }
-                    levels[i + 1].splice(tar, 0, newNode);
-                    // 新增一个临时树节点
-                    node.addChild(newNode);
-                }
-                adjust[i].push(node);
-            });
-        });
-        return adjust;
-    },
-
-    // 树调整
-    _adjust: function (adjust) {
-        while (true) {
-            var isAllNeedAjust = false;
-            BI.backEach(adjust, function (i, nodes) {
-                BI.each(nodes, function (j, node) {
-                    if (!node.isNew) {
-                        var needAdjust = true;
-                        BI.any(node.getChildren(), function (k, n) {
-                            if (!n.isNew) {
-                                needAdjust = false;
-                                return true;
-                            }
-                        });
-                        if (!node.isLeaf() && needAdjust === true) {
-                            var allChilds = [];
-                            BI.each(node.getChildren(), function (k, n) {
-                                allChilds = allChilds.concat(n.getChildren());
-                            });
-                            node.removeAllChilds();
-                            BI.each(allChilds, function (k, c) {
-                                node.addChild(c);
-                            });
-                            var newNode = new BI.Node(BI.UUID());
-                            // newNode.isEmptyRoot = node.isRoot || node.isEmptyRoot;
-                            newNode.isNew = true;
-                            var index = node.parent.getChildIndex(node.id);
-                            node.parent.removeChildByIndex(index);
-                            node.parent.addChild(newNode, index);
-                            newNode.addChild(node);
-                            isAllNeedAjust = true;
-                        }
-                    }
-                });
-            });
-            if (isAllNeedAjust === false) {
-                break;
-            } else {// 树重构
-                adjust = this._stratification();
-            }
-        }
-        return adjust;
-    },
-
-    _calculateWidth: function () {
-        var o = this.options;
-        var width = 0;
-
-        function track1 (node) {
-            var w = 0;
-            if (node.isLeaf()) {
-                return node.width;
-            }
-            BI.each(node.getChildren(), function (i, child) {
-                w += track1(child);
-            });
-            return w;
-        }
-
-        function track2 (node) {
-            var w = 0;
-            if (node.isLeaf()) {
-                return node.height;
-            }
-            BI.each(node.getChildren(), function (i, child) {
-                w += track2(child);
-            });
-            return w;
-        }
-
-        if (this._isVertical()) {
-            width = track1(this.tree.getRoot());
-        } else {
-            width = track2(this.tree.getRoot());
-        }
-
-        return width;
-    },
-
-    _isVertical: function () {
-        var o = this.options;
-        return o.direction === BI.Direction.Top || o.direction === BI.Direction.Bottom;
-    },
-
-    _calculateHeight: function () {
-        var o = this.options;
-        var height = 0;
-
-        function track1 (node) {
-            var h = 0;
-            BI.each(node.getChildren(), function (i, child) {
-                h = Math.max(h, track1(child));
-            });
-            return h + (node.height || 0);
-        }
-
-        function track2 (node) {
-            var h = 0;
-            BI.each(node.getChildren(), function (i, child) {
-                h = Math.max(h, track2(child));
-            });
-            return h + (node.width || 0);
-        }
-
-        if (this._isVertical()) {
-            height = track1(this.tree.getRoot());
-        } else {
-            height = track2(this.tree.getRoot());
-        }
-        return height;
-    },
-
-    _calculateXY: function (levels) {
-        var o = this.options;
-        var width = this._calculateWidth();
-        var height = this._calculateHeight();
-        var levelCount = levels.length;
-        var allLeavesCount = this._calculateLeaves();
-        // 计算坐标
-        var xy = {};
-        var levelHeight = height / levelCount;
-        BI.each(levels, function (i, nodes) {
-            // 计算权重
-            var weights = [];
-            BI.each(nodes, function (j, node) {
-                weights[j] = (node.get("leaves") || 1) / allLeavesCount;
-            });
-            BI.each(nodes, function (j, node) {
-                // 求前j个元素的权重
-                var weight = BI.sum(weights.slice(0, j));
-                // 求坐标
-                var x = weight * width + weights[j] * width / 2;
-                var y = i * levelHeight + levelHeight / 2;
-                xy[node.id] = {x: x, y: y};
-            });
-        });
-        return xy;
-    },
-
-    _stroke: function (levels, xy) {
-        var height = this._calculateHeight();
-        var levelCount = levels.length;
-        var levelHeight = height / levelCount;
-        var self = this, o = this.options;
-        switch (o.direction) {
-            case BI.Direction.Top:
-                BI.each(levels, function (i, nodes) {
-                    BI.each(nodes, function (j, node) {
-                        if (node.getChildrenLength() > 0 && !node.leaf) {
-                            var path = "";
-                            var start = xy[node.id];
-                            var split = start.y + levelHeight / 2;
-                            path += "M" + start.x + "," + (start.y + o.centerOffset) + "L" + start.x + "," + split;
-                            var end = [];
-                            BI.each(node.getChildren(), function (t, c) {
-                                var e = end[t] = xy[c.id];
-                                path += "M" + e.x + "," + (e.y + o.centerOffset) + "L" + e.x + "," + split;
-                            });
-                            if (end.length > 0) {
-                                path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
-                            }
-                            self.svg.path(path).attr("stroke", "#d4dadd");
-                        }
-                    });
-                });
-                break;
-            case BI.Direction.Bottom:
-                BI.each(levels, function (i, nodes) {
-                    BI.each(nodes, function (j, node) {
-                        if (node.getChildrenLength() > 0 && !node.leaf) {
-                            var path = "";
-                            var start = xy[node.id];
-                            var split = start.y - levelHeight / 2;
-                            path += "M" + start.x + "," + (start.y - o.centerOffset) + "L" + start.x + "," + split;
-                            var end = [];
-                            BI.each(node.getChildren(), function (t, c) {
-                                var e = end[t] = xy[c.id];
-                                path += "M" + e.x + "," + (e.y - o.centerOffset) + "L" + e.x + "," + split;
-                            });
-                            if (end.length > 0) {
-                                path += "M" + BI.first(end).x + "," + split + "L" + BI.last(end).x + "," + split;
-                            }
-                            self.svg.path(path).attr("stroke", "#d4dadd");
-                        }
-                    });
-                });
-                break;
-            case BI.Direction.Left:
-                BI.each(levels, function (i, nodes) {
-                    BI.each(nodes, function (j, node) {
-                        if (node.getChildrenLength() > 0 && !node.leaf) {
-                            var path = "";
-                            var start = xy[node.id];
-                            var split = start.y + levelHeight / 2;
-                            path += "M" + (start.y + o.centerOffset) + "," + start.x + "L" + split + "," + start.x;
-                            var end = [];
-                            BI.each(node.getChildren(), function (t, c) {
-                                var e = end[t] = xy[c.id];
-                                path += "M" + (e.y + o.centerOffset) + "," + e.x + "L" + split + "," + e.x;
-                            });
-                            if (end.length > 0) {
-                                path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
-                            }
-                            self.svg.path(path).attr("stroke", "#d4dadd");
-                        }
-                    });
-                });
-                break;
-            case BI.Direction.Right:
-                BI.each(levels, function (i, nodes) {
-                    BI.each(nodes, function (j, node) {
-                        if (node.getChildrenLength() > 0 && !node.leaf) {
-                            var path = "";
-                            var start = xy[node.id];
-                            var split = start.y - levelHeight / 2;
-                            path += "M" + (start.y - o.centerOffset) + "," + start.x + "L" + split + "," + start.x;
-                            var end = [];
-                            BI.each(node.getChildren(), function (t, c) {
-                                var e = end[t] = xy[c.id];
-                                path += "M" + (e.y - o.centerOffset) + "," + e.x + "L" + split + "," + e.x;
-                            });
-                            if (end.length > 0) {
-                                path += "M" + split + "," + BI.first(end).x + "L" + split + "," + BI.last(end).x;
-                            }
-                            self.svg.path(path).attr("stroke", "#d4dadd");
-                        }
-                    });
-                });
-                break;
-        }
-    },
-
-    _createBranches: function (levels) {
-        var self = this, o = this.options;
-        if (o.direction === BI.Direction.Bottom || o.direction === BI.Direction.Right) {
-            levels = levels.reverse();
-        }
-        var xy = this._calculateXY(levels);
-        // 画图
-        this._stroke(levels, xy);
-    },
-
-    _isNeedAdjust: function () {
-        var o = this.options;
-        return o.direction === BI.Direction.Top && o.align === BI.VerticalAlign.Bottom || o.direction === BI.Direction.Bottom && o.align === BI.VerticalAlign.Top
-            || o.direction === BI.Direction.Left && o.align === BI.HorizontalAlign.Right || o.direction === BI.Direction.Right && o.align === BI.HorizontalAlign.Left;
-    },
-
-    setValue: function (value) {
-
-    },
-
-    getValue: function () {
-
-    },
-
-    populate: function (items) {
-        var self = this, o = this.options;
-        o.items = items || [];
-        this.empty();
-        items = BI.Tree.transformToTreeFormat(o.items);
-        this.tree = new BI.Tree();
-        this.tree.initTree(items);
-
-        this.svg = BI.createWidget({
-            type: "bi.svg"
-        });
-
-        // 树分层
-        var levels = this._stratification();
-
-        if (this._isNeedAdjust()) {
-            // 树平移
-            var adjust = this._translate(levels);
-            // 树调整
-            adjust = this._adjust(adjust);
-
-            this._createBranches(adjust);
-        } else {
-            var adjust = this._fill(levels);
-
-            this._createBranches(adjust);
-        }
-
-        var container = BI.createWidget({
-            type: "bi.layout",
-            width: this._isVertical() ? this._calculateWidth() : this._calculateHeight(),
-            height: this._isVertical() ? this._calculateHeight() : this._calculateWidth()
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: container,
-            items: [{
-                el: this.svg,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }]
-        });
-        if (this._isVertical()) {
-            items = [{
-                type: "bi.handstand_branch_tree",
-                expander: {
-                    direction: o.direction
-                },
-                el: {
-                    layouts: [{
-                        type: "bi.horizontal_adapt",
-                        verticalAlign: o.align
-                    }]
-                },
-                items: items
-            }];
-        } else {
-            items = [{
-                type: "bi.branch_tree",
-                expander: {
-                    direction: o.direction
-                },
-                el: {
-                    layouts: [{
-                        type: "bi.vertical"
-                    }, {
-                        type: o.align === BI.HorizontalAlign.Left ? "bi.left" : "bi.right"
-                    }]
-                },
-                items: items
-            }];
-        }
-        BI.createWidget({
-            type: "bi.adaptive",
-            element: container,
-            items: items
-        });
-        BI.createWidget({
-            type: "bi.center_adapt",
-            scrollable: true,
-            element: this,
-            items: [container]
-        });
-    }
-});
-BI.BranchRelation.EVENT_CHANGE = "BranchRelation.EVENT_CHANGE";
-BI.shortcut("bi.branch_relation", BI.BranchRelation);/**
- * 倒立的Branch
- * @class BI.HandStandBranchExpander
- * @extend BI.Widget
- * create by young
- */
-BI.HandStandBranchExpander = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HandStandBranchExpander.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-handstand-branch-expander",
-            direction: BI.Direction.Top,
-            logic: {
-                dynamic: true
-            },
-            el: {type: "bi.label"},
-            popup: {}
-        });
-    },
-
-    _init: function () {
-        BI.HandStandBranchExpander.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this._initExpander();
-        this._initBranchView();
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, {
-                type: "bi.center_adapt",
-                items: [this.expander]
-            }, this.branchView)
-        }))));
-    },
-
-    _initExpander: function () {
-        var self = this, o = this.options;
-        this.expander = BI.createWidget(o.el);
-        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _initBranchView: function () {
-        var self = this, o = this.options;
-        this.branchView = BI.createWidget(o.popup, {});
-        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function (items) {
-        this.branchView.populate.apply(this.branchView, arguments);
-    },
-
-    getValue: function () {
-        return this.branchView.getValue();
-    }
-});
-BI.HandStandBranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.handstand_branch_expander", BI.HandStandBranchExpander);/**
- * @class BI.BranchExpander
- * @extend BI.Widget
- * create by young
- */
-BI.BranchExpander = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BranchExpander.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-branch-expander",
-            direction: BI.Direction.Left,
-            logic: {
-                dynamic: true
-            },
-            el: {},
-            popup: {}
-        });
-    },
-
-    _init: function () {
-        BI.BranchExpander.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this._initExpander();
-        this._initBranchView();
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({}, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.expander, this.branchView)
-        }))));
-    },
-
-    _initExpander: function () {
-        var self = this, o = this.options;
-        this.expander = BI.createWidget(o.el, {
-            type: "bi.label",
-            width: 30,
-            height: "100%"
-        });
-        this.expander.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _initBranchView: function () {
-        var self = this, o = this.options;
-        this.branchView = BI.createWidget(o.popup, {});
-        this.branchView.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function (items) {
-        this.branchView.populate.apply(this.branchView, arguments);
-    },
-
-    getValue: function () {
-        return this.branchView.getValue();
-    }
-});
-BI.BranchExpander.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.branch_expander", BI.BranchExpander);/**
- * @class BI.HandStandBranchTree
- * @extends BI.Widget
- * create by young
- * 横向分支的树
- */
-BI.HandStandBranchTree = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.HandStandBranchTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-handstand-branch-tree",
-            expander: {},
-            el: {},
-            items: []
-        });
-    },
-    _init: function () {
-        BI.HandStandBranchTree.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.branchTree = BI.createWidget({
-            type: "bi.custom_tree",
-            element: this,
-            expander: BI.extend({
-                type: "bi.handstand_branch_expander",
-                el: {},
-                popup: {
-                    type: "bi.custom_tree"
-                }
-            }, o.expander),
-            el: BI.extend({
-                type: "bi.button_tree",
-                chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
-                layouts: [{
-                    type: "bi.horizontal_adapt"
-                }]
-            }, o.el),
-            items: this.options.items
-        });
-        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function () {
-            self.fireEvent(BI.HandStandBranchTree.EVENT_CHANGE, arguments);
-        });
-        this.branchTree.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function () {
-        this.branchTree.populate.apply(this.branchTree, arguments);
-    },
-
-    getValue: function () {
-        return this.branchTree.getValue();
-    }
-});
-BI.HandStandBranchTree.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.handstand_branch_tree", BI.HandStandBranchTree);/**
- * @class BI.BranchTree
- * @extends BI.Widget
- * create by young
- * 横向分支的树
- */
-BI.BranchTree = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.BranchTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-branch-tree",
-            expander: {},
-            el: {},
-            items: []
-        });
-    },
-    _init: function () {
-        BI.BranchTree.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.branchTree = BI.createWidget({
-            type: "bi.custom_tree",
-            element: this,
-            expander: BI.extend({
-                type: "bi.branch_expander",
-                el: {},
-                popup: {
-                    type: "bi.custom_tree"
-                }
-            }, o.expander),
-            el: BI.extend({
-                type: "bi.button_tree",
-                chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
-                layouts: [{
-                    type: "bi.vertical"
-                }]
-            }, o.el),
-            items: this.options.items
-        });
-        this.branchTree.on(BI.CustomTree.EVENT_CHANGE, function () {
-            self.fireEvent(BI.BranchTree.EVENT_CHANGE, arguments);
-        });
-        this.branchTree.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    populate: function () {
-        this.branchTree.populate.apply(this.branchTree, arguments);
-    },
-
-    getValue: function () {
-        return this.branchTree.getValue();
-    }
-});
-BI.BranchTree.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.branch_tree", BI.BranchTree);/**
+BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
+/**
  * guy
  * 异步树
  * @class BI.DisplayTree
@@ -15137,8 +9421,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             cls: "select-text-label",
             textAlign: "left",
             height: o.height,
-            text: o.text,
-            hgap: c.hgap
+            text: o.text
         });
         this.trigerButton = BI.createWidget({
             type: "bi.trigger_icon_button",
@@ -15163,10 +9446,11 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
                     iconWidth: o.iconWidth,
                     disableSelected: true
                 },
-                width: BI.isEmptyString(o.iconCls) ? 0 : (o.triggerWidth || o.height)
+                width: BI.isEmptyString(o.iconCls) ? 0 : (o.iconWrapperWidth || o.height)
             },
             {
-                el: this.text
+                el: this.text,
+                lgap: BI.isEmptyString(o.iconCls) ? 5 : 0
             }, {
                 el: this.trigerButton,
                 width: o.triggerWidth || o.height
@@ -15183,14 +9467,17 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var o = this.options;
         this.icon.setIcon(iconCls);
         var iconItem = this.wrapper.attr("items")[0];
+        var textItem = this.wrapper.attr("items")[1];
         if(BI.isNull(iconCls) || BI.isEmptyString(iconCls)) {
             if(iconItem.width !== 0) {
                 iconItem.width = 0;
+                textItem.lgap = 5;
                 this.wrapper.resize();
             }
         }else{
-            if(iconItem.width !== (o.triggerWidth || o.height)) {
-                iconItem.width = (o.triggerWidth || o.height);
+            if(iconItem.width !== (o.iconWrapperWidth || o.height)) {
+                iconItem.width = (o.iconWrapperWidth || o.height);
+                textItem.lgap = 0;
                 this.wrapper.resize();
             }
         }
@@ -15227,7 +9514,8 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             iconCls: obj.iconCls,
             height: o.height,
             iconHeight: o.iconHeight,
-            iconWidth: o.iconWidth
+            iconWidth: o.iconWidth,
+            iconWrapperWidth: o.iconWrapperWidth
         });
     },
 
@@ -15338,7 +9626,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border",
+            baseCls: "bi-select-text-trigger bi-border bi-focus-shadow",
             height: 24
         });
     },
@@ -15362,7 +9650,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });
@@ -15417,7 +9705,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });

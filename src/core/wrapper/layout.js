@@ -63,9 +63,13 @@ BI.Layout = BI.inherit(BI.Widget, {
         }
     },
 
+    appendFragment: function (frag) {
+        this.element.append(frag);
+    },
+
     _mountChildren: function () {
         var self = this;
-        var frag = document.createDocumentFragment();
+        var frag = BI.Widget._renderEngine.createFragment();
         var hasChild = false;
         BI.each(this._children, function (i, widget) {
             if (widget.element !== self.element) {
@@ -74,7 +78,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         });
         if (hasChild === true) {
-            this.element.append(frag);
+            this.appendFragment(frag);
         }
     },
 
@@ -242,7 +246,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         var newItems = [], newChildren = {};
         for (var i = 0, len = this.options.items.length; i < len; i++) {
             var child = this._children[this._getChildName(i)];
-            if (indexes.contains(i)) {
+            if (BI.contains(indexes, i)) {
                 child && deleted.push(child);
             } else {
                 newChildren[this._getChildName(newItems.length)] = child;
@@ -294,7 +298,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     addItems: function (items) {
         var self = this, o = this.options;
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item);
@@ -303,16 +307,18 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         });
-        this._getWrapper().append(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().append(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     prependItems: function (items) {
         var self = this;
         items = items || [];
-        var fragment = document.createDocumentFragment();
+        var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
             this._addItemAt(0, items[i]);
@@ -322,10 +328,12 @@ BI.Layout = BI.inherit(BI.Widget, {
             added.push(w);
             fragment.appendChild(w.element[0]);
         }
-        this._getWrapper().prepend(fragment);
-        BI.each(added, function (i, w) {
-            w._mount();
-        });
+        if (this._isMounted) {
+            this._getWrapper().prepend(fragment);
+            BI.each(added, function (i, w) {
+                w._mount();
+            });
+        }
     },
 
     getValue: function () {
@@ -428,7 +436,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._children = {};
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
-            var key = node.key == null ? i : node.key;
+            var key = node.key == null ? self._getChildName(i) : node.key;
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -446,7 +454,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? index : opt.key;
+            var key = opt.key == null ? self._getChildName(index) : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -460,7 +468,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? startIdx : node.key;
+                var key = node.key == null ? self._getChildName(startIdx) : node.key;
                 children[key]._destroy();
             }
         }
@@ -468,9 +476,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
-            var insertKey = BI.isKey(insert.key) ? insert.key : index;
+            var insertKey = BI.isKey(insert.key) ? insert.key : self._getChildName(index);
             if (before && children[before.key]) {
-                var beforeKey = BI.isKey(before.key) ? before.key : index;
+                var beforeKey = BI.isKey(before.key) ? before.key : self._getChildName(index);
                 var next;
                 if (isNext) {
                     next = children[beforeKey].element.next();

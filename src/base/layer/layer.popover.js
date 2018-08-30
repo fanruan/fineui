@@ -30,7 +30,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         this.startY = 0;
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             var size = self._calculateSize();
-            var W = $("body").width(), H = $("body").height();
+            var W = BI.Widget._renderEngine.createElement("body").width(), H = BI.Widget._renderEngine.createElement("body").height();
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({
@@ -41,48 +41,43 @@ BI.Popover = BI.inherit(BI.Widget, {
             BI.Resizers._resize();
         }, function () {
             self.tracker.releaseMouseMoves();
-        }, window);
+        }, _global);
         var items = {
             north: {
                 el: {
-                    type: "bi.border",
-                    cls: "bi-message-title bi-background",
+                    type: "bi.htape",
+                    cls: "bi-message-title bi-header-background",
                     ref: function (_ref) {
                         self.dragger = _ref;
                     },
-                    items: {
-                        center: {
-                            el: {
-                                type: "bi.absolute",
-                                items: [{
-                                    el: BI.isPlainObject(o.header) ? BI.createWidget(o.header, {
-                                        extraCls: "bi-font-bold"
-                                    }) : {
-                                        type: "bi.label",
-                                        cls: "bi-font-bold",
-                                        height: this._constant.HEADER_HEIGHT,
-                                        text: o.header,
-                                        textAlign: "left"
-                                    },
-                                    left: 20,
-                                    top: 0,
-                                    right: 0,
-                                    bottom: 0
-                                }]
+                    items: [{
+                        type: "bi.absolute",
+                        items: [{
+                            el: BI.isPlainObject(o.header) ? BI.createWidget(o.header, {
+                                extraCls: "bi-font-bold"
+                            }) : {
+                                type: "bi.label",
+                                cls: "bi-font-bold",
+                                height: this._constant.HEADER_HEIGHT,
+                                text: o.header,
+                                textAlign: "left"
+                            },
+                            left: 20,
+                            top: 0,
+                            right: 0,
+                            bottom: 0
+                        }]
+                    }, {
+                        el: {
+                            type: "bi.icon_button",
+                            cls: "bi-message-close close-font",
+                            height: this._constant.HEADER_HEIGHT,
+                            handler: function () {
+                                self.close();
                             }
                         },
-                        east: {
-                            el: {
-                                type: "bi.icon_button",
-                                cls: "bi-message-close close-font",
-                                height: this._constant.HEADER_HEIGHT,
-                                handler: function () {
-                                    self.close();
-                                }
-                            },
-                            width: 60
-                        }
-                    }
+                        width: 56
+                    }]
                 },
                 height: this._constant.HEADER_HEIGHT
             },

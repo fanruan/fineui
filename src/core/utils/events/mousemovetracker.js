@@ -1,13 +1,13 @@
 !(function () {
     var cancelAnimationFrame =
-        window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        window.msCancelAnimationFrame ||
-        window.clearTimeout;
+        _global.cancelAnimationFrame ||
+        _global.webkitCancelAnimationFrame ||
+        _global.mozCancelAnimationFrame ||
+        _global.oCancelAnimationFrame ||
+        _global.msCancelAnimationFrame ||
+        _global.clearTimeout;
 
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
+    var requestAnimationFrame = _global.requestAnimationFrame || _global.webkitRequestAnimationFrame || _global.mozRequestAnimationFrame || _global.oRequestAnimationFrame || _global.msRequestAnimationFrame || _global.setTimeout;
 
 
     BI.MouseMoveTracker = function (onMove, onMoveEnd, domNode) {

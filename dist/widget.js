@@ -1,424 +1,4 @@
 /**
- *
- * Created by GUY on 2016/5/26.
- * @class BI.SequenceTableTreeNumber
- * @extends BI.Widget
- */
-BI.SequenceTableTreeNumber = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SequenceTableTreeNumber.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-sequence-table-tree-number",
-            isNeedFreeze: false,
-            startSequence: 1, // 开始的序号
-            scrollTop: 0,
-            headerRowSize: 25,
-            rowSize: 25,
-
-            sequenceHeaderCreator: BI.emptyFn,
-
-            header: [],
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _init: function () {
-        BI.SequenceTableTreeNumber.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.vCurr = 1;
-        this.hCurr = 1;
-        this.tasks = [];
-        this.renderedCells = [];
-        this.renderedKeys = [];
-
-        this.container = BI.createWidget({
-            type: "bi.absolute",
-            width: 60,
-            scrollable: false
-        });
-
-        this.scrollContainer = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.container]
-        });
-
-        this.headerContainer = BI.createWidget({
-            type: "bi.absolute",
-            cls: "bi-border",
-            width: 58,
-            scrollable: false
-        });
-
-        this.layout = BI.createWidget({
-            type: "bi.vtape",
-            element: this,
-            items: [{
-                el: this.headerContainer,
-                height: this._getHeaderHeight() - 2
-            }, {el: {type: "bi.layout"}, height: 2}, {
-                el: this.scrollContainer
-            }]
-        });
-        // 缓存第一行对应的序号
-        this.start = this.options.startSequence;
-        this.cache = {};
-        this._nextState();
-
-        this._populate();
-    },
-
-    _getNextSequence: function (nodes) {
-        var self = this;
-        var start = this.start;
-        var cnt = this.start;
-
-        function track (node) {
-            // 如果已经有缓存了就不改计数了，复杂表会出现这种情况
-            self.cache[node.text || node.value] || (self.cache[node.text || node.value] = cnt);
-            cnt++;
-        }
-
-        BI.each(nodes, function (i, node) {
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    if (index === 0) {
-                        if (self.cache[child.text || child.value]) {
-                            start = cnt = self.cache[child.text || child.value];
-                        }
-                    }
-                    track(child);
-                });
-            }
-        });
-        this.start = cnt;
-        return start;
-    },
-
-    _getStart: function (nodes) {
-        var self = this;
-        var start = this.start;
-        BI.some(nodes, function (i, node) {
-            if (BI.isNotEmptyArray(node.children)) {
-                return BI.some(node.children, function (index, child) {
-                    if (index === 0) {
-                        if (self.cache[child.text || child.value]) {
-                            start = self.cache[child.text || child.value];
-                            return true;
-                        }
-                    }
-                });
-            }
-        });
-        return start;
-    },
-
-    _formatNumber: function (nodes) {
-        var self = this, o = this.options;
-        var result = [];
-        var count = this._getStart(nodes);
-
-        function getLeafCount (node) {
-            var cnt = 0;
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    cnt += getLeafCount(child);
-                });
-                if (/** node.children.length > 1 && **/BI.isNotEmptyArray(node.values)) {
-                    cnt++;
-                }
-            } else {
-                cnt++;
-            }
-            return cnt;
-        }
-
-        var start = 0, top = 0;
-        BI.each(nodes, function (i, node) {
-            if (BI.isArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    var cnt = getLeafCount(child);
-                    result.push({
-                        text: count++,
-                        start: start,
-                        top: top,
-                        cnt: cnt,
-                        index: index,
-                        height: cnt * o.rowSize
-                    });
-                    start += cnt;
-                    top += cnt * o.rowSize;
-                });
-                if (BI.isNotEmptyArray(node.values)) {
-                    result.push({
-                        text: BI.i18nText("BI-Summary_Values"),
-                        start: start++,
-                        top: top,
-                        cnt: 1,
-                        isSummary: true,
-                        height: o.rowSize
-                    });
-                    top += o.rowSize;
-                }
-            }
-        });
-        return result;
-    },
-
-    _layout: function () {
-        var self = this, o = this.options;
-        var headerHeight = this._getHeaderHeight() - 2;
-        var items = this.layout.attr("items");
-        if (o.isNeedFreeze === false) {
-            items[0].height = 0;
-            items[1].height = 0;
-        } else if (o.isNeedFreeze === true) {
-            items[0].height = headerHeight;
-            items[1].height = 2;
-        }
-        this.layout.attr("items", items);
-        this.layout.resize();
-        try {
-            this.scrollContainer.element.scrollTop(o.scrollTop);
-        } catch (e) {
-
-        }
-    },
-
-    _getHeaderHeight: function () {
-        var o = this.options;
-        return o.headerRowSize * (o.crossHeader.length + (o.header.length > 0 ? 1 : 0));
-    },
-
-    _nextState: function () {
-        var o = this.options;
-        this._getNextSequence(o.items);
-    },
-
-    _prevState: function () {
-        var self = this, o = this.options;
-        var firstChild;
-        BI.some(o.items, function (i, node) {
-            if (BI.isNotEmptyArray(node.children)) {
-                return BI.some(node.children, function (j, child) {
-                    firstChild = child;
-                    return true;
-                });
-            }
-        });
-        if (firstChild && BI.isNotEmptyObject(this.cache)) {
-            this.start = this.cache[firstChild.text || firstChild.value];
-        } else {
-            this.start = 1;
-        }
-        this._nextState();
-    },
-
-    _getMaxScrollTop: function (numbers) {
-        var cnt = 0;
-        BI.each(numbers, function (i, number) {
-            cnt += number.cnt;
-        });
-        return Math.max(0, cnt * this.options.rowSize - (this.options.height - this._getHeaderHeight()) + BI.DOM.getScrollWidth());
-    },
-
-    _createHeader: function () {
-        var o = this.options;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.headerContainer,
-            items: [{
-                el: o.sequenceHeaderCreator() || {
-                    type: "bi.table_style_cell",
-                    cls: "sequence-table-title-cell",
-                    height: this._getHeaderHeight() - 2,
-                    styleGetter: o.headerCellStyleGetter,
-                    text: BI.i18nText("BI-Number_Index")
-                },
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0
-            }]
-        });
-    },
-
-    _calculateChildrenToRender: function () {
-        var self = this, o = this.options;
-
-        var renderedCells = [], renderedKeys = [];
-        var numbers = this._formatNumber(o.items);
-        var intervalTree = BI.PrefixIntervalTree.uniform(numbers.length, 0);
-        BI.each(numbers, function (i, number) {
-            intervalTree.set(i, number.height);
-        });
-        var scrollTop = BI.clamp(o.scrollTop, 0, this._getMaxScrollTop(numbers));
-        var index = intervalTree.greatestLowerBound(scrollTop);
-        var offsetTop = -(scrollTop - (index > 0 ? intervalTree.sumTo(index - 1) : 0));
-        var height = offsetTop;
-        var bodyHeight = o.height - this._getHeaderHeight();
-        while (height < bodyHeight && index < numbers.length) {
-            renderedKeys.push(index);
-            offsetTop += numbers[index].height;
-            height += numbers[index].height;
-            index++;
-        }
-
-        BI.each(renderedKeys, function (i, key) {
-            var index = BI.deepIndexOf(self.renderedKeys, key);
-            if (index > -1) {
-                if (numbers[key].height !== self.renderedCells[index]._height) {
-                    self.renderedCells[index]._height = numbers[key].height;
-                    self.renderedCells[index].el.setHeight(numbers[key].height);
-                }
-                if (numbers[key].top !== self.renderedCells[index].top) {
-                    self.renderedCells[index].top = numbers[key].top;
-                    self.renderedCells[index].el.element.css("top", numbers[key].top + "px");
-                }
-                renderedCells.push(self.renderedCells[index]);
-            } else {
-                var child = BI.createWidget(BI.extend({
-                    type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
-                    width: 60,
-                    styleGetter: numbers[key].isSummary === true ? function () {
-                        return o.summaryCellStyleGetter(true);
-                    } : function (key) {
-                        return function () {
-                            return o.sequenceCellStyleGetter(key);
-                        };
-                    }(numbers[key].index)
-                }, numbers[key]));
-                renderedCells.push({
-                    el: child,
-                    left: 0,
-                    top: numbers[key].top,
-                    _height: numbers[key].height
-                });
-            }
-        });
-
-        // 已存在的， 需要添加的和需要删除的
-        var existSet = {}, addSet = {}, deleteArray = [];
-        BI.each(renderedKeys, function (i, key) {
-            if (BI.deepContains(self.renderedKeys, key)) {
-                existSet[i] = key;
-            } else {
-                addSet[i] = key;
-            }
-        });
-        BI.each(this.renderedKeys, function (i, key) {
-            if (BI.deepContains(existSet, key)) {
-                return;
-            }
-            if (BI.deepContains(addSet, key)) {
-                return;
-            }
-            deleteArray.push(i);
-        });
-        BI.each(deleteArray, function (i, index) {
-            self.renderedCells[index].el.destroy();
-        });
-        var addedItems = [];
-        BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index]);
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: addedItems
-        });
-        this.renderedCells = renderedCells;
-        this.renderedKeys = renderedKeys;
-
-        this.container.setHeight(intervalTree.sumUntil(numbers.length));
-    },
-
-    _restore: function () {
-        BI.each(this.renderedCells, function (i, cell) {
-            cell.el.destroy();
-        });
-        this.renderedCells = [];
-        this.renderedKeys = [];
-    },
-
-    _populate: function () {
-        var self = this;
-        BI.each(this.tasks, function (i, task) {
-            task.apply(self);
-        });
-        this.tasks = [];
-        this.headerContainer.empty();
-        this._createHeader();
-        this._layout();
-        this._calculateChildrenToRender();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        if (this.options.scrollTop !== scrollTop) {
-            this.options.scrollTop = scrollTop;
-            try {
-                this.scrollContainer.element.scrollTop(scrollTop);
-            } catch (e) {
-
-            }
-        }
-    },
-
-    getVerticalScroll: function () {
-        return this.options.scrollTop;
-    },
-
-    setVPage: function (v) {
-        if (v <= 1) {
-            this.cache = {};
-            this.start = this.options.startSequence;
-            this._restore();
-            this.tasks.push(this._nextState);
-        } else if (v === this.vCurr + 1) {
-            this.tasks.push(this._nextState);
-        } else if (v === this.vCurr - 1) {
-            this.tasks.push(this._prevState);
-        }
-        this.vCurr = v;
-    },
-
-    setHPage: function (v) {
-        if (v !== this.hCurr) {
-            this.tasks.push(this._prevState);
-        }
-        this.hCurr = v;
-    },
-
-    restore: function () {
-        this._restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        if (items && items !== this.options.items) {
-            o.items = items;
-            this._restore();
-            this.tasks.push(this._prevState);
-        }
-        if (header && header !== this.options.header) {
-            o.header = header;
-        }
-        if (crossItems && crossItems !== this.options.crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader && crossHeader !== this.options.crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        this._populate();
-    }
-});
-BI.shortcut("bi.sequence_table_tree_number", BI.SequenceTableTreeNumber);/**
  * 日期控件中的月份下拉框
  *
  * Created by GUY on 2015/9/7.
@@ -664,10 +244,15 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.center_adapt",
                 items: [{
-                    type: "bi.horizontal",
-                    width: 100,
-                    rgap: 10,
-                    items: [this.year, this.month]
+                    el: {
+                        type: "bi.horizontal",
+                        width: 110,
+                        rgap: 10,
+                        items: [{
+                            el: this.year,
+                            lgap: 10
+                        }, this.month]
+                    }
                 }]
             }, {
                 el: {
@@ -786,7 +371,15 @@ BI.YearPicker = BI.inherit(BI.Widget, {
                 width: 25
             }, {
                 type: "bi.center_adapt",
-                items: [this.year]
+                items: [{
+                    el: {
+                        type: "bi.horizontal_float",
+                        width: 50,
+                        items: [{
+                            el: this.year
+                        }]
+                    }
+                }]
             }, {
                 el: {
                     type: "bi.center_adapt",
@@ -917,12 +510,12 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.calendar,
-                left: 10,
-                right: 10
+                left: 5,
+                right: 5
             }, {
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -1009,7 +602,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 dynamic: true
             },
             tab: {
-                cls: "year-popup-navigation bi-high-light bi-border-top",
+                cls: "year-popup-navigation bi-high-light bi-split-top",
                 height: 24,
                 items: [backBtn, preBtn]
             },
@@ -1153,7 +746,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -1201,7 +794,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -1282,7 +875,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
             items: [{
                 el: {
                     type: "bi.linear_segment",
-                    cls: "bi-border-bottom",
+                    cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -1526,7 +1119,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
                 }, {
                     el: triggerBtn,
                     top: 0,
-                    left: 0
+                    right: 0
                 }]
             }]
         });
@@ -1863,10 +1456,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
             type: "bi.htape",
             element: this,
             items: [{
+                el: this.text
+            },{
                 el: BI.createWidget(),
                 width: o.height
-            }, {
-                el: this.text
             }]
         });
         this.setValue(o.value);
@@ -1881,10 +1474,10 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
         var value = v, dateStr;
         if(BI.isNull(value)) {
             value = BI.getDate();
-            dateStr = value.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(value, "%Y-%X-%d %H:%M:%S");
         } else {
             var date = BI.getDate(value.year, value.month - 1, value.day, value.hour, value.minute, value.second);
-            dateStr = date.print("%Y-%X-%d %H:%M:%S");
+            dateStr = BI.print(date, "%Y-%X-%d %H:%M:%S");
 
         }
         this.text.setText(dateStr);
@@ -1892,7 +1485,8 @@ BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
     }
 
 });
-BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
+BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
+BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.StaticDateTimePaneCard.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -1923,7 +1517,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -1986,7 +1580,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);BI.StaticDateTimePaneCar
             items: [{
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,
@@ -2074,7 +1668,7 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);BI.Dynam
             items: [{
                 el: {
                     type: "bi.linear_segment",
-                    cls: "bi-border-bottom",
+                    cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
                         text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -2620,7 +2214,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -2721,7 +2315,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                     items: [{
                         el: {
                             type: "bi.layout",
-                            cls: "bi-down-list-spliter bi-border-top cursor-pointer",
+                            cls: "bi-down-list-spliter bi-split-top cursor-pointer",
                             height: 0
                         }
 
@@ -2864,29 +2458,29 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
                 date = BI.getDate((date.getFullYear() + BI.parseInt(obj.year)), date.getMonth(), date.getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                date = date.getOffsetQuarter(BI.parseInt(obj.quarter));
+                date = BI.getOffsetQuarter(date, BI.parseInt(obj.quarter));
             }
             if (BI.isNotNull(obj.month)) {
-                date = date.getOffsetMonth(BI.parseInt(obj.month));
+                date = BI.getOffsetMonth(date, BI.parseInt(obj.month));
             }
             if (BI.isNotNull(obj.week)) {
-                date = date.getOffsetDate(BI.parseInt(obj.week) * 7);
+                date = BI.getOffsetDate(date, BI.parseInt(obj.week) * 7);
             }
             if (BI.isNotNull(obj.day)) {
-                date = date.getOffsetDate(BI.parseInt(obj.day));
+                date = BI.getOffsetDate(date, BI.parseInt(obj.day));
             }
             if (BI.isNotNull(obj.workDay)) {
                 // 配置了节假日就按照节假日计算工作日偏移，否则按正常的天去算
                 if(BI.isNotNull(BI.holidays)) {
                     var count = Math.abs(obj.workDay);
                     for (var i = 0; i < count; i++) {
-                        date = date.getOffsetDate(obj.workDay < 0 ? -1 : 1);
-                        if(BI.isNotNull(BI.holidays[date.print("%Y-%X-%d")])) {
+                        date = BI.getOffsetDate(date, obj.workDay < 0 ? -1 : 1);
+                        if(BI.isNotNull(BI.holidays[BI.print(date, "%Y-%X-%d")])) {
                             i--;
                         }
                     }
                 } else {
-                    date = date.getOffsetDate(BI.parseInt(obj.workDay));
+                    date = BI.getOffsetDate(date, BI.parseInt(obj.workDay));
                 }
             }
             if (BI.isNotNull(obj.position) && obj.position !== BI.DynamicDateCard.OFFSET.CURRENT) {
@@ -2898,16 +2492,16 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
 
         getBeginDate: function (date, obj) {
             if (BI.isNotNull(obj.day)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.week)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getWeekStartDate() : date.getWeekEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getWeekStartDate(date) : BI.getWeekEndDate(date);
             }
             if (BI.isNotNull(obj.month)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (date.getLastDateOfMonth()).getDate());
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), date.getMonth(), 1) : BI.getDate(date.getFullYear(), date.getMonth(), (BI.getLastDateOfMonth(date)).getDate());
             }
             if (BI.isNotNull(obj.quarter)) {
-                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? date.getQuarterStartDate() : date.getQuarterEndDate();
+                return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getQuarterStartDate(date) : BI.getQuarterEndDate(date);
             }
             if (BI.isNotNull(obj.year)) {
                 return obj.position === BI.DynamicDateCard.OFFSET.BEGIN ? BI.getDate(date.getFullYear(), 0, 1) : BI.getDate(date.getFullYear(), 11, 31);
@@ -3029,8 +2623,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                                 self.fireEvent("EVENT_CHANGE");
                             }
                         }]
-                    },
-                    bgap: 5
+                    }
                 }],
                 ref: function () {
                     self.workDay = this;
@@ -3056,16 +2649,19 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         var self = this;
         var items = BI.map(values, function (idx, value) {
             return {
-                type: "bi.dynamic_date_param_item",
-                dateType: value.dateType,
-                value: value.value,
-                offset: value.offset,
-                listeners: [{
-                    eventName: "EVENT_CHANGE",
-                    action: function () {
-                        self.fireEvent("EVENT_CHANGE");
-                    }
-                }]
+                el: {
+                    type: "bi.dynamic_date_param_item",
+                    dateType: value.dateType,
+                    value: value.value,
+                    offset: value.offset,
+                    listeners: [{
+                        eventName: "EVENT_CHANGE",
+                        action: function () {
+                            self.fireEvent("EVENT_CHANGE");
+                        }
+                    }]
+                },
+                tgap: idx === 0 ? 5 : 0
             };
         });
 
@@ -3269,8 +2865,8 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
-        height: 24
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        height: 22
     },
 
 
@@ -3285,13 +2881,13 @@ BI.extend(BI.DynamicDateCard, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    width: opts.height,
+                    height: opts.height,
                     ref: function () {
                         self.changeIcon = this;
                     }
                 },
-                width: 24
+                width: opts.height
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -3308,6 +2904,7 @@ BI.extend(BI.DynamicDateCard, {
                             type: "bi.dynamic_date_trigger",
                             min: this.constants.DATE_MIN_VALUE,
                             max: this.constants.DATE_MAX_VALUE,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -3452,8 +3049,8 @@ BI.extend(BI.DynamicDateCard, {
                     el: {
                         type: "bi.icon_button",
                         cls: "bi-trigger-icon-button date-font",
-                        width: 24,
-                        height: 24,
+                        width: opts.height,
+                        height: opts.height,
                         listeners: [{
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
@@ -3480,6 +3077,7 @@ BI.extend(BI.DynamicDateCard, {
     },
 
     _checkDynamicValue: function (v) {
+        var o = this.options;
         var type = null;
         if (BI.isNotNull(v)) {
             type = v.type;
@@ -3487,7 +3085,7 @@ BI.extend(BI.DynamicDateCard, {
         switch (type) {
             case BI.DynamicDateCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = o.height;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -3506,6 +3104,10 @@ BI.extend(BI.DynamicDateCard, {
             default:
                 return true;
         }
+    },
+
+    _defaultState: function () {
+
     },
 
     setValue: function (v) {
@@ -3681,7 +3283,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
                         textHeight: c.buttonHeight - 1,
@@ -3694,7 +3296,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
@@ -3710,7 +3312,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -3737,7 +3339,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -3820,7 +3422,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -3927,14 +3529,14 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                         var text = self._getText(value);
                         var date = BI.getDate();
                         date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e");
+                        var dateStr = BI.print(date, "%Y-%x-%e");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                 }
             }
         });
@@ -3997,10 +3599,10 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -4025,19 +3627,19 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() >= 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() >= 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e");
+        var dateStr = BI.print(date, "%Y-%x-%e");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -4113,7 +3715,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day).print("%Y-%X-%d");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -4151,8 +3753,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border",
-        height: 24
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
+        height: 22
     },
 
 
@@ -4167,13 +3769,13 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 el: {
                     type: "bi.icon_button",
                     cls: "bi-trigger-icon-button date-change-h-font",
-                    width: 24,
-                    height: 24,
+                    width: opts.height,
+                    height: opts.height,
                     ref: function () {
                         self.changeIcon = this;
                     }
                 },
-                width: 24
+                width: opts.height
             }, {
                 type: "bi.absolute",
                 items: [{
@@ -4190,6 +3792,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_time_trigger",
                             min: this.constants.DATE_MIN_VALUE,
                             max: this.constants.DATE_MAX_VALUE,
+                            height: opts.height,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -4337,8 +3940,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                     el: {
                         type: "bi.icon_button",
                         cls: "bi-trigger-icon-button date-font",
-                        width: 24,
-                        height: 24,
+                        width: opts.height,
+                        height: opts.height,
                         listeners: [{
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
@@ -4365,6 +3968,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     _checkDynamicValue: function (v) {
+        var o = this.options;
         var type = null;
         if (BI.isNotNull(v)) {
             type = v.type;
@@ -4372,7 +3976,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         switch (type) {
             case BI.DynamicDateTimeCombo.Dynamic:
                 this.changeIcon.setVisible(true);
-                this.comboWrapper.attr("items")[0].width = 24;
+                this.comboWrapper.attr("items")[0].width = o.height;
                 this.comboWrapper.resize();
                 break;
             default:
@@ -4452,7 +4056,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -4465,7 +4069,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
@@ -4481,7 +4085,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-high-light bi-border-top",
+                        cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -4508,7 +4112,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Multi_Date_YMD"),
@@ -4603,7 +4207,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x-%e");
+            date = BI.print(date, "%Y-%x-%e");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -4666,7 +4270,7 @@ BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-date-time-select bi-border-top"
+        baseCls: "bi-date-time-select bi-split-top"
     },
 
     render: function () {
@@ -4917,15 +4521,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                            value.second || 0), "%Y-%X-%d %H:%M:%S");
                 }
             }
         });
@@ -4986,15 +4590,15 @@ BI.extend(BI.DynamicDateTimeSelect, {
         this.setValue(o.value);
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date ||
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date ||
 
-            BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+            BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.options.min, this.options.max)[0];
@@ -5019,19 +4623,19 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
         var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = date.print("%Y-%X-%d");
-        return (date.getMonth() > 0 && (BI.parseDateTime(v, "%Y-%X").print("%Y-%X") === v ||
-            BI.parseDateTime(v, "%Y-%x").print("%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
+        var dateStr = BI.print(date, "%Y-%X-%d");
+        return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
+            BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = date.print("%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -5107,8 +4711,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0).print("%Y-%X-%d %H:%M:%S");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                        value.second || 0), "%Y-%X-%d %H:%M:%S");
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -5145,7 +4749,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: "bi-search-editor bi-border",
+            baseCls: "bi-search-editor bi-border bi-focus-shadow",
             height: 24,
             errorText: "",
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -5183,13 +4787,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             items: [
                 {
                     el: {
-                        type: "bi.center_adapt",
-                        cls: "search-font",
-                        items: [{
-                            el: {
-                                type: "bi.icon"
-                            }
-                        }]
+                        type: "bi.icon_label",
+                        cls: "search-font"
                     },
                     width: 24
                 },
@@ -5538,671 +5137,6 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
     }
 });
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);/**
- * 文件管理控件组
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerButtonGroup
- * @extends BI.Widget
- */
-BI.FileManagerButtonGroup = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerButtonGroup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-button_group",
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerButtonGroup.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.button_group = BI.createWidget({
-            type: "bi.button_tree",
-            element: this,
-            chooseType: BI.Selection.Multi,
-            items: this._formatItems(o.items),
-            layouts: [{
-                type: "bi.vertical"
-            }]
-        });
-        this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _formatItems: function (items) {
-        var self = this, o = this.options;
-        BI.each(items, function (i, item) {
-            if (item.children && item.children.length > 0) {
-                item.type = "bi.file_manager_folder_item";
-            } else {
-                item.type = "bi.file_manager_file_item";
-            }
-        });
-        return items;
-    },
-
-    setValue: function (v) {
-        this.button_group.setValue(v);
-    },
-
-    getValue: function () {
-        return this.button_group.getValue();
-    },
-
-    getNotSelectedValue: function () {
-        return this.button_group.getNotSelectedValue();
-    },
-
-    getAllLeaves: function () {
-        return this.button_group.getAllLeaves();
-    },
-
-    getAllButtons: function () {
-        return this.button_group.getAllButtons();
-    },
-
-    getSelectedButtons: function () {
-        return this.button_group.getSelectedButtons();
-    },
-
-    getNotSelectedButtons: function () {
-        return this.button_group.getNotSelectedButtons();
-    },
-
-    populate: function (items) {
-        this.button_group.populate(this._formatItems(items));
-    }
-});
-BI.FileManagerButtonGroup.EVENT_CHANGE = "FileManagerButtonGroup.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_button_group", BI.FileManagerButtonGroup);/**
- * 文件管理控件
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManager
- * @extends BI.Widget
- */
-BI.FileManager = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManager.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager",
-            el: {},
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.FileManager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.tree = new BI.Tree();
-        var items = BI.Tree.transformToTreeFormat(o.items);
-        this.tree.initTree(items);
-        this.selectedValues = [];
-        this.nav = BI.createWidget({
-            type: "bi.file_manager_nav",
-            items: BI.deepClone(items)
-        });
-        this.nav.on(BI.FileManagerNav.EVENT_CHANGE, function (value, obj) {
-            if (value == "-1") {// 根节点
-                self.populate({children: self.tree.toJSON()});
-            } else {
-                var node = self.tree.search(obj.attr("id"));
-                self.populate(BI.extend({id: node.id}, node.get("data"), {children: self.tree.toJSON(node)}));
-            }
-            self.setValue(self.selectedValues);
-        });
-        this.list = BI.createWidget(o.el, {
-            type: "bi.file_manager_list",
-            items: items
-        });
-        this.list.on(BI.Controller.EVENT_CHANGE, function (type, selected, obj) {
-            if (type === BI.Events.CHANGE) {
-                var node = self.tree.search(obj.attr("id"));
-                self.populate(BI.extend({id: node.id}, node.get("data"), {children: self.tree.toJSON(node)}));
-            } else if (type === BI.Events.CLICK) {
-                var values = [];
-                if (obj instanceof BI.MultiSelectBar) {
-                    var t = self.list.getValue();
-                    selected = t.type === BI.Selection.All;
-                    values = BI.concat(t.assist, t.value);
-                } else {
-                    values = obj.getAllLeaves();
-                }
-                BI.each(values, function (i, v) {
-                    if (selected === true) {
-                        self.selectedValues.pushDistinct(v);
-                    } else {
-                        self.selectedValues.remove(v);
-                    }
-                });
-            }
-            self.setValue(self.selectedValues);
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.list,
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 10
-            }, {
-                el: this.nav,
-                left: 40,
-                right: 100,
-                top: 0
-            }]
-        });
-    },
-
-    setValue: function (value) {
-        this.selectedValues = value || [];
-        this.list.setValue(this.selectedValues);
-    },
-
-    getValue: function () {
-        var obj = this.list.getValue();
-        var res = obj.type === BI.Selection.All ? obj.assist : obj.value;
-        res.pushDistinctArray(this.selectedValues);
-        return res;
-    },
-
-    _populate: function (items) {
-        this.list.populate(items);
-    },
-
-    getSelectedValue: function () {
-        return this.nav.getValue()[0];
-    },
-
-    getSelectedId: function () {
-        return this.nav.getId()[0];
-    },
-
-    populate: function (node) {
-        var clone = BI.deepClone(node);
-        this._populate(node.children);
-        this.nav.populate(clone);
-    }
-});
-BI.FileManager.EVENT_CHANGE = "FileManager.EVENT_CHANGE";
-BI.shortcut("bi.file_manager", BI.FileManager);/**
- * 文件管理控件
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerFileItem
- * @extends BI.Single
- */
-BI.FileManagerFileItem = BI.inherit(BI.Single, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerFileItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-file-item bi-list-item bi-border-bottom",
-            height: 30
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerFileItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.checked = BI.createWidget({
-            type: "bi.multi_select_bar",
-            text: "",
-            width: 36,
-            height: o.height
-        });
-        this.checked.on(BI.Controller.EVENT_CHANGE, function () {
-            arguments[2] = self;
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [{
-                el: this.checked,
-                width: 36
-            }, {
-                el: {
-                    type: "bi.icon_button",
-                    cls: "create-by-me-file-font"
-                },
-                width: 20
-            }, {
-                el: {
-                    type: "bi.label",
-                    textAlign: "left",
-                    height: o.height,
-                    text: o.text,
-                    value: o.value
-                }
-            }]
-        });
-    },
-
-    getAllLeaves: function () {
-        return [this.options.value];
-    },
-
-    isSelected: function () {
-        return this.checked.isSelected();
-    },
-
-    setSelected: function (v) {
-        this.checked.setSelected(v);
-    }
-});
-BI.FileManagerFileItem.EVENT_CHANGE = "FileManagerFileItem.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_file_item", BI.FileManagerFileItem);/**
- * 文件管理控件
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerFolderItem
- * @extends BI.Single
- */
-BI.FileManagerFolderItem = BI.inherit(BI.Single, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerFolderItem.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-folder-item bi-list-item bi-border-bottom",
-            height: 30
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerFolderItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.checked = BI.createWidget({
-            type: "bi.multi_select_bar",
-            text: "",
-            width: 36,
-            height: o.height
-        });
-        this.checked.on(BI.Controller.EVENT_CHANGE, function () {
-            arguments[2] = self;
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.button = BI.createWidget({
-            type: "bi.text_button",
-            textAlign: "left",
-            height: o.height,
-            text: o.text,
-            value: o.value
-        });
-        this.button.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CHANGE, o.value, self);
-        });
-
-        this.tree = new BI.Tree();
-        this.tree.initTree([{
-            id: o.id,
-            children: o.children
-        }]);
-        this.selectValue = [];
-
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [{
-                el: this.checked,
-                width: 36
-            }, {
-                el: {
-                    type: "bi.icon_button",
-                    cls: "create-by-me-folder-font"
-                },
-                width: 20
-            }, {
-                el: this.button
-            }]
-        });
-    },
-
-    setAllSelected: function (v) {
-        this.checked.setSelected(v);
-        this.selectValue = [];
-    },
-
-    setHalfSelected: function (v) {
-        this.checked.setHalfSelected(v);
-        if(!v) {
-            this.selectValue = [];
-        }
-    },
-
-    setValue: function (v) {
-        var self = this, o = this.options;
-        var isHalf = false;
-        var selectValue = [];
-        this.tree.traverse(function (node) {
-            if (node.isLeaf()) {
-                if (BI.contains(v, node.get("data").value)) {
-                    selectValue.push(node.get("data").value);
-                } else {
-                    isHalf = true;
-                }
-            }
-        });
-        this.setAllSelected(selectValue.length > 0 && !isHalf);
-        this.setHalfSelected(selectValue.length > 0 && isHalf);
-        if (this.checked.isHalfSelected()) {
-            this.selectValue = selectValue;
-        }
-    },
-
-    getAllButtons: function () {
-        return [this];
-    },
-
-    getAllLeaves: function () {
-        var o = this.options;
-        var res = [];
-        this.tree.traverse(function (node) {
-            if (node.isLeaf()) {
-                res.push(node.get("data").value);
-            }
-        });
-        return res;
-    },
-
-    getNotSelectedValue: function () {
-        var self = this, o = this.options;
-        var res = [];
-        var isAllSelected = this.checked.isSelected();
-        if (isAllSelected === true) {
-            return res;
-        }
-        var isHalfSelected = this.checked.isHalfSelected();
-        this.tree.traverse(function (node) {
-            if (node.isLeaf()) {
-                var v = node.get("data").value;
-                if (isHalfSelected === true) {
-                    if (!BI.contains(self.selectValue, node.get("data").value)) {
-                        res.push(v);
-                    }
-                } else {
-                    res.push(v);
-                }
-            }
-        });
-        return res;
-    },
-
-    getValue: function () {
-        var res = [];
-        if (this.checked.isSelected()) {
-            this.tree.traverse(function (node) {
-                if (node.isLeaf()) {
-                    res.push(node.get("data").value);
-                }
-            });
-            return res;
-        }
-        if (this.checked.isHalfSelected()) {
-            return this.selectValue;
-        }
-        return [];
-    }
-});
-BI.FileManagerFolderItem.EVENT_CHANGE = "FileManagerFolderItem.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_folder_item", BI.FileManagerFolderItem);/**
- * 文件管理控件列表
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerList
- * @extends BI.Widget
- */
-BI.FileManagerList = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerList.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-list",
-            el: {},
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerList.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.list = BI.createWidget({
-            type: "bi.select_list",
-            element: this,
-            items: o.items,
-            toolbar: {
-                type: "bi.multi_select_bar",
-                height: 40,
-                text: ""
-            },
-            el: {
-                type: "bi.list_pane",
-                el: BI.isWidget(o.el) ? o.el : BI.extend({
-                    type: "bi.file_manager_button_group"
-                }, o.el)
-            }
-        });
-        this.list.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-    },
-
-    setValue: function (v) {
-        this.list.setValue({
-            value: v
-        });
-    },
-
-    getValue: function () {
-        return this.list.getValue();
-    },
-
-    populate: function (items) {
-        this.list.populate(items);
-        this.list.setToolBarVisible(true);
-    }
-});
-BI.FileManagerList.EVENT_CHANGE = "FileManagerList.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_list", BI.FileManagerList);/**
- * 文件管理导航按钮
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerNavButton
- * @extends BI.Widget
- */
-BI.FileManagerNavButton = BI.inherit(BI.Widget, {
-
-    _const: {
-        normal_color: "#ffffff",
-        select_color: "#eff1f4"
-    },
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerNavButton.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-nav-button",
-            selected: false,
-            height: 40
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerNavButton.superclass._init.apply(this, arguments);
-        var self = this, o = this.options, c = this._const;
-        this.button = BI.createWidget({
-            type: "bi.text_button",
-            cls: "file-manager-nav-button-text bi-card",
-            once: true,
-            selected: o.selected,
-            text: o.text,
-            title: o.text,
-            value: o.value,
-            height: o.height,
-            lgap: 20,
-            rgap: 10
-        });
-        this.button.on(BI.Controller.EVENT_CHANGE, function () {
-            arguments[2] = self;
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        var svg = BI.createWidget({
-            type: "bi.svg",
-            cls: "file-manager-nav-button-triangle",
-            width: 15,
-            height: o.height
-        });
-        var path = svg.path("M0,0L15,20L0,40").attr({
-            stroke: c.select_color,
-            fill: o.selected ? c.select_color : c.normal_color
-        });
-        this.button.on(BI.TextButton.EVENT_CHANGE, function () {
-            if (this.isSelected()) {
-                path.attr("fill", c.select_color);
-            } else {
-                path.attr("fill", c.normal_color);
-            }
-        });
-        BI.createWidget({
-            type: "bi.default",
-            element: this,
-            items: [this.button]
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: svg,
-                right: -15,
-                top: 0,
-                bottom: 0
-            }]
-        });
-    },
-
-    isSelected: function () {
-        return this.button.isSelected();
-    },
-
-    setValue: function (v) {
-        this.button.setValue(v);
-    },
-
-    getValue: function () {
-        return this.button.getValue();
-    },
-
-    populate: function (items) {
-
-    }
-});
-BI.FileManagerNavButton.EVENT_CHANGE = "FileManagerNavButton.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_nav_button", BI.FileManagerNavButton);/**
- * 文件管理导航
- *
- * Created by GUY on 2015/12/11.
- * @class BI.FileManagerNav
- * @extends BI.Widget
- */
-BI.FileManagerNav = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.FileManagerNav.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-file-manager-nav bi-border-left",
-            height: 40,
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.FileManagerNav.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.tree = new BI.Tree();
-        this.refreshTreeData(o.items);
-        this.tree.getRoot().set("data", {
-            text: BI.i18nText("BI-Created_By_Me"),
-            value: BI.FileManagerNav.ROOT_CREATE_BY_ME,
-            id: BI.FileManagerNav.ROOT_CREATE_BY_ME
-        });
-        this.button_group = BI.createWidget({
-            type: "bi.button_group",
-            element: this,
-            items: [{
-                type: "bi.file_manager_nav_button",
-                text: BI.i18nText("BI-Created_By_Me"),
-                selected: true,
-                id: BI.FileManagerNav.ROOT_CREATE_BY_ME,
-                value: BI.FileManagerNav.ROOT_CREATE_BY_ME
-            }],
-            layouts: [{
-                type: "bi.horizontal"
-            }]
-        });
-        this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.button_group.on(BI.ButtonGroup.EVENT_CHANGE, function (value, obj) {
-            self.fireEvent(BI.FileManagerNav.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _getAllParents: function (id) {
-        var node, res = [];
-        if (!id) {
-            node = this.tree.getRoot();
-        } else {
-            node = this.tree.search(id);
-        }
-        while (node.parent) {
-            res.push(node);
-            node = node.parent;
-        }
-        res.push(node);
-        return res.reverse();
-    },
-
-    _formatNodes: function (nodes) {
-        var res = [];
-        BI.each(nodes, function (i, node) {
-            res.push(BI.extend({
-                type: "bi.file_manager_nav_button",
-                id: node.id
-            }, node.get("data")));
-        });
-        BI.last(res).selected = true;
-        return res;
-    },
-
-    getValue: function () {
-        return this.button_group.getValue();
-    },
-
-    getId: function () {
-        var ids = [];
-        BI.each(this.button_group.getSelectedButtons(), function (i, btn) {
-            ids.push(btn.attr("id"));
-        });
-        return ids;
-    },
-
-    refreshTreeData: function (items) {
-        this.tree.initTree(BI.Tree.transformToTreeFormat(items));
-        this.tree.getRoot().set("data", {
-            text: BI.i18nText("BI-Created_By_Me"),
-            value: BI.FileManagerNav.ROOT_CREATE_BY_ME,
-            id: BI.FileManagerNav.ROOT_CREATE_BY_ME
-        });
-    },
-
-    populate: function (node) {
-        var parents = BI.isNull(node) ? [this.tree.getRoot()] : this._getAllParents(node.id);
-        this.button_group.populate(this._formatNodes(parents));
-    }
-});
-BI.extend(BI.FileManagerNav, {
-    ROOT_CREATE_BY_ME: "-1"
-});
-BI.FileManagerNav.EVENT_CHANGE = "FileManagerNav.EVENT_CHANGE";
-BI.shortcut("bi.file_manager_nav", BI.FileManagerNav);/**
  * Created by zcf on 2016/9/26.
  */
 BI.IntervalSlider = BI.inherit(BI.Single, {
@@ -6427,7 +5361,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
                     }]
                 }],
                 rgap: c.EDITOR_R_GAP,
-                height: 70
+                height: c.SLIDER_HEIGHT
             },
             top: 0,
             left: 0,
@@ -6689,10 +5623,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
-                this.valueOne = valueOne;
+                this.valueOne = (this.valueOne <= this.valueTwo ? valueOne : valueTwo);
             }
             if (this._checkValidation(valueTwo)) {
-                this.valueTwo = valueTwo;
+                this.valueTwo = (this.valueOne <= this.valueTwo ? valueTwo : valueOne);
             }
             if (valueOne < this.min) {
                 this.valueOne = this.min;
@@ -7382,7 +6316,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             }
 
 
-            if (!self.singleValues.contains(changedValue)) {
+            if (!BI.contains(self.singleValues, changedValue)) {
                 var item = self.getValue();
                 var result = [];
                 BI.each(item, function (i, valueObject) {
@@ -7666,7 +6600,10 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -8222,7 +7159,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -8296,7 +7236,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             baseCls: "bi-multilayer-single-level-tree",
             isDefaultInit: false,
             items: [],
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            chooseType: BI.Selection.Single
         });
     },
 
@@ -8375,7 +7316,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
             el: {
                 type: "bi.button_tree",
-                chooseType: BI.Selection.Single,
+                chooseType: o.chooseType,
                 layouts: [{
                     type: "bi.vertical"
                 }]
@@ -8393,7 +7334,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             element: this,
             scrollable: true,
             items: [this.tree]
-        })
+        });
     },
 
     populate: function (nodes) {
@@ -9218,7 +8159,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9373,12 +8317,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -9481,6 +8420,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -9493,9 +8433,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -9549,6 +8491,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -9556,6 +8499,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -9606,7 +8550,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -9754,12 +8701,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -9818,7 +8760,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -9881,6 +8823,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -9893,9 +8836,11 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -9926,6 +8871,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    // value更新的时候assist也需要更新
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -9933,6 +8880,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -9982,7 +8930,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -10142,12 +9093,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -10206,7 +9152,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         }, function () {
             // 如果在不选的状态下直接把该值添加进来
             if (self.storeValue.type === BI.Selection.Multi) {
-                self.storeValue.value.pushDistinct(keyword);
+                BI.pushDistinct(self.storeValue.value, keyword);
             }
             self.combo.setValue(self.storeValue);
             self._setStartValue(keyword);
@@ -10269,6 +9215,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -10281,9 +9228,11 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -10314,6 +9263,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -10321,6 +9271,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -10472,7 +9423,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
@@ -10555,6 +9506,11 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget({
             type: "bi.select_list",
             logic: opts.logic,
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             el: BI.extend({
                 onLoaded: opts.onLoaded,
                 el: {
@@ -10596,7 +9552,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -10620,12 +9576,15 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             value: this.storeValue
         });
-        BI.createWidget({
-            type: "bi.vertical",
-            element: this,
-            items: [this.button_group],
+
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Top), BI.extend({
+            scrolly: true,
             vgap: 5
-        });
+        }, opts.logic, {
+            items: BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Top, this.button_group)
+        }))));
         this.button_group.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -10640,7 +9599,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -10689,7 +9649,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.resetHeight(h);
+        this.button_group.resetHeight(h - 10);
     },
 
     resetWidth: function (w) {
@@ -10771,7 +9731,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -10814,8 +9774,10 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
+            cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 36
         });
     },
 
@@ -11161,7 +10123,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
@@ -11346,6 +10308,11 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
         this.storeValue = BI.deepClone(opts.value);
         this.button_group = BI.createWidget({
             type: "bi.select_list",
+            toolbar: {
+                type: "bi.multi_select_bar",
+                cls: "bi-list-item-active",
+                iconWrapperWidth: 36
+            },
             element: this,
             logic: {
                 dynamic: false
@@ -11410,7 +10377,9 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            cls: "bi-list-item-active",
+            iconWrapperWidth: 36
         });
     },
 
@@ -12243,7 +11212,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -12294,7 +11263,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -12584,7 +11553,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                     var keyword = self.trigger.getKeyword();
                     if (!self.trigger.hasMatched()) {
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.storeValue.value.pushDistinct(keyword);
+                            BI.pushDistinct(self.storeValue.value, keyword);
                         }
                         self._showAdapter();
                         self.adapter.setValue(self.storeValue);
@@ -12635,7 +11604,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                             value: [keyword]
                         }, function () {
                             if (self.storeValue.type === BI.Selection.Multi) {
-                                self.storeValue.value.pushDistinct(keyword);
+                                BI.pushDistinct(self.storeValue.value, keyword);
                             }
                             self._showAdapter();
                             self.adapter.setValue(self.storeValue);
@@ -13725,7 +12694,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             if (isSearching()) {
                 return;
             }
@@ -13738,7 +12706,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
             if (isSearching()) {
                 self.trigger.stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
@@ -14227,7 +13194,7 @@ BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);/**
 BI.NumberEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.NumberEditor.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-number-editor bi-border",
+            baseCls: "bi-number-editor bi-border bi-focus-shadow",
             validationChecker: function () {
                 return true;
             },
@@ -14264,7 +13231,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
@@ -14275,7 +13242,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active3 icon-size-12"
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
@@ -14888,611 +13855,6 @@ BI.NumberInterval.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);/**
- *
- * 表格
- *
- * Created by GUY on 2015/9/22.
- * @class BI.PageTableCell
- * @extends BI.Single
- */
-BI.PageTableCell = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.PageTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-page-table-cell",
-            text: "",
-            title: ""
-        });
-    },
-
-    _init: function () {
-        BI.PageTableCell.superclass._init.apply(this, arguments);
-        var label = BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: "left",
-            whiteSpace: "nowrap",
-            height: this.options.height,
-            text: this.options.text,
-            title: this.options.title,
-            value: this.options.value,
-            lgap: 5,
-            rgap: 5
-        });
-
-        if (BI.isNotNull(this.options.styles) && BI.isObject(this.options.styles)) {
-            this.element.css(this.options.styles);
-        }
-    }
-});
-
-BI.shortcut("bi.page_table_cell", BI.PageTableCell);/**
- * 分页表格
- *
- * Created by GUY on 2016/2/15.
- * @class BI.PageTable
- * @extends BI.Widget
- */
-BI.PageTable = BI.inherit(BI.Widget, {
-
-    _const: {
-        scrollWidth: 18,
-        minScrollWidth: 100
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PageTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-page-table",
-            el: {
-                type: "bi.sequence_table"
-            },
-            pager: {
-                horizontal: {
-                    pages: false, // 总页数
-                    curr: 1, // 初始化当前页， pages为数字时可用
-
-                    hasPrev: BI.emptyFn,
-                    hasNext: BI.emptyFn,
-                    firstPage: 1,
-                    lastPage: BI.emptyFn
-                },
-                vertical: {
-                    pages: false, // 总页数
-                    curr: 1, // 初始化当前页， pages为数字时可用
-
-                    hasPrev: BI.emptyFn,
-                    hasNext: BI.emptyFn,
-                    firstPage: 1,
-                    lastPage: BI.emptyFn
-                }
-            },
-
-            itemsCreator: BI.emptyFn,
-
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
-
-            isNeedMerge: false, // 是否需要合并单元格
-            mergeCols: [], // 合并的单元格列号
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-            headerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _init: function () {
-        BI.PageTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.hCurr = 1;
-        this.vCurr = 1;
-
-        this.table = BI.createWidget(o.el, {
-            type: "bi.sequence_table",
-            width: o.width,
-            height: o.height && o.height - 30,
-
-            isNeedResize: true,
-            isResizeAdapt: false,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            minColumnSize: o.minColumnSize,
-            maxColumnSize: o.maxColumnSize,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
-
-            header: o.header,
-            items: o.items,
-            // 交叉表头
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems
-        });
-
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-
-        this.pager = BI.createWidget(o.pager, {
-            type: "bi.direction_pager",
-            height: 30
-        });
-        this.pager.on(BI.Pager.EVENT_CHANGE, function () {
-            var vpage = this.getVPage && this.getVPage();
-            if (BI.isNull(vpage)) {
-                vpage = this.getCurrentPage();
-            }
-            var hpage = this.getHPage && this.getHPage();
-            o.itemsCreator({
-                vpage: vpage,
-                hpage: hpage
-            }, function (items, header, crossItems, crossHeader) {
-                self.table.setVPage ? self.table.setVPage(vpage) : self.table.setValue(vpage);
-                self.table.setHPage && self.table.setHPage(hpage);
-                self.populate.apply(self, arguments);
-            });
-        });
-
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.table,
-                left: 0,
-                top: 0
-            }, {
-                el: this.pager,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }]
-        });
-    },
-
-    setHPage: function (v) {
-        this.hCurr = v;
-        this.pager.setHPage && this.pager.setHPage(v);
-        this.table.setHPage && this.table.setHPage(v);
-    },
-
-    setVPage: function (v) {
-        this.vCurr = v;
-        this.pager.setVPage && this.pager.setVPage(v);
-        this.table.setVPage && this.table.setVPage(v);
-    },
-
-    getHPage: function () {
-        var hpage = this.pager.getHPage && this.pager.getHPage();
-        if (BI.isNotNull(hpage)) {
-            return hpage;
-        }
-        hpage = this.pager.getCurrentPage && this.pager.getCurrentPage();
-        if (BI.isNotNull(hpage)) {
-            return hpage;
-        }
-        return this.hpage;
-    },
-
-    getVPage: function () {
-        var vpage = this.pager.getVPage && this.pager.getVPage();
-        if (BI.isNotNull(vpage)) {
-            return vpage;
-        }
-        vpage = this.pager.getCurrentPage && this.pager.getCurrentPage();
-        if (BI.isNotNull(vpage)) {
-            return vpage;
-        }
-        return this.vpage;
-    },
-
-    setWidth: function (width) {
-        BI.PageTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(width);
-    },
-
-    setHeight: function (height) {
-        BI.PageTable.superclass.setHeight.apply(this, arguments);
-        var showPager = false;
-        if (this.pager.alwaysShowPager) {
-            showPager = true;
-        } else if (this.pager.hasHNext && this.pager.hasHNext()) {
-            showPager = true;
-        } else if (this.pager.hasHPrev && this.pager.hasHPrev()) {
-            showPager = true;
-        } else if (this.pager.hasVNext && this.pager.hasVNext()) {
-            showPager = true;
-        } else if (this.pager.hasVPrev && this.pager.hasVPrev()) {
-            showPager = true;
-        } else if (this.pager.hasNext && this.pager.hasNext()) {
-            showPager = true;
-        } else if (this.pager.hasPrev && this.pager.hasPrev()) {
-            showPager = true;
-        }
-        this.table.setHeight(height - (showPager ? 30 : 0));
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-        this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    restore: function () {
-        this.table.restore();
-    },
-
-    attr: function () {
-        BI.PageTable.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    populate: function () {
-        this.pager.populate();
-        this.table.populate.apply(this.table, arguments);
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        this.pager && this.pager.destroy();
-        BI.PageTable.superclass.destroy.apply(this, arguments);
-    }
-});
-BI.shortcut("bi.page_table", BI.PageTable);/**
- * 预览表列
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTableCell
- * @extends BI.Widget
- */
-BI.PreviewTableCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTableCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table-cell",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTableCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: o.textAlign || "left",
-            whiteSpace: o.whiteSpace || "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            hgap: o.hgap || 5
-        });
-    }
-});
-BI.shortcut("bi.preview_table_cell", BI.PreviewTableCell);/**
- * 预览表
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTableHeaderCell
- * @extends BI.Widget
- */
-BI.PreviewTableHeaderCell = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTableHeaderCell.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table-header-cell",
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTableHeaderCell.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        BI.createWidget({
-            type: "bi.label",
-            element: this,
-            textAlign: o.textAlign || "left",
-            whiteSpace: o.whiteSpace || "normal",
-            height: this.options.height,
-            text: this.options.text,
-            value: this.options.value,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            hgap: o.hgap || 5
-        });
-    }
-});
-BI.shortcut("bi.preview_table_header_cell", BI.PreviewTableHeaderCell);/**
- * 预览表
- *
- * Created by GUY on 2015/12/25.
- * @class BI.PreviewTable
- * @extends BI.Widget
- */
-BI.PreviewTable = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.PreviewTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-preview-table",
-            isNeedFreeze: false,
-            freezeCols: [],
-            rowSize: null,
-            columnSize: [],
-            headerRowSize: 30,
-            header: [],
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.PreviewTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.table = BI.createWidget({
-            type: "bi.table_view",
-            element: this,
-            isNeedResize: false,
-
-            isResizeAdapt: false,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            rowSize: o.rowSize,
-            columnSize: o.columnSize,
-            headerRowSize: o.headerRowSize,
-
-            header: BI.map(o.header, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_header_cell"
-                    }, item);
-                });
-            }),
-            items: BI.map(o.items, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_cell"
-                    }, item);
-                });
-            })
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self._adjustColumns();
-        });
-        this._adjustColumns();
-    },
-
-    // 是否有自适应调节的列，即列宽为""
-    _hasAdaptCol: function (columnSize) {
-        return BI.any(columnSize, function (i, size) {
-            return size === "";
-        });
-    },
-
-    _isPercentage: function (columnSize) {
-        return columnSize[0] <= 1;
-    },
-
-    _adjustColumns: function () {
-        var self = this, o = this.options;
-        if (o.isNeedFreeze === true) {
-            // 如果存在百分比的情况
-            if (this._isPercentage(o.columnSize)) {
-                if (this._hasAdaptCol(o.columnSize)) {
-                    var findCols = [], remain = 0;
-                    BI.each(o.columnSize, function (i, size) {
-                        if (size === "") {
-                            findCols.push(i);
-                        } else {
-                            remain += size;
-                        }
-                    });
-                    remain = 1 - remain;
-                    var average = remain / findCols.length;
-                    BI.each(findCols, function (i, col) {
-                        o.columnSize[col] = average;
-                    });
-                }
-                var isRight = BI.first(o.freezeCols) !== 0;
-                var freezeSize = [], notFreezeSize = [];
-                BI.each(o.columnSize, function (i, size) {
-                    if (o.freezeCols.contains(i)) {
-                        freezeSize.push(size);
-                    } else {
-                        notFreezeSize.push(size);
-                    }
-                });
-                var sumFreezeSize = BI.sum(freezeSize), sumNotFreezeSize = BI.sum(notFreezeSize);
-                BI.each(freezeSize, function (i, size) {
-                    freezeSize[i] = size / sumFreezeSize;
-                });
-                BI.each(notFreezeSize, function (i, size) {
-                    notFreezeSize[i] = size / sumNotFreezeSize;
-                });
-                this.table.setRegionColumnSize(isRight ? ["fill", sumFreezeSize] : [sumFreezeSize, "fill"]);
-                this.table.setColumnSize(isRight ? (notFreezeSize.concat(freezeSize)) : (freezeSize.concat(notFreezeSize)));
-            }
-        } else {
-            // 如果存在自适应宽度的列或者是百分比计算的列，需要将整个表宽设为100%
-            if (this._hasAdaptCol(o.columnSize) || this._isPercentage(o.columnSize)) {
-                this.table.setRegionColumnSize(["100%"]);
-            }
-        }
-    },
-
-    setColumnSize: function (columnSize) {
-        return this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        return this.table.setHeaderColumnSize(columnSize);
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        return this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        return this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        return this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        return this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
-    populate: function (items, header) {
-        if (items) {
-            items = BI.map(items, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_cell"
-                    }, item);
-                });
-            });
-        }
-        if (header) {
-            header = BI.map(header, function (i, items) {
-                return BI.map(items, function (j, item) {
-                    return BI.extend({
-                        type: "bi.preview_table_header_cell"
-                    }, item);
-                });
-            });
-        }
-        this.table.populate(items, header);
-        this._adjustColumns();
-    }
-});
-BI.PreviewTable.EVENT_CHANGE = "PreviewTable.EVENT_CHANGE";
-BI.shortcut("bi.preview_table", BI.PreviewTable);/**
  * 季度下拉框
  *
  * Created by GUY on 2015/8/28.
@@ -15604,16 +13966,16 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         items = BI.map(items, function (j, item) {
@@ -15762,371 +14124,6 @@ BI.QuarterTrigger.EVENT_START = "EVENT_START";
 BI.QuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.QuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.quarter_trigger", BI.QuarterTrigger);/**
- * 自适应宽度的表格
- *
- * Created by GUY on 2016/2/3.
- * @class BI.ResponisveTable
- * @extends BI.Widget
- */
-BI.ResponisveTable = BI.inherit(BI.Widget, {
-
-    _const: {
-        perColumnSize: 100
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.ResponisveTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-responsive-table",
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
-            logic: { // 冻结的页面布局逻辑
-                dynamic: false
-            },
-
-            isNeedMerge: false, // 是否需要合并单元格
-            mergeCols: [], // 合并的单元格列号
-            mergeRule: function (row1, row2) { // 合并规则, 默认相等时合并
-                return BI.isEqual(row1, row2);
-            },
-
-            columnSize: [],
-            headerRowSize: 25,
-            footerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: false,
-
-            header: [],
-            footer: false,
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: []
-        });
-    },
-
-    _init: function () {
-        BI.ResponisveTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.table = BI.createWidget({
-            type: "bi.table_view",
-            element: this,
-            logic: o.logic,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            headerRowSize: o.headerRowSize,
-            footerRowSize: o.footerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            header: o.header,
-            footer: o.footer,
-            items: o.items,
-            // 交叉表头
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_INIT, function () {
-            self._initRegionSize();
-            self.table.resize();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_INIT, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_RESIZE, function () {
-            self._resizeRegion();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_REGION_RESIZE, function () {
-            // important:在冻结并自适应列宽的情况下要随时变更表头宽度
-            if (o.isNeedResize === true && self._isAdaptiveColumn()) {
-                self._resizeHeader();
-            }
-            self.fireEvent(BI.Table.EVENT_TABLE_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-
-        this.table.on(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, function () {
-            self._resizeBody();
-            self.fireEvent(BI.Table.EVENT_TABLE_BEFORE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_COLUMN_RESIZE, function () {
-            self.fireEvent(BI.Table.EVENT_TABLE_COLUMN_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            self._resizeRegion();
-            self._resizeHeader();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-    },
-
-    _initRegionSize: function () {
-        var o = this.options;
-        if (o.isNeedFreeze === true) {
-            var regionColumnSize = this.table.getRegionColumnSize();
-            var maxWidth = this.table.element.width();
-            if (!regionColumnSize[0] || (regionColumnSize[0] === "fill") || regionColumnSize[0] > maxWidth || regionColumnSize[1] > maxWidth) {
-                var freezeCols = o.freezeCols;
-                if (freezeCols.length === 0) {
-                    this.table.setRegionColumnSize([0, "fill"]);
-                } else if (freezeCols.length > 0 && freezeCols.length < o.columnSize.length) {
-                    var size = maxWidth / 3;
-                    if (freezeCols.length > o.columnSize.length / 2) {
-                        size = maxWidth * 2 / 3;
-                    }
-                    this.table.setRegionColumnSize([size, "fill"]);
-                } else {
-                    this.table.setRegionColumnSize(["fill", 0]);
-                }
-            }
-        }
-    },
-
-    _getBlockSize: function () {
-        var o = this.options;
-        var columnSize = this.table.getCalculateColumnSize();
-        if (o.isNeedFreeze === true) {
-            var columnSizeLeft = [], columnSizeRight = [];
-            BI.each(columnSize, function (i, size) {
-                if (o.freezeCols.contains(i)) {
-                    columnSizeLeft.push(size);
-                } else {
-                    columnSizeRight.push(size);
-                }
-            });
-            // 因为有边框，所以加上数组长度的参数调整
-            var sumLeft = BI.sum(columnSizeLeft) + columnSizeLeft.length,
-                sumRight = BI.sum(columnSizeRight) + columnSizeRight.length;
-            return {
-                sumLeft: sumLeft,
-                sumRight: sumRight,
-                left: columnSizeLeft,
-                right: columnSizeRight
-            };
-        }
-        return {
-            size: columnSize,
-            sum: BI.sum(columnSize) + columnSize.length
-        };
-    },
-
-    _isAdaptiveColumn: function (columnSize) {
-        return !(BI.last(columnSize || this.table.getColumnSize()) > 1.05);
-    },
-
-    _resizeHeader: function () {
-        var self = this, o = this.options;
-        if (o.isNeedFreeze === true) {
-            // 若是当前处于自适应调节阶段
-            if (this._isAdaptiveColumn()) {
-                var columnSize = this.table.getCalculateColumnSize();
-                this.table.setHeaderColumnSize(columnSize);
-            } else {
-                var regionColumnSize = this.table.getClientRegionColumnSize();
-                var block = this._getBlockSize();
-                var sumLeft = block.sumLeft, sumRight = block.sumRight;
-                var columnSizeLeft = block.left, columnSizeRight = block.right;
-                columnSizeLeft[columnSizeLeft.length - 1] += regionColumnSize[0] - sumLeft;
-                columnSizeRight[columnSizeRight.length - 1] += regionColumnSize[1] - sumRight;
-
-                var newLeft = BI.clone(columnSizeLeft), newRight = BI.clone(columnSizeRight);
-                newLeft[newLeft.length - 1] = "";
-                newRight[newRight.length - 1] = "";
-                this.table.setColumnSize(newLeft.concat(newRight));
-
-                block = self._getBlockSize();
-                if (columnSizeLeft[columnSizeLeft.length - 1] < block.left[block.left.length - 1]) {
-                    columnSizeLeft[columnSizeLeft.length - 1] = block.left[block.left.length - 1];
-                }
-                if (columnSizeRight[columnSizeRight.length - 1] < block.right[block.right.length - 1]) {
-                    columnSizeRight[columnSizeRight.length - 1] = block.right[block.right.length - 1];
-                }
-
-                self.table.setColumnSize(columnSizeLeft.concat(columnSizeRight));
-            }
-        } else {
-            if (!this._isAdaptiveColumn()) {
-                var regionColumnSize = this.table.getClientRegionColumnSize();
-                var block = this._getBlockSize();
-                var sum = block.sum;
-                var size = block.size;
-
-                size[size.length - 1] += regionColumnSize[0] - sum;
-
-                var newSize = BI.clone(size);
-                newSize[newSize.length - 1] = "";
-                this.table.setColumnSize(newSize);
-                block = this._getBlockSize();
-
-                if (size[size.length - 1] < block.size[block.size.length - 1]) {
-                    size[size.length - 1] = block.size[block.size.length - 1];
-                }
-                this.table.setColumnSize(size);
-            }
-        }
-    },
-
-    _resizeBody: function () {
-        if (this._isAdaptiveColumn()) {
-            var columnSize = this.table.getCalculateColumnSize();
-            this.setColumnSize(columnSize);
-        }
-    },
-
-    _adjustRegion: function () {
-        var o = this.options;
-        var regionColumnSize = this.table.getCalculateRegionColumnSize();
-        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
-            var block = this._getBlockSize();
-            var sumLeft = block.sumLeft, sumRight = block.sumRight;
-            if (sumLeft < regionColumnSize[0] || regionColumnSize[0] >= (sumLeft + sumRight)) {
-                this.table.setRegionColumnSize([sumLeft, "fill"]);
-            }
-            this._resizeRegion();
-        }
-    },
-
-    _resizeRegion: function () {
-        var o = this.options;
-        var regionColumnSize = this.table.getCalculateRegionColumnSize();
-        if (o.isNeedFreeze === true && o.freezeCols.length > 0 && o.freezeCols.length < o.columnSize.length) {
-            var maxWidth = this.table.element.width();
-            if (regionColumnSize[0] < 15 || regionColumnSize[1] < 15) {
-                var freezeCols = o.freezeCols;
-                var size = maxWidth / 3;
-                if (freezeCols.length > o.columnSize.length / 2) {
-                    size = maxWidth * 2 / 3;
-                }
-                this.table.setRegionColumnSize([size, "fill"]);
-            }
-        }
-    },
-
-
-    resize: function () {
-        this.table.resize();
-        this._resizeRegion();
-        this._resizeHeader();
-    },
-
-    setColumnSize: function (columnSize) {
-        this.table.setColumnSize(columnSize);
-        this._adjustRegion();
-        this._resizeHeader();
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    getCalculateColumnSize: function () {
-        return this.table.getCalculateColumnSize();
-    },
-
-    setHeaderColumnSize: function (columnSize) {
-        this.table.setHeaderColumnSize(columnSize);
-        this._adjustRegion();
-        this._resizeHeader();
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.table.setRegionColumnSize(columnSize);
-        this._resizeHeader();
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    getCalculateRegionColumnSize: function () {
-        return this.table.getCalculateRegionColumnSize();
-    },
-
-    getCalculateRegionRowSize: function () {
-        return this.table.getCalculateRegionRowSize();
-    },
-
-    getClientRegionColumnSize: function () {
-        return this.table.getClientRegionColumnSize();
-    },
-
-    getScrollRegionColumnSize: function () {
-        return this.table.getScrollRegionColumnSize();
-    },
-
-    getScrollRegionRowSize: function () {
-        return this.table.getScrollRegionRowSize();
-    },
-
-    hasVerticalScroll: function () {
-        return this.table.hasVerticalScroll();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    getLeftHorizontalScroll: function () {
-        return this.table.getLeftHorizontalScroll();
-    },
-
-    getRightHorizontalScroll: function () {
-        return this.table.getRightHorizontalScroll();
-    },
-
-    getColumns: function () {
-        return this.table.getColumns();
-    },
-
-    attr: function () {
-        BI.ResponisveTable.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
-    },
-
-    populate: function (items) {
-        var self = this, o = this.options;
-        this.table.populate.apply(this.table, arguments);
-        if (o.isNeedFreeze === true) {
-            BI.nextTick(function () {
-                self._initRegionSize();
-                self.table.resize();
-                self._resizeHeader();
-            });
-        }
-    }
-});
-BI.shortcut("bi.responsive_table", BI.ResponisveTable);/**
  *
  * @class BI.SearchMultiTextValueCombo
  * @extends BI.Single
@@ -16298,12 +14295,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             }
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -16317,6 +14309,10 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
+                /**
+                 * 在存在标红的情况，如果popover没有发生改变就确认需要同步trigger的值，否则对外value值和trigger样式不统一
+                 */
+                assertShowValue();
                 self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
@@ -16411,6 +14407,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 BI.each(items, function (i, v) {
                     if (BI.isNotNull(map[v])) {
                         change = true;
+                        self.storeValue.assist && self.storeValue.assist.push(map[v]);
                         delete map[v];
                     }
                 });
@@ -16423,9 +14420,11 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             var newItems = [];
             BI.each(items, function (i, item) {
                 if (BI.isNotNull(selectedMap[items[i]])) {
+                    self.storeValue.assist && self.storeValue.assist.push(selectedMap[items[i]]);
                     delete selectedMap[items[i]];
                 }
                 if (BI.isNull(notSelectedMap[items[i]])) {
+                    BI.remove(self.storeValue.assist, item);
                     newItems.push(item);
                 }
             });
@@ -16481,6 +14480,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.value, function (i, v) {
                 if (!map[v]) {
                     self.storeValue.value.push(v);
+                    BI.remove(self.storeValue.assist, v);
                     map[v] = v;
                 }
             });
@@ -16488,6 +14488,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             BI.each(res.assist, function (i, v) {
                 if (BI.isNotNull(map[v])) {
                     change = true;
+                    self.storeValue.assist && self.storeValue.assist.push(map[v]);
                     delete map[v];
                 }
             });
@@ -16704,7 +14705,7 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         });
 
         this.element.click(function (e) {
-            if (self.element.__isMouseInBounds__(e) && !self.numberCounter.element.__isMouseInBounds__(e)) {
+            if (self.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
             }
         });
@@ -16828,7 +14829,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -16864,8 +14865,10 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
+            cls: "bi-list-item-active",
             height: 24,
-            selected: this.isAllSelected()
+            selected: this.isAllSelected(),
+            iconWrapperWidth: 36
         });
     },
 
@@ -17446,7 +15449,10 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             height: 30,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -17677,571 +15683,6 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
 
 BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);/**
- *
- * Created by GUY on 2016/8/10.
- * @class BI.SequenceTableDynamicNumber
- * @extends BI.SequenceTableTreeNumber
- */
-BI.SequenceTableDynamicNumber = BI.inherit(BI.SequenceTableTreeNumber, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SequenceTableDynamicNumber.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-sequence-table-dynamic-number"
-        });
-    },
-
-    _init: function () {
-        BI.SequenceTableDynamicNumber.superclass._init.apply(this, arguments);
-    },
-
-    _formatNumber: function (nodes) {
-        var self = this, o = this.options;
-        var result = [];
-        var count = this._getStart(nodes);
-
-        function getLeafCount (node) {
-            var cnt = 0;
-            if (BI.isNotEmptyArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    cnt += getLeafCount(child);
-                });
-                if (node.children.length > 1 && BI.isNotEmptyArray(node.values)) {
-                    cnt++;
-                }
-            } else {
-                cnt++;
-            }
-            return cnt;
-        }
-
-        var start = 0, top = 0;
-        BI.each(nodes, function (i, node) {
-            if (BI.isArray(node.children)) {
-                BI.each(node.children, function (index, child) {
-                    var cnt = getLeafCount(child);
-                    result.push({
-                        text: count++,
-                        start: start,
-                        top: top,
-                        cnt: cnt,
-                        index: index,
-                        height: cnt * o.rowSize
-                    });
-                    start += cnt;
-                    top += cnt * o.rowSize;
-                });
-                if (BI.isNotEmptyArray(node.values)) {
-                    result.push({
-                        text: BI.i18nText("BI-Summary_Values"),
-                        start: start++,
-                        top: top,
-                        cnt: 1,
-                        isSummary: true,
-                        height: o.rowSize
-                    });
-                    top += o.rowSize;
-                }
-            }
-        });
-        return result;
-    }
-});
-BI.shortcut("bi.sequence_table_dynamic_number", BI.SequenceTableDynamicNumber);/**
- *
- * Created by GUY on 2016/5/26.
- * @class BI.SequenceTableListNumber
- * @extends BI.Widget
- */
-BI.SequenceTableListNumber = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SequenceTableListNumber.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-sequence-table-list-number",
-            isNeedFreeze: false,
-            scrollTop: 0,
-            startSequence: 1, // 开始的序号
-            headerRowSize: 25,
-            rowSize: 25,
-
-            sequenceHeaderCreator: BI.emptyFn,
-
-            header: [],
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: [],
-
-            pageSize: 20
-        });
-    },
-
-    _init: function () {
-        BI.SequenceTableListNumber.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.start = o.startSequence;
-        this.renderedCells = [];
-        this.renderedKeys = [];
-
-        this.container = BI.createWidget({
-            type: "bi.absolute",
-            width: 60,
-            scrollable: false
-        });
-
-        this.scrollContainer = BI.createWidget({
-            type: "bi.vertical",
-            scrollable: false,
-            scrolly: false,
-            items: [this.container]
-        });
-
-        this.headerContainer = BI.createWidget({
-            type: "bi.absolute",
-            cls: "bi-border",
-            width: 58,
-            scrollable: false
-        });
-
-        this.layout = BI.createWidget({
-            type: "bi.vtape",
-            element: this,
-            items: [{
-                el: this.headerContainer,
-                height: o.headerRowSize * o.header.length - 2
-            }, {
-                el: {type: "bi.layout"},
-                height: 2
-            }, {
-                el: this.scrollContainer
-            }]
-        });
-        this._populate();
-    },
-
-    _layout: function () {
-        var self = this, o = this.options;
-        var headerHeight = o.headerRowSize * o.header.length - 2;
-        var items = this.layout.attr("items");
-        if (o.isNeedFreeze === false) {
-            items[0].height = 0;
-            items[1].height = 0;
-        } else if (o.isNeedFreeze === true) {
-            items[0].height = headerHeight;
-            items[1].height = 2;
-        }
-        this.layout.attr("items", items);
-        this.layout.resize();
-        this.container.setHeight(o.items.length * o.rowSize);
-        try {
-            this.scrollContainer.element.scrollTop(o.scrollTop);
-        } catch (e) {
-
-        }
-    },
-
-    _createHeader: function () {
-        var o = this.options;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.headerContainer,
-            items: [{
-                el: o.sequenceHeaderCreator() || {
-                    type: "bi.table_style_cell",
-                    cls: "sequence-table-title-cell",
-                    styleGetter: o.headerCellStyleGetter,
-                    text: BI.i18nText("BI-Number_Index")
-                },
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0
-            }]
-        });
-    },
-
-    _calculateChildrenToRender: function () {
-        var self = this, o = this.options;
-        var scrollTop = BI.clamp(o.scrollTop, 0, o.rowSize * o.items.length - (o.height - o.header.length * o.headerRowSize) + BI.DOM.getScrollWidth());
-        var start = Math.floor(scrollTop / o.rowSize);
-        var end = start + Math.floor((o.height - o.header.length * o.headerRowSize) / o.rowSize);
-        var renderedCells = [], renderedKeys = [];
-        for (var i = start, cnt = 0; i <= end && i < o.items.length; i++, cnt++) {
-            var index = BI.deepIndexOf(this.renderedKeys, this.start + i);
-            var top = i * o.rowSize;
-            if (index > -1) {
-                if (o.rowSize !== this.renderedCells[index]._height) {
-                    this.renderedCells[index]._height = o.rowSize;
-                    this.renderedCells[index].el.setHeight(o.rowSize);
-                }
-                if (this.renderedCells[index].top !== top) {
-                    this.renderedCells[index].top = top;
-                    this.renderedCells[index].el.element.css("top", top + "px");
-                }
-                renderedCells.push(this.renderedCells[index]);
-            } else {
-                var child = BI.createWidget(BI.extend({
-                    type: "bi.table_style_cell",
-                    cls: "sequence-table-number-cell bi-border-left bi-border-right bi-border-bottom",
-                    width: 60,
-                    height: o.rowSize,
-                    text: this.start + i,
-                    styleGetter: function (index) {
-                        return function () {
-                            return o.sequenceCellStyleGetter(self.start + i - 1);
-                        };
-                    }(cnt)
-                }));
-                renderedCells.push({
-                    el: child,
-                    left: 0,
-                    top: top,
-                    _height: o.rowSize
-                });
-            }
-            renderedKeys.push(this.start + i);
-        }
-
-        // 已存在的， 需要添加的和需要删除的
-        var existSet = {}, addSet = {}, deleteArray = [];
-        BI.each(renderedKeys, function (i, key) {
-            if (BI.deepContains(self.renderedKeys, key)) {
-                existSet[i] = key;
-            } else {
-                addSet[i] = key;
-            }
-        });
-        BI.each(this.renderedKeys, function (i, key) {
-            if (BI.deepContains(existSet, key)) {
-                return;
-            }
-            if (BI.deepContains(addSet, key)) {
-                return;
-            }
-            deleteArray.push(i);
-        });
-        BI.each(deleteArray, function (i, index) {
-            self.renderedCells[index].el.destroy();
-        });
-        var addedItems = [];
-        BI.each(addSet, function (index) {
-            addedItems.push(renderedCells[index]);
-        });
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this.container,
-            items: addedItems
-        });
-        this.renderedCells = renderedCells;
-        this.renderedKeys = renderedKeys;
-    },
-
-    _populate: function () {
-        this.headerContainer.empty();
-        this._createHeader();
-        this._layout();
-        this._calculateChildrenToRender();
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        if (this.options.scrollTop !== scrollTop) {
-            this.options.scrollTop = scrollTop;
-            try {
-                this.scrollContainer.element.scrollTop(scrollTop);
-            } catch (e) {
-
-            }
-        }
-    },
-
-    getVerticalScroll: function () {
-        return this.options.scrollTop;
-    },
-
-    setVPage: function (v) {
-        v = v < 1 ? 1 : v;
-        var o = this.options;
-        this.start = (v - 1) * o.pageSize + 1;
-    },
-
-    _restore: function () {
-        var o = this.options;
-        BI.each(this.renderedCells, function (i, cell) {
-            cell.el.destroy();
-        });
-        this.renderedCells = [];
-        this.renderedKeys = [];
-    },
-
-    restore: function () {
-        this._restore();
-    },
-
-    populate: function (items, header) {
-        var o = this.options;
-        if (items && items !== this.options.items) {
-            o.items = items;
-            this._restore();
-        }
-        if (header && header !== this.options.header) {
-            o.header = header;
-        }
-        this._populate();
-    }
-});
-BI.shortcut("bi.sequence_table_list_number", BI.SequenceTableListNumber);/**
- * 带有序号的表格
- *
- * Created by GUY on 2016/5/26.
- * @class BI.SequenceTable
- * @extends BI.Widget
- */
-BI.SequenceTable = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SequenceTable.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-sequence-table",
-            el: {
-                type: "bi.adaptive_table"
-            },
-
-            sequence: {},
-
-            isNeedResize: true,
-            isResizeAdapt: false,
-
-            isNeedFreeze: false, // 是否需要冻结单元格
-            freezeCols: [], // 冻结的列号,从0开始,isNeedFreeze为true时生效
-
-            isNeedMerge: false, // 是否需要合并单元格
-            mergeCols: [], // 合并的单元格列号
-            mergeRule: BI.emptyFn,
-
-            columnSize: [],
-            minColumnSize: [],
-            maxColumnSize: [],
-            headerRowSize: 25,
-            rowSize: 25,
-
-            regionColumnSize: [],
-
-            headerCellStyleGetter: BI.emptyFn,
-            summaryCellStyleGetter: BI.emptyFn,
-            sequenceCellStyleGetter: BI.emptyFn,
-
-            header: [],
-            items: [], // 二维数组
-
-            // 交叉表头
-            crossHeader: [],
-            crossItems: [],
-
-            showSequence: false,
-            startSequence: 1// 开始的序号
-        });
-    },
-
-    _init: function () {
-        BI.SequenceTable.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.sequence = BI.createWidget(o.sequence, {
-            type: "bi.sequence_table_list_number",
-            invisible: o.showSequence === false,
-            startSequence: o.startSequence,
-            isNeedFreeze: o.isNeedFreeze,
-            header: o.header,
-            items: o.items,
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-            width: 60,
-            height: o.height && o.height - BI.GridTableScrollbar.SIZE,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter
-        });
-        this.table = BI.createWidget(o.el, {
-            type: "bi.adaptive_table",
-            width: o.showSequence === true ? o.width - 60 : o.width,
-            height: o.height,
-            isNeedResize: o.isNeedResize,
-            isResizeAdapt: o.isResizeAdapt,
-
-            isNeedFreeze: o.isNeedFreeze,
-            freezeCols: o.freezeCols,
-
-            isNeedMerge: o.isNeedMerge,
-            mergeCols: o.mergeCols,
-            mergeRule: o.mergeRule,
-
-            columnSize: o.columnSize,
-            minColumnSize: o.minColumnSize,
-            maxColumnSize: o.maxColumnSize,
-            headerRowSize: o.headerRowSize,
-            rowSize: o.rowSize,
-
-            regionColumnSize: o.regionColumnSize,
-
-            headerCellStyleGetter: o.headerCellStyleGetter,
-            summaryCellStyleGetter: o.summaryCellStyleGetter,
-            sequenceCellStyleGetter: o.sequenceCellStyleGetter,
-
-            header: o.header,
-            items: o.items,
-            // 交叉表头
-            crossHeader: o.crossHeader,
-            crossItems: o.crossItems
-        });
-
-        this.table.on(BI.Table.EVENT_TABLE_SCROLL, function (scroll) {
-            if (self.sequence.getVerticalScroll() !== this.getVerticalScroll()) {
-                self.sequence.setVerticalScroll(this.getVerticalScroll());
-                self.sequence.populate();
-            }
-            self.fireEvent(BI.Table.EVENT_TABLE_SCROLL, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_REGION_RESIZE, arguments);
-        });
-        this.table.on(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, function () {
-            o.regionColumnSize = this.getRegionColumnSize();
-            o.columnSize = this.getColumnSize();
-            self.fireEvent(BI.Table.EVENT_TABLE_AFTER_COLUMN_RESIZE, arguments);
-        });
-
-        this.htape = BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [{
-                el: this.sequence,
-                left: 0,
-                top: 0
-            }, {
-                el: this.table,
-                top: 0,
-                left: o.showSequence === true ? 60 : 0
-            }]
-        });
-        this._populate();
-    },
-
-    _populate: function () {
-        var o = this.options;
-        if (o.showSequence === true) {
-            this.sequence.setVisible(true);
-            this.table.element.css("left", "60px");
-            this.table.setWidth(o.width - 60);
-        } else {
-            this.sequence.setVisible(false);
-            this.table.element.css("left", "0px");
-            this.table.setWidth(o.width);
-        }
-    },
-
-    setWidth: function (width) {
-        BI.PageTable.superclass.setWidth.apply(this, arguments);
-        this.table.setWidth(this.options.showSequence ? width - 60 : width);
-    },
-
-    setHeight: function (height) {
-        BI.PageTable.superclass.setHeight.apply(this, arguments);
-        this.table.setHeight(height);
-        this.sequence.setHeight(height - BI.GridTableScrollbar.SIZE);
-    },
-
-    setColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-        this.table.setColumnSize(columnSize);
-    },
-
-    getColumnSize: function () {
-        return this.table.getColumnSize();
-    },
-
-    setRegionColumnSize: function (columnSize) {
-        this.options.columnSize = columnSize;
-        this.table.setRegionColumnSize(columnSize);
-    },
-
-    getRegionColumnSize: function () {
-        return this.table.getRegionColumnSize();
-    },
-
-    hasLeftHorizontalScroll: function () {
-        return this.table.hasLeftHorizontalScroll();
-    },
-
-    hasRightHorizontalScroll: function () {
-        return this.table.hasRightHorizontalScroll();
-    },
-
-    setLeftHorizontalScroll: function (scrollLeft) {
-        this.table.setLeftHorizontalScroll(scrollLeft);
-    },
-
-    setRightHorizontalScroll: function (scrollLeft) {
-        this.table.setRightHorizontalScroll(scrollLeft);
-    },
-
-    setVerticalScroll: function (scrollTop) {
-        this.table.setVerticalScroll(scrollTop);
-        this.sequence.setVerticalScroll(scrollTop);
-    },
-
-    getVerticalScroll: function () {
-        return this.table.getVerticalScroll();
-    },
-
-    setVPage: function (page) {
-        this.sequence.setVPage && this.sequence.setVPage(page);
-    },
-
-    setHPage: function (page) {
-        this.sequence.setHPage && this.sequence.setHPage(page);
-    },
-
-    attr: function () {
-        BI.SequenceTable.superclass.attr.apply(this, arguments);
-        this.table.attr.apply(this.table, arguments);
-        this.sequence.attr.apply(this.sequence, arguments);
-    },
-
-    restore: function () {
-        this.table.restore();
-        this.sequence.restore();
-    },
-
-    populate: function (items, header, crossItems, crossHeader) {
-        var o = this.options;
-        if (items) {
-            o.items = items;
-        }
-        if (header) {
-            o.header = header;
-        }
-        if (crossItems) {
-            o.crossItems = crossItems;
-        }
-        if (crossHeader) {
-            o.crossHeader = crossHeader;
-        }
-        this._populate();
-        this.table.populate.apply(this.table, arguments);
-        this.sequence.populate.apply(this.sequence, arguments);
-        this.sequence.setVerticalScroll(this.table.getVerticalScroll());
-    },
-
-    destroy: function () {
-        this.table.destroy();
-        BI.SequenceTable.superclass.destroy.apply(this, arguments);
-    }
-});
-BI.shortcut("bi.sequence_table", BI.SequenceTable);/**
  * 单选加载数据搜索loader面板
  * Created by guy on 15/11/4.
  * @class BI.SingleSelectSearchLoader
@@ -18325,7 +15766,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo.item",
+            type: "bi.single_select_item",
             logic: {
                 dynamic: false
             },
@@ -18500,7 +15941,10 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -18617,12 +16061,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
-        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
-            self.element.removeClass("combo-show");
-        });
-
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.element.removeClass("combo-show").addClass("combo-show");
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self.populate();
@@ -18771,7 +16210,10 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-single-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -20225,7 +17667,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select2",
+                    cls: "slider-button bi-list-item-select3 bi-high-light-border",
                     ref: function () {
                         self.slider = this;
                     }
@@ -20681,10 +18123,9 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.vertical",
                     items: [{
-                        type: "bi.absolute",
+                        type: "bi.horizontal_auto",
                         items: [this.label]
                     }],
-                    rgap: c.EDITOR_WIDTH,
                     height: c.EDITOR_HEIGHT
                 },
                 top: 0,
@@ -20711,7 +18152,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
                 self._setSliderPosition(significantPercent);
                 var v = self._getValueByPercent(significantPercent);
                 v = o.digit === false ? v : v.toFixed(o.digit);
-                self.label.setValue(v);
+                self.label.setValue(v + o.unit);
                 self.value = v;
                 self.fireEvent(BI.SingleSliderLabel.EVENT_CHANGE);
             }
@@ -20783,7 +18224,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Widget, {
     },
 
     _setLabelPosition: function (percent) {
-        this.label.element.css({left: percent + "%"});
+        // this.label.element.css({left: percent + "%"});
     },
 
     _setSliderPosition: function (percent) {
@@ -21173,7 +18614,10 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
             height: 24,
             text: "",
             items: [],
-            value: ""
+            value: "",
+            attributes: {
+                tabIndex: 0
+            }
         });
     },
 
@@ -21337,7 +18781,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
     _checkTitle: function () {
         var self = this, val = this.getValue();
         BI.any(this.options.items, function (i, item) {
-            if (val.contains(item.value)) {
+            if (BI.contains(val, item.value)) {
                 self.trigger.setTitle(item.text || item.value);
                 return true;
             }
@@ -21363,119 +18807,6 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 });
 
 BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);/**
- * 可以单选多选切换的树
- *
- * Created by GUY on 2015/12/21.
- * @class BI.SwitchTree
- * @extends BI.Widget
- */
-BI.SwitchTree = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.SwitchTree.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-switch-tree",
-            items: []
-        });
-    },
-
-    _init: function () {
-        BI.SwitchTree.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.tab = BI.createWidget({
-            type: "bi.tab",
-            element: this,
-            tab: null,
-            showIndex: BI.SwitchTree.SelectType.SingleSelect,
-            cardCreator: BI.bind(this._createTree, this)
-        });
-    },
-
-    _createTree: function (type) {
-        var self = this, o = this.options;
-        switch (type) {
-            case BI.SwitchTree.SelectType.SingleSelect:
-                this.levelTree = BI.createWidget({
-                    type: "bi.multilayer_single_level_tree",
-                    isDefaultInit: true,
-                    items: BI.deepClone(o.items),
-                    value: o.value
-                });
-                this.levelTree.on(BI.LevelTree.EVENT_CHANGE, function () {
-                    self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
-                });
-                return this.levelTree;
-            case BI.SwitchTree.SelectType.MultiSelect:
-                this.tree = BI.createWidget({
-                    type: "bi.simple_tree",
-                    items: this._removeIsParent(BI.deepClone(o.items)),
-                    value: o.value
-                });
-                this.tree.on(BI.SimpleTreeView.EVENT_CHANGE, function () {
-                    self.fireEvent(BI.SwitchTree.EVENT_CHANGE, arguments);
-                });
-                return this.tree;
-        }
-    },
-
-    _removeIsParent: function (items) {
-        BI.each(items, function (i, item) {
-            BI.isNotNull(item.isParent) && delete item.isParent;
-        });
-        return items;
-    },
-
-    switchSelect: function () {
-        switch (this.getSelect()) {
-            case BI.SwitchTree.SelectType.SingleSelect:
-                this.setSelect(BI.SwitchTree.SelectType.MultiSelect);
-                break;
-            case BI.SwitchTree.SelectType.MultiSelect:
-                this.setSelect(BI.SwitchTree.SelectType.SingleSelect);
-                break;
-        }
-    },
-
-    setSelect: function (v) {
-        this.tab.setSelect(v);
-    },
-
-    getSelect: function () {
-        return this.tab.getSelect();
-    },
-
-    setValue: function (v) {
-        this.storeValue = v;
-        switch (this.getSelect()) {
-            case BI.SwitchTree.SelectType.SingleSelect:
-                this.levelTree.setValue(v);
-                break;
-            case BI.SwitchTree.SelectType.MultiSelect:
-                this.tree.setValue(v);
-                break;
-        }
-    },
-
-    getValue: function () {
-        return this.tab.getValue();
-    },
-
-    populate: function (items) {
-        this.options.items = items;
-        if (BI.isNotNull(this.levelTree)) {
-            this.levelTree.populate(BI.deepClone(items));
-        }
-        if (BI.isNotNull(this.tree)) {
-            this.tree.populate(this._removeIsParent(BI.deepClone(items)));
-        }
-    }
-});
-BI.SwitchTree.EVENT_CHANGE = "SwitchTree.EVENT_CHANGE";
-BI.SwitchTree.SelectType = {
-    SingleSelect: BI.Selection.Single,
-    MultiSelect: BI.Selection.Multi
-};
-BI.shortcut("bi.switch_tree", BI.SwitchTree);
-/**
  * Created by Baron on 2015/10/19.
  */
 BI.DateInterval = BI.inherit(BI.Single, {
@@ -21510,7 +18841,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
@@ -21608,10 +18939,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -21629,8 +18960,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d"), "%Y-%X-%d");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d"), "%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -21690,7 +19021,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
@@ -21788,10 +19119,10 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S").print("%Y-%x-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S").print("%Y-%x-%e %H:%M:%S") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S").print("%Y-%X-%e %H:%M:%S") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -21809,8 +19140,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S").print("%Y-%X-%d %H:%M:%S");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -21978,7 +19309,7 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.htape",
-                cls: "bi-border-top bi-border-bottom",
+                cls: "bi-split-top bi-split-bottom",
                 height: 30,
                 items: [{
                     el: {
@@ -22059,11 +19390,11 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border",
+        baseCls: "bi-year-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -22074,6 +19405,7 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
             type: "bi.dynamic_year_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
@@ -22253,7 +19585,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -22267,7 +19599,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         type: "bi.text_button",
                         forceCenter: true,
                         textHeight: c.buttonHeight - 1,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
                         ref: function () {
@@ -22282,7 +19614,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -22305,7 +19637,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y");
+            date = BI.print(date, "%Y");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -22320,7 +19652,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -22534,7 +19866,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y");
+        var dateStr = BI.print(date, "%Y");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -22551,7 +19883,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y");
+                var dateStr = BI.print(date, "%Y");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -22729,7 +20061,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                 }]
             }, {
                 type: "bi.button_group",
-                cls: "bi-border-top",
+                cls: "bi-split-top",
                 behaviors: o.behaviors,
                 ref: function () {
                     self.month = this;
@@ -22792,11 +20124,11 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo  bi-border",
+        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -22808,6 +20140,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             type: "bi.dynamic_year_month_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN, function () {
@@ -23010,7 +20343,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -23023,7 +20356,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
@@ -23039,7 +20372,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -23062,7 +20395,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%x");
+            date = BI.print(date, "%Y-%x");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -23077,7 +20410,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Month"),
@@ -23322,7 +20655,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
                 var text = this._getText(value);
                 var date = BI.getDate();
                 date = BI.DynamicDateHelper.getCalculation(value);
-                var dateStr = date.print("%Y-%x");
+                var dateStr = BI.print(date, "%Y-%x");
                 return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
             case BI.DynamicDateCombo.Static:
             default:
@@ -23347,8 +20680,8 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -23444,7 +20777,7 @@ BI.DynamicYearMonthTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.YearMonthInterval = BI.inherit(BI.Single, {
     constants: {
-        height: 26,
+        height: 24,
         width: 25,
         lgap: 15,
         offset: -15,
@@ -23555,7 +20888,7 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
 
 
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x").print("%Y-%x") === date || BI.parseDateTime(date, "%Y-%X").print("%Y-%X") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x"), "%Y-%x") === date || BI.print(BI.parseDateTime(date, "%Y-%X"), "%Y-%X") === date;
     },
 
 
@@ -23590,8 +20923,8 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
     },
 
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X").print("%Y-%X");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X").print("%Y-%X");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X"), "%Y-%X");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X"), "%Y-%X");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {
@@ -23718,16 +21051,16 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
     _createQuarter: function () {
 
         var items = [{
-            text: Date._QN[1],
+            text: BI.Date._QN[1],
             value: 1
         }, {
-            text: Date._QN[2],
+            text: BI.Date._QN[2],
             value: 2
         }, {
-            text: Date._QN[3],
+            text: BI.Date._QN[3],
             value: 3
         }, {
-            text: Date._QN[4],
+            text: BI.Date._QN[4],
             value: 4
         }];
         return BI.map(items, function (j, item) {
@@ -23820,11 +21153,11 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-quarter-combo bi-border",
+        baseCls: "bi-year-quarter-combo bi-border bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -23836,6 +21169,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             type: "bi.dynamic_year_quarter_trigger",
             min: o.min,
             max: o.max,
+            height: o.height,
             value: o.value || ""
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN, function () {
@@ -23900,7 +21234,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         eventName: BI.DynamicYearQuarterPopup.BUTTON_lABEL_EVENT_CHANGE,
                         action: function () {
                             var date = BI.getDate();
-                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: date.getQuarter()}});
+                            self.setValue({type: BI.DynamicYearMonthCombo.Static, value: {year: date.getFullYear(), quarter: BI.getQuarter(date)}});
                             self.combo.hideView();
                             self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                         }
@@ -24011,7 +21345,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     items: [[{
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -24024,7 +21358,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-left bi-border-right bi-high-light bi-border-top",
+                        cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
@@ -24040,7 +21374,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     }, {
                         type: "bi.text_button",
                         forceCenter: true,
-                        cls: "bi-border-top bi-high-light",
+                        cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Basic_OK"),
@@ -24063,7 +21397,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = date.print("%Y-%Q");
+            date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -24078,7 +21412,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-border-bottom",
+                cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Quarter"),
@@ -24131,7 +21465,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     switch (v) {
                         case BI.DynamicYearQuarterCombo.Static:
                             var date = BI.DynamicDateHelper.getCalculation(self.dynamicPane.getValue());
-                            self.year.setValue({year: date.getFullYear(), quarter: date.getQuarter()});
+                            self.year.setValue({year: date.getFullYear(), quarter: BI.getQuarter(date)});
                             self._setInnerValue();
                             break;
                         case BI.DynamicYearQuarterCombo.Dynamic:
@@ -24226,7 +21560,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height
+                            width: o.height < 24 ? 24 : o.height
                         },
                         width: o.height}]
                 }]
@@ -24314,8 +21648,8 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _yearCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d").print("%Y-%X-%d");
-        return BI.parseDateTime(v, "%Y").print("%Y") === v && date >= this.options.min && date <= this.options.max;
+        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _autoSwitch: function (editor) {
@@ -24362,9 +21696,9 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
     },
 
     _setInnerValue: function (date, text) {
-        var dateStr = date.print("%Y-%Q");
+        var dateStr = BI.print(date, "%Y-%Q");
         this.yearEditor.setValue(date.getFullYear());
-        this.quarterEditor.setValue(date.getQuarter());
+        this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
     },
 

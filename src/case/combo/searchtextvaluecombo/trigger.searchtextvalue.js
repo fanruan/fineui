@@ -4,7 +4,7 @@
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     props: {
-        baseCls: "bi-search-text-value-trigger bi-border",
+        extraCls: "bi-search-text-value-trigger bi-border",
         height: 24
     },
 
@@ -27,7 +27,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             },
                             text: this._digest(o.value, o.items),
                             value: o.value,
-                            height: o.height
+                            height: o.height,
+                            tipText: ""
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",
@@ -68,7 +69,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         var result = [];
         var formatItems = BI.Tree.transformToArrayFormat(items);
         BI.each(formatItems, function (i, item) {
-            if (BI.deepContains(vals, item.value) && !result.contains(item.text || item.value)) {
+            if (BI.deepContains(vals, item.value) && !BI.contains(result, item.text || item.value)) {
                 result.push(item.text || item.value);
             }
         });

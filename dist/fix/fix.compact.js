@@ -1,5 +1,5 @@
 ;(function () {
-    function initWatch (vm, watch) {
+    function initWatch(vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -13,7 +13,7 @@
         }
     }
 
-    function createWatcher (vm, keyOrFn, handler) {
+    function createWatcher(vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
             store: vm.store
         });
@@ -22,24 +22,24 @@
     var target = null;
     var targetStack = [];
 
-    function pushTarget (_target) {
+    function pushTarget(_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
-    function popTarget () {
+    function popTarget() {
         Fix.Model.target = target = targetStack.pop();
     }
 
     var context = null;
     var contextStack = [];
 
-    function pushContext (_context) {
+    function pushContext(_context) {
         if (context) contextStack.push(context);
         Fix.Model.context = context = _context;
     }
 
-    function popContext () {
+    function popContext() {
         Fix.Model.context = context = contextStack.pop();
     }
 
@@ -60,7 +60,7 @@
         }, options);
     };
 
-    function findStore (widget) {
+    function findStore(widget) {
         if (target != null) {
             return target;
         }
@@ -106,11 +106,9 @@
         };
     });
 
-    var _init = BI.Widget.prototype._init;
-    BI.Widget.prototype._init = function () {
-        var self = this;
+    function createStore() {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
             if (store) {
                 pushTarget(store);
@@ -128,6 +126,13 @@
             }
             needPop = true;
         }
+        return needPop;
+    }
+
+    var _init = BI.Widget.prototype._init;
+    BI.Widget.prototype._init = function () {
+        var self = this;
+        var needPop = createStore.call(this);
         _init.apply(this, arguments);
         needPop && popTarget();
     };
@@ -135,7 +140,7 @@
     var _render = BI.Widget.prototype._render;
     BI.Widget.prototype._render = function () {
         var needPop = false;
-        if (window.Fix && this._store) {
+        if (_global.Fix && this._store) {
             needPop = true;
             pushTarget(this.store);
             initWatch(this, this.watch);
@@ -173,7 +178,7 @@
         });
     });
 
-    if (BI.isIE9Below()) {
+    if (BI.isIE9Below && BI.isIE9Below()) {
         _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
             "sortBy", "groupBy", "indexBy", "countBy", "partition",
             "keys", "allKeys", "values", "pairs", "invert",
@@ -211,6 +216,21 @@
                 values[i] = obj[keys[i]];
             }
             return values;
+        };
+        BI.extend = function () {
+            var args = Array.prototype.slice.call(arguments);
+            if (args.length < 1) {
+                return {};
+            }
+            var object = args[0];
+            var i = 1;
+            while (i < args.length) {
+                BI.each(args[i], function (key, v) {
+                    object[key] = v;
+                });
+                i++;
+            }
+            return object;
         };
         BI.size = function (ob) {
             if (BI.isPlainObject(ob) && ob.__ob__) {

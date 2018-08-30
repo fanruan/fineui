@@ -29,7 +29,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         });
         this.datePicker.on(BI.DatePicker.EVENT_CHANGE, function () {
             var value = self.datePicker.getValue();
-            var monthDay = BI.getDate(value.year, value.month - 1, 1).getMonthDays();
+            var monthDay = BI.getMonthDays(BI.getDate(value.year, value.month - 1, 1));
             var day = self.selectedTime.day || 0;
             if (day > monthDay) {
                 day = monthDay;
@@ -92,7 +92,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.layout",
-                    cls: "bi-border-top"
+                    cls: "bi-split-top"
                 },
                 height: 1,
                 top: 40,

@@ -33,7 +33,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 15,
+            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
@@ -131,10 +131,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
         return combo;
     },
     _dateCheck: function (date) {
-        return BI.parseDateTime(date, "%Y-%x-%d").print("%Y-%x-%d") === date ||
-            BI.parseDateTime(date, "%Y-%X-%d").print("%Y-%X-%d") === date ||
-            BI.parseDateTime(date, "%Y-%x-%e").print("%Y-%x-%e") === date ||
-            BI.parseDateTime(date, "%Y-%X-%e").print("%Y-%X-%e") === date;
+        return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%e"), "%Y-%x-%e") === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
         return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
@@ -152,8 +152,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         });
     },
     _compare: function (smallDate, bigDate) {
-        smallDate = BI.parseDateTime(smallDate, "%Y-%X-%d").print("%Y-%X-%d");
-        bigDate = BI.parseDateTime(bigDate, "%Y-%X-%d").print("%Y-%X-%d");
+        smallDate = BI.print(BI.parseDateTime(smallDate, "%Y-%X-%d"), "%Y-%X-%d");
+        bigDate = BI.print(BI.parseDateTime(bigDate, "%Y-%X-%d"), "%Y-%X-%d");
         return BI.isNotNull(smallDate) && BI.isNotNull(bigDate) && smallDate > bigDate;
     },
     _setTitle: function (v) {

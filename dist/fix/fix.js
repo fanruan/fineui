@@ -24,12 +24,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var hasProto = '__proto__' in {};
 
     var isIE = function isIE() {
+        if (typeof navigator === "undefined") {
+            return false;
+        }
         return (/(msie|trident)/i.test(navigator.userAgent.toLowerCase())
         );
     };
 
     var getIEVersion = function getIEVersion() {
         var version = 0;
+        if (typeof navigator === "undefined") {
+            return false;
+        }
         var agent = navigator.userAgent.toLowerCase();
         var v1 = agent.match(/(?:msie\s([\w.]+))/);
         var v2 = agent.match(/(?:trident.*rv:([\w.]+))/);
@@ -105,8 +111,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-            // PhantomJS
-            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -114,19 +120,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 port.postMessage(1);
             };
         } else
-        /* istanbul ignore next */
-        if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
-            var p = Promise.resolve();
-            timerFunc = function timerFunc() {
-                p.then(nextTickHandler);
-            };
-        } else {
-            // fallback to setTimeout
-            timerFunc = function timerFunc() {
-                setTimeout(nextTickHandler, 0);
-            };
-        }
+            /* istanbul ignore next */
+            if (typeof Promise !== 'undefined' && isNative(Promise)) {
+                // use microtask in non-DOM environments, e.g. Weex
+                var p = Promise.resolve();
+                timerFunc = function timerFunc() {
+                    p.then(nextTickHandler);
+                };
+            } else {
+                // fallback to setTimeout
+                timerFunc = function timerFunc() {
+                    setTimeout(nextTickHandler, 0);
+                };
+            }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -250,7 +256,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     break;
             }
             var result = original.apply(this, args);
-            notify(ob.parent, ob.parentKey, ob.dep);
+            notify(ob.parent, ob.parentKey, ob.dep, true);
             return result;
         };
     });
@@ -301,7 +307,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -317,7 +323,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                    '\tEnd Function');
+                '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -330,19 +336,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                        //由于不知对方会传入什么,因此set, let都用上
-                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                    //由于不知对方会传入什么,因此set, let都用上
+                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -360,7 +366,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -458,8 +464,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return ob;
     }
 
-    function notify(observer, key, dep) {
-        dep.notify({ observer: observer, key: key });
+    function notify(observer, key, dep, refresh) {
+        dep.notify({ observer: observer, key: key, refresh: refresh });
         if (observer) {
             //触发a.*绑定的依赖
             _.each(observer._deps, function (dep) {
@@ -563,7 +569,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 },
                 set: function reactiveSetter(newVal) {
                     var value = childOb ? childOb.model : val;
-                    if (newVal === value || (newVal !== newVal && value !== value)) {
+                    if (newVal === value || newVal !== newVal && value !== value) {
                         return;
                     }
                     val = newVal;
@@ -757,7 +763,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             } catch (e) {
                 // if (this.user) {
                 // } else {
-                console.error(e);
+                // console.error(e)
                 // }
             } finally {
                 // "touch" every property so they are all tracked as
@@ -815,10 +821,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                    // Deep watchers and watchers on Object/Arrays should fire even
-                    // when the value is the same, because the value may
-                    // have mutated.
-                    _.isArray(value) || this.deep) {
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -826,13 +832,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         try {
                             this.cb.call(this.vm, value, oldValue, options);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                     } else {
                         try {
                             this.cb.call(this.vm, value, oldValue, options);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                     }
                 }
@@ -1063,6 +1069,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return watchers;
     }
 
+    var mixinInjection = {};
+
+    function getMixins(type) {
+        return mixinInjection[type];
+    }
+
+    function mixin(xtype, cls) {
+        mixinInjection[xtype] = _.cloneDeep(cls);
+    }
+
     var computedWatcherOptions = { lazy: true };
 
     function initState(vm, state) {
@@ -1165,6 +1181,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         for (var key in methods) {
             vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
         }
+    }
+
+    function initMixins(vm, mixins) {
+        mixins = mixins || [];
+
+        _.each(mixins.reverse(), function (mixinType) {
+            var mixin$$1 = getMixins(mixinType);
+
+            for (var key in mixin$$1) {
+                if (typeof mixin$$1[key] !== "function") continue;
+
+                if (_.has(vm, key)) continue;
+
+                vm[key] = _.bind(mixin$$1[key], vm.$$model ? vm.model : vm);
+            }
+        });
     }
 
     function defineProps(vm, keys) {
@@ -1294,9 +1326,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var watch$$1 = this.watch;
             var actions = this.actions;
             var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
+            var mixins = this.mixins;
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+            initMixins(this, mixins);
             this._init();
             initState(this, state);
             initComputed(this, computed);
@@ -1358,6 +1392,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
+    exports.mixin = mixin;
     exports.Model = Model;
     exports.observerState = observerState;
     exports.Observer = Observer;

@@ -71,7 +71,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                                 selected: self.storeValue.type === BI.Selection.Multi
                             };
                         });
-                        if (BI.isKey(self._startValue) && !self.storeValue.value.contains(self._startValue)) {
+                        if (BI.isKey(self._startValue) && !BI.contains(self.storeValue.value, self._startValue)) {
                             var txt = opts.valueFormatter(startValue) || startValue;
                             json.unshift({
                                 text: txt,
@@ -114,8 +114,10 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     _createItems: function (items) {
         return BI.createItems(items, {
             type: "bi.multi_select_item",
+            cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 36
         });
     },
 
