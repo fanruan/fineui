@@ -17,13 +17,10 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 
     _init: function () {
         BI.NodeButton.superclass._init.apply(this, arguments);
-    },
-
-    _mount: function () {
-        var _mount = BI.NodeButton.superclass._mount.apply(this, arguments);
-        if(_mount === true) {
-            this.setOpened(this.isOpened());
-        }
+        var self = this;
+        BI.nextTick(function () {
+            self.setOpened(self.isOpened());
+        });
     },
 
     doClick: function () {
