@@ -256,23 +256,23 @@ BI.Pane = BI.inherit(BI.Widget, {
             cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 30,
             width: 30,
-            hgap: 5.625,
+            hgap: 5.25,
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
                 cls: "rect1",
                 height: 25,
-                width: 2.5
+                width: 3
             }, {
                 type: "bi.layout",
                 cls: "rect2",
                 height: 25,
-                width: 2.5
+                width: 3
             }, {
                 type: "bi.layout",
                 cls: "rect3",
                 height: 25,
-                width: 2.5
+                width: 3
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
