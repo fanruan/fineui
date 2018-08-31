@@ -17396,13 +17396,13 @@ _.extend(BI, {
         }
     },
     pushDistinct: function (sArray, obj) {
-        if (!BI.contains(obj)) {
+        if (!BI.contains(sArray, obj)) {
             sArray.push(obj);
         }
     },
     pushDistinctArray: function (sArray, array) {
         for (var i = 0, len = array.length; i < len; i++) {
-            sArray.pushDistinct(array[i]);
+            BI.pushDistinct(sArray, array[i]);
         }
     }
 });
