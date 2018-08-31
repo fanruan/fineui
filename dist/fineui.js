@@ -24056,12 +24056,34 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// on a disconnected node (IE 9)
 			support.disconnectedMatch = matches.call( div, "div" );
 
-			// This should fail with an exception
-			// Gecko does not error, returns false instead
-			matches.call( div, "[s!='']:x" );
-			rbuggyMatches.push( "!=", pseudos );
-		});
-	}
+    pushArray: function (sArray, array) {
+        for (var i = 0; i < array.length; i++) {
+            sArray.push(array[i]);
+        }
+    },
+    pushDistinct: function (sArray, obj) {
+        if (!BI.contains(sArray, obj)) {
+            sArray.push(obj);
+        }
+    },
+    pushDistinctArray: function (sArray, array) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            BI.pushDistinct(sArray, array[i]);
+        }
+    }
+});
+BI.prepares.push(function () {
+    BI.Date = BI.Date || {};
+    // 牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
 
 	rbuggyQSA = new RegExp( rbuggyQSA.join("|") );
 	rbuggyMatches = new RegExp( rbuggyMatches.join("|") );
