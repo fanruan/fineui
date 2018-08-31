@@ -10711,7 +10711,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = [];
+        var items = Demo.CONSTANTS.ITEMS;
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
@@ -10800,7 +10800,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = [];
+        var items = Demo.CONSTANTS.ITEMS;
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
