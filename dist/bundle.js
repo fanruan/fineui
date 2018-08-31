@@ -17650,13 +17650,13 @@ _.extend(BI, {
         }
     },
     pushDistinct: function (sArray, obj) {
-        if (!BI.contains(sArray, obj)) {
+        if (!BI.contains(obj)) {
             sArray.push(obj);
         }
     },
     pushDistinctArray: function (sArray, array) {
         for (var i = 0, len = array.length; i < len; i++) {
-            BI.pushDistinct(sArray, array[i]);
+            sArray.pushDistinct(array[i]);
         }
     }
 });
@@ -24411,11 +24411,34 @@ Expr = Sizzle.selectors = {
 				};
 		}),
 
-		"has": markFunction(function( selector ) {
-			return function( elem ) {
-				return Sizzle( selector, elem ).length > 0;
-			};
-		}),
+    pushArray: function (sArray, array) {
+        for (var i = 0; i < array.length; i++) {
+            sArray.push(array[i]);
+        }
+    },
+    pushDistinct: function (sArray, obj) {
+        if (!BI.contains(sArray, obj)) {
+            sArray.push(obj);
+        }
+    },
+    pushDistinctArray: function (sArray, array) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            BI.pushDistinct(sArray, array[i]);
+        }
+    }
+});
+BI.prepares.push(function () {
+    BI.Date = BI.Date || {};
+    // 牵扯到国际化这些常量在页面加载后再生效
+    // full day names
+    BI.Date._DN = [BI.i18nText("BI-Basic_Sunday"),
+        BI.i18nText("BI-Basic_Monday"),
+        BI.i18nText("BI-Basic_Tuesday"),
+        BI.i18nText("BI-Basic_Wednesday"),
+        BI.i18nText("BI-Basic_Thursday"),
+        BI.i18nText("BI-Basic_Friday"),
+        BI.i18nText("BI-Basic_Saturday"),
+        BI.i18nText("BI-Basic_Sunday")];
 
 		"contains": markFunction(function( text ) {
 			return function( elem ) {
@@ -35611,25 +35634,25 @@ BI.Pane = BI.inherit(BI.Widget, {
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
             cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
-            height: 60,
-            width: 60,
-            hgap: 10,
-            vgap: 5,
+            height: 30,
+            width: 30,
+            hgap: 5.625,
+            vgap: 2.5,
             items: [{
                 type: "bi.layout",
                 cls: "rect1",
-                height: 50,
-                width: 5
+                height: 25,
+                width: 2.5
             }, {
                 type: "bi.layout",
                 cls: "rect2",
-                height: 50,
-                width: 5
+                height: 25,
+                width: 2.5
             }, {
                 type: "bi.layout",
                 cls: "rect3",
-                height: 50,
-                width: 5
+                height: 25,
+                width: 2.5
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
