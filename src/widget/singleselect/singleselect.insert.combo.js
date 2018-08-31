@@ -206,7 +206,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.value["remove"](val);
+                    BI.remove(self.storeValue.value, val);
                 }
             });
             self._adjust(callback);
