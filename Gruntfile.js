@@ -188,6 +188,7 @@ module.exports = function (grunt) {
                     "src/core/utils/*.js",
 
                     "utils/date.i18n.js",
+                    "public/js/fineui.i18n.js",
                     "src/data/data.js",
                     "src/data/**/*.js"
                 ],

@@ -492,15 +492,18 @@
     });
 
     BI.mount = function (widget, container, predicate, hydrate) {
-        if(hydrate === true){
+        if (hydrate === true) {
             // 将widget的element元素都挂载好，并建立相互关系
-            var res = widget._mount(true, false, false, function(w){
-                var ws = w.element.data("__widgets");
-                if(!ws) {
-                    ws = [];
-                }
-                ws.push(w);
-                w.element.data("__widgets", ws);
+            widget.element.data("__widgets", [widget]);
+            var res = widget._mount(true, false, false, function (w) {
+                BI.each(w._children, function (i, child) {
+                    var ws = child.element.data("__widgets");
+                    if (!ws) {
+                        ws = [];
+                    }
+                    ws.push(child);
+                    child.element.data("__widgets", ws);
+                });
                 predicate && predicate.apply(this, arguments);
             });
             // 将新的dom树属性（事件等）patch到已存在的dom上
@@ -514,7 +517,7 @@
                     triggerLifeHook(child);
                 });
             };
-            //最后触发组件树生命周期函数
+            // 最后触发组件树生命周期函数
             triggerLifeHook(widget);
             return res;
         }
