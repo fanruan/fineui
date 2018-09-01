@@ -1,5 +1,6 @@
 @import "../index";
-@import "../resource/background";
+@import "../image";
+@import "../lib/icon";
 .bi-pane {
     min-height: 55px;
     & .loading-container {
@@ -8,9 +9,10 @@
 }
 
 .bi-loading-widget {
+    font-size: 0;
     div {
         .background-color(@background-color-highlight, 90%);
-        .border-radius(2.5px);
+        .border-radius(1.5px);
         .animation(loading-widget 0.8s infinite linear);
     }
     .rect2 {
@@ -28,7 +30,7 @@
         }
     });
     &.hack {
-        .loading-background;
+        .imagePath(@icon-wave-loading);
         div {
             .background-color(@background-color-highlight, 0%);
         }
