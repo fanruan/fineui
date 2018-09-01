@@ -198,6 +198,12 @@ _.extend(BI, {
         s["%Q"] = qr;
 
         var re = /%./g;
+        BI.isKhtml = BI.isKhtml || function () {
+            if(!_global.navigator) {
+                return false;
+            }
+            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        };
         if (!BI.isKhtml()) {
             return str.replace(re, function (par) {
                 return s[par] || par;

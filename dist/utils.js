@@ -10744,6 +10744,12 @@ _.extend(BI, {
         s["%Q"] = qr;
 
         var re = /%./g;
+        BI.isKhtml = BI.isKhtml || function () {
+            if(!_global.navigator) {
+                return false;
+            }
+            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        };
         if (!BI.isKhtml()) {
             return str.replace(re, function (par) {
                 return s[par] || par;
@@ -10767,7 +10773,7 @@ _.extend(BI, {
  * Created by GUY on 2015/6/24.
  */
 BI.Func = {};
-BI.extend(BI.Func, {
+_.extend(BI.Func, {
     /**
      * 创建唯一的名字
      * @param array
