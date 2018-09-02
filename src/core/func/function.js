@@ -3,7 +3,7 @@
  * Created by GUY on 2015/6/24.
  */
 BI.Func = {};
-BI.extend(BI.Func, {
+_.extend(BI.Func, {
     /**
      * 创建唯一的名字
      * @param array

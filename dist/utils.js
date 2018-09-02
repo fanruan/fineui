@@ -10245,148 +10245,630 @@ _.extend(BI, {
         Stretch: "stretch"
     },
     StartOfWeek: 1
-});if (!Number.prototype.toFixed || (0.00008).toFixed(3) !== "0.000" ||
-    (0.9).toFixed(0) === "0" || (1.255).toFixed(2) !== "1.25" ||
-    (1000000000000000128).toFixed(0) !== "1000000000000000128") {
-    (function () {
-        var base, size, data, i;
-        base = 1e7;
-        size = 6;
-        data = [0, 0, 0, 0, 0, 0];
-        function multiply (n, c) {
-            var i = -1;
-            while (++i < size) {
-                c += n * data[i];
-                data[i] = c % base;
-                c = Math.floor(c / base);
-            }
+});/**
+ * 对数组对象的扩展
+ * @class Array
+ */
+_.extend(BI, {
+
+    pushArray: function (sArray, array) {
+        for (var i = 0; i < array.length; i++) {
+            sArray.push(array[i]);
         }
-
-        function divide (n) {
-            var i = size, c = 0;
-            while (--i >= 0) {
-                c += data[i];
-                data[i] = Math.floor(c / n);
-                c = (c % n) * base;
-            }
+    },
+    pushDistinct: function (sArray, obj) {
+        if (!BI.contains(sArray, obj)) {
+            sArray.push(obj);
         }
-
-        function toString () {
-            var i = size;
-            var s = "";
-            while (--i >= 0) {
-                if (s !== "" || i === 0 || data[i] !== 0) {
-                    var t = String(data[i]);
-                    if (s === "") {
-                        s = t;
-                    } else {
-                        s += "0000000".slice(0, 7 - t.length) + t;
-                    }
-                }
-            }
-            return s;
+    },
+    pushDistinctArray: function (sArray, array) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            BI.pushDistinct(sArray, array[i]);
         }
+    }
+});
+_.extend(BI, {
+    // 给Number类型增加一个add方法，调用起来更加方便。
+    add: function (num, arg) {
+        return accAdd(arg, num);
 
-        function pow (x, n, acc) {
-            return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x)
-                : pow(x * x, n / 2, acc)));
-        }
-
-        function log (x) {
-            var n = 0;
-            while (x >= 4096) {
-                n += 12;
-                x /= 4096;
+        /**
+         ** 加法函数，用来得到精确的加法结果
+         ** 说明：javascript的加法结果会有误差，在两个浮点数相加的时候会比较明显。这个函数返回较为精确的加法结果。
+         ** 调用：accAdd(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accAdd (arg1, arg2) {
+            var r1, r2, m, c;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
             }
-            while (x >= 2) {
-                n += 1;
-                x /= 2;
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
             }
-            return n;
-        }
-
-        Number.prototype.toFixed = function (fractionDigits) {
-            var f, x, s, m, e, z, j, k;
-            f = Number(fractionDigits);
-            f = f !== f ? 0 : Math.floor(f);
-
-            if (f < 0 || f > 20) {
-                throw new RangeError("Number.toFixed called with invalid number of decimals");
-            }
-
-            x = Number(this);
-
-            if (x !== x) {
-                return "NaN";
-            }
-
-            if (x <= -1e21 || x > 1e21) {
-                return String(x);
-            }
-
-            s = "";
-
-            if (x < 0) {
-                s = "-";
-                x = -x;
-            }
-
-            m = "0";
-
-            if (x > 1e-21) {
-                // 1e-21<x<1e21
-                // -70<log2(x)<70
-                e = log(x * pow(2, 69, 1)) - 69;
-                z = (e < 0 ? x * pow(2, -e, 1) : x / pow(2, e, 1));
-                z *= 0x10000000000000;// Math.pow(2,52);
-                e = 52 - e;
-
-                // -18<e<122
-                // x=z/2^e
-                if (e > 0) {
-                    multiply(0, z);
-                    j = f;
-
-                    while (j >= 7) {
-                        multiply(1e7, 0);
-                        j -= 7;
-                    }
-
-                    multiply(pow(10, j, 1), 0);
-                    j = e - 1;
-
-                    while (j >= 23) {
-                        divide(1 << 23);
-                        j -= 23;
-                    }
-                    divide(1 << j);
-                    multiply(1, 1);
-                    divide(2);
-                    m = toString();
+            c = Math.abs(r1 - r2);
+            m = Math.pow(10, Math.max(r1, r2));
+            if (c > 0) {
+                var cm = Math.pow(10, c);
+                if (r1 > r2) {
+                    arg1 = Number(arg1.toString().replace(".", ""));
+                    arg2 = Number(arg2.toString().replace(".", "")) * cm;
                 } else {
-                    multiply(0, z);
-                    multiply(1 << (-e), 0);
-                    m = toString() + "0.00000000000000000000".slice(2, 2 + f);
-                }
-            }
-
-            if (f > 0) {
-                k = m.length;
-
-                if (k <= f) {
-                    m = s + "0.0000000000000000000".slice(0, f - k + 2) + m;
-                } else {
-                    m = s + m.slice(0, k - f) + "." + m.slice(k - f);
+                    arg1 = Number(arg1.toString().replace(".", "")) * cm;
+                    arg2 = Number(arg2.toString().replace(".", ""));
                 }
             } else {
-                m = s + m;
+                arg1 = Number(arg1.toString().replace(".", ""));
+                arg2 = Number(arg2.toString().replace(".", ""));
             }
+            return (arg1 + arg2) / m;
+        }
+    },
 
-            return m;
+    // 给Number类型增加一个sub方法，调用起来更加方便。
+    sub: function (num, arg) {
+        return accSub(num, arg);
+
+        /**
+         ** 减法函数，用来得到精确的减法结果
+         ** 说明：javascript的减法结果会有误差，在两个浮点数相减的时候会比较明显。这个函数返回较为精确的减法结果。
+         ** 调用：accSub(arg1,arg2)
+         ** 返回值：arg1加上arg2的精确结果
+         **/
+        function accSub (arg1, arg2) {
+            var r1, r2, m, n;
+            try {
+                r1 = arg1.toString().split(".")[1].length;
+            } catch (e) {
+                r1 = 0;
+            }
+            try {
+                r2 = arg2.toString().split(".")[1].length;
+            } catch (e) {
+                r2 = 0;
+            }
+            m = Math.pow(10, Math.max(r1, r2)); // last modify by deeka //动态控制精度长度
+            n = (r1 >= r2) ? r1 : r2;
+            return ((arg1 * m - arg2 * m) / m).toFixed(n);
+        }
+    },
+
+    // 给Number类型增加一个mul方法，调用起来更加方便。
+    mul: function (num, arg) {
+        return accMul(arg, num);
+
+        /**
+         ** 乘法函数，用来得到精确的乘法结果
+         ** 说明：javascript的乘法结果会有误差，在两个浮点数相乘的时候会比较明显。这个函数返回较为精确的乘法结果。
+         ** 调用：accMul(arg1,arg2)
+         ** 返回值：arg1乘以 arg2的精确结果
+         **/
+        function accMul (arg1, arg2) {
+            var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+            try {
+                m += s1.split(".")[1].length;
+            } catch (e) {
+            }
+            try {
+                m += s2.split(".")[1].length;
+            } catch (e) {
+            }
+            return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+        }
+    },
+    
+    // 给Number类型增加一个div方法，调用起来更加方便。
+    div: function (num, arg) {
+        return accDivide(num, arg);
+
+        /**
+         * Return digits length of a number
+         * @param {*number} num Input number
+         */
+        function digitLength (num) {
+            // Get digit length of e
+            var eSplit = num.toString().split(/[eE]/);
+            var len = (eSplit[0].split(".")[1] || "").length - (+(eSplit[1] || 0));
+            return len > 0 ? len : 0;
+        }
+        /**
+         * 把小数转成整数，支持科学计数法。如果是小数则放大成整数
+         * @param {*number} num 输入数
+         */
+        function float2Fixed (num) {
+            if (num.toString().indexOf("e") === -1) {
+                return Number(num.toString().replace(".", ""));
+            }
+            var dLen = digitLength(num);
+            return dLen > 0 ? num * Math.pow(10, dLen) : num;
+        }
+
+        /**
+         * 精确乘法
+         */
+        function times (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return times.apply(void 0, [times(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            var baseNum = digitLength(num1) + digitLength(num2);
+            var leftValue = num1Changed * num2Changed;
+            return leftValue / Math.pow(10, baseNum);
+        }
+
+        /**
+         * 精确除法
+         */
+        function accDivide (num1, num2) {
+            var others = [];
+            for (var _i = 2; _i < arguments.length; _i++) {
+                others[_i - 2] = arguments[_i];
+            }
+            if (others.length > 0) {
+                return accDivide.apply(void 0, [accDivide(num1, num2), others[0]].concat(others.slice(1)));
+            }
+            var num1Changed = float2Fixed(num1);
+            var num2Changed = float2Fixed(num2);
+            return times((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
+        }
+    }
+
+});/**
+ * 对字符串对象的扩展
+ * @class String
+ */
+_.extend(BI, {
+
+    /**
+     * 判断字符串是否已指定的字符串开始
+     * @param str source字符串
+     * @param {String} startTag   指定的开始字符串
+     * @return {Boolean}  如果字符串以指定字符串开始则返回true，否则返回false
+     */
+    startWith: function (str, startTag) {
+        str = str || "";
+        if (startTag == null || startTag == "" || str.length === 0 || startTag.length > str.length) {
+            return false;
+        }
+        return str.substr(0, startTag.length) == startTag;
+    },
+    /**
+     * 判断字符串是否以指定的字符串结束
+     * @param str source字符串
+     * @param {String} endTag 指定的字符串
+     * @return {Boolean}  如果字符串以指定字符串结束则返回true，否则返回false
+     */
+    endWith: function (str, endTag) {
+        if (endTag == null || endTag == "" || str.length === 0 || endTag.length > str.length) {
+            return false;
+        }
+        return str.substring(str.length - endTag.length) == endTag;
+    },
+
+    /**
+     * 获取url中指定名字的参数
+     * @param str source字符串
+     * @param {String} name 参数的名字
+     * @return {String} 参数的值
+     */
+    getQuery: function (str, name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = str.substr(str.indexOf("?") + 1).match(reg);
+        if (r) {
+            return unescape(r[2]);
+        }
+        return null;
+    },
+
+    /**
+     * 给url加上给定的参数
+     * @param str source字符串
+     * @param {Object} paras 参数对象，是一个键值对对象
+     * @return {String} 添加了给定参数的url
+     */
+    appendQuery: function (str, paras) {
+        if (!paras) {
+            return str;
+        }
+        var src = str;
+        // 没有问号说明还没有参数
+        if (src.indexOf("?") === -1) {
+            src += "?";
+        }
+        // 如果以问号结尾，说明没有其他参数
+        if (src.endWith("?") !== false) {
+        } else {
+            src += "&";
+        }
+        _.each(paras, function (value, name) {
+            if (typeof(name) === "string") {
+                src += name + "=" + value + "&";
+            }
+        });
+        src = src.substr(0, src.length - 1);
+        return src;
+    },
+    /**
+     * 将所有符合第一个字符串所表示的字符串替换成为第二个字符串
+     * @param str source字符串
+     * @param {String} s1 要替换的字符串的正则表达式
+     * @param {String} s2 替换的结果字符串
+     * @returns {String} 替换后的字符串
+     */
+    replaceAll: function (str, s1, s2) {
+        return str.replace(new RegExp(s1, "gm"), s2);
+    },
+    /**
+     * 总是让字符串以指定的字符开头
+     * @param str source字符串
+     * @param {String} start 指定的字符
+     * @returns {String} 以指定字符开头的字符串
+     */
+    perfectStart: function (str, start) {
+        if (str.startWith(start)) {
+            return str;
+        }
+        return start + str;
+
+    },
+
+    /**
+     * 获取字符串中某字符串的所有项位置数组
+     * @param str source字符串
+     * @param {String} sub 子字符串
+     * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
+     */
+    allIndexOf: function (str, sub) {
+        if (typeof sub !== "string") {
+            return [];
+        }
+        var location = [];
+        var offset = 0;
+        while (str.length > 0) {
+            var loc = str.indexOf(sub);
+            if (loc === -1) {
+                break;
+            }
+            location.push(offset + loc);
+            str = str.substring(loc + sub.length, str.length);
+            offset += loc + sub.length;
+        }
+        return location;
+    }
+});/** Constants used for time computations */
+BI.Date = BI.Date || {};
+BI.Date.SECOND = 1000;
+BI.Date.MINUTE = 60 * BI.Date.SECOND;
+BI.Date.HOUR = 60 * BI.Date.MINUTE;
+BI.Date.DAY = 24 * BI.Date.HOUR;
+BI.Date.WEEK = 7 * BI.Date.DAY;
+
+_.extend(BI, {
+    /**
+     * 获取时区
+     * @returns {String}
+     */
+    getTimezone: function (date) {
+        return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
+    },
+
+    /** Returns the number of days in the current month */
+    getMonthDays: function (date, month) {
+        var year = date.getFullYear();
+        if (typeof month === "undefined") {
+            month = date.getMonth();
+        }
+        if (((0 == (year % 4)) && ((0 != (year % 100)) || (0 == (year % 400)))) && month == 1) {
+            return 29;
+        }
+        return BI.Date._MD[month];
+
+    },
+
+    /**
+     * 获取每月的最后一天
+     * @returns {Date}
+     */
+    getLastDateOfMonth: function (date) {
+        return BI.getDate(date.getFullYear(), date.getMonth(), BI.getMonthDays(date));
+    },
+
+    /** Returns the number of day in the year. */
+    getDayOfYear: function (date) {
+        var now = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var then = BI.getDate(date.getFullYear(), 0, 0, 0, 0, 0);
+        var time = now - then;
+        return Math.floor(time / BI.Date.DAY);
+    },
+
+    /** Returns the number of the week in year, as defined in ISO 8601. */
+    getWeekNumber: function (date) {
+        var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+        var week = d.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        if (date.getMonth() === 0 && date.getDate() <= week) {
+            return 1;
+        }
+        d.setDate(date.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
+        var ms = d.valueOf(); // GMT
+        d.setMonth(0);
+        d.setDate(1);
+        var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
+        if (d.getDay() !== startOfWeek) {
+            offset++;
+        }
+        return offset;
+    },
+
+    getQuarter: function (date) {
+        return Math.floor(date.getMonth() / 3) + 1;
+    },
+
+    // 离当前时间多少天的时间
+    getOffsetDate: function (date, offset) {
+        return BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()) + offset * 864e5);
+    },
+
+    getOffsetQuarter: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + BI.parseInt(n) * 3, 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n) * 3);
+        return dt;
+    },
+
+    // 得到本季度的起始月份
+    getQuarterStartMonth: function (date) {
+        var quarterStartMonth = 0;
+        var nowMonth = date.getMonth();
+        if (nowMonth < 3) {
+            quarterStartMonth = 0;
+        }
+        if (2 < nowMonth && nowMonth < 6) {
+            quarterStartMonth = 3;
+        }
+        if (5 < nowMonth && nowMonth < 9) {
+            quarterStartMonth = 6;
+        }
+        if (nowMonth > 8) {
+            quarterStartMonth = 9;
+        }
+        return quarterStartMonth;
+    },
+    // 获得本季度的起始日期
+    getQuarterStartDate: function (date) {
+        return BI.getDate(date.getFullYear(), BI.getQuarterStartMonth(date), 1);
+    },
+    // 得到本季度的结束日期
+    getQuarterEndDate: function (date) {
+        var quarterEndMonth = BI.getQuarterStartMonth(date) + 2;
+        return BI.getDate(date.getFullYear(), quarterEndMonth, BI.getMonthDays(date, quarterEndMonth));
+    },
+
+    // 指定日期n个月之前或之后的日期
+    getOffsetMonth: function (date, n) {
+        var dt = BI.getDate(BI.getTime(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds()));
+        var day = dt.getDate();
+        var monthDay = BI.getMonthDays(BI.getDate(dt.getFullYear(), dt.getMonth() + parseInt(n), 1));
+        if (day > monthDay) {
+            day = monthDay;
+        }
+        dt.setDate(day);
+        dt.setMonth(dt.getMonth() + parseInt(n));
+        return dt;
+    },
+
+    // 获得本周的起始日期
+    getWeekStartDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)]);
+    },
+    // 得到本周的结束日期
+    getWeekEndDate: function (date) {
+        var w = date.getDay();
+        var startOfWeek = BI.StartOfWeek % 7;
+        return BI.getOffsetDate(date, BI.Date._OFFSET[w < startOfWeek ? (7 + w - startOfWeek) : (w - startOfWeek)] + 6);
+    },
+
+    // 格式化打印日期
+    print: function (date, str) {
+        var m = date.getMonth();
+        var d = date.getDate();
+        var y = date.getFullYear();
+        var yWith4number = y + "";
+        while (yWith4number.length < 4) {
+            yWith4number = "0" + yWith4number;
+        }
+        var wn = BI.getWeekNumber(date);
+        var qr = BI.getQuarter(date);
+        var w = date.getDay();
+        var s = {};
+        var hr = date.getHours();
+        var pm = (hr >= 12);
+        var ir = (pm) ? (hr - 12) : hr;
+        var dy = BI.getDayOfYear(date);
+        if (ir == 0) {
+            ir = 12;
+        }
+        var min = date.getMinutes();
+        var sec = date.getSeconds();
+        s["%a"] = BI.Date._SDN[w]; // abbreviated weekday name [FIXME: I18N]
+        s["%A"] = BI.Date._DN[w]; // full weekday name
+        s["%b"] = BI.Date._SMN[m]; // abbreviated month name [FIXME: I18N]
+        s["%B"] = BI.Date._MN[m]; // full month name
+        // FIXME: %c : preferred date and time representation for the current locale
+        s["%C"] = 1 + Math.floor(y / 100); // the century number
+        s["%d"] = (d < 10) ? ("0" + d) : d; // the day of the month (range 01 to 31)
+        s["%e"] = d; // the day of the month (range 1 to 31)
+        // FIXME: %D : american date style: %m/%d/%y
+        // FIXME: %E, %F, %G, %g, %h (man strftime)
+        s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
+        s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
+        s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
+        s["%k"] = hr;		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir;		// hour, range 1 to 12 (12h format)
+        s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
+        s["%x"] = m + 1; // month, range 1 to 12
+        s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
+        s["%n"] = "\n";		// a newline character
+        s["%p"] = pm ? "PM" : "AM";
+        s["%P"] = pm ? "pm" : "am";
+        // FIXME: %r : the time in am/pm notation %I:%M:%S %p
+        // FIXME: %R : the time in 24-hour notation %H:%M
+        s["%s"] = Math.floor(date.getTime() / 1000);
+        s["%S"] = (sec < 10) ? ("0" + sec) : sec; // seconds, range 00 to 59
+        s["%t"] = "\t";		// a tab character
+        // FIXME: %T : the time in 24-hour notation (%H:%M:%S)
+        s["%U"] = s["%W"] = s["%V"] = (wn < 10) ? ("0" + wn) : wn;
+        s["%u"] = w + 1;	// the day of the week (range 1 to 7, 1 = MON)
+        s["%w"] = w;		// the day of the week (range 0 to 6, 0 = SUN)
+        // FIXME: %x : preferred date representation for the current locale without the time
+        // FIXME: %X : preferred time representation for the current locale without the date
+        s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
+        s["%Y"] = yWith4number;		// year with the century
+        s["%%"] = "%";		// a literal '%' character
+        s["%Q"] = qr;
+
+        var re = /%./g;
+        BI.isKhtml = BI.isKhtml || function () {
+            if(!_global.navigator) {
+                return false;
+            }
+            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         };
+        if (!BI.isKhtml()) {
+            return str.replace(re, function (par) {
+                return s[par] || par;
+            });
+        }
 
-    })();
-}/**
+        var a = str.match(re);
+        for (var i = 0; i < a.length; i++) {
+            var tmp = s[a[i]];
+            if (tmp) {
+                re = new RegExp(a[i], "g");
+                str = str.replace(re, tmp);
+            }
+        }
+
+        return str;
+    }
+});
+/**
+ * 基本的函数
+ * Created by GUY on 2015/6/24.
+ */
+BI.Func = {};
+_.extend(BI.Func, {
+    /**
+     * 创建唯一的名字
+     * @param array
+     * @param name
+     * @returns {*}
+     */
+    createDistinctName: function (array, name) {
+        var src = name, idx = 1;
+        name = name || "";
+        while (true) {
+            if (BI.every(array, function (i, item) {
+                    return item.name !== name;
+                })) {
+                break;
+            }
+            name = src + (idx++);
+        }
+        return name;
+    },
+    /**
+     * 获取搜索结果
+     * @param items
+     * @param keyword
+     * @param param  搜索哪个属性
+     */
+    getSearchResult: function (items, keyword, param) {
+        var isArray = BI.isArray(items);
+        items = isArray ? BI.flatten(items) : items;
+        param || (param = "text");
+        if (!BI.isKey(keyword)) {
+            return {
+                find: BI.deepClone(items),
+                match: isArray ? [] : {}
+            };
+        }
+        var t, text, py;
+        keyword = BI.toUpperCase(keyword);
+        var matched = isArray ? [] : {}, find = isArray ? [] : {};
+        BI.each(items, function (i, item) {
+            item = BI.deepClone(item);
+            t = BI.stripEL(item);
+            text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
+                return BI.isNotNull(val);
+            });
+
+            if (BI.isNull(text) || BI.isObject(text)) return;
+
+            py = BI.makeFirstPY(text);
+            text = BI.toUpperCase(text);
+            py = BI.toUpperCase(py);
+            var pidx;
+            if (text.indexOf(keyword) > -1) {
+                if (text === keyword) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? find.push(item) : (find[i] = item);
+                }
+            } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
+                if (text === keyword || keyword.length === text.length) {
+                    isArray ? matched.push(item) : (matched[i] = item);
+                } else {
+                    isArray ? find.push(item) : (find[i] = item);
+                }
+            }
+        });
+        return {
+            match: matched,
+            find: find
+        };
+    }
+});
+
+_.extend(BI, {
+    beforeFunc: function (sFunc, func) {
+        var __self = sFunc;
+        return function () {
+            if (func.apply(sFunc, arguments) === false) {
+                return false;
+            }
+            return __self.apply(sFunc, arguments);
+        };
+    },
+
+    afterFunc: function (func) {
+        var __self = sFunc;
+        return function () {
+            var ret = __self.apply(sFunc, arguments);
+            if (ret === false) {
+                return false;
+            }
+            func.apply(sFunc, arguments);
+            return ret;
+        };
+    }
+});/**
  * 基本函数
  * Create By GUY 2014\11\17
  *
