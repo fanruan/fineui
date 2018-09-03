@@ -508,11 +508,11 @@
                     } else {
                         wrap.files.unshift(item);
                         // BI.Msg.toast(value);
-                        self.fireEvent(BI.File.EVENT_CHANGE, {
-                            file: item
-                        });
                     }
                 }
+                self.fireEvent(BI.File.EVENT_CHANGE, {
+                    files: wrap.files
+                });
                 input.value = "";
                 wrap.dom.input.parentNode.replaceChild(input, wrap.dom.input);
                 wrap.dom.input = input;
