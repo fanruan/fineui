@@ -27701,7 +27701,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         }
         if (o.masker && !BI.Maskers.has(this.getName())) {
             BI.Maskers.create(this.getName(), o.adapter, BI.extend({
-                container: o.container || this,
+                container: this,
                 render: this.popupView
             }, o.masker), this);
         }
@@ -27888,8 +27888,7 @@ BI.Searcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Searcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 
-BI.shortcut("bi.searcher", BI.Searcher);
-/**
+BI.shortcut("bi.searcher", BI.Searcher);/**
  *
  * 切换显示或隐藏面板
  *

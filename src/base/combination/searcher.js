@@ -120,7 +120,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         }
         if (o.masker && !BI.Maskers.has(this.getName())) {
             BI.Maskers.create(this.getName(), o.adapter, BI.extend({
-                container: o.container || this,
+                container: this,
                 render: this.popupView
             }, o.masker), this);
         }
