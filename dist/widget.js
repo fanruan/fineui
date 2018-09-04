@@ -15766,7 +15766,8 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_item",
+            type: "bi.single_select_combo.item",
+            cls: "bi-list-item-active",
             logic: {
                 dynamic: false
             },
@@ -17140,7 +17141,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0
