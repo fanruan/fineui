@@ -288,7 +288,7 @@ textarea {
   border: 1px solid #3a3c53;
 }
 .base-disabled {
-  cursor: not-allowed !important;
+  cursor: url('images/cursor/disable.cur'), auto !important;
   color: #9ea6b2 !important;
 }
 .base-disabled .bi-input {
