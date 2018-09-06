@@ -2783,6 +2783,14 @@ body .bi-button,
   border-radius: 2px;
   border: 1px solid #3685f2;
   background-color: #3685f2;
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
