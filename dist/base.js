@@ -9196,15 +9196,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                         xhr = new XMLHttpRequest,
-                         upload = xhr.upload || {
-                             addEventListener: function (event, callback) {
-                                 this["on" + event] = callback;
-                             }
-                         },
-                         i = 0;
-                     i < length;
-                     i++
+                    xhr = new XMLHttpRequest,
+                    upload = xhr.upload || {
+                        addEventListener: function (event, callback) {
+                            this["on" + event] = callback;
+                        }
+                    },
+                    i = 0;
+                    i < length;
+                    i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -9259,9 +9259,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {
-                                    rpe.loaded = rpe.total;
-                                }
+                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -9327,12 +9325,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {
-                                ++rpe.loaded;
-                            }
-                            if (isFunction(handler.onprogress)) {
-                                handler.onprogress(rpe, {});
-                            }
+                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
+                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
                         }, 100)
                     },
                     onload = function () {
@@ -9356,13 +9350,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {
-                                handler.onerror(rpe, event || _global.event);
-                            }
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
                         }
-                        if (isFunction(handler.onload)) {
-                            handler.onload(rpe, {responseText: responseText});
-                        }
+                        if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
                     target = ["AjaxUpload", (new Date).getTime(), String(Math.random()).substring(2)].join("_");
                 try { // IE < 8 does not accept enctype attribute ...
