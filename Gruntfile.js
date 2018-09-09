@@ -46,9 +46,9 @@ module.exports = function (grunt) {
                     "src/base/single/tip/tip.js",
                     "src/base/combination/group.button.js",
                     "src/base/combination/tree.button.js",
-                    "src/base/tree/treeview.js",
-                    "src/base/tree/asynctree.js",
-                    "src/base/tree/parttree.js",
+                    "src/base/tree/ztree/treeview.js",
+                    "src/base/tree/ztree/asynctree.js",
+                    "src/base/tree/ztree/parttree.js",
                     "src/base/**/*.js"
                 ],
                 dest: "dist/base.js"
