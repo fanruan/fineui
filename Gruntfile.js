@@ -142,13 +142,13 @@ module.exports = function (grunt) {
                     "src/base/combination/tree.button.js",
                     "src/base/combination/map.button.js",
                     "src/base/**/*.js",
-                    "!src/base/tree/**/*.js",
+                    "!src/base/tree/ztree/**/*.js",
                     "!src/base/single/input/file.js",
 
                     "src/case/combo/popup.bubble.js",
                     "src/case/**/*.js",
                     "!src/case/colorchooser/**/*.js",
-                    "!src/case/tree/tree.display.js",
+                    "!src/case/tree/ztree/**/*.js",
 
                     "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
                 dest: "dist/fineui_without_jquery_polyfill.js"
