@@ -33556,6 +33556,153 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     }
 });/**
+ *
+ * 自定义树
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.CustomTree
+ * @extends BI.Single
+ */
+BI.CustomTree = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomTree.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-custom-tree",
+            expander: {
+                el: {},
+                popup: {
+                    type: "bi.custom_tree"
+                }
+            },
+
+            items: [],
+            itemsCreator: BI.emptyFn,
+
+            el: {
+                type: "bi.button_tree",
+                chooseType: 0,
+                layouts: [{
+                    type: "bi.vertical"
+                }]
+            }
+        });
+    },
+
+    _init: function () {
+        BI.CustomTree.superclass._init.apply(this, arguments);
+        this.initTree(this.options.items);
+    },
+
+    _formatItems: function (nodes) {
+        var self = this, o = this.options;
+        nodes = BI.Tree.transformToTreeFormat(nodes);
+
+        var items = [];
+        BI.each(nodes, function (i, node) {
+            if (BI.isNotEmptyArray(node.children) || node.isParent === true) {
+                var item = BI.extend({
+                    type: "bi.expander",
+                    el: {
+                        value: node.value
+                    },
+                    popup: {type: "bi.custom_tree"}
+                }, BI.deepClone(o.expander), {
+                    id: node.id,
+                    pId: node.pId
+                });
+                var el = BI.stripEL(node);
+                if (!BI.isWidget(el)) {
+                    el = BI.clone(el);
+                    delete el.children;
+                    BI.extend(item.el, el);
+                } else {
+                    item.el = el;
+                }
+                item.popup.expander = BI.deepClone(o.expander);
+                item.items = item.popup.items = node.children;
+                item.itemsCreator = item.popup.itemsCreator = function (op) {
+                    if (BI.isNotNull(op.node)) {// 从子节点传过来的itemsCreator直接向上传递
+                        return o.itemsCreator.apply(self, arguments);
+                    }
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    args[0].node = node;
+                    return o.itemsCreator.apply(self, args);
+                };
+                BI.isNull(item.popup.el) && (item.popup.el = BI.deepClone(o.el));
+                items.push(item);
+            } else {
+                items.push(node);
+            }
+        });
+        return items;
+    },
+
+    // 构造树结构，
+    initTree: function (nodes) {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget(o.el, {
+            element: this,
+            items: this._formatItems(nodes),
+            itemsCreator: function (op, callback) {
+                o.itemsCreator.apply(this, [op, function (items) {
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    args[0] = self._formatItems(items);
+                    callback.apply(null, args);
+                }]);
+            },
+            value: o.value
+        });
+        this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.CustomTree.EVENT_CHANGE, val, obj);
+            }
+        });
+    },
+
+    // 生成树方法
+    stroke: function (nodes) {
+        this.populate.apply(this, arguments);
+    },
+
+    populate: function (nodes) {
+        var args = Array.prototype.slice.call(arguments, 0);
+        if (arguments.length > 0) {
+            args[0] = this._formatItems(nodes);
+        }
+        this.tree.populate.apply(this.tree, args);
+    },
+
+    setValue: function (v) {
+        this.tree && this.tree.setValue(v);
+    },
+
+    getValue: function () {
+        return this.tree ? this.tree.getValue() : [];
+    },
+
+    getAllButtons: function () {
+        return this.tree ? this.tree.getAllButtons() : [];
+    },
+
+    getAllLeaves: function () {
+        return this.tree ? this.tree.getAllLeaves() : [];
+    },
+
+    getNodeById: function (id) {
+        return this.tree && this.tree.getNodeById(id);
+    },
+
+    getNodeByValue: function (id) {
+        return this.tree && this.tree.getNodeByValue(id);
+    },
+
+    empty: function () {
+        this.tree.empty();
+    }
+});
+BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.shortcut("bi.custom_tree", BI.CustomTree);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -41019,133 +41166,6 @@ BI.LevelTree = BI.inherit(BI.Widget, {
 BI.LevelTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.level_tree", BI.LevelTree);/**
- * 简单的多选树
- *
- * Created by GUY on 2016/2/16.
- * @class BI.SimpleTreeView
- * @extends BI.Widget
- */
-BI.SimpleTreeView = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SimpleTreeView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-simple-tree",
-            itemsCreator: BI.emptyFn,
-            items: null
-        });
-    },
-    _init: function () {
-        BI.SimpleTreeView.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.structure = new BI.Tree();
-        this.tree = BI.createWidget({
-            type: "bi.tree_view",
-            element: this,
-            itemsCreator: function (op, callback) {
-                var fn = function (items) {
-                    callback({
-                        items: items
-                    });
-                    self.structure.initTree(BI.Tree.transformToTreeFormat(items));
-                };
-                if (BI.isNotNull(o.items)) {
-                    fn(o.items);
-                } else {
-                    o.itemsCreator(op, fn);
-                }
-            }
-        });
-        this.tree.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.SimpleTreeView.EVENT_CHANGE, arguments);
-        });
-        if (BI.isNotEmptyArray(o.items)) {
-            this.populate();
-        }
-        if (BI.isNotNull(o.value)) {
-            this.setValue(o.value);
-        }
-    },
-
-    populate: function (items, keyword) {
-        if (items) {
-            this.options.items = items;
-        }
-        this.tree.stroke({
-            keyword: keyword
-        });
-    },
-
-    _digest: function (v) {
-        v || (v = []);
-        var self = this, map = {};
-        var selected = [];
-        BI.each(v, function (i, val) {
-            var node = self.structure.search(val, "value");
-            if (node) {
-                var p = node;
-                p = p.getParent();
-                if (p) {
-                    if (!map[p.value]) {
-                        map[p.value] = 0;
-                    }
-                    map[p.value]++;
-                }
-
-                while (p && p.getChildrenLength() <= map[p.value]) {
-                    selected.push(p.value);
-                    p = p.getParent();
-                    if (p) {
-                        if (!map[p.value]) {
-                            map[p.value] = 0;
-                        }
-                        map[p.value]++;
-                    }
-                }
-            }
-        });
-        return BI.makeObject(v.concat(selected));
-    },
-
-    setValue: function (v) {
-        this.tree.setValue(this._digest(v));
-    },
-
-    _getValue: function () {
-        var self = this, result = [], val = this.tree.getValue();
-        var track = function (nodes) {
-            BI.each(nodes, function (key, node) {
-                if (BI.isEmpty(node)) {
-                    result.push(key);
-                } else {
-                    track(node);
-                }
-            });
-        };
-        track(val);
-        return result;
-    },
-
-    empty: function () {
-        this.tree.empty();
-    },
-
-    getValue: function () {
-        var self = this, result = [], val = this._getValue();
-        BI.each(val, function (i, key) {
-            var target = self.structure.search(key, "value");
-            if (target) {
-                self.structure._traverse(target, function (node) {
-                    if (node.isLeaf()) {
-                        result.push(node.value);
-                    }
-                });
-            }
-        });
-        return result;
-    }
-});
-BI.SimpleTreeView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
-/**
  * 文本输入框trigger
  *
  * Created by GUY on 2015/9/15.
