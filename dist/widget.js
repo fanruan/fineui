@@ -1084,6 +1084,10 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
                 el: this.popup,
                 width: this.constants.popupWidth,
                 stopPropagation: false
+            },
+            // DEC-4250 和复选下拉一样，点击不收起
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -1097,9 +1101,9 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             width: 24,
             height: 24
         });
-        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+        triggerBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
-                self.combo.hideView();
+                // self.combo.hideView();
             } else {
                 self.combo.showView();
             }
@@ -3033,6 +3037,10 @@ BI.extend(BI.DynamicDateCard, {
                             },
                             stopPropagation: false
                         },
+                        // DEC-4250 和复选下拉一样，点击triggerBtn不默认收起
+                        hideChecker: function (e) {
+                            return self.triggerBtn.element.find(e.target).length === 0;
+                        },
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
@@ -3055,12 +3063,15 @@ BI.extend(BI.DynamicDateCard, {
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
                                 if (self.combo.isViewVisible()) {
-                                    self.combo.hideView();
+                                    // self.combo.hideView();
                                 } else {
                                     self.combo.showView();
                                 }
                             }
-                        }]
+                        }],
+                        ref: function () {
+                            self.triggerBtn = this;
+                        }
                     },
                     top: 0,
                     right: 0
@@ -3930,7 +3941,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                 self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
                             }
-                        }]
+                        }],
+                        // DEC-4250 和复选下拉一样，点击不收起
+                        hideChecker: function (e) {
+                            return self.triggerBtn.element.find(e.target).length === 0;
+                        }
                     },
                     top: 0,
                     left: 0,
@@ -3946,12 +3961,15 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
                                 if (self.combo.isViewVisible()) {
-                                    self.combo.hideView();
+                                    // self.combo.hideView();
                                 } else {
                                     self.combo.showView();
                                 }
                             }
-                        }]
+                        }],
+                        ref: function () {
+                            self.triggerBtn = this;
+                        }
                     },
                     top: 0,
                     right: 0

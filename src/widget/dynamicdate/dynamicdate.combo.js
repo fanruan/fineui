@@ -177,6 +177,10 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             },
                             stopPropagation: false
                         },
+                        // DEC-4250 和复选下拉一样，点击triggerBtn不默认收起
+                        hideChecker: function (e) {
+                            return self.triggerBtn.element.find(e.target).length === 0;
+                        },
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
@@ -199,12 +203,15 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
                                 if (self.combo.isViewVisible()) {
-                                    self.combo.hideView();
+                                    // self.combo.hideView();
                                 } else {
                                     self.combo.showView();
                                 }
                             }
-                        }]
+                        }],
+                        ref: function () {
+                            self.triggerBtn = this;
+                        }
                     },
                     top: 0,
                     right: 0
