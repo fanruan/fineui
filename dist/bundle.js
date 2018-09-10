@@ -71897,7 +71897,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "number-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
+            cls: "number-interval-small-editor bi-border"
         });
 
         this.smallTip = BI.createWidget({
@@ -71934,7 +71934,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "number-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
+            cls: "number-interval-big-editor bi-border"
         });
 
         this.bigTip = BI.createWidget({
@@ -71970,7 +71970,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         // });
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "number-interval-small-combo bi-border",
+            cls: "number-interval-small-combo bi-border-top bi-border-bottom bi-border-right",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -71989,7 +71989,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "number-interval-big-combo bi-border",
+            cls: "number-interval-big-combo bi-border-top bi-border-bottom bi-border-left",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -72021,7 +72021,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 el: self.smallEditor
             }, {
                 el: self.smallCombo,
-                width: c.width - c.border * 2
+                width: c.width - c.border
             }]
 
         });
@@ -72029,7 +72029,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             type: "bi.htape",
             items: [{
                 el: self.bigCombo,
-                width: c.width - c.border * 2
+                width: c.width - c.border
             }, {
                 el: self.bigEditor,
                 // BI-23883 间距考虑边框
