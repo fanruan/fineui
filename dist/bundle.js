@@ -18554,28 +18554,26 @@ BI.ShowListener = BI.inherit(BI.OB, {
     _init: function () {
         BI.ShowListener.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (o.eventObj) {
-            o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
-                if (type === BI.Events.CLICK) {
-                    v = v || o.eventObj.getValue();
-                    v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
-                    if (BI.isNull(v)) {
-                        throw new Error("value cannot be null");
-                    }
-                    var cardName = o.cardNameCreator(v);
-                    if (!o.cardLayout.isCardExisted(cardName)) {
-                        var card = o.cardCreator(cardName);
-                        o.cardLayout.addCardByName(cardName, card);
-                        o.afterCardCreated(cardName);
-                    }
-                    o.cardLayout.showCardByName(cardName);
-                    BI.nextTick(function () {
-                        o.afterCardShow(cardName);
-                        self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
-                    });
+        o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
+            if (type === BI.Events.CLICK) {
+                v = v || o.eventObj.getValue();
+                v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
+                if (BI.isNull(v)) {
+                    throw new Error("value cannot be null");
                 }
-            });
-        }
+                var cardName = o.cardNameCreator(v);
+                if (!o.cardLayout.isCardExisted(cardName)) {
+                    var card = o.cardCreator(cardName);
+                    o.cardLayout.addCardByName(cardName, card);
+                    o.afterCardCreated(cardName);
+                }
+                o.cardLayout.showCardByName(cardName);
+                BI.nextTick(function () {
+                    o.afterCardShow(cardName);
+                    self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
+                });
+            }
+        });
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
@@ -82562,5 +82560,6 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_Minute": "分",
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
-    "BI-Basic_Billion": "亿"
+    "BI-Basic_Billion": "亿",
+    "BI-Basic_Quarter": "季度"
 };BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
