@@ -82560,5 +82560,6 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_Minute": "分",
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
-    "BI-Basic_Billion": "亿"
+    "BI-Basic_Billion": "亿",
+    "BI-Basic_Quarter": "季度"
 };BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
