@@ -18796,26 +18796,28 @@ BI.ShowListener = BI.inherit(BI.OB, {
     _init: function () {
         BI.ShowListener.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
-            if (type === BI.Events.CLICK) {
-                v = v || o.eventObj.getValue();
-                v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
-                if (BI.isNull(v)) {
-                    throw new Error("value cannot be null");
+        if (o.eventObj) {
+            o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
+                if (type === BI.Events.CLICK) {
+                    v = v || o.eventObj.getValue();
+                    v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
+                    if (BI.isNull(v)) {
+                        throw new Error("value cannot be null");
+                    }
+                    var cardName = o.cardNameCreator(v);
+                    if (!o.cardLayout.isCardExisted(cardName)) {
+                        var card = o.cardCreator(cardName);
+                        o.cardLayout.addCardByName(cardName, card);
+                        o.afterCardCreated(cardName);
+                    }
+                    o.cardLayout.showCardByName(cardName);
+                    BI.nextTick(function () {
+                        o.afterCardShow(cardName);
+                        self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
+                    });
                 }
-                var cardName = o.cardNameCreator(v);
-                if (!o.cardLayout.isCardExisted(cardName)) {
-                    var card = o.cardCreator(cardName);
-                    o.cardLayout.addCardByName(cardName, card);
-                    o.afterCardCreated(cardName);
-                }
-                o.cardLayout.showCardByName(cardName);
-                BI.nextTick(function () {
-                    o.afterCardShow(cardName);
-                    self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
-                });
-            }
-        });
+            });
+        }
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
