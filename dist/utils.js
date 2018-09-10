@@ -15906,7 +15906,8 @@ BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];BI.i18n = {
     "BI-Basic_Minute": "分",
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
-    "BI-Basic_Billion": "亿"
+    "BI-Basic_Billion": "亿",
+    "BI-Basic_Quarter": "季度"
 };/**
  * 缓冲池
  * @type {{Buffer: {}}}
