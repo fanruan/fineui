@@ -120,8 +120,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.Editor.EVENT_KEY_DOWN, arguments);
         });
-        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (v) {
-            self.watermark && self.watermark.invisible();
+        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
+            // tab键就不要隐藏了
+            self.watermark && e.keyCode !== 9 && self.watermark.invisible();
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
