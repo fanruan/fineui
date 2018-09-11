@@ -23515,9 +23515,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (key in $$skipArray) {
                 return;
             }
+            var configurable = true;
+            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
+            if (property && property.configurable === false) {
+                configurable = false;
+            }
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
-            var childOb = !shallow && observe(val, observer, key);
+            var childOb = configurable && !shallow && observe(val, observer, key);
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -23540,7 +23545,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return;
                     }
                     val = newVal;
-                    childOb = !shallow && observe(newVal, observer, key);
+                    childOb = configurable && !shallow && observe(newVal, observer, key);
                     if (childOb && value && value.__ob__) {
                         childOb._scopeDeps = value.__ob__._scopeDeps;
                         childOb._deps = value.__ob__._deps;
