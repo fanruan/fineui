@@ -23423,11 +23423,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var ob = void 0;
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
+        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
-        ob.parent = parentObserver || ob.parent;
-        ob.parentKey = parentKey;
+        if (ob) {
+            ob.parent = parentObserver || ob.parent;
+            ob.parentKey = parentKey;
+        }
         return ob;
     }
 
