@@ -122,7 +122,9 @@ BI.Editor = BI.inherit(BI.Single, {
         });
         this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
             // tab键就不要隐藏了
-            self.watermark && e.keyCode !== 9 && self.watermark.invisible();
+            if (e.keyCode !== BI.KeyCode.TAB && self.watermark) {
+                self.watermark.invisible();
+            }
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
