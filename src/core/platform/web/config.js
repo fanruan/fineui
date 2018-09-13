@@ -3,7 +3,7 @@ BI.prepares.push(function () {
     // 注册布局
     var _isSupprtFlex;
     var isSupportFlex = function () {
-        if(_isSupprtFlex == null) {
+        if (_isSupprtFlex == null) {
             _isSupprtFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
         return _isSupprtFlex;
@@ -45,6 +45,6 @@ BI.prepares.push(function () {
             }
             return BI.extend(ob, {type: "bi.flex_center"});
         }
-        return ob;
+        return BI.extend(ob, {type: "bi.inline_center_adapt"});
     });
 });
