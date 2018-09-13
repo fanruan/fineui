@@ -23423,11 +23423,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var ob = void 0;
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
+        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
-        ob.parent = parentObserver || ob.parent;
-        ob.parentKey = parentKey;
+        if (ob) {
+            ob.parent = parentObserver || ob.parent;
+            ob.parentKey = parentKey;
+        }
         return ob;
     }
 
@@ -23515,9 +23517,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (key in $$skipArray) {
                 return;
             }
+            var configurable = true;
+            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
+            if (property && property.configurable === false) {
+                configurable = false;
+            }
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
-            var childOb = !shallow && observe(val, observer, key);
+            var childOb = configurable && !shallow && observe(val, observer, key);
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -23540,7 +23547,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return;
                     }
                     val = newVal;
-                    childOb = !shallow && observe(newVal, observer, key);
+                    childOb = configurable && !shallow && observe(newVal, observer, key);
                     if (childOb && value && value.__ob__) {
                         childOb._scopeDeps = value.__ob__._scopeDeps;
                         childOb._deps = value.__ob__._deps;
@@ -25091,7 +25098,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _trigger: function () {
+    _trigger: function (e) {
         var o = this.options;
         if (!this.isEnabled()) {
             return;
@@ -25102,9 +25109,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this);
+            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
                 BI.Actions.runAction(o.action, "click", o);
@@ -25117,7 +25124,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (this.isValid()) {
             this.beforeClick(e);
         }
-        this._trigger();
+        this._trigger(e);
         if (this.isValid()) {
             this.doClick(e);
         }
@@ -26480,13 +26487,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
-    _popupView: function () {
+    _popupView: function (e) {
         this._assertPopupViewRender();
         this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
 
         this.popupView.visible();
-        this.adjustWidth();
-        this.adjustHeight();
+        this.adjustWidth(e);
+        this.adjustHeight(e);
 
         this.element.addClass(this.options.comboClass);
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
@@ -26494,7 +26501,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
-    adjustWidth: function () {
+    adjustWidth: function (e) {
         var o = this.options;
         if (!this.popupView) {
             return;
@@ -26512,59 +26519,84 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
     },
 
-    adjustHeight: function () {
+    adjustHeight: function (e) {
         var o = this.options, p = {};
         if (!this.popupView) {
             return;
         }
         var isVisible = this.popupView.isVisible();
         this.popupView.visible();
+        var combo = BI.isNotNull(e) ? {
+            element: {
+                offset: function () {
+                    return {
+                        left: e.pageX,
+                        top: e.pageY
+                    };
+                },
+                bounds: function () {
+                    // offset为其相对于父定位元素的偏移
+                    return {
+                        x: e.offsetX,
+                        y: e.offsetY,
+                        width: 0,
+                        height: 24
+                    };
+                },
+                outerWidth: function () {
+                    return 0;
+                },
+                outerHeight: function () {
+                    return 24;
+                }
+            }
+        } : this.combo;
         switch (o.direction) {
             case "bottom":
             case "bottom,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
-                p = $.getTopAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "custom,bottom":
             case "bottom,custom":
-                p = $.getBottomAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getBottomAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "left,custom":
             case "custom,left":
-                p = $.getLeftAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getLeftAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
             case "custom,right":
             case "right,custom":
-                p = $.getRightAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getRightAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
@@ -26635,9 +26667,9 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.isEnabled() && this.combo.isEnabled() && !!this.popupView && this.popupView.isVisible();
     },
 
-    showView: function () {
+    showView: function (e) {
         if (this.isEnabled() && this.combo.isEnabled()) {
-            this._popupView();
+            this._popupView(e);
         }
     },
 
@@ -43552,8 +43584,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo.hideView();
     },
 
-    showView: function () {
-        this.downlistcombo.showView();
+    showView: function (e) {
+        this.downlistcombo.showView(e);
     },
 
     populate: function (items) {
@@ -47928,8 +47960,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo.hideView();
     },
 
-    showView: function () {
-        this.downlistcombo.showView();
+    showView: function (e) {
+        this.downlistcombo.showView(e);
     },
 
     populate: function (items) {
