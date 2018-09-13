@@ -29,6 +29,10 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -37,7 +41,7 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
@@ -59,6 +63,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -107,7 +114,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -208,7 +214,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },
