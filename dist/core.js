@@ -11500,6 +11500,7 @@ if (!_global.BI) {
                 }
             }
         }
+        return target;
     }
 
     /**

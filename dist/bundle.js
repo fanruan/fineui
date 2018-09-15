@@ -11500,6 +11500,7 @@ if (!_global.BI) {
                 }
             }
         }
+        return target;
     }
 
     /**
@@ -43867,18 +43868,30 @@ BI.Editor = BI.inherit(BI.Single, {
                 }
                 e.stopEvent();
             });
-            this.watermark.element.css({
-                position: "absolute",
-                left: "3px",
-                right: "3px",
-                top: "0px",
-                bottom: "0px"
+        }
+
+        var _items = [];
+        if (this.watermark) {
+            _items.push({
+                el: this.watermark,
+                left: 3,
+                right: 3,
+                top: 0,
+                bottom: 0
             });
         }
+        _items.push({
+            el: this.editor,
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        });
+
         var items = [{
             el: {
-                type: "bi.default",
-                items: this.watermark ? [this.editor, this.watermark] : [this.editor]
+                type: "bi.absolute",
+                items: _items
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -43913,8 +43926,11 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.Editor.EVENT_KEY_DOWN, arguments);
         });
-        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (v) {
-            self.watermark && self.watermark.invisible();
+        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
+            // tab键就不要隐藏了
+            if (e.keyCode !== BI.KeyCode.TAB && self.watermark) {
+                self.watermark.invisible();
+            }
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
@@ -45154,6 +45170,10 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -45162,7 +45182,7 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
@@ -45184,6 +45204,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -45232,7 +45255,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -45333,7 +45355,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },

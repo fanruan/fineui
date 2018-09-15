@@ -11742,6 +11742,7 @@ if (!_global.BI) {
                 }
             }
         }
+        return target;
     }
 
     /**
@@ -44109,18 +44110,30 @@ BI.Editor = BI.inherit(BI.Single, {
                 }
                 e.stopEvent();
             });
-            this.watermark.element.css({
-                position: "absolute",
-                left: "3px",
-                right: "3px",
-                top: "0px",
-                bottom: "0px"
+        }
+
+        var _items = [];
+        if (this.watermark) {
+            _items.push({
+                el: this.watermark,
+                left: 3,
+                right: 3,
+                top: 0,
+                bottom: 0
             });
         }
+        _items.push({
+            el: this.editor,
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        });
+
         var items = [{
             el: {
-                type: "bi.default",
-                items: this.watermark ? [this.editor, this.watermark] : [this.editor]
+                type: "bi.absolute",
+                items: _items
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -44155,8 +44168,11 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.Editor.EVENT_KEY_DOWN, arguments);
         });
-        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (v) {
-            self.watermark && self.watermark.invisible();
+        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
+            // tab键就不要隐藏了
+            if (e.keyCode !== BI.KeyCode.TAB && self.watermark) {
+                self.watermark.invisible();
+            }
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
@@ -45396,6 +45412,10 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -45404,7 +45424,7 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
@@ -45426,6 +45446,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -45474,7 +45497,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -45575,7 +45597,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },
@@ -81862,255 +81883,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
-    function initWatch(vm, watch) {
-        vm._watchers || (vm._watchers = []);
-        for (var key in watch) {
-            var handler = watch[key];
-            if (BI.isArray(handler)) {
-                for (var i = 0; i < handler.length; i++) {
-                    vm._watchers.push(createWatcher(vm, key, handler[i]));
-                }
-            } else {
-                vm._watchers.push(createWatcher(vm, key, handler));
-            }
-        }
-    }
-
-    function createWatcher(vm, keyOrFn, handler) {
-        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
-            store: vm.store
-        });
-    }
-
-    var target = null;
-    var targetStack = [];
-
-    function pushTarget(_target) {
-        if (target) targetStack.push(target);
-        Fix.Model.target = target = _target;
-    }
-
-    function popTarget() {
-        Fix.Model.target = target = targetStack.pop();
-    }
-
-    var context = null;
-    var contextStack = [];
-
-    function pushContext(_context) {
-        if (context) contextStack.push(context);
-        Fix.Model.context = context = _context;
-    }
-
-    function popContext() {
-        Fix.Model.context = context = contextStack.pop();
-    }
-
-    var oldWatch = Fix.watch;
-    Fix.watch = function (model, expOrFn, cb, options) {
-        if (BI.isPlainObject(cb)) {
-            options = cb;
-            cb = cb.handler;
-        }
-        if (typeof cb === "string") {
-            cb = model[cb];
-        }
-        return oldWatch.call(this, model, expOrFn, function () {
-            options && options.store && pushTarget(options.store);
-            var res = cb.apply(this, arguments);
-            options && options.store && popTarget();
-            return res;
-        }, options);
-    };
-
-    function findStore(widget) {
-        if (target != null) {
-            return target;
-        }
-        widget = widget || context;
-        var p = widget;
-        while (p) {
-            if (p instanceof Fix.Model || p.store || p.__cacheStore) {
-                break;
-            }
-            p = p._parent || (p.options && p.options.element);
-        }
-        if (p) {
-            if (p instanceof Fix.Model) {
-                return widget.__cacheStore = p;
-            }
-            widget.__cacheStore = p.store || p.__cacheStore;
-            return p.__cacheStore || p.store;
-        }
-    }
-
-    var _create = BI.createWidget;
-    BI.createWidget = function (item, options, context) {
-        var pushed = false;
-        if (BI.isWidget(options)) {
-            pushContext(options);
-            pushed = true;
-        } else if (context != null) {
-            pushContext(context);
-            pushed = true;
-        }
-        var result = _create.apply(this, arguments);
-        pushed && popContext();
-        return result;
-    };
-
-    _.each(["populate", "addItems", "prependItems"], function (name) {
-        var old = BI.Loader.prototype[name];
-        BI.Loader.prototype[name] = function () {
-            pushContext(this);
-            var result = old.apply(this, arguments);
-            popContext();
-            return result;
-        };
-    });
-
-    function createStore() {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this.options.element);
-            if (store) {
-                pushTarget(store);
-                needPop = true;
-            }
-            this.store = this._store();
-            this.store && (this.store._widget = this);
-            needPop && popTarget();
-            needPop = false;
-            pushTarget(this.store);
-            if (this.store instanceof Fix.Model) {
-                this.model = this.store.model;
-            } else {
-                this.model = this.store;
-            }
-            needPop = true;
-        }
-        return needPop;
-    }
-
-    var _init = BI.Widget.prototype._init;
-    BI.Widget.prototype._init = function () {
-        var self = this;
-        var needPop = createStore.call(this);
-        _init.apply(this, arguments);
-        needPop && popTarget();
-    };
-
-    var _render = BI.Widget.prototype._render;
-    BI.Widget.prototype._render = function () {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            needPop = true;
-            pushTarget(this.store);
-            initWatch(this, this.watch);
-        }
-        _render.apply(this, arguments);
-        needPop && popTarget();
-    };
-
-    var unMount = BI.Widget.prototype.__d;
-    BI.Widget.prototype.__d = function () {
-        unMount.apply(this, arguments);
-        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
-        BI.each(this._watchers, function (i, unwatches) {
-            unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
-            BI.each(unwatches, function (j, unwatch) {
-                unwatch();
-            });
-        });
-        this._watchers && (this._watchers = []);
-        if (this.store) {
-            this.store._parent && (this.store._parent = null);
-            this.store._widget && (this.store._widget = null);
-            this.store = null;
-        }
-        delete this.__cacheStore;
-    };
-
-    _.each(["_mount"], function (name) {
-        var old = BI.Widget.prototype[name];
-        old && (BI.Widget.prototype[name] = function () {
-            this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
-            this.store && popTarget();
-            return res;
-        });
-    });
-
-    if (BI.isIE9Below && BI.isIE9Below()) {
-        _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-            "sortBy", "groupBy", "indexBy", "countBy", "partition",
-            "keys", "allKeys", "values", "pairs", "invert",
-            "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-            var old = BI[name];
-            BI[name] = function (obj, fn, context) {
-                return typeof fn === "function" ? old(obj, function (key, value) {
-                    if (!(key in Fix.$$skipArray)) {
-                        return fn.apply(this, arguments);
-                    }
-                }, context) : old.apply(this, arguments);
-            };
-        });
-        BI.isEmpty = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length === 0;
-            }
-            return _.isEmpty(ob);
-        };
-        BI.keys = function (ob) {
-            var keys = _.keys(ob);
-            var nKeys = [];
-            for (var i = 0; i < keys.length; i++) {
-                if (!(keys[i] in Fix.$$skipArray)) {
-                    nKeys.push(keys[i]);
-                }
-            }
-            return nKeys;
-        };
-        BI.values = function (ob) {
-            var keys = BI.keys(obj);
-            var length = keys.length;
-            var values = [];
-            for (var i = 0; i < length; i++) {
-                values[i] = obj[keys[i]];
-            }
-            return values;
-        };
-        BI.extend = function () {
-            var args = Array.prototype.slice.call(arguments);
-            if (args.length < 1) {
-                return {};
-            }
-            var object = args[0];
-            var i = 1;
-            while (i < args.length) {
-                BI.each(args[i], function (key, v) {
-                    object[key] = v;
-                });
-                i++;
-            }
-            return object;
-        };
-        BI.size = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length;
-            }
-            return _.size(ob);
-        };
-        BI.isEmptyObject = function (ob) {
-            return BI.size(ob) === 0;
-        };
-        BI.deepClone = function (ob) {
-            return Fix.toJSON(ob);
-        };
-    }
-    BI.watch = Fix.watch;
-}());(function () {
+BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
     var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
@@ -82694,4 +82467,252 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     // Create the default BI.history.
     BI.history = new History;
+}());;(function () {
+    function initWatch(vm, watch) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch) {
+            var handler = watch[key];
+            if (BI.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher(vm, keyOrFn, handler) {
+        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
+            store: vm.store
+        });
+    }
+
+    var target = null;
+    var targetStack = [];
+
+    function pushTarget(_target) {
+        if (target) targetStack.push(target);
+        Fix.Model.target = target = _target;
+    }
+
+    function popTarget() {
+        Fix.Model.target = target = targetStack.pop();
+    }
+
+    var context = null;
+    var contextStack = [];
+
+    function pushContext(_context) {
+        if (context) contextStack.push(context);
+        Fix.Model.context = context = _context;
+    }
+
+    function popContext() {
+        Fix.Model.context = context = contextStack.pop();
+    }
+
+    var oldWatch = Fix.watch;
+    Fix.watch = function (model, expOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === "string") {
+            cb = model[cb];
+        }
+        return oldWatch.call(this, model, expOrFn, function () {
+            options && options.store && pushTarget(options.store);
+            var res = cb.apply(this, arguments);
+            options && options.store && popTarget();
+            return res;
+        }, options);
+    };
+
+    function findStore(widget) {
+        if (target != null) {
+            return target;
+        }
+        widget = widget || context;
+        var p = widget;
+        while (p) {
+            if (p instanceof Fix.Model || p.store || p.__cacheStore) {
+                break;
+            }
+            p = p._parent || (p.options && p.options.element);
+        }
+        if (p) {
+            if (p instanceof Fix.Model) {
+                return widget.__cacheStore = p;
+            }
+            widget.__cacheStore = p.store || p.__cacheStore;
+            return p.__cacheStore || p.store;
+        }
+    }
+
+    var _create = BI.createWidget;
+    BI.createWidget = function (item, options, context) {
+        var pushed = false;
+        if (BI.isWidget(options)) {
+            pushContext(options);
+            pushed = true;
+        } else if (context != null) {
+            pushContext(context);
+            pushed = true;
+        }
+        var result = _create.apply(this, arguments);
+        pushed && popContext();
+        return result;
+    };
+
+    _.each(["populate", "addItems", "prependItems"], function (name) {
+        var old = BI.Loader.prototype[name];
+        BI.Loader.prototype[name] = function () {
+            pushContext(this);
+            var result = old.apply(this, arguments);
+            popContext();
+            return result;
+        };
+    });
+
+    function createStore() {
+        var needPop = false;
+        if (_global.Fix && this._store) {
+            var store = findStore(this.options.context || this.options.element);
+            if (store) {
+                pushTarget(store);
+                needPop = true;
+            }
+            this.store = this._store();
+            this.store && (this.store._widget = this);
+            needPop && popTarget();
+            needPop = false;
+            pushTarget(this.store);
+            if (this.store instanceof Fix.Model) {
+                this.model = this.store.model;
+            } else {
+                this.model = this.store;
+            }
+            needPop = true;
+        }
+        return needPop;
+    }
+
+    var _init = BI.Widget.prototype._init;
+    BI.Widget.prototype._init = function () {
+        var self = this;
+        var needPop = createStore.call(this);
+        _init.apply(this, arguments);
+        needPop && popTarget();
+    };
+
+    var _render = BI.Widget.prototype._render;
+    BI.Widget.prototype._render = function () {
+        var needPop = false;
+        if (_global.Fix && this._store) {
+            needPop = true;
+            pushTarget(this.store);
+            initWatch(this, this.watch);
+        }
+        _render.apply(this, arguments);
+        needPop && popTarget();
+    };
+
+    var unMount = BI.Widget.prototype.__d;
+    BI.Widget.prototype.__d = function () {
+        unMount.apply(this, arguments);
+        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
+        BI.each(this._watchers, function (i, unwatches) {
+            unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+            BI.each(unwatches, function (j, unwatch) {
+                unwatch();
+            });
+        });
+        this._watchers && (this._watchers = []);
+        if (this.store) {
+            this.store._parent && (this.store._parent = null);
+            this.store._widget && (this.store._widget = null);
+            this.store = null;
+        }
+        delete this.__cacheStore;
+    };
+
+    _.each(["_mount"], function (name) {
+        var old = BI.Widget.prototype[name];
+        old && (BI.Widget.prototype[name] = function () {
+            this.store && pushTarget(this.store);
+            var res = old.apply(this, arguments);
+            this.store && popTarget();
+            return res;
+        });
+    });
+
+    if (BI.isIE9Below && BI.isIE9Below()) {
+        _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+            "sortBy", "groupBy", "indexBy", "countBy", "partition",
+            "keys", "allKeys", "values", "pairs", "invert",
+            "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
+            var old = BI[name];
+            BI[name] = function (obj, fn, context) {
+                return typeof fn === "function" ? old(obj, function (key, value) {
+                    if (!(key in Fix.$$skipArray)) {
+                        return fn.apply(this, arguments);
+                    }
+                }, context) : old.apply(this, arguments);
+            };
+        });
+        BI.isEmpty = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length === 0;
+            }
+            return _.isEmpty(ob);
+        };
+        BI.keys = function (ob) {
+            var keys = _.keys(ob);
+            var nKeys = [];
+            for (var i = 0; i < keys.length; i++) {
+                if (!(keys[i] in Fix.$$skipArray)) {
+                    nKeys.push(keys[i]);
+                }
+            }
+            return nKeys;
+        };
+        BI.values = function (ob) {
+            var keys = BI.keys(obj);
+            var length = keys.length;
+            var values = [];
+            for (var i = 0; i < length; i++) {
+                values[i] = obj[keys[i]];
+            }
+            return values;
+        };
+        BI.extend = function () {
+            var args = Array.prototype.slice.call(arguments);
+            if (args.length < 1) {
+                return {};
+            }
+            var object = args[0];
+            var i = 1;
+            while (i < args.length) {
+                BI.each(args[i], function (key, v) {
+                    object[key] = v;
+                });
+                i++;
+            }
+            return object;
+        };
+        BI.size = function (ob) {
+            if (BI.isPlainObject(ob) && ob.__ob__) {
+                return BI.keys(ob).length;
+            }
+            return _.size(ob);
+        };
+        BI.isEmptyObject = function (ob) {
+            return BI.size(ob) === 0;
+        };
+        BI.deepClone = function (ob) {
+            return Fix.toJSON(ob);
+        };
+    }
+    BI.watch = Fix.watch;
 }());BI.resourceURL = "file?path=/com/fr/web/ui/resource";
