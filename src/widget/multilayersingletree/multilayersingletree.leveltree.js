@@ -32,14 +32,14 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
-                if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_single_tree_first_plus_group_node"
-                }
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_plus_group_node";
                     extend.isLastNode = true;
                 }
-                if (i === 0 && i === nodes.length - 1) {  // 根
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.multilayer_single_tree_first_plus_group_node";
+                }
+                if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
                     extend.type = "bi.multilayer_single_tree_plus_group_node";
                 }
                 BI.defaults(node, extend);

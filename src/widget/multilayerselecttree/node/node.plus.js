@@ -2,14 +2,14 @@
  * 加号表示的组节点
  *
  * Created by GUY on 2016/1/27.
- * @class BI.MultiLayerSelectTreeLastPlusGroupNode
+ * @class BI.MultiLayerSelectTreePlusGroupNode
  * @extends BI.NodeButton
  */
-BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
+BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
     _defaultConfig: function () {
-        var conf = BI.MultiLayerSelectTreeLastPlusGroupNode.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.MultiLayerSelectTreePlusGroupNode.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-multilayer-select-tree-last-plus-group-node bi-list-item-active",
+            extraCls: "bi-multilayer-select-tree-first-plus-group-node bi-list-item-active",
             layer: 0, // 第几层级
             id: "",
             pId: "",
@@ -19,10 +19,10 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
     },
     _init: function () {
-        BI.MultiLayerSelectTreeLastPlusGroupNode.superclass._init.apply(this, arguments);
+        BI.MultiLayerSelectTreePlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.node = BI.createWidget({
-            type: "bi.select_tree_last_plus_group_node",
+            type: "bi.select_tree_plus_group_node",
             cls: "bi-list-item-none",
             stopPropagation: true,
             logic: {
@@ -69,6 +69,10 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         });
     },
 
+    isOnce: function () {
+        return true;
+    },
+
     doRedMark: function () {
         this.node.doRedMark.apply(this.node, arguments);
     },
@@ -82,19 +86,19 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
     },
 
     setSelected: function (b) {
-        BI.MultiLayerSelectTreeLastPlusGroupNode.superclass.setSelected.apply(this, arguments);
+        BI.MultiLayerSelectTreePlusGroupNode.superclass.setSelected.apply(this, arguments);
         this.node.setSelected(b);
     },
 
     doClick: function () {
-        BI.MultiLayerSelectTreeLastPlusGroupNode.superclass.doClick.apply(this, arguments);
+        BI.NodeButton.superclass.doClick.apply(this, arguments);
         this.node.setSelected(this.isSelected());
     },
 
     setOpened: function (v) {
-        BI.MultiLayerSelectTreeLastPlusGroupNode.superclass.setOpened.apply(this, arguments);
+        BI.MultiLayerSelectTreePlusGroupNode.superclass.setOpened.apply(this, arguments);
         this.node.setOpened(v);
     }
 });
 
-BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelectTreeLastPlusGroupNode);
+BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTreePlusGroupNode);
