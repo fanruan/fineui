@@ -11478,158 +11478,184 @@ if (!_global.BI) {
 
         }
     });
-})();/**
- * 客户端观察者，主要处理事件的添加、删除、执行等
- * @class BI.OB
- * @abstract
- */
-BI.OB = function (config) {
-    var props = this.props;
-    if (BI.isFunction(this.props)) {
-        props = this.props(config);
-    }
-    this.options = (_global.$ || _global._).extend(this._defaultConfig(config), props, config);
-    this._init();
-    this._initRef();
-};
-_.extend(BI.OB.prototype, {
-    props: {},
-    init: null,
-    destroyed: null,
+})();!(function () {
+    function extend () {
+        var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
+        for (; i < length; i++) {
+            // Only deal with non-null/undefined values
+            if ((options = arguments[i]) != null) {
+                // Extend the base object
+                for (name in options) {
+                    src = target[name];
+                    copy = options[name];
 
-    _defaultConfig: function (config) {
-        return {};
-    },
-
-    _init: function () {
-        this._initListeners();
-        this.init && this.init();
-    },
-
-    _initListeners: function () {
-        var self = this;
-        if (this.options.listeners != null) {
-            _.each(this.options.listeners, function (lis) {
-                (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
-                (lis.eventName, _.bind(lis.action, self));
-            });
-            delete this.options.listeners;
-        }
-    },
-
-    // 获得一个当前对象的引用
-    _initRef: function () {
-        if (this.options.ref) {
-            this.options.ref.call(this, this);
-        }
-    },
-
-    //释放当前对象
-    _purgeRef: function(){
-        if (this.options.ref) {
-            this.options.ref.call(null);
-        }
-    },
-
-    _getEvents: function () {
-        if (!_.isArray(this.events)) {
-            this.events = [];
-        }
-        return this.events;
-    },
-
-    /**
-     * 给观察者绑定一个事件
-     * @param {String} eventName 事件的名字
-     * @param {Function} fn 事件对应的执行函数
-     */
-    on: function (eventName, fn) {
-        eventName = eventName.toLowerCase();
-        var fns = this._getEvents()[eventName];
-        if (!_.isArray(fns)) {
-            fns = [];
-            this._getEvents()[eventName] = fns;
-        }
-        fns.push(fn);
-    },
-
-    /**
-     * 给观察者绑定一个只执行一次的事件
-     * @param {String} eventName 事件的名字
-     * @param {Function} fn 事件对应的执行函数
-     */
-    once: function (eventName, fn) {
-        var proxy = function () {
-            fn.apply(this, arguments);
-            this.un(eventName, proxy);
-        };
-        this.on(eventName, proxy);
-    },
-    /**
-     * 解除观察者绑定的指定事件
-     * @param {String} eventName 要解除绑定事件的名字
-     * @param {Function} fn 事件对应的执行函数，该参数是可选的，没有该参数时，将解除绑定所有同名字的事件
-     */
-    un: function (eventName, fn) {
-        eventName = eventName.toLowerCase();
-
-        /* alex:如果fn是null,就是把eventName上面所有方法都un掉*/
-        if (fn == null) {
-            delete this._getEvents()[eventName];
-        } else {
-            var fns = this._getEvents()[eventName];
-            if (_.isArray(fns)) {
-                var newFns = [];
-                _.each(fns, function (ifn) {
-                    if (ifn != fn) {
-                        newFns.push(ifn);
+                    // Prevent never-ending loop
+                    if (target === copy) {
+                        continue;
                     }
+
+                    if (copy !== undefined) {
+                        target[name] = copy;
+                    }
+                }
+            }
+        }
+        return target;
+    }
+
+    /**
+     * 客户端观察者，主要处理事件的添加、删除、执行等
+     * @class BI.OB
+     * @abstract
+     */
+    BI.OB = function (config) {
+        var props = this.props;
+        if (BI.isFunction(this.props)) {
+            props = this.props(config);
+        }
+        this.options = extend(this._defaultConfig(config), props, config);
+        this._init();
+        this._initRef();
+    };
+    _.extend(BI.OB.prototype, {
+        props: {},
+        init: null,
+        destroyed: null,
+
+        _defaultConfig: function (config) {
+            return {};
+        },
+
+        _init: function () {
+            this._initListeners();
+            this.init && this.init();
+        },
+
+        _initListeners: function () {
+            var self = this;
+            if (this.options.listeners != null) {
+                _.each(this.options.listeners, function (lis) {
+                    (lis.target ? lis.target : self)[lis.once ? "once" : "on"]
+                    (lis.eventName, _.bind(lis.action, self));
                 });
-                this._getEvents()[eventName] = newFns;
+                delete this.options.listeners;
             }
-        }
-    },
-    /**
-     * 清除观察者的所有事件绑定
-     */
-    purgeListeners: function () {
-        /* alex:清空events*/
-        this.events = [];
-    },
-    /**
-     * 触发绑定过的事件
-     *
-     * @param {String} eventName 要触发的事件的名字
-     * @returns {Boolean} 如果事件函数返回false，则返回false并中断其他同名事件的执行，否则执行所有的同名事件并返回true
-     */
-    fireEvent: function () {
-        var eventName = arguments[0].toLowerCase();
-        var fns = this._getEvents()[eventName];
-        if (BI.isArray(fns)) {
-            if (BI.isArguments(arguments[1])) {
-                for (var i = 0; i < fns.length; i++) {
-                    if (fns[i].apply(this, arguments[1]) === false) {
-                        return false;
-                    }
-                }
-            } else {
-                var args = Array.prototype.slice.call(arguments, 1);
-                for (var i = 0; i < fns.length; i++) {
-                    if (fns[i].apply(this, args) === false) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    },
+        },
 
-    destroy: function () {
-        this.destroyed && this.destroyed();
-        this._purgeRef();
-        this.purgeListeners();
-    }
-});/**
+        // 获得一个当前对象的引用
+        _initRef: function () {
+            if (this.options.ref) {
+                this.options.ref.call(this, this);
+            }
+        },
+
+        //释放当前对象
+        _purgeRef: function () {
+            if (this.options.ref) {
+                this.options.ref.call(null);
+            }
+        },
+
+        _getEvents: function () {
+            if (!_.isArray(this.events)) {
+                this.events = [];
+            }
+            return this.events;
+        },
+
+        /**
+         * 给观察者绑定一个事件
+         * @param {String} eventName 事件的名字
+         * @param {Function} fn 事件对应的执行函数
+         */
+        on: function (eventName, fn) {
+            eventName = eventName.toLowerCase();
+            var fns = this._getEvents()[eventName];
+            if (!_.isArray(fns)) {
+                fns = [];
+                this._getEvents()[eventName] = fns;
+            }
+            fns.push(fn);
+        },
+
+        /**
+         * 给观察者绑定一个只执行一次的事件
+         * @param {String} eventName 事件的名字
+         * @param {Function} fn 事件对应的执行函数
+         */
+        once: function (eventName, fn) {
+            var proxy = function () {
+                fn.apply(this, arguments);
+                this.un(eventName, proxy);
+            };
+            this.on(eventName, proxy);
+        },
+        /**
+         * 解除观察者绑定的指定事件
+         * @param {String} eventName 要解除绑定事件的名字
+         * @param {Function} fn 事件对应的执行函数，该参数是可选的，没有该参数时，将解除绑定所有同名字的事件
+         */
+        un: function (eventName, fn) {
+            eventName = eventName.toLowerCase();
+
+            /* alex:如果fn是null,就是把eventName上面所有方法都un掉*/
+            if (fn == null) {
+                delete this._getEvents()[eventName];
+            } else {
+                var fns = this._getEvents()[eventName];
+                if (_.isArray(fns)) {
+                    var newFns = [];
+                    _.each(fns, function (ifn) {
+                        if (ifn != fn) {
+                            newFns.push(ifn);
+                        }
+                    });
+                    this._getEvents()[eventName] = newFns;
+                }
+            }
+        },
+        /**
+         * 清除观察者的所有事件绑定
+         */
+        purgeListeners: function () {
+            /* alex:清空events*/
+            this.events = [];
+        },
+        /**
+         * 触发绑定过的事件
+         *
+         * @param {String} eventName 要触发的事件的名字
+         * @returns {Boolean} 如果事件函数返回false，则返回false并中断其他同名事件的执行，否则执行所有的同名事件并返回true
+         */
+        fireEvent: function () {
+            var eventName = arguments[0].toLowerCase();
+            var fns = this._getEvents()[eventName];
+            if (BI.isArray(fns)) {
+                if (BI.isArguments(arguments[1])) {
+                    for (var i = 0; i < fns.length; i++) {
+                        if (fns[i].apply(this, arguments[1]) === false) {
+                            return false;
+                        }
+                    }
+                } else {
+                    var args = Array.prototype.slice.call(arguments, 1);
+                    for (var i = 0; i < fns.length; i++) {
+                        if (fns[i].apply(this, args) === false) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        },
+
+        destroy: function () {
+            this.destroyed && this.destroyed();
+            this._purgeRef();
+            this.purgeListeners();
+        }
+    });
+})();/**
  * Widget超类
  * @class BI.Widget
  * @extends BI.OB
@@ -18300,26 +18326,28 @@ BI.ShowListener = BI.inherit(BI.OB, {
     _init: function () {
         BI.ShowListener.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
-            if (type === BI.Events.CLICK) {
-                v = v || o.eventObj.getValue();
-                v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
-                if (BI.isNull(v)) {
-                    throw new Error("value cannot be null");
+        if (o.eventObj) {
+            o.eventObj.on(BI.Controller.EVENT_CHANGE, function (type, v, ob) {
+                if (type === BI.Events.CLICK) {
+                    v = v || o.eventObj.getValue();
+                    v = BI.isArray(v) ? (v.length > 1 ? v.toString() : v[0]) : v;
+                    if (BI.isNull(v)) {
+                        throw new Error("value cannot be null");
+                    }
+                    var cardName = o.cardNameCreator(v);
+                    if (!o.cardLayout.isCardExisted(cardName)) {
+                        var card = o.cardCreator(cardName);
+                        o.cardLayout.addCardByName(cardName, card);
+                        o.afterCardCreated(cardName);
+                    }
+                    o.cardLayout.showCardByName(cardName);
+                    BI.nextTick(function () {
+                        o.afterCardShow(cardName);
+                        self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
+                    });
                 }
-                var cardName = o.cardNameCreator(v);
-                if (!o.cardLayout.isCardExisted(cardName)) {
-                    var card = o.cardCreator(cardName);
-                    o.cardLayout.addCardByName(cardName, card);
-                    o.afterCardCreated(cardName);
-                }
-                o.cardLayout.showCardByName(cardName);
-                BI.nextTick(function () {
-                    o.afterCardShow(cardName);
-                    self.fireEvent(BI.ShowListener.EVENT_CHANGE, cardName);
-                });
-            }
-        });
+            });
+        }
     }
 });
 BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
@@ -23421,11 +23449,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var ob = void 0;
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && (_.isArray(value) || isPlainObject(value))) {
+        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
-        ob.parent = parentObserver || ob.parent;
-        ob.parentKey = parentKey;
+        if (ob) {
+            ob.parent = parentObserver || ob.parent;
+            ob.parentKey = parentKey;
+        }
         return ob;
     }
 
@@ -23513,9 +23543,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (key in $$skipArray) {
                 return;
             }
+            var configurable = true;
+            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
+            if (property && property.configurable === false) {
+                configurable = false;
+            }
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
-            var childOb = !shallow && observe(val, observer, key);
+            var childOb = configurable && !shallow && observe(val, observer, key);
             props[key] = {
                 enumerable: true,
                 configurable: true,
@@ -23538,7 +23573,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         return;
                     }
                     val = newVal;
-                    childOb = !shallow && observe(newVal, observer, key);
+                    childOb = configurable && !shallow && observe(newVal, observer, key);
                     if (childOb && value && value.__ob__) {
                         childOb._scopeDeps = value.__ob__._scopeDeps;
                         childOb._deps = value.__ob__._deps;
@@ -25089,7 +25124,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _trigger: function () {
+    _trigger: function (e) {
         var o = this.options;
         if (!this.isEnabled()) {
             return;
@@ -25100,9 +25135,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this);
+            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
                 BI.Actions.runAction(o.action, "click", o);
@@ -25115,7 +25150,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (this.isValid()) {
             this.beforeClick(e);
         }
-        this._trigger();
+        this._trigger(e);
         if (this.isValid()) {
             this.doClick(e);
         }
@@ -26286,7 +26321,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _initPullDownAction: function () {
         var self = this, o = this.options;
-        var evs = this.options.trigger.split(",");
+        var evs = (this.options.trigger || "").split(",");
         var st = function (e) {
             if (o.stopEvent) {
                 e.stopEvent();
@@ -26478,13 +26513,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
-    _popupView: function () {
+    _popupView: function (e) {
         this._assertPopupViewRender();
         this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
 
         this.popupView.visible();
-        this.adjustWidth();
-        this.adjustHeight();
+        this.adjustWidth(e);
+        this.adjustHeight(e);
 
         this.element.addClass(this.options.comboClass);
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
@@ -26492,7 +26527,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
-    adjustWidth: function () {
+    adjustWidth: function (e) {
         var o = this.options;
         if (!this.popupView) {
             return;
@@ -26510,59 +26545,84 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
     },
 
-    adjustHeight: function () {
+    adjustHeight: function (e) {
         var o = this.options, p = {};
         if (!this.popupView) {
             return;
         }
         var isVisible = this.popupView.isVisible();
         this.popupView.visible();
+        var combo = BI.isNotNull(e) ? {
+            element: {
+                offset: function () {
+                    return {
+                        left: e.pageX,
+                        top: e.pageY
+                    };
+                },
+                bounds: function () {
+                    // offset为其相对于父定位元素的偏移
+                    return {
+                        x: e.offsetX,
+                        y: e.offsetY,
+                        width: 0,
+                        height: 24
+                    };
+                },
+                outerWidth: function () {
+                    return 0;
+                },
+                outerHeight: function () {
+                    return 24;
+                }
+            }
+        } : this.combo;
         switch (o.direction) {
             case "bottom":
             case "bottom,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
-                p = $.getTopAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "custom,bottom":
             case "bottom,custom":
-                p = $.getBottomAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getBottomAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "left,custom":
             case "custom,left":
-                p = $.getLeftAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getLeftAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
             case "custom,right":
             case "right,custom":
-                p = $.getRightAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getRightAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
@@ -26633,9 +26693,9 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.isEnabled() && this.combo.isEnabled() && !!this.popupView && this.popupView.isVisible();
     },
 
-    showView: function () {
+    showView: function (e) {
         if (this.isEnabled() && this.combo.isEnabled()) {
-            this._popupView();
+            this._popupView(e);
         }
     },
 
@@ -31718,18 +31778,30 @@ BI.Editor = BI.inherit(BI.Single, {
                 }
                 e.stopEvent();
             });
-            this.watermark.element.css({
-                position: "absolute",
-                left: "3px",
-                right: "3px",
-                top: "0px",
-                bottom: "0px"
+        }
+
+        var _items = [];
+        if (this.watermark) {
+            _items.push({
+                el: this.watermark,
+                left: 3,
+                right: 3,
+                top: 0,
+                bottom: 0
             });
         }
+        _items.push({
+            el: this.editor,
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        });
+
         var items = [{
             el: {
-                type: "bi.default",
-                items: this.watermark ? [this.editor, this.watermark] : [this.editor]
+                type: "bi.absolute",
+                items: _items
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -31764,8 +31836,11 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.Editor.EVENT_KEY_DOWN, arguments);
         });
-        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (v) {
-            self.watermark && self.watermark.invisible();
+        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
+            // tab键就不要隐藏了
+            if (e.keyCode !== BI.KeyCode.TAB && self.watermark) {
+                self.watermark.invisible();
+            }
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
@@ -32389,6 +32464,10 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -32397,7 +32476,7 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
@@ -32419,6 +32498,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -32467,7 +32549,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -32568,7 +32649,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },
@@ -33556,6 +33636,153 @@ BI.Trigger = BI.inherit(BI.Single, {
 
     }
 });/**
+ *
+ * 自定义树
+ *
+ * Created by GUY on 2015/9/7.
+ * @class BI.CustomTree
+ * @extends BI.Single
+ */
+BI.CustomTree = BI.inherit(BI.Widget, {
+    _defaultConfig: function () {
+        return BI.extend(BI.CustomTree.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-custom-tree",
+            expander: {
+                el: {},
+                popup: {
+                    type: "bi.custom_tree"
+                }
+            },
+
+            items: [],
+            itemsCreator: BI.emptyFn,
+
+            el: {
+                type: "bi.button_tree",
+                chooseType: 0,
+                layouts: [{
+                    type: "bi.vertical"
+                }]
+            }
+        });
+    },
+
+    _init: function () {
+        BI.CustomTree.superclass._init.apply(this, arguments);
+        this.initTree(this.options.items);
+    },
+
+    _formatItems: function (nodes) {
+        var self = this, o = this.options;
+        nodes = BI.Tree.transformToTreeFormat(nodes);
+
+        var items = [];
+        BI.each(nodes, function (i, node) {
+            if (BI.isNotEmptyArray(node.children) || node.isParent === true) {
+                var item = BI.extend({
+                    type: "bi.expander",
+                    el: {
+                        value: node.value
+                    },
+                    popup: {type: "bi.custom_tree"}
+                }, BI.deepClone(o.expander), {
+                    id: node.id,
+                    pId: node.pId
+                });
+                var el = BI.stripEL(node);
+                if (!BI.isWidget(el)) {
+                    el = BI.clone(el);
+                    delete el.children;
+                    BI.extend(item.el, el);
+                } else {
+                    item.el = el;
+                }
+                item.popup.expander = BI.deepClone(o.expander);
+                item.items = item.popup.items = node.children;
+                item.itemsCreator = item.popup.itemsCreator = function (op) {
+                    if (BI.isNotNull(op.node)) {// 从子节点传过来的itemsCreator直接向上传递
+                        return o.itemsCreator.apply(self, arguments);
+                    }
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    args[0].node = node;
+                    return o.itemsCreator.apply(self, args);
+                };
+                BI.isNull(item.popup.el) && (item.popup.el = BI.deepClone(o.el));
+                items.push(item);
+            } else {
+                items.push(node);
+            }
+        });
+        return items;
+    },
+
+    // 构造树结构，
+    initTree: function (nodes) {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget(o.el, {
+            element: this,
+            items: this._formatItems(nodes),
+            itemsCreator: function (op, callback) {
+                o.itemsCreator.apply(this, [op, function (items) {
+                    var args = Array.prototype.slice.call(arguments, 0);
+                    args[0] = self._formatItems(items);
+                    callback.apply(null, args);
+                }]);
+            },
+            value: o.value
+        });
+        this.tree.on(BI.Controller.EVENT_CHANGE, function (type, val, obj) {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.CustomTree.EVENT_CHANGE, val, obj);
+            }
+        });
+    },
+
+    // 生成树方法
+    stroke: function (nodes) {
+        this.populate.apply(this, arguments);
+    },
+
+    populate: function (nodes) {
+        var args = Array.prototype.slice.call(arguments, 0);
+        if (arguments.length > 0) {
+            args[0] = this._formatItems(nodes);
+        }
+        this.tree.populate.apply(this.tree, args);
+    },
+
+    setValue: function (v) {
+        this.tree && this.tree.setValue(v);
+    },
+
+    getValue: function () {
+        return this.tree ? this.tree.getValue() : [];
+    },
+
+    getAllButtons: function () {
+        return this.tree ? this.tree.getAllButtons() : [];
+    },
+
+    getAllLeaves: function () {
+        return this.tree ? this.tree.getAllLeaves() : [];
+    },
+
+    getNodeById: function (id) {
+        return this.tree && this.tree.getNodeById(id);
+    },
+
+    getNodeByValue: function (id) {
+        return this.tree && this.tree.getNodeByValue(id);
+    },
+
+    empty: function () {
+        this.tree.empty();
+    }
+});
+BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.shortcut("bi.custom_tree", BI.CustomTree);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -41019,133 +41246,6 @@ BI.LevelTree = BI.inherit(BI.Widget, {
 BI.LevelTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.level_tree", BI.LevelTree);/**
- * 简单的多选树
- *
- * Created by GUY on 2016/2/16.
- * @class BI.SimpleTreeView
- * @extends BI.Widget
- */
-BI.SimpleTreeView = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SimpleTreeView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-simple-tree",
-            itemsCreator: BI.emptyFn,
-            items: null
-        });
-    },
-    _init: function () {
-        BI.SimpleTreeView.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.structure = new BI.Tree();
-        this.tree = BI.createWidget({
-            type: "bi.tree_view",
-            element: this,
-            itemsCreator: function (op, callback) {
-                var fn = function (items) {
-                    callback({
-                        items: items
-                    });
-                    self.structure.initTree(BI.Tree.transformToTreeFormat(items));
-                };
-                if (BI.isNotNull(o.items)) {
-                    fn(o.items);
-                } else {
-                    o.itemsCreator(op, fn);
-                }
-            }
-        });
-        this.tree.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.SimpleTreeView.EVENT_CHANGE, arguments);
-        });
-        if (BI.isNotEmptyArray(o.items)) {
-            this.populate();
-        }
-        if (BI.isNotNull(o.value)) {
-            this.setValue(o.value);
-        }
-    },
-
-    populate: function (items, keyword) {
-        if (items) {
-            this.options.items = items;
-        }
-        this.tree.stroke({
-            keyword: keyword
-        });
-    },
-
-    _digest: function (v) {
-        v || (v = []);
-        var self = this, map = {};
-        var selected = [];
-        BI.each(v, function (i, val) {
-            var node = self.structure.search(val, "value");
-            if (node) {
-                var p = node;
-                p = p.getParent();
-                if (p) {
-                    if (!map[p.value]) {
-                        map[p.value] = 0;
-                    }
-                    map[p.value]++;
-                }
-
-                while (p && p.getChildrenLength() <= map[p.value]) {
-                    selected.push(p.value);
-                    p = p.getParent();
-                    if (p) {
-                        if (!map[p.value]) {
-                            map[p.value] = 0;
-                        }
-                        map[p.value]++;
-                    }
-                }
-            }
-        });
-        return BI.makeObject(v.concat(selected));
-    },
-
-    setValue: function (v) {
-        this.tree.setValue(this._digest(v));
-    },
-
-    _getValue: function () {
-        var self = this, result = [], val = this.tree.getValue();
-        var track = function (nodes) {
-            BI.each(nodes, function (key, node) {
-                if (BI.isEmpty(node)) {
-                    result.push(key);
-                } else {
-                    track(node);
-                }
-            });
-        };
-        track(val);
-        return result;
-    },
-
-    empty: function () {
-        this.tree.empty();
-    },
-
-    getValue: function () {
-        var self = this, result = [], val = this._getValue();
-        BI.each(val, function (i, key) {
-            var target = self.structure.search(key, "value");
-            if (target) {
-                self.structure._traverse(target, function (node) {
-                    if (node.isLeaf()) {
-                        result.push(node.value);
-                    }
-                });
-            }
-        });
-        return result;
-    }
-});
-BI.SimpleTreeView.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
-/**
  * 文本输入框trigger
  *
  * Created by GUY on 2015/9/15.
@@ -42732,6 +42832,10 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
                 el: this.popup,
                 width: this.constants.popupWidth,
                 stopPropagation: false
+            },
+            // DEC-4250 和复选下拉一样，点击不收起
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -42745,9 +42849,9 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
             width: 24,
             height: 24
         });
-        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+        triggerBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self.combo.isViewVisible()) {
-                self.combo.hideView();
+                // self.combo.hideView();
             } else {
                 self.combo.showView();
             }
@@ -43526,8 +43630,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo.hideView();
     },
 
-    showView: function () {
-        this.downlistcombo.showView();
+    showView: function (e) {
+        this.downlistcombo.showView(e);
     },
 
     populate: function (items) {
@@ -44681,6 +44785,10 @@ BI.extend(BI.DynamicDateCard, {
                             },
                             stopPropagation: false
                         },
+                        // DEC-4250 和复选下拉一样，点击triggerBtn不默认收起
+                        hideChecker: function (e) {
+                            return self.triggerBtn.element.find(e.target).length === 0;
+                        },
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
@@ -44703,12 +44811,15 @@ BI.extend(BI.DynamicDateCard, {
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
                                 if (self.combo.isViewVisible()) {
-                                    self.combo.hideView();
+                                    // self.combo.hideView();
                                 } else {
                                     self.combo.showView();
                                 }
                             }
-                        }]
+                        }],
+                        ref: function () {
+                            self.triggerBtn = this;
+                        }
                     },
                     top: 0,
                     right: 0
@@ -45578,7 +45689,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                 self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
                             }
-                        }]
+                        }],
+                        // DEC-4250 和复选下拉一样，点击不收起
+                        hideChecker: function (e) {
+                            return self.triggerBtn.element.find(e.target).length === 0;
+                        }
                     },
                     top: 0,
                     left: 0,
@@ -45594,12 +45709,15 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             eventName: BI.IconButton.EVENT_CHANGE,
                             action: function () {
                                 if (self.combo.isViewVisible()) {
-                                    self.combo.hideView();
+                                    // self.combo.hideView();
                                 } else {
                                     self.combo.showView();
                                 }
                             }
-                        }]
+                        }],
+                        ref: function () {
+                            self.triggerBtn = this;
+                        }
                     },
                     top: 0,
                     right: 0
@@ -47888,8 +48006,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo.hideView();
     },
 
-    showView: function () {
-        this.downlistcombo.showView();
+    showView: function (e) {
+        this.downlistcombo.showView(e);
     },
 
     populate: function (items) {
@@ -55003,7 +55121,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "number-interval-small-editor bi-border-top bi-border-bottom bi-border-left"
+            cls: "number-interval-small-editor bi-border"
         });
 
         this.smallTip = BI.createWidget({
@@ -55040,7 +55158,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 }
                 return true;
             },
-            cls: "number-interval-big-editor bi-border-top bi-border-bottom bi-border-right"
+            cls: "number-interval-big-editor bi-border"
         });
 
         this.bigTip = BI.createWidget({
@@ -55076,7 +55194,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         // });
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "number-interval-small-combo bi-border",
+            cls: "number-interval-small-combo bi-border-top bi-border-bottom bi-border-right",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -55095,7 +55213,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         }
         this.bigCombo = BI.createWidget({
             type: "bi.icon_combo",
-            cls: "number-interval-big-combo bi-border",
+            cls: "number-interval-big-combo bi-border-top bi-border-bottom bi-border-left",
             height: o.height - 2,
             items: [{
                 text: "(" + BI.i18nText("BI-Less_Than") + ")",
@@ -55127,7 +55245,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 el: self.smallEditor
             }, {
                 el: self.smallCombo,
-                width: c.width - c.border * 2
+                width: c.width - c.border
             }]
 
         });
@@ -55135,7 +55253,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             type: "bi.htape",
             items: [{
                 el: self.bigCombo,
-                width: c.width - c.border * 2
+                width: c.width - c.border
             }, {
                 el: self.bigEditor,
                 // BI-23883 间距考虑边框
@@ -57414,7 +57532,8 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_item",
+            type: "bi.single_select_combo_item",
+            cls: "bi-list-item-active",
             logic: {
                 dynamic: false
             },
@@ -58168,7 +58287,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.single_select_combo.item", BI.SingleSelectComboItem);/**
+BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);/**
  * 选择列表
  *
  * Created by GUY on 2015/11/1.
@@ -58406,7 +58525,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo.item",
+            type: "bi.single_select_combo_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
@@ -58788,7 +58907,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0

@@ -915,7 +915,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _trigger: function () {
+    _trigger: function (e) {
         var o = this.options;
         if (!this.isEnabled()) {
             return;
@@ -926,9 +926,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this);
+            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
                 BI.Actions.runAction(o.action, "click", o);
@@ -941,7 +941,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (this.isValid()) {
             this.beforeClick(e);
         }
-        this._trigger();
+        this._trigger(e);
         if (this.isValid()) {
             this.doClick(e);
         }
@@ -3012,7 +3012,7 @@ BI.Combo = BI.inherit(BI.Widget, {
 
     _initPullDownAction: function () {
         var self = this, o = this.options;
-        var evs = this.options.trigger.split(",");
+        var evs = (this.options.trigger || "").split(",");
         var st = function (e) {
             if (o.stopEvent) {
                 e.stopEvent();
@@ -3204,13 +3204,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_HIDEVIEW);
     },
 
-    _popupView: function () {
+    _popupView: function (e) {
         this._assertPopupViewRender();
         this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
 
         this.popupView.visible();
-        this.adjustWidth();
-        this.adjustHeight();
+        this.adjustWidth(e);
+        this.adjustHeight(e);
 
         this.element.addClass(this.options.comboClass);
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName()).unbind("mousewheel." + this.getName());
@@ -3218,7 +3218,7 @@ BI.Combo = BI.inherit(BI.Widget, {
         this.fireEvent(BI.Combo.EVENT_AFTER_POPUPVIEW);
     },
 
-    adjustWidth: function () {
+    adjustWidth: function (e) {
         var o = this.options;
         if (!this.popupView) {
             return;
@@ -3236,59 +3236,84 @@ BI.Combo = BI.inherit(BI.Widget, {
         }
     },
 
-    adjustHeight: function () {
+    adjustHeight: function (e) {
         var o = this.options, p = {};
         if (!this.popupView) {
             return;
         }
         var isVisible = this.popupView.isVisible();
         this.popupView.visible();
+        var combo = BI.isNotNull(e) ? {
+            element: {
+                offset: function () {
+                    return {
+                        left: e.pageX,
+                        top: e.pageY
+                    };
+                },
+                bounds: function () {
+                    // offset为其相对于父定位元素的偏移
+                    return {
+                        x: e.offsetX,
+                        y: e.offsetY,
+                        width: 0,
+                        height: 24
+                    };
+                },
+                outerWidth: function () {
+                    return 0;
+                },
+                outerHeight: function () {
+                    return 24;
+                }
+            }
+        } : this.combo;
         switch (o.direction) {
             case "bottom":
             case "bottom,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
-                p = $.getTopAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "custom,bottom":
             case "bottom,custom":
-                p = $.getBottomAdaptPosition(this.combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = $.getBottomAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "left,custom":
             case "custom,left":
-                p = $.getLeftAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getLeftAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
             case "custom,right":
             case "right,custom":
-                p = $.getRightAdaptPosition(this.combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = $.getRightAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
@@ -3359,9 +3384,9 @@ BI.Combo = BI.inherit(BI.Widget, {
         return this.isEnabled() && this.combo.isEnabled() && !!this.popupView && this.popupView.isVisible();
     },
 
-    showView: function () {
+    showView: function (e) {
         if (this.isEnabled() && this.combo.isEnabled()) {
-            this._popupView();
+            this._popupView(e);
         }
     },
 
@@ -8444,18 +8469,30 @@ BI.Editor = BI.inherit(BI.Single, {
                 }
                 e.stopEvent();
             });
-            this.watermark.element.css({
-                position: "absolute",
-                left: "3px",
-                right: "3px",
-                top: "0px",
-                bottom: "0px"
+        }
+
+        var _items = [];
+        if (this.watermark) {
+            _items.push({
+                el: this.watermark,
+                left: 3,
+                right: 3,
+                top: 0,
+                bottom: 0
             });
         }
+        _items.push({
+            el: this.editor,
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0
+        });
+
         var items = [{
             el: {
-                type: "bi.default",
-                items: this.watermark ? [this.editor, this.watermark] : [this.editor]
+                type: "bi.absolute",
+                items: _items
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -8490,8 +8527,11 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_KEY_DOWN, function (v) {
             self.fireEvent(BI.Editor.EVENT_KEY_DOWN, arguments);
         });
-        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (v) {
-            self.watermark && self.watermark.invisible();
+        this.editor.on(BI.Input.EVENT_QUICK_DOWN, function (e) {
+            // tab键就不要隐藏了
+            if (e.keyCode !== BI.KeyCode.TAB && self.watermark) {
+                self.watermark.invisible();
+            }
         });
 
         this.editor.on(BI.Input.EVENT_VALID, function () {
@@ -9196,15 +9236,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                         xhr = new XMLHttpRequest,
-                         upload = xhr.upload || {
-                             addEventListener: function (event, callback) {
-                                 this["on" + event] = callback;
-                             }
-                         },
-                         i = 0;
-                     i < length;
-                     i++
+                    xhr = new XMLHttpRequest,
+                    upload = xhr.upload || {
+                        addEventListener: function (event, callback) {
+                            this["on" + event] = callback;
+                        }
+                    },
+                    i = 0;
+                    i < length;
+                    i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -9259,9 +9299,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {
-                                    rpe.loaded = rpe.total;
-                                }
+                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -9327,12 +9365,8 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {
-                                ++rpe.loaded;
-                            }
-                            if (isFunction(handler.onprogress)) {
-                                handler.onprogress(rpe, {});
-                            }
+                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
+                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
                         }, 100)
                     },
                     onload = function () {
@@ -9356,13 +9390,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {
-                                handler.onerror(rpe, event || _global.event);
-                            }
+                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
                         }
-                        if (isFunction(handler.onload)) {
-                            handler.onload(rpe, {responseText: responseText});
-                        }
+                        if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
                     },
                     target = ["AjaxUpload", (new Date).getTime(), String(Math.random()).substring(2)].join("_");
                 try { // IE < 8 does not accept enctype attribute ...
@@ -9741,6 +9771,10 @@ BI.Input = BI.inherit(BI.Single, {
             "leading": true,
             "trailing": false
         });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
         this._blurDebounce = BI.debounce(BI.bind(this._blur, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
@@ -9749,7 +9783,7 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
@@ -9771,6 +9805,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -9819,7 +9856,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -9920,7 +9956,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },

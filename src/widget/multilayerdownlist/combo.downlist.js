@@ -68,8 +68,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         this.downlistcombo.hideView();
     },
 
-    showView: function () {
-        this.downlistcombo.showView();
+    showView: function (e) {
+        this.downlistcombo.showView(e);
     },
 
     populate: function (items) {

@@ -64,4 +64,4 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.single_select_combo.item", BI.SingleSelectComboItem);
+BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);
