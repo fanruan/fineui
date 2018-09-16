@@ -18970,7 +18970,7 @@ BI.prepares.push(function () {
     // 注册布局
     var _isSupprtFlex;
     var isSupportFlex = function () {
-        if(_isSupprtFlex == null) {
+        if (_isSupprtFlex == null) {
             _isSupprtFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
         return _isSupprtFlex;
@@ -19012,7 +19012,7 @@ BI.prepares.push(function () {
             }
             return BI.extend(ob, {type: "bi.flex_center"});
         }
-        return ob;
+        return BI.extend(ob, {type: "bi.inline_center_adapt"});
     });
 });/**
  * Detect Element Resize.
@@ -30359,6 +30359,98 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);/**
+ * 内联布局
+ * @class BI.InlineCenterAdaptLayout
+ * @extends BI.Layout
+ *
+ * @cfg {JSON} options 配置属性
+ * @cfg {Number} [hgap=0] 水平间隙
+ * @cfg {Number} [vgap=0] 垂直间隙
+ */
+BI.InlineVaerticalAdaptLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-inline-center-adapt-layout",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        BI.InlineVaerticalAdaptLayout.superclass.render.apply(this, arguments);
+        this.element.css({
+            whiteSpace: "nowrap",
+            "text-align": "left"
+        });
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item, length) {
+        var o = this.options;
+        if (!this.hasWidget(this.getName() + i)) {
+            var t = BI.createWidget(item);
+            this.addWidget(this.getName() + i, t);
+        } else {
+            var t = this.getWidgetByName(this.getName() + i);
+        }
+        t.element.css({
+            position: "relative",
+            display: "inline-block",
+            "vertical-align": "middle",
+            "*display": "inline",
+            "*zoom": 1
+        });
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            t.element.css({
+                "margin-top": (o.vgap || 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            t.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            t.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            t.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        return t;
+    },
+
+    resize: function () {
+        this.stroke(this.options.items);
+    },
+
+    addItem: function (item) {
+        throw new Error("不能添加元素");
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (item) {
+                self._addElement(i, item, items.length);
+            }
+        });
+    },
+
+    populate: function (items) {
+        BI.InlineVaerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.vertical_inline_adapt", BI.InlineVaerticalAdaptLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -31080,33 +31172,21 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            textAlign: "center"
         });
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
-            var t = BI.createWidget(item);
-            t.element.css({
-                position: "relative"
-            });
-            var w = BI.createWidget({
-                type: "bi.horizontal_auto",
-                items: [t]
-            });
-            this.addWidget(this.getName() + i, w);
-        } else {
-            var w = this.getWidgetByName(this.getName() + i);
-        }
+        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
             display: "inline-block",
             "vertical-align": "middle",
             "*display": "inline",
-            "*zoom": 1,
-            "min-width": 100 / length + "%"
+            "*zoom": 1
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -31115,7 +31195,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
@@ -49900,7 +49980,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -49908,7 +49988,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "first-line-conn-background",
                 width: 24,
                 height: o.height
             }
@@ -50091,7 +50171,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -50099,7 +50179,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "last-line-conn-background",
                 width: 24,
                 height: o.height
             }
@@ -50195,7 +50275,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -50893,7 +50973,7 @@ BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);/**
  */
 BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
-        return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
             iconWidth: 24,
             iconHeight: 24
@@ -50905,10 +50985,10 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     },
     setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v === true) {
-            this.element.addClass("tree-expand-icon-type3");
+        if (v === true) {
+            this.element.addClass("tree-expand-icon-type4");
         } else {
-            this.element.removeClass("tree-expand-icon-type3");
+            this.element.removeClass("tree-expand-icon-type4");
         }
     }
 });
@@ -57812,34 +57892,35 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.initTree(this.options.items);
     },
 
-    _formatItems: function (nodes, layer) {
+    _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
             var extend = {layer: layer};
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.mid_plus_group_node";
-                        break;
+                extend.type = "bi.mid_plus_group_node";
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.last_plus_group_node";
+                    extend.isLastNode = true;
+                }
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.first_plus_group_node"
+                }
+                if (i === 0 && i === nodes.length - 1) {  // 根
+                    extend.type = "bi.plus_group_node";
                 }
                 BI.defaults(node, extend);
-                self._formatItems(node.children, layer + 1);
+                self._formatItems(node.children, layer + 1, node);
             } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.mid_tree_leaf_item";
+                extend.type = "bi.mid_tree_leaf_item";
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.first_tree_leaf_item"
+                }
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.last_tree_leaf_item";
                 }
                 BI.defaults(node, extend);
             }
@@ -65326,7 +65407,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         this.initTree(this.options.items);
     },
 
-    _formatItems: function (nodes, layer) {
+    _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
             var extend = {};
@@ -65334,28 +65415,28 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.multilayer_select_tree_first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.multilayer_select_tree_last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
-                        break;
+                extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.multilayer_select_tree_last_plus_group_node";
+                    extend.isLastNode = true;
+                }
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.multilayer_select_tree_first_plus_group_node"
+                }
+                if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
+                    extend.type = "bi.multilayer_select_tree_plus_group_node";
                 }
                 BI.defaults(node, extend);
-
-                self._formatItems(node.children, layer + 1);
+                self._formatItems(node.children, layer + 1, node);
             } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
+                extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item"
+                }
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
                 }
                 BI.defaults(node, extend);
             }
@@ -65552,11 +65633,20 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -65646,11 +65736,20 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -65736,11 +65835,20 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -65783,6 +65891,109 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelectTreeMidPlusGroupNode);/**
+ * 加号表示的组节点
+ *
+ * Created by GUY on 2016/1/27.
+ * @class BI.MultiLayerSelectTreePlusGroupNode
+ * @extends BI.NodeButton
+ */
+BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
+    _defaultConfig: function () {
+        var conf = BI.MultiLayerSelectTreePlusGroupNode.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            extraCls: "bi-multilayer-select-tree-first-plus-group-node bi-list-item-active",
+            layer: 0, // 第几层级
+            id: "",
+            pId: "",
+            readonly: true,
+            open: false,
+            height: 24
+        });
+    },
+    _init: function () {
+        BI.MultiLayerSelectTreePlusGroupNode.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.node = BI.createWidget({
+            type: "bi.select_tree_plus_group_node",
+            cls: "bi-list-item-none",
+            stopPropagation: true,
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py
+        });
+        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
+            self.setSelected(self.isSelected());
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
+        var items = [];
+        BI.count(0, o.layer, function (index) {
+            items.push({
+                type: "bi.layout",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
+                width: 12,
+                height: o.height
+            });
+        });
+        items.push(this.node);
+        BI.createWidget({
+            type: "bi.td",
+            element: this,
+            columnSize: BI.makeArray(o.layer, 12),
+            items: [items]
+        });
+    },
+
+    isOnce: function () {
+        return true;
+    },
+
+    doRedMark: function () {
+        this.node.doRedMark.apply(this.node, arguments);
+    },
+
+    unRedMark: function () {
+        this.node.unRedMark.apply(this.node, arguments);
+    },
+
+    isSelected: function () {
+        return this.node.isSelected();
+    },
+
+    setSelected: function (b) {
+        BI.MultiLayerSelectTreePlusGroupNode.superclass.setSelected.apply(this, arguments);
+        this.node.setSelected(b);
+    },
+
+    doClick: function () {
+        BI.NodeButton.superclass.doClick.apply(this, arguments);
+        this.node.setSelected(this.isSelected());
+    },
+
+    setOpened: function (v) {
+        BI.MultiLayerSelectTreePlusGroupNode.superclass.setOpened.apply(this, arguments);
+        this.node.setOpened(v);
+    }
+});
+
+BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTreePlusGroupNode);/**
  * 多层级下拉单选树
  * Created by GUY on 2016/1/26.
  *
@@ -65887,7 +66098,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         this.initTree(this.options.items);
     },
 
-    _formatItems: function (nodes, layer) {
+    _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
             var extend = {};
@@ -65895,28 +66106,28 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.multilayer_single_tree_first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.multilayer_single_tree_last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
-                        break;
+                extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.multilayer_single_tree_last_plus_group_node";
+                    extend.isLastNode = true;
+                }
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.multilayer_single_tree_first_plus_group_node";
+                }
+                if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
+                    extend.type = "bi.multilayer_single_tree_plus_group_node";
                 }
                 BI.defaults(node, extend);
-
-                self._formatItems(node.children, layer + 1);
+                self._formatItems(node.children, layer + 1, node);
             } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
+                extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item"
+                }
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
                 }
                 BI.defaults(node, extend);
             }
@@ -66106,6 +66317,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: o.id,
             pId: o.pId,
             open: o.open,
+            isLastNode: o.isLastNode,
             height: o.height,
             hgap: o.hgap,
             text: o.text,
@@ -66120,11 +66332,20 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -66204,11 +66425,20 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -66288,11 +66518,20 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -66328,6 +66567,101 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingleTreeMidPlusGroupNode);/**
+ *@desc 根节点,既是第一个又是最后一个
+ *@author dailer
+ *@date 2018/09/16
+ */
+BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
+    _defaultConfig: function () {
+        var conf = BI.MultiLayerSingleTreePlusGroupNode.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            extraCls: "bi-multilayer-single-tree-plus-group-node bi-list-item",
+            layer: 0, // 第几层级
+            id: "",
+            pId: "",
+            open: false,
+            height: 24
+        });
+    },
+    _init: function () {
+        BI.MultiLayerSingleTreePlusGroupNode.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (o.isLastNode && !o.pNode) {
+
+        }
+        this.node = BI.createWidget({
+            type: "bi.plus_group_node",
+            cls: "bi-list-item-none",
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            isLastNode: o.isLastNode,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword
+        });
+        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {// 本身实现click功能
+                return;
+            }
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+        });
+
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
+        var items = [];
+        BI.count(0, o.layer, function (index) {
+            items.push({
+                type: "bi.layout",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
+                width: 12,
+                height: o.height
+            });
+        });
+        items.push(this.node);
+        BI.createWidget({
+            type: "bi.td",
+            element: this,
+            columnSize: BI.makeArray(o.layer, 12),
+            items: [items]
+        });
+    },
+
+    doRedMark: function () {
+        this.node.doRedMark.apply(this.node, arguments);
+    },
+
+    unRedMark: function () {
+        this.node.unRedMark.apply(this.node, arguments);
+    },
+
+    doClick: function () {
+        BI.MultiLayerSingleTreePlusGroupNode.superclass.doClick.apply(this, arguments);
+        this.node.setSelected(this.isSelected());
+    },
+
+    setOpened: function (v) {
+        BI.MultiLayerSingleTreePlusGroupNode.superclass.setOpened.apply(this, arguments);
+        if (BI.isNotNull(this.node)) {
+            this.node.setOpened(v);
+        }
+    }
+});
+
+BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);/**
  *
  * Created by GUY on 2016/1/27.
  * @class BI.MultiLayerSingleTreeFirstTreeLeafItem
@@ -66371,11 +66705,21 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -66460,11 +66804,20 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -66549,11 +66902,20 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
 
+        var needBlankLayers = [];
+        var pNode = o.pNode;
+        while (pNode) {
+            if (pNode.isLastNode) {
+                needBlankLayers.push(pNode.layer)
+            }
+            pNode = pNode.pNode;
+        }
+
         var items = [];
-        BI.count(0, o.layer, function () {
+        BI.count(0, o.layer, function (index) {
             items.push({
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             });
@@ -74078,6 +74440,91 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);/**
+ * 加号表示的组节点
+ * Created by GUY on 2015/9/6.
+ * @class BI.SelectTreePlusGroupNode
+ * @extends BI.NodeButton
+ */
+BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
+    _defaultConfig: function () {
+        var conf = BI.SelectTreePlusGroupNode.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-select-tree-plus-group-node bi-list-item-active",
+            logic: {
+                dynamic: false
+            },
+            id: "",
+            pId: "",
+            readonly: true,
+            open: false,
+            height: 24
+        });
+    },
+    _init: function () {
+        BI.SelectTreePlusGroupNode.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        this.checkbox = BI.createWidget({
+            type: "bi.tree_node_checkbox",
+            stopPropagation: true
+        });
+        this.text = BI.createWidget({
+            type: "bi.label",
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            textHeight: o.height,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            keyword: o.keyword,
+            py: o.py
+        });
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
+                if (this.isSelected()) {
+                    self.triggerExpand();
+                } else {
+                    self.triggerCollapse();
+                }
+            }
+        });
+        var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
+        var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
+            width: 24,
+            el: this.checkbox
+        }, this.text);
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
+            items: items
+        }))));
+    },
+
+    isOnce: function () {
+        return true;
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
+    },
+
+    doClick: function () {
+        BI.NodeButton.superclass.doClick.apply(this, arguments);
+    },
+
+    setOpened: function (v) {
+        BI.SelectTreePlusGroupNode.superclass.setOpened.apply(this, arguments);
+        if (BI.isNotNull(this.checkbox)) {
+            this.checkbox.setSelected(v);
+        }
+    }
+});
+
+BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);/**
  * @class BI.SelectTreeCombo
  * @extends BI.Widget
  */
@@ -74239,32 +74686,33 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
         });
     },
 
-    _formatItems: function (nodes, layer) {
+    _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
             var extend = {layer: layer};
             node.id = node.id || BI.UUID();
+            extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.select_tree_first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.select_tree_last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.select_tree_mid_plus_group_node";
-                        break;
+                extend.type = "bi.select_tree_mid_plus_group_node";
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.select_tree_last_plus_group_node";
+                    extend.isLastNode = true;
+                }
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.select_tree_first_plus_group_node"
+                }
+                if (i === 0 && i === nodes.length - 1) {  // 根
+                    extend.type = "bi.select_tree_plus_group_node";
                 }
                 BI.defaults(node, extend);
-                self._formatItems(node.children);
+                self._formatItems(node.children, layer + 1, node);
             } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.mid_tree_leaf_item";
+                extend.type = "bi.mid_tree_leaf_item";
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.first_tree_leaf_item"
+                }
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.last_tree_leaf_item";
                 }
                 BI.defaults(node, extend);
             }
@@ -74283,7 +74731,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
                 type: "bi.select_tree_expander",
                 isDefaultInit: true
             },
-            items: this._formatItems(BI.Tree.transformToTreeFormat(o.items)),
+            items: this._formatItems(BI.Tree.transformToTreeFormat(o.items), 0),
             value: o.value,
             chooseType: BI.Selection.Single
         });

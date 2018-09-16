@@ -1069,7 +1069,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -1077,7 +1077,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "first-line-conn-background",
                 width: 24,
                 height: o.height
             }
@@ -1260,7 +1260,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -1268,7 +1268,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "last-line-conn-background",
                 width: 24,
                 height: o.height
             }
@@ -1364,7 +1364,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -2062,7 +2062,7 @@ BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);/**
  */
 BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
-        return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
             iconWidth: 24,
             iconHeight: 24
@@ -2074,10 +2074,10 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     },
     setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v === true) {
-            this.element.addClass("tree-expand-icon-type3");
+        if (v === true) {
+            this.element.addClass("tree-expand-icon-type4");
         } else {
-            this.element.removeClass("tree-expand-icon-type3");
+            this.element.removeClass("tree-expand-icon-type4");
         }
     }
 });
@@ -8981,34 +8981,35 @@ BI.LevelTree = BI.inherit(BI.Widget, {
         this.initTree(this.options.items);
     },
 
-    _formatItems: function (nodes, layer) {
+    _formatItems: function (nodes, layer, pNode) {
         var self = this;
         BI.each(nodes, function (i, node) {
             var extend = {layer: layer};
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            extend.pNode = pNode;
             if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.mid_plus_group_node";
-                        break;
+                extend.type = "bi.mid_plus_group_node";
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.last_plus_group_node";
+                    extend.isLastNode = true;
+                }
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.first_plus_group_node"
+                }
+                if (i === 0 && i === nodes.length - 1) {  // 根
+                    extend.type = "bi.plus_group_node";
                 }
                 BI.defaults(node, extend);
-                self._formatItems(node.children, layer + 1);
+                self._formatItems(node.children, layer + 1, node);
             } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.mid_tree_leaf_item";
+                extend.type = "bi.mid_tree_leaf_item";
+                if (i === 0 && !pNode) {
+                    extend.type = "bi.first_tree_leaf_item"
+                }
+                if (i === nodes.length - 1) {
+                    extend.type = "bi.last_tree_leaf_item";
                 }
                 BI.defaults(node, extend);
             }

@@ -24,33 +24,21 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            textAlign: "center"
         });
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
-            var t = BI.createWidget(item);
-            t.element.css({
-                position: "relative"
-            });
-            var w = BI.createWidget({
-                type: "bi.horizontal_auto",
-                items: [t]
-            });
-            this.addWidget(this.getName() + i, w);
-        } else {
-            var w = this.getWidgetByName(this.getName() + i);
-        }
+        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
             display: "inline-block",
             "vertical-align": "middle",
             "*display": "inline",
-            "*zoom": 1,
-            "min-width": 100 / length + "%"
+            "*zoom": 1
         });
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -59,7 +47,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
