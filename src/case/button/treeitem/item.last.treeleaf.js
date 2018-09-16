@@ -53,7 +53,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "last-line-conn-background",
                 width: 24,
                 height: o.height
             }

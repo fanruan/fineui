@@ -1,33 +1,36 @@
 /**
- *
- * Created by GUY on 2016/1/27.
- * @class BI.MultiLayerSingleTreeFirstTreeLeafItem
- * @extends BI.BasicButton
+ *@desc 根节点,既是第一个又是最后一个
+ *@author dailer
+ *@date 2018/09/16
  */
-BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
     _defaultConfig: function () {
-        return BI.extend(BI.MultiLayerSingleTreeFirstTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-multilayer-single-tree-first-tree-leaf-item bi-list-item-active",
-            logic: {
-                dynamic: false
-            },
-            layer: 0,
+        var conf = BI.MultiLayerSingleTreePlusGroupNode.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            extraCls: "bi-multilayer-single-tree-plus-group-node bi-list-item",
+            layer: 0, // 第几层级
             id: "",
             pId: "",
+            open: false,
             height: 24
         });
     },
     _init: function () {
-        BI.MultiLayerSingleTreeFirstTreeLeafItem.superclass._init.apply(this, arguments);
+        BI.MultiLayerSingleTreePlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.item = BI.createWidget({
-            type: "bi.first_tree_leaf_item",
+        if (o.isLastNode && !o.pNode) {
+
+        }
+        this.node = BI.createWidget({
+            type: "bi.plus_group_node",
             cls: "bi-list-item-none",
             logic: {
                 dynamic: true
             },
             id: o.id,
             pId: o.pId,
+            open: o.open,
+            isLastNode: o.isLastNode,
             height: o.height,
             hgap: o.hgap,
             text: o.text,
@@ -35,13 +38,12 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             py: o.py,
             keyword: o.keyword
         });
-        this.item.on(BI.Controller.EVENT_CHANGE, function (type) {
+        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {// 本身实现click功能
                 return;
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
-
 
         var needBlankLayers = [];
         var pNode = o.pNode;
@@ -61,7 +63,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
                 height: o.height
             });
         });
-        items.push(this.item);
+        items.push(this.node);
         BI.createWidget({
             type: "bi.td",
             element: this,
@@ -70,31 +72,25 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
     },
 
-    doHighLight: function () {
-        this.item.doHighLight.apply(this.item, arguments);
+    doRedMark: function () {
+        this.node.doRedMark.apply(this.node, arguments);
     },
 
-    unHighLight: function () {
-        this.item.unHighLight.apply(this.item, arguments);
-    },
-
-    getId: function () {
-        return this.options.id;
-    },
-
-    getPId: function () {
-        return this.options.pId;
+    unRedMark: function () {
+        this.node.unRedMark.apply(this.node, arguments);
     },
 
     doClick: function () {
-        BI.MultiLayerSingleTreeFirstTreeLeafItem.superclass.doClick.apply(this, arguments);
-        this.item.setSelected(this.isSelected());
+        BI.MultiLayerSingleTreePlusGroupNode.superclass.doClick.apply(this, arguments);
+        this.node.setSelected(this.isSelected());
     },
 
-    setSelected: function (v) {
-        BI.MultiLayerSingleTreeFirstTreeLeafItem.superclass.setSelected.apply(this, arguments);
-        this.item.setSelected(v);
+    setOpened: function (v) {
+        BI.MultiLayerSingleTreePlusGroupNode.superclass.setOpened.apply(this, arguments);
+        if (BI.isNotNull(this.node)) {
+            this.node.setOpened(v);
+        }
     }
 });
 
-BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingleTreeFirstTreeLeafItem);
+BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
