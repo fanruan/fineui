@@ -100,6 +100,11 @@ module.exports = function (grunt) {
                 dest: "dist/bundle.js"
             },
 
+            bundleIEJs: {
+                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
+                dest: "dist/bundle.ie.js"
+            },
+
             bundleCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
                 dest: "dist/bundle.css"
@@ -109,6 +114,12 @@ module.exports = function (grunt) {
                 src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
                     "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
+            },
+
+            fineuiIEJs: {
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.ie.js", "dist/base.js",
+                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.ie.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                dest: "dist/fineui.ie.js"
             },
 
             fineuiWithoutJqueryAndPolyfillJs: {
@@ -242,8 +253,10 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
+                    "dist/bundle.ie.min.js": ["<%= concat.bundleIEJs.dest %>"],
                     "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
-                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
+                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"],
+                    "dist/fineui.ie.min.js": ["<%= concat.fineuiIEJs.dest %>"]
                 }
             }
         },

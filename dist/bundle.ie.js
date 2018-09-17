@@ -19,248 +19,6 @@ if (_global.BI == null) {
 }
 if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
-}// Production steps of ECMA-262, Edition 5, 15.4.4.14
-// Reference: http://es5.github.io/#x15.4.4.14
-if (!Array.prototype.indexOf) {
-    Array.prototype.indexOf = function (searchElement, fromIndex) {
-
-        var k;
-
-        // 1. Let o be the result of calling ToObject passing
-        //    the this value as the argument.
-        if (this == null) {
-            throw new TypeError("\"this\" is null or not defined");
-        }
-
-        var o = Object(this);
-
-        // 2. Let lenValue be the result of calling the Get
-        //    internal method of o with the argument "length".
-        // 3. Let len be ToUint32(lenValue).
-        var len = o.length >>> 0;
-
-        // 4. If len is 0, return -1.
-        if (len === 0) {
-            return -1;
-        }
-
-        // 5. If argument fromIndex was passed let n be
-        //    ToInteger(fromIndex); else let n be 0.
-        var n = fromIndex | 0;
-
-        // 6. If n >= len, return -1.
-        if (n >= len) {
-            return -1;
-        }
-
-        // 7. If n >= 0, then Let k be n.
-        // 8. Else, n<0, Let k be len - abs(n).
-        //    If k is less than 0, then let k be 0.
-        k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-
-        // 9. Repeat, while k < len
-        while (k < len) {
-            // a. Let Pk be ToString(k).
-            //   This is implicit for LHS operands of the in operator
-            // b. Let kPresent be the result of calling the
-            //    HasProperty internal method of o with argument Pk.
-            //   This step can be combined with c
-            // c. If kPresent is true, then
-            //    i.  Let elementK be the result of calling the Get
-            //        internal method of o with the argument ToString(k).
-            //   ii.  Let same be the result of applying the
-            //        Strict Equality Comparison Algorithm to
-            //        searchElement and elementK.
-            //  iii.  If same is true, return k.
-            if (k in o && o[k] === searchElement) {
-                return k;
-            }
-            k++;
-        }
-        return -1;
-    };
-}
-if (!Array.prototype.lastIndexOf) {
-    Array.prototype.lastIndexOf = function (searchElement /* , fromIndex*/) {
-        "use strict";
-
-        if (this === void 0 || this === null) {
-            throw new TypeError();
-        }
-
-        var n, k,
-            t = Object(this),
-            len = t.length >>> 0;
-        if (len === 0) {
-            return -1;
-        }
-
-        n = len - 1;
-        if (arguments.length > 1) {
-            n = Number(arguments[1]);
-            if (n != n) {
-                n = 0;
-            } else if (n != 0 && n != (1 / 0) && n != -(1 / 0)) {
-                n = (n > 0 || -1) * Math.floor(Math.abs(n));
-            }
-        }
-
-        for (k = n >= 0
-            ? Math.min(n, len - 1)
-            : len - Math.abs(n); k >= 0; k--) {
-            if (k in t && t[k] === searchElement) {
-                return k;
-            }
-        }
-        return -1;
-    };
-}
-/**
- * 特殊情况
- * Created by wang on 15/6/23.
- */
-// 解决console未定义问题 guy
-_global.console = _global.console || (function () {
-    var c = {};
-    c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
-            = c.clear = c.exception = c.trace = c.assert = function () {
-        };
-    return c;
-})();
-/*
- * 前端缓存
- */
-_global.localStorage || (_global.localStorage = {
-    items: {},
-    setItem: function (k, v) {
-        BI.Cache.addCookie(k, v);
-    },
-    getItem: function (k) {
-        return BI.Cache.getCookie(k);
-    },
-    removeItem: function (k) {
-        BI.Cache.deleteCookie(k);
-    },
-    key: function () {
-
-    },
-    clear: function () {
-        this.items = {};
-    }
-});
-if (!Object.keys) {
-    Object.keys = function(o) {
-        if (o !== Object(o)) {
-            throw new TypeError('Object.keys called on a non-object');
-        }
-        // fix的问题
-        var falsy;
-        var skipArray = {
-            __ob__: falsy,
-            $accessors: falsy,
-            $vbthis: falsy,
-            $vbsetter: falsy
-        };
-        var k = [], p;
-        for (p in o) {
-            if (!(p in skipArray)) {
-                if (Object.prototype.hasOwnProperty.call(o, p)) {
-                    k.push(p);
-                }
-            }
-        }
-        return k;
-    };
-}
-
-if (!Array.isArray) {
-    Array.isArray = function(arg) {
-        return Object.prototype.toString.call(arg) === '[object Array]';
-    };
-}
-
-// https://stackoverflow.com/questions/10919915/ie8-getprototypeof-method
-if (typeof Object.getPrototypeOf !== "function") {
-    Object.getPrototypeOf = "".__proto__ === String.prototype
-        ? function (object) {
-            return object.__proto__;
-        }
-        : function (object) {
-            // May break if the constructor has been tampered with
-            return object.constructor.prototype;
-        };
-}
-
-if(!Date.now) {
-    Date.now = function () {
-        return new Date().valueOf();
-    };
-}if (typeof Set !== "undefined" && Set.toString().match(/native code/)) {
-
-} else {
-    Set = function () {
-        this.set = {};
-    };
-    Set.prototype.has = function (key) {
-        return this.set[key] !== undefined;
-    };
-    Set.prototype.add = function (key) {
-        this.set[key] = 1;
-    };
-    Set.prototype.clear = function () {
-        this.set = {};
-    };
-}// 修复ie9下sort方法的bug
-!function (window) {
-    var ua = window.navigator.userAgent.toLowerCase(),
-        reg = /msie|applewebkit.+safari/;
-    if (reg.test(ua)) {
-        var _sort = Array.prototype.sort;
-        Array.prototype.sort = function (fn) {
-            if (!!fn && typeof fn === "function") {
-                if (this.length < 2) {
-                    return this;
-                }
-                var i = 0, j = i + 1, l = this.length, tmp, r = false, t = 0;
-                for (; i < l; i++) {
-                    for (j = i + 1; j < l; j++) {
-                        t = fn.call(this, this[i], this[j]);
-                        r = (typeof t === "number" ? t :
-                            t ? 1 : 0) > 0;
-                        if (r === true) {
-                            tmp = this[i];
-                            this[i] = this[j];
-                            this[j] = tmp;
-                        }
-                    }
-                }
-                return this;
-            }
-            return _sort.call(this);
-
-        };
-    }
-}(window);/**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-var _global;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (_global.BI == null) {
-    _global.BI = {prepares: []};
-}
-if(_global.BI.prepares == null) {
-    _global.BI.prepares = [];
 }/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
@@ -34213,9 +33971,11 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) : typeof define === 'function' && define.amd ? define(['exports'], factory) : factory(global.Fix = global.Fix || {});
-})(this, function (exports) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('lodash'), require('underscore')) : typeof define === 'function' && define.amd ? define(['exports', 'lodash', 'underscore'], factory) : factory(global.Fix = global.Fix || {}, global._, global._);
+})(this, function (exports, lodash, _$1) {
     'use strict';
+
+    _$1 = 'default' in _$1 ? _$1['default'] : _$1;
 
     function noop(a, b, c) {}
 
@@ -34225,27 +33985,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     var rhashcode = /\d\.\d{4}/;
 
-    //生成UUID http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
-    function makeHashCode(prefix) {
-        /* istanbul ignore next*/
-        prefix = prefix || 'bi';
+    // 生成UUID http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
+    function makeHashCode() {
+        var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'bi';
+
         /* istanbul ignore next*/
         return String(Math.random() + Math.random()).replace(rhashcode, prefix);
     }
 
-    var hasProto = '__proto__' in {};
-
-    var isIE = function isIE() {
-        if (typeof navigator === "undefined") {
+    function isIE() {
+        if (typeof navigator === 'undefined') {
             return false;
         }
+
         return (/(msie|trident)/i.test(navigator.userAgent.toLowerCase())
         );
-    };
+    }
 
-    var getIEVersion = function getIEVersion() {
+    function getIEVersion() {
         var version = 0;
-        if (typeof navigator === "undefined") {
+        if (typeof navigator === 'undefined') {
             return false;
         }
         var agent = navigator.userAgent.toLowerCase();
@@ -34260,8 +34019,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else {
             version = 0;
         }
+
         return version;
-    };
+    }
     var isIE9Below = isIE() && getIEVersion() < 9;
 
     var _toString = Object.prototype.toString;
@@ -34270,29 +34030,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return _toString.call(obj) === '[object Object]';
     }
 
-    function remove(arr, item) {
-        if (arr && arr.length) {
-            var _index = arr.indexOf(item);
-            if (_index > -1) {
-                return arr.splice(_index, 1);
-            }
-        }
-    }
-
     var bailRE = /[^\w.$]/;
 
+    /* eslint no-param-reassign: ['off'] */
     function parsePath(path) {
         if (bailRE.test(path)) {
             return;
         }
         var segments = path.split('.');
+
         return function (obj) {
             for (var i = 0; i < segments.length; i++) {
                 if (!obj) return;
                 obj = obj[segments[i]];
             }
+
             return obj;
         };
+    }
+
+    function cloneShadow(obj) {
+        if (obj === null) return null;
+
+        if (Array.isArray(obj)) {
+            return [].concat(obj);
+        }
+
+        return lodash.cloneDeep(obj);
+
+        // const type = typeof obj;
+        //
+        // switch (type) {
+        //     case 'object':
+        //         return _.extend({}, obj);
+        //     default:
+        //         return obj;
+        // }
     }
 
     var nextTick = function () {
@@ -34331,20 +34104,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             timerFunc = function timerFunc() {
                 port.postMessage(1);
             };
-        } else
             /* istanbul ignore next */
-            if (typeof Promise !== 'undefined' && isNative(Promise)) {
-                // use microtask in non-DOM environments, e.g. Weex
-                var p = Promise.resolve();
-                timerFunc = function timerFunc() {
-                    p.then(nextTickHandler);
-                };
-            } else {
-                // fallback to setTimeout
-                timerFunc = function timerFunc() {
-                    setTimeout(nextTickHandler, 0);
-                };
-            }
+        } else if (typeof Promise !== 'undefined' && isNative(Promise)) {
+            // use microtask in non-DOM environments, e.g. Weex
+            var p = Promise.resolve();
+            timerFunc = function timerFunc() {
+                p.then(nextTickHandler);
+            };
+        } else {
+            // fallback to setTimeout
+            timerFunc = function timerFunc() {
+                setTimeout(nextTickHandler, 0);
+            };
+        }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -34372,763 +34144,44 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         };
     }();
 
-    var falsy;
+    var falsy = void 0;
     var $$skipArray = {
-        __ob__: falsy,
         $accessors: falsy,
         $vbthis: falsy,
-        $vbsetter: falsy
+        $vbsetter: falsy,
+        $vm: falsy
     };
 
-    var uid = 0;
-
-    /**
-     * A dep is an observable that can have multiple
-     * directives subscribing to it.
-     */
-
-    var Dep = function () {
-        function Dep() {
-            _classCallCheck(this, Dep);
-
-            this.id = uid++;
-            this.subs = [];
+    function inherit(sb, sp, overrides) {
+        if (typeof sp === "object") {
+            overrides = sp;
+            sp = sb;
+            sb = function sb() {
+                return sp.apply(this, arguments);
+            };
         }
-
-        Dep.prototype.addSub = function addSub(sub) {
-            this.subs.push(sub);
-        };
-
-        Dep.prototype.removeSub = function removeSub(sub) {
-            remove(this.subs, sub);
-        };
-
-        Dep.prototype.depend = function depend() {
-            if (Dep.target) {
-                Dep.target.addDep(this);
-            }
-        };
-
-        Dep.prototype.notify = function notify(options) {
-            // stabilize the subscriber list first
-            var subs = this.subs.slice();
-            for (var i = 0, l = subs.length; i < l; i++) {
-                subs[i].update(options);
-            }
-        };
-
-        return Dep;
-    }();
-
-    // the current target watcher being evaluated.
-    // this is globally unique because there could be only one
-    // watcher being evaluated at any time.
-
-
-    Dep.target = null;
-    var targetStack = [];
-
-    function pushTarget(_target) {
-        if (Dep.target) targetStack.push(Dep.target);
-        Dep.target = _target;
-    }
-
-    function popTarget() {
-        Dep.target = targetStack.pop();
-    }
-
-    var arrayProto = Array.prototype;
-    var arrayMethods = [];
-    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
-        var original = arrayProto[method];
-        arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            var ob = this.__ob__;
-            var inserted = void 0;
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    inserted = args;
-                    break;
-                case 'splice':
-                    inserted = args.slice(2);
-                    break;
-            }
-            if (inserted) inserted = ob.observeArray(inserted);
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    args = inserted;
-                    break;
-                case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
-                    break;
-            }
-            var result = original.apply(this, args);
-            notify(ob.parent, ob.parentKey, ob.dep, true);
-            return result;
-        };
-    });
-
-    //如果浏览器不支持ecma262v5的Object.defineProperties或者存在BUG，比如IE8
-    //标准浏览器使用__defineGetter__, __defineSetter__实现
-    var canHideProperty = true;
-    try {
-        Object.defineProperty({}, '_', {
-            value: 'x'
+        var F = function F() {},
+            spp = sp.prototype;
+        F.prototype = spp;
+        sb.prototype = new F();
+        sb.superclass = spp;
+        _$1.extend(sb.prototype, overrides, {
+            superclass: sp
         });
-        delete $$skipArray.$vbsetter;
-        delete $$skipArray.$vbthis;
-    } catch (e) {
-        /* istanbul ignore next*/
-        canHideProperty = false;
+        return sb;
     }
 
-    var createViewModel = Object.defineProperties;
-    var defineProperty = void 0;
+    var mixinInjection = {};
 
-    var timeBucket = new Date() - 0;
-    /* istanbul ignore if*/
-    if (!canHideProperty) {
-        if ('__defineGetter__' in {}) {
-            defineProperty = function defineProperty(obj, prop, desc) {
-                if ('value' in desc) {
-                    obj[prop] = desc.value;
-                }
-                if ('get' in desc) {
-                    obj.__defineGetter__(prop, desc.get);
-                }
-                if ('set' in desc) {
-                    obj.__defineSetter__(prop, desc.set);
-                }
-                return obj;
-            };
-            createViewModel = function createViewModel(obj, descs) {
-                for (var prop in descs) {
-                    if (descs.hasOwnProperty(prop)) {
-                        defineProperty(obj, prop, descs[prop]);
-                    }
-                }
-                return obj;
-            };
-        }
-        /* istanbul ignore if*/
-        if (isIE9Below) {
-            var VBClassPool = {};
-            window.execScript([// jshint ignore:line
-            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
-            ].join('\n'), 'VBScript');
-
-            var VBMediator = function VBMediator(instance, accessors, name, value) {
-                // jshint ignore:line
-                var accessor = accessors[name];
-                if (arguments.length === 4) {
-                    accessor.set.call(instance, value);
-                } else {
-                    return accessor.get.call(instance);
-                }
-            };
-            createViewModel = function createViewModel(name, accessors, properties) {
-                // jshint ignore:line
-                var buffer = [];
-                buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                '\tEnd Function');
-                //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
-                var uniq = {
-                    $vbthis: true,
-                    $vbsetter: true,
-                    $accessors: true
-                };
-                for (name in $$skipArray) {
-                    if (!uniq[name]) {
-                        buffer.push('\tPublic [' + name + ']');
-                        uniq[name] = true;
-                    }
-                }
-                //添加访问器属性 
-                for (name in accessors) {
-                    if (uniq[name]) {
-                        continue;
-                    }
-                    uniq[name] = true;
-                    buffer.push(
-                    //由于不知对方会传入什么,因此set, let都用上
-                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
-                }
-
-                for (name in properties) {
-                    if (!uniq[name]) {
-                        uniq[name] = true;
-                        buffer.push('\tPublic [' + name + ']');
-                    }
-                }
-
-                buffer.push('\tPublic [hasOwnProperty]');
-                buffer.push('End Class');
-                var body = buffer.join('\r\n');
-                var className = VBClassPool[body];
-                if (!className) {
-                    className = makeHashCode('VBClass');
-                    window.parseVB('Class ' + className + body);
-                    window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
-                    VBClassPool[body] = className;
-                }
-                var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
-                return ret; //得到其产品
-            };
-        }
+    function getMixins(type) {
+        return mixinInjection[type];
     }
 
-    var createViewModel$1 = createViewModel;
-
-    var arrayKeys = _.keys(arrayMethods);
-
-    var observerState = {
-        shouldConvert: true
-    };
-
-    function def(obj, key, val, enumerable) {
-        Object.defineProperty(obj, key, {
-            value: val,
-            enumerable: !!enumerable,
-            writable: true,
-            configurable: true
-        });
+    function mixin(xtype, cls) {
+        mixinInjection[xtype] = _.cloneDeep(cls);
     }
 
-    /**
-     * Observer class that are attached to each observed
-     * object. Once attached, the observer converts target
-     * object's property keys into getter/setters that
-     * collect dependencies and dispatches updates.
-     */
-
-    var Observer = function () {
-        function Observer(value) {
-            _classCallCheck(this, Observer);
-
-            this.value = value;
-            this.dep = new Dep();
-            this.vmCount = 0;
-            if (_.isArray(value)) {
-                var augment = hasProto ? protoAugment : copyAugment;
-                augment(value, arrayMethods, arrayKeys);
-                this.model = this.observeArray(value);
-            } else {
-                this.model = this.walk(value);
-            }
-            if (isIE9Below) {
-                this.model['__ob__'] = this;
-            } else {
-                def(this.model, "__ob__", this);
-            }
-        }
-
-        Observer.prototype.walk = function walk(obj) {
-            return defineReactive(obj, this);
-        };
-
-        Observer.prototype.observeArray = function observeArray(items) {
-            for (var i = 0, l = items.length; i < l; i++) {
-                var ob = observe(items[i], this, i);
-                items[i] = ob ? ob.model : items[i];
-            }
-            return items;
-        };
-
-        return Observer;
-    }();
-
-    function protoAugment(target, src, keys) {
-        /* eslint-disable no-proto */
-        target.__proto__ = src;
-        /* eslint-enable no-proto */
-    }
-
-    /* istanbul ignore next */
-    function copyAugment(target, src, keys) {
-        for (var i = 0, l = keys.length; i < l; i++) {
-            var key = keys[i];
-            target[key] = src[key];
-        }
-    }
-
-    function observe(value, parentObserver, parentKey) {
-        if (!_.isObject(value)) {
-            return;
-        }
-        var ob = void 0;
-        if (value.__ob__ instanceof Observer) {
-            ob = value.__ob__;
-        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
-            ob = new Observer(value);
-        }
-        if (ob) {
-            ob.parent = parentObserver || ob.parent;
-            ob.parentKey = parentKey;
-        }
-        return ob;
-    }
-
-    function notify(observer, key, dep, refresh) {
-        dep.notify({ observer: observer, key: key, refresh: refresh });
-        if (observer) {
-            //触发a.*绑定的依赖
-            _.each(observer._deps, function (dep) {
-                dep.notify({ observer: observer, key: key });
-            });
-            //触发a.**绑定的依赖
-            var parent = observer,
-                root = observer,
-                route = key || "";
-            while (parent) {
-                _.each(parent._scopeDeps, function (dep) {
-                    dep.notify({ observer: observer, key: key });
-                });
-                if (parent.parentKey != null) {
-                    route = parent.parentKey + '.' + route;
-                }
-                root = parent;
-                parent = parent.parent;
-            }
-            for (var _key2 in root._globalDeps) {
-                var reg = new RegExp(_key2);
-                if (reg.test(route)) {
-                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
-                }
-            }
-        }
-    }
-
-    function defineReactive(obj, observer, shallow) {
-        var props = {};
-        var model = void 0;
-        // if (typeof Proxy === 'function') {
-        //     const deps = {}, childObs = {}, cache = {}
-        //     _.each(obj, function (val, key) {
-        //         if (key in $$skipArray) {
-        //             return
-        //         }
-        //         cache[key] = val
-        //         const dep = deps[key] = (observer && observer['__dep' + key]) || new Dep()
-        //         observer && (observer['__dep' + key] = dep)
-        //         childObs[key] = !shallow && observe(val, observer, key)
-        //     })
-        //     return model = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return key in obj;
-        //         },
-        //         get: function (target, key) {
-        //             if (key in $$skipArray) {
-        //                 return target[key]
-        //             }
-        //             const value = cache[key]
-        //             if (Dep.target) {
-        //                 deps[key].depend()
-        //                 if (childObs[key]) {
-        //                     childObs[key].dep.depend()
-        //                     if (_.isArray(value)) {
-        //                         dependArray(value)
-        //                     }
-        //                 }
-        //             }
-        //             return value
-        //         },
-        //         set: function (target, key, newVal) {
-        //             if (key in $$skipArray) {
-        //                 return target[key] = newVal
-        //             }
-        //             const value = cache[key], dep = deps[key]
-        //             if (newVal === value || (newVal !== newVal && value !== value)) {
-        //                 return newVal
-        //             }
-        //             cache[key] = newVal
-        //             childObs[key] = !shallow && observe(newVal, observer, key)
-        //             obj[key] = childObs[key] ? childObs[key].model : newVal
-        //             notify(model, key, dep)
-        //             return obj[key]
-        //         }
-        //     })
-        // }
-        _.each(obj, function (val, key) {
-            if (key in $$skipArray) {
-                return;
-            }
-            var configurable = true;
-            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
-            if (property && property.configurable === false) {
-                configurable = false;
-            }
-            var dep = observer && observer['__dep' + key] || new Dep();
-            observer && (observer['__dep' + key] = dep);
-            var childOb = configurable && !shallow && observe(val, observer, key);
-            props[key] = {
-                enumerable: true,
-                configurable: true,
-                get: function reactiveGetter() {
-                    var value = childOb ? childOb.model : val;
-                    if (Dep.target) {
-                        dep.depend();
-                        if (childOb) {
-                            childOb.dep.depend();
-                            if (_.isArray(value)) {
-                                dependArray(value);
-                            }
-                        }
-                    }
-                    return value;
-                },
-                set: function reactiveSetter(newVal) {
-                    var value = childOb ? childOb.model : val;
-                    if (newVal === value || newVal !== newVal && value !== value) {
-                        return;
-                    }
-                    val = newVal;
-                    childOb = configurable && !shallow && observe(newVal, observer, key);
-                    if (childOb && value && value.__ob__) {
-                        childOb._scopeDeps = value.__ob__._scopeDeps;
-                        childOb._deps = value.__ob__._deps;
-                    }
-                    obj[key] = childOb ? childOb.model : newVal;
-                    notify(model.__ob__, key, dep);
-                }
-            };
-        });
-        return model = createViewModel$1(obj, props);
-    }
-
-    /**
-     * Set a property on an object. Adds the new property and
-     * triggers change notification if the property doesn't
-     * already exist.
-     */
-    function set(target, key, val) {
-        if (_.isArray(target)) {
-            target.length = Math.max(target.length, key);
-            target.splice(key, 1, val);
-            return val;
-        }
-        if (_.has(target, key)) {
-            target[key] = val;
-            return val;
-        }
-        var ob = target.__ob__;
-        if (!ob) {
-            target[key] = val;
-            return val;
-        }
-        ob.value[key] = val;
-        target = defineReactive(ob.value, ob);
-        notify(ob, key, ob.dep);
-        return target;
-    }
-
-    /**
-     * Delete a property and trigger change if necessary.
-     */
-    function del(target, key) {
-        if (_.isArray(target)) {
-            target.splice(key, 1);
-            return;
-        }
-        var ob = target.__ob__;
-        if (!_.has(target, key)) {
-            return;
-        }
-        if (!ob) {
-            delete target[key];
-            return target;
-        }
-        delete ob.value[key];
-        target = defineReactive(ob.value, ob);
-        notify(ob, key, ob.dep);
-        return target;
-    }
-
-    /**
-     * Collect dependencies on array elements when the array is touched, since
-     * we cannot intercept array element access like property getters.
-     */
-    function dependArray(value) {
-        for (var e, i = 0, l = value.length; i < l; i++) {
-            e = value[i];
-            e && e.__ob__ && e.__ob__.dep.depend();
-            if (_.isArray(e)) {
-                dependArray(e);
-            }
-        }
-    }
-
-    var queue = [];
-    var activatedChildren = [];
-    var has = {};
-    var waiting = false;
-    var flushing = false;
-    var index = 0;
-
-    function resetSchedulerState() {
-        index = queue.length = activatedChildren.length = 0;
-        has = {};
-        waiting = flushing = false;
-    }
-
-    function flushSchedulerQueue() {
-        flushing = true;
-        var watcher = void 0,
-            id = void 0,
-            options = void 0;
-
-        // Sort queue before flush.
-        // This ensures that:
-        // 1. Components are updated from parent to child. (because parent is always
-        //    created before the child)
-        // 2. A component's user watchers are run before its render watcher (because
-        //    user watchers are created before the render watcher)
-        // 3. If a component is destroyed during a parent component's watcher run,
-        //    its watchers can be skipped.
-        queue.sort(function (a, b) {
-            return a.id - b.id;
-        });
-
-        // do not cache length because more watchers might be pushed
-        // as we run existing watchers
-        for (index = 0; index < queue.length; index++) {
-            watcher = queue[index].watcher;
-            options = queue[index].options;
-            id = watcher.id;
-            has[id] = null;
-            watcher.run(options);
-        }
-
-        resetSchedulerState();
-    }
-
-    function queueWatcher(watcher, options) {
-        var id = watcher.id;
-        if (has[id] == null) {
-            has[id] = true;
-            if (!flushing) {
-                queue.push({ watcher: watcher, options: options });
-            } else {
-                // if already flushing, splice the watcher based on its id
-                // if already past its id, it will be run next immediately.
-                var i = queue.length - 1;
-                while (i > index && queue[i].watcher.id > watcher.id) {
-                    i--;
-                }
-                queue.splice(i + 1, 0, { watcher: watcher, options: options });
-            }
-            // queue the flush
-            if (!waiting) {
-                waiting = true;
-                nextTick(flushSchedulerQueue);
-            }
-        }
-    }
-
-    var uid$1 = 0;
-
-    var Watcher = function () {
-        function Watcher(vm, expOrFn, cb, options) {
-            _classCallCheck(this, Watcher);
-
-            this.vm = vm;
-            // vm._watchers || (vm._watchers = [])
-            // vm._watchers.push(this)
-            // options
-            if (options) {
-                this.deep = !!options.deep;
-                this.user = !!options.user;
-                this.lazy = !!options.lazy;
-                this.sync = !!options.sync;
-            } else {
-                this.deep = this.user = this.lazy = this.sync = false;
-            }
-            this.cb = cb;
-            this.id = ++uid$1; // uid for batching
-            this.active = true;
-            this.dirty = this.lazy; // for lazy watchers
-            this.deps = [];
-            this.newDeps = [];
-            this.depIds = new Set();
-            this.newDepIds = new Set();
-            this.expression = '';
-            // parse expression for getter
-            if (typeof expOrFn === 'function') {
-                this.getter = expOrFn;
-            } else {
-                this.getter = parsePath(expOrFn);
-                if (!this.getter) {
-                    this.getter = function () {};
-                }
-            }
-            this.value = this.lazy ? undefined : this.get();
-        }
-
-        Watcher.prototype.get = function get() {
-            pushTarget(this);
-            var value = void 0;
-            var vm = this.vm;
-            try {
-                value = this.getter.call(vm, vm);
-            } catch (e) {
-                // if (this.user) {
-                // } else {
-                // console.error(e)
-                // }
-            } finally {
-                // "touch" every property so they are all tracked as
-                // dependencies for deep watching
-                if (this.deep) {
-                    traverse(value);
-                }
-                popTarget();
-                this.cleanupDeps();
-            }
-            return value;
-        };
-
-        Watcher.prototype.addDep = function addDep(dep) {
-            var id = dep.id;
-            if (!this.newDepIds.has(id)) {
-                this.newDepIds.add(id);
-                this.newDeps.push(dep);
-                if (!this.depIds.has(id)) {
-                    dep.addSub(this);
-                }
-            }
-        };
-
-        Watcher.prototype.cleanupDeps = function cleanupDeps() {
-            var i = this.deps.length;
-            while (i--) {
-                var dep = this.deps[i];
-                if (!this.newDepIds.has(dep.id)) {
-                    dep.removeSub(this);
-                }
-            }
-            var tmp = this.depIds;
-            this.depIds = this.newDepIds;
-            this.newDepIds = tmp;
-            this.newDepIds.clear();
-            tmp = this.deps;
-            this.deps = this.newDeps;
-            this.newDeps = tmp;
-            this.newDeps.length = 0;
-        };
-
-        Watcher.prototype.update = function update(options) {
-            /* istanbul ignore else */
-            if (this.lazy) {
-                this.dirty = true;
-            } else if (this.sync) {
-                this.run(options);
-            } else {
-                queueWatcher(this, options);
-            }
-        };
-
-        Watcher.prototype.run = function run(options) {
-            if (this.active) {
-                var value = this.get();
-                if (value !== this.value ||
-                // Deep watchers and watchers on Object/Arrays should fire even
-                // when the value is the same, because the value may
-                // have mutated.
-                options && options.refresh || this.deep) {
-                    // set new value
-                    var oldValue = this.value;
-                    this.value = value;
-                    if (this.user) {
-                        try {
-                            this.cb.call(this.vm, value, oldValue, options);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    } else {
-                        try {
-                            this.cb.call(this.vm, value, oldValue, options);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
-                }
-            }
-        };
-
-        Watcher.prototype.evaluate = function evaluate() {
-            this.value = this.get();
-            this.dirty = false;
-        };
-
-        Watcher.prototype.depend = function depend() {
-            var i = this.deps.length;
-            while (i--) {
-                this.deps[i].depend();
-            }
-        };
-
-        Watcher.prototype.teardown = function teardown() {
-            if (this.active) {
-                // remove self from vm's watcher list
-                // this is a somewhat expensive operation so we skip it
-                // if the vm is being destroyed.
-                remove(this.vm._watchers, this);
-                var i = this.deps.length;
-                while (i--) {
-                    this.deps[i].removeSub(this);
-                }
-                this.active = false;
-            }
-        };
-
-        return Watcher;
-    }();
-
-    var seenObjects = new Set();
-
-    function traverse(val) {
-        seenObjects.clear();
-        _traverse(val, seenObjects);
-    }
-
-    function _traverse(val, seen) {
-        var i = void 0,
-            keys = void 0;
-        var isA = _.isArray(val);
-        if (!isA && !_.isObject(val)) {
-            return;
-        }
-        if (val.__ob__) {
-            var depId = val.__ob__.dep.id;
-            if (seen.has(depId)) {
-                return;
-            }
-            seen.add(depId);
-        }
-        if (isA) {
-            i = val.length;
-            while (i--) {
-                _traverse(val[i], seen);
-            }
-        } else {
-            keys = _.keys(val);
-            i = keys.length;
-            while (i--) {
-                _traverse(val[keys[i]], seen);
-            }
-        }
-    }
-
-    var falsy$1;
+    var falsy$1 = void 0;
     var operators = {
         '||': falsy$1,
         '&&': falsy$1,
@@ -35139,21 +34192,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     function runBinaryFunction(binarys) {
         var expr = '';
         for (var i = 0, len = binarys.length; i < len; i++) {
-            if (_.isBoolean(binarys[i]) || _.has(operators, binarys[i])) {
+            if (_$1.isBoolean(binarys[i]) || _$1.has(operators, binarys[i])) {
                 expr += binarys[i];
             } else {
                 expr += 'false';
             }
         }
+
         return new Function('return ' + expr)();
     }
 
-    function routeToRegExp(route) {
-        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
-        return '^' + route + '$';
-    }
+    function watch(vm, expOrFn, cb) {
+        var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-    function watch(model, expOrFn, cb, options) {
+        var model = vm;
+        if (!model.addWatch && model.$vm) {
+            model = model.$vm;
+        }
         if (isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -35164,14 +34219,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options = options || {};
         options.user = true;
         var exps = void 0;
-        if (_.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-            var watcher = new Watcher(model, expOrFn, cb, options);
-            if (options.immediate) {
-                cb(watcher.value);
-            }
-            return function unwatchFn() {
-                watcher.teardown();
-            };
+        if (_$1.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
+            model.addWatch(expOrFn, cb, options);
+
+            return [];
         }
         var watchers = [];
         var fns = exps.slice();
@@ -35184,7 +34235,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             fns[index] = true;
             if (runBinaryFunction(fns)) {
                 complete = true;
-                cb(newValue, oldValue, attrs);
+                cb.call(vm, newValue, oldValue, attrs);
             }
             if (options && options.sync) {
                 complete = false;
@@ -35201,191 +34252,292 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
             }
         };
-        _.each(exps, function (exp, i) {
-            if (_.has(operators, exp)) {
+        _$1.each(exps, function (exp, i) {
+            if (_$1.has(operators, exp)) {
                 return;
             }
-            //a.**或a.*形式
-            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === "**") {
+            // a.**或a.*形式
+            if (/^[1-9a-zA-Z.]+(\*\*$|\*$)/.test(exp) || exp === '**') {
                 var isGlobal = /\*\*$/.test(exp);
                 if (isGlobal) {
-                    //a.**的形式
-                    exp = exp.replace(".**", "");
+                    // a.**的形式
+                    exp = exp.replace('.**', '');
                 } else {
-                    //a.*的形式
-                    exp = exp.replace(".*", "");
+                    // a.*的形式
+                    exp = exp.replace('.*', '');
                 }
-                var getter = exp === "**" ? function (m) {
-                    return m;
-                } : parsePath(exp);
-                var v = getter.call(model, model);
-                var dep = new Dep();
-                if (isGlobal) {
-                    (v.__ob__._scopeDeps || (v.__ob__._scopeDeps = [])).push(dep);
-                } else {
-                    (v.__ob__._deps || (v.__ob__._deps = [])).push(dep);
-                }
-                var w = new Watcher(model, function () {
-                    dep.depend();
-                    return NaN;
-                }, function (newValue, oldValue, attrs) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
-                }, options);
-                watchers.push(function unwatchFn() {
-                    w.teardown();
-                    v.__ob__._scopeDeps && remove(v.__ob__._scopeDeps, dep);
-                    v.__ob__._deps && remove(v.__ob__._deps, dep);
-                });
+                var getter = isGlobal ? exp : function () {
+                    var result = {};
+                    _$1.each(model.model, function (v, key) {
+                        if (key in $$skipArray) return;
+                        result[key] = v;
+                    });
+
+                    return result;
+                };
+                model.addWatch(getter, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
+                }, _$1.extend(options, {
+                    deep: isGlobal
+                }));
+
                 return;
             }
             if (/\*\*$|\*$/.test(exp)) {
                 throw new Error('not support');
             }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
+            // 其他含有*的情况，如*.a,*.*.a,a.*.a
             if (/\*/.test(exp)) {
-                var currentModel = model;
-                //先获取到能获取到的对象
-                var paths = exp.split(".");
-                for (var _i = 0, len = paths.length; _i < len; _i++) {
-                    if (paths[_i] === "*") {
-                        break;
-                    }
-                    currentModel = model[paths[_i]];
-                }
-                exp = exp.substr(exp.indexOf("*"));
-                //补全路径
-                var parent = currentModel.__ob__.parent,
-                    root = currentModel.__ob__;
-                while (parent) {
-                    exp = '*.' + exp;
-                    root = parent;
-                    parent = parent.parent;
-                }
-                var regStr = routeToRegExp(exp);
-                var _dep = new Dep();
-                root._globalDeps || (root._globalDeps = {});
-                root._globalDeps[regStr] = _dep;
+                // 先获取到能获取到的对象
+                var paths = exp.split('.');
+                var _getter = function _getter() {
+                    var currentModels = {
+                        root: model.model
+                    };
 
-                var _w = new Watcher(currentModel, function () {
-                    _dep.depend();
-                    return NaN;
-                }, function (newValue, oldValue, attrs) {
-                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                    var _loop = function _loop(len, _i) {
+                        var models = {};
+                        if (paths[_i] === '*') {
+                            _$1.each(currentModels, function (model, key) {
+                                _$1.each(model, function (v, k) {
+                                    if (key + k in $$skipArray) return;
+                                    models[key + k] = v;
+                                });
+                            });
+                        } else {
+                            _$1.each(currentModels, function (model, key) {
+                                if (key + paths[_i] in $$skipArray) return;
+                                models[key + paths[_i]] = model[paths[_i]];
+                            });
+                        }
+                        currentModels = models;
+                    };
+
+                    for (var _i = 0, len = paths.length; _i < len; _i++) {
+                        _loop(len, _i);
+                    }
+
+                    return currentModels;
+                };
+                model.addWatch(_getter, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
                 }, options);
-                watchers.push(function unwatchFn() {
-                    _w.teardown();
-                    root._globalDeps && delete root._globalDeps[regStr];
-                });
+
                 return;
             }
-            var watcher = new Watcher(model, exp, function (newValue, oldValue, attrs) {
-                callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+            model.addWatch(exp, function (newValue, oldValue, attrs) {
+                callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
             }, options);
-            watchers.push(function unwatchFn() {
-                watcher.teardown();
-            });
         });
+
         return watchers;
     }
 
-    var mixinInjection = {};
+    var SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
+    var ObjProto = Object.prototype;
+    var toString = ObjProto.toString;
 
-    function getMixins(type) {
-        return mixinInjection[type];
+    // Internal recursive comparison function for `isEqual`.
+    /* eslint no-param-reassign: ['off'] */
+    /* eslint no-use-before-define: ["off"] */
+    var deepEq = function deepEq(a, b, aStack, bStack) {
+        // Unwrap any wrapped objects.
+        if (a instanceof _$1) a = a._wrapped;
+        if (b instanceof _$1) b = b._wrapped;
+        // Compare `[[Class]]` names.
+        var className = toString.call(a);
+        if (className !== toString.call(b)) return false;
+        switch (className) {
+            // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+            case '[object RegExp]':
+            case '[object String]':
+                // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+                // equivalent to `new String("5")`.
+                return '' + a === '' + b;
+            case '[object Number]':
+                // `NaN`s are equivalent, but non-reflexive.
+                // Object(NaN) is equivalent to NaN.
+                if (+a !== +a) return +b !== +b;
+                // An `egal` comparison is performed for other numeric values.
+
+                return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+            case '[object Date]':
+            case '[object Boolean]':
+                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+                // millisecond representations. Note that invalid dates with millisecond representations
+                // of `NaN` are not equivalent.
+                return +a === +b;
+            case '[object Symbol]':
+                return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
+            default:
+        }
+
+        var areArrays = className === '[object Array]';
+
+        if (!areArrays) {
+            if (typeof a != 'object' || typeof b != 'object') return false;
+
+            // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+            // from different frames are.
+            var aCtor = a.constructor,
+                bCtor = b.constructor;
+            if (aCtor !== bCtor && !(_$1.isFunction(aCtor) && aCtor instanceof aCtor && _$1.isFunction(bCtor) && bCtor instanceof bCtor) && 'constructor' in a && 'constructor' in b) {
+                return false;
+            }
+        }
+        // Assume equality for cyclic structures. The algorithm for detecting cyclic
+        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+
+        // Initializing stack of traversed objects.
+        // It's done here since we only need them for objects and arrays comparison.
+        aStack = aStack || [];
+        bStack = bStack || [];
+        var length = aStack.length;
+        while (length--) {
+            // Linear search. Performance is inversely proportional to the number of
+            // unique nested structures.
+            if (aStack[length] === a) return bStack[length] === b;
+        }
+
+        // Add the first object to the stack of traversed objects.
+        aStack.push(a);
+        bStack.push(b);
+
+        // Recursively compare objects and arrays.
+        if (areArrays) {
+            // Compare array lengths to determine if a deep comparison is necessary.
+            length = a.length;
+            if (length !== b.length) return false;
+            // Deep compare the contents, ignoring non-numeric properties.
+            while (length--) {
+                if (!eq(a[length], b[length], aStack, bStack)) return false;
+            }
+        } else {
+            // Deep compare objects.
+            var keys = _$1.keys(a);var key = void 0;
+            length = keys.length;
+            // Ensure that both objects contain the same number of properties before comparing deep equality.
+            if (_$1.keys(b).length !== length) return false;
+            while (length--) {
+                // Deep compare each member
+                key = keys[length];
+                if (!(_$1.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+            }
+        }
+        // Remove the first object from the stack of traversed objects.
+        aStack.pop();
+        bStack.pop();
+
+        return true;
+    };
+
+    var eq = function eq(a, b, aStack, bStack) {
+        // Identical objects are equal. `0 === -0`, but they aren't identical.
+        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+        if (a === b) return a !== 0 || 1 / a === 1 / b;
+        // `null` or `undefined` only equal to itself (strict comparison).
+        if (a == null || b == null) return false;
+        // `NaN`s are equivalent, but non-reflexive.
+        if (a !== a) return b !== b;
+        // Exhaust primitive checks
+        var type = typeof a;
+        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+
+        // skip function
+        if (type === 'function') return true;
+
+        return deepEq(a, b, aStack, bStack);
+    };
+
+    function isEqual(a, b) {
+        return eq(a, b);
     }
 
-    function mixin(xtype, cls) {
-        mixinInjection[xtype] = _.cloneDeep(cls);
-    }
+    var allModelInstances = {};
+    var emptyFn = function emptyFn() {};
 
-    var computedWatcherOptions = { lazy: true };
+    var Watcher = function Watcher(_ref) {
+        var get = _ref.get,
+            last = _ref.last,
+            listener = _ref.listener,
+            sync = _ref.sync,
+            deep = _ref.deep;
+
+        _classCallCheck(this, Watcher);
+
+        this.get = get;
+        this.last = cloneShadow(last);
+        this.listener = listener || emptyFn;
+        this.sync = sync || false;
+
+        return {
+            get: this.get,
+            last: this.last,
+            listener: this.listener
+        };
+    };
 
     function initState(vm, state) {
-        if (state) {
-            vm.$$state = observe(state).model;
+        var watchers = vm._stateWatchers = {};
+        for (var key in state) {
+            vm.model[key] = state[key];
+        }
+        // state暂不支持func和context
+
+        var _loop2 = function _loop2(_key) {
+            var userDef = state[_key];
+
+            watchers[_key] = new Watcher({
+                get: function get() {
+                    return vm.model[_key];
+                },
+                last: userDef,
+                listener: vm.options.defaultCallback || emptyFn
+            });
+        };
+
+        for (var _key in state) {
+            _loop2(_key);
         }
     }
 
     function initComputed(vm, computed) {
         var watchers = vm._computedWatchers = {};
-
-        defineComputed(vm, computed);
+        var order = vm._computedOrder = [];
 
         for (var key in computed) {
             var userDef = computed[key],
-                context = vm.$$model ? vm.model : vm;
-            var getter = typeof userDef === "function" ? _.bind(userDef, context) : _.bind(userDef.get, context);
+                context = vm;
 
-            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
+            order.push(key);
+
+            watchers[key] = new Watcher({
+                get: _$1.bind(userDef, context),
+                last: undefined,
+                listener: emptyFn
+            });
         }
     }
 
-    function defineComputed(vm, computed) {
-        var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.$$computed = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return computed && key in computed
-        //         },
-        //         get: function (target, key) {
-        //             return createComputedGetter(vm, key)()
-        //         }
-        //     })
-        // }
-        var shouldCache = true;
-        for (var key in computed) {
-            if (!(key in vm)) {
-                var sharedPropertyDefinition = {
-                    enumerable: true,
-                    configurable: true,
-                    get: noop,
-                    set: noop
-                };
-                var userDef = computed[key];
-                if (typeof userDef === "function") {
-                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
-                    sharedPropertyDefinition.set = noop;
-                } else {
-                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
-                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
-                }
-
-                props[key] = sharedPropertyDefinition;
-            }
-        }
-        vm.$$computed = createViewModel$1({}, props);
-    }
-
-    function createComputedGetter(vm, key) {
-        return function computedGetter() {
-            var watcher = vm._computedWatchers && vm._computedWatchers[key];
-            if (watcher) {
-                if (watcher.dirty) {
-                    watcher.evaluate();
-                }
-                if (Dep.target) {
-                    watcher.depend();
-                }
-                return watcher.value;
-            }
-        };
-    }
-
-    function initWatch(vm, watch$$1) {
+    function initWatch(vm, watchObj) {
         vm._watchers || (vm._watchers = []);
-        for (var key in watch$$1) {
-            var handler = watch$$1[key];
-            if (_.isArray(handler)) {
+        for (var expOrFn in watchObj) {
+            var handler = watchObj[expOrFn];
+            if (_$1.isArray(handler)) {
                 for (var i = 0; i < handler.length; i++) {
-                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                    watch(vm, expOrFn, handler[i]);
                 }
             } else {
-                vm._watchers.push(createWatcher(vm, key, handler));
+                watch(vm, expOrFn, handler);
             }
         }
     }
 
-    function createWatcher(vm, keyOrFn, cb, options) {
+    /* eslint no-param-reassign: ['off'] */
+    function createWatcher(vm, expOrFn, cb) {
+        var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
         if (isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -35393,195 +34545,280 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (typeof cb === 'string') {
             cb = vm[cb];
         }
-        return watch(vm.model, keyOrFn, _.bind(cb, vm.$$model ? vm.model : vm), options);
+        var getter = _$1.isFunction(expOrFn) ? _$1.bind(expOrFn, vm) : _$1.bind(function () {
+            return parsePath('model.' + expOrFn)(vm);
+        }, vm);
+
+        return new Watcher({
+            get: getter,
+            listener: _$1.bind(cb, vm),
+            last: getter(),
+            sync: options.sync,
+            deep: options.deep
+        });
+    }
+
+    function injectMethod(method, vm) {
+        return function () {
+            var result = method.apply(vm, [].concat(Array.prototype.slice.call(arguments)));
+            // 有回调的函数不作处理，拦截ajax请求
+            vm.$digest();
+
+            return result;
+        };
     }
 
     function initMethods(vm, methods) {
         for (var key in methods) {
-            vm[key] = methods[key] == null ? noop : _.bind(methods[key], vm.$$model ? vm.model : vm);
+            vm[key] = methods[key] == null ? noop : injectMethod(methods[key], vm);
         }
     }
 
-    function initMixins(vm, mixins) {
-        mixins = mixins || [];
+    function initMixins(vm) {
+        var mixins = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
-        _.each(mixins.reverse(), function (mixinType) {
+        _$1.each(mixins.reverse(), function (mixinType) {
             var mixin$$1 = getMixins(mixinType);
 
             for (var key in mixin$$1) {
-                if (typeof mixin$$1[key] !== "function") continue;
+                if (typeof mixin$$1[key] !== 'function') continue;
 
-                if (_.has(vm, key)) continue;
+                if (_$1.has(vm, key)) continue;
 
-                vm[key] = _.bind(mixin$$1[key], vm.$$model ? vm.model : vm);
+                vm[key] = injectMethod(mixin$$1[key], vm);
             }
         });
     }
 
-    function defineProps(vm, keys) {
-        var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.model = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return keys.indexOf(key) > -1;
-        //         },
-        //         get: function (target, key) {
-        //             if (key in $$skipArray) {
-        //                 return props[key]
-        //             }
-        //             if (vm.$$computed && key in vm.$$computed) {
-        //                 return vm.$$computed[key]
-        //             }
-        //             if (vm.$$state && key in vm.$$state) {
-        //                 return vm.$$state[key]
-        //             }
-        //             return vm.$$model[key]
-        //         },
-        //         set: function (target, key, val) {
-        //             if (key in $$skipArray) {
-        //                 return props[key] = val
-        //             }
-        //             if (vm.$$state && key in vm.$$state) {
-        //                 return vm.$$state[key] = val
-        //             }
-        //             if (vm.$$model && key in vm.$$model) {
-        //                 return vm.$$model[key] = val
-        //             }
-        //         }
-        //     })
-        // }
+    function defineContext(vm, keys) {
+        var watchers = vm._contextWatchers = {};
 
-        var _loop = function _loop(i, len) {
-            var key = keys[i];
-            if (!(key in $$skipArray)) {
-                props[key] = {
-                    enumerable: true,
-                    configurable: true,
-                    get: function get() {
-                        if (vm.$$computed && key in vm.$$computed) {
-                            return vm.$$computed[key];
-                        }
-                        if (vm.$$state && key in vm.$$state) {
-                            return vm.$$state[key];
-                        }
-                        if (vm.$$model && key in vm.$$model) {
-                            return vm.$$model[key];
-                        }
-                        var p = vm._parent;
-                        while (p) {
-                            if (p.$$context && key in p.$$context) {
-                                return p.$$context[key];
-                            }
-                            p = p._parent;
-                        }
-                    },
-                    set: function set(val) {
-                        if (vm.$$state && key in vm.$$state) {
-                            return vm.$$state[key] = val;
-                        }
-                        if (vm.$$model && key in vm.$$model) {
-                            return vm.$$model[key] = val;
-                        }
-                        var p = vm._parent;
-                        while (p) {
-                            if (p.$$context && key in p.$$context) {
-                                return p.$$context[key] = val;
-                            }
-                            p = p._parent;
-                        }
-                    }
-                };
+        // 相关context挂上别的model中的修改监听
+        function getSingleContext(key) {
+            var p = vm._parent;
+            while (p) {
+                if (p.childContext && p.childContext.indexOf(key) > -1) {
+                    p.addWatch(key, function (cur, last, p) {
+                        if (!vm.alive) return;
+                        vm.model[key] = cur;
+                        vm._contextWatchers[key].last = cloneShadow(cur); // 避免重复调用（可以改成给watch添加一个参数保证下次比较一定相同）
+                        vm.$digest();
+                    });
+
+                    return {
+                        p: p,
+                        value: p.model[key]
+                    };
+                }
+                p = p._parent;
             }
-        };
-
-        for (var i = 0, len = keys.length; i < len; i++) {
-            _loop(i, len);
         }
-        vm.model = createViewModel$1({}, props);
+
+        _$1.each(keys, function (key) {
+            var context = getSingleContext(key);
+            if (!context) return;
+            vm.model[key] = context.p ? context.p.model[key] : undefined;
+            watchers[key] = new Watcher({
+                get: function get() {
+                    return vm.model[key];
+                },
+                last: vm.model[key],
+                listener: _$1.bind(function () {
+                    context.p.model[key] = vm.model[key];
+                    context.p.$digest();
+                }, context.p)
+            });
+        });
     }
 
-    function defineContext(vm, keys) {
-        var props = {};
+    function addToListenerQueue(vm, watcher, cur, last) {
+        var listener = _$1.bind(watcher.listener, vm, cur, last, vm);
+        watcher.sync === true ? vm.syncListeners.push(listener) : vm.asyncListeners.push(listener);
+    }
 
-        var _loop2 = function _loop2(i, len) {
-            var key = keys[i];
-            if (!(key in $$skipArray)) {
-                props[key] = {
-                    enumerable: true,
-                    configurable: true,
-                    get: function get() {
-                        return vm.model[key];
-                    },
-                    set: function set(val) {
-                        return vm.model[key] = val;
-                    }
-                };
+    function digestState(vm) {
+        var dirty = false;
+        _$1.each(vm._stateWatchers, function (watcher, key) {
+            var cur = watcher.get();
+            var last = watcher.last;
+            if (!isEqual(cur, last)) {
+                addToListenerQueue(vm, watcher, cur, last);
+                vm.model[key] = cur;
+                dirty = true;
+                watcher.last = cloneShadow(cur);
             }
-        };
+        });
 
-        for (var i = 0, len = keys.length; i < len; i++) {
-            _loop2(i, len);
-        }
-        vm.$$context = createViewModel$1({}, props);
+        return dirty;
+    }
+
+    function digestComputed(vm) {
+        var dirty = false;
+        var dirtyQueue = [],
+            cleanQueue = [];
+
+        _$1.each(vm._computedOrder, function (key) {
+            var watcher = vm._computedWatchers[key];
+
+            try {
+                var cur = watcher.get();
+                var last = watcher.last;
+                if (!isEqual(cur, last)) {
+                    addToListenerQueue(vm, watcher, cur, last);
+                    vm.model[key] = cur;
+                    dirty = true;
+                    dirtyQueue.push(key);
+                    watcher.last = cloneShadow(cur);
+                } else {
+                    cleanQueue.push(key);
+                }
+            } catch (err) {
+                dirty = true;
+                dirtyQueue.push(key);
+            }
+        });
+
+        vm._computedOrder = [].concat(cleanQueue, dirtyQueue);
+
+        return dirty;
+    }
+
+    function digestContext(vm) {
+        var dirty = false;
+        _$1.each(vm._contextWatchers, function (watcher, key) {
+            var cur = watcher.get();
+            var last = watcher.last;
+            if (!isEqual(cur, last)) {
+                var listener = _$1.bind(watcher.listener, vm, cur, last, vm);
+                vm.contextListeners.push(listener);
+                vm.model[key] = cur;
+                dirty = true;
+                watcher.last = cloneShadow(cur);
+            }
+        });
+
+        return dirty;
+    }
+
+    function digest(vm) {
+        var ttl = 10,
+            dirty = true;
+        do {
+            dirty = digestState(vm) || digestContext(vm) || digestComputed(vm);
+        } while (dirty && ttl-- >= 0);
+    }
+
+    function executeWatchListeners(vm) {
+        var syncListeners = [].concat(vm.syncListeners || []);
+        var asyncListeners = [].concat(vm.asyncListeners || []);
+        var contextListeners = [].concat(vm.contextListeners || []);
+
+        vm.asyncListeners = [];
+        vm.syncListeners = [];
+
+        var watchers = [].concat(vm._watchers);
+
+        _$1.each(watchers, function (watcher) {
+            var cur = watcher.get();
+            var last = watcher.last;
+
+            if (_$1.isEqual(cur, last)) return;
+
+            var listner = _$1.bind(watcher.listener, vm, cur, last, vm);
+
+            watcher.sync === true ? syncListeners.push(listner) : asyncListeners.push(listner);
+
+            watcher.last = cloneShadow(cur);
+        });
+
+        _$1.each(syncListeners, function (listener) {
+            listener();
+        });
+
+        nextTick(function () {
+            _$1.each(contextListeners, function (listener) {
+                listener();
+            });
+
+            _$1.each(asyncListeners, function (listener) {
+                if (!vm.alive) return;
+                listener();
+            });
+        });
     }
 
     var Model = function () {
         function Model(model) {
             _classCallCheck(this, Model);
 
-            if (model instanceof Observer || model instanceof Model) {
-                model = model.model;
-            }
-            if (model && model.__ob__) {
-                this.$$model = model;
-            } else {
-                this.options = model || {};
-            }
+            this.alive = true;
+            this.options = model || {};
+            this.model = {
+                $vm: this
+            };
+            this._modelHashId = makeHashCode('model');
+            this.syncListeners = [];
+            this.asyncListeners = [];
+            this.contextListeners = [];
+
             this._parent = Model.target;
-            var state = _.isFunction(this.state) ? this.state() : this.state;
+            var state = _$1.isFunction(this.state) ? this.state() : this.state;
             var computed = this.computed;
+            // Todo
             var context = this.context;
             var childContext = this.childContext;
             var watch$$1 = this.watch;
             var actions = this.actions;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
             var mixins = this.mixins;
-            defineProps(this, keys);
-            childContext && defineContext(this, childContext);
-            this.$$model && (this.model.__ob__ = this.$$model.__ob__);
+
+            context && defineContext(this, context);
+
             initMixins(this, mixins);
             this._init();
             initState(this, state);
             initComputed(this, computed);
+            digest(this);
             initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
-            if (this.$$model) {
-                return this.model;
-            }
+            allModelInstances[this._modelHashId] = this;
         }
 
         Model.prototype._init = function _init() {};
 
+        Model.prototype.addWatch = function addWatch(expOrFn, cb, options) {
+            var watcher = createWatcher(this, expOrFn, cb, options);
+            this._watchers.push(watcher);
+        };
+
         Model.prototype.destroy = function destroy() {
-            for (var _key3 in this._computedWatchers) {
-                this._computedWatchers[_key3].teardown();
-            }
-            _.each(this._watchers, function (unwatches) {
-                unwatches = _.isArray(unwatches) ? unwatches : [unwatches];
-                _.each(unwatches, function (unwatch) {
-                    unwatch();
-                });
-            });
+            this.alive = false;
+            allModelInstances[this._modelHashId] = null;
             this._watchers && (this._watchers = []);
+            this._computedWatchers && (this._computedWatchers = []);
+            this._stateWatchers && (this._stateWatchers = []);
+            this._contextWatchers && (this._contextWatchers = []);
             this.destroyed && this.destroyed();
-            this.$$model = null;
-            this.$$computed = null;
-            this.$$state = null;
+        };
+
+        Model.prototype.$digest = function $digest() {
+            digest(this);
+
+            executeWatchListeners(this);
         };
 
         return Model;
     }();
+
+    function getAllModelInstances() {
+        return allModelInstances;
+    }
+
+    function refreshAll() {
+        _$1.each(getAllModelInstances(), function (insta) {
+            insta && insta.$digest && insta.$digest();
+        });
+    }
 
     function toJSON(model) {
         var result = void 0;
@@ -35592,9 +34829,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         } else if (model && isPlainObject(model)) {
             result = {};
-            for (var _key4 in model) {
-                if (!_.has($$skipArray, _key4)) {
-                    result[_key4] = toJSON(model[_key4]);
+            for (var key in model) {
+                if (!_.has($$skipArray, key)) {
+                    result[key] = toJSON(model[key]);
                 }
             }
         } else {
@@ -35603,26 +34840,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return result;
     }
 
-    function define(model) {
-        return new Observer(model).model;
-    }
     var version = '2.0';
 
-    exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
-    exports.observerState = observerState;
-    exports.Observer = Observer;
-    exports.observe = observe;
-    exports.notify = notify;
-    exports.defineReactive = defineReactive;
-    exports.set = set;
-    exports.del = del;
-    exports.Watcher = Watcher;
-    exports.pushTarget = pushTarget;
-    exports.popTarget = popTarget;
+    exports.getAllModelInstances = getAllModelInstances;
+    exports.refreshAll = refreshAll;
+    exports.inherit = inherit;
     exports.watch = watch;
     exports.toJSON = toJSON;
 
@@ -82239,7 +81465,335 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
     }
 });
 BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
-BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
+BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
+    function initWatch(vm, watch) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch) {
+            var handler = watch[key];
+            if (BI.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher(vm, keyOrFn, handler) {
+        return Fix.watch(vm.store, keyOrFn, _.bind(handler, vm), {
+            store: vm.store
+        });
+    }
+
+    var target = null;
+    var targetStack = [];
+
+    function pushTarget(_target) {
+        if (target) targetStack.push(target);
+        Fix.Model.target = target = _target;
+    }
+
+    function popTarget() {
+        Fix.Model.target = target = targetStack.pop();
+    }
+
+    var context = null;
+    var contextStack = [];
+
+    function pushContext(_context) {
+        if (context) contextStack.push(context);
+        Fix.Model.context = context = _context;
+    }
+
+    function popContext() {
+        Fix.Model.context = context = contextStack.pop();
+    }
+
+    var oldWatch = Fix.watch;
+    Fix.watch = function (model, expOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        if (typeof cb === "string") {
+            cb = model[cb];
+        }
+        return oldWatch.call(this, model, expOrFn, function () {
+            options && options.store && pushTarget(options.store);
+            var res = cb.apply(this, arguments);
+            options && options.store && popTarget();
+            return res;
+        }, options);
+    };
+
+    function findStore(widget) {
+        if (target != null) {
+            return target;
+        }
+        widget = widget || context;
+        var p = widget;
+        while (p) {
+            if (p instanceof Fix.Model || p.store || p.__cacheStore) {
+                break;
+            }
+            p = p._parent || (p.options && p.options.element);
+        }
+        if (p) {
+            if (p instanceof Fix.Model) {
+                return widget.__cacheStore = p;
+            }
+            widget.__cacheStore = p.store || p.__cacheStore;
+            return p.__cacheStore || p.store;
+        }
+    }
+
+    var _create = BI.createWidget;
+    BI.createWidget = function (item, options, context) {
+        var pushed = false;
+        if (BI.isWidget(options)) {
+            pushContext(options);
+            pushed = true;
+        } else if (context != null) {
+            pushContext(context);
+            pushed = true;
+        }
+        var result = _create.apply(this, arguments);
+        pushed && popContext();
+        return result;
+    };
+
+    _.each(["populate", "addItems", "prependItems"], function (name) {
+        var old = BI.Loader.prototype[name];
+        BI.Loader.prototype[name] = function () {
+            pushContext(this);
+            var result = old.apply(this, arguments);
+            popContext();
+            return result;
+        };
+    });
+
+    function createStore() {
+        var needPop = false;
+        if (_global.Fix && this._store) {
+            var store = findStore(this.options.context || this.options.element);
+            if (store) {
+                pushTarget(store);
+                needPop = true;
+            }
+            this.store = this._store();
+            this.store && (this.store._widget = this);
+            needPop && popTarget();
+            needPop = false;
+            pushTarget(this.store);
+            if (this.store instanceof Fix.Model) {
+                this.model = this.store.model;
+            } else {
+                this.model = this.store;
+            }
+            needPop = true;
+        }
+        return needPop;
+    }
+
+    BI.Widget.prototype._init = function () {
+        BI.Widget.superclass._init.apply(this, arguments);
+        this._initRoot();
+        this._initElementWidth();
+        this._initElementHeight();
+        this._initVisual();
+        this._initState();
+        if (this.beforeInit) {
+            this.__asking = true;
+            this.beforeInit(BI.bind(function () {
+                if (this.model && this.model.$vm) {
+                    this.model.$vm.$digest()
+                }
+                this._render();
+            }, this));
+            if (this.__asking === true) {
+                this.__async = true;
+            }
+        } else {
+            this._render();
+        }
+    }
+
+    var _init = BI.Widget.prototype._init;
+    BI.Widget.prototype._init = function () {
+        var self = this;
+        var needPop = createStore.call(this);
+        _init.apply(this, arguments);
+        needPop && popTarget();
+    };
+
+    var _render = BI.Widget.prototype._render;
+    BI.Widget.prototype._render = function () {
+        var needPop = false;
+        if (_global.Fix && this._store) {
+            needPop = true;
+            pushTarget(this.store);
+            initWatch(this, this.watch);
+        }
+        _render.apply(this, arguments);
+        needPop && popTarget();
+    };
+
+    var unMount = BI.Widget.prototype.__d;
+    BI.Widget.prototype.__d = function () {
+        unMount.apply(this, arguments);
+        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
+        BI.each(this._watchers, function (i, unwatches) {
+            unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+            BI.each(unwatches, function (j, unwatch) {
+                unwatch();
+            });
+        });
+        this._watchers && (this._watchers = []);
+        if (this.store) {
+            this.store._parent && (this.store._parent = null);
+            this.store._widget && (this.store._widget = null);
+            this.store = null;
+        }
+        delete this.__cacheStore;
+    };
+
+    _.each(["_mount"], function (name) {
+        var old = BI.Widget.prototype[name];
+        old && (BI.Widget.prototype[name] = function () {
+            this.store && pushTarget(this.store);
+            var res = old.apply(this, arguments);
+            this.store && popTarget();
+            return res;
+        });
+    });
+
+    var additionFunc = function () {
+        BI.nextTick(function () {
+            Fix && Fix.refreshAll && Fix.refreshAll();
+        });
+    };
+
+    $(document).ajaxStop(additionFunc);
+
+    if (BI.history) {
+        var navigate = BI.history.navigate;
+        // navigate之后不会立即变化有一段延迟
+        BI.history.navigate = function () {
+            navigate.apply(this, arguments);
+            BI.defer(function () {
+                additionFunc();
+            }, 110);
+        }
+        var back = window.history.back;
+        window.history.back = function () {
+            back.apply(this, arguments);
+            BI.defer(function () {
+                additionFunc();
+            }, 110);
+        }
+    }
+
+    _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+        "sortBy", "groupBy", "indexBy", "countBy", "partition",
+        "keys", "allKeys", "values", "pairs", "invert",
+        "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
+            var old = BI[name];
+            BI[name] = function (obj, fn, context) {
+                return typeof fn === "function" ? old(obj, function (key, value) {
+                    if (!(key in Fix.$$skipArray)) {
+                        return fn.apply(this, arguments);
+                    }
+                }, context) : old.apply(this, arguments);
+            };
+        });
+    BI.isEmpty = function (ob) {
+        if (BI.isPlainObject(ob) && ob.__ob__) {
+            return BI.keys(ob).length === 0;
+        }
+        return _.isEmpty(ob);
+    };
+    BI.keys = function (ob) {
+        var keys = _.keys(ob);
+        var nKeys = [];
+        for (var i = 0; i < keys.length; i++) {
+            if (!(keys[i] in Fix.$$skipArray)) {
+                nKeys.push(keys[i]);
+            }
+        }
+        return nKeys;
+    };
+    BI.values = function (ob) {
+        var keys = BI.keys(obj);
+        var length = keys.length;
+        var values = [];
+        for (var i = 0; i < length; i++) {
+            values[i] = obj[keys[i]];
+        }
+        return values;
+    };
+    BI.extend = function () {
+        var args = Array.prototype.slice.call(arguments);
+        if (args.length < 1) {
+            return {};
+        }
+        var object = args[0];
+        var i = 1;
+        while (i < args.length) {
+            BI.each(args[i], function (key, v) {
+                object[key] = v;
+            });
+            i++;
+        }
+        return object;
+    };
+    BI.size = function (ob) {
+        if (BI.isPlainObject(ob) && ob.__ob__) {
+            return BI.keys(ob).length;
+        }
+        return _.size(ob);
+    };
+    BI.isEmptyObject = function (ob) {
+        return BI.size(ob) === 0;
+    };
+    BI.deepClone = function (ob) {
+        return Fix.toJSON(ob);
+    };
+
+    Fix.define = function (model) {
+        var OB = BI.inherit(Fix.Model, {
+            state: function () {
+                return model
+            }
+        });
+        return new OB({
+            defaultCallback: additionFunc
+        }).model;
+    }
+    Fix.set = function (obj, k, v) {
+        try {
+            if(obj) {
+                obj[k] = v;
+            }
+        } catch (e) {
+
+        } finally {
+            return _.cloneDeep(obj);
+        }
+    }
+    Fix.del = function (obj, k) {
+        try {
+            if(obj) {
+                obj[k] = undefined;
+            }
+        } catch (e) {
+
+        } finally {
+            return _.cloneDeep(obj);
+        }
+    }
+    BI.watch = Fix.watch;
+}());(function () {
     var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
@@ -82823,252 +82377,191 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
 
     // Create the default BI.history.
     BI.history = new History;
-}());;(function () {
-    function initWatch(vm, watch) {
-        vm._watchers || (vm._watchers = []);
-        for (var key in watch) {
-            var handler = watch[key];
-            if (BI.isArray(handler)) {
-                for (var i = 0; i < handler.length; i++) {
-                    vm._watchers.push(createWatcher(vm, key, handler[i]));
-                }
-            } else {
-                vm._watchers.push(createWatcher(vm, key, handler));
-            }
-        }
-    }
-
-    function createWatcher(vm, keyOrFn, handler) {
-        return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
-            store: vm.store
-        });
-    }
-
-    var target = null;
-    var targetStack = [];
-
-    function pushTarget(_target) {
-        if (target) targetStack.push(target);
-        Fix.Model.target = target = _target;
-    }
-
-    function popTarget() {
-        Fix.Model.target = target = targetStack.pop();
-    }
-
-    var context = null;
-    var contextStack = [];
-
-    function pushContext(_context) {
-        if (context) contextStack.push(context);
-        Fix.Model.context = context = _context;
-    }
-
-    function popContext() {
-        Fix.Model.context = context = contextStack.pop();
-    }
-
-    var oldWatch = Fix.watch;
-    Fix.watch = function (model, expOrFn, cb, options) {
-        if (BI.isPlainObject(cb)) {
-            options = cb;
-            cb = cb.handler;
-        }
-        if (typeof cb === "string") {
-            cb = model[cb];
-        }
-        return oldWatch.call(this, model, expOrFn, function () {
-            options && options.store && pushTarget(options.store);
-            var res = cb.apply(this, arguments);
-            options && options.store && popTarget();
-            return res;
-        }, options);
-    };
-
-    function findStore(widget) {
-        if (target != null) {
-            return target;
-        }
-        widget = widget || context;
-        var p = widget;
-        while (p) {
-            if (p instanceof Fix.Model || p.store || p.__cacheStore) {
-                break;
-            }
-            p = p._parent || (p.options && p.options.element);
-        }
-        if (p) {
-            if (p instanceof Fix.Model) {
-                return widget.__cacheStore = p;
-            }
-            widget.__cacheStore = p.store || p.__cacheStore;
-            return p.__cacheStore || p.store;
-        }
-    }
-
-    var _create = BI.createWidget;
-    BI.createWidget = function (item, options, context) {
-        var pushed = false;
-        if (BI.isWidget(options)) {
-            pushContext(options);
-            pushed = true;
-        } else if (context != null) {
-            pushContext(context);
-            pushed = true;
-        }
-        var result = _create.apply(this, arguments);
-        pushed && popContext();
-        return result;
-    };
-
-    _.each(["populate", "addItems", "prependItems"], function (name) {
-        var old = BI.Loader.prototype[name];
-        BI.Loader.prototype[name] = function () {
-            pushContext(this);
-            var result = old.apply(this, arguments);
-            popContext();
-            return result;
-        };
-    });
-
-    function createStore() {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this.options.element);
-            if (store) {
-                pushTarget(store);
-                needPop = true;
-            }
-            this.store = this._store();
-            this.store && (this.store._widget = this);
-            needPop && popTarget();
-            needPop = false;
-            pushTarget(this.store);
-            if (this.store instanceof Fix.Model) {
-                this.model = this.store.model;
-            } else {
-                this.model = this.store;
-            }
-            needPop = true;
-        }
-        return needPop;
-    }
-
-    var _init = BI.Widget.prototype._init;
-    BI.Widget.prototype._init = function () {
-        var self = this;
-        var needPop = createStore.call(this);
-        _init.apply(this, arguments);
-        needPop && popTarget();
-    };
-
-    var _render = BI.Widget.prototype._render;
-    BI.Widget.prototype._render = function () {
-        var needPop = false;
-        if (_global.Fix && this._store) {
-            needPop = true;
-            pushTarget(this.store);
-            initWatch(this, this.watch);
-        }
-        _render.apply(this, arguments);
-        needPop && popTarget();
-    };
-
-    var unMount = BI.Widget.prototype.__d;
-    BI.Widget.prototype.__d = function () {
-        unMount.apply(this, arguments);
-        this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
-        BI.each(this._watchers, function (i, unwatches) {
-            unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
-            BI.each(unwatches, function (j, unwatch) {
-                unwatch();
-            });
-        });
-        this._watchers && (this._watchers = []);
-        if (this.store) {
-            this.store._parent && (this.store._parent = null);
-            this.store._widget && (this.store._widget = null);
-            this.store = null;
-        }
-        delete this.__cacheStore;
-    };
-
-    _.each(["_mount"], function (name) {
-        var old = BI.Widget.prototype[name];
-        old && (BI.Widget.prototype[name] = function () {
-            this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
-            this.store && popTarget();
-            return res;
-        });
-    });
-
-    if (BI.isIE9Below && BI.isIE9Below()) {
-        _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
-            "sortBy", "groupBy", "indexBy", "countBy", "partition",
-            "keys", "allKeys", "values", "pairs", "invert",
-            "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-            var old = BI[name];
-            BI[name] = function (obj, fn, context) {
-                return typeof fn === "function" ? old(obj, function (key, value) {
-                    if (!(key in Fix.$$skipArray)) {
-                        return fn.apply(this, arguments);
-                    }
-                }, context) : old.apply(this, arguments);
-            };
-        });
-        BI.isEmpty = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length === 0;
-            }
-            return _.isEmpty(ob);
-        };
-        BI.keys = function (ob) {
-            var keys = _.keys(ob);
-            var nKeys = [];
-            for (var i = 0; i < keys.length; i++) {
-                if (!(keys[i] in Fix.$$skipArray)) {
-                    nKeys.push(keys[i]);
-                }
-            }
-            return nKeys;
-        };
-        BI.values = function (ob) {
-            var keys = BI.keys(obj);
-            var length = keys.length;
-            var values = [];
-            for (var i = 0; i < length; i++) {
-                values[i] = obj[keys[i]];
-            }
-            return values;
-        };
-        BI.extend = function () {
-            var args = Array.prototype.slice.call(arguments);
-            if (args.length < 1) {
-                return {};
-            }
-            var object = args[0];
-            var i = 1;
-            while (i < args.length) {
-                BI.each(args[i], function (key, v) {
-                    object[key] = v;
-                });
-                i++;
-            }
-            return object;
-        };
-        BI.size = function (ob) {
-            if (BI.isPlainObject(ob) && ob.__ob__) {
-                return BI.keys(ob).length;
-            }
-            return _.size(ob);
-        };
-        BI.isEmptyObject = function (ob) {
-            return BI.size(ob) === 0;
-        };
-        BI.deepClone = function (ob) {
-            return Fix.toJSON(ob);
-        };
-    }
-    BI.watch = Fix.watch;
-}());BI.resourceURL = "file?path=/com/fr/web/ui/resource";
+}());BI.i18n = {
+    "BI-Multi_Date_Quarter_End": "季度末",
+    "BI-Multi_Date_Month_Begin": "月初",
+    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Custom_Color": "自定义颜色",
+    "BI-Numerical_Interval_Input_Data": "请输入数值",
+    "BI-Please_Input_Natural_Number": "请输入非负整数",
+    "BI-No_More_Data": "无更多数据",
+    "BI-Basic_Altogether": "共",
+    "BI-Basic_Sunday": "星期日",
+    "BI-Widget_Background_Colour": "组件背景",
+    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Multi_Date_Month": "月",
+    "BI-No_Selected_Item": "没有可选项",
+    "BI-Multi_Date_Year_Begin": "年初",
+    "BI-Quarter_1": "第1季度",
+    "BI-Quarter_2": "第2季度",
+    "BI-Quarter_3": "第3季度",
+    "BI-Quarter_4": "第4季度",
+    "BI-Multi_Date_Year_Next": "年后",
+    "BI-Multi_Date_Month_Prev": "个月前",
+    "BI-Month_Trigger_Error_Text": "请输入1~12的正整数",
+    "BI-Less_And_Equal": "小于等于",
+    "BI-Year_Trigger_Invalid_Text": "请输入有效时间",
+    "BI-Multi_Date_Week_Next": "周后",
+    "BI-Font_Size": "字号",
+    "BI-Basic_Total": "共",
+    "BI-Already_Selected": "已选择",
+    "BI-Formula_Insert": "插入",
+    "BI-Select_All": "全选",
+    "BI-Basic_Tuesday": "星期二",
+    "BI-Multi_Date_Month_End": "月末",
+    "BI-Load_More": "点击加载更多数据",
+    "BI-Basic_September": "九月",
+    "BI-Current_Is_Last_Page": "当前已是最后一页",
+    "BI-Basic_Auto": "自动",
+    "BI-Basic_Count": "个",
+    "BI-Basic_Value": "值",
+    "BI-Basic_Unrestricted": "无限制",
+    "BI-Quarter_Trigger_Error_Text": "请输入1~4的正整数",
+    "BI-Basic_More": "更多",
+    "BI-Basic_Wednesday": "星期三",
+    "BI-Basic_Bold": "加粗",
+    "BI-Basic_Simple_Saturday": "六",
+    "BI-Multi_Date_Month_Next": "个月后",
+    "BI-Basic_March": "三月",
+    "BI-Current_Is_First_Page": "当前已是第一页",
+    "BI-Basic_Thursday": "星期四",
+    "BI-Basic_Prompt": "提示",
+    "BI-Multi_Date_Today": "今天",
+    "BI-Multi_Date_Quarter_Prev": "个季度前",
+    "BI-Row_Header": "行表头",
+    "BI-Date_Trigger_Error_Text": "日期格式示例:2015-3-11",
+    "BI-Basic_Cancel": "取消",
+    "BI-Basic_January": "一月",
+    "BI-Basic_June": "六月",
+    "BI-Basic_July": "七月",
+    "BI-Basic_April": "四月",
+    "BI-Multi_Date_Quarter_Begin": "季度初",
+    "BI-Multi_Date_Week": "周",
+    "BI-Click_Blank_To_Select": "点击\"空格键\"选中完全匹配项",
+    "BI-Basic_August": "八月",
+    "BI-Word_Align_Left": "文字居左",
+    "BI-Basic_November": "十一月",
+    "BI-Font_Colour": "字体颜色",
+    "BI-Multi_Date_Day_Prev": "天前",
+    "BI-Select_Part": "部分选择",
+    "BI-Multi_Date_Day_Next": "天后",
+    "BI-Less_Than": "小于",
+    "BI-Basic_February": "二月",
+    "BI-Multi_Date_Year": "年",
+    "BI-Number_Index": "序号",
+    "BI-Multi_Date_Week_Prev": "周前",
+    "BI-Next_Page": "下一页",
+    "BI-Right_Page": "向右翻页",
+    "BI-Numerical_Interval_Signal_Value": "前后值相等，请将操作符改为“≤”",
+    "BI-Basic_December": "十二月",
+    "BI-Basic_Saturday": "星期六",
+    "BI-Basic_Simple_Wednesday": "三",
+    "BI-Multi_Date_Quarter_Next": "个季度后",
+    "BI-Basic_October": "十月",
+    "BI-Basic_Simple_Friday": "五",
+    "BI-Basic_Save": "保存",
+    "BI-Numerical_Interval_Number_Value": "请保证前面的数值小于/等于后面的数值",
+    "BI-Previous_Page": "上一页",
+    "BI-No_Select": "搜索结果为空",
+    "BI-Basic_Clears": "清空",
+    "BI-Created_By_Me": "我创建的",
+    "BI-Basic_Simple_Tuesday": "二",
+    "BI-Word_Align_Right": "文字居右",
+    "BI-Summary_Values": "汇总",
+    "BI-Basic_Clear": "清除",
+    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Up_Page": "向上翻页",
+    "BI-Basic_Simple_Sunday": "日",
+    "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
+    "BI-Selected_Data": "已选数据：",
+    "BI-Multi_Date_Quarter": "季度",
+    "BI-Check_Selected": "查看已选",
+    "BI-Basic_Search": "搜索",
+    "BI-Basic_May": "五月",
+    "BI-Continue_Select": "继续选择",
+    "BI-Please_Input_Positive_Integer": "请输入正整数",
+    "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Basic_Friday": "星期五",
+    "BI-Down_Page": "向下翻页",
+    "BI-Basic_Monday": "星期一",
+    "BI-Left_Page": "向左翻页",
+    "BI-Transparent_Color": "透明",
+    "BI-Basic_Simple_Monday": "一",
+    "BI-Multi_Date_Year_End": "年末",
+    "BI-Time_Interval_Error_Text": "请保证开始时间早于/等于结束时间",
+    "BI-Basic_Time": "时间",
+    "BI-Basic_OK": "确定",
+    "BI-Basic_Sure": "确定",
+    "BI-Basic_Simple_Thursday": "四",
+    "BI-Multi_Date_Year_Prev": "年前",
+    "BI-Tiao_Data": "条数据",
+    "BI-Basic_Italic": "斜体",
+    "BI-Basic_Dynamic_Title": "动态时间",
+    "BI-Basic_Year": "年",
+    "BI-Basic_Single_Quarter": "季",
+    "BI-Basic_Month": "月",
+    "BI-Basic_Week": "周",
+    "BI-Basic_Day": "天",
+    "BI-Basic_Work_Day": "工作日",
+    "BI-Basic_Front": "前",
+    "BI-Basic_Behind": "后",
+    "BI-Basic_Empty": "空",
+    "BI-Basic_Month_End": "月末",
+    "BI-Basic_Month_Begin": "月初",
+    "BI-Basic_Year_End": "年末",
+    "BI-Basic_Year_Begin": "年初",
+    "BI-Basic_Quarter_End": "季末",
+    "BI-Basic_Quarter_Begin": "季初",
+    "BI-Basic_Week_End": "周末",
+    "BI-Basic_Week_Begin": "周初",
+    "BI-Basic_Current_Day": "当天",
+    "BI-Basic_Begin_Start": "初",
+    "BI-Basic_End_Stop": "末",
+    "BI-Basic_Current_Year": "今年",
+    "BI-Basic_Year_Fen": "年份",
+    "BI-Basic_Current_Month": "本月",
+    "BI-Basic_Current_Quarter": "本季度",
+    "BI-Basic_Year_Month": "年月",
+    "BI-Basic_Year_Quarter": "年季度",
+    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
+    "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
+    "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00",
+    "BI-Basic_Or": "或",
+    "BI-Basic_And": "且",
+    "BI-Conf_Add_Formula": "添加公式",
+    "BI-Conf_Add_Condition": "添加条件",
+    "BI-Conf_Formula_And": "且公式条件",
+    "BI-Conf_Formula_Or": "或公式条件",
+    "BI-Conf_Condition_And": "且条件",
+    "BI-Conf_Condition_Or": "或条件",
+    "BI-Microsoft_YaHei": "微软雅黑",
+    "BI-Apple_Light": "苹方-light",
+    "BI-Font_Family": "字体",
+    "BI-Basic_Please_Input_Content": "请输入内容",
+    "BI-Word_Align_Center": "文字居中",
+    "BI-Basic_Please_Enter_Number_Between": "请输入{R1}-{R2}的值",
+    "BI-More_Than": "大于",
+    "BI-More_And_Equal": "大于等于",
+    "BI-Please_Enter_SQL": "请输入SQL",
+    "BI-Basic_Click_To_Add_Text": "+点击新增\"{R1}\"",
+    "BI-Basic_Please_Select": "请选择",
+    "BI-Basic_Font_Color": "文字颜色",
+    "BI-Basic_Background_Color": "背景色",
+    "BI-Basic_Underline": "下划线",
+    "BI-Basic_Param_Month": "{R1}月",
+    "BI-Basic_Param_Day": "{R1}日",
+    "BI-Basic_Param_Quarter": "{R1}季度",
+    "BI-Basic_Param_Week_Count": "第{R1}周",
+    "BI-Basic_Param_Hour": "{R1}时",
+    "BI-Basic_Param_Minute": "{R1}分",
+    "BI-Basic_Param_Second": "{R1}秒",
+    "BI-Basic_Param_Year": "{R1}年",
+    "BI-Basic_Date_Day": "日",
+    "BI-Basic_Hour_Sin": "时",
+    "BI-Basic_Seconds": "秒",
+    "BI-Basic_Minute": "分",
+    "BI-Basic_Wan": "万",
+    "BI-Basic_Million": "百万",
+    "BI-Basic_Billion": "亿",
+    "BI-Basic_Quarter": "季度"
+};BI.resourceURL = "https://fanruan.coding.me/fineui/dist/resource/";
