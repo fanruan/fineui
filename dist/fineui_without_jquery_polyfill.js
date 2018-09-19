@@ -10589,6 +10589,17 @@ if (!_global.BI) {
             return _.has.apply(_, arguments);
         },
 
+        freeze: function (value) {
+            if (Object.freeze) {
+                return Object.freeze(value);
+            } else {
+                if (!BI.isObject(value)) {
+                    throw new TypeError('Object.freeze can only be called on Objects.');
+                }
+                return value;
+            }
+        },
+
         // 数字和字符串可以作为key
         isKey: function (key) {
             return BI.isNumber(key) || (BI.isString(key) && key.length > 0);
@@ -10925,7 +10936,7 @@ if (!_global.BI) {
         },
 
         isNumeric: function (number) {
-            return !isNaN( parseFloat(number) ) && isFinite( number );
+            return !isNaN(parseFloat(number)) && isFinite(number);
         },
 
         isFloat: function (number) {
@@ -11478,7 +11489,8 @@ if (!_global.BI) {
 
         }
     });
-})();!(function () {
+})();
+!(function () {
     function extend () {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
@@ -23039,6 +23051,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return _toString.call(obj) === '[object Object]';
     }
 
+    function isConfigurable(obj, key) {
+        var configurable = true;
+        var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
+        if (property && property.configurable === false) {
+            configurable = false;
+        }
+        return configurable;
+    }
+
+    function isExtensible(obj) {
+        if (Object.isExtensible) {
+            return Object.isExtensible(obj);
+        }
+        var name = '';
+        while (obj.hasOwnProperty(name)) {
+            name += '?';
+        }
+        obj[name] = true;
+        var returnValue = obj.hasOwnProperty(name);
+        delete obj[name];
+        return returnValue;
+    }
+
     function remove(arr, item) {
         if (arr && arr.length) {
             var _index = arr.indexOf(item);
@@ -23437,7 +23472,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var ob = void 0;
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
+        } else if (observerState.shouldConvert && isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
         if (ob) {
@@ -23531,11 +23566,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (key in $$skipArray) {
                 return;
             }
-            var configurable = true;
-            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
-            if (property && property.configurable === false) {
-                configurable = false;
-            }
+            var configurable = isConfigurable(obj, key);
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
             var childOb = configurable && !shallow && observe(val, observer, key);

@@ -58,6 +58,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return _toString.call(obj) === '[object Object]';
     }
 
+    function isConfigurable(obj, key) {
+        var configurable = true;
+        var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
+        if (property && property.configurable === false) {
+            configurable = false;
+        }
+        return configurable;
+    }
+
+    function isExtensible(obj) {
+        if (Object.isExtensible) {
+            return Object.isExtensible(obj);
+        }
+        var name = '';
+        while (obj.hasOwnProperty(name)) {
+            name += '?';
+        }
+        obj[name] = true;
+        var returnValue = obj.hasOwnProperty(name);
+        delete obj[name];
+        return returnValue;
+    }
+
     function remove(arr, item) {
         if (arr && arr.length) {
             var _index = arr.indexOf(item);
@@ -456,7 +479,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var ob = void 0;
         if (value.__ob__ instanceof Observer) {
             ob = value.__ob__;
-        } else if (observerState.shouldConvert && Object.isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
+        } else if (observerState.shouldConvert && isExtensible(value) && (_.isArray(value) || isPlainObject(value))) {
             ob = new Observer(value);
         }
         if (ob) {
@@ -550,11 +573,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (key in $$skipArray) {
                 return;
             }
-            var configurable = true;
-            var property = Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(obj, key);
-            if (property && property.configurable === false) {
-                configurable = false;
-            }
+            var configurable = isConfigurable(obj, key);
             var dep = observer && observer['__dep' + key] || new Dep();
             observer && (observer['__dep' + key] = dep);
             var childOb = configurable && !shallow && observe(val, observer, key);

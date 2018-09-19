@@ -10589,6 +10589,17 @@ if (!_global.BI) {
             return _.has.apply(_, arguments);
         },
 
+        freeze: function (value) {
+            if (Object.freeze) {
+                return Object.freeze(value);
+            } else {
+                if (!BI.isObject(value)) {
+                    throw new TypeError('Object.freeze can only be called on Objects.');
+                }
+                return value;
+            }
+        },
+
         // 数字和字符串可以作为key
         isKey: function (key) {
             return BI.isNumber(key) || (BI.isString(key) && key.length > 0);
@@ -10925,7 +10936,7 @@ if (!_global.BI) {
         },
 
         isNumeric: function (number) {
-            return !isNaN( parseFloat(number) ) && isFinite( number );
+            return !isNaN(parseFloat(number)) && isFinite(number);
         },
 
         isFloat: function (number) {
@@ -11478,7 +11489,8 @@ if (!_global.BI) {
 
         }
     });
-})();!(function () {
+})();
+!(function () {
     function extend () {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
