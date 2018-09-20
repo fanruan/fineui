@@ -1211,7 +1211,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 40px 40px 40px 40px;
   -moz-border-radius: 40px 40px 40px 40px;
   border-radius: 40px 40px 40px 40px;
-  background-color: #d4dadd;
+  background-color: #d0d4da;
 }
 .bi-switch:active,
 .bi-switch.active {
@@ -1221,6 +1221,25 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 9px 9px 9px 9px;
   -moz-border-radius: 9px 9px 9px 9px;
   border-radius: 9px 9px 9px 9px;
+}
+.bi-switch.disabled {
+  background-color: #F2F4F7;
+}
+.bi-switch.disabled:active {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-switch {
+  background-color: #606479;
+}
+.bi-theme-dark .bi-switch:active,
+.bi-theme-dark .bi-switch.active {
+  background-color: #3685f2;
+}
+.bi-theme-dark .bi-switch.disabled {
+  background-color: #2F3149;
+}
+.bi-theme-dark .bi-switch.disabled:active {
+  background-color: #2F3149;
 }
 
 .bi-multifile-editor .multifile-editor {

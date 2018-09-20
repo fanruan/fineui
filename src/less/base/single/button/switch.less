@@ -2,11 +2,32 @@
 
 .bi-switch{
   .border-radius(40px 40px 40px 40px);
-  background-color: @background-color-dark;
+  background-color: @color-bi-background-dark-gray;
   &:active, &.active {
     background-color: @color-bi-background-highlight;
   }
   & .circle-button{
     .border-radius(9px 9px 9px 9px);
+  }
+  &.disabled {
+    background-color: @color-bi-background-disabled;
+    &:active {
+      background-color: @color-bi-background-disabled;
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-switch{
+    background-color: @color-bi-background-dark-gray-theme-dark;
+    &:active, &.active {
+      background-color: @color-bi-background-highlight;
+    }
+    &.disabled {
+      background-color: @color-bi-background-disabled-theme-dark;
+      &:active {
+        background-color: @color-bi-background-disabled-theme-dark;
+      }
+    }
   }
 }
