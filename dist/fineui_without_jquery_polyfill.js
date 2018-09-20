@@ -17560,8 +17560,11 @@ _.extend(BI, {
         var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
         var week = d.getDay();
         var startOfWeek = BI.StartOfWeek % 7;
-        if (date.getMonth() === 0 && date.getDate() <= week) {
-            return 1;
+        if (date.getMonth() === 0) {
+            var formatWeek = (week + 8 - startOfWeek) % 7;
+            if(date.getDate() <= (formatWeek === 0 ? 7 : formatWeek)) {
+                return 1;
+            }
         }
         d.setDate(date.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
         var ms = d.valueOf(); // GMT
