@@ -1066,7 +1066,7 @@ textarea {
   color: #ff4949;
 }
 .bi-list-item-select.button-warning.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.button-warning:hover,
 .bi-list-item-select.button-warning.hover {
@@ -1087,7 +1087,7 @@ textarea {
 }
 .bi-list-item-select.button-warning:hover.bi-high-light-border,
 .bi-list-item-select.button-warning.hover.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.button-warning:active,
 .bi-list-item-select.button-warning.active {
@@ -1108,7 +1108,7 @@ textarea {
 }
 .bi-list-item-select.button-warning:active.bi-high-light-border,
 .bi-list-item-select.button-warning.active.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.disabled {
   color: #9ea6b2 !important;
@@ -2914,7 +2914,7 @@ body .bi-button.button-warning.clear .b-font:before,
 body .bi-button.button-error,
 #body .bi-button.button-error {
   background-color: #ff4949;
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 body .bi-button.button-error,
 #body .bi-button.button-error,
@@ -3314,7 +3314,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-tooltip.tooltip-warning {
   background: #ff4949;
-  border: 1px solid #e85050;
+  border: 1px solid #FF4949;
 }
 .bi-branch-tree .bi-branch-tree-view {
   min-width: 300px;

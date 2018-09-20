@@ -785,7 +785,7 @@ textarea {
   color: #ff4949;
 }
 .bi-list-item-select.button-warning.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.button-warning:hover,
 .bi-list-item-select.button-warning.hover {
@@ -806,7 +806,7 @@ textarea {
 }
 .bi-list-item-select.button-warning:hover.bi-high-light-border,
 .bi-list-item-select.button-warning.hover.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.button-warning:active,
 .bi-list-item-select.button-warning.active {
@@ -827,7 +827,7 @@ textarea {
 }
 .bi-list-item-select.button-warning:active.bi-high-light-border,
 .bi-list-item-select.button-warning.active.bi-high-light-border {
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 .bi-list-item-select.disabled {
   color: #9ea6b2 !important;
