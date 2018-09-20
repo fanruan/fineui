@@ -53790,7 +53790,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            value: o.value
+            value: o.value,
+            warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -53829,8 +53830,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 return BI.contains(v, item.value);
             });
             if (BI.isNull(result)) {
+                this.trigger.setTipType("warning");
                 this.element.removeClass("combo-error").addClass("combo-error");
             } else {
+                this.trigger.setTipType("success");
                 this.element.removeClass("combo-error");
             }
         }
@@ -53853,7 +53856,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_value_combo", BI.TextValueCombo);/**
+BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
+/**
  * @class BI.SmallTextValueCombo
  * @extend BI.Widget
  * combo : text + icon, popup : text
@@ -58134,6 +58138,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             title: function () {
                 return self.text.getText();
             },
+            tipType: o.tipType,
+            warningTitle: o.warningTitle,
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -58158,9 +58164,14 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    setTipType: function (v) {
+        this.text.options.tipType = v;
     }
 });
-BI.shortcut("bi.text_trigger", BI.TextTrigger);/**
+BI.shortcut("bi.text_trigger", BI.TextTrigger);
+/**
  * 选择字段trigger
  *
  * Created by GUY on 2015/9/15.
@@ -58185,10 +58196,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             readonly: o.readonly,
-            text: this._digest(o.value, o.items)
+            text: this._digest(o.value, o.items),
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
     },
-    
+
     _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
@@ -58211,11 +58224,16 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger.setText(this._digest(vals, this.options.items));
     },
 
+    setTipType: function (v) {
+        this.trigger.setTipType(v);
+    },
+
     populate: function (items) {
         this.options.items = items;
     }
 });
-BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);/**
+BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
+/**
  * 选择字段trigger小一号的
  *
  * @class BI.SmallSelectTextTrigger
