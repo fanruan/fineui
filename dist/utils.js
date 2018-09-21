@@ -10916,17 +10916,22 @@ if (!_global.BI) {
             if (!localeText) {
                 localeText = key;
             }
-            var len = arguments.length;
-            if (len > 1) {
-                for (var i = 1; i < len; i++) {
-                    var key = "{R" + i + "}";
-                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
-                    if (i === 1) {
-                        localeText = BI.replaceAll(localeText, "\\{\\s*\\}", arguments[i] + "");
+            if (_.indexOf(localeText, "{R") >= 0) {
+                var len = arguments.length;
+                if (len > 1) {
+                    for (var i = 1; i < len; i++) {
+                        var key = "{R" + i + "}";
+                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                     }
                 }
+                return localeText;
+            } else {
+                var args = Array.prototype.slice.call(arguments);
+                var count = 1;
+                return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                    return args[count++] + "";
+                });
             }
-            return localeText;
         },
 
         assert: function (v, is) {
