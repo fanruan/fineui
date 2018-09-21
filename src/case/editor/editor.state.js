@@ -65,7 +65,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                     title = self.stateValue[0];
                 }
                 return title;
-            }
+            },
+            warningTitle: o.warningTitle,
+            tipType: o.tipType
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
@@ -255,6 +257,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.element.removeClass("state-editor-infinite-text");
             }
         }
+    },
+
+    setTipType: function (v) {
+        this.text.options.tipType = v;
     }
 });
 BI.StateEditor.EVENT_CHANGE = "EVENT_CHANGE";

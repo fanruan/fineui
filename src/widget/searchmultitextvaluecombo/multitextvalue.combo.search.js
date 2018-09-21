@@ -58,7 +58,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
-            value: this.storeValue
+            value: this.storeValue,
+            warningTitle: o.warningTitle
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
@@ -432,12 +433,20 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
                 this.element.removeClass("combo-error");
             } else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
                 this.element.addClass("combo-error");
             }
         } else {
-            v.length === this.allValue.length ? this.element.removeClass("combo-error") : this.element.addClass("combo-error");
+            if(v.length === this.allValue.length){
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
+                this.element.removeClass("combo-error");
+            }else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
+                this.element.addClass("combo-error");
+            }
         }
     },
 

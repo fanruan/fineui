@@ -52845,7 +52845,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             value: o.value,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth,
-            iconWrapperWidth: o.iconWrapperWidth
+            iconWrapperWidth: o.iconWrapperWidth,
+            warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
@@ -52886,8 +52887,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
                 return BI.contains(v, item.value);
             });
             if (BI.isNull(result)) {
+                this.trigger.options.tipType = "warning";
                 this.element.removeClass("combo-error").addClass("combo-error");
             } else {
+                this.trigger.options.tipType = "success";
                 this.element.removeClass("combo-error");
             }
         }
@@ -52910,7 +52913,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.IconTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);/**
+BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
+/**
  * Created by Windy on 2017/12/12.
  */
 BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
@@ -53548,7 +53552,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            value: o.value
+            value: o.value,
+            warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -53587,8 +53592,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 return BI.contains(v, item.value);
             });
             if (BI.isNull(result)) {
+                this.trigger.setTipType("warning");
                 this.element.removeClass("combo-error").addClass("combo-error");
             } else {
+                this.trigger.setTipType("success");
                 this.element.removeClass("combo-error");
             }
         }
@@ -53611,7 +53618,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_value_combo", BI.TextValueCombo);/**
+BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
+/**
  * @class BI.SmallTextValueCombo
  * @extend BI.Widget
  * combo : text + icon, popup : text
@@ -54643,7 +54651,9 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                     title = self.stateValue[0];
                 }
                 return title;
-            }
+            },
+            warningTitle: o.warningTitle,
+            tipType: o.tipType
         });
         this.text.on(BI.TextButton.EVENT_CHANGE, function () {
             BI.nextTick(function () {
@@ -54833,6 +54843,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.element.removeClass("state-editor-infinite-text");
             }
         }
+    },
+
+    setTipType: function (v) {
+        this.text.options.tipType = v;
     }
 });
 BI.StateEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -54853,7 +54867,8 @@ BI.StateEditor.EVENT_RESTRICT = "EVENT_RESTRICT";
 BI.StateEditor.EVENT_SPACE = "EVENT_SPACE";
 BI.StateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 
-BI.shortcut("bi.state_editor", BI.StateEditor);/**
+BI.shortcut("bi.state_editor", BI.StateEditor);
+/**
  * 无限制-已选择状态输入框
  * Created by GUY on 2016/5/18.
  * @class BI.SimpleStateEditor
@@ -57892,6 +57907,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             title: function () {
                 return self.text.getText();
             },
+            tipType: o.tipType,
+            warningTitle: o.warningTitle,
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -57916,9 +57933,14 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    setTipType: function (v) {
+        this.text.options.tipType = v;
     }
 });
-BI.shortcut("bi.text_trigger", BI.TextTrigger);/**
+BI.shortcut("bi.text_trigger", BI.TextTrigger);
+/**
  * 选择字段trigger
  *
  * Created by GUY on 2015/9/15.
@@ -57943,10 +57965,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             readonly: o.readonly,
-            text: this._digest(o.value, o.items)
+            text: this._digest(o.value, o.items),
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
     },
-    
+
     _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
@@ -57969,11 +57993,16 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.trigger.setText(this._digest(vals, this.options.items));
     },
 
+    setTipType: function (v) {
+        this.trigger.setTipType(v);
+    },
+
     populate: function (items) {
         this.options.items = items;
     }
 });
-BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);/**
+BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
+/**
  * 选择字段trigger小一号的
  *
  * @class BI.SmallSelectTextTrigger
@@ -69039,7 +69068,9 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -69070,6 +69101,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.setValue(v);
     },
 
+    setTipType: function (v) {
+        this.editor.setTipType(v);
+    },
+
     getValue: function () {
         var v = this.editor.getState();
         if (BI.isArray(v) && v.length > 0) {
@@ -69093,7 +69128,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
-BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);/**
+BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
+/**
  * searcher
  * Created by guy on 15/11/3.
  * @class BI.MultiSelectInsertSearcher
@@ -72576,7 +72612,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
-            value: this.storeValue
+            value: this.storeValue,
+            warningTitle: o.warningTitle
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
@@ -72950,12 +72987,20 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
                 this.element.removeClass("combo-error");
             } else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
                 this.element.addClass("combo-error");
             }
         } else {
-            v.length === this.allValue.length ? this.element.removeClass("combo-error") : this.element.addClass("combo-error");
+            if(v.length === this.allValue.length){
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
+                this.element.removeClass("combo-error");
+            }else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
+                this.element.addClass("combo-error");
+            }
         }
     },
 
@@ -73034,7 +73079,9 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
             adapter: o.adapter,
             masker: o.masker,
             value: o.value,
-            text: o.text
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
         this.searcher.on(BI.MultiSelectSearcher.EVENT_START, function () {
             self.fireEvent(BI.SearchMultiSelectTrigger.EVENT_START);
@@ -73127,6 +73174,10 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.numberCounter.setValue(ob);
     },
 
+    setTipType: function (v) {
+        this.searcher.setTipType(v);
+    },
+
     getKey: function () {
         return this.searcher.getKey();
     },
@@ -73145,7 +73196,8 @@ BI.SearchMultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SearchMultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SearchMultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 
-BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);/**
+BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
+/**
  * 多选加载数据面板
  * Created by guy on 15/11/2.
  * @class BI.SearchMultiSelectLoader
@@ -73426,7 +73478,9 @@ BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
 
         this.searcher = BI.createWidget({
@@ -73551,6 +73605,10 @@ BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
         }
     },
 
+    setTipType: function (v) {
+        this.editor.setTipType(v);
+    },
+
     setValue: function (ob) {
         this.setState(ob);
         this.searcher.setValue(ob);
@@ -73575,7 +73633,8 @@ BI.SearchMultiSelectSearcher.EVENT_START = "EVENT_START";
 BI.SearchMultiSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SearchMultiSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SearchMultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
-BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);/**
+BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
+/**
  * 加号表示的组节点
  * Created by GUY on 2015/9/6.
  * @class BI.SelectTreeFirstPlusGroupNode
@@ -80454,6 +80513,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
             value: value,
             numOfPage: 100,
             valueFormatter: o.valueFormatter,
+            warningTitle: o.warningTitle,
             listeners: [{
                 eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
                 action: function () {

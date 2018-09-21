@@ -18,6 +18,7 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
             value: value,
             numOfPage: 100,
             valueFormatter: o.valueFormatter,
+            warningTitle: o.warningTitle,
             listeners: [{
                 eventName: BI.SearchMultiTextValueCombo.EVENT_CONFIRM,
                 action: function () {
