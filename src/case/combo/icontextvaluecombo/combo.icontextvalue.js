@@ -29,7 +29,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             value: o.value,
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth,
-            iconWrapperWidth: o.iconWrapperWidth
+            iconWrapperWidth: o.iconWrapperWidth,
+            warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
             type: "bi.icon_text_value_combo_popup",
@@ -70,8 +71,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
                 return BI.contains(v, item.value);
             });
             if (BI.isNull(result)) {
+                this.trigger.options.tipType = "warning";
                 this.element.removeClass("combo-error").addClass("combo-error");
             } else {
+                this.trigger.options.tipType = "success";
                 this.element.removeClass("combo-error");
             }
         }
