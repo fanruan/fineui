@@ -43,14 +43,11 @@ if (!_global.BI) {
             if (!localeText) {
                 localeText = key;
             }
-            var len = arguments.length;
-            var regexp = new RegExp("\\{\\s*\\}");
-            if (len > 1) {
-                for (var i = 1; i < len; i++) {
-                    localeText = localeText.replace(regexp, arguments[i] + "");
-                }
-            }
-            return localeText;
+            var args = Array.prototype.slice.call(arguments);
+            var count = 1;
+            return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                return args[count++] + "";
+            });
         },
 
         assert: function (v, is) {
