@@ -10159,6 +10159,9 @@ if (!_global.BI) {
                 for (var i = 1; i < len; i++) {
                     var key = "{R" + i + "}";
                     localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    if (i === 1) {
+                        localeText = BI.replaceAll(localeText, "\\{\\s*\\}", arguments[i] + "");
+                    }
                 }
             }
             return localeText;
@@ -10567,7 +10570,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-                }, spp = sp.prototype;
+            }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -10801,7 +10804,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -10834,7 +10837,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
+            return function queueNextTick(cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
