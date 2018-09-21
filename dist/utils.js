@@ -10919,7 +10919,7 @@ if (!_global.BI) {
             var len = arguments.length;
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
-                    var key = "{R" + i + "}";
+                    var key = "{}";
                     localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                 }
             }
