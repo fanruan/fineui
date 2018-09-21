@@ -62566,7 +62566,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%x-%e");
+        var dateStr = BI.print(date, "%Y-%X-%e");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -63569,7 +63569,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%X-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
