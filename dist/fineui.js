@@ -10397,10 +10397,10 @@ if (!_global.BI) {
                 localeText = key;
             }
             var len = arguments.length;
+            var regexp = new RegExp("\\{\\s*\\}");
             if (len > 1) {
                 for (var i = 1; i < len; i++) {
-                    var key = "{}";
-                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    localeText = localeText.replace(regexp, arguments[i] + "");
                 }
             }
             return localeText;
