@@ -165,7 +165,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
+        var dateStr = BI.print(date, "%Y-%X-%e %H:%M:%S");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
