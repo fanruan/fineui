@@ -10916,7 +10916,7 @@ if (!_global.BI) {
             if (!localeText) {
                 localeText = key;
             }
-            if (_.indexOf(localeText, "{R1}") >= 0) {
+            if (localeText.indexOf("{R1}") > -1) {
                 var len = arguments.length;
                 if (len > 1) {
                     for (var i = 1; i < len; i++) {
