@@ -43,22 +43,22 @@ if (!_global.BI) {
             if (!localeText) {
                 localeText = key;
             }
-            if (localeText.indexOf("{R1}") > -1) {
-                var len = arguments.length;
-                if (len > 1) {
+            var len = arguments.length;
+            if (len > 1) {
+                if (localeText.indexOf("{R1}") > -1) {
                     for (var i = 1; i < len; i++) {
                         var key = "{R" + i + "}";
                         localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                     }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
                 }
-                return localeText;
-            } else {
-                var args = Array.prototype.slice.call(arguments);
-                var count = 1;
-                return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
-                    return args[count++] + "";
-                });
             }
+            return localeText;
         },
 
         assert: function (v, is) {
