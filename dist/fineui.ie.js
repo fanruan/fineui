@@ -10396,22 +10396,22 @@ if (!_global.BI) {
             if (!localeText) {
                 localeText = key;
             }
-            if (localeText.indexOf("{R1}") > -1) {
-                var len = arguments.length;
-                if (len > 1) {
+            var len = arguments.length;
+            if (len > 1) {
+                if (localeText.indexOf("{R1}") > -1) {
                     for (var i = 1; i < len; i++) {
                         var key = "{R" + i + "}";
                         localeText = BI.replaceAll(localeText, key, arguments[i] + "");
                     }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
                 }
-                return localeText;
-            } else {
-                var args = Array.prototype.slice.call(arguments);
-                var count = 1;
-                return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
-                    return args[count++] + "";
-                });
             }
+            return localeText;
         },
 
         assert: function (v, is) {
@@ -34471,7 +34471,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
         var model = vm;
-        if (!model.addWatch && model.$vm) {
+        if (!model.$watch && model.$vm) {
             model = model.$vm;
         }
         if (isPlainObject(cb)) {
@@ -34485,7 +34485,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         options.user = true;
         var exps = void 0;
         if (_$1.isFunction(expOrFn) || !(exps = expOrFn.match(/[a-zA-Z0-9_.*]+|[|][|]|[&][&]|[(]|[)]/g)) || exps.length === 1 && !/\*/.test(expOrFn)) {
-            model.addWatch(expOrFn, cb, options);
+            model.$watch(expOrFn, cb, options);
 
             return [];
         }
@@ -34540,7 +34540,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     return result;
                 };
-                model.addWatch(getter, function (newValue, oldValue, attrs) {
+                model.$watch(getter, function (newValue, oldValue, attrs) {
                     callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
                 }, _$1.extend(options, {
                     deep: isGlobal
@@ -34584,13 +34584,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     return currentModels;
                 };
-                model.addWatch(_getter, function (newValue, oldValue, attrs) {
+                model.$watch(_getter, function (newValue, oldValue, attrs) {
                     callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
                 }, options);
 
                 return;
             }
-            model.addWatch(exp, function (newValue, oldValue, attrs) {
+            model.$watch(exp, function (newValue, oldValue, attrs) {
                 callback(i, newValue, oldValue, _$1.extend({ index: i }, attrs));
             }, options);
         });
@@ -34722,26 +34722,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var allModelInstances = {};
     var emptyFn = function emptyFn() {};
 
-    var Watcher = function Watcher(_ref) {
-        var get = _ref.get,
-            last = _ref.last,
-            listener = _ref.listener,
-            sync = _ref.sync,
-            deep = _ref.deep;
+    var Watcher = function () {
+        function Watcher(_ref) {
+            var get = _ref.get,
+                last = _ref.last,
+                listener = _ref.listener,
+                sync = _ref.sync,
+                deep = _ref.deep;
 
-        _classCallCheck(this, Watcher);
+            _classCallCheck(this, Watcher);
 
-        this.get = get;
-        this.last = cloneShadow(last);
-        this.listener = listener || emptyFn;
-        this.sync = sync || false;
+            this.get = get;
+            this.last = cloneShadow(last);
+            this.listener = listener || emptyFn;
+            this.sync = sync || false;
 
-        return {
-            get: this.get,
-            last: this.last,
-            listener: this.listener
+            return {
+                get: this.get,
+                last: this.last,
+                listener: this.listener
+            };
+        }
+
+        // 不要去掉，为了兼容IE8，IE8下instance of Constructor如果不绑定函数会出错
+
+
+        Watcher.prototype.getInstance = function getInstance() {
+            return this;
         };
-    };
+
+        return Watcher;
+    }();
 
     function initState(vm, state) {
         var watchers = vm._stateWatchers = {};
@@ -34863,7 +34874,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var p = vm._parent;
             while (p) {
                 if (p.childContext && p.childContext.indexOf(key) > -1) {
-                    p.addWatch(key, function (cur, last, p) {
+                    p.$watch(key, function (cur, last, p) {
                         if (!vm.alive) return;
                         vm.model[key] = cur;
                         vm._contextWatchers[key].last = cloneShadow(cur); // 避免重复调用（可以改成给watch添加一个参数保证下次比较一定相同）
@@ -34984,6 +34995,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var watchers = [].concat(vm._watchers);
 
         _$1.each(watchers, function (watcher) {
+            if (!watcher) return;
             var cur = watcher.get();
             var last = watcher.last;
 
@@ -35051,7 +35063,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         Model.prototype._init = function _init() {};
 
-        Model.prototype.addWatch = function addWatch(expOrFn, cb, options) {
+        Model.prototype.$watch = function $watch(expOrFn, cb, options) {
             var watcher = createWatcher(this, expOrFn, cb, options);
             this._watchers.push(watcher);
         };
