@@ -21,7 +21,6 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
 
         var value;
         if(BI.isNotNull(o.value)){
-            this.value = o.value;
             value = this._digest(o.value);
         }
         this.trigger = BI.createWidget({
@@ -45,19 +44,13 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         });
 
         this.combo.on(BI.DownListCombo.EVENT_CHANGE, function () {
-            var currentVal = self.combo.getValue()[0].value;
-            if (currentVal !== self.value) {
-                self.setValue(currentVal);
-                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
-            }
+            self.setValue(self.combo.getValue()[0].value);
+            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
         });
 
         this.combo.on(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, function () {
-            var currentVal = self.combo.getValue()[0].childValue;
-            if (currentVal !== self.value) {
-                self.setValue(currentVal);
-                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
-            }
+            self.setValue(self.combo.getValue()[0].childValue);
+            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
         });
     },
 
@@ -76,7 +69,6 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     },
 
     _digest: function (v) {
-        this.value = v;
         return this.valueMap[v];
     },
 
