@@ -433,10 +433,10 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
-                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
                 this.element.removeClass("combo-error");
             } else {
-                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
                 this.element.addClass("combo-error");
             }
         } else {
