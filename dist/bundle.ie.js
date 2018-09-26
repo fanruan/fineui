@@ -53790,6 +53790,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
 
         var value;
         if(BI.isNotNull(o.value)){
+            this.value = o.value;
             value = this._digest(o.value);
         }
         this.trigger = BI.createWidget({
