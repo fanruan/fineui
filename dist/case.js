@@ -9004,7 +9004,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.last_plus_group_node";
@@ -9146,7 +9146,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function beforeCollapse (treeId, treeNode) {
+        function beforeCollapse(treeId, treeNode) {
             return false;
         }
 
@@ -9157,6 +9157,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
         nodes = BI.DisplayTree.superclass._dealWidthNodes.apply(this, arguments);
         var self = this, o = this.options;
         BI.each(nodes, function (i, node) {
+            node.isParent = node.isParent || node.parent;
             if (node.text == null) {
                 if (node.count > 0) {
                     node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
