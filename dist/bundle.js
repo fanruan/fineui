@@ -30382,6 +30382,98 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);/**
+ * 内联布局
+ * @class BI.InlineCenterAdaptLayout
+ * @extends BI.Layout
+ *
+ * @cfg {JSON} options 配置属性
+ * @cfg {Number} [hgap=0] 水平间隙
+ * @cfg {Number} [vgap=0] 垂直间隙
+ */
+BI.InlineVaerticalAdaptLayout = BI.inherit(BI.Layout, {
+
+    props: function () {
+        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-inline-center-adapt-layout",
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+
+    render: function () {
+        BI.InlineVaerticalAdaptLayout.superclass.render.apply(this, arguments);
+        this.element.css({
+            whiteSpace: "nowrap",
+            "text-align": "left"
+        });
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item, length) {
+        var o = this.options;
+        if (!this.hasWidget(this.getName() + i)) {
+            var t = BI.createWidget(item);
+            this.addWidget(this.getName() + i, t);
+        } else {
+            var t = this.getWidgetByName(this.getName() + i);
+        }
+        t.element.css({
+            position: "relative",
+            display: "inline-block",
+            "vertical-align": "middle",
+            "*display": "inline",
+            "*zoom": 1
+        });
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            t.element.css({
+                "margin-top": (o.vgap || 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            t.element.css({
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            t.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            t.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        return t;
+    },
+
+    resize: function () {
+        this.stroke(this.options.items);
+    },
+
+    addItem: function (item) {
+        throw new Error("不能添加元素");
+    },
+
+    stroke: function (items) {
+        var self = this;
+        BI.each(items, function (i, item) {
+            if (item) {
+                self._addElement(i, item, items.length);
+            }
+        });
+    },
+
+    populate: function (items) {
+        BI.InlineVaerticalAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.vertical_inline_adapt", BI.InlineVaerticalAdaptLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -57866,7 +57958,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.last_plus_group_node";
@@ -58008,7 +58100,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function beforeCollapse (treeId, treeNode) {
+        function beforeCollapse(treeId, treeNode) {
             return false;
         }
 
@@ -58019,6 +58111,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
         nodes = BI.DisplayTree.superclass._dealWidthNodes.apply(this, arguments);
         var self = this, o = this.options;
         BI.each(nodes, function (i, node) {
+            node.isParent = node.isParent || node.parent;
             if (node.text == null) {
                 if (node.count > 0) {
                     node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
@@ -65396,7 +65489,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_select_tree_last_plus_group_node";
@@ -66087,7 +66180,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_plus_group_node";
@@ -74702,7 +74795,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
             var extend = {layer: layer};
             node.id = node.id || BI.UUID();
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.select_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.select_tree_last_plus_group_node";
