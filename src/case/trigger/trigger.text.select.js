@@ -23,10 +23,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
             element: this,
             height: o.height,
             readonly: o.readonly,
-            text: this._digest(o.value, o.items)
+            text: this._digest(o.value, o.items),
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
     },
-    
+
     _digest: function(vals, items){
         var o = this.options;
         vals = BI.isArray(vals) ? vals : [vals];
@@ -47,6 +49,10 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     setValue: function (vals) {
         this.trigger.setText(this._digest(vals, this.options.items));
+    },
+
+    setTipType: function (v) {
+        this.trigger.setTipType(v);
     },
 
     populate: function (items) {

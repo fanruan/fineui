@@ -10918,9 +10918,17 @@ if (!_global.BI) {
             }
             var len = arguments.length;
             if (len > 1) {
-                for (var i = 1; i < len; i++) {
-                    var key = "{R" + i + "}";
-                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                if (localeText.indexOf("{R1}") > -1) {
+                    for (var i = 1; i < len; i++) {
+                        var key = "{R" + i + "}";
+                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
                 }
             }
             return localeText;
@@ -11329,7 +11337,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-                }, spp = sp.prototype;
+            }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -11563,7 +11571,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -11596,7 +11604,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
+            return function queueNextTick(cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {

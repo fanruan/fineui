@@ -37,7 +37,9 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
             adapter: o.adapter,
             masker: o.masker,
             value: o.value,
-            text: o.text
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
         this.searcher.on(BI.MultiSelectSearcher.EVENT_START, function () {
             self.fireEvent(BI.SearchMultiSelectTrigger.EVENT_START);
@@ -128,6 +130,10 @@ BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
     setValue: function (ob) {
         this.searcher.setValue(ob);
         this.numberCounter.setValue(ob);
+    },
+
+    setTipType: function (v) {
+        this.searcher.setTipType(v);
     },
 
     getKey: function () {

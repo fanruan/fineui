@@ -30,6 +30,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
             title: function () {
                 return self.text.getText();
             },
+            tipType: o.tipType,
+            warningTitle: o.warningTitle,
             hgap: c.hgap,
             readonly: o.readonly
         });
@@ -54,6 +56,10 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    setTipType: function (v) {
+        this.text.options.tipType = v;
     }
 });
 BI.shortcut("bi.text_trigger", BI.TextTrigger);
