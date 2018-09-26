@@ -30382,98 +30382,6 @@ BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);/**
- * 内联布局
- * @class BI.InlineCenterAdaptLayout
- * @extends BI.Layout
- *
- * @cfg {JSON} options 配置属性
- * @cfg {Number} [hgap=0] 水平间隙
- * @cfg {Number} [vgap=0] 垂直间隙
- */
-BI.InlineVaerticalAdaptLayout = BI.inherit(BI.Layout, {
-
-    props: function () {
-        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0
-        });
-    },
-
-    render: function () {
-        BI.InlineVaerticalAdaptLayout.superclass.render.apply(this, arguments);
-        this.element.css({
-            whiteSpace: "nowrap",
-            "text-align": "left"
-        });
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item, length) {
-        var o = this.options;
-        if (!this.hasWidget(this.getName() + i)) {
-            var t = BI.createWidget(item);
-            this.addWidget(this.getName() + i, t);
-        } else {
-            var t = this.getWidgetByName(this.getName() + i);
-        }
-        t.element.css({
-            position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
-        });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            t.element.css({
-                "margin-top": (o.vgap || 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            t.element.css({
-                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            t.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            t.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return t;
-    },
-
-    resize: function () {
-        this.stroke(this.options.items);
-    },
-
-    addItem: function (item) {
-        throw new Error("不能添加元素");
-    },
-
-    stroke: function (items) {
-        var self = this;
-        BI.each(items, function (i, item) {
-            if (item) {
-                self._addElement(i, item, items.length);
-            }
-        });
-    },
-
-    populate: function (items) {
-        BI.InlineVaerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
-    }
-});
-BI.shortcut("bi.vertical_inline_adapt", BI.InlineVaerticalAdaptLayout);/**
  * 自适应水平和垂直方向都居中容器
  * @class BI.CenterAdaptLayout
  * @extends BI.Layout
@@ -53881,7 +53789,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         this._createValueMap();
 
         var value;
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             value = this._digest(o.value);
         }
         this.trigger = BI.createWidget({
@@ -53905,13 +53813,19 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         });
 
         this.combo.on(BI.DownListCombo.EVENT_CHANGE, function () {
-            self.setValue(self.combo.getValue()[0].value);
-            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            var currentVal = self.combo.getValue()[0].value;
+            if (currentVal !== self.value) {
+                self.setValue(currentVal);
+                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            }
         });
 
         this.combo.on(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, function () {
-            self.setValue(self.combo.getValue()[0].childValue);
-            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            var currentVal = self.combo.getValue()[0].childValue;
+            if (currentVal !== self.value) {
+                self.setValue(currentVal);
+                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            }
         });
     },
 
@@ -53930,6 +53844,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     },
 
     _digest: function (v) {
+        this.value = v;
         return this.valueMap[v];
     },
 
