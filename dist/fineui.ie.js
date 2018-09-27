@@ -54031,7 +54031,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         this._createValueMap();
 
         var value;
-        if(BI.isNotNull(o.value)){
+        if(BI.isNotNull(o.value)) {
             value = this._digest(o.value);
         }
         this.trigger = BI.createWidget({
@@ -54055,13 +54055,19 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
         });
 
         this.combo.on(BI.DownListCombo.EVENT_CHANGE, function () {
-            self.setValue(self.combo.getValue()[0].value);
-            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            var currentVal = self.combo.getValue()[0].value;
+            if (currentVal !== self.value) {
+                self.setValue(currentVal);
+                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            }
         });
 
         this.combo.on(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, function () {
-            self.setValue(self.combo.getValue()[0].childValue);
-            self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            var currentVal = self.combo.getValue()[0].childValue;
+            if (currentVal !== self.value) {
+                self.setValue(currentVal);
+                self.fireEvent(BI.TextValueDownListCombo.EVENT_CHANGE);
+            }
         });
     },
 
@@ -54080,6 +54086,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     },
 
     _digest: function (v) {
+        this.value = v;
         return this.valueMap[v];
     },
 
@@ -57569,7 +57576,7 @@ BI.LevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.last_plus_group_node";
@@ -57711,7 +57718,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             }
         };
 
-        function beforeCollapse (treeId, treeNode) {
+        function beforeCollapse(treeId, treeNode) {
             return false;
         }
 
@@ -57722,6 +57729,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
         nodes = BI.DisplayTree.superclass._dealWidthNodes.apply(this, arguments);
         var self = this, o = this.options;
         BI.each(nodes, function (i, node) {
+            node.isParent = node.isParent || node.parent;
             if (node.text == null) {
                 if (node.count > 0) {
                     node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
@@ -65099,7 +65107,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_select_tree_last_plus_group_node";
@@ -65790,7 +65798,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_plus_group_node";
@@ -74405,7 +74413,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
             var extend = {layer: layer};
             node.id = node.id || BI.UUID();
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.select_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.select_tree_last_plus_group_node";

@@ -30,7 +30,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
                 node.id = BI.UUID();
             }
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_plus_group_node";
