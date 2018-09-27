@@ -4424,7 +4424,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
 
     _autoSwitch: function (v, type) {
         var limit = 0;
-        var value = v;
+        var value = v + "";
         switch (type) {
             case BI.DynamicDateTimeSelect.HOUR:
                 limit = 2;
@@ -13585,7 +13585,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     // 微调
     _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
-        this.setValue(v.add(add));
+        this.setValue(BI.add(v, add));
     },
 
     setUpEnable: function (v) {

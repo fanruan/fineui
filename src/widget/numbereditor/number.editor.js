@@ -90,7 +90,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
     // 微调
     _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());
-        this.setValue(v.add(add));
+        this.setValue(BI.add(v, add));
     },
 
     setUpEnable: function (v) {
