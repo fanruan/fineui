@@ -388,17 +388,21 @@
     };
 
     var _mkPYRslt = function (arr) {
-        var arrRslt = [""], k;
+        var arrRslt = [""], k, multiLen = 0;
         for (var i = 0, len = arr.length; i < len; i++) {
             var str = arr[i];
             var strlen = str.length;
-            if (strlen == 1) {
+            // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
+            // 超过14个多音字之后，后面的都用第一个拼音
+            if (strlen == 1 || multiLen > 14) {
+                var tmpStr = str.substring(0, 1);
                 for (k = 0; k < arrRslt.length; k++) {
-                    arrRslt[k] += str;
+                    arrRslt[k] += tmpStr;
                 }
             } else {
                 var tmpArr = arrRslt.slice(0);
                 arrRslt = [];
+                multiLen ++;
                 for (k = 0; k < strlen; k++) {
                     // 复制一个相同的arrRslt
                     var tmp = tmpArr.slice(0);
