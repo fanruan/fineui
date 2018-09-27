@@ -61262,6 +61262,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
                     }],
                     cls: "bi-down-list-spliter-container cursor-pointer",
+                    vgap: 5,
                     lgap: 10,
                     rgap: 0
                 });
