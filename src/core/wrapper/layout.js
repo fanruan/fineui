@@ -427,7 +427,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
         if (oldStartIdx > oldEndIdx) {
-            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1].elm;
+            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1];
             addVnodes(before, newCh, newStartIdx, newEndIdx);
         } else if (newStartIdx > newEndIdx) {
             removeVnodes(oldCh, oldStartIdx, oldEndIdx);

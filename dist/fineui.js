@@ -15085,7 +15085,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         return eq(item1, item2);
 
         // 不比较函数
-        function eq (a, b, aStack, bStack) {
+        function eq(a, b, aStack, bStack) {
             if (a === b) {
                 return a !== 0 || 1 / a === 1 / b;
             }
@@ -15391,7 +15391,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
         if (oldStartIdx > oldEndIdx) {
-            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1].elm;
+            before = BI.isNull(newCh[newEndIdx + 1]) ? null : newCh[newEndIdx + 1];
             addVnodes(before, newCh, newStartIdx, newEndIdx);
         } else if (newStartIdx > newEndIdx) {
             removeVnodes(oldCh, oldStartIdx, oldEndIdx);
@@ -15405,7 +15405,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             self._children[self._getChildName(i)] = children[key];
         });
 
-        function sameVnode (vnode1, vnode2, oldIndex, newIndex) {
+        function sameVnode(vnode1, vnode2, oldIndex, newIndex) {
             vnode1 = self._getOptions(vnode1);
             vnode2 = self._getOptions(vnode2);
             if (BI.isKey(vnode1.key)) {
@@ -15416,20 +15416,20 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function addNode (vnode, index) {
+        function addNode(vnode, index) {
             var opt = self._getOptions(vnode);
             var key = opt.key == null ? self._getChildName(index) : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
-        function addVnodes (before, vnodes, startIdx, endIdx) {
+        function addVnodes(before, vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = addNode(vnodes[startIdx], startIdx);
                 insertBefore(node, before, false, startIdx);
             }
         }
 
-        function removeVnodes (vnodes, startIdx, endIdx) {
+        function removeVnodes(vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
                 var node = self._getOptions(vnodes[startIdx]);
                 var key = node.key == null ? self._getChildName(startIdx) : node.key;
@@ -15437,7 +15437,7 @@ BI.Layout = BI.inherit(BI.Widget, {
             }
         }
 
-        function insertBefore (insert, before, isNext, index) {
+        function insertBefore(insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
             var insertKey = BI.isKey(insert.key) ? insert.key : self._getChildName(index);
