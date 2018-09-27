@@ -20,7 +20,7 @@ BI.SelectTreePopup = BI.inherit(BI.Pane, {
             var extend = {layer: layer};
             node.id = node.id || BI.UUID();
             extend.pNode = pNode;
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
+            if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.select_tree_mid_plus_group_node";
                 if (i === nodes.length - 1) {
                     extend.type = "bi.select_tree_last_plus_group_node";
