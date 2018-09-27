@@ -1535,8 +1535,7 @@ Demo.CONSTANTS = {
         {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},
         {id: 211, pId: 21, value: "第三级目录2", text: "第三级目录2"},
         {id: 212, pId: 21, value: "第三级文件2", text: "第三级文件2"},
-        {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"},
-        {id: 3, pId: -1, value: "第一级目录3", text: "第一级目录3", isParent: true}],
+        {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"}],
     LEVELTREE: [{
         id: 1,
         text: "第一项",
