@@ -49,8 +49,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         var items = [{
-            type: "bi.icon_button",
-            disableSelected: true,
+            type: "bi.icon_label",
             cls: cls + " toast-icon",
             width: 36
         }, {

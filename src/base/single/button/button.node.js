@@ -10,7 +10,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls: (conf.baseCls || "") + " bi-node",
+            _baseCls: (conf._baseCls || "") + " bi-node",
             open: false
         });
     },

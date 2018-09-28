@@ -7,7 +7,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.IconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
+            _baseCls: (conf._baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
         });

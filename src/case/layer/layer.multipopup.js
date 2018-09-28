@@ -9,7 +9,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var conf = BI.MultiPopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-multi-list-view",
+            _baseCls: (conf._baseCls || "") + " bi-multi-list-view",
             buttons: [BI.i18nText("BI-Basic_Sure")]
         });
     },
