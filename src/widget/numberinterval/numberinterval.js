@@ -240,6 +240,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         self._setComboValueChangedEvent(self.smallCombo);
         self._setEditorValueChangedEvent(self.bigEditor);
         self._setEditorValueChangedEvent(self.smallEditor);
+
+        self._checkValidation();
     },
 
     _checkValidation: function () {
@@ -517,6 +519,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.bigCombo.setValue(combo_value);
         }
+
+        this._checkValidation();
     },
 
 
