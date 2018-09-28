@@ -43993,10 +43993,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 0,
-                right: 3,
+                left: 6,
+                right: 6,
                 top: 6,
-                bottom: 5
+                bottom: 6
             }]
         });
 
@@ -44059,7 +44059,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 0,
+                            left: 6,
                             top: 0,
                             right: 0
                         }]
