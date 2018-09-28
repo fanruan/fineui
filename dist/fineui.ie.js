@@ -36067,9 +36067,9 @@ BI.BasicButton = BI.inherit(BI.Single, {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
-                BI.Actions.runAction(o.action, "click", o);
+                BI.Actions.runAction(o.action, "click", o, this);
             }
-            BI.Actions.runGlobalAction("click", o);
+            BI.Actions.runGlobalAction("click", o, this);
         }
     },
 
