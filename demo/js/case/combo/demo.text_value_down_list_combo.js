@@ -19,26 +19,26 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 text: "默认值",
                 value: 11,
                 items: [[{
-                    text: BI.i18nText("BI-Basic_Number_IN"),
+                    text: "属于",
                     value: 1,
                     cls: "dot-e-font"
                 }, {
-                    text: BI.i18nText("BI-Basic_Not_Number_In"),
+                    text: "不属于",
                     value: 2,
                     cls: "dot-e-font"
                 }], [{
                     el: {
-                        text: BI.i18nText("BI-Basic_More_Than"),
+                        text: "大于",
                         value: 3,
-                        cls: "dot-e-font"
+                        iconCls1: "dot-e-font"
                     },
                     value: 3,
                     children: [{
-                        text: BI.i18nText("BI-Basic_Settled_Value"),
+                        text: "固定值",
                         value: 4,
                         cls: "dot-e-font"
                     }, {
-                        text: BI.i18nText("BI-Basic_Average_Value"),
+                        text: "平均值",
                         value: 5,
                         cls: "dot-e-font"
                     }]

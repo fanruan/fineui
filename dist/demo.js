@@ -745,9 +745,10 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inher
     render: function () {
         var editor = BI.createWidget({
             type: "bi.textarea_editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             width: 600,
-            height: 400
+            height: 400,
+            watermark: "请输入内容"
         });
         editor.on(BI.TextAreaEditor.EVENT_FOCUS, function () {
             BI.Msg.toast("Focus");
@@ -1564,26 +1565,26 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 text: "默认值",
                 value: 11,
                 items: [[{
-                    text: BI.i18nText("BI-Basic_Number_IN"),
+                    text: "属于",
                     value: 1,
                     cls: "dot-e-font"
                 }, {
-                    text: BI.i18nText("BI-Basic_Not_Number_In"),
+                    text: "不属于",
                     value: 2,
                     cls: "dot-e-font"
                 }], [{
                     el: {
-                        text: BI.i18nText("BI-Basic_More_Than"),
+                        text: "大于",
                         value: 3,
-                        cls: "dot-e-font"
+                        iconCls1: "dot-e-font"
                     },
                     value: 3,
                     children: [{
-                        text: BI.i18nText("BI-Basic_Settled_Value"),
+                        text: "固定值",
                         value: 4,
                         cls: "dot-e-font"
                     }, {
-                        text: BI.i18nText("BI-Basic_Average_Value"),
+                        text: "平均值",
                         value: 5,
                         cls: "dot-e-font"
                     }]
@@ -3026,10 +3027,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 2,
     text: "toast提示",
     value: "demo.toast"
-}, {
-    pId: 2,
-    text: "message提示",
-    value: "demo.message"
 }, {
     pId: 2,
     id: 201,

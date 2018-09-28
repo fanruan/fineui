@@ -12018,8 +12018,8 @@ if (!_global.BI) {
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
             }
             if (o.attributes) {
                 this.element.attr(o.attributes);
@@ -35886,7 +35886,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Pane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-pane",
+            _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             overlap: true,
             onLoaded: BI.emptyFn
@@ -36028,7 +36028,7 @@ BI.Single = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.Single.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-single",
+            _baseCls: (conf._baseCls || "") + " bi-single",
             readonly: false,
             title: null,
             warningTitle: null,
@@ -36314,7 +36314,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
             value: "",
             text: "",
             stopEvent: false,
@@ -36726,7 +36726,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.NodeButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend( conf, {
-            baseCls: (conf.baseCls || "") + " bi-node",
+            _baseCls: (conf._baseCls || "") + " bi-node",
             open: false
         });
     },
@@ -36781,7 +36781,7 @@ BI.Tip = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-tip",
+            _baseCls: (conf._baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
         });
     },
@@ -37309,7 +37309,7 @@ BI.shortcut("bi.button_tree", BI.ButtonTree);/**
 BI.TreeView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TreeView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree",
+            _baseCls: "bi-tree",
             paras: {},
             itemsCreator: BI.emptyFn
         });
@@ -41585,7 +41585,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.PopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.PopupView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-popup-view",
+            _baseCls: "bi-popup-view",
             maxWidth: "auto",
             minWidth: 100,
             // maxHeight: 200,
@@ -42585,7 +42585,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.IconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-icon-button horizon-center",
+            _baseCls: (conf._baseCls || "") + " bi-icon-button horizon-center",
             iconWidth: null,
             iconHeight: null
         });
@@ -44532,10 +44532,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 0,
-                right: 3,
+                left: 6,
+                right: 6,
                 top: 6,
-                bottom: 5
+                bottom: 6
             }]
         });
 
@@ -44598,7 +44598,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 0,
+                            left: 6,
                             top: 0,
                             right: 0
                         }]
@@ -46464,8 +46464,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         }
 
         var items = [{
-            type: "bi.icon_button",
-            disableSelected: true,
+            type: "bi.icon_label",
             cls: cls + " toast-icon",
             width: 36
         }, {
@@ -46602,7 +46601,7 @@ BI.Trigger = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Trigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger cursor-pointer",
+            _baseCls: (conf._baseCls || "") + " bi-trigger cursor-pointer",
             height: 24
         });
     },
@@ -55949,7 +55948,7 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var conf = BI.MultiPopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-multi-list-view",
+            _baseCls: (conf._baseCls || "") + " bi-multi-list-view",
             buttons: [BI.i18nText("BI-Basic_Sure")]
         });
     },

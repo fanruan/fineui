@@ -9,7 +9,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
             value: "",
             text: "",
             stopEvent: false,

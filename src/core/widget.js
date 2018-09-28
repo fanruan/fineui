@@ -99,8 +99,8 @@
                 this.element = BI.Widget._renderEngine.createElement(this);
             }
             this.element._isWidget = true;
-            if (o.baseCls || o.extraCls || o.cls) {
-                this.element.addClass((o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
+            if (o._baseCls || o.baseCls || o.extraCls || o.cls) {
+                this.element.addClass((o._baseCls || "") + " " + (o.baseCls || "") + " " + (o.extraCls || "") + " " + (o.cls || ""));
             }
             if (o.attributes) {
                 this.element.attr(o.attributes);
