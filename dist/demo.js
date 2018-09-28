@@ -3029,10 +3029,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.toast"
 }, {
     pId: 2,
-    text: "message提示",
-    value: "demo.message"
-}, {
-    pId: 2,
     id: 201,
     text: "button"
 }, {
