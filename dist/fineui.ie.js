@@ -53112,6 +53112,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth,
             iconWrapperWidth: o.iconWrapperWidth,
+            title: o.title,
             warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
