@@ -4820,6 +4820,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        this.options.items = items;
         this.combo.populate(items);
     },
 
