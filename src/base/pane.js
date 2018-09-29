@@ -10,7 +10,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Pane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-pane",
+            _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             overlap: true,
             onLoaded: BI.emptyFn
