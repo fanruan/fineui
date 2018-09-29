@@ -625,6 +625,7 @@ BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
         var editor1 = BI.createWidget({
             type: "bi.editor",
             cls: "bi-border",
+            value: "我先给个默认值",
             watermark: "alert信息显示在下面",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
@@ -636,6 +637,7 @@ BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
         var editor2 = BI.createWidget({
             type: "bi.editor",
             cls: "mvc-border",
+            value: "我先给个默认值",
             watermark: "输入'a'会有错误信息",
             disabled: true,
             errorText: "字段不可重名",
@@ -645,7 +647,6 @@ BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
                 }
                 return true;
             },
-            allowBlank: true,
             width: 200,
             height: 24
         });
@@ -713,7 +714,8 @@ BI.shortcut("demo.pager", Demo.Func);Demo.Editor = BI.inherit(BI.Widget, {
         });
     }
 });
-BI.shortcut("demo.editor", Demo.Editor);Demo.CodeEditor = BI.inherit(BI.Widget, {
+BI.shortcut("demo.editor", Demo.Editor);
+Demo.CodeEditor = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-editor"
     },

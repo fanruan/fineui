@@ -45196,6 +45196,7 @@ BI.Input = BI.inherit(BI.Single, {
         BI.Input.superclass._init.apply(this, arguments);
         var self = this;
         var ctrlKey = false;
+        var keyCode = null;
         var inputEventValid = false;
         var _keydown = BI.debounce(function (keyCode) {
             self.onKeyDown(keyCode, ctrlKey);
@@ -45217,20 +45218,23 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
+                keyCode = e.keyCode;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
+                keyCode = null;
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
                     self._keydown_ = true;
                     _keydown(e.keyCode);
                 }
             })
             .on("input propertychange", function (e) {
+                // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(e.keyCode)) {
+                if (BI.isNotNull(keyCode)) {
                     inputEventValid = true;
                     self._keydown_ = true;
-                    _keydown(e.keyCode);
+                    _keydown(keyCode);
                 }
             })
             .click(function (e) {
@@ -45474,7 +45478,8 @@ BI.Input.EVENT_VALID = "EVENT_VALID";
 BI.Input.EVENT_ERROR = "EVENT_ERROR";
 BI.Input.EVENT_ENTER = "EVENT_ENTER";
 BI.Input.EVENT_RESTRICT = "EVENT_RESTRICT";
-BI.shortcut("bi.input", BI.Input);/**
+BI.shortcut("bi.input", BI.Input);
+/**
  * guy
  * @extends BI.Single
  * @type {*|void|Object}
