@@ -46256,7 +46256,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
             default:
                 break;
         }
-        if(v.length === 1 && BI.parseInt(v) > limit) {
+        if(value.length === 1 && BI.parseInt(value) > limit) {
             value = "0" + value;
         }
         if (value.length === 2) {
