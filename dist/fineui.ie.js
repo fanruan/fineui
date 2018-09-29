@@ -63194,7 +63194,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "circle-close-font"
+            cls: "close-font"
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
