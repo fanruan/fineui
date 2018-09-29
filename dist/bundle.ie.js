@@ -35137,6 +35137,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             });
             BI.createWidget({
                 type: "bi.absolute_center_adapt",
+                cls: "no-item-tip-status",
                 element: this,
                 items: [this._tipText]
             });
@@ -35199,6 +35200,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 }]
             });
         }
+        this.element.addClass("loading-status");
     },
 
     loaded: function () {
@@ -35208,6 +35210,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         this._loading && (this._loading = null);
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
+        this.element.removeClass("loading-status");
     },
 
     check: function () {
