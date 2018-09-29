@@ -56,6 +56,7 @@ BI.Input = BI.inherit(BI.Single, {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
                 if (BI.isNotNull(keyCode)) {
+                    keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(keyCode);
