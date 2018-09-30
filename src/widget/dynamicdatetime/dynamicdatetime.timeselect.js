@@ -148,7 +148,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
             default:
                 break;
         }
-        if(v.length === 1 && BI.parseInt(v) > limit) {
+        if(value.length === 1 && BI.parseInt(value) > limit) {
             value = "0" + value;
         }
         if (value.length === 2) {

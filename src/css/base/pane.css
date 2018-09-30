@@ -1,4 +1,7 @@
 .bi-pane {
+  min-height: 25px;
+}
+.bi-pane.loading-status {
   min-height: 55px;
 }
 .bi-pane .loading-container {

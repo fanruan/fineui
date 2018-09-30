@@ -4436,7 +4436,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
             default:
                 break;
         }
-        if(v.length === 1 && BI.parseInt(v) > limit) {
+        if(value.length === 1 && BI.parseInt(value) > limit) {
             value = "0" + value;
         }
         if (value.length === 2) {
@@ -4793,7 +4793,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "circle-close-font"
+            cls: "close-font"
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");

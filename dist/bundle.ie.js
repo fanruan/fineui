@@ -35199,6 +35199,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 }]
             });
         }
+        this.element.addClass("loading-status");
     },
 
     loaded: function () {
@@ -35208,6 +35209,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         this._loading && (this._loading = null);
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
+        this.element.removeClass("loading-status");
     },
 
     check: function () {
@@ -53152,6 +53154,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        this.options.items = items;
         this.combo.populate(items);
     },
 
@@ -62598,7 +62601,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
             default:
                 break;
         }
-        if(v.length === 1 && BI.parseInt(v) > limit) {
+        if(value.length === 1 && BI.parseInt(value) > limit) {
             value = "0" + value;
         }
         if (value.length === 2) {
@@ -62955,7 +62958,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear = BI.createWidget({
             type: "bi.icon_button",
             stopEvent: true,
-            cls: "circle-close-font"
+            cls: "close-font"
         });
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
