@@ -10,8 +10,10 @@ BI.Img = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Img.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
+            tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -19,7 +21,7 @@ BI.Img = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = BI.Widget._renderEngine.createElement("<img src='" + o.src + "'>");
+        o.attributes.src = o.src;
         BI.Img.superclass._init.apply(this, arguments);
     },
 

@@ -391,7 +391,10 @@
             var conf = BI.File.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-file display-block",
-                element: "<input type='file'>",
+                tagName: "input",
+                attributes: {
+                    type: "file"
+                },
                 name: "",
                 url: "",
                 multiple: true,

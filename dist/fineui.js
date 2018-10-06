@@ -44694,8 +44694,10 @@ BI.Iframe = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Iframe.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
+            tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -44703,7 +44705,8 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = BI.Widget._renderEngine.createElement("<iframe frameborder='0' src='" + o.src + "'>");
+        o.attributes.frameborder = "0";
+        o.attributes.src = o.src;
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
@@ -44746,8 +44749,10 @@ BI.Img = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Img.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
+            tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -44755,7 +44760,7 @@ BI.Img = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = BI.Widget._renderEngine.createElement("<img src='" + o.src + "'>");
+        o.attributes.src = o.src;
         BI.Img.superclass._init.apply(this, arguments);
     },
 
@@ -45195,7 +45200,10 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             var conf = BI.File.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-file display-block",
-                element: "<input type='file'>",
+                tagName: "input",
+                attributes: {
+                    type: "file"
+                },
                 name: "",
                 url: "",
                 multiple: true,
@@ -45429,7 +45437,7 @@ BI.Input = BI.inherit(BI.Single, {
         var conf = BI.Input.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-input display-block",
-            element: "<input/>",
+            tagName: "input",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn, // 按确定键能否退出编辑
             allowBlank: false
