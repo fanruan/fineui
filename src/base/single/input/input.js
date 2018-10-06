@@ -9,7 +9,7 @@ BI.Input = BI.inherit(BI.Single, {
         var conf = BI.Input.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-input display-block",
-            element: "<input/>",
+            tagName: "input",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn, // 按确定键能否退出编辑
             allowBlank: false

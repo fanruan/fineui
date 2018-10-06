@@ -8,8 +8,10 @@ BI.Iframe = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Iframe.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
+            tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -17,7 +19,8 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var o = this.options;
-        this.options.element = BI.Widget._renderEngine.createElement("<iframe frameborder='0' src='" + o.src + "'>");
+        o.attributes.frameborder = "0";
+        o.attributes.src = o.src;
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
