@@ -72,6 +72,11 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
+    },
+
+    mounted: function () {
+        var o = this.options;
+
         if (BI.isKey(o.text)) {
             this.setText(o.text);
         } else if (BI.isKey(o.value)) {
