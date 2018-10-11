@@ -23,8 +23,7 @@ BI.Text = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Text.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (o.hgap + o.lgap > 0) {
             this.element.css({
