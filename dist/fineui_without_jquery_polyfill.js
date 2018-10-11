@@ -36963,7 +36963,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            // self.trigger.stopEditing();
+                            self.trigger.stopEditing();
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
