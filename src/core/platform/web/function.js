@@ -72,7 +72,7 @@ _.extend(BI, {
         if(!_global.navigator) {
             return false;
         }
-        return /safari/i.test(navigator.userAgent.toLowerCase());
+        return /opera/i.test(navigator.userAgent.toLowerCase()) && !/chrome/i.test(navigator.userAgent.toLowerCase());
     },
 
     isKhtml: function () {
