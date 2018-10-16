@@ -387,12 +387,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (type === 'function') return true;
 
         if (Array.isArray(a) && Array.isArray(b) && (a.__ref__ || b.__ref__)) {
-            // if (a.length !== b.length) return false;
+            if (a.length !== b.length) return false;
             // for (let i = 0; i < a.length; i++) {
             //     if (a[i] !== b[i]) {
             //         return false;
             //     }
             // }
+
             return a.__ref__ === b.__ref__;
         }
 
