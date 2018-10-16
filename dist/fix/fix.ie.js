@@ -7,6 +7,45 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     _$1 = 'default' in _$1 ? _$1['default'] : _$1;
 
+    var falsy = void 0;
+    var $$skipArray = {
+        $accessors: falsy,
+        $vbthis: falsy,
+        $vbsetter: falsy,
+        $vm: falsy
+    };
+
+    var originalMethods = [];
+    _$1.each(['slice', 'splice'], function (method) {
+        originalMethods[method] = Array.prototype[method];
+    });
+
+    // Array.prototype.slice = function (...args) {
+    //     let array = originalMethods["slice"].apply(this, args);
+    //     // let result = [];
+    //     // for (let i = 0; i < array.length; i++) {
+    //     //     if (Object.prototype.toString.call(array[i]) === "[object Array]") result[i] = [...array[i]];
+    //     //     if (Object.prototype.toString.call(array[i]) === "[object Object]") result[i] = _.extend({}, array[i]);
+    //     //     result[i] = array[i];
+    //     // }
+    //     this.__ref__ = makeHashCode();
+    //     return array;
+    // }
+
+    Array.prototype.splice = function () {
+        // for (let i = 0; i < this.length; i++) {
+        //     if (Object.prototype.toString.call(this[i]) === "[object Array]") this[i] = [...this[i]];
+        //     if (Object.prototype.toString.call(this[i]) === "[object Object]") this[i] = _.extend({}, this[i]);
+        // }
+        this.__ref__ = makeHashCode();
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return originalMethods["splice"].apply(this, args);
+    };
+
     function noop(a, b, c) {}
 
     function isNative(Ctor) {
@@ -79,14 +118,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         };
     }
 
+    function toJSON(model) {
+        var result = void 0;
+        if (_$1.isArray(model)) {
+            result = [];
+            for (var i = 0, len = model.length; i < len; i++) {
+                result[i] = toJSON(model[i]);
+            }
+        } else if (model && isPlainObject(model)) {
+            result = {};
+            for (var key in model) {
+                if (!_$1.has($$skipArray, key)) {
+                    result[key] = toJSON(model[key]);
+                }
+            }
+        } else {
+            result = model;
+        }
+        return result;
+    }
+
     function cloneShadow(obj) {
         if (obj === null) return null;
 
         if (Array.isArray(obj)) {
-            return [].concat(obj);
+            var result = [].concat(obj);
+            if (obj.__ref__ !== undefined) result.__ref__ = obj.__ref__;
+            return result;
         }
 
-        return lodash.cloneDeep(obj);
+        return toJSON(obj);
 
         // const type = typeof obj;
         //
@@ -174,19 +235,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         };
     }();
 
-    var falsy = void 0;
-    var $$skipArray = {
-        $accessors: falsy,
-        $vbthis: falsy,
-        $vbsetter: falsy,
-        $vm: falsy
-    };
-
     function inherit(sb, sp, overrides) {
         if (typeof sp === "object") {
             overrides = sp;
             sp = sb;
-            sb = function sb() {
+            sb = function temp() {
                 return sp.apply(this, arguments);
             };
         }
@@ -199,6 +252,155 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             superclass: sp
         });
         return sb;
+    }
+
+    var SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
+    var ObjProto = Object.prototype;
+    var toString = ObjProto.toString;
+
+    // Internal recursive comparison function for `isEqual`.
+    /* eslint no-param-reassign: ['off'] */
+    /* eslint no-use-before-define: ["off"] */
+    var deepEq = function deepEq(a, b, aStack, bStack) {
+        // Unwrap any wrapped objects.
+        if (a instanceof _$1) a = a._wrapped;
+        if (b instanceof _$1) b = b._wrapped;
+        // Compare `[[Class]]` names.
+        var className = toString.call(a);
+        if (className !== toString.call(b)) return false;
+        switch (className) {
+            // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+            case '[object RegExp]':
+            case '[object String]':
+                // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
+                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+                // equivalent to `new String("5")`.
+                return '' + a === '' + b;
+            case '[object Number]':
+                // `NaN`s are equivalent, but non-reflexive.
+                // Object(NaN) is equivalent to NaN.
+                if (+a !== +a) return +b !== +b;
+                // An `egal` comparison is performed for other numeric values.
+
+                return +a === 0 ? 1 / +a === 1 / b : +a === +b;
+            case '[object Date]':
+            case '[object Boolean]':
+                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+                // millisecond representations. Note that invalid dates with millisecond representations
+                // of `NaN` are not equivalent.
+                return +a === +b;
+            case '[object Symbol]':
+                return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
+            default:
+        }
+
+        var areArrays = className === '[object Array]';
+
+        if (!areArrays) {
+            if (typeof a != 'object' || typeof b != 'object') return false;
+
+            // Objects with different constructors are not equivalent, but `Object`s or `Array`s
+            // from different frames are.
+            var aCtor = a.constructor,
+                bCtor = b.constructor;
+            if (aCtor !== bCtor && !(_$1.isFunction(aCtor) && aCtor instanceof aCtor && _$1.isFunction(bCtor) && bCtor instanceof bCtor) && 'constructor' in a && 'constructor' in b) {
+                return false;
+            }
+        }
+        // Assume equality for cyclic structures. The algorithm for detecting cyclic
+        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+
+        // Initializing stack of traversed objects.
+        // It's done here since we only need them for objects and arrays comparison.
+        aStack = aStack || [];
+        bStack = bStack || [];
+        var length = aStack.length;
+        while (length--) {
+            // Linear search. Performance is inversely proportional to the number of
+            // unique nested structures.
+            if (aStack[length] === a) return bStack[length] === b;
+        }
+
+        // Add the first object to the stack of traversed objects.
+        aStack.push(a);
+        bStack.push(b);
+
+        // Recursively compare objects and arrays.
+        if (areArrays) {
+            // Compare array lengths to determine if a deep comparison is necessary.
+            length = a.length;
+            if (length !== b.length) return false;
+            // Deep compare the contents, ignoring non-numeric properties.
+            while (length--) {
+                if (!eq(a[length], b[length], aStack, bStack)) return false;
+            }
+        } else {
+            // Deep compare objects.
+            var keys = _$1.keys(a);var key = void 0;
+            length = keys.length;
+            // Ensure that both objects contain the same number of properties before comparing deep equality.
+            if (_$1.keys(b).length !== length) return false;
+            while (length--) {
+                // Deep compare each member
+                key = keys[length];
+                if (!(_$1.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+            }
+        }
+        // Remove the first object from the stack of traversed objects.
+        aStack.pop();
+        bStack.pop();
+
+        return true;
+    };
+
+    var eq = function eq(a, b, aStack, bStack) {
+        // Identical objects are equal. `0 === -0`, but they aren't identical.
+        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+        if (a === b) return a !== 0 || 1 / a === 1 / b;
+        // `null` or `undefined` only equal to itself (strict comparison).
+        if (a == null || b == null) return false;
+        // `NaN`s are equivalent, but non-reflexive.
+        if (a !== a) return b !== b;
+        // Exhaust primitive checks
+        var type = typeof a;
+        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+
+        // skip function
+        if (type === 'function') return true;
+
+        return deepEq(a, b, aStack, bStack);
+    };
+
+    var shadowEq = function shadowEq(a, b, aStack, bStack) {
+        // Identical objects are equal. `0 === -0`, but they aren't identical.
+        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+        if (a === b) return a !== 0 || 1 / a === 1 / b;
+        // `null` or `undefined` only equal to itself (strict comparison).
+        if (a == null || b == null) return false;
+        // `NaN`s are equivalent, but non-reflexive.
+        if (a !== a) return b !== b;
+        // Exhaust primitive checks
+        var type = typeof a;
+        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+
+        // skip function
+        if (type === 'function') return true;
+
+        if (Array.isArray(a) && Array.isArray(b) && (a.__ref__ || b.__ref__)) {
+            // if (a.length !== b.length) return false;
+            // for (let i = 0; i < a.length; i++) {
+            //     if (a[i] !== b[i]) {
+            //         return false;
+            //     }
+            // }
+            return a.__ref__ === b.__ref__;
+        }
+
+        return deepEq(a, b, aStack, bStack);
+    };
+
+    function isShadowEqual(a, b) {
+        return shadowEq(a, b);
     }
 
     var mixinInjection = {};
@@ -363,129 +565,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return watchers;
     }
 
-    var SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
-    var ObjProto = Object.prototype;
-    var toString = ObjProto.toString;
-
-    // Internal recursive comparison function for `isEqual`.
-    /* eslint no-param-reassign: ['off'] */
-    /* eslint no-use-before-define: ["off"] */
-    var deepEq = function deepEq(a, b, aStack, bStack) {
-        // Unwrap any wrapped objects.
-        if (a instanceof _$1) a = a._wrapped;
-        if (b instanceof _$1) b = b._wrapped;
-        // Compare `[[Class]]` names.
-        var className = toString.call(a);
-        if (className !== toString.call(b)) return false;
-        switch (className) {
-            // Strings, numbers, regular expressions, dates, and booleans are compared by value.
-            case '[object RegExp]':
-            case '[object String]':
-                // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
-                // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
-                // equivalent to `new String("5")`.
-                return '' + a === '' + b;
-            case '[object Number]':
-                // `NaN`s are equivalent, but non-reflexive.
-                // Object(NaN) is equivalent to NaN.
-                if (+a !== +a) return +b !== +b;
-                // An `egal` comparison is performed for other numeric values.
-
-                return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-            case '[object Date]':
-            case '[object Boolean]':
-                // Coerce dates and booleans to numeric primitive values. Dates are compared by their
-                // millisecond representations. Note that invalid dates with millisecond representations
-                // of `NaN` are not equivalent.
-                return +a === +b;
-            case '[object Symbol]':
-                return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
-            default:
-        }
-
-        var areArrays = className === '[object Array]';
-
-        if (!areArrays) {
-            if (typeof a != 'object' || typeof b != 'object') return false;
-
-            // Objects with different constructors are not equivalent, but `Object`s or `Array`s
-            // from different frames are.
-            var aCtor = a.constructor,
-                bCtor = b.constructor;
-            if (aCtor !== bCtor && !(_$1.isFunction(aCtor) && aCtor instanceof aCtor && _$1.isFunction(bCtor) && bCtor instanceof bCtor) && 'constructor' in a && 'constructor' in b) {
-                return false;
-            }
-        }
-        // Assume equality for cyclic structures. The algorithm for detecting cyclic
-        // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
-
-        // Initializing stack of traversed objects.
-        // It's done here since we only need them for objects and arrays comparison.
-        aStack = aStack || [];
-        bStack = bStack || [];
-        var length = aStack.length;
-        while (length--) {
-            // Linear search. Performance is inversely proportional to the number of
-            // unique nested structures.
-            if (aStack[length] === a) return bStack[length] === b;
-        }
-
-        // Add the first object to the stack of traversed objects.
-        aStack.push(a);
-        bStack.push(b);
-
-        // Recursively compare objects and arrays.
-        if (areArrays) {
-            // Compare array lengths to determine if a deep comparison is necessary.
-            length = a.length;
-            if (length !== b.length) return false;
-            // Deep compare the contents, ignoring non-numeric properties.
-            while (length--) {
-                if (!eq(a[length], b[length], aStack, bStack)) return false;
-            }
-        } else {
-            // Deep compare objects.
-            var keys = _$1.keys(a);var key = void 0;
-            length = keys.length;
-            // Ensure that both objects contain the same number of properties before comparing deep equality.
-            if (_$1.keys(b).length !== length) return false;
-            while (length--) {
-                // Deep compare each member
-                key = keys[length];
-                if (!(_$1.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
-            }
-        }
-        // Remove the first object from the stack of traversed objects.
-        aStack.pop();
-        bStack.pop();
-
-        return true;
-    };
-
-    var eq = function eq(a, b, aStack, bStack) {
-        // Identical objects are equal. `0 === -0`, but they aren't identical.
-        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-        if (a === b) return a !== 0 || 1 / a === 1 / b;
-        // `null` or `undefined` only equal to itself (strict comparison).
-        if (a == null || b == null) return false;
-        // `NaN`s are equivalent, but non-reflexive.
-        if (a !== a) return b !== b;
-        // Exhaust primitive checks
-        var type = typeof a;
-        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
-
-        // skip function
-        if (type === 'function') return true;
-
-        return deepEq(a, b, aStack, bStack);
-    };
-
-    function isEqual(a, b) {
-        return eq(a, b);
-    }
-
     var allModelInstances = {};
+    var allDefineModelInstances = {};
     var emptyFn = function emptyFn() {};
+    var TTL = 10;
 
     var Watcher = function () {
         function Watcher(_ref) {
@@ -493,16 +576,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 last = _ref.last,
                 listener = _ref.listener,
                 sync = _ref.sync,
-                deep = _ref.deep;
+                deep = _ref.deep,
+                id = _ref.id;
 
             _classCallCheck(this, Watcher);
 
+            this.id = id;
             this.get = get;
             this.last = cloneShadow(last);
             this.listener = listener || emptyFn;
             this.sync = sync || false;
 
             return {
+                id: this.id,
                 get: this.get,
                 last: this.last,
                 listener: this.listener
@@ -526,20 +612,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
         // state暂不支持func和context
 
-        var _loop2 = function _loop2(_key) {
-            var userDef = state[_key];
+        var _loop2 = function _loop2(_key2) {
+            var userDef = state[_key2];
 
-            watchers[_key] = new Watcher({
+            watchers[_key2] = new Watcher({
+                id: vm._modelHashId + '-' + _key2,
                 get: function get() {
-                    return vm.model[_key];
+                    return vm.model[_key2];
                 },
                 last: userDef,
                 listener: vm.options.defaultCallback || emptyFn
             });
         };
 
-        for (var _key in state) {
-            _loop2(_key);
+        for (var _key2 in state) {
+            _loop2(_key2);
         }
     }
 
@@ -554,6 +641,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             order.push(key);
 
             watchers[key] = new Watcher({
+                id: vm._modelHashId + '-' + key,
                 get: _$1.bind(userDef, context),
                 last: undefined,
                 listener: emptyFn
@@ -595,7 +683,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             listener: _$1.bind(cb, vm),
             last: getter(),
             sync: options.sync,
-            deep: options.deep
+            deep: options.deep,
+            id: options.id
         });
     }
 
@@ -640,10 +729,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             while (p) {
                 if (p.childContext && p.childContext.indexOf(key) > -1) {
                     p.$watch(key, function (cur, last, p) {
-                        if (!vm.alive) return;
+                        if (!vm._contextWatchers[key]) return;
                         vm.model[key] = cur;
                         vm._contextWatchers[key].last = cloneShadow(cur); // 避免重复调用（可以改成给watch添加一个参数保证下次比较一定相同）
                         vm.$digest();
+                    }, {
+                        id: vm._modelHashId + '-' + key
                     });
 
                     return {
@@ -660,6 +751,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (!context) return;
             vm.model[key] = context.p ? context.p.model[key] : undefined;
             watchers[key] = new Watcher({
+                id: context.p._modelHashId + '-' + key,
                 get: function get() {
                     return vm.model[key];
                 },
@@ -673,7 +765,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function addToListenerQueue(vm, watcher, cur, last) {
-        var listener = _$1.bind(watcher.listener, vm, cur, last, vm);
+        var listener = {
+            id: watcher.id,
+            cb: _$1.bind(watcher.listener, vm, cur, last, vm)
+        };
         watcher.sync === true ? vm.syncListeners.push(listener) : vm.asyncListeners.push(listener);
     }
 
@@ -682,7 +777,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.each(vm._stateWatchers, function (watcher, key) {
             var cur = watcher.get();
             var last = watcher.last;
-            if (!isEqual(cur, last)) {
+            if (!isShadowEqual(cur, last)) {
                 addToListenerQueue(vm, watcher, cur, last);
                 vm.model[key] = cur;
                 dirty = true;
@@ -704,7 +799,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             try {
                 var cur = watcher.get();
                 var last = watcher.last;
-                if (!isEqual(cur, last)) {
+                if (!isShadowEqual(cur, last)) {
                     addToListenerQueue(vm, watcher, cur, last);
                     vm.model[key] = cur;
                     dirty = true;
@@ -729,8 +824,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.each(vm._contextWatchers, function (watcher, key) {
             var cur = watcher.get();
             var last = watcher.last;
-            if (!isEqual(cur, last)) {
-                var listener = _$1.bind(watcher.listener, vm, cur, last, vm);
+            if (!isShadowEqual(cur, last)) {
+                var listener = {
+                    id: watcher.id,
+                    cb: _$1.bind(watcher.listener, vm, cur, last, vm)
+                };
                 vm.contextListeners.push(listener);
                 vm.model[key] = cur;
                 dirty = true;
@@ -742,12 +840,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     function digest(vm) {
-        var ttl = 10,
-            dirty = true;
-        do {
-            dirty = digestState(vm) || digestContext(vm) || digestComputed(vm);
-        } while (dirty && ttl-- >= 0);
+        var stateDirty = true,
+            contextDirty = true,
+            computedDirty = true;
+        for (var ttl = TTL; stateDirty && ttl > 0; ttl--) {
+            stateDirty = digestState(vm);
+        }
+        for (var _ttl = TTL; contextDirty && _ttl > 0; _ttl--) {
+            contextDirty = digestContext(vm);
+        }
+        for (var _ttl2 = TTL; computedDirty && _ttl2 > 0; _ttl2--) {
+            computedDirty = digestComputed(vm);
+        }
     }
+
+    var nextListener = function () {
+        var callbackMap = {};
+
+        return function queueNextListener(listener, ctx) {
+            var id = listener.id;
+            var cb = listener.cb;
+            if (id && callbackMap[id]) {
+                return;
+            }
+            nextTick(function () {
+                cb();
+                callbackMap[id] = false;
+            }, ctx);
+            callbackMap[id] = true;
+        };
+    }();
 
     function executeWatchListeners(vm) {
         var syncListeners = [].concat(vm.syncListeners || []);
@@ -764,9 +886,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             var cur = watcher.get();
             var last = watcher.last;
 
-            if (_$1.isEqual(cur, last)) return;
+            if (isShadowEqual(cur, last)) return;
 
-            var listner = _$1.bind(watcher.listener, vm, cur, last, vm);
+            var listner = {
+                id: watcher.id,
+                cb: _$1.bind(watcher.listener, vm, cur, last, vm)
+            };
 
             watcher.sync === true ? syncListeners.push(listner) : asyncListeners.push(listner);
 
@@ -774,18 +899,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
 
         _$1.each(syncListeners, function (listener) {
-            listener();
+            listener.cb();
         });
 
         nextTick(function () {
             _$1.each(contextListeners, function (listener) {
-                listener();
+                listener.cb();
             });
-
             _$1.each(asyncListeners, function (listener) {
-                if (!vm.alive) return;
-                listener();
+                listener.cb();
             });
+        });
+    }
+
+    function refreshAllDefineModel() {
+        _$1.each(allDefineModelInstances, function (insta) {
+            insta && insta.$digest && insta.$digest();
         });
     }
 
@@ -828,11 +957,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         Model.prototype._init = function _init() {};
 
-        Model.prototype.$watch = function $watch(expOrFn, cb, options) {
-            var watcher = createWatcher(this, expOrFn, cb, options);
-            this._watchers.push(watcher);
-        };
-
         Model.prototype.destroy = function destroy() {
             this.alive = false;
             allModelInstances[this._modelHashId] = null;
@@ -843,10 +967,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.destroyed && this.destroyed();
         };
 
+        Model.prototype.$watch = function $watch(expOrFn, cb, options) {
+            var watcher = createWatcher(this, expOrFn, cb, options);
+            this._watchers.push(watcher);
+        };
+
         Model.prototype.$digest = function $digest() {
             digest(this);
 
             executeWatchListeners(this);
+
+            // 非define创建的model$digest触发所有define定义的model的$digest(未来需要平台去除这些写法))
+            if (!this.options.define) {
+                refreshAllDefineModel();
+            }
+        };
+
+        Model.prototype.getModelID = function getModelID() {
+            return this._modelHashId;
         };
 
         return Model;
@@ -862,24 +1000,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
     }
 
-    function toJSON(model) {
-        var result = void 0;
-        if (_.isArray(model)) {
-            result = [];
-            for (var i = 0, len = model.length; i < len; i++) {
-                result[i] = toJSON(model[i]);
+    function define(model) {
+        var OB = inherit(Model, {
+            state: function state() {
+                return model;
             }
-        } else if (model && isPlainObject(model)) {
-            result = {};
-            for (var key in model) {
-                if (!_.has($$skipArray, key)) {
-                    result[key] = toJSON(model[key]);
-                }
-            }
-        } else {
-            result = model;
-        }
-        return result;
+        });
+        var ob = new OB({
+            define: true
+        });
+        allDefineModelInstances[ob.getModelID()] = ob;
+
+        return ob.model;
     }
 
     var version = '2.0';
@@ -887,12 +1019,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.version = version;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
+    exports.toJSON = toJSON;
+    exports.nextListener = nextListener;
     exports.Model = Model;
     exports.getAllModelInstances = getAllModelInstances;
     exports.refreshAll = refreshAll;
+    exports.define = define;
     exports.inherit = inherit;
     exports.watch = watch;
-    exports.toJSON = toJSON;
 
     exports.__esModule = true;
 });

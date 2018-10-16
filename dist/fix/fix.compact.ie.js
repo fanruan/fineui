@@ -216,14 +216,22 @@
             navigate.apply(this, arguments);
             BI.defer(function () {
                 additionFunc();
-            }, 110);
+            }, 200);
         }
         var back = window.history.back;
         window.history.back = function () {
             back.apply(this, arguments);
             BI.defer(function () {
                 additionFunc();
-            }, 110);
+            }, 200);
+        }
+    }
+
+    if (BI.Router) {
+        var execute = BI.Router.prototype.execute;
+        BI.Router.prototype.execute = function () {
+            execute.apply(this, arguments);
+            additionFunc();
         }
     }
 
@@ -293,16 +301,6 @@
         return Fix.toJSON(ob);
     };
 
-    Fix.define = function (model) {
-        var OB = BI.inherit(Fix.Model, {
-            state: function () {
-                return model
-            }
-        });
-        return new OB({
-            defaultCallback: additionFunc
-        }).model;
-    }
     Fix.set = function (obj, k, v) {
         try {
             if(obj) {
@@ -316,9 +314,7 @@
     }
     Fix.del = function (obj, k) {
         try {
-            if(obj) {
-                obj[k] = undefined;
-            }
+            delete obj[k];
         } catch (e) {
 
         } finally {
