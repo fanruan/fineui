@@ -5708,6 +5708,9 @@ BI.Popover = BI.inherit(BI.Widget, {
             // width: 600,
             // height: 500,
             size: "normal", // small, normal, big
+            logic: {
+                dynamic: false
+            },
             header: null,
             body: null,
             footer: null
@@ -5723,68 +5726,77 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.startX += deltaX;
             self.startY += deltaY;
             self.element.css({
-                left: BI.clamp(self.startX, 0, W - size.width) + "px",
-                top: BI.clamp(self.startY, 0, H - size.height) + "px"
+                left: BI.clamp(self.startX, 0, W - self.element.width()) + "px",
+                top: BI.clamp(self.startY, 0, H - self.element.height()) + "px"
             });
             // BI-12134 没有什么特别好的方法
             BI.Resizers._resize();
         }, function () {
             self.tracker.releaseMouseMoves();
         }, _global);
-        var items = {
-            north: {
-                el: {
-                    type: "bi.htape",
-                    cls: "bi-message-title bi-header-background",
-                    ref: function (_ref) {
-                        self.dragger = _ref;
-                    },
-                    items: [{
-                        type: "bi.absolute",
-                        items: [{
-                            el: BI.isPlainObject(o.header) ? BI.createWidget(o.header, {
-                                extraCls: "bi-font-bold"
-                            }) : {
-                                type: "bi.label",
-                                cls: "bi-font-bold",
-                                height: this._constant.HEADER_HEIGHT,
-                                text: o.header,
-                                textAlign: "left"
-                            },
-                            left: 20,
-                            top: 0,
-                            right: 0,
-                            bottom: 0
-                        }]
-                    }, {
-                        el: {
-                            type: "bi.icon_button",
-                            cls: "bi-message-close close-font",
-                            height: this._constant.HEADER_HEIGHT,
-                            handler: function () {
-                                self.close();
-                            }
-                        },
-                        width: 56
-                    }]
+        var items = [{
+            el: {
+                type: "bi.htape",
+                cls: "bi-message-title bi-header-background",
+                ref: function (_ref) {
+                    self.dragger = _ref;
                 },
-                height: this._constant.HEADER_HEIGHT
-            },
-            center: {
-                el: {
+                items: [{
                     type: "bi.absolute",
                     items: [{
-                        el: BI.createWidget(o.body),
+                        el: BI.isPlainObject(o.header) ? BI.createWidget(o.header, {
+                            extraCls: "bi-font-bold"
+                        }) : {
+                            type: "bi.label",
+                            cls: "bi-font-bold",
+                            height: this._constant.HEADER_HEIGHT,
+                            text: o.header,
+                            textAlign: "left"
+                        },
                         left: 20,
-                        top: 10,
-                        right: 20,
+                        top: 0,
+                        right: 0,
                         bottom: 0
                     }]
-                }
+                }, {
+                    el: {
+                        type: "bi.icon_button",
+                        cls: "bi-message-close close-font",
+                        height: this._constant.HEADER_HEIGHT,
+                        handler: function () {
+                            self.close();
+                        }
+                    },
+                    width: 56
+                }],
+                height: this._constant.HEADER_HEIGHT
+            },
+            height: this._constant.HEADER_HEIGHT
+        }, {
+            el: o.logic.dynamic ? {
+                type: "bi.vertical",
+                cls: "popover-body",
+                ref: function () {
+                    self.body = this;
+                },
+                hgap: 20,
+                tgap: 10,
+                items: [{
+                    el: BI.createWidget(o.body)
+                }]
+            } : {
+                type: "bi.absolute",
+                items: [{
+                    el: BI.createWidget(o.body),
+                    left: 20,
+                    top: 10,
+                    right: 20,
+                    bottom: 0
+                }]
             }
-        };
+        }];
         if (o.footer) {
-            items.south = {
+            items.push({
                 el: {
                     type: "bi.absolute",
                     items: [{
@@ -5793,30 +5805,41 @@ BI.Popover = BI.inherit(BI.Widget, {
                         top: 0,
                         right: 20,
                         bottom: 0
-                    }]
+                    }],
+                    height: 44
                 },
                 height: 44
-            };
+            });
         }
 
         var size = this._calculateSize();
 
-        return {
-            type: "bi.border",
+        return BI.extend({
+            type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
-            width: size.width,
+            width: size.width
+        }, o.logic.dynamic ? {
+            type: "bi.vertical",
+            scrolly: false
+        } : {
+            type: "bi.vtape",
             height: size.height
-        };
+        });
     },
 
     mounted: function () {
-        var self = this;
+        var self = this, o = this.options;
         this.dragger.element.mousedown(function (e) {
             var pos = self.element.offset();
             self.startX = pos.left;
             self.startY = pos.top;
             self.tracker.captureMouseMoves(e);
         });
+        if (o.logic.dynamic) {
+            var height = this.element.height();
+            var compareHeight = BI.clamp(height, 200, 600) - (o.footer ? 84 : 44);
+            this.body.element.height(compareHeight);
+        }
     },
 
     _calculateSize: function () {
