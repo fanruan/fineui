@@ -40732,19 +40732,19 @@ BI.Msg = function () {
                         text: BI.i18nText("BI-Basic_Cancel"),
                         level: "ignore",
                         handler: function () {
+                            BI.Popovers.remove(name);
                             if (BI.isFunction(callback)) {
                                 callback.apply(null, [false]);
                             }
-                            BI.Popovers.remove(name);
                         }
                     }, {
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_Sure"),
                         handler: function () {
+                            BI.Popovers.remove(name);
                             if (BI.isFunction(callback)) {
                                 callback.apply(null, [true]);
                             }
-                            BI.Popovers.remove(name);
                         }
                     }]
                 } : {
@@ -40755,10 +40755,10 @@ BI.Msg = function () {
                         text: BI.i18nText("BI-Basic_Cancel"),
                         level: "ignore",
                         handler: function () {
+                            BI.Popovers.remove(name);
                             if (BI.isFunction(callback)) {
                                 callback.apply(null, [false]);
                             }
-                            BI.Popovers.remove(name);
                         }
                     }]
                 },
