@@ -1,6 +1,6 @@
 (function () {
     var kv = {};
-    BI.shortcut = function (xtype, cls) {
+    BI.shortcut = BI.component = function (xtype, cls) {
         if (kv[xtype] != null) {
             _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
