@@ -20285,6 +20285,7 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
+
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
@@ -29280,10 +29281,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         if (o.logic.dynamic) {
             var height = this.element.height();
             var compareHeight = BI.clamp(height, 200, 600) - (o.footer ? 84 : 44);
-            this.body.element.css({
-                "min-height": compareHeight,
-                "max-height": compareHeight
-            });
+            this.body.element.height(compareHeight);
         }
     },
 

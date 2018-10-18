@@ -31274,6 +31274,7 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     _addElement: function (i, item) {
+
         var o = this.options;
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];

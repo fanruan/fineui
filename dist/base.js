@@ -5838,10 +5838,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         if (o.logic.dynamic) {
             var height = this.element.height();
             var compareHeight = BI.clamp(height, 200, 600) - (o.footer ? 84 : 44);
-            this.body.element.css({
-                "min-height": compareHeight,
-                "max-height": compareHeight
-            });
+            this.body.element.height(compareHeight);
         }
     },
 
