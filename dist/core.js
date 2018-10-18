@@ -18382,6 +18382,14 @@ _.extend(BI, {
         return location;
     }
 });(function () {
+    var moduleInjection = {};
+    BI.module = function (xtype, cls) {
+        if (moduleInjection[xtype] != null) {
+            _global.console && console.error("module:[" + xtype + "] has been registed");
+        }
+        moduleInjection[xtype] = cls;
+    };
+
     var constantInjection = {};
     BI.constant = function (xtype, cls) {
         if (constantInjection[xtype] != null) {
@@ -18472,6 +18480,16 @@ _.extend(BI, {
             points[type][action][after ? "after" : "before"] = [];
         }
         points[type][action][after ? "after" : "before"].push(pointFn);
+    };
+
+    BI.Modules = {
+        getModule: function (type) {
+            if(!moduleInjection[type]){
+                _global.console && console.error("module:[" + type + "] does not exists");
+                return false;
+            }
+            return moduleInjection[type];
+        }
     };
 
     BI.Constants = {
