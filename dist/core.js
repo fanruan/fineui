@@ -31283,15 +31283,13 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             td = BI.createWidget({
                 type: "bi.default",
-                attributes: {
-                    width: width
-                },
+                width: width,
                 items: [w]
             });
             this.addWidget(this._getChildName(i), td);
         } else {
             td = this.getWidgetByName(this._getChildName(i));
-            td.element.attr("width", width);
+            td.element.width(width);
         }
         td.element.css({"max-width": o.columnSize[i]});
         if (i === 0) {
