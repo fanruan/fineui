@@ -52592,7 +52592,10 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), ghost: true}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            buttons: [{
+                value: BI.i18nText("BI-Basic_Cancel"),
+                ghost: true
+            }, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
     _init: function () {
@@ -52603,9 +52606,9 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
 
         var items = [];
         BI.each(o.buttons, function (i, buttonOpt) {
-            if(BI.isWidget(buttonOpt)) {
+            if (BI.isWidget(buttonOpt)) {
                 items.push(buttonOpt);
-            }else{
+            } else {
                 items.push(BI.extend({
                     type: "bi.button",
                     height: 30,
@@ -52638,11 +52641,33 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-text-bubble-bar-popup-view",
         text: "",
-        width: 250
+        width: 250,
+        buttons: [{
+            value: BI.i18nText("BI-Basic_Cancel"),
+            level: "ignore"
+        }, {
+            value: BI.i18nText("BI-Basic_Sure")
+        }]
     },
 
-    render: function(){
+    render: function () {
         var self = this, o = this.options;
+        var buttons = BI.map(o.buttons, function (index, buttonOpt) {
+            if (BI.isWidget(buttonOpt)) {
+                return buttonOpt;
+            }
+            if (buttonOpt.value) {
+                buttonOpt.value = BI.i18nText(buttonOpt.value);
+            }
+            return BI.extend({
+                type: "bi.button",
+                height: 24,
+                handler: function () {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, buttonOpt.level !== "ignore");
+                }
+            }, buttonOpt);
+
+        });
         return {
             type: "bi.bubble_bar_popup_view",
             ref: function () {
@@ -52663,22 +52688,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 tgap: 25,
                 bgap: 10
             },
-            buttons: [{
-                type: "bi.button",
-                value: BI.i18nText("BI-Basic_Cancel"),
-                level: "ignore",
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
-                }
-            }, {
-                type: "bi.button",
-                value: BI.i18nText("BI-Basic_Sure"),
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
-                }
-            }]
+            buttons: buttons
         };
     },
 
