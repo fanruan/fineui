@@ -20273,7 +20273,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
- * 自适应水平和垂直方向都居中容器
+ * 使用display:table和display:table-cell实现的horizontal布局
  * @class BI.TableCenterAdaptLayout
  * @extends BI.Layout
  */
@@ -20282,6 +20282,8 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.TableCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-center-adapt-layout",
             columnSize: [],
+            verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20291,12 +20293,13 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options;
         BI.TableCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
-            width: "100%",
-            height: "100%",
+            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
+            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
             "white-space": "nowrap"
         });
         this.populate(this.options.items);
@@ -20320,7 +20323,7 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.width(width);
         }
-        td.element.css({"max-width": o.columnSize[i]});
+        td.element.css({"max-width": o.columnSize[i] + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -21759,8 +21762,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
-            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21770,10 +21773,13 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options;
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
+            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
+            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -21803,7 +21809,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
-
+        td.element.css({"max-width": o.columnSize[i] + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
