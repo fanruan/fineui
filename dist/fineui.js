@@ -31505,12 +31505,12 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
  * 使用display:table和display:table-cell实现的horizontal布局
- * @class BI.TableCenterAdaptLayout
+ * @class BI.TableAdaptLayout
  * @extends BI.Layout
  */
-BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
+BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.TableCenterAdaptLayout.superclass.props.apply(this, arguments), {
+        return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-table-center-adapt-layout",
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
@@ -31525,7 +31525,7 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         var o = this.options;
-        BI.TableCenterAdaptLayout.superclass.render.apply(this, arguments);
+        BI.TableAdaptLayout.superclass.render.apply(this, arguments);
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
@@ -31599,11 +31599,11 @@ BI.TableCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.TableCenterAdaptLayout.superclass.populate.apply(this, arguments);
+        BI.TableAdaptLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-BI.shortcut("bi.table_center_adapt", BI.TableCenterAdaptLayout);/**
+BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -32995,6 +32995,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
+            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,

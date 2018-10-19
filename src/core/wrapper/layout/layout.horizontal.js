@@ -10,6 +10,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
+            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
