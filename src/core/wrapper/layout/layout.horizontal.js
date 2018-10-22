@@ -8,6 +8,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -19,10 +20,13 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options;
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
+            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
+            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -52,7 +56,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
-
+        td.element.css({"max-width": o.columnSize[i] + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
