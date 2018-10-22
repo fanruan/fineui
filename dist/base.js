@@ -5181,132 +5181,57 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
-                position: "absolute",
-                zIndex: BI.zIndex_tip - 2,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                opacity: 0.5
-            }).appendTo("body");
-            $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
-                position: "absolute",
-                zIndex: BI.zIndex_tip - 1,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }).appendTo("body");
-            var close = function () {
-                messageShow.destroy();
-                $mask.remove();
-            };
-            var controlItems = [];
-            if (hasCancel === true) {
-                controlItems.push({
-                    el: {
+            var name = BI.UUID();
+            BI.Popovers.create(name, {
+                type: "bi.bar_popover",
+                header: title,
+                body: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        type: "bi.label",
+                        text: message
+                    }]
+                },
+                footer: hasCancel ? {
+                    type: "bi.right_vertical_adapt",
+                    lgap: 10,
+                    items: [{
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_Cancel"),
                         level: "ignore",
                         handler: function () {
-                            close();
+                            BI.Popovers.remove(name);
                             if (BI.isFunction(callback)) {
                                 callback.apply(null, [false]);
                             }
                         }
-                    }
-                });
-            }
-            controlItems.push({
-                el: {
-                    type: "bi.button",
-                    text: BI.i18nText("BI-Basic_OK"),
-                    handler: function () {
-                        close();
-                        if (BI.isFunction(callback)) {
-                            callback.apply(null, [true]);
-                        }
-                    }
-                }
-            });
-            var conf = {
-                element: $pop,
-                type: "bi.center_adapt",
-                items: [
-                    {
-                        type: "bi.border",
-                        cls: "bi-message-content bi-card",
-                        items: {
-                            north: {
-                                el: {
-                                    type: "bi.border",
-                                    cls: "bi-message-title bi-background",
-                                    items: {
-                                        center: {
-                                            el: {
-                                                type: "bi.label",
-                                                text: title || BI.i18nText("BI-Basic_Prompt"),
-                                                textAlign: "left",
-                                                hgap: 20,
-                                                height: 50
-                                            }
-                                        },
-                                        east: {
-                                            el: {
-                                                type: "bi.icon_button",
-                                                cls: "bi-message-close close-font",
-                                                //                                                    height: 50,
-                                                handler: function () {
-                                                    close();
-                                                    if (BI.isFunction(callback)) {
-                                                        callback.apply(null, [false]);
-                                                    }
-                                                }
-                                            },
-                                            width: 60
-                                        }
-                                    }
-                                },
-                                height: 50
-                            },
-                            center: {
-                                el: {
-                                    type: "bi.text",
-                                    cls: "bi-message-text",
-                                    tgap: 60,
-                                    hgap: 20,
-                                    lineHeight: 30,
-                                    whiteSpace: "normal",
-                                    text: message
-                                }
-                            },
-                            south: {
-                                el: {
-                                    type: "bi.absolute",
-                                    items: [{
-                                        el: {
-                                            type: "bi.right_vertical_adapt",
-                                            hgap: 5,
-                                            items: controlItems
-                                        },
-                                        top: 0,
-                                        left: 20,
-                                        right: 20,
-                                        bottom: 0
-                                    }]
-
-                                },
-                                height: 60
+                    }, {
+                        type: "bi.button",
+                        text: BI.i18nText("BI-Basic_Sure"),
+                        handler: function () {
+                            BI.Popovers.remove(name);
+                            if (BI.isFunction(callback)) {
+                                callback.apply(null, [true]);
                             }
-                        },
-                        width: 400,
-                        height: 300
-                    }
-                ]
-            };
-
-            messageShow = BI.createWidget(conf);
+                        }
+                    }]
+                } : {
+                    type: "bi.right_vertical_adapt",
+                    lgap: 10,
+                    items: [{
+                        type: "bi.button",
+                        text: BI.i18nText("BI-Basic_Cancel"),
+                        level: "ignore",
+                        handler: function () {
+                            BI.Popovers.remove(name);
+                            if (BI.isFunction(callback)) {
+                                callback.apply(null, [false]);
+                            }
+                        }
+                    }]
+                },
+                size: "small"
+            }).open(name);
         }
     };
 }();/**

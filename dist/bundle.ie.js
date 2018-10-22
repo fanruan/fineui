@@ -30415,6 +30415,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-center-adapt-layout",
             columnSize: [],
+            scrollx: false,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -30424,92 +30425,33 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options, self = this;
         BI.CenterAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            "white-space": "nowrap",
-            "border-spacing": "0px",
-            border: "none",
-            "border-collapse": "separate"
-        });
-        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
-        this.$tr.appendTo(this.$table);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
-            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            td = BI.createWidget({
-                type: "bi.default",
-                tagName: "td",
-                attributes: {
-                    width: width
-                },
-                items: [w]
-            });
-            this.addWidget(this._getChildName(i), td);
-        } else {
-            td = this.getWidgetByName(this._getChildName(i));
-            td.element.attr("width", width);
-        }
-        td.element.css({"max-width": o.columnSize[i]});
-        if (i === 0) {
-            td.element.addClass("first-element");
-        }
-        td.element.css({
-            position: "relative",
-            height: "100%",
-            "vertical-align": "middle",
-            margin: "0",
-            padding: "0",
-            border: "none"
-        });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return td;
-    },
-
-    appendFragment: function (frag) {
-        this.$tr.append(frag);
-        this.element.append(this.$table);
+        return {
+            type: "bi.horizontal",
+            verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Center,
+            columnSize: o.columnSize,
+            scrollx: o.scrollx,
+            items: o.items,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     resize: function () {
         // console.log("center_adapt布局不需要resize");
     },
 
-    _getWrapper: function () {
-        return this.$tr;
-    },
-
     populate: function (items) {
-        BI.CenterAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);/**
@@ -30641,8 +30583,40 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options, self = this;
         BI.LeftRightVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        var layoutArray = [];
+        if ("left" in o.items) {
+            layoutArray.push({
+                type: "bi.left",
+                items: [{
+                    el: {
+                        type: "bi.vertical_adapt",
+                        height: "100%",
+                        items: o.items.left,
+                        hgap: o.lhgap,
+                        lgap: o.llgap,
+                        rgap: o.lrgap
+                    }
+                }]
+            });
+        }
+        if ("right" in o.items) {
+            layoutArray.push({
+                type: "bi.right",
+                items: [{
+                    el: {
+                        type: "bi.vertical_adapt",
+                        height: "100%",
+                        items: o.items.right,
+                        hgap: o.rhgap,
+                        lgap: o.rlgap,
+                        rgap: o.rrgap
+                    }
+                }]
+            });
+        }
+        return layoutArray;
     },
 
     resize: function () {
@@ -30652,40 +30626,6 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     addItem: function () {
         // do nothing
         throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
-        var o = this.options;
-        if ("left" in items) {
-            var left = BI.createWidget({
-                type: "bi.vertical_adapt",
-                items: items.left,
-                hgap: o.lhgap,
-                lgap: o.llgap,
-                rgap: o.lrgap
-            });
-            left.element.css("height", "100%");
-            BI.createWidget({
-                type: "bi.left",
-                element: this,
-                items: [left]
-            });
-        }
-        if ("right" in items) {
-            var right = BI.createWidget({
-                type: "bi.vertical_adapt",
-                items: items.right,
-                hgap: o.rhgap,
-                lgap: o.rlgap,
-                rgap: o.rrgap
-            });
-            right.element.css("height", "100%");
-            BI.createWidget({
-                type: "bi.right",
-                element: this,
-                items: [right]
-            });
-        }
     },
 
     populate: function (items) {
@@ -30707,8 +30647,22 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options, self = this;
         BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        return {
+            type: "bi.left",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: [{
+                type: "bi.vertical_adapt",
+                height: "100%",
+                items: o.items,
+                lgap: o.lgap,
+                hgap: o.hgap,
+                rgap: o.rgap
+            }]
+        };
     },
 
     resize: function () {
@@ -30720,26 +30674,8 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("cannot be added");
     },
 
-    stroke: function (items) {
-        var o = this.options;
-        var left = BI.createWidget({
-            type: "bi.vertical_adapt",
-            items: items,
-            lgap: o.lgap,
-            hgap: o.hgap,
-            rgap: o.rgap
-        });
-        left.element.css("height", "100%");
-        BI.createWidget({
-            type: "bi.left",
-            element: this,
-            items: [left]
-        });
-    },
-
     populate: function (items) {
-        BI.LeftVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
@@ -30755,8 +30691,22 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options, self = this;
         BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
+        return {
+            type: "bi.right",
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            items: [{
+                type: "bi.vertical_adapt",
+                height: "100%",
+                items: o.items,
+                lgap: o.lgap,
+                hgap: o.hgap,
+                rgap: o.rgap
+            }]
+        };
     },
 
     resize: function () {
@@ -30768,26 +30718,8 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
         throw new Error("cannot be added");
     },
 
-    stroke: function (items) {
-        var o = this.options;
-        var right = BI.createWidget({
-            type: "bi.vertical_adapt",
-            items: items,
-            lgap: o.lgap,
-            hgap: o.hgap,
-            rgap: o.rgap
-        });
-        right.element.css("height", "100%");
-        BI.createWidget({
-            type: "bi.right",
-            element: this,
-            items: [right]
-        });
-    },
-
     populate: function (items) {
-        BI.RightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);/**
@@ -30799,7 +30731,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-vertical-adapt-layout",
         columnSize: [],
-        horizontalAlign: BI.HorizontalAlign.Left,
+        scrollx: false,
         hgap: 0,
         vgap: 0,
         lgap: 0,
@@ -30807,85 +30739,27 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         tgap: 0,
         bgap: 0
     },
+
     render: function () {
+        var self = this, o = this.options;
         BI.VerticalAdaptLayout.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
-            position: "relative",
-            width: o.horizontalAlign === BI.HorizontalAlign.Stretch ? "100%" : "auto",
-            height: "100%",
-            "white-space": "nowrap",
-            "border-spacing": "0px",
-            border: "none",
-            "border-collapse": "separate"
-        });
-        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
-        this.$tr.appendTo(this.$table);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
-            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            td = BI.createWidget({
-                type: "bi.default",
-                tagName: "td",
-                attributes: {
-                    width: width
-                },
-                items: [w]
-            });
-            this.addWidget(this._getChildName(i), td);
-        } else {
-            td = this.getWidgetByName(this._getChildName(i));
-            td.element.attr("width", width);
-        }
-
-        if (i === 0) {
-            td.element.addClass("first-element");
-        }
-        td.element.css({
-            position: "relative",
-            height: "100%",
-            "vertical-align": "middle",
-            margin: "0",
-            padding: "0",
-            border: "none"
-        });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return td;
-    },
-
-    appendFragment: function (frag) {
-        this.$tr.append(frag);
-        this.element.append(this.$table);
-    },
-
-    _getWrapper: function () {
-        return this.$tr;
+        return {
+            type: "bi.horizontal",
+            verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Left,
+            columnSize: o.columnSize,
+            items: o.items,
+            scrollx: o.scrollx,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     resize: function () {
@@ -30893,8 +30767,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.VerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);/**
@@ -32651,6 +32524,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-layout",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: true,
             hgap: 0,
@@ -32662,10 +32536,13 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var o = this.options;
         BI.HorizontalLayout.superclass.render.apply(this, arguments);
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
+            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
+            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -32695,7 +32572,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
-
+        td.element.css({"max-width": o.columnSize[i] + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -40230,132 +40107,57 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
-                position: "absolute",
-                zIndex: BI.zIndex_tip - 2,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                opacity: 0.5
-            }).appendTo("body");
-            $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
-                position: "absolute",
-                zIndex: BI.zIndex_tip - 1,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }).appendTo("body");
-            var close = function () {
-                messageShow.destroy();
-                $mask.remove();
-            };
-            var controlItems = [];
-            if (hasCancel === true) {
-                controlItems.push({
-                    el: {
+            var name = BI.UUID();
+            BI.Popovers.create(name, {
+                type: "bi.bar_popover",
+                header: title,
+                body: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        type: "bi.label",
+                        text: message
+                    }]
+                },
+                footer: hasCancel ? {
+                    type: "bi.right_vertical_adapt",
+                    lgap: 10,
+                    items: [{
                         type: "bi.button",
                         text: BI.i18nText("BI-Basic_Cancel"),
                         level: "ignore",
                         handler: function () {
-                            close();
+                            BI.Popovers.remove(name);
                             if (BI.isFunction(callback)) {
                                 callback.apply(null, [false]);
                             }
                         }
-                    }
-                });
-            }
-            controlItems.push({
-                el: {
-                    type: "bi.button",
-                    text: BI.i18nText("BI-Basic_OK"),
-                    handler: function () {
-                        close();
-                        if (BI.isFunction(callback)) {
-                            callback.apply(null, [true]);
-                        }
-                    }
-                }
-            });
-            var conf = {
-                element: $pop,
-                type: "bi.center_adapt",
-                items: [
-                    {
-                        type: "bi.border",
-                        cls: "bi-message-content bi-card",
-                        items: {
-                            north: {
-                                el: {
-                                    type: "bi.border",
-                                    cls: "bi-message-title bi-background",
-                                    items: {
-                                        center: {
-                                            el: {
-                                                type: "bi.label",
-                                                text: title || BI.i18nText("BI-Basic_Prompt"),
-                                                textAlign: "left",
-                                                hgap: 20,
-                                                height: 50
-                                            }
-                                        },
-                                        east: {
-                                            el: {
-                                                type: "bi.icon_button",
-                                                cls: "bi-message-close close-font",
-                                                //                                                    height: 50,
-                                                handler: function () {
-                                                    close();
-                                                    if (BI.isFunction(callback)) {
-                                                        callback.apply(null, [false]);
-                                                    }
-                                                }
-                                            },
-                                            width: 60
-                                        }
-                                    }
-                                },
-                                height: 50
-                            },
-                            center: {
-                                el: {
-                                    type: "bi.text",
-                                    cls: "bi-message-text",
-                                    tgap: 60,
-                                    hgap: 20,
-                                    lineHeight: 30,
-                                    whiteSpace: "normal",
-                                    text: message
-                                }
-                            },
-                            south: {
-                                el: {
-                                    type: "bi.absolute",
-                                    items: [{
-                                        el: {
-                                            type: "bi.right_vertical_adapt",
-                                            hgap: 5,
-                                            items: controlItems
-                                        },
-                                        top: 0,
-                                        left: 20,
-                                        right: 20,
-                                        bottom: 0
-                                    }]
-
-                                },
-                                height: 60
+                    }, {
+                        type: "bi.button",
+                        text: BI.i18nText("BI-Basic_Sure"),
+                        handler: function () {
+                            BI.Popovers.remove(name);
+                            if (BI.isFunction(callback)) {
+                                callback.apply(null, [true]);
                             }
-                        },
-                        width: 400,
-                        height: 300
-                    }
-                ]
-            };
-
-            messageShow = BI.createWidget(conf);
+                        }
+                    }]
+                } : {
+                    type: "bi.right_vertical_adapt",
+                    lgap: 10,
+                    items: [{
+                        type: "bi.button",
+                        text: BI.i18nText("BI-Basic_Cancel"),
+                        level: "ignore",
+                        handler: function () {
+                            BI.Popovers.remove(name);
+                            if (BI.isFunction(callback)) {
+                                callback.apply(null, [false]);
+                            }
+                        }
+                    }]
+                },
+                size: "small"
+            }).open(name);
         }
     };
 }();/**
@@ -81997,7 +81799,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         });
     };
 
-    $(document).ajaxStop(additionFunc);
+    $(document).ajaxComplete(additionFunc);
 
     if (BI.history) {
         var navigate = BI.history.navigate;
