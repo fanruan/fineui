@@ -246,7 +246,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 items: [{
                     el: {
                         type: "bi.horizontal",
-                        width: 110,
+                        width: 120,
                         rgap: 10,
                         items: [{
                             el: this.year,
