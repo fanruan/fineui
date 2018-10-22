@@ -9,7 +9,7 @@ BI.prepares.push(function () {
         return _isSupprtFlex;
     };
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
-        if (!BI.isIE() && isSupportFlex()) {
+        if (!BI.isIE() && isSupportFlex() && ob.items && ob.items.length <= 1) {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         return ob;
