@@ -53284,16 +53284,20 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
-    props: {
-        baseCls: "bi-text-bubble-bar-popup-view",
-        text: "",
-        width: 250,
-        buttons: [{
-            level: "ignore",
-            value: false
-        }, {
-            value: true
-        }]
+    props: function () {
+        return {
+            baseCls: "bi-text-bubble-bar-popup-view",
+            text: "",
+            width: 250,
+            buttons: [{
+                level: "ignore",
+                value: false,
+                text: BI.i18nText("BI-Basic_Cancel")
+            }, {
+                value: true,
+                text: BI.i18nText("BI-Basic_Sure")
+            }]
+        };
     },
 
     render: function () {
@@ -53305,7 +53309,6 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             return BI.extend({
                 type: "bi.button",
                 height: 24,
-                text: index === 0 ? BI.i18nText("BI-Basic_Cancel") : BI.i18nText("BI-Basic_Sure"),
                 handler: function (v) {
                     self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
                 }
