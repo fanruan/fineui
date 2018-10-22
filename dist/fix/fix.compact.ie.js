@@ -207,7 +207,7 @@
         });
     };
 
-    $(document).ajaxStop(additionFunc);
+    $(document).ajaxComplete(additionFunc);
 
     if (BI.history) {
         var navigate = BI.history.navigate;
