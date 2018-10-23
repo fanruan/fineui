@@ -11347,6 +11347,13 @@ if (!_global.BI) {
             return sb;
         },
 
+        init: function () {
+            // 先把准备环境准备好
+            while (BI.prepares && BI.prepares.length > 0) {
+                BI.prepares.shift()();
+            }
+        },
+
         has: function (obj, keys) {
             if (BI.isArray(keys)) {
                 if (keys.length === 0) {
