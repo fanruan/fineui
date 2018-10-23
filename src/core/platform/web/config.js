@@ -9,7 +9,19 @@ BI.prepares.push(function () {
         return _isSupprtFlex;
     };
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
-        if (!BI.isIE() && isSupportFlex() && ob.items && ob.items.length <= 1) {
+        // center_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Center) {
+            return ob;
+        }
+        // vertical_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Left) {
+            return ob;
+        }
+        // horizontal_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Top && ob.horizontalAlign === BI.HorizontalAlign.Center) {
+            return ob;
+        }
+        if (!BI.isIE() && isSupportFlex()) {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         return ob;
@@ -33,6 +45,12 @@ BI.prepares.push(function () {
                 return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
             }
             return BI.extend(ob, {type: "bi.flex_vertical_center"});
+        }
+        return ob;
+    });
+    BI.Plugin.registerWidget("bi.horizontal_adapt", function (ob) {
+        if (ob.items && ob.items.length <= 1) {
+            return BI.extend(ob, {type: "bi.horizontal_auto"});
         }
         return ob;
     });
