@@ -55,7 +55,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 30,
             width: 30,
-            hgap: 5.25,
+            hgap: 5,
             vgap: 2.5,
             items: [{
                 type: "bi.layout",

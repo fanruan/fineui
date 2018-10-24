@@ -10585,6 +10585,13 @@ if (!_global.BI) {
             return sb;
         },
 
+        init: function () {
+            // 先把准备环境准备好
+            while (BI.prepares && BI.prepares.length > 0) {
+                BI.prepares.shift()();
+            }
+        },
+
         has: function (obj, keys) {
             if (BI.isArray(keys)) {
                 if (keys.length === 0) {
@@ -24440,7 +24447,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 30,
             width: 30,
-            hgap: 5.25,
+            hgap: 5,
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
