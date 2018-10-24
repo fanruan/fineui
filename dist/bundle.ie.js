@@ -40771,8 +40771,9 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.tracker.captureMouseMoves(e);
         });
         if (o.logic.dynamic) {
+            var size = this._calculateSize();
             var height = this.element.height();
-            var compareHeight = BI.clamp(height, 200, 600) - (o.footer ? 84 : 44);
+            var compareHeight = BI.clamp(height, size.height, 600) - (o.footer ? 84 : 44);
             this.body.element.height(compareHeight);
         }
     },
@@ -40784,7 +40785,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             switch (o.size) {
                 case this._constant.SIZE.SMALL:
                     size.width = 450;
-                    size.height = 220;
+                    size.height = 200;
                     break;
                 case this._constant.SIZE.BIG:
                     size.width = 900;
