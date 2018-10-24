@@ -3933,22 +3933,18 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             case "left,top":
             case "left,bottom":
                 this._createLeftTriangle();
-                //this.combo.getView().showLine("right");
                 break;
             case "right,top":
             case "right,bottom":
                 this._createRightTriangle();
-                //this.combo.getView().showLine("left");
                 break;
             case "top,left":
             case "top,right":
                 this._createTopTriangle();
-                //this.combo.getView().showLine("bottom");
                 break;
             case "bottom,left":
             case "bottom,right":
                 this._createBottomTriangle();
-                //this.combo.getView().showLine("top");
                 break;
         }
     },
@@ -3956,7 +3952,6 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
     _hideTriangle: function () {
         this.triangle && this.triangle.destroy();
         this.triangle = null;
-        //this.combo.getView() && this.combo.getView().hideLine();
     },
 
     hideView: function () {
@@ -3994,65 +3989,14 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view"
+            baseCls: config.baseCls + " bi-bubble-popup-view",
+            minWidth: 220,
+            maxWidth: 300,
+            minHeight: 90
         });
     },
     _init: function () {
         BI.BubblePopupView.superclass._init.apply(this, arguments);
-    },
-
-    showLine: function (direction) {
-        var pos = {}, op = {};
-        switch (direction) {
-            case "left":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    left: -1
-                };
-                op = {width: 3};
-                break;
-            case "right":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    right: -1
-                };
-                op = {width: 3};
-                break;
-            case "top":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    top: -1
-                };
-                op = {height: 3};
-                break;
-            case "bottom":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    bottom: -1
-                };
-                op = {height: 3};
-                break;
-            default:
-                break;
-        }
-        this.line = BI.createWidget(op, {
-            type: "bi.layout",
-            cls: "bubble-popup-line bi-high-light-background"
-        });
-        pos.el = this.line;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [pos]
-        });
-    },
-
-    hideLine: function () {
-        this.line && this.line.destroy();
     }
 });
 
@@ -4087,7 +4031,7 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             } else {
                 items.push(BI.extend({
                     type: "bi.button",
-                    height: 30,
+                    height: 24,
                     handler: function (v) {
                         self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
                     }
@@ -4095,12 +4039,33 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             }
         });
         return BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            height: 44,
-            hgap: 10,
-            bgap: 10,
-            items: items
+            type: "bi.default",
+            rgap: 15,
+            items: [{
+                type: "bi.right_vertical_adapt",
+                height: 44,
+                lgap: 10,
+                items: items
+            }]
         });
+    },
+
+    _createView: function () {
+        var o = this.options;
+
+        var button =  BI.createWidget({
+            type: "bi.button_group",
+            items: [o.el],
+            layouts: [{
+                type: "bi.vertical",
+                hgap: 15,
+                tgap: 10
+            }]
+        });
+
+        button.element.css("min-height", o.minHeight - 44);
+
+        return button;
     }
 });
 BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
@@ -4118,7 +4083,6 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         return {
             baseCls: "bi-text-bubble-bar-popup-view",
             text: "",
-            width: 250,
             buttons: [{
                 level: "ignore",
                 value: false,
@@ -4151,19 +4115,13 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 self.popup = this;
             },
             el: {
-                type: "bi.vertical",
-                items: [{
-                    type: "bi.label",
-                    text: o.text,
-                    whiteSpace: "normal",
-                    textAlign: "left",
-                    ref: function () {
-                        self.text = this;
-                    }
-                }],
-                hgap: 10,
-                tgap: 25,
-                bgap: 10
+                type: "bi.label",
+                text: o.text,
+                whiteSpace: "normal",
+                textAlign: "left",
+                ref: function () {
+                    self.text = this;
+                }
             },
             buttons: buttons
         };
@@ -4171,14 +4129,6 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
     populate: function (v) {
         this.text.setText(v || this.options.text);
-    },
-
-    showLine: function (direction) {
-        this.popup.showLine(direction);
-    },
-
-    hideLine: function () {
-        this.popup.hideLine();
     }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";

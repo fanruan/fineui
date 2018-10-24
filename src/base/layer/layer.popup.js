@@ -65,7 +65,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         this.view = this._createView();
         this.toolbar = this._createToolBar();
 
-        this.button_group.on(BI.Controller.EVENT_CHANGE, function (type) {
+        this.view.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.PopupView.EVENT_CHANGE);
@@ -140,11 +140,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
     },
 
     getView: function () {
-        return this.button_group;
+        return this.view;
     },
 
     populate: function (items) {
-        this.button_group.populate.apply(this.button_group, arguments);
+        this.view.populate.apply(this.view, arguments);
     },
 
     resetWidth: function (w) {
@@ -163,11 +163,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     setValue: function (selectedValues) {
         this.tab && this.tab.setValue(selectedValues);
-        this.button_group.setValue(selectedValues);
+        this.view.setValue(selectedValues);
     },
 
     getValue: function () {
-        return this.button_group.getValue();
+        return this.view.getValue();
     }
 });
 BI.PopupView.EVENT_CHANGE = "EVENT_CHANGE";
