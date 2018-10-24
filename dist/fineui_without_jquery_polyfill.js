@@ -17581,21 +17581,16 @@ _.extend(BI, {
         var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
         var week = d.getDay();
         var startOfWeek = BI.StartOfWeek % 7;
-        if (date.getMonth() === 0) {
-            var formatWeek = (week + 8 - startOfWeek) % 7;
-            if(date.getDate() <= (formatWeek === 0 ? 7 : formatWeek)) {
-                return 1;
-            }
-        }
-        d.setDate(date.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
-        var ms = d.valueOf(); // GMT
+        var middleDay = (startOfWeek + 3) % 7;
+        middleDay = middleDay || 7;
+        // 偏移到周周首之前需要多少天
+        var offsetWeekStartCount = week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek);
+        var offsetWeekMiddleCount = middleDay < startOfWeek ? (7 + middleDay - startOfWeek) : (middleDay - startOfWeek);
+        d.setDate(d.getDate() - offsetWeekStartCount + offsetWeekMiddleCount);
+        var ms = d.valueOf();
         d.setMonth(0);
         d.setDate(1);
-        var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-        if (d.getDay() !== startOfWeek) {
-            offset++;
-        }
-        return offset;
+        return Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
     },
 
     getQuarter: function (date) {
@@ -17744,7 +17739,27 @@ _.extend(BI, {
                 return s[par] || par;
             });
         }
-
+        // 包含年周的格式化，ISO8601标准周的计数会影响年
+        if ((str.indexOf("%Y") !== -1 || str.indexOf("%y") !== -1) && (str.indexOf("%W") !== -1 || str.indexOf("%U") !== -1 || str.indexOf("%V") !== -1)) {
+            switch (wn) {
+                // 如果周数是1，但是当前却在12月，表示此周数为下一年的
+                case 1:
+                    if (m === 11) {
+                        s["%y"] = parseInt(s["%y"]) + 1;
+                        s["%Y"] = parseInt(s["%Y"]) + 1;
+                    }
+                    break;
+                // 如果周数是53，但是当前却在1月，表示此周数为上一年的
+                case 53:
+                    if (m === 0) {
+                        s["%y"] = parseInt(s["%y"]) - 1;
+                        s["%Y"] = parseInt(s["%Y"]) - 1;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
         var a = str.match(re);
         for (var i = 0; i < a.length; i++) {
             var tmp = s[a[i]];
@@ -19483,6 +19498,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             baseCls: "bi-horizontal-adapt-layout",
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
+            scrollx: false,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -19492,90 +19508,33 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
+        var self = this, o = this.options;
         BI.HorizontalAdaptLayout.superclass.render.apply(this, arguments);
-        this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
-            position: "relative",
-            width: "100%",
-            "white-space": "nowrap",
-            "border-spacing": "0px",
-            border: "none",
-            "border-collapse": "separate"
-        });
-        this.$tr = BI.Widget._renderEngine.createElement("<tr>");
-        this.$tr.appendTo(this.$table);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
-        if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
-            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            td = BI.createWidget({
-                type: "bi.default",
-                tagName: "td",
-                attributes: {
-                    width: width
-                },
-                items: [w]
-            });
-            this.addWidget(this._getChildName(i), td);
-        } else {
-            td = this.getWidgetByName(this._getChildName(i));
-            td.element.attr("width", width);
-        }
-        td.element.css({"max-width": o.columnSize[i] + "px"});
-        if (i === 0) {
-            td.element.addClass("first-element");
-        }
-        td.element.css({
-            position: "relative",
-            "vertical-align": o.verticalAlign,
-            margin: "0",
-            padding: "0",
-            border: "none"
-        });
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return td;
-    },
-
-    appendFragment: function (frag) {
-        this.$tr.append(frag);
-        this.element.append(this.$table);
+        return {
+            type: "bi.horizontal",
+            verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Center,
+            columnSize: o.columnSize,
+            items: o.items,
+            scrollx: o.scrollx,
+            ref: function (_ref) {
+                self.layout = _ref;
+            },
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap
+        };
     },
 
     resize: function () {
         // console.log("horizontal_adapt布局不需要resize");
     },
 
-    _getWrapper: function () {
-        return this.$tr;
-    },
-
     populate: function (items) {
-        BI.HorizontalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.layout.populate.apply(this, arguments);
     }
 });
 BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);/**
@@ -19741,6 +19700,106 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);/**
+ * 使用display:table和display:table-cell实现的horizontal布局
+ * @class BI.TableAdaptLayout
+ * @extends BI.Layout
+ */
+BI.TableAdaptLayout = BI.inherit(BI.Layout, {
+    props: function () {
+        return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-table-center-adapt-layout",
+            columnSize: [],
+            verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Left,
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0
+        });
+    },
+    render: function () {
+        var o = this.options;
+        BI.TableAdaptLayout.superclass.render.apply(this, arguments);
+        this.$table = BI.Widget._renderEngine.createElement("<div>").css({
+            position: "relative",
+            display: "table",
+            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
+            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
+            "white-space": "nowrap"
+        });
+        this.populate(this.options.items);
+    },
+
+    _addElement: function (i, item) {
+
+        var o = this.options;
+        var td;
+        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        if (!this.hasWidget(this._getChildName(i))) {
+            var w = BI.createWidget(item);
+            w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
+            td = BI.createWidget({
+                type: "bi.default",
+                width: width,
+                items: [w]
+            });
+            this.addWidget(this._getChildName(i), td);
+        } else {
+            td = this.getWidgetByName(this._getChildName(i));
+            td.element.width(width);
+        }
+        td.element.css({"max-width": o.columnSize[i] + "px"});
+        if (i === 0) {
+            td.element.addClass("first-element");
+        }
+        td.element.css({
+            position: "relative",
+            display: "table-cell",
+            "vertical-align": "middle",
+            margin: "0",
+            padding: "0",
+            height: "100%"
+        });
+        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
+            w.element.css({
+                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
+            });
+        }
+        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
+            w.element.css({
+                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
+            });
+        }
+        return td;
+    },
+
+    appendFragment: function (frag) {
+        this.$table.append(frag);
+        this.element.append(this.$table);
+    },
+
+    resize: function () {
+        // console.log("center_adapt布局不需要resize");
+    },
+
+    populate: function (items) {
+        BI.TableAdaptLayout.superclass.populate.apply(this, arguments);
+        this._mount();
+    }
+});
+BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);/**
  * 垂直方向居中容器
  * @class BI.VerticalAdaptLayout
  * @extends BI.Layout
