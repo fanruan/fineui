@@ -6,7 +6,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         height: 24,
         width: 24,
         lgap: 15,
-        offset: -15,
+        offset: 0,
         timeErrorCls: "time-error",
         DATE_MIN_VALUE: "1900-01-01",
         DATE_MAX_VALUE: "2099-12-31"
@@ -33,14 +33,13 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         BI.createWidget({
             element: self,
             type: "bi.center",
-            hgap: 10,
             height: this.constants.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
                     el: self.left,
                     left: this.constants.offset,
-                    right: 0,
+                    right: this.constants.width / 2,
                     top: 0,
                     bottom: 0
                 }]
@@ -48,7 +47,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
                 type: "bi.absolute",
                 items: [{
                     el: self.right,
-                    left: 0,
+                    left: this.constants.width / 2,
                     right: this.constants.offset,
                     top: 0,
                     bottom: 0
