@@ -1677,23 +1677,26 @@ BI.Calendar = BI.inherit(BI.Widget, {
         // 是周几
         log.FDay = De.getDay();
 
+        // 当前BI.StartOfWeek与周日对齐后的FDay是周几
+        var offSetFDay = (7 - BI.StartOfWeek + log.FDay) % 7;
+
         // 当前月页第一天是几号
-        log.PDay = MD[M === 0 ? 11 : M - 1] - log.FDay + 1;
+        log.PDay = MD[M === 0 ? 11 : M - 1] - offSetFDay + 1;
         log.NDay = 1;
 
         var items = [];
         BI.each(BI.range(42), function (i) {
             var td = {}, YY = log.ymd[0], MM = log.ymd[1] + 1, DD;
             // 上个月的日期
-            if (i < log.FDay) {
+            if (i < offSetFDay) {
                 td.lastMonth = true;
                 DD = i + log.PDay;
                 // 上一年
                 MM === 1 && (YY -= 1);
                 MM = MM === 1 ? 12 : MM - 1;
-            } else if (i >= log.FDay && i < log.FDay + MD[log.ymd[1]]) {
-                DD = i - log.FDay + 1;
-                if (i - log.FDay + 1 === log.ymd[2]) {
+            } else if (i >= offSetFDay && i < offSetFDay + MD[log.ymd[1]]) {
+                DD = i - offSetFDay + 1;
+                if (i - offSetFDay + 1 === log.ymd[2]) {
                     td.currentDay = true;
                 }
             } else {
@@ -1714,7 +1717,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
     _init: function () {
         BI.Calendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var items = BI.map(BI.Date._SDN.slice(0, 7), function (i, value) {
+        var items = BI.map(this._getWeekLabel(), function (i, value) {
             return {
                 type: "bi.label",
                 height: 24,
@@ -1779,6 +1782,12 @@ BI.Calendar = BI.inherit(BI.Widget, {
         }, BI.LogicFactory.createLogic("vertical", BI.extend({}, o.logic, {
             items: BI.LogicFactory.createLogicItemsByDirection("top", title, this.days)
         }))));
+    },
+
+    _getWeekLabel: function () {
+        return BI.map(BI.range(0, 7), function (idx, v) {
+            return BI.Date._SDN[(v + BI.StartOfWeek) % 7];
+        });
     },
 
     isFrontDate: function () {
