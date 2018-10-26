@@ -11,7 +11,7 @@
 .bi-loading-widget {
   font-size: 0;
 }
-.bi-loading-widget div {
+.bi-loading-widget .animate-rect {
   background-color: rgba(54, 133, 242, 0.9);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#e63685f2,endColorstr=#e63685f2);
   -webkit-border-radius: 1.5px;
@@ -127,7 +127,7 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/wave_loading.gif');
   _background: none;
 }
-.bi-loading-widget.hack div {
+.bi-loading-widget.hack .animate-rect {
   background-color: rgba(54, 133, 242, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#003685f2,endColorstr=#003685f2);
 }

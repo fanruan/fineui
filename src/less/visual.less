@@ -195,12 +195,14 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  //虽然position:absolute使得:before的display属性为block,但是其仍然受到祖先text-align:center的影响，这边重置掉
+  text-align: left;
 
   &:before {
     position: absolute;
     width: 6px;
     height: 6px;
-    margin-left: 3px;
+    margin-left: 4px;
     margin-top: 2px;
     content: "";
     transform: rotate(-135deg);
@@ -211,12 +213,14 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  //虽然position:absolute使得:before的display属性为block,但是其仍然受到祖先text-align:center的影响，这边重置掉
+  text-align: left;
 
   &:before {
     position: absolute;
     width: 6px;
     height: 6px;
-    margin-left: 3px;
+    margin-left: 4px;
     margin-top: -3px;
     content: "";
     transform: rotate(45deg);
@@ -228,6 +232,8 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  //虽然position:absolute使得:before的display属性为block,但是其仍然受到祖先text-align:center的影响，这边重置掉
+  text-align: left;
 
   &:before {
     position: absolute;
@@ -244,13 +250,15 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  //虽然position:absolute使得:before的display属性为block,但是其仍然受到祖先text-align:center的影响，这边重置掉
+  text-align: left;
 
   &:before {
     position: absolute;
     width: 6px;
     height: 6px;
-    margin-left: 2px;
-    margin-top: -3px;
+    margin-left: -3px;
+    margin-top: 4px;
     content: "";
     transform: rotate(-45deg);
   }

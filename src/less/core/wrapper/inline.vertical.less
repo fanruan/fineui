@@ -6,4 +6,18 @@
     vertical-align:middle;
     content:' ';
   }
+
+  & > .inline-vertical-adapt-item {
+    display: inline-block;
+    &.x-icon {
+      display: inline-block !important;
+    }
+  }
+
+  // 这样写对于布局来说过于具体,好孩子不要学
+  & > .bi-combo {
+    &.bi-combo-popup {
+      display: inline-block !important;
+    }
+  }
 }
