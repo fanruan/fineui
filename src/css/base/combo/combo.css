@@ -1,5 +1,6 @@
 .bi-bubble-combo .button-combo-triangle-wrapper {
   position: fixed !important;
+  line-height: 0;
   z-index: 10000000;
 }
 .bi-bubble-combo .bubble-combo-triangle-left {
@@ -7,13 +8,14 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-left:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 2px;
-  margin-top: -3px;
+  margin-left: -3px;
+  margin-top: 4px;
   content: "";
   transform: rotate(-45deg);
 }
@@ -22,6 +24,7 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-right:before {
   position: absolute;
@@ -37,12 +40,13 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-top:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 4px;
   margin-top: -3px;
   content: "";
   transform: rotate(45deg);
@@ -52,12 +56,13 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 4px;
   margin-top: 2px;
   content: "";
   transform: rotate(-135deg);

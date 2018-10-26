@@ -19279,6 +19279,11 @@ _.extend(BI, {
 });// 工程配置
 BI.prepares.push(function () {
     // 注册布局
+    // adapt类布局优先级规则
+    // 1、在非IE且支持flex的浏览器下使用flex布局
+    // 2、IE或者不支持flex的浏览器下使用inline布局
+    // 3、在2的情况下如果布局的items大于1的话使用display:table的布局
+    // 4、在3的情况下如果IE版本低于8使用table标签布局
     var _isSupprtFlex;
     var isSupportFlex = function () {
         if (_isSupprtFlex == null) {
@@ -19287,25 +19292,39 @@ BI.prepares.push(function () {
         return _isSupprtFlex;
     };
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
+        var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
         // center_adapt
         if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Center) {
-            return ob;
+            if (isLessIE8) {
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.table_adapt"});
         }
         // vertical_adapt
         if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Left) {
-            return ob;
+            if (isLessIE8) {
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.table_adapt"});
         }
         // horizontal_adapt
         if (ob.verticalAlign === BI.VerticalAlign.Top && ob.horizontalAlign === BI.HorizontalAlign.Center) {
-            return ob;
+            if (isLessIE8) {
+                return ob;
+            }
+            return BI.extend(ob, {type: "bi.table_adapt"});
         }
-        if (!BI.isIE() && isSupportFlex()) {
-            return BI.extend(ob, {type: "bi.flex_horizontal"});
+        if(!isIE) {
+            if(supportFlex) {
+                return BI.extend(ob, {type: "bi.flex_horizontal"});
+            }
+            return BI.extend(ob, {type: "bi.table_adapt"});
         }
         return ob;
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-        if (!BI.isIE() && isSupportFlex() && ob.items && ob.items.length <= 1) {
+        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        if (!isIE && supportFlex && justOneItem) {
             // 有滚动条的情况下需要用到flex_wrapper_center布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
                 // 不是IE用flex_wrapper_center布局
@@ -19313,10 +19332,15 @@ BI.prepares.push(function () {
             }
             return BI.extend(ob, {type: "bi.flex_center"});
         }
+        // 一个item的情况下inline布局睥睨天下
+        if(justOneItem) {
+            return BI.extend(ob, {type: "bi.inline_center_adapt"});
+        }
         return ob;
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
-        if (!BI.isIE() && isSupportFlex()) {
+        var isIE = BI.isIE(), supportFlex = isSupportFlex();
+        if (!isIE && supportFlex) {
             // 有滚动条的情况下需要用到flex_wrapper_center布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
                 // 不是IE用flex_wrapper_center布局
@@ -19324,7 +19348,7 @@ BI.prepares.push(function () {
             }
             return BI.extend(ob, {type: "bi.flex_vertical_center"});
         }
-        return ob;
+        return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
     });
     BI.Plugin.registerWidget("bi.horizontal_adapt", function (ob) {
         if (ob.items && ob.items.length <= 1) {
@@ -31341,11 +31365,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
+            "vertical-align": "middle"
         });
+        w.element.addClass("inline-center-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
@@ -31417,7 +31439,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            textAlign: "left"
         });
         this.populate(this.options.items);
     },
@@ -31427,11 +31450,9 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
+            "vertical-align": "middle"
         });
+        w.element.addClass("inline-vertical-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
@@ -35920,17 +35941,17 @@ BI.Pane = BI.inherit(BI.Widget, {
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
-                cls: "rect1",
+                cls: "animate-rect rect1",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect2",
+                cls: "animate-rect rect2",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect3",
+                cls: "animate-rect rect3",
                 height: 25,
                 width: 3
             }]
@@ -46015,6 +46036,7 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (o.whiteSpace == "normal") {
@@ -46031,6 +46053,7 @@ BI.Label = BI.inherit(BI.Single, {
                     element: this,
                     items: [this.text]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (BI.isNumber(o.height) && o.height > 0) {
@@ -46066,6 +46089,7 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
@@ -46086,6 +46110,7 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (o.whiteSpace == "normal") {
@@ -46102,6 +46127,8 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
@@ -46160,6 +46187,7 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
@@ -79808,7 +79836,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     beforeInit: function (callback) {
@@ -80810,7 +80838,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -80841,9 +80869,9 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height < 24 ? 24 : o.height
+                            width: 24
                         },
-                        width: o.height}]
+                        width: 24}]
                 }]
             }, {
                 el: {

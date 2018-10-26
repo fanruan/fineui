@@ -20092,11 +20092,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
+            "vertical-align": "middle"
         });
+        w.element.addClass("inline-center-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
@@ -20168,7 +20166,8 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
-            whiteSpace: "nowrap"
+            whiteSpace: "nowrap",
+            textAlign: "left"
         });
         this.populate(this.options.items);
     },
@@ -20178,11 +20177,9 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
+            "vertical-align": "middle"
         });
+        w.element.addClass("inline-vertical-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
@@ -24470,17 +24467,17 @@ BI.Pane = BI.inherit(BI.Widget, {
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
-                cls: "rect1",
+                cls: "animate-rect rect1",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect2",
+                cls: "animate-rect rect2",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect3",
+                cls: "animate-rect rect3",
                 height: 25,
                 width: 3
             }]
@@ -33045,6 +33042,7 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (o.whiteSpace == "normal") {
@@ -33061,6 +33059,7 @@ BI.Label = BI.inherit(BI.Single, {
                     element: this,
                     items: [this.text]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (BI.isNumber(o.height) && o.height > 0) {
@@ -33096,6 +33095,7 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
@@ -33116,6 +33116,7 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (o.whiteSpace == "normal") {
@@ -33132,6 +33133,8 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
@@ -33190,6 +33193,7 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {
@@ -62669,7 +62673,7 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
         extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     beforeInit: function (callback) {
@@ -63671,7 +63675,7 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
         extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -63702,9 +63706,9 @@ BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);BI.Dyna
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height < 24 ? 24 : o.height
+                            width: 24
                         },
-                        width: o.height}]
+                        width: 24}]
                 }]
             }, {
                 el: {

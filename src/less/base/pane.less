@@ -13,7 +13,8 @@
 
 .bi-loading-widget {
     font-size: 0;
-    div {
+    // 直接控制div标签将会导致使用div的table布局样式问题
+    & .animate-rect {
         .background-color(@background-color-highlight, 90%);
         .border-radius(1.5px);
         .animation(loading-widget 0.8s infinite linear);
@@ -34,7 +35,7 @@
     });
     &.hack {
         .imagePath(@icon-wave-loading);
-        div {
+        & .animate-rect {
             .background-color(@background-color-highlight, 0%);
         }
     }

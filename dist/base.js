@@ -260,17 +260,17 @@ BI.Pane = BI.inherit(BI.Widget, {
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
-                cls: "rect1",
+                cls: "animate-rect rect1",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect2",
+                cls: "animate-rect rect2",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect3",
+                cls: "animate-rect rect3",
                 height: 25,
                 width: 3
             }]
@@ -10355,6 +10355,7 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (o.whiteSpace == "normal") {
@@ -10371,6 +10372,7 @@ BI.Label = BI.inherit(BI.Single, {
                     element: this,
                     items: [this.text]
                 });
+                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
             if (BI.isNumber(o.height) && o.height > 0) {
@@ -10406,6 +10408,7 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
@@ -10426,6 +10429,7 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (o.whiteSpace == "normal") {
@@ -10442,6 +10446,8 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
@@ -10500,6 +10506,7 @@ BI.Label = BI.inherit(BI.Single, {
                 element: this,
                 items: [this.text]
             });
+            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         this.text = BI.createWidget(BI.extend(json, {

@@ -35,11 +35,9 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
-            display: "inline-block",
-            "vertical-align": "middle",
-            "*display": "inline",
-            "*zoom": 1
+            "vertical-align": "middle"
         });
+        w.element.addClass("inline-center-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"

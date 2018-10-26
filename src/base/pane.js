@@ -59,17 +59,17 @@ BI.Pane = BI.inherit(BI.Widget, {
             vgap: 2.5,
             items: [{
                 type: "bi.layout",
-                cls: "rect1",
+                cls: "animate-rect rect1",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect2",
+                cls: "animate-rect rect2",
                 height: 25,
                 width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect3",
+                cls: "animate-rect rect3",
                 height: 25,
                 width: 3
             }]
