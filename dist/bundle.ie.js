@@ -30639,12 +30639,14 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             items: [{
-                type: "bi.vertical_adapt",
-                height: "100%",
-                items: o.items,
-                lgap: o.lgap,
-                hgap: o.hgap,
-                rgap: o.rgap
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: "100%",
+                    items: o.items,
+                    lgap: o.lgap,
+                    hgap: o.hgap,
+                    rgap: o.rgap
+                }
             }]
         };
     },
@@ -30683,12 +30685,14 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             items: [{
-                type: "bi.vertical_adapt",
-                height: "100%",
-                items: o.items,
-                lgap: o.lgap,
-                hgap: o.hgap,
-                rgap: o.rgap
+                el: {
+                    type: "bi.vertical_adapt",
+                    height: "100%",
+                    items: o.items,
+                    lgap: o.lgap,
+                    hgap: o.hgap,
+                    rgap: o.rgap
+                }
             }]
         };
     },
