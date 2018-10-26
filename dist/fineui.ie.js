@@ -19315,9 +19315,9 @@ BI.prepares.push(function () {
             return BI.extend(ob, {type: "bi.table_adapt"});
         }
         if(!isIE) {
-            // if(supportFlex) {
-            //     return BI.extend(ob, {type: "bi.flex_horizontal"});
-            // }
+            if(supportFlex) {
+                return BI.extend(ob, {type: "bi.flex_horizontal"});
+            }
             return BI.extend(ob, {type: "bi.table_adapt"});
         }
         return ob;
