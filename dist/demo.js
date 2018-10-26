@@ -6126,30 +6126,7 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.htape", Demo.HtapeLayout);Demo.InlineVerticalLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-absolute"
-    },
-    render: function () {
-        return {
-            type: "bi.inline_vertical_adapt",
-            items: [{
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 200
-            }, {
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 100
-            }]
-        };
-    }
-});
-BI.shortcut("demo.inline_vertical", Demo.InlineVerticalLayout);/**
+BI.shortcut("demo.htape", Demo.HtapeLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
@@ -10739,7 +10716,10 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
                 self.list = ref;
             },
             itemsCreator: BI.bind(this._itemsCreator, this),
-            value: ["柳州市城贸金属材料有限责任公司", "柳州市建福房屋租赁有限公司", "柳州市迅昌数码办公设备有限责任公司"]
+            value: {
+                type: 1,
+                value: ["柳州市城贸金属材料有限责任公司", "柳州市建福房屋租赁有限公司", "柳州市迅昌数码办公设备有限责任公司"]
+            }
         });
 
         widget.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
