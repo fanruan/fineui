@@ -40735,6 +40735,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         }, {
             el: o.logic.dynamic ? {
                 type: "bi.vertical",
+                scrolly: false,
                 cls: "popover-body",
                 ref: function () {
                     self.body = this;
