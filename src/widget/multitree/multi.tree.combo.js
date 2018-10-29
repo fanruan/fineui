@@ -11,7 +11,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 31
+            bottom: 25
         }
     },
 
@@ -117,7 +117,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 return triggerBtn.element.find(e.target).length === 0;
             }
         });
-        
+
         var change = false;
         var clear = false;          // 标识当前是否点击了清空
 

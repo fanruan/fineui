@@ -66721,9 +66721,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = o.value || {};
-        
+
         this._assertValue(this.storeValue);
-        
+
         // 标记正在请求数据
         this.requesting = false;
 
@@ -66737,7 +66737,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -67125,7 +67125,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -67508,7 +67508,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -71076,7 +71076,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 31
+            bottom: 25
         }
     },
 
@@ -71182,7 +71182,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 return triggerBtn.element.find(e.target).length === 0;
             }
         });
-        
+
         var change = false;
         var clear = false;          // 标识当前是否点击了清空
 
@@ -72723,7 +72723,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             allValueGetter: function () {

@@ -40,7 +40,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,

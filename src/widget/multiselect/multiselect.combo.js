@@ -27,9 +27,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = o.value || {};
-        
+
         this._assertValue(this.storeValue);
-        
+
         // 标记正在请求数据
         this.requesting = false;
 
@@ -43,7 +43,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,
