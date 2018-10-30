@@ -30777,6 +30777,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
+            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -30823,7 +30824,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         td.element.css({
             position: "relative",
             display: "table-cell",
-            "vertical-align": "middle",
+            "vertical-align": o.verticalAlign,
             margin: "0",
             padding: "0",
             height: "100%"
