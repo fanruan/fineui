@@ -564,6 +564,7 @@ if (!_global.BI) {
     // deep方法
     _.extend(BI, {
         deepClone: _.cloneDeep,
+        deepExtend: _.merge,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
@@ -676,12 +677,6 @@ if (!_global.BI) {
                 }
             }
             return result;
-        },
-
-        deepExtend: function () {
-            var args = [].slice.call(arguments);
-            args.unshift(true);
-            return $.extend.apply($, args);
         }
     });
 
