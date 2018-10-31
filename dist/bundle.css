@@ -2534,6 +2534,10 @@ textarea {
 .bi-text-value-down-list-combo:hover > .bi-border {
   border-color: #3685f2;
 }
+.bi-bubble-bar-popup-view .bar-popup-container {
+  max-height: 656px;
+}
+
 /*************BI.SearchEditor******************/
 .bi-search-editor {
   -webkit-border-radius: 2px;
