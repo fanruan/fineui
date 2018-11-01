@@ -44938,7 +44938,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         // BI.Msg.toast(value);
                     }
                 }
-                self.fireEvent(BI.File.EVENT_CHANGE, {
+                wrap.files.length > 0 && self.fireEvent(BI.File.EVENT_CHANGE, {
                     files: wrap.files
                 });
                 input.value = "";
