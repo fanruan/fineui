@@ -233,6 +233,22 @@
             return width;
         },
 
+        getTextSizeHeight: function (text, fontSize) {
+            var span = BI.Widget._renderEngine.createElement("<span></span>").addClass("text-width-span").appendTo("body");
+
+            if (fontSize == null) {
+                fontSize = 12;
+            }
+            fontSize = fontSize + "px";
+
+            span.css("font-size", fontSize).text(text);
+
+            var height = span.height();
+            span.remove();
+
+            return height;
+        },
+
         // 获取滚动条的宽度
         getScrollWidth: function () {
             if (this._scrollWidth == null) {
