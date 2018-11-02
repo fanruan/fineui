@@ -35906,14 +35906,15 @@ BI.Single = BI.inherit(BI.Widget, {
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
-                if (!self.element.__isMouseInBounds__(e)) {
-                    if (BI.isNotNull(self.timeout)) {
-                        clearTimeout(self.timeout);
-                    }
-                    self._hideTooltip();
+                if (BI.isNotNull(self.timeout)) {
+                    clearTimeout(self.timeout);
                 }
+                self.timeout = BI.delay(function () {
+                    self._showToolTip(self._e || e, opt);
+                }, 500);
+                self._hideTooltip();
             });
-            this.element.on("mouseleave.title" + this.getName(), function () {
+            this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
                 if (BI.isNotNull(self.timeout)) {
                     clearTimeout(self.timeout);
