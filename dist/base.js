@@ -401,6 +401,17 @@ BI.Single = BI.inherit(BI.Widget, {
         }
     },
 
+    _clearTimeOut: function() {
+        if (BI.isNotNull(this.showTimeout)) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
+        if (BI.isNotNull(this.hideTimeout)) {
+            clearTimeout(this.hideTimeout);
+            this.showTimeout = null;
+        }
+    },
+
     enableHover: function (opt) {
         opt || (opt = {});
         var self = this;
@@ -408,30 +419,40 @@ BI.Single = BI.inherit(BI.Widget, {
             this.element.on("mouseenter.title" + this.getName(), function (e) {
                 self._e = e;
                 if (self.getTipType() === "warning" || (BI.isKey(self.getWarningTitle()) && !self.isEnabled())) {
-                    self.timeout = BI.delay(function () {
+                    self.showTimeout = BI.delay(function () {
                         self._showToolTip(self._e || e, opt);
                     }, 200);
                 } else if (self.getTipType() === "success" || self.isEnabled()) {
-                    self.timeout = BI.delay(function () {
+                    self.showTimeout = BI.delay(function () {
                         self._showToolTip(self._e || e, opt);
                     }, 500);
                 }
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
-                if (BI.isNotNull(self.timeout)) {
-                    clearTimeout(self.timeout);
+                if (BI.isNotNull(self.showTimeout)) {
+                    clearTimeout(self.showTimeout);
+                    self.showTimeout = null;
                 }
-                self.timeout = BI.delay(function () {
+                if(BI.isNull(self.hideTimeout)) {
+                    self.hideTimeout = BI.delay(function () {
+                        self._hideTooltip();
+                    }, 500);
+                }
+
+                self.showTimeout = BI.delay(function () {
+                    if (BI.isNotNull(self.hideTimeout)) {
+                        clearTimeout(self.hideTimeout);
+                        self.hideTimeout = null;
+                    }
                     self._showToolTip(self._e || e, opt);
                 }, 500);
-                self._hideTooltip();
+
+
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
-                if (BI.isNotNull(self.timeout)) {
-                    clearTimeout(self.timeout);
-                }
+                self._clearTimeOut();
                 self._hideTooltip();
             });
             this._hoverBinded = true;
@@ -440,9 +461,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
     disabledHover: function () {
         // 取消hover事件
-        if (BI.isNotNull(this.timeout)) {
-            clearTimeout(this.timeout);
-        }
+        this._clearTimeOut();
         this._hideTooltip();
         this.element.unbind("mouseenter.title" + this.getName())
             .unbind("mousemove.title" + this.getName())
