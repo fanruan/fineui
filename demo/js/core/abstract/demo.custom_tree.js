@@ -28,12 +28,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     hgap: 30
                 }]
             },
-            items: BI.deepClone(TREEITEMS),
-            expander: {
-                el: {},
-                popup: {type: "bi.custom_tree"},
-                trigger: "hover"
-            }
+            items: BI.deepClone(TREEITEMS)
         });
         return this.tree;
     },
@@ -63,57 +58,58 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }]);
                 } else {
                     if (op.node.id == 1) {
-                        callback([{
-                            id: 11,
-                            pId: 1,
-                            type: "bi.plus_group_node",
-                            text: "test11",
-                            value: 11,
-                            height: 25,
-                            isParent: true
-                        }, {
-                            id: 12,
-                            pId: 1,
-                            type: "bi.single_select_item",
-                            text: "test12",
-                            value: 12,
-                            height: 35
-                        }, {
-                            id: 13,
-                            pId: 1,
-                            type: "bi.single_select_item",
-                            text: "test13",
-                            value: 13,
-                            height: 35
-                        }, {
-                            id: 14,
-                            pId: 1,
-                            type: "bi.single_select_item",
-                            text: "test14",
-                            value: 14,
-                            height: 35
-                        }, {
-                            id: 15,
-                            pId: 1,
-                            type: "bi.single_select_item",
-                            text: "test15",
-                            value: 15,
-                            height: 35
-                        }, {
-                            id: 16,
-                            pId: 1,
-                            type: "bi.single_select_item",
-                            text: "test16",
-                            value: 16,
-                            height: 35
-                        }, {
-                            id: 17, 
-                            pId: 1, 
-                            type: "bi.single_select_item", 
-                            text: "test17", 
-                            value: 17, 
-                            height: 35
-                        }]);
+                        callback([
+                            {
+                                id: 11,
+                                pId: 1,
+                                type: "bi.plus_group_node",
+                                text: "test11",
+                                value: 11,
+                                height: 25,
+                                isParent: true
+                            },
+                            {
+                                id: 12,
+                                pId: 1,
+                                type: "bi.single_select_item",
+                                text: "test12",
+                                value: 12,
+                                height: 35
+                            },
+                            {
+                                id: 13,
+                                pId: 1,
+                                type: "bi.single_select_item",
+                                text: "test13",
+                                value: 13,
+                                height: 35
+                            },
+                            {
+                                id: 14,
+                                pId: 1,
+                                type: "bi.single_select_item",
+                                text: "test14",
+                                value: 14,
+                                height: 35
+                            },
+                            {
+                                id: 15,
+                                pId: 1,
+                                type: "bi.single_select_item",
+                                text: "test15",
+                                value: 15,
+                                height: 35
+                            },
+                            {
+                                id: 16,
+                                pId: 1,
+                                type: "bi.single_select_item",
+                                text: "test16",
+                                value: 16,
+                                height: 35
+                            },
+                            {id: 17, pId: 1, type: "bi.single_select_item", text: "test17", value: 17, height: 35}
+                        ]);
                     } else if (op.node.id == 2) {
                         callback([{
                             id: 21,
@@ -122,7 +118,8 @@ Demo.Func = BI.inherit(BI.Widget, {
                             text: "test21",
                             value: 21,
                             height: 35
-                        }, {
+                        },
+                        {
                             id: 22,
                             pId: 2,
                             type: "bi.single_select_item",
@@ -154,12 +151,6 @@ Demo.Func = BI.inherit(BI.Widget, {
                         vgap: 0
                     }]
                 }
-            },
-            expander: {
-                el: {},
-                popup: {type: "bi.custom_tree"},
-                trigger: "click",
-                direction: "bottom"
             }
         });
         return this.asyncTree;
@@ -177,68 +168,75 @@ Demo.Func = BI.inherit(BI.Widget, {
                 row: 0,
                 el: {
                     type: "bi.vtape",
-                    items: [{
-                        el: this._createDefaultTree()
-                    }, {
-                        el: {
-                            type: "bi.center",
-                            hgap: 10,
-                            items: [{
-                                type: "bi.text_button",
-                                cls: "mvc-button layout-bg2",
-                                text: "getValue",
-                                height: 30,
-                                handler: function () {
-                                    BI.Msg.alert("", JSON.stringify(self.tree.getValue()));
-                                }
-                            }, {
-                                type: "bi.text_button",
-                                cls: "mvc-button layout-bg2",
-                                text: "getNodeByValue(第一级目录1)",
-                                height: 30,
-                                handler: function () {
-                                    BI.Msg.alert("", "节点名称为: " + self.tree.getNodeByValue("第一级目录1").getValue());
-                                }
-                            }]
+                    items: [
+                        {
+                            el: this._createDefaultTree()
                         },
-                        height: 30
-                    }]
+                        {
+                            el: {
+                                type: "bi.center",
+                                hgap: 10,
+                                items: [{
+                                    type: "bi.text_button",
+                                    cls: "mvc-button layout-bg2",
+                                    text: "getValue",
+                                    height: 30,
+                                    handler: function () {
+                                        BI.Msg.alert("", JSON.stringify(self.tree.getValue()));
+                                    }
+                                }, {
+                                    type: "bi.text_button",
+                                    cls: "mvc-button layout-bg2",
+                                    text: "getNodeByValue(第一级目录1)",
+                                    height: 30,
+                                    handler: function () {
+                                        BI.Msg.alert("", "节点名称为: " + self.tree.getNodeByValue("第一级目录1").getValue());
+                                    }
+                                }]
+                            },
+                            height: 30
+                        }
+                    ]
                 }
             }, {
                 column: 1,
                 row: 0,
                 el: {
                     type: "bi.vtape",
-                    items: [{
-                        type: "bi.label",
-                        text: "异步加载数据",
-                        height: 30
-                    }, {
-                        el: this._createAsyncTree()
-                    }, {
-                        el: {
-                            type: "bi.center",
-                            hgap: 10,
-                            items: [{
-                                type: "bi.text_button",
-                                cls: "mvc-button layout-bg2",
-                                text: "getValue",
-                                height: 30,
-                                handler: function () {
-                                    BI.Msg.alert("", JSON.stringify(self.asyncTree.getValue()));
-                                }
-                            }, {
-                                type: "bi.text_button",
-                                cls: "mvc-button layout-bg2",
-                                text: "getNodeById(11)",
-                                height: 30,
-                                handler: function () {
-                                    BI.Msg.alert("", "节点名称为: " + (self.asyncTree.getNodeById(11) && self.asyncTree.getNodeById(11).getText()));
-                                }
-                            }]
+                    items: [
+                        {
+                            type: "bi.label",
+                            text: "异步加载数据",
+                            height: 30
                         },
-                        height: 30
-                    }]
+                        {
+                            el: this._createAsyncTree()
+                        },
+                        {
+                            el: {
+                                type: "bi.center",
+                                hgap: 10,
+                                items: [{
+                                    type: "bi.text_button",
+                                    cls: "mvc-button layout-bg2",
+                                    text: "getValue",
+                                    height: 30,
+                                    handler: function () {
+                                        BI.Msg.alert("", JSON.stringify(self.asyncTree.getValue()));
+                                    }
+                                }, {
+                                    type: "bi.text_button",
+                                    cls: "mvc-button layout-bg2",
+                                    text: "getNodeById(11)",
+                                    height: 30,
+                                    handler: function () {
+                                        BI.Msg.alert("", "节点名称为: " + (self.asyncTree.getNodeById(11) && self.asyncTree.getNodeById(11).getText()));
+                                    }
+                                }]
+                            },
+                            height: 30
+                        }
+                    ]
                 }
             }]
         });

@@ -18,16 +18,16 @@ Demo.Func = BI.inherit(BI.Widget, {
                     BI.Layers.create(id1, self, {
                         //偏移量
                         offset: {
-                            left: 20,
-                            right: 20,
-                            top: 20,
-                            bottom: 20
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
                         },
                         type: "bi.center_adapt",
                         cls: "bi-card",
                         items: [{
                             type: "bi.button",
-                            text: "点击隐藏",
+                            text: "点击关闭",
                             handler: function () {
                                 BI.Layers.hide(id1);
                             }
@@ -43,16 +43,16 @@ Demo.Func = BI.inherit(BI.Widget, {
                     BI.Layers.make(id2, self, {
                         //偏移量
                         offset: {
-                            left: 20,
-                            right: 20,
-                            top: 20,
-                            bottom: 20
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
                         },
                         type: "bi.center_adapt",
                         cls: "bi-card",
                         items: [{
                             type: "bi.button",
-                            text: "点击移除",
+                            text: "点击关闭",
                             handler: function () {
                                 BI.Layers.remove(id2);
                             }

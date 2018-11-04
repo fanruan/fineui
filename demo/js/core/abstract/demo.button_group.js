@@ -11,24 +11,12 @@ Demo.Func = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     ref = _ref;
                 },
-                behaviors: {
-                    highlight: function () {
-                        return true;
-                    }
-                },
-                chooseType: BI.ButtonGroup.CHOOSE_TYPE_MULTI,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function (value) {
-                        var content = "传递的参数为：" + value + "  getValue方法得到的值为：" + this.getValue();
-                        BI.Msg.alert("", content);
-                    }
-                }],
+                chooseType: BI.ButtonGroup.CHOOSE_TYPE_NONE,
                 layouts: [{
                     type: "bi.vertical",
                     items: [{
                         type: "bi.vtape",
-                        height: 300
+                        height: 200
                     }]
                 }],
                 items: [{
@@ -40,19 +28,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }, {
                     el: {
                         type: "bi.button",
-                        value: "button1"
-                    },
-                    height: 50
-                }, {
-                    el: {
-                        type: "bi.button",
-                        value: "button2"
-                    },
-                    height: 50
-                }, {
-                    el: {
-                        type: "bi.button",
-                        value: "button3"
+                        text: "1"
                     }
                 }]
             }, {
@@ -68,7 +44,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     }, {
                         el: {
                             type: "bi.button",
-                            value: "2"
+                            text: "2"
                         },
                         height: 50
                     }, {
