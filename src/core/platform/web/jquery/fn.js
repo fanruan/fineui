@@ -176,8 +176,9 @@ if (jQuery) {
             var offset2Body = this.get(0).getBoundingClientRect ? this.get(0).getBoundingClientRect() : this.offset();
             var width = offset2Body.width || this.outerWidth();
             var height = offset2Body.height || this.outerHeight();
-            return !(e.pageX < offset2Body.left || e.pageX > offset2Body.left + width
-                || e.pageY < offset2Body.top || e.pageY > offset2Body.top + height);
+            // offset2Body.left的值可能会有小数，导致某点出现false
+            return !(e.pageX < Math.floor(offset2Body.left) || e.pageX > offset2Body.left + width
+                || e.pageY < Math.floor(offset2Body.top) || e.pageY > offset2Body.top + height);
         },
 
         __hasZIndexMask__: function (zindex) {

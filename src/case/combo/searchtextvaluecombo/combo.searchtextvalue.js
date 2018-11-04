@@ -74,7 +74,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
                         action: function () {
-                            // self.trigger.stopEditing();
+                            self.trigger.stopEditing();
                         }
                     }, {
                         eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
@@ -138,6 +138,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
+        this.options.items = items;
         this.combo.populate(items);
     },
 

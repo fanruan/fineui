@@ -8,65 +8,14 @@ BI.BubblePopupView = BI.inherit(BI.PopupView, {
     _defaultConfig: function () {
         var config = BI.BubblePopupView.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(config, {
-            baseCls: config.baseCls + " bi-bubble-popup-view"
+            baseCls: config.baseCls + " bi-bubble-popup-view",
+            minWidth: 220,
+            maxWidth: 300,
+            minHeight: 90
         });
     },
     _init: function () {
         BI.BubblePopupView.superclass._init.apply(this, arguments);
-    },
-
-    showLine: function (direction) {
-        var pos = {}, op = {};
-        switch (direction) {
-            case "left":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    left: -1
-                };
-                op = {width: 3};
-                break;
-            case "right":
-                pos = {
-                    top: 0,
-                    bottom: 0,
-                    right: -1
-                };
-                op = {width: 3};
-                break;
-            case "top":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    top: -1
-                };
-                op = {height: 3};
-                break;
-            case "bottom":
-                pos = {
-                    left: 0,
-                    right: 0,
-                    bottom: -1
-                };
-                op = {height: 3};
-                break;
-            default:
-                break;
-        }
-        this.line = BI.createWidget(op, {
-            type: "bi.layout",
-            cls: "bubble-popup-line bi-high-light-background"
-        });
-        pos.el = this.line;
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
-            items: [pos]
-        });
-    },
-
-    hideLine: function () {
-        this.line && this.line.destroy();
     }
 });
 
@@ -82,7 +31,10 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
     _defaultConfig: function () {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
-            buttons: [{value: BI.i18nText("BI-Basic_Cancel"), ghost: true}, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            buttons: [{
+                value: BI.i18nText("BI-Basic_Cancel"),
+                ghost: true
+            }, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
         });
     },
     _init: function () {
@@ -93,12 +45,12 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
 
         var items = [];
         BI.each(o.buttons, function (i, buttonOpt) {
-            if(BI.isWidget(buttonOpt)) {
+            if (BI.isWidget(buttonOpt)) {
                 items.push(buttonOpt);
-            }else{
+            } else {
                 items.push(BI.extend({
                     type: "bi.button",
-                    height: 30,
+                    height: 24,
                     handler: function (v) {
                         self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
                     }
@@ -106,12 +58,34 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
             }
         });
         return BI.createWidget({
-            type: "bi.right_vertical_adapt",
+            type: "bi.center",
             height: 44,
-            hgap: 10,
-            bgap: 10,
-            items: items
+            rgap: 15,
+            items: [{
+                type: "bi.right_vertical_adapt",
+                lgap: 10,
+                items: items
+            }]
         });
+    },
+
+    _createView: function () {
+        var o = this.options;
+
+        var button =  BI.createWidget({
+            type: "bi.button_group",
+            items: [o.el],
+            layouts: [{
+                type: "bi.vertical",
+                cls: "bar-popup-container",
+                hgap: 15,
+                tgap: 10
+            }]
+        });
+
+        button.element.css("min-height", o.minHeight - 44);
+
+        return button;
     }
 });
 BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
@@ -125,63 +99,56 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  */
 BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
 
-    props: {
-        baseCls: "bi-text-bubble-bar-popup-view",
-        text: "",
-        width: 250
+    props: function () {
+        return {
+            baseCls: "bi-text-bubble-bar-popup-view",
+            text: "",
+            buttons: [{
+                level: "ignore",
+                value: false,
+                text: BI.i18nText("BI-Basic_Cancel")
+            }, {
+                value: true,
+                text: BI.i18nText("BI-Basic_Sure")
+            }]
+        };
     },
 
-    render: function(){
+    render: function () {
         var self = this, o = this.options;
+        var buttons = BI.map(o.buttons, function (index, buttonOpt) {
+            if (BI.isWidget(buttonOpt)) {
+                return buttonOpt;
+            }
+            return BI.extend({
+                type: "bi.button",
+                height: 24,
+                handler: function (v) {
+                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                }
+            }, buttonOpt);
+
+        });
         return {
             type: "bi.bubble_bar_popup_view",
             ref: function () {
                 self.popup = this;
             },
             el: {
-                type: "bi.vertical",
-                items: [{
-                    type: "bi.label",
-                    text: o.text,
-                    whiteSpace: "normal",
-                    textAlign: "left",
-                    ref: function () {
-                        self.text = this;
-                    }
-                }],
-                hgap: 10,
-                tgap: 25,
-                bgap: 10
+                type: "bi.label",
+                text: o.text,
+                whiteSpace: "normal",
+                textAlign: "left",
+                ref: function () {
+                    self.text = this;
+                }
             },
-            buttons: [{
-                type: "bi.button",
-                value: BI.i18nText("BI-Basic_Cancel"),
-                level: "ignore",
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, false);
-                }
-            }, {
-                type: "bi.button",
-                value: BI.i18nText("BI-Basic_Sure"),
-                height: 24,
-                handler: function () {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, true);
-                }
-            }]
+            buttons: buttons
         };
     },
 
     populate: function (v) {
         this.text.setText(v || this.options.text);
-    },
-
-    showLine: function (direction) {
-        this.popup.showLine(direction);
-    },
-
-    hideLine: function () {
-        this.popup.hideLine();
     }
 });
 BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";

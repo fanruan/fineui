@@ -391,7 +391,10 @@
             var conf = BI.File.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-file display-block",
-                element: "<input type='file'>",
+                tagName: "input",
+                attributes: {
+                    type: "file"
+                },
                 name: "",
                 url: "",
                 multiple: true,
@@ -410,7 +413,7 @@
             this.element.attr("title", o.title || "");
         },
 
-        mounted: function () {
+        created: function () {
             var self = this, o = this.options;
             // create the noswfupload.wrap Object
             // wrap.maxSize 文件大小限制
@@ -508,11 +511,11 @@
                     } else {
                         wrap.files.unshift(item);
                         // BI.Msg.toast(value);
-                        self.fireEvent(BI.File.EVENT_CHANGE, {
-                            file: item
-                        });
                     }
                 }
+                wrap.files.length > 0 && self.fireEvent(BI.File.EVENT_CHANGE, {
+                    files: wrap.files
+                });
                 input.value = "";
                 wrap.dom.input.parentNode.replaceChild(input, wrap.dom.input);
                 wrap.dom.input = input;
@@ -582,21 +585,23 @@
         },
 
         select: function () {
-            BI.Widget._renderEngine.createElement(this.wrap.dom.input).click();
+            this.wrap && BI.Widget._renderEngine.createElement(this.wrap.dom.input).click();
         },
 
         upload: function (handler) {
-            this.wrap.upload(handler);
+            this.wrap && this.wrap.upload(handler);
         },
 
         getValue: function () {
-            return this.wrap.attach_array;
+            return this.wrap ? this.wrap.attach_array : [];
         },
 
         reset: function () {
-            this.wrap.attach_array = [];
-            this.wrap.attach_names = [];
-            this.wrap.attachNum = 0;
+            if (this.wrap) {
+                this.wrap.attach_array = [];
+                this.wrap.attach_names = [];
+                this.wrap.attachNum = 0;
+            }
         },
 
         _setEnable: function (enable) {

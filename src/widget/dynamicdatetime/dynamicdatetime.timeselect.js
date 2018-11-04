@@ -137,7 +137,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
 
     _autoSwitch: function (v, type) {
         var limit = 0;
-        var value = v;
+        var value = v + "";
         switch (type) {
             case BI.DynamicDateTimeSelect.HOUR:
                 limit = 2;
@@ -148,7 +148,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
             default:
                 break;
         }
-        if(v.length === 1 && BI.parseInt(v) > limit) {
+        if(value.length === 1 && BI.parseInt(value) > limit) {
             value = "0" + value;
         }
         if (value.length === 2) {

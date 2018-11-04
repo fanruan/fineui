@@ -5,9 +5,10 @@ Demo.CodeEditor = BI.inherit(BI.Widget, {
     render: function () {
         var editor = BI.createWidget({
             type: "bi.textarea_editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             width: 600,
-            height: 400
+            height: 400,
+            watermark: "请输入内容"
         });
         editor.on(BI.TextAreaEditor.EVENT_FOCUS, function () {
             BI.Msg.toast("Focus");

@@ -45,7 +45,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 12,
             el: {
                 type: "bi.layout",
-                cls: "base-line-conn-background",
+                cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
                 width: 12,
                 height: o.height
             }
@@ -53,7 +53,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             width: 24,
             el: {
                 type: "bi.layout",
-                cls: "mid-line-conn-background",
+                cls: "first-line-conn-background",
                 width: 24,
                 height: o.height
             }

@@ -17,7 +17,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self._updateAllValue();
             self._checkError();
             self.trigger.getSearcher().setState(self.storeValue);
@@ -42,7 +42,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             allValueGetter: function () {
@@ -58,7 +58,8 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
-            value: this.storeValue
+            value: this.storeValue,
+            warningTitle: o.warningTitle
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
@@ -260,7 +261,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
                 }
             });
             self._adjust(callback);
@@ -432,12 +433,20 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 return !BI.contains(v, value);
             });
             if (BI.isNull(result)) {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
                 this.element.removeClass("combo-error");
             } else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
                 this.element.addClass("combo-error");
             }
         } else {
-            v.length === this.allValue.length ? this.element.removeClass("combo-error") : this.element.addClass("combo-error");
+            if(v.length === this.allValue.length){
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("success"));
+                this.element.removeClass("combo-error");
+            }else {
+                BI.isNotNull(this.trigger) && (this.trigger.setTipType("warning"));
+                this.element.addClass("combo-error");
+            }
         }
     },
 

@@ -46,9 +46,9 @@ module.exports = function (grunt) {
                     "src/base/single/tip/tip.js",
                     "src/base/combination/group.button.js",
                     "src/base/combination/tree.button.js",
-                    "src/base/tree/treeview.js",
-                    "src/base/tree/asynctree.js",
-                    "src/base/tree/parttree.js",
+                    "src/base/tree/ztree/treeview.js",
+                    "src/base/tree/ztree/asynctree.js",
+                    "src/base/tree/ztree/parttree.js",
                     "src/base/**/*.js"
                 ],
                 dest: "dist/base.js"
@@ -100,6 +100,11 @@ module.exports = function (grunt) {
                 dest: "dist/bundle.js"
             },
 
+            bundleIEJs: {
+                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
+                dest: "dist/bundle.ie.js"
+            },
+
             bundleCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
                 dest: "dist/bundle.css"
@@ -107,8 +112,14 @@ module.exports = function (grunt) {
 
             fineuiJs: {
                 src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
-                    "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
                 dest: "dist/fineui.js"
+            },
+
+            fineuiIEJs: {
+                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.ie.js", "dist/base.js",
+                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.ie.js", "ui/js/**/*.js", "!ui/js/fineui.i18n.js"],
+                dest: "dist/fineui.ie.js"
             },
 
             fineuiWithoutJqueryAndPolyfillJs: {
@@ -142,13 +153,13 @@ module.exports = function (grunt) {
                     "src/base/combination/tree.button.js",
                     "src/base/combination/map.button.js",
                     "src/base/**/*.js",
-                    "!src/base/tree/**/*.js",
+                    "!src/base/tree/ztree/**/*.js",
                     "!src/base/single/input/file.js",
 
                     "src/case/combo/popup.bubble.js",
                     "src/case/**/*.js",
                     "!src/case/colorchooser/**/*.js",
-                    "!src/case/tree/tree.display.js",
+                    "!src/case/tree/ztree/**/*.js",
 
                     "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
                 dest: "dist/fineui_without_jquery_polyfill.js"
@@ -176,11 +187,11 @@ module.exports = function (grunt) {
                     "src/core/foundation.js",
                     "src/core/lodash.js",
                     "src/core/var.js",
-                    "src/core/proto/array.js",
-                    "src/core/proto/number.js",
-                    "src/core/proto/string.js",
-                    "src/core/proto/date.js",
-                    "src/core/proto/function.js",
+                    "src/core/func/array.js",
+                    "src/core/func/number.js",
+                    "src/core/func/string.js",
+                    "src/core/func/date.js",
+                    "src/core/func/function.js",
                     "src/core/base.js",
                     "src/core/ob.js",
                     "src/core/alias.js",
@@ -242,8 +253,10 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     "dist/bundle.min.js": ["<%= concat.bundleJs.dest %>"],
+                    "dist/bundle.ie.min.js": ["<%= concat.bundleIEJs.dest %>"],
                     "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
-                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"]
+                    "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"],
+                    "dist/fineui.ie.min.js": ["<%= concat.fineuiIEJs.dest %>"]
                 }
             }
         },

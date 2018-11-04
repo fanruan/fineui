@@ -9,7 +9,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
             value: "",
             text: "",
             stopEvent: false,
@@ -229,6 +229,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
+                                direction: "top,left",
                                 ref: function () {
                                     self.combo = this;
                                 },
@@ -285,7 +286,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         }
     },
 
-    _trigger: function () {
+    _trigger: function (e) {
         var o = this.options;
         if (!this.isEnabled()) {
             return;
@@ -296,14 +297,14 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this);
+            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
-            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this);
+            this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
-                BI.Actions.runAction(o.action, "click", o);
+                BI.Actions.runAction(o.action, "click", o, this);
             }
-            BI.Actions.runGlobalAction("click", o);
+            BI.Actions.runGlobalAction("click", o, this);
         }
     },
 
@@ -311,7 +312,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (this.isValid()) {
             this.beforeClick(e);
         }
-        this._trigger();
+        this._trigger(e);
         if (this.isValid()) {
             this.doClick(e);
         }

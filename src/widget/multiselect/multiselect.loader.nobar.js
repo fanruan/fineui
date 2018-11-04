@@ -84,7 +84,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
                     }
                     callback(firstItems.concat(self._createItems(ob.items)), ob.keyword || "");
                     if (op.times === 1 && self.storeValue) {
-                        BI.isKey(startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](startValue);
+                        BI.isKey(startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, startValue) : BI.pushDistinct(self.storeValue.value, startValue));
                         self.setValue(self.storeValue);
                     }
                     (op.times === 1) && self._scrollToTop();

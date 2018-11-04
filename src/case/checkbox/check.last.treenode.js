@@ -5,7 +5,7 @@
  */
 BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
-        return BI.extend( BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.LastTreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type4",
             iconWidth: 24,
             iconHeight: 24
@@ -17,10 +17,10 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
     },
     setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
-        if(v === true) {
-            this.element.addClass("tree-expand-icon-type3");
+        if (v === true) {
+            this.element.addClass("tree-expand-icon-type4");
         } else {
-            this.element.removeClass("tree-expand-icon-type3");
+            this.element.removeClass("tree-expand-icon-type4");
         }
     }
 });

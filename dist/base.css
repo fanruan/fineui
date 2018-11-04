@@ -421,6 +421,7 @@
 }
 .bi-bubble-combo .button-combo-triangle-wrapper {
   position: fixed !important;
+  line-height: 0;
   z-index: 10000000;
 }
 .bi-bubble-combo .bubble-combo-triangle-left {
@@ -428,13 +429,14 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-left:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 2px;
-  margin-top: -3px;
+  margin-left: -3px;
+  margin-top: 4px;
   content: "";
   transform: rotate(-45deg);
 }
@@ -443,6 +445,7 @@
   position: absolute;
   width: 6px;
   height: 16px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-right:before {
   position: absolute;
@@ -458,12 +461,13 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-top:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 4px;
   margin-top: -3px;
   content: "";
   transform: rotate(45deg);
@@ -473,12 +477,13 @@
   position: absolute;
   width: 16px;
   height: 6px;
+  text-align: left;
 }
 .bi-bubble-combo .bubble-combo-triangle-bottom:before {
   position: absolute;
   width: 6px;
   height: 6px;
-  margin-left: 3px;
+  margin-left: 4px;
   margin-top: 2px;
   content: "";
   transform: rotate(-135deg);
@@ -557,6 +562,10 @@
 .bi-text-value-down-list-combo:hover > .bi-border {
   border-color: #3685f2;
 }
+.bi-bubble-bar-popup-view .bar-popup-container {
+  max-height: 456px;
+}
+
 /*************BI.SearchEditor******************/
 .bi-search-editor {
   -webkit-border-radius: 2px;
@@ -653,363 +662,25 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-.farbtastic .wheel {
-  background: url('images/1x/background/wheel.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/wheel.png');
-  _background: none;
-}
-.farbtastic .overlay {
-  background: url('images/1x/background/mask.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/mask.png');
-  _background: none;
-}
-.farbtastic .marker {
-  background: url('images/1x/background/marker.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/marker.png');
-  _background: none;
-}
-.bi-display-tree .ztree li span.button.switch.center_open {
-  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
-}
-.bi-display-tree .ztree li span.button.switch.roots_open {
-  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
-}
-.bi-display-tree .ztree li span.button.switch.bottom_open {
-  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
-}
-.ztree li ul.line {
-  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li ul.line {
-  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_false_full {
-  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_false_full_focus {
-  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_false_part_focus {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_true_full {
-  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_true_full_focus {
-  background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_true_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree li span.button.chk.checkbox_true_part_focus {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
-  background-size: contain;
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_false_full {
-  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_false_full_focus {
-  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_false_part_focus {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_true_full {
-  background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_true_full_focus {
-  background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_true_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
-}
-.ztree.hack li span.button.chk.checkbox_true_part_focus {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
-}
-.ztree li span.button.root_open {
-  background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_1.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.root_open {
-  background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_1.png');
-  _background: none;
-}
-.ztree li span.button.root_close {
-  background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_1.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.root_close {
-  background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_1.png');
-  _background: none;
-}
-.ztree li span.button.roots_open {
-  background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_2.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.roots_open {
-  background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_2.png');
-  _background: none;
-}
-.ztree li span.button.roots_close {
-  background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_2.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.roots_close {
-  background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_2.png');
-  _background: none;
-}
-.ztree li span.button.center_open {
-  background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_3.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.center_open {
-  background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_3.png');
-  _background: none;
-}
-.ztree li span.button.center_close {
-  background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_3.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.center_close {
-  background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_3.png');
-  _background: none;
-}
-.ztree li span.button.bottom_open {
-  background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_4.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.bottom_open {
-  background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_4.png');
-  _background: none;
-}
-.ztree li span.button.bottom_close {
-  background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_4.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.bottom_close {
-  background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_4.png');
-  _background: none;
-}
-.ztree li span.button.roots_docu {
-  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.roots_docu {
-  background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
-}
-.ztree li span.button.center_docu {
-  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.center_docu {
-  background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
-}
-.ztree li span.button.bottom_docu {
-  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
-}
-.bi-theme-dark .ztree li span.button.bottom_docu {
-  background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
-}
-.ztree li span.button.ico_loading {
-  background: url('images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
-  _background: none;
-}
-.base-line-conn-background {
-  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
-}
-.bi-theme-dark .base-line-conn-background {
-  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
-}
-.first-line-conn-background {
-  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
-}
-.bi-theme-dark .first-line-conn-background {
-  background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
-}
-.mid-line-conn-background {
-  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
-}
-.bi-theme-dark .mid-line-conn-background {
-  background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
-}
-.last-line-conn-background {
-  background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
-}
-.bi-theme-dark .last-line-conn-background {
-  background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
-}
-.loading-background {
-  background: url('images/2x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
-  background-size: contain;
-  _background: none;
-}
-.auto-color-background {
-  background: url('images/2x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color.png');
-  background-size: contain;
-  _background: none;
-}
-.auto-color-normal-background {
-  background: url('images/2x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.auto-color-normal-disabled-background {
-  background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
-  background-size: contain;
-  _background: none;
-}
-.trans-color-background {
-  background: url('images/2x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_normal.png');
-  background-size: contain;
-  _background: none;
-}
-.trans-color-disabled-background {
-  background: url('images/2x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
-  background-size: contain;
-  _background: none;
-}
-.auto-color-background.hack {
-  background: url('images/1x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
-  _background: none;
-}
-.auto-color-normal-background.hack {
-  background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
-  _background: none;
-}
-.auto-color-normal-disabled-background.hack {
-  background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
-  _background: none;
-}
-.trans-color-background.hack {
-  background: url('images/1x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
-  _background: none;
-}
-.trans-color-disabled-background.hack {
-  background: url('images/1x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
-  _background: none;
-}
 .bi-pane {
+  min-height: 25px;
+}
+.bi-pane.loading-status {
   min-height: 55px;
 }
 .bi-pane .loading-container {
   background-color: rgba(247, 248, 250, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00f7f8fa,endColorstr=#00f7f8fa);
 }
-.bi-loading-widget div {
+.bi-loading-widget {
+  font-size: 0;
+}
+.bi-loading-widget .animate-rect {
   background-color: rgba(54, 133, 242, 0.9);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#e63685f2,endColorstr=#e63685f2);
-  -webkit-border-radius: 2.5px;
-  -moz-border-radius: 2.5px;
-  border-radius: 2.5px;
+  -webkit-border-radius: 1.5px;
+  -moz-border-radius: 1.5px;
+  border-radius: 1.5px;
   -webkit-animation: loading-widget 0.8s infinite linear;
   -moz-animation: loading-widget 0.8s infinite linear;
   -ms-animation: loading-widget 0.8s infinite linear;
@@ -1116,12 +787,11 @@
   }
 }
 .bi-loading-widget.hack {
-  background: url('images/2x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
-  background-size: contain;
+  background: url('images/1x/icon/wave_loading.gif') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/wave_loading.gif');
   _background: none;
 }
-.bi-loading-widget.hack div {
+.bi-loading-widget.hack .animate-rect {
   background-color: rgba(54, 133, 242, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#003685f2,endColorstr=#003685f2);
 }
@@ -1171,6 +841,14 @@ body .bi-button,
   border-radius: 2px;
   border: 1px solid #3685f2;
   background-color: #3685f2;
+  -webkit-box-sizing: border-box;
+  /*Safari3.2+*/
+  -moz-box-sizing: border-box;
+  /*Firefox3.5+*/
+  -ms-box-sizing: border-box;
+  /*IE8*/
+  box-sizing: border-box;
+  /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -1294,7 +972,7 @@ body .bi-button.button-warning.clear .b-font:before,
 body .bi-button.button-error,
 #body .bi-button.button-error {
   background-color: #ff4949;
-  border-color: #e85050;
+  border-color: #FF4949;
 }
 body .bi-button.button-error,
 #body .bi-button.button-error,
@@ -1545,7 +1223,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 40px 40px 40px 40px;
   -moz-border-radius: 40px 40px 40px 40px;
   border-radius: 40px 40px 40px 40px;
-  background-color: #d4dadd;
+  background-color: #d0d4da;
 }
 .bi-switch:active,
 .bi-switch.active {
@@ -1555,6 +1233,25 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -webkit-border-radius: 9px 9px 9px 9px;
   -moz-border-radius: 9px 9px 9px 9px;
   border-radius: 9px 9px 9px 9px;
+}
+.bi-switch.disabled {
+  background-color: #F2F4F7;
+}
+.bi-switch.disabled:active {
+  background-color: #F2F4F7;
+}
+.bi-theme-dark .bi-switch {
+  background-color: #606479;
+}
+.bi-theme-dark .bi-switch:active,
+.bi-theme-dark .bi-switch.active {
+  background-color: #3685f2;
+}
+.bi-theme-dark .bi-switch.disabled {
+  background-color: #2F3149;
+}
+.bi-theme-dark .bi-switch.disabled:active {
+  background-color: #2F3149;
 }
 
 .bi-multifile-editor .multifile-editor {
@@ -1694,7 +1391,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-tooltip.tooltip-warning {
   background: #ff4949;
-  border: 1px solid #e85050;
+  border: 1px solid #FF4949;
 }
 .bi-branch-tree .bi-branch-tree-view {
   min-width: 300px;
@@ -1956,18 +1653,6 @@ ul.ztree.zTreeDragUL {
 
 .bi-trigger .bi-trigger-icon-button {
   font-size: 16px;
-}
-.bi-trigger .trigger-up {
-  display: none;
-}
-.bi-trigger .trigger-down {
-  display: block;
-}
-.bi-combo-popup > .bi-trigger .trigger-up {
-  display: block;
-}
-.bi-combo-popup > .bi-trigger .trigger-down {
-  display: none;
 }
 
 .bi-select-text-trigger {

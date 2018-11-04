@@ -22,14 +22,14 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && self.storeValue.value[self.storeValue.type === BI.Selection.All ? "remove" : "pushDistinct"](self._startValue);
+            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self.trigger.getSearcher().setState(self.storeValue);
             self.trigger.getCounter().setButtonChecked(self.storeValue);
         };
         this.storeValue = o.value || {};
-        
+
         this._assertValue(this.storeValue);
-        
+
         // 标记正在请求数据
         this.requesting = false;
 
@@ -43,7 +43,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     left: 0,
                     top: 0,
                     right: 0,
-                    bottom: 26
+                    bottom: 25
                 }
             },
             valueFormatter: o.valueFormatter,
@@ -249,7 +249,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.value[self.storeValue.type === BI.Selection.Multi ? "pushDistinct" : "remove"](val);
+                    self.storeValue.type === BI.Selection.Multi ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
                 }
             });
             self._adjust(callback);

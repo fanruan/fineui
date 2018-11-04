@@ -10,7 +10,7 @@ BI.Tip = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-tip",
+            _baseCls: (conf._baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
         });
     },

@@ -7,7 +7,7 @@
 BI.TreeView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TreeView.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-tree",
+            _baseCls: "bi-tree",
             paras: {},
             itemsCreator: BI.emptyFn
         });
@@ -318,6 +318,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var ns = BI.Tree.arrayFormat(nodes);
         BI.each(ns, function (i, n) {
             n.title = n.title || n.text || n.value;
+            n.isParent = n.isParent || n.parent;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();

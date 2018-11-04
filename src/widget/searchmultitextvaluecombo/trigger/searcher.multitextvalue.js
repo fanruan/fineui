@@ -18,7 +18,9 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            tipType: o.tipType,
+            warningTitle: o.warningTitle
         });
 
         this.searcher = BI.createWidget({
@@ -141,6 +143,10 @@ BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
                 this.editor.setState(BI.Selection.Multi);
             }
         }
+    },
+
+    setTipType: function (v) {
+        this.editor.setTipType(v);
     },
 
     setValue: function (ob) {

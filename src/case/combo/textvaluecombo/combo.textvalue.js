@@ -27,7 +27,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             items: o.items,
             height: o.height,
             text: o.text,
-            value: o.value
+            value: o.value,
+            warningTitle: o.warningTitle
         });
         this.popup = BI.createWidget({
             type: "bi.text_value_combo_popup",
@@ -66,8 +67,10 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
                 return BI.contains(v, item.value);
             });
             if (BI.isNull(result)) {
+                this.trigger.setTipType("warning");
                 this.element.removeClass("combo-error").addClass("combo-error");
             } else {
+                this.trigger.setTipType("success");
                 this.element.removeClass("combo-error");
             }
         }

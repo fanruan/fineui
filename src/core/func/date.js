@@ -49,18 +49,16 @@ _.extend(BI, {
         var d = BI.getDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
         var week = d.getDay();
         var startOfWeek = BI.StartOfWeek % 7;
-        if (date.getMonth() === 0 && date.getDate() <= week) {
-            return 1;
-        }
-        d.setDate(date.getDate() - (week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek)));
-        var ms = d.valueOf(); // GMT
+        var middleDay = (startOfWeek + 3) % 7;
+        middleDay = middleDay || 7;
+        // 偏移到周周首之前需要多少天
+        var offsetWeekStartCount = week < startOfWeek ? (7 + week - startOfWeek) : (week - startOfWeek);
+        var offsetWeekMiddleCount = middleDay < startOfWeek ? (7 + middleDay - startOfWeek) : (middleDay - startOfWeek);
+        d.setDate(d.getDate() - offsetWeekStartCount + offsetWeekMiddleCount);
+        var ms = d.valueOf();
         d.setMonth(0);
         d.setDate(1);
-        var offset = Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
-        if (d.getDay() !== startOfWeek) {
-            offset++;
-        }
-        return offset;
+        return Math.floor((ms - d.valueOf()) / (7 * 864e5)) + 1;
     },
 
     getQuarter: function (date) {
@@ -198,12 +196,38 @@ _.extend(BI, {
         s["%Q"] = qr;
 
         var re = /%./g;
+        BI.isKhtml = BI.isKhtml || function () {
+            if(!_global.navigator) {
+                return false;
+            }
+            return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
+        };
         if (!BI.isKhtml()) {
             return str.replace(re, function (par) {
                 return s[par] || par;
             });
         }
-
+        // 包含年周的格式化，ISO8601标准周的计数会影响年
+        if ((str.indexOf("%Y") !== -1 || str.indexOf("%y") !== -1) && (str.indexOf("%W") !== -1 || str.indexOf("%U") !== -1 || str.indexOf("%V") !== -1)) {
+            switch (wn) {
+                // 如果周数是1，但是当前却在12月，表示此周数为下一年的
+                case 1:
+                    if (m === 11) {
+                        s["%y"] = parseInt(s["%y"]) + 1;
+                        s["%Y"] = parseInt(s["%Y"]) + 1;
+                    }
+                    break;
+                // 如果周数是53，但是当前却在1月，表示此周数为上一年的
+                case 53:
+                    if (m === 0) {
+                        s["%y"] = parseInt(s["%y"]) - 1;
+                        s["%Y"] = parseInt(s["%Y"]) - 1;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
         var a = str.match(re);
         for (var i = 0; i < a.length; i++) {
             var tmp = s[a[i]];

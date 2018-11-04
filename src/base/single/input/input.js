@@ -9,7 +9,7 @@ BI.Input = BI.inherit(BI.Single, {
         var conf = BI.Input.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-input display-block",
-            element: "<input/>",
+            tagName: "input",
             validationChecker: BI.emptyFn,
             quitChecker: BI.emptyFn, // 按确定键能否退出编辑
             allowBlank: false
@@ -20,12 +20,17 @@ BI.Input = BI.inherit(BI.Single, {
         BI.Input.superclass._init.apply(this, arguments);
         var self = this;
         var ctrlKey = false;
+        var keyCode = null;
         var inputEventValid = false;
         var _keydown = BI.debounce(function (keyCode) {
             self.onKeyDown(keyCode, ctrlKey);
             self._keydown_ = false;
         }, 300);
         var _clk = BI.debounce(BI.bind(this._click, this), BI.EVENT_RESPONSE_TIME, {
+            "leading": true,
+            "trailing": false
+        });
+        this._focusDebounce = BI.debounce(BI.bind(this._focus, this), BI.EVENT_RESPONSE_TIME, {
             "leading": true,
             "trailing": false
         });
@@ -37,20 +42,24 @@ BI.Input = BI.inherit(BI.Single, {
             .keydown(function (e) {
                 inputEventValid = false;
                 ctrlKey = e.ctrlKey;
-                self.fireEvent(BI.Input.EVENT_QUICK_DOWN);
+                keyCode = e.keyCode;
+                self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
             .keyup(function (e) {
+                keyCode = null;
                 if (!(inputEventValid && e.keyCode === BI.KeyCode.ENTER)) {
                     self._keydown_ = true;
                     _keydown(e.keyCode);
                 }
             })
             .on("input propertychange", function (e) {
+                // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
                 // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(e.keyCode)) {
+                if (BI.isNotNull(keyCode)) {
+                    keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
-                    _keydown(e.keyCode);
+                    _keydown(keyCode);
                 }
             })
             .click(function (e) {
@@ -59,6 +68,9 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .mousedown(function (e) {
                 self.element.val(self.element.val());
+            })
+            .focus(function (e) { // 可以不用冒泡
+                self._focusDebounce();
             })
             .focusout(function (e) {
                 self._blurDebounce();
@@ -107,7 +119,6 @@ BI.Input = BI.inherit(BI.Single, {
 
     _click: function () {
         if (this._isEditing !== true) {
-            this._focus();
             this.selectAll();
             this.fireEvent(BI.Input.EVENT_CLICK);
         }
@@ -208,7 +219,6 @@ BI.Input = BI.inherit(BI.Single, {
         }
         if (!this._isEditing === true) {
             this.element.focus();
-            this._focus();
             this.selectAll();
         }
     },

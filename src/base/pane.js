@@ -10,7 +10,7 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Pane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-pane",
+            _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             overlap: true,
             onLoaded: BI.emptyFn
@@ -53,25 +53,25 @@ BI.Pane = BI.inherit(BI.Widget, {
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
             cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
-            height: 60,
-            width: 60,
-            hgap: 10,
-            vgap: 5,
+            height: 30,
+            width: 30,
+            hgap: 5,
+            vgap: 2.5,
             items: [{
                 type: "bi.layout",
-                cls: "rect1",
-                height: 50,
-                width: 5
+                cls: "animate-rect rect1",
+                height: 25,
+                width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect2",
-                height: 50,
-                width: 5
+                cls: "animate-rect rect2",
+                height: 25,
+                width: 3
             }, {
                 type: "bi.layout",
-                cls: "rect3",
-                height: 50,
-                width: 5
+                cls: "animate-rect rect3",
+                height: 25,
+                width: 3
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
@@ -104,6 +104,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 }]
             });
         }
+        this.element.addClass("loading-status");
     },
 
     loaded: function () {
@@ -113,6 +114,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         this._loading && (this._loading = null);
         o.onLoaded();
         self.fireEvent(BI.Pane.EVENT_LOADED);
+        this.element.removeClass("loading-status");
     },
 
     check: function () {

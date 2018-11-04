@@ -8,7 +8,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         extraCls: "bi-year-quarter-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 22
     },
 
     _init: function () {
@@ -39,9 +39,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height < 24 ? 24 : o.height
+                            width: 24
                         },
-                        width: o.height}]
+                        width: 24}]
                 }]
             }, {
                 el: {

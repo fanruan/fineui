@@ -349,6 +349,7 @@ BI.shortcut("demo.icon_label", Demo.IconLabel);Demo.Label = BI.inherit(BI.Widget
                 type: "bi.label",
                 cls: "layout-bg6",
                 text: "这是一个label控件，默认居中",
+                disabled: true,
                 textAlign: "center"
             }, {
                 type: "bi.label",
@@ -744,9 +745,10 @@ BI.shortcut("demo.multifile_editor", Demo.CodeEditor);Demo.CodeEditor = BI.inher
     render: function () {
         var editor = BI.createWidget({
             type: "bi.textarea_editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             width: 600,
-            height: 400
+            height: 400,
+            watermark: "请输入内容"
         });
         editor.on(BI.TextAreaEditor.EVENT_FOCUS, function () {
             BI.Msg.toast("Focus");
@@ -1563,26 +1565,26 @@ Demo.TextValueDownListCombo = BI.inherit(BI.Widget, {
                 text: "默认值",
                 value: 11,
                 items: [[{
-                    text: BI.i18nText("BI-Basic_Number_IN"),
+                    text: "属于",
                     value: 1,
                     cls: "dot-e-font"
                 }, {
-                    text: BI.i18nText("BI-Basic_Not_Number_In"),
+                    text: "不属于",
                     value: 2,
                     cls: "dot-e-font"
                 }], [{
                     el: {
-                        text: BI.i18nText("BI-Basic_More_Than"),
+                        text: "大于",
                         value: 3,
-                        cls: "dot-e-font"
+                        iconCls1: "dot-e-font"
                     },
                     value: 3,
                     children: [{
-                        text: BI.i18nText("BI-Basic_Settled_Value"),
+                        text: "固定值",
                         value: 4,
                         cls: "dot-e-font"
                     }, {
-                        text: BI.i18nText("BI-Basic_Average_Value"),
+                        text: "平均值",
                         value: 5,
                         cls: "dot-e-font"
                     }]
@@ -2644,220 +2646,6 @@ BI.shortcut("demo.select_text_trigger", Demo.Func);Demo.Func = BI.inherit(BI.Wid
     }
 });
 BI.shortcut("demo.text_trigger", Demo.Func);/**
- * guy
- * 二级树
- * @class BI.PlatformLevelTree
- * @extends BI.Select
- */
-BI.PlatformLevelTree = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "platform-level-tree",
-        itemsCreator: BI.emptyFn
-    },
-
-    render: function () {
-        var self = this, o = this.options;
-        this.tree = BI.createWidget({
-            type: "bi.custom_tree",
-            element: this,
-            expander: {
-                type: "bi.select_tree_expander",
-                isDefaultInit: false,
-                el: {},
-                popup: {
-                    type: "bi.custom_tree"
-                }
-            },
-
-            itemsCreator: function (op, callback) {
-                o.itemsCreator(op, function (items) {
-                    callback(self._formatItems(items));
-                });
-            },
-
-            el: {
-                type: "bi.loader",
-                next: false,
-                el: {
-                    type: "bi.button_tree",
-                    chooseType: 0,
-                    layouts: [{
-                        type: "bi.vertical"
-                    }]
-                }
-            }
-        });
-        this.tree.on(BI.CustomTree.EVENT_CHANGE, function () {
-            self.fireEvent(BI.PlatformLevelTree.EVENT_CHANGE, arguments);
-        });
-    },
-
-    _formatItems: function (nodes) {
-        var self = this;
-        BI.each(nodes, function (i, node) {
-            var extend = {};
-            if (node.isParent === true || BI.isNotEmptyArray(node.children)) {
-                switch (i) {
-                    case 0 :
-                        extend.type = "bi.multilayer_select_tree_first_plus_group_node";
-                        break;
-                    case nodes.length - 1 :
-                        extend.type = "bi.multilayer_select_tree_last_plus_group_node";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
-                        break;
-                }
-                BI.defaults(node, extend);
-            } else {
-                switch (i) {
-                    case nodes.length - 1:
-                        extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
-                        break;
-                    default :
-                        extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
-                }
-                BI.defaults(node, extend);
-            }
-        });
-        return nodes;
-    },
-
-    populate: function () {
-        this.tree.populate();
-    },
-
-    getValue: function () {
-        return this.tree.getValue();
-    }
-});
-BI.PlatformLevelTree.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.platform_level_tree", BI.PlatformLevelTree);
-
-
-BI.DemoLevelTree = BI.inherit(BI.Widget, {
-
-    render: function () {
-        var self = this;
-        return {
-            type: "bi.vtape",
-            items: [{
-                el: {
-                    type: "bi.platform_level_tree",
-                    ref: function () {
-                        self.tree = this;
-                    },
-                    itemsCreator: function (op, callback) {
-                        if (!op.node) {// 根节点
-                            callback([{
-                                id: 1,
-                                pId: 0,
-                                text: "A",
-                                value: 1,
-                                isParent: true
-                            }, {
-                                id: 2,
-                                pId: 0,
-                                text: "B",
-                                value: 2,
-                                isParent: true,
-                                open: true
-                            }]);
-                        } else {
-                            if (op.node.id == 1) {
-                                callback([
-                                    {
-                                        id: 11,
-                                        pId: 1,
-                                        text: "test11",
-                                        value: 11,
-                                        layer: 1,
-                                        isParent: true
-                                    },
-                                    {
-                                        id: 12,
-                                        pId: 1,
-                                        text: "test12",
-                                        value: 12,
-                                        layer: 1
-                                    },
-                                    {
-                                        id: 13,
-                                        pId: 1,
-                                        text: "test13",
-                                        value: 13,
-                                        layer: 1
-                                    },
-                                    {
-                                        id: 14,
-                                        pId: 1,
-                                        text: "test14",
-                                        value: 14,
-                                        layer: 1,
-                                        height: 35
-                                    },
-                                    {
-                                        id: 15,
-                                        pId: 1,
-                                        text: "test15",
-                                        value: 15,
-                                        layer: 1
-                                    },
-                                    {
-                                        id: 16,
-                                        pId: 1,
-                                        text: "test16",
-                                        value: 16,
-                                        layer: 1
-                                    },
-                                    {id: 17, pId: 1, text: "test17", layer: 1, value: 17}
-                                ]);
-                            } else if (op.node.id == 2) {
-                                callback([{
-                                    id: 21,
-                                    pId: 2,
-                                    text: "test21",
-                                    value: 21,
-                                    layer: 1
-                                },
-                                {
-                                    id: 22,
-                                    pId: 2,
-                                    text: "test22",
-                                    value: 22,
-                                    layer: 1
-                                }]);
-                            } else if (op.node.id == 11) {
-                                callback([{
-                                    id: 111,
-                                    pId: 11,
-                                    text: "test111",
-                                    value: 111,
-                                    layer: 2
-                                }]);
-                            }
-                        }
-                    }
-                }
-            }, {
-                el: {
-                    type: "bi.button",
-                    text: "确定",
-                    handler: function () {
-                        BI.Msg.toast(JSON.stringify(self.tree.getValue()));
-                    }
-                },
-                height: 25
-            }]
-
-        };
-    },
-
-    mounted: function () {
-
-    }
-});
-BI.shortcut("demo.platform_level_tree", BI.DemoLevelTree);/**
  * Created by roy on 16/5/23.
  */
 BI.DetailTableCell = BI.inherit(BI.Widget, {
@@ -3241,10 +3029,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     value: "demo.toast"
 }, {
     pId: 2,
-    text: "message提示",
-    value: "demo.message"
-}, {
-    pId: 2,
     id: 201,
     text: "button"
 }, {
@@ -3486,10 +3270,6 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
 }];Demo.CATEGORY_CONFIG = [{
     id: 100000,
     text: "专题"
-}, {
-    pId: 100000,
-    text: "自定义一棵树",
-    value: "demo.platform_level_tree"
 }, {
     pId: 100000,
     text: "可以排序的树",
@@ -6193,33 +5973,118 @@ Demo.Horizontal = BI.inherit(BI.Widget, {
     },
     render: function () {
         return {
-            type: "bi.horizontal",
-            hgap: 10,
+            type: "bi.vertical",
+            vgap: 10,
             items: [{
-                type: "bi.label",
-                whiteSpace: "normal",
-                text: "因为大多数场景下都需要垂直居中，所以这个布局一般会被vertical_adapt布局设置scrollx=true取代",
-                cls: "layout-bg3",
-                width: 500,
-                height: 50
+                type: "bi.horizontal",
+                height: 150,
+                hgap: 10,
+                items: [{
+                    type: "bi.label",
+                    whiteSpace: "normal",
+                    text: "因为大多数场景下都需要垂直居中，所以这个布局一般会被vertical_adapt布局设置scrollx=true取代",
+                    cls: "layout-bg3",
+                    width: 500,
+                    height: 50
+                }, {
+                    type: "bi.label",
+                    text: "水平布局",
+                    cls: "layout-bg4",
+                    width: 300,
+                    height: 30
+                }, {
+                    type: "bi.label",
+                    text: "水平布局",
+                    cls: "layout-bg5",
+                    width: 300,
+                    height: 30
+                }, {
+                    type: "bi.label",
+                    text: "水平布局",
+                    cls: "layout-bg6",
+                    width: 300,
+                    height: 30
+                }]
             }, {
-                type: "bi.label",
-                text: "水平布局",
-                cls: "layout-bg4",
-                width: 300,
-                height: 30
+                type: "bi.layout",
+                height: 1,
+                cls: "bi-border-bottom bi-high-light-border"
             }, {
-                type: "bi.label",
-                text: "水平布局",
-                cls: "layout-bg5",
-                width: 300,
-                height: 30
+                type: "bi.horizontal",
+                height: 150,
+                verticalAlign: BI.VerticalAlign.Middle,
+                horizontalAlign: BI.HorizontalAlign.Left,
+                vgap: 10,
+                items: [{
+                    type: "bi.label",
+                    text: "以horizontal实现的vertical_adapt垂直居中",
+                    cls: "layout-bg1",
+                    width: 300,
+                    height: 30
+                }, {
+                    type: "bi.label",
+                    text: "以horizontal实现的vertical_adapt垂直居中",
+                    cls: "layout-bg2",
+                    width: 300,
+                    height: 30
+                }]
             }, {
-                type: "bi.label",
-                text: "水平布局",
-                cls: "layout-bg6",
-                width: 300,
-                height: 30
+                type: "bi.layout",
+                height: 1,
+                cls: "bi-border-bottom bi-high-light-border"
+            }, {
+                type: "bi.horizontal",
+                height: 150,
+                verticalAlign: BI.VerticalAlign.Top,
+                horizontalAlign: BI.HorizontalAlign.Center,
+                items: [{
+                    type: "bi.label",
+                    text: "以horizontal代替horizontal_adapt实现的水平居中(单元素)",
+                    cls: "layout-bg1",
+                    width: 300,
+                    height: 30
+                }]
+            }, {
+                type: "bi.layout",
+                height: 1,
+                cls: "bi-border-bottom bi-high-light-border"
+            }, {
+                type: "bi.horizontal",
+                height: 150,
+                verticalAlign: BI.VerticalAlign.Top,
+                horizontalAlign: BI.HorizontalAlign.Center,
+                columnSize: [300, "fill"],
+                items: [{
+                    type: "bi.label",
+                    text: "以horizontal代替horizontal_adapt实现的用于水平适应布局",
+                    cls: "layout-bg1",
+                    height: 30
+                }, {
+                    type: "bi.label",
+                    text: "以horizontal代替horizontal_adapt实现的水平自适应列",
+                    cls: "layout-bg2",
+                    height: 30
+                }]
+            }, {
+                type: "bi.layout",
+                height: 1,
+                cls: "bi-border-bottom bi-high-light-border"
+            }, {
+                type: "bi.center_adapt",
+                height: 150,
+                verticalAlign: BI.VerticalAlign.Middle,
+                horizontalAlign: BI.HorizontalAlign.Center,
+                items: [{
+                    type: "bi.label",
+                    text: "以horizontal代替center_adapt实现的水平垂直居中",
+                    width: 300,
+                    height: 100,
+                    cls: "layout-bg1"
+                }]
+            }, {
+                type: "bi.layout",
+                height: 1,
+                cls: "bi-border-bottom bi-high-light-border"
             }]
         };
     }
@@ -6261,7 +6126,30 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.htape", Demo.HtapeLayout);/**
+BI.shortcut("demo.htape", Demo.HtapeLayout);Demo.InlineVerticalLayout = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-absolute"
+    },
+    render: function () {
+        return {
+            type: "bi.inline_vertical_adapt",
+            items: [{
+                type: "bi.label",
+                text: "绝对布局",
+                cls: "layout-bg1",
+                width: 300,
+                height: 200
+            }, {
+                type: "bi.label",
+                text: "绝对布局",
+                cls: "layout-bg1",
+                width: 300,
+                height: 100
+            }]
+        };
+    }
+});
+BI.shortcut("demo.inline_vertical", Demo.InlineVerticalLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
@@ -6705,18 +6593,19 @@ Demo.Func = BI.inherit(BI.Widget, {
     },
     render: function () {
         var id = BI.UUID();
+        var body;
         return {
             type: "bi.vertical",
             vgap: 10,
             items: [{
                 type: "bi.text_button",
-                text: "点击弹出Popover(normal size)",
+                text: "点击弹出Popover(normal size & fixed)",
                 height: 30,
                 handler: function () {
                     BI.Popovers.remove(id);
                     BI.Popovers.create(id, {
                         type: "bi.bar_popover",
-                        size: "big",
+                        size: "normal",
                         header: {
                             type: "bi.label",
                             text: "这个是header"
@@ -6729,7 +6618,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }
             }, {
                 type: "bi.text_button",
-                text: "点击弹出Popover(small size)",
+                text: "点击弹出Popover(small size & fixed)",
                 height: 30,
                 handler: function () {
                     BI.Popovers.remove(id);
@@ -6748,7 +6637,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }
             }, {
                 type: "bi.text_button",
-                text: "点击弹出Popover(big size)",
+                text: "点击弹出Popover(big size & fixed)",
                 height: 30,
                 handler: function () {
                     BI.Popovers.remove(id);
@@ -6762,6 +6651,80 @@ Demo.Func = BI.inherit(BI.Widget, {
                         body: {
                             type: "bi.label",
                             text: "这个是body"
+                        }
+                    }).open(id);
+                }
+            }, {
+                type: "bi.text_button",
+                text: "点击弹出Popover(normal size & adapt body区域高度是300)",
+                height: 30,
+                handler: function () {
+                    BI.Popovers.remove(id);
+                    BI.Popovers.create(id, {
+                        type: "bi.bar_popover",
+                        size: "normal",
+                        logic: {
+                            dynamic: true
+                        },
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.vertical",
+                            items: [{
+                                type: "bi.button_group",
+                                ref: function () {
+                                    body = this;
+                                },
+                                items: BI.map(BI.range(0, 10), function () {
+                                    return {
+                                        type: "bi.label",
+                                        text: "1",
+                                        height: 30
+                                    };
+                                }),
+                                layouts: [{
+                                    type: "bi.vertical"
+                                }]
+                            }]
+                        }
+                    }).open(id);
+                }
+            }, {
+                type: "bi.text_button",
+                text: "点击弹出Popover(small size & adapt body区域高度是900)",
+                height: 30,
+                handler: function () {
+                    BI.Popovers.remove(id);
+                    BI.Popovers.create(id, {
+                        type: "bi.bar_popover",
+                        size: "small",
+                        logic: {
+                            dynamic: true
+                        },
+                        header: {
+                            type: "bi.label",
+                            text: "这个是header"
+                        },
+                        body: {
+                            type: "bi.vertical",
+                            items: [{
+                                type: "bi.button_group",
+                                ref: function () {
+                                    body = this;
+                                },
+                                items: BI.map(BI.range(0, 30), function () {
+                                    return {
+                                        type: "bi.label",
+                                        text: "1",
+                                        height: 30
+                                    };
+                                }),
+                                layouts: [{
+                                    type: "bi.vertical"
+                                }]
+                            }]
                         }
                     }).open(id);
                 }
@@ -10711,7 +10674,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = [];
+        var items = Demo.CONSTANTS.ITEMS;
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
@@ -10776,7 +10739,10 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
                 self.list = ref;
             },
             itemsCreator: BI.bind(this._itemsCreator, this),
-            value: ["柳州市城贸金属材料有限责任公司", "柳州市建福房屋租赁有限公司", "柳州市迅昌数码办公设备有限责任公司"]
+            value: {
+                type: 1,
+                value: ["柳州市城贸金属材料有限责任公司", "柳州市建福房屋租赁有限公司", "柳州市迅昌数码办公设备有限责任公司"]
+            }
         });
 
         widget.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
@@ -10800,7 +10766,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
 
     _itemsCreator: function (options, callback) {
         var self = this;
-        var items = [];
+        var items = Demo.CONSTANTS.ITEMS;
         var keywords = (options.keywords || []).slice();
         if (options.keyword) {
             keywords.push(options.keyword);
@@ -11652,7 +11618,28 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     },
 
     mounted: function () {
-        this.tree.populate(BI.deepClone(Demo.CONSTANTS.TREE));
+        var tree = [
+            // {id: -2, pId: 0, value: "根目录1", text: "根目录1"},
+            {id: -1, pId: 0, value: "根目录", text: "根目录"},
+            {id: 1, pId: -1, value: "第一级目录1", text: "第一级目录1"},
+            {id: 11, pId: 1, value: "第二级文件1", text: "第二级文件1"},
+            {id: 12, pId: 1, value: "第二级目录2", text: "第二级目录2"},
+            {id: 121, pId: 12, value: "第三级目录1", text: "第三级目录1"},
+            {id: 122, pId: 12, value: "第三级文件1", text: "第三级文件1"},
+            {id: 1211, pId: 121, value: "第四级目录1", text: "第四级目录1"},
+            {id: 2, pId: -1, value: "第一级目录2", text: "第一级目录2"},
+            {id: 21, pId: 2, value: "第二级目录3", text: "第二级目录3"},
+            {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},
+            {id: 211, pId: 21, value: "第三级目录2", text: "第三级目录2"},
+            {id: 212, pId: 21, value: "第三级文件2", text: "第三级文件2"},
+            {id: 2111, pId: 211, value: "第四级文件1", text: "第四级文件1"},
+            {id: 3, pId: -1, value: "第一级目录3", text: "第一级目录3"},
+            {id: 31, pId: 3, value: "第二级文件2", text: "第二级文件2"},
+            {id: 33, pId: 3, value: "第二级目录3", text: "第二级目录1"},
+            {id: 32, pId: 3, value: "第二级文件3", text: "第二级文件3"},
+            {id: 331, pId: 33, value: "第三级文件1", text: "第三级文件1"}
+        ];
+        this.tree.populate(tree);
     }
 });
 
@@ -13459,7 +13446,12 @@ Demo.CONSTANTS = {
         {id: 121, pId: 12, value: "第三级目录1", text: "第三级目录1"},
         {id: 122, pId: 12, value: "第三级文件1", text: "第三级文件1"},
         {id: 1211, pId: 121, value: "第四级目录1", text: "第四级目录1"},
-        {id: 12111, pId: 1211, value: "第五级文件1", text: "第五级文件111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"},
+        {
+            id: 12111,
+            pId: 1211,
+            value: "第五级文件1",
+            text: "第五级文件111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        },
         {id: 2, pId: -1, value: "第一级目录2", text: "第一级目录2"},
         {id: 21, pId: 2, value: "第二级目录3", text: "第二级目录3"},
         {id: 22, pId: 2, value: "第二级文件2", text: "第二级文件2"},

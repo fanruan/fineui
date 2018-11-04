@@ -1,6 +1,6 @@
 (function () {
     var kv = {};
-    BI.shortcut = function (xtype, cls) {
+    BI.shortcut = BI.component = function (xtype, cls) {
         if (kv[xtype] != null) {
             _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
@@ -19,7 +19,7 @@
 
     BI.createWidget = function (item, options, context) {
         // 先把准备环境准备好
-        while(BI.prepares && BI.prepares.length > 0) {
+        while (BI.prepares && BI.prepares.length > 0) {
             BI.prepares.shift()();
         }
         var el, w;

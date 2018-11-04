@@ -9,6 +9,7 @@ Demo.Label = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 cls: "layout-bg6",
                 text: "这是一个label控件，默认居中",
+                disabled: true,
                 textAlign: "center"
             }, {
                 type: "bi.label",

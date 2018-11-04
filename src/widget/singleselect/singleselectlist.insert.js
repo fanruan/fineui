@@ -141,7 +141,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -187,7 +187,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
             var selectedMap = self._makeMap(items);
             BI.each(keywords, function (i, val) {
                 if (BI.isNotNull(selectedMap[val])) {
-                    self.storeValue.value[self.storeValue.type === BI.Selection.Single ? "pushDistinct" : "remove"](val);
+                    self.storeValue.type === BI.Selection.Single ? BI.pushDistinct(self.storeValue.value, val) : BI.remove(self.storeValue.value, val);
                 }
             });
             callback();

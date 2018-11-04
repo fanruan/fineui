@@ -45,9 +45,17 @@ if (!_global.BI) {
             }
             var len = arguments.length;
             if (len > 1) {
-                for (var i = 1; i < len; i++) {
-                    var key = "{R" + i + "}";
-                    localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                if (localeText.indexOf("{R1}") > -1) {
+                    for (var i = 1; i < len; i++) {
+                        var key = "{R" + i + "}";
+                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
                 }
             }
             return localeText;
@@ -456,7 +464,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-                }, spp = sp.prototype;
+            }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -464,6 +472,13 @@ if (!_global.BI) {
                 superclass: sp
             });
             return sb;
+        },
+
+        init: function () {
+            // 先把准备环境准备好
+            while (BI.prepares && BI.prepares.length > 0) {
+                BI.prepares.shift()();
+            }
         },
 
         has: function (obj, keys) {
@@ -476,6 +491,17 @@ if (!_global.BI) {
                 });
             }
             return _.has.apply(_, arguments);
+        },
+
+        freeze: function (value) {
+            if (Object.freeze) {
+                return Object.freeze(value);
+            } else {
+                if (!BI.isObject(value)) {
+                    throw new TypeError('Object.freeze can only be called on Objects.');
+                }
+                return value;
+            }
         },
 
         // 数字和字符串可以作为key
@@ -538,6 +564,7 @@ if (!_global.BI) {
     // deep方法
     _.extend(BI, {
         deepClone: _.cloneDeep,
+        deepExtend: _.merge,
 
         isDeepMatch: function (object, attrs) {
             var keys = BI.keys(attrs), length = keys.length;
@@ -650,12 +677,6 @@ if (!_global.BI) {
                 }
             }
             return result;
-        },
-
-        deepExtend: function () {
-            var args = [].slice.call(arguments);
-            args.unshift(true);
-            return $.extend.apply($, args);
         }
     });
 
@@ -679,7 +700,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -712,7 +733,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
+            return function queueNextTick(cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
@@ -814,7 +835,7 @@ if (!_global.BI) {
         },
 
         isNumeric: function (number) {
-            return !isNaN( parseFloat(number) ) && isFinite( number );
+            return !isNaN(parseFloat(number)) && isFinite(number);
         },
 
         isFloat: function (number) {
@@ -1311,7 +1332,8 @@ if (!_global.BI) {
             }
             if (BI.isNotNull(BI.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
                 var localTime = dt.getTime();
-                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                // BI-33791 1901年以前的东8区标准是GMT+0805, 统一无论是什么时间，都以整的0800这样的为基准
+                var localOffset = new Date().getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
                 var utc = localTime + localOffset; // utc即GMT时间标准时区
                 return new Date(utc + BI.timeZone);// + Pool.timeZone.offset);
             }
@@ -1361,7 +1383,8 @@ if (!_global.BI) {
                     break;
             }
             if (BI.isNotNull(BI.timeZone)) {
-                return dt.getTime() - BI.timeZone - dt.getTimezoneOffset() * 60000;
+                // BI-33791 1901年以前的东8区标准是GMT+0805, 统一无论是什么时间，都以整的0800这样的为基准
+                return dt.getTime() - BI.timeZone - new Date().getTimezoneOffset() * 60000;
             }
             return dt.getTime();
 
