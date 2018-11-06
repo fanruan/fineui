@@ -40357,7 +40357,18 @@ BI.Msg = function () {
                                 }
                             }]
                         },
-                        size: "small"
+                        size: "small",
+                        listeners: [
+                            {
+                                eventName: "EVENT_CLOSE",
+                                action: function () {
+                                    close();
+                                    if (BI.isFunction(callback)) {
+                                        callback.apply(null, [false]);
+                                    }
+                                }
+                            }
+                        ]
                     }
                 ]
             };
