@@ -10996,14 +10996,14 @@ if (!_global.BI) {
             if (!BI.isInteger(number)) {
                 return false;
             }
-            return number & 1 === 1;
+            return (number & 1) === 1;
         },
 
         isEven: function (number) {
             if (!BI.isInteger(number)) {
                 return false;
             }
-            return number & 1 === 0;
+            return (number & 1) === 0;
         },
 
         sum: function (array, iteratee, context) {
