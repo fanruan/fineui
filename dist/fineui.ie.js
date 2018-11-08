@@ -35945,11 +35945,13 @@ BI.Text = BI.inherit(BI.Single, {
 
     doRedMark: function (keyword) {
         var o = this.options;
+        o.keyword = keyword;
         this.text.element.__textKeywordMarked__(o.text || o.value, keyword, o.py);
     },
 
     unRedMark: function () {
         var o = this.options;
+        o.keyword = "";
         this.text.element.__textKeywordMarked__(o.text || o.value, "", o.py);
     },
 
