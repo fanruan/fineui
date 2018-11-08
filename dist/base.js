@@ -620,6 +620,7 @@ BI.Text = BI.inherit(BI.Single, {
 
     doRedMark: function (keyword) {
         var o = this.options;
+        // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
         o.keyword = keyword;
         this.text.element.__textKeywordMarked__(o.text || o.value, keyword, o.py);
     },
