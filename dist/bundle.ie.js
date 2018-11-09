@@ -18537,11 +18537,14 @@ _.extend(BI, {
 
     BI.Modules = {
         getModule: function (type) {
-            if(!moduleInjection[type]){
+            if (!moduleInjection[type]) {
                 _global.console && console.error("module:[" + type + "] does not exists");
                 return false;
             }
             return moduleInjection[type];
+        },
+        getAllModules: function () {
+            return moduleInjection;
         }
     };
 
