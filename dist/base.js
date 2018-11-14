@@ -461,7 +461,6 @@ BI.Single = BI.inherit(BI.Widget, {
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
-                console.log("clear all");
                 self._clearTimeOut();
                 self._hideTooltip();
             });
