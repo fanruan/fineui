@@ -24643,9 +24643,7 @@ BI.Single = BI.inherit(BI.Widget, {
         }
     },
 
-    _clearTimeOut: function() {
-        console.log(this.showTimeout);
-        console.log(BI.isNotNull(this.showTimeout));
+    _clearTimeOut: function () {
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
