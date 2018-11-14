@@ -35892,13 +35892,15 @@ BI.Single = BI.inherit(BI.Widget, {
     },
 
     _clearTimeOut: function() {
+        console.log(this.showTimeout);
+        console.log(BI.isNotNull(this.showTimeout));
         if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
         }
         if (BI.isNotNull(this.hideTimeout)) {
             clearTimeout(this.hideTimeout);
-            this.showTimeout = null;
+            this.hideTimeout = null;
         }
     },
 
@@ -35910,11 +35912,15 @@ BI.Single = BI.inherit(BI.Widget, {
                 self._e = e;
                 if (self.getTipType() === "warning" || (BI.isKey(self.getWarningTitle()) && !self.isEnabled())) {
                     self.showTimeout = BI.delay(function () {
-                        self._showToolTip(self._e || e, opt);
+                        if (BI.isNotNull(self.showTimeout)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }, 200);
                 } else if (self.getTipType() === "success" || self.isEnabled()) {
                     self.showTimeout = BI.delay(function () {
-                        self._showToolTip(self._e || e, opt);
+                        if (BI.isNotNull(self.showTimeout)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }, 500);
                 }
             });
@@ -35926,22 +35932,28 @@ BI.Single = BI.inherit(BI.Widget, {
                 }
                 if(BI.isNull(self.hideTimeout)) {
                     self.hideTimeout = BI.delay(function () {
-                        self._hideTooltip();
+                        if (BI.isNotNull(self.hideTimeout)) {
+                            self._hideTooltip();
+                        }
                     }, 500);
                 }
 
                 self.showTimeout = BI.delay(function () {
-                    if (BI.isNotNull(self.hideTimeout)) {
-                        clearTimeout(self.hideTimeout);
-                        self.hideTimeout = null;
+                    // DEC-5321 IE下如果回调已经进入事件队列，clearTimeout将不会起作用
+                    if (BI.isNotNull(self.showTimeout)) {
+                        if (BI.isNotNull(self.hideTimeout)) {
+                            clearTimeout(self.hideTimeout);
+                            self.hideTimeout = null;
+                        }
+                        self._showToolTip(self._e || e, opt);
                     }
-                    self._showToolTip(self._e || e, opt);
                 }, 500);
 
 
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
+                console.log("clear all");
                 self._clearTimeOut();
                 self._hideTooltip();
             });
