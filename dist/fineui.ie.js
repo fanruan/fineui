@@ -39364,7 +39364,6 @@ BI.Loader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget(o.el, {
             type: "bi.button_group",
             chooseType: 0,
-            items: o.items,
             behaviors: {},
             layouts: [{
                 type: "bi.vertical"
