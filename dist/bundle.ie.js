@@ -39244,8 +39244,8 @@ BI.Loader = BI.inherit(BI.Widget, {
         }
     },
 
-    populate: function (items) {
-        this._populate(items);
+    populate: function () {
+        this._populate.apply(this, arguments);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
