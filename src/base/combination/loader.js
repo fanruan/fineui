@@ -74,6 +74,7 @@ BI.Loader = BI.inherit(BI.Widget, {
         this.button_group = BI.createWidget(o.el, {
             type: "bi.button_group",
             chooseType: 0,
+            items: o.items,
             behaviors: {},
             layouts: [{
                 type: "bi.vertical"
@@ -106,10 +107,10 @@ BI.Loader = BI.inherit(BI.Widget, {
         }))));
 
         o.isDefaultInit && BI.isEmpty(o.items) && BI.nextTick(BI.bind(function () {
-            o.isDefaultInit && BI.isEmpty(o.items) && this.populate();
+            o.isDefaultInit && BI.isEmpty(o.items) && this._populate();
         }, this));
         if (BI.isNotEmptyArray(o.items)) {
-            this.populate(o.items);
+            this._populate(o.items);
         }
     },
 
@@ -161,14 +162,16 @@ BI.Loader = BI.inherit(BI.Widget, {
         this.button_group.addItems.apply(this.button_group, arguments);
     },
 
-    populate: function (items) {
+
+    _populate: function (items) {
         var self = this, o = this.options;
         if (arguments.length === 0 && (BI.isFunction(o.itemsCreator))) {
             o.itemsCreator.apply(this, [{times: 1}, function () {
                 if (arguments.length === 0) {
                     throw new Error("arguments can not be null!!!");
                 }
-                self.populate.apply(self, arguments);
+                self._populate.apply(self, arguments);
+                self.button_group.populate.apply(self.button_group, arguments);
                 o.onLoaded();
             }]);
             return;
@@ -191,6 +194,10 @@ BI.Loader = BI.inherit(BI.Widget, {
                 this.prev.invisible();
             }
         }
+    },
+
+    populate: function (items) {
+        this._populate(items);
         this.button_group.populate.apply(this.button_group, arguments);
     },
 
