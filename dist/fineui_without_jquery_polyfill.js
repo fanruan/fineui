@@ -27477,7 +27477,7 @@ BI.Loader = BI.inherit(BI.Widget, {
                 self.button_group.populate.apply(self.button_group, arguments);
                 o.onLoaded();
             }]);
-            return;
+            return false;
         }
         this.options.items = items;
         this.times = 1;
@@ -27497,11 +27497,12 @@ BI.Loader = BI.inherit(BI.Widget, {
                 this.prev.invisible();
             }
         }
+        return true;
     },
 
     populate: function () {
-        this._populate.apply(this, arguments);
-        this.button_group.populate.apply(this.button_group, arguments);
+        var refresh = this._populate.apply(this, arguments);
+        refresh && this.button_group.populate.apply(this.button_group, arguments);
     },
 
     setNotSelectedValue: function () {
