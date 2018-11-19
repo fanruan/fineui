@@ -18631,7 +18631,7 @@ _.extend(BI, {
                 providers[type] = new providerInjection[type]();
             }
             if (!providerInstance[type]) {
-                providerInstance[type] = new providers[type].$get()(config);
+                providerInstance[type] = new (providers[type].$get())(config);
             }
             return providerInstance[type];
         }
