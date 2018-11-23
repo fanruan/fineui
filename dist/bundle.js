@@ -54207,6 +54207,11 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             layouts: [{
                 type: "bi.vertical"
             }],
+            behaviors: {
+                redmark: function () {
+                    return true;
+                }
+            },
             value: o.value
         });
 
@@ -54225,7 +54230,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
         });
     },
 
-    populate: function (items) {
+    populate: function (items, keyword) {
         BI.IconTextValueComboPopup.superclass.populate.apply(this, arguments);
         var o = this.options;
         items = BI.createItems(items, {
@@ -54235,7 +54240,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             iconHeight: o.iconHeight,
             iconWidth: o.iconWidth
         });
-        this.popup.populate(items);
+        this.popup.populate(items, keyword);
     },
 
     getValue: function () {
@@ -54248,7 +54253,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
 
 });
 BI.IconTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);/**
+BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
+/**
  * Created by Windy on 2018/2/2.
  */
 BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
