@@ -4132,8 +4132,7 @@ BI.Loader = BI.inherit(BI.Widget, {
                 if (arguments.length === 0) {
                     throw new Error("arguments can not be null!!!");
                 }
-                self._populate.apply(self, arguments);
-                self.button_group.populate.apply(self.button_group, arguments);
+                self.populate.apply(self, arguments);
                 o.onLoaded();
             }]);
             return false;
@@ -4160,8 +4159,7 @@ BI.Loader = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
-        var refresh = this._populate.apply(this, arguments);
-        refresh && this.button_group.populate.apply(this.button_group, arguments);
+        this._populate.apply(this, arguments) && this.button_group.populate.apply(this.button_group, arguments);
     },
 
     setNotSelectedValue: function () {
