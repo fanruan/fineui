@@ -19,9 +19,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            // logic: {
-            //    dynamic: true
-            // },
+            cls: "bi-list-item-none",
             id: o.id,
             pId: o.pId,
             open: o.open,

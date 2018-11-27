@@ -36387,7 +36387,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
-                                direction: "top,left",
                                 ref: function () {
                                     self.combo = this;
                                 },
@@ -50428,9 +50427,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         this.node = BI.createWidget({
             type: "bi.icon_arrow_node",
             iconCls: o.iconCls,
-            // logic: {
-            //    dynamic: true
-            // },
+            cls: "bi-list-item-none",
             id: o.id,
             pId: o.pId,
             open: o.open,
