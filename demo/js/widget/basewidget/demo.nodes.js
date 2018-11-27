@@ -25,6 +25,9 @@ Demo.Nodes = BI.inherit(BI.Widget, {
                 type: "bi.icon_arrow_node",
                 iconCls: "search-font",
                 text: "箭头图标节点"
+            }, {
+                type: "bi.multilayer_icon_arrow_node",
+                layer: 2
             }]
         };
     }
