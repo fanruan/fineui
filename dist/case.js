@@ -5304,7 +5304,7 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SmallTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
             width: 100,
-            height: 24,
+            height: 20,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             el: {},
             text: ""
