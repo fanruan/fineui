@@ -36387,8 +36387,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
-                                direction: "top,left",
-                                ref: function () {
+                                ref:b function () {
                                     self.combo = this;
                                 },
                                 el: {
