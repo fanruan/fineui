@@ -897,7 +897,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
-                                ref:b function () {
+                                ref: function () {
                                     self.combo = this;
                                 },
                                 el: {
