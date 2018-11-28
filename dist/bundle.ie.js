@@ -60026,7 +60026,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-date-time-combo bi-border",
+            baseCls: "bi-date-time-combo bi-border bi-border-radius",
             width: 200,
             height: 24
         });
@@ -60095,7 +60095,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 
         var triggerBtn = BI.createWidget({
             type: "bi.icon_button",
-            cls: "bi-trigger-icon-button date-font bi-border-right",
+            cls: "bi-trigger-icon-button date-font",
             width: 24,
             height: 24
         });
