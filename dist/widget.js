@@ -4964,7 +4964,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
         var conf = BI.SmallSearchEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-small-search-editor",
-            height: 24
+            height: 20
         });
     },
 
@@ -5147,7 +5147,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
         var conf = BI.SmallTextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-small-text-editor",
-            height: 24
+            height: 20
         });
     },
 
