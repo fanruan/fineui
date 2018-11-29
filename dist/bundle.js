@@ -82112,7 +82112,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function isSearchValueInParent(parentValues) {
             for (var i = 0, len = parentValues.length; i < len; i++) {
-                if (self._isMatch(parentValues.slice(0, parentValues.length - 1 - i), parentValues[i], keyword)) {
+                if (self._isMatch(parentValues.slice(0, i), parentValues[i], keyword)) {
                     return true;
                 }
             }
