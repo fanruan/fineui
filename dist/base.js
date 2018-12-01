@@ -431,7 +431,6 @@ BI.Single = BI.inherit(BI.Widget, {
                         }
                     }, 500);
                 }
-                e.stopPropagation();
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
@@ -458,13 +457,12 @@ BI.Single = BI.inherit(BI.Widget, {
                     }
                 }, 500);
 
-                e.stopPropagation();
+
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
                 self._clearTimeOut();
                 self._hideTooltip();
-                e.stopPropagation();
             });
             this._hoverBinded = true;
         }
