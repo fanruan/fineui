@@ -34786,7 +34786,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             keyword: o.keyword,
             value: o.value,
-            title: o.text,
+            title: o.title || o.text,
             py: o.py
         });
     },
