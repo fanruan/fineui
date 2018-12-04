@@ -49493,7 +49493,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             keyword: o.keyword,
             value: o.value,
-            title: o.text,
+            title: o.title || o.text,
             py: o.py
         });
     },
@@ -63979,7 +63979,7 @@ BI.TextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.TextEditor.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-text-editor bi-border",
+            extraCls: "bi-text-editor bi-border bi-focus-shadow",
             hgap: 4,
             vgap: 2,
             lgap: 0,
