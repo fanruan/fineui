@@ -40504,6 +40504,8 @@ BI.Msg = function () {
 
     var messageShow, $mask, $pop;
 
+    var toastStack = [];
+
     return {
         alert: function (title, message, callback) {
             this._show(false, title, message, callback);
@@ -40524,7 +40526,22 @@ BI.Msg = function () {
                 cls: "bi-message-animate bi-message-leave",
                 level: level,
                 autoClose: autoClose,
-                text: message
+                text: message,
+                listeners: [{
+                    eventName: BI.Toast.EVENT_DESTORY,
+                    action: function () {
+                        BI.remove(toastStack, toast.element);
+                        var _height = 10;
+                        BI.each(toastStack, function (i, element) {
+                            element.css({"top": _height});
+                            _height += element.outerHeight() + 10;
+                        });
+                    }
+                }]
+            });
+            var height = 10;
+            BI.each(toastStack, function (i, element) {
+                height += element.outerHeight() + 10;
             });
             BI.createWidget({
                 type: "bi.absolute",
@@ -40532,17 +40549,16 @@ BI.Msg = function () {
                 items: [{
                     el: toast,
                     left: "50%",
-                    top: 10
+                    top: height
                 }]
             });
+            toastStack.push(toast.element);
             toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
             toast.element.removeClass("bi-message-leave").addClass("bi-message-enter");
 
             autoClose && BI.delay(function () {
                 toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
-                BI.delay(function () {
-                    toast.destroy();
-                }, 1000);
+                toast.destroy();
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
@@ -46830,9 +46846,13 @@ BI.Toast = BI.inherit(BI.Tip, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    beforeDestroy: function () {
+        this.fireEvent(BI.Toast.EVENT_DESTORY);
     }
 });
-
+BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
  * toast提示
  *
@@ -52045,6 +52065,8 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             value: o.value,
+            width: o.width,
+            height: o.height,
             popup: {
                 type: "bi.simple_color_chooser_popup"
             }
@@ -52826,7 +52848,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         }));
     }
 });
-BI.SimpleColorPickerEditor.EVENT_CHANGE = "SimpleColorPickerEditor.EVENT_CHANGE";
+BI.SimpleColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);/**
  * 选色控件
  *

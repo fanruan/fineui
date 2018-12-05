@@ -28517,6 +28517,8 @@ BI.Msg = function () {
 
     var messageShow, $mask, $pop;
 
+    var toastStack = [];
+
     return {
         alert: function (title, message, callback) {
             this._show(false, title, message, callback);
@@ -28537,7 +28539,22 @@ BI.Msg = function () {
                 cls: "bi-message-animate bi-message-leave",
                 level: level,
                 autoClose: autoClose,
-                text: message
+                text: message,
+                listeners: [{
+                    eventName: BI.Toast.EVENT_DESTORY,
+                    action: function () {
+                        BI.remove(toastStack, toast.element);
+                        var _height = 10;
+                        BI.each(toastStack, function (i, element) {
+                            element.css({"top": _height});
+                            _height += element.outerHeight() + 10;
+                        });
+                    }
+                }]
+            });
+            var height = 10;
+            BI.each(toastStack, function (i, element) {
+                height += element.outerHeight() + 10;
             });
             BI.createWidget({
                 type: "bi.absolute",
@@ -28545,17 +28562,16 @@ BI.Msg = function () {
                 items: [{
                     el: toast,
                     left: "50%",
-                    top: 10
+                    top: height
                 }]
             });
+            toastStack.push(toast.element);
             toast.element.css({"margin-left": -1 * toast.element.outerWidth() / 2});
             toast.element.removeClass("bi-message-leave").addClass("bi-message-enter");
 
             autoClose && BI.delay(function () {
                 toast.element.removeClass("bi-message-enter").addClass("bi-message-leave");
-                BI.delay(function () {
-                    toast.destroy();
-                }, 1000);
+                toast.destroy();
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
@@ -34222,9 +34238,13 @@ BI.Toast = BI.inherit(BI.Tip, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    beforeDestroy: function () {
+        this.fireEvent(BI.Toast.EVENT_DESTORY);
     }
 });
-
+BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
  * toast提示
  *

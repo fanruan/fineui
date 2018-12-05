@@ -88,7 +88,11 @@ BI.Toast = BI.inherit(BI.Tip, {
 
     setText: function (text) {
         this.text.setText(text);
+    },
+
+    beforeDestroy: function () {
+        this.fireEvent(BI.Toast.EVENT_DESTORY);
     }
 });
-
+BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);

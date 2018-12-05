@@ -726,7 +726,6 @@ BI.shortcut("demo.editor", Demo.Editor);Demo.CodeEditor = BI.inherit(BI.Widget, 
                     cls: "layout-bg1",
                     items: [{
                         type: "bi.multifile_editor",
-                        accept: "*.zip;",
                         width: 400,
                         height: 300
                     }],
