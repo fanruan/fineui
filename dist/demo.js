@@ -726,6 +726,7 @@ BI.shortcut("demo.editor", Demo.Editor);Demo.CodeEditor = BI.inherit(BI.Widget, 
                     cls: "layout-bg1",
                     items: [{
                         type: "bi.multifile_editor",
+                        accept: "*.zip;",
                         width: 400,
                         height: 300
                     }],
@@ -6126,30 +6127,7 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.htape", Demo.HtapeLayout);Demo.InlineVerticalLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-absolute"
-    },
-    render: function () {
-        return {
-            type: "bi.inline_vertical_adapt",
-            items: [{
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 200
-            }, {
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 100
-            }]
-        };
-    }
-});
-BI.shortcut("demo.inline_vertical", Demo.InlineVerticalLayout);/**
+BI.shortcut("demo.htape", Demo.HtapeLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {

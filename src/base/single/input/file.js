@@ -496,14 +496,14 @@
                         size = item.fileSize || item.size;
                     if (wrap.fileType && -1 === wrap.fileType.indexOf("*." + ext)) {
                         // 文件类型不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"));
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"), {level: "error"});
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 0,
                             file: item
                         });
                     } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
                         // 文件大小不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"));
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"), {level: "error"});
                         self.fireEvent(BI.File.EVENT_ERROR, {
                             errorType: 1,
                             file: item
