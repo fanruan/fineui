@@ -23,6 +23,8 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             value: o.value,
+            width: o.width,
+            height: o.height,
             popup: {
                 type: "bi.simple_color_chooser_popup"
             }

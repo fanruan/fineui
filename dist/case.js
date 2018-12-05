@@ -2611,6 +2611,8 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             element: this,
             container: o.container,
             value: o.value,
+            width: o.width,
+            height: o.height,
             popup: {
                 type: "bi.simple_color_chooser_popup"
             }
@@ -3392,7 +3394,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         }));
     }
 });
-BI.SimpleColorPickerEditor.EVENT_CHANGE = "SimpleColorPickerEditor.EVENT_CHANGE";
+BI.SimpleColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);/**
  * 选色控件
  *
