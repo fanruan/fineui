@@ -33,13 +33,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         var self = this, c = this.constants, o = this.options;
         BI.NumberInterval.superclass._init.apply(this, arguments);
         this.smallEditor = BI.createWidget({
-            type: "bi.editor",
+            type: "bi.number_interval_single_editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.min,
             level: "warning",
-            tipType: "warning",
+            tipType: "success",
+            title: function () {
+                return self.smallEditor && self.smallEditor.getValue();
+            },
             quitChecker: function () {
                 return false;
             },
@@ -70,13 +73,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         });
 
         this.bigEditor = BI.createWidget({
-            type: "bi.editor",
+            type: "bi.number_interval_single_editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.max,
             level: "warning",
-            tipType: "warning",
+            tipType: "success",
+            title: function () {
+                return self.bigEditor && self.bigEditor.getValue();
+            },
             quitChecker: function () {
                 return false;
             },
