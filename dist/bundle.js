@@ -73070,13 +73070,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         var self = this, c = this.constants, o = this.options;
         BI.NumberInterval.superclass._init.apply(this, arguments);
         this.smallEditor = BI.createWidget({
-            type: "bi.editor",
+            type: "bi.number_interval_single_editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.min,
             level: "warning",
-            tipType: "warning",
+            tipType: "success",
+            title: function () {
+                return self.smallEditor && self.smallEditor.getValue();
+            },
             quitChecker: function () {
                 return false;
             },
@@ -73107,13 +73110,16 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         });
 
         this.bigEditor = BI.createWidget({
-            type: "bi.editor",
+            type: "bi.number_interval_single_editor",
             height: o.height - 2,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             allowBlank: true,
             value: o.max,
             level: "warning",
-            tipType: "warning",
+            tipType: "success",
+            title: function () {
+                return self.bigEditor && self.bigEditor.getValue();
+            },
             quitChecker: function () {
                 return false;
             },
@@ -73590,7 +73596,86 @@ BI.NumberInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.NumberInterval.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
-BI.shortcut("bi.number_interval", BI.NumberInterval);/**
+BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
+    props: {
+        tipType: "success",
+        title: ""
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.editor",
+                ref: function (_ref) {
+                    self.editor = _ref;
+                },
+                height: o.height - 2,
+                watermark: o.watermark,
+                allowBlank: o.allowBlank,
+                value: o.value,
+                level: o.level,
+                quitChecker: o.quitChecker,
+                validationChecker: o.validationChecker,
+                listeners: [{
+                    eventName: BI.Editor.EVENT_ERROR,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_FOCUS, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_BLUR, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_VALID,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_VALID, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_CHANGE, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
+                    }
+                }]
+            }]
+        };
+    },
+
+    isValid: function () {
+        return this.editor.isValid();
+    },
+
+    getValue: function () {
+        return this.editor.getValue();
+    },
+
+    setTitle: function () {
+        return this.editor.setTitle();
+    },
+
+    setEnable: function () {
+        return this.editor.setEnable();
+    },
+
+    setValue: function (v) {
+        return this.editor.setValue(v);
+    }
+});
+
+BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);/**
  * 季度下拉框
  *
  * Created by GUY on 2015/8/28.
