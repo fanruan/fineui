@@ -1,5 +1,6 @@
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
     props: {
+        baseCls: "bi-number-interval-single-editor",
         tipType: "success",
         title: ""
     },
