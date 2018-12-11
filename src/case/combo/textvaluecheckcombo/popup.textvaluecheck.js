@@ -37,8 +37,8 @@ BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
     _formatItems: function (items) {
         return BI.map(items, function (i, item) {
             return BI.extend({
-                type: "bi.icon_text_item",
-                cls: "item-check-font bi-list-item",
+                type: "bi.single_select_item",
+                cls: "bi-list-item",
                 height: 24
             }, item);
         });

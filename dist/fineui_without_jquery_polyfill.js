@@ -38052,8 +38052,8 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
     _formatItems: function (items) {
         return BI.map(items, function (i, item) {
             return BI.extend({
-                type: "bi.icon_text_item",
-                cls: "item-check-font bi-list-item",
+                type: "bi.single_select_item",
+                cls: "bi-list-item",
                 height: 24
             }, item);
         });
@@ -38074,7 +38074,8 @@ BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.T
 
 });
 BI.TextValueCheckComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);/**
+BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
+/**
  * @class BI.TextValueCombo
  * @extend BI.Widget
  * combo : text + icon, popup : text
