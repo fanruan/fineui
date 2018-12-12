@@ -36,6 +36,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            text: o.text,
             height: o.height,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,

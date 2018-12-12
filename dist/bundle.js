@@ -73598,6 +73598,7 @@ BI.NumberInterval.EVENT_VALID = "EVENT_VALID";
 BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
     props: {
+        baseCls: "bi-number-interval-single-editor",
         tipType: "success",
         title: ""
     },
@@ -75905,6 +75906,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
+            text: o.text,
             value: this.storeValue
         });
 
@@ -76174,6 +76176,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
+            text: o.text,
             value: this.storeValue
         });
 
@@ -76856,6 +76859,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            text: o.text,
             height: o.height,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
@@ -77186,7 +77190,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             height: o.height,
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
-            value: o.value
+            value: o.value,
+            text: o.text
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -77265,7 +77270,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
-            height: o.height
+            height: o.height,
+            text: o.text
         });
 
         this.searcher = BI.createWidget({
