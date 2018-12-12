@@ -43,6 +43,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     callback.apply(self, arguments);
                 });
             },
+            text: o.text,
             value: this.storeValue
         });
 

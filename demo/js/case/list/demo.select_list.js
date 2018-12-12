@@ -7,6 +7,10 @@ Demo.Func = BI.inherit(BI.Widget, {
         var self = this;
         BI.createWidget({
             type: "bi.select_list",
+            toolbar: {
+                type: "bi.multi_select_bar",
+                iconWrapperWidth: 26
+            },
             element: this,
             el: {
                 el: {

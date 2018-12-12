@@ -23,7 +23,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
-            height: o.height
+            height: o.height,
+            text: o.text
         });
 
         this.searcher = BI.createWidget({
