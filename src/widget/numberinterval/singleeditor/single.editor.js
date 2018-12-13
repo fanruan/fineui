@@ -65,12 +65,8 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
         return this.editor.getValue();
     },
 
-    setTitle: function () {
-        return this.editor.setTitle();
-    },
-
-    setEnable: function () {
-        return this.editor.setEnable();
+    setTitle: function (v) {
+        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {
