@@ -103,7 +103,6 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
-            scrollable: true,
             items: [this.tree]
         })
     },

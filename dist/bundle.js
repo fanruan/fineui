@@ -66212,7 +66212,6 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
-            scrollable: true,
             items: [this.tree]
         })
     },
@@ -66906,7 +66905,6 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
-            scrollable: true,
             items: [this.tree]
         });
     },
@@ -73663,12 +73661,8 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
         return this.editor.getValue();
     },
 
-    setTitle: function () {
-        return this.editor.setTitle();
-    },
-
-    setEnable: function () {
-        return this.editor.setEnable();
+    setTitle: function (v) {
+        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {
