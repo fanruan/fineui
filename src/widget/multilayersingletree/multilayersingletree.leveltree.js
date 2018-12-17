@@ -11,7 +11,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
-            chooseType: BI.Selection.Single
+            chooseType: BI.Selection.Single,
+            scrollable: true
         });
     },
 
@@ -106,6 +107,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
+            scrollable: o.scrollable,
             items: [this.tree]
         });
     },
