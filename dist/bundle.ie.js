@@ -65716,7 +65716,8 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
-            value: ""
+            value: "",
+            scrollable: true
         });
     },
 
@@ -65742,7 +65743,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
                     extend.isLastNode = true;
                 }
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_select_tree_first_plus_group_node"
+                    extend.type = "bi.multilayer_select_tree_first_plus_group_node";
                 }
                 if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
                     extend.type = "bi.multilayer_select_tree_plus_group_node";
@@ -65752,7 +65753,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             } else {
                 extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item"
+                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 }
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
@@ -65808,9 +65809,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
-            scrollable: true,
+            scrollable: o.scrollable,
             items: [this.tree]
-        })
+        });
     },
 
     populate: function (nodes) {
@@ -65869,7 +65870,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             value: o.value,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            scrollable: null
         });
 
         BI.createWidget({
@@ -66407,7 +66409,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
-            chooseType: BI.Selection.Single
+            chooseType: BI.Selection.Single,
+            scrollable: true
         });
     },
 
@@ -66502,7 +66505,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.adaptive",
             element: this,
-            scrollable: true,
+            scrollable: o.scrollable,
             items: [this.tree]
         });
     },
@@ -66566,7 +66569,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator,
-            value: o.value
+            value: o.value,
+            scrollable: null
         });
 
         BI.createWidget({
@@ -73259,12 +73263,8 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
         return this.editor.getValue();
     },
 
-    setTitle: function () {
-        return this.editor.setTitle();
-    },
-
-    setEnable: function () {
-        return this.editor.setEnable();
+    setTitle: function (v) {
+        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {

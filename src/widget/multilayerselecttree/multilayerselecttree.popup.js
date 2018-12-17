@@ -28,7 +28,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             value: o.value,
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            scrollable: null
         });
 
         BI.createWidget({
