@@ -7975,14 +7975,11 @@ BI.shortcut("bi.sort_list", BI.SortList);
 /**
  * author: young
  * createdDate: 2018/12/18
- * description: 实现先loading 然后再渲染，解决beforeInit中loading无效
- * 继承此类，你需要明确，你的页面是根据动态请求后的结果来渲染的
- * 使用：1、在子类中使用loadedRender代替render方法；2、请求数据放到reqInitData中
+ * description:
  */
 BI.LoadingPane = BI.inherit(BI.Pane, {
-
     _mount: function () {
-        var isMounted = BI.LoadingPane.superclass._mount.apply(this, arguments);
+        var isMounted = BI.Pane.superclass._mount.apply(this, arguments);
         if (isMounted) {
             if (this.beforeInit) {
                 this.__asking = true;

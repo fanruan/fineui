@@ -3504,7 +3504,7 @@ Demo.COMPONENT_CONFIG = [{
  * description:
  */
 !(function () {
-    var Pane = BI.inherit(BI.Pane, {
+    var Pane = BI.inherit(BI.LoadingPane, {
         props: {
 
         },
