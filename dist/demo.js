@@ -3498,7 +3498,35 @@ Demo.COMPONENT_CONFIG = [{
     pId: 1,
     text: "Pane(继承)",
     value: "demo.pane"
-}];// 定义Model路由
+}];/**
+ * author: young
+ * createdDate: 2018/11/30
+ * description:
+ */
+!(function () {
+    var Pane = BI.inherit(BI.LoadingPane, {
+        props: {
+
+        },
+
+        loadedRender: function () {
+            return {
+                type: "bi.center_adapt",
+                items: [{
+                    type: "bi.label",
+                    text: "this is pane center"
+                }]
+            };
+        },
+
+        reqInitData: function (callback) {
+            setTimeout(function () {
+                callback();
+            }, 3000);
+        }
+    });
+    BI.shortcut("demo.pane", Pane);
+})();// 定义Model路由
 var modelRouter = new (BI.inherit(BI.WRouter, {
     routes: {
         "": "index"
@@ -6130,30 +6158,7 @@ Demo.HtapeLayout = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.shortcut("demo.htape", Demo.HtapeLayout);Demo.InlineVerticalLayout = BI.inherit(BI.Widget, {
-    props: {
-        baseCls: "demo-absolute"
-    },
-    render: function () {
-        return {
-            type: "bi.inline_vertical_adapt",
-            items: [{
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 200
-            }, {
-                type: "bi.label",
-                text: "绝对布局",
-                cls: "layout-bg1",
-                width: 300,
-                height: 100
-            }]
-        };
-    }
-});
-BI.shortcut("demo.inline_vertical", Demo.InlineVerticalLayout);/**
+BI.shortcut("demo.htape", Demo.HtapeLayout);/**
  * Created by User on 2017/3/22.
  */
 Demo.LeftRightVerticalAdaptLayout = BI.inherit(BI.Widget, {
