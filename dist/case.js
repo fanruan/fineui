@@ -7973,6 +7973,36 @@ BI.SortList = BI.inherit(BI.Widget, {
 BI.SortList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.sort_list", BI.SortList);
 /**
+ * author: young
+ * createdDate: 2018/12/18
+ * description:
+ */
+BI.LoadingPane = BI.inherit(BI.Pane, {
+    _mount: function () {
+        var isMounted = BI.Pane.superclass._mount.apply(this, arguments);
+        if (isMounted) {
+            if (this.beforeInit) {
+                this.__asking = true;
+                this.loading();
+                this.beforeInit(BI.bind(this.__loaded, this));
+            }
+        }
+    },
+
+    _initRender: function () {
+        if (this.beforeInit) {
+            this.__async = true;
+        } else {
+            this._render();
+        }
+    },
+
+    __loaded: function () {
+        this.__asking = false;
+        this.loaded();
+        this._render();
+    }
+});/**
  * 有总页数和总行数的分页控件
  * Created by Young's on 2016/10/13.
  */
