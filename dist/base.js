@@ -218,20 +218,6 @@ BI.Pane = BI.inherit(BI.Widget, {
         });
     },
 
-    _init: function () {
-        BI.Pane.superclass._init.apply(this, arguments);
-        if (this.__async) {
-            this.loading();
-        }
-    },
-
-    _render: function () {
-        BI.Pane.superclass._render.apply(this, arguments);
-        if (this.__async) {
-            this.loaded();
-        }
-    },
-
     _assertTip: function () {
         var o = this.options;
         if (!this._tipText) {
