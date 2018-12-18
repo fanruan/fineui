@@ -54,6 +54,10 @@
             this._initElementHeight();
             this._initVisual();
             this._initState();
+            this._initRender();
+        },
+
+        _initRender: function () {
             if (this.beforeInit) {
                 this.__asking = true;
                 this.beforeInit(BI.bind(this._render, this));

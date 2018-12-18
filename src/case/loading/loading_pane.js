@@ -8,36 +8,27 @@
 BI.LoadingPane = BI.inherit(BI.Pane, {
 
     _mount: function () {
-        BI.Pane.superclass._mount.apply(this, arguments);
-        if (this.isMounted()) {
-            this.loading();
-            this.reqInitData(BI.bind(this.__loaded, this));
+        var isMounted = BI.LoadingPane.superclass._mount.apply(this, arguments);
+        if (isMounted) {
+            if (this.beforeInit) {
+                this.__asking = true;
+                this.loading();
+                this.beforeInit(BI.bind(this.__loaded, this));
+            }
         }
     },
 
-    render: function () {
-        return {
-            type: "bi.default"
-        };
-    },
-
-    /**
-     * 子类用loadedRender代替原先的render方法
-     */
-    loadedRender: function () {
-        return {
-            type: "bi.default"
-        };
-    },
-
-    reqInitData: function (callback) {
-        BI.isFunction(callback) && callback();
+    _initRender: function () {
+        if (this.beforeInit) {
+            this.__async = true;
+        } else {
+            this._render();
+        }
     },
 
     __loaded: function () {
+        this.__asking = false;
         this.loaded();
-        BI.createWidget(this.loadedRender(), {
-            element: this
-        }, this);
+        this._render();
     }
 });

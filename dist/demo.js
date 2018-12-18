@@ -3509,7 +3509,7 @@ Demo.COMPONENT_CONFIG = [{
 
         },
 
-        loadedRender: function () {
+        render: function () {
             return {
                 type: "bi.center_adapt",
                 items: [{
@@ -3519,7 +3519,7 @@ Demo.COMPONENT_CONFIG = [{
             };
         },
 
-        reqInitData: function (callback) {
+        beforeInit: function (callback) {
             setTimeout(function () {
                 callback();
             }, 3000);

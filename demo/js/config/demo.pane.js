@@ -9,7 +9,7 @@
 
         },
 
-        loadedRender: function () {
+        render: function () {
             return {
                 type: "bi.center_adapt",
                 items: [{
@@ -19,7 +19,7 @@
             };
         },
 
-        reqInitData: function (callback) {
+        beforeInit: function (callback) {
             setTimeout(function () {
                 callback();
             }, 3000);
