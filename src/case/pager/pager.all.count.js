@@ -26,17 +26,16 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             vgap: 0,
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
-            width: 35,
-            height: 16
+            width: 40,
+            height: 24
         });
 
         this.pager = BI.createWidget({
             type: "bi.pager",
-            width: 36,
+            width: 58,
             layouts: [{
                 type: "bi.horizontal",
-                hgap: 1,
-                vgap: 1
+                lgap: 5
             }],
 
             dynamicShow: false,
@@ -51,16 +50,18 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Previous_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                cls: "all-pager-prev column-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border all-pager-prev pull-up-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Next_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                cls: "all-pager-next column-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border all-pager-next pull-down-font"
             },
 
             hasPrev: o.hasPrev,
@@ -82,13 +83,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
         this.allPages = BI.createWidget({
             type: "bi.label",
-            width: 30,
             title: o.pages,
-            text: "/" + o.pages
+            text: "/" + o.pages,
+            lgap: 5
         });
 
         this.rowCount = BI.createWidget({
             type: "bi.label",
+            cls: "row-count",
             height: o.height,
             hgap: 5,
             text: o.count,
@@ -115,7 +117,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         BI.createWidget({
             type: "bi.center_adapt",
             element: this,
-            columnSize: ["", 35, 40, 36],
+            columnSize: ["", 40, 20, 58],
             items: [count, this.editor, this.allPages, this.pager]
         });
     },
