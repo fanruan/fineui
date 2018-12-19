@@ -10784,11 +10784,7 @@ _.extend(BI, {
             }
             return /Konqueror|Safari|KHTML/i.test(navigator.userAgent);
         };
-        if (!BI.isKhtml()) {
-            return str.replace(re, function (par) {
-                return s[par] || par;
-            });
-        }
+
         // 包含年周的格式化，ISO8601标准周的计数会影响年
         if ((str.indexOf("%Y") !== -1 || str.indexOf("%y") !== -1) && (str.indexOf("%W") !== -1 || str.indexOf("%U") !== -1 || str.indexOf("%V") !== -1)) {
             switch (wn) {
@@ -10809,6 +10805,12 @@ _.extend(BI, {
                 default:
                     break;
             }
+        }
+
+        if (!BI.isKhtml()) {
+            return str.replace(re, function (par) {
+                return s[par] || par;
+            });
         }
         var a = str.match(re);
         for (var i = 0; i < a.length; i++) {
