@@ -649,6 +649,9 @@
 .bi-all-count-pager .all-pager-next {
   font-size: 16px;
 }
+.bi-all-count-pager .row-count {
+  color: #3685f2;
+}
 
 .bi-direction-pager .direction-pager-prev {
   font-size: 16px;
