@@ -53781,7 +53781,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText,
-            value: o.value
+            value: o.value,
+            title: o.title
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
@@ -53828,7 +53829,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.EditorIconCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);/**
+BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
+/**
  * Created by GUY on 2016/2/2.
  *
  * @class BI.IconCombo
