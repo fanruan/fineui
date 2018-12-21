@@ -29,7 +29,9 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             watermark: o.watermark,
             errorText: o.errorText,
             value: o.value,
-            title: o.title
+            title:　function () {
+                return self.trigger.getValue();
+            }
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
