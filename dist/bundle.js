@@ -53781,7 +53781,10 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText,
-            value: o.value
+            value: o.value,
+            title:　function () {
+                return self.trigger.getValue();
+            }
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
@@ -53828,7 +53831,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.EditorIconCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);/**
+BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
+/**
  * Created by GUY on 2016/2/2.
  *
  * @class BI.IconCombo
@@ -58969,7 +58973,8 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
             quitChecker: o.quitChecker,
             allowBlank: o.allowBlank,
             watermark: o.watermark,
-            errorText: o.errorText
+            errorText: o.errorText,
+            title: o.title,
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -59008,7 +59013,8 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.EditorTrigger.EVENT_CHANGE = "BI.EditorTrigger.EVENT_CHANGE";
-BI.shortcut("bi.editor_trigger", BI.EditorTrigger);/**
+BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
+/**
  * 图标按钮trigger
  *
  * Created by GUY on 2015/10/8.
