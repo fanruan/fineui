@@ -32110,10 +32110,6 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
-    resetLastValidValue: function () {
-        this.editor.resetLastValidValue();
-    },
-
     getValue: function () {
         if (!this.isValid()) {
             return BI.trim(this.editor.getLastValidValue());

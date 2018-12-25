@@ -1,5 +1,7 @@
 @import "../../../index";
-
+@hoverVal: opacity .3s ease;
+@activeVal: transform .5s ease, opacity 1s ease;
+@activeStopVal: transform 0s;
 body .bi-button, #body .bi-button {
   .border-radius(2px);
   border: 1px solid @color-bi-border-highlight;
@@ -120,6 +122,9 @@ body .bi-button, #body .bi-button {
       background: @color-bi-background-disabled !important;
       border-color: @color-bi-border-disabled !important;
     }
+    &:after {
+      display: none;
+    }
   }
   &.button-ignore.disabled {
     &, & .b-font:before {
@@ -127,6 +132,9 @@ body .bi-button, #body .bi-button {
     }
     background: @color-bi-background-default !important;
     border-color: @color-bi-border-line !important;
+    &:after {
+      display: none;
+    }
   }
   &.button-common.disabled,
   &.button-success.disabled,
@@ -156,25 +164,56 @@ body .bi-button, #body .bi-button {
 
 .bi-basic-button {
   &.button-common, &.button-success, &.button-warning, &.button-error {
+    &:after {
+      content: "";
+      background-color: @color-bi-button-mask;
+      .border-radius(10px);
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform: scale(1, 1);
+      .opacity(0);
+      .transition(@activeVal);
+      left: 0;
+      top: 0;
+    }
+    &:active:after {
+      transform: scale(0, 1);
+      .opacity(0.1);
+      .transition(@activeStopVal)
+    }
     &:hover{
       & .bi-button-mask {
         .opacity(0.1);
         background-color: @color-bi-background-default;
-      }
-    }
-    &:active{
-      & .bi-button-mask {
-        .opacity(0.1);
-        background-color: @color-bi-button-mask;
+        .transition(@hoverVal);
       }
     }
   }
   &.button-ignore {
+    &:after {
+      content: "";
+      background-color: @color-bi-background-highlight;
+      .border-radius(10px);
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform: scale(1, 1);
+      .opacity(0);
+      .transition(@activeVal);
+      left: 0;
+      top: 0;
+    }
+    &:active:after {
+      transform: scale(0, 1);
+      .opacity(0.1);
+      .transition(@activeStopVal)
+    }
     &:hover{
       background-color: @color-bi-blue-5;
-    }
-    &:active{
-      background-color: @color-bi-blue-10;
+      .transition(@hoverVal);
     }
   }
   & .popup-content{

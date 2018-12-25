@@ -1,5 +1,5 @@
 @import "../../index";
-
+@val: transform .3s ease;
 .bi-multi-select-insert-combo{
   & .multi-select-trigger-icon-button{
     font-size: 16px;
@@ -8,6 +8,13 @@
   & .bi-combo.bi-combo-popup + .bi-trigger-icon-button {
     & .x-icon {
       .rotate(180deg);
+      .transition(@val);
+    }
+  }
+  & .bi-combo + .bi-trigger-icon-button {
+    & .x-icon {
+      .rotate(0deg);
+      .transition(@val);
     }
   }
 }
