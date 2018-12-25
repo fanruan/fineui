@@ -1,5 +1,14 @@
 @import "../../index";
+@val: transform .3s ease;
 .bi-combo {
+  & > .bi-trigger {
+    & .bi-trigger-icon-button{
+      & .x-icon {
+        .rotate(0deg);
+        .transition(@val);
+      }
+    }
+  }
   &.bi-combo-popup {
     display: block !important;
     visibility: visible !important;
@@ -7,6 +16,7 @@
       & .bi-trigger-icon-button{
         & .x-icon {
           .rotate(180deg);
+          .transition(@val);
         }
       }
     }

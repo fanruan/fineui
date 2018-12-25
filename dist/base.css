@@ -505,6 +505,15 @@
   border-right: 1px solid #2F3149;
 }
 
+.bi-combo > .bi-trigger .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
 .bi-combo.bi-combo-popup {
   display: block !important;
   visibility: visible !important;
@@ -513,6 +522,10 @@
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   transform: rotate(180deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 .bi-combo.bi-combo-popup > .bi-border,
 .bi-combo.bi-combo-hover > .bi-border,
@@ -543,6 +556,19 @@
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   transform: rotate(180deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+.bi-search-text-value-combo .bi-combo + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .bi-icon-text-value-combo.combo-error .bi-text-trigger .select-text-label {
@@ -1047,6 +1073,16 @@ body .bi-button.button-warning.disabled.base-disabled .b-font:before,
 #body .bi-button.button-warning.disabled.base-disabled .b-font:before {
   color: #9ea6b2 !important;
 }
+body .bi-button.button-common.disabled:after,
+#body .bi-button.button-common.disabled:after,
+body .bi-button.button-success.disabled:after,
+#body .bi-button.button-success.disabled:after,
+body .bi-button.button-error.disabled:after,
+#body .bi-button.button-error.disabled:after,
+body .bi-button.button-warning.disabled:after,
+#body .bi-button.button-warning.disabled:after {
+  display: none;
+}
 body .bi-button.button-ignore.disabled,
 #body .bi-button.button-ignore.disabled {
   background: #ffffff !important;
@@ -1057,6 +1093,10 @@ body .bi-button.button-ignore.disabled,
 body .bi-button.button-ignore.disabled .b-font:before,
 #body .bi-button.button-ignore.disabled .b-font:before {
   color: #9ea6b2 !important;
+}
+body .bi-button.button-ignore.disabled:after,
+#body .bi-button.button-ignore.disabled:after {
+  display: none;
 }
 body .bi-button.button-common.disabled.clear,
 #body .bi-button.button-common.disabled.clear,
@@ -1153,6 +1193,41 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 #body .bi-button.button-ignore.disabled.ghost .b-font:before {
   color: #3685f2 !important;
 }
+.bi-basic-button.button-common:after,
+.bi-basic-button.button-success:after,
+.bi-basic-button.button-warning:after,
+.bi-basic-button.button-error:after {
+  content: "";
+  background-color: #232E40;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: scale(1, 1);
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-transition: transform 0.5s ease, opacity 1s ease;
+  -moz-transition: transform 0.5s ease, opacity 1s ease;
+  -o-transition: transform 0.5s ease, opacity 1s ease;
+  transition: transform 0.5s ease, opacity 1s ease;
+  left: 0;
+  top: 0;
+}
+.bi-basic-button.button-common:active:after,
+.bi-basic-button.button-success:active:after,
+.bi-basic-button.button-warning:active:after,
+.bi-basic-button.button-error:active:after {
+  transform: scale(0, 1);
+  opacity: 0.1;
+  filter: alpha(opacity=10);
+  -webkit-transition: transform 0s;
+  -moz-transition: transform 0s;
+  -o-transition: transform 0s;
+  transition: transform 0s;
+}
 .bi-basic-button.button-common:hover .bi-button-mask,
 .bi-basic-button.button-success:hover .bi-button-mask,
 .bi-basic-button.button-warning:hover .bi-button-mask,
@@ -1160,20 +1235,46 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   opacity: 0.1;
   filter: alpha(opacity=10);
   background-color: #ffffff;
+  -webkit-transition: opacity 0.3s ease;
+  -moz-transition: opacity 0.3s ease;
+  -o-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
-.bi-basic-button.button-common:active .bi-button-mask,
-.bi-basic-button.button-success:active .bi-button-mask,
-.bi-basic-button.button-warning:active .bi-button-mask,
-.bi-basic-button.button-error:active .bi-button-mask {
+.bi-basic-button.button-ignore:after {
+  content: "";
+  background-color: #3685f2;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: scale(1, 1);
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -webkit-transition: transform 0.5s ease, opacity 1s ease;
+  -moz-transition: transform 0.5s ease, opacity 1s ease;
+  -o-transition: transform 0.5s ease, opacity 1s ease;
+  transition: transform 0.5s ease, opacity 1s ease;
+  left: 0;
+  top: 0;
+}
+.bi-basic-button.button-ignore:active:after {
+  transform: scale(0, 1);
   opacity: 0.1;
   filter: alpha(opacity=10);
-  background-color: #232E40;
+  -webkit-transition: transform 0s;
+  -moz-transition: transform 0s;
+  -o-transition: transform 0s;
+  transition: transform 0s;
 }
 .bi-basic-button.button-ignore:hover {
   background-color: rgba(54, 133, 242, 0.05);
-}
-.bi-basic-button.button-ignore:active {
-  background-color: rgba(54, 133, 242, 0.1);
+  -webkit-transition: opacity 0.3s ease;
+  -moz-transition: opacity 0.3s ease;
+  -o-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 .bi-basic-button .popup-content {
   font-size: 14px;
