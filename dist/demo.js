@@ -30,10 +30,7 @@ $(function () {
                 type: "bi.button",
                 text: "一般按钮",
                 level: "common",
-                height: 30,
-                handler: function () {
-                    BI.Msg.toast("aaaaaaaaaaaaa");
-                }
+                height: 30
             }
         }, {
             el: {
@@ -5593,9 +5590,7 @@ BI.shortcut("demo.border", Demo.BorderLayout);Demo.CenterAdapt = BI.inherit(BI.W
     },
     render: function () {
         return {
-            type: "bi.horizontal",
-            verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            type: "bi.center_adapt",
             items: [{
                 type: "bi.label",
                 text: "水平垂直居中",
