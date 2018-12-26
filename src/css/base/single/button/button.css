@@ -350,6 +350,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   transition: transform 0.5s ease, opacity 1s ease;
   left: 0;
   top: 0;
+  pointer-events: none;
 }
 .bi-basic-button.button-common:active:after,
 .bi-basic-button.button-success:active:after,
@@ -394,6 +395,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   transition: transform 0.5s ease, opacity 1s ease;
   left: 0;
   top: 0;
+  pointer-events: none;
 }
 .bi-basic-button.button-ignore:active:after {
   transform: scale(0, 1);
