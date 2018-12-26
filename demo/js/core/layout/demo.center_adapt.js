@@ -4,7 +4,9 @@ Demo.CenterAdapt = BI.inherit(BI.Widget, {
     },
     render: function () {
         return {
-            type: "bi.center_adapt",
+            type: "bi.horizontal",
+            verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: BI.HorizontalAlign.Center,
             items: [{
                 type: "bi.label",
                 text: "水平垂直居中",

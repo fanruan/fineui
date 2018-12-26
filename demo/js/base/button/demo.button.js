@@ -8,7 +8,10 @@ Demo.Button = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 text: "一般按钮",
                 level: "common",
-                height: 30
+                height: 30,
+                handler: function () {
+                    BI.Msg.toast("aaaaaaaaaaaaa");
+                }
             }
         }, {
             el: {

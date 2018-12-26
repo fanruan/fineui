@@ -19121,19 +19121,19 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        if (!isIE && supportFlex && justOneItem) {
-            // 有滚动条的情况下需要用到flex_wrapper_center布局
-            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                // 不是IE用flex_wrapper_center布局
-                return BI.extend(ob, {type: "bi.flex_wrapper_center"});
-            }
-            return BI.extend(ob, {type: "bi.flex_center"});
-        }
-        // 一个item的情况下inline布局睥睨天下
-        if(justOneItem) {
-            return BI.extend(ob, {type: "bi.inline_center_adapt"});
-        }
+        // var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        // if (!isIE && supportFlex && justOneItem) {
+        //     // 有滚动条的情况下需要用到flex_wrapper_center布局
+        //     if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+        //         // 不是IE用flex_wrapper_center布局
+        //         return BI.extend(ob, {type: "bi.flex_wrapper_center"});
+        //     }
+        //     return BI.extend(ob, {type: "bi.flex_center"});
+        // }
+        // // 一个item的情况下inline布局睥睨天下
+        // if(justOneItem) {
+        //     return BI.extend(ob, {type: "bi.inline_center_adapt"});
+        // }
         return ob;
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
@@ -66657,29 +66657,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
     _init: function () {
         BI.MultiLayerSingleTreeFirstPlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.node = BI.createWidget({
-            type: "bi.first_plus_group_node",
-            cls: "bi-list-item-none",
-            logic: {
-                dynamic: true
-            },
-            id: o.id,
-            pId: o.pId,
-            open: o.open,
-            isLastNode: o.isLastNode,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword
-        });
-        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {// 本身实现click功能
-                return;
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
+        this.node = this._createNode();
 
         var needBlankLayers = [];
         var pNode = o.pNode;
@@ -66726,6 +66704,37 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         if (BI.isNotNull(this.node)) {
             this.node.setOpened(v);
         }
+    },
+
+    _createNode: function () {
+        var self = this, o = this.options;
+
+        return BI.createWidget({
+            type: "bi.first_plus_group_node",
+            cls: "bi-list-item-none",
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            isLastNode: o.isLastNode,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function (type) {
+                    if (type === BI.Events.CLICK) {// 本身实现click功能
+                        return;
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }]
+        });
     }
 });
 
@@ -66751,28 +66760,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
     _init: function () {
         BI.MultiLayerSingleTreeLastPlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.node = BI.createWidget({
-            type: "bi.last_plus_group_node",
-            cls: "bi-list-item-none",
-            logic: {
-                dynamic: true
-            },
-            id: o.id,
-            pId: o.pId,
-            open: o.open,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword
-        });
-        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {// 本身实现click功能
-                return;
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
+        this.node = this._createNode();
 
         var needBlankLayers = [];
         var pNode = o.pNode;
@@ -66819,6 +66807,36 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         if (BI.isNotNull(this.node)) {
             this.node.setOpened(v);
         }
+    },
+
+    _createNode: function () {
+        var self = this, o = this.options;
+
+        return BI.createWidget({
+            type: "bi.last_plus_group_node",
+            cls: "bi-list-item-none",
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function (type) {
+                    if (type === BI.Events.CLICK) {// 本身实现click功能
+                        return;
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }]
+        });
     }
 });
 
@@ -66844,28 +66862,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
     _init: function () {
         BI.MultiLayerSingleTreeMidPlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        this.node = BI.createWidget({
-            type: "bi.mid_plus_group_node",
-            cls: "bi-list-item-none",
-            logic: {
-                dynamic: true
-            },
-            id: o.id,
-            pId: o.pId,
-            open: o.open,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword
-        });
-        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {// 本身实现click功能
-                return;
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
+        this.node = this._createNode();
 
         var needBlankLayers = [];
         var pNode = o.pNode;
@@ -66912,6 +66909,36 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         if (BI.isNotNull(this.node)) {
             this.node.setOpened(v);
         }
+    },
+
+    _createNode: function () {
+        var self = this, o = this.options;
+
+        return BI.createWidget({
+            type: "bi.mid_plus_group_node",
+            cls: "bi-list-item-none",
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function (type) {
+                    if (type === BI.Events.CLICK) {// 本身实现click功能
+                        return;
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }]
+        });
     }
 });
 
@@ -66935,32 +66962,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
     _init: function () {
         BI.MultiLayerSingleTreePlusGroupNode.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (o.isLastNode && !o.pNode) {
-
-        }
-        this.node = BI.createWidget({
-            type: "bi.plus_group_node",
-            cls: "bi-list-item-none",
-            logic: {
-                dynamic: true
-            },
-            id: o.id,
-            pId: o.pId,
-            open: o.open,
-            isLastNode: o.isLastNode,
-            height: o.height,
-            hgap: o.hgap,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword
-        });
-        this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {// 本身实现click功能
-                return;
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
+        this.node = this._createNode();
 
         var needBlankLayers = [];
         var pNode = o.pNode;
@@ -67007,6 +67009,37 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
         if (BI.isNotNull(this.node)) {
             this.node.setOpened(v);
         }
+    },
+
+    _createNode: function () {
+        var self = this, o = this.options;
+
+        return BI.createWidget({
+            type: "bi.plus_group_node",
+            cls: "bi-list-item-none",
+            logic: {
+                dynamic: true
+            },
+            id: o.id,
+            pId: o.pId,
+            open: o.open,
+            isLastNode: o.isLastNode,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function (type) {
+                    if (type === BI.Events.CLICK) {// 本身实现click功能
+                        return;
+                    }
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }]
+        });
     }
 });
 

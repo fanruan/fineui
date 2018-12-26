@@ -45,19 +45,19 @@ BI.prepares.push(function () {
         return ob;
     });
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
-        var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
-        if (!isIE && supportFlex && justOneItem) {
-            // 有滚动条的情况下需要用到flex_wrapper_center布局
-            if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                // 不是IE用flex_wrapper_center布局
-                return BI.extend(ob, {type: "bi.flex_wrapper_center"});
-            }
-            return BI.extend(ob, {type: "bi.flex_center"});
-        }
-        // 一个item的情况下inline布局睥睨天下
-        if(justOneItem) {
-            return BI.extend(ob, {type: "bi.inline_center_adapt"});
-        }
+        // var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
+        // if (!isIE && supportFlex && justOneItem) {
+        //     // 有滚动条的情况下需要用到flex_wrapper_center布局
+        //     if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
+        //         // 不是IE用flex_wrapper_center布局
+        //         return BI.extend(ob, {type: "bi.flex_wrapper_center"});
+        //     }
+        //     return BI.extend(ob, {type: "bi.flex_center"});
+        // }
+        // // 一个item的情况下inline布局睥睨天下
+        // if(justOneItem) {
+        //     return BI.extend(ob, {type: "bi.inline_center_adapt"});
+        // }
         return ob;
     });
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
