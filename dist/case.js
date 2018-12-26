@@ -8123,10 +8123,12 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             }]
         });
         BI.createWidget({
-            type: "bi.center_adapt",
+            type: "bi.left_right_vertical_adapt",
             element: this,
-            columnSize: ["", 40, 20, 58],
-            items: [count, this.editor, this.allPages, this.pager]
+            items: {
+                left: [count],
+                right: [this.editor, this.allPages, this.pager]
+            }
         });
     },
 
