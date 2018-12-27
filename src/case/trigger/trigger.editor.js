@@ -36,7 +36,9 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
             allowBlank: o.allowBlank,
             watermark: o.watermark,
             errorText: o.errorText,
-            title: o.title,
+            title: function () {
+                return self.getValue();
+            }
         });
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
