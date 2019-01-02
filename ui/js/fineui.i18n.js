@@ -168,5 +168,6 @@ BI.i18n = {
     "BI-Basic_Please_Select": "请选择",
     "BI-Basic_Font_Color": "文字颜色",
     "BI-Basic_Background_Color": "背景色",
-    "BI-Basic_Underline": "下划线"
+    "BI-Basic_Underline": "下划线",
+    "BI-Basic_No_Select": "不选"
 };

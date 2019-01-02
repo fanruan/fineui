@@ -7,6 +7,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
         });
@@ -24,6 +25,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
         this.adapter = BI.createWidget({
             type: "bi.single_select_loader",
+            allowNoSelect: o.allowNoSelect,
             cls: "popup-single-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
@@ -42,6 +44,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
         this.searcherPane = BI.createWidget({
             type: "bi.single_select_search_pane",
+            allowNoSelect: o.allowNoSelect,
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
             keywordGetter: function () {

@@ -15,7 +15,8 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
             ref: function () {
                 self.SingleSelectCombo = this;
             },
-            value: "柳州市针织总厂"
+            value: "柳州市针织总厂",
+            allowNoSelect: true
         });
 
         widget.populate();

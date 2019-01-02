@@ -9,6 +9,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-loader",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -23,6 +24,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
+            allowNoSelect: opts.allowNoSelect,
             element: this,
             logic: {
                 dynamic: false
@@ -82,7 +84,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             cls: "bi-list-item-active",
             logic: {
                 dynamic: false
