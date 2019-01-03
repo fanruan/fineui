@@ -57861,7 +57861,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
-            height: 20,
+            height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
             count: 1 // 总行数
@@ -59982,8 +59982,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
 
     setValue: function (ob) {
-        this._year = ob.year;
-        this._month = ob.month;
+        this._year = BI.parseInt(ob.year);
+        this._month = BI.parseInt(ob.month);
         this.year.setValue(ob.year);
         this.month.setValue(ob.month);
         this._checkLeftValid();
@@ -75930,6 +75930,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearchLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-loader",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
             valueFormatter: BI.emptyFn
@@ -75944,6 +75945,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
+            allowNoSelect: opts.allowNoSelect,
             element: this,
             logic: {
                 dynamic: false
@@ -76003,7 +76005,7 @@ BI.SingleSelectSearchLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             cls: "bi-list-item-active",
             logic: {
                 dynamic: false
@@ -76087,6 +76089,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearchPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-pane bi-card",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             keywordGetter: BI.emptyFn
@@ -76107,6 +76110,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
 
         this.loader = BI.createWidget({
             type: "bi.single_select_search_loader",
+            allowNoSelect: o.allowNoSelect,
             keywordGetter: o.keywordGetter,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
@@ -76177,6 +76181,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-combo",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
@@ -76202,6 +76207,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             // adapter: this.popup,
+            allowNoSelect: o.allowNoSelect,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
@@ -76270,6 +76276,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             adjustLength: 1,
             popup: {
                 type: "bi.single_select_popup_view",
+                allowNoSelect: o.allowNoSelect,
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
@@ -76447,6 +76454,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-combo",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
@@ -76471,6 +76479,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
             height: o.height,
+            allowNoSelect: o.allowNoSelect,
             // adapter: this.popup,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
@@ -76539,6 +76548,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             adjustLength: 1,
             popup: {
                 type: "bi.single_select_popup_view",
+                allowNoSelect: o.allowNoSelect,
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
@@ -76768,7 +76778,7 @@ BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);/**
  * @extends BI.Widget
  */
 BI.SingleSelectList = BI.inherit(BI.Widget, {
-    
+
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-list",
@@ -76782,26 +76792,32 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
             onLoaded: BI.emptyFn,
             el: {
                 type: "bi.list_pane"
-            }
+            },
+            allowNoSelect: false
         });
     },
     _init: function () {
         BI.SingleSelectList.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-    
+
         this.list = BI.createWidget(o.el, {
             type: "bi.list_pane",
             items: o.items,
             itemsCreator: function (op, callback) {
+                op.times === 1 && self.toolbar && self.toolbar.setVisible(false);
                 o.itemsCreator(op, function (items) {
                     callback.apply(self, arguments);
+                    if (op.times === 1) {
+                        self.toolbar && self.toolbar.setVisible(items && items.length > 0);
+                        self.toolbar && self.toolbar.setEnable(items && items.length > 0);
+                    }
                 });
             },
             onLoaded: o.onLoaded,
             hasNext: o.hasNext,
             value: o.value
         });
-    
+
         this.list.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             if (type === BI.Events.CLICK) {
                 self.fireEvent(BI.SingleSelectList.EVENT_CHANGE, value, obj);
@@ -76814,80 +76830,98 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
         }, BI.LogicFactory.createLogic(BI.LogicFactory.createLogicTypeByDirection(o.direction), BI.extend({
             scrolly: true
         }, o.logic, {
-            items: BI.LogicFactory.createLogicItemsByDirection(o.direction, this.list)
+            items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
+                type: "bi.single_select_item",
+                height: 24,
+                forceNotSelected: true,
+                text: BI.i18nText("BI-Basic_No_Select"),
+                ref: function (_ref) {
+                    self.toolbar = _ref;
+                },
+                listeners: [{
+                    eventName: BI.Controller.EVENT_CHANGE,
+                    action: function (type) {
+                        if (type === BI.Events.CLICK) {
+                            self.list.setValue();
+                            self.fireEvent(BI.SingleSelectList.EVENT_CHANGE);
+                        }
+                        self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    }
+                }]
+            }, this.list) : BI.LogicFactory.createLogicItemsByDirection(o.direction, this.list)
         }))));
-    
+
     },
-    
+
     hasPrev: function () {
         return this.list.hasPrev();
     },
-    
+
     hasNext: function () {
         return this.list.hasNext();
     },
-    
+
     prependItems: function (items) {
         this.list.prependItems.apply(this.list, arguments);
     },
-    
+
     addItems: function (items) {
         this.list.addItems.apply(this.list, arguments);
     },
-    
+
     setValue: function (v) {
         this.list.setValue([v]);
     },
-    
+
     getValue: function () {
         return this.list.getValue()[0];
     },
-    
+
     empty: function () {
         this.list.empty();
     },
-    
+
     populate: function (items) {
         this.list.populate.apply(this.list, arguments);
     },
-    
+
     resetHeight: function (h) {
         this.list.resetHeight ? this.list.resetHeight(h) :
             this.list.element.css({"max-height": h + "px"});
     },
-    
+
     setNotSelectedValue: function () {
         this.list.setNotSelectedValue.apply(this.list, arguments);
     },
-    
+
     getNotSelectedValue: function () {
         return this.list.getNotSelectedValue();
     },
-    
+
     getAllButtons: function () {
         return this.list.getAllButtons();
     },
-    
+
     getAllLeaves: function () {
         return this.list.getAllLeaves();
     },
-    
+
     getSelectedButtons: function () {
         return this.list.getSelectedButtons();
     },
-    
+
     getNotSelectedButtons: function () {
         return this.list.getNotSelectedButtons();
     },
-    
+
     getIndexByValue: function (value) {
         return this.list.getIndexByValue(value);
     },
-    
+
     getNodeById: function (id) {
         return this.list.getNodeById(id);
     },
-    
+
     getNodeByValue: function (value) {
         return this.list.getNodeByValue(value);
     }
@@ -76907,9 +76941,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: true
             },
-            el: {
-                height: 400
-            },
+            allowNoSelect: false,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn
@@ -76924,6 +76956,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
+            allowNoSelect: opts.allowNoSelect,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -76998,7 +77031,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,
@@ -77062,6 +77095,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectPopupView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-popup-view",
+            allowNoSelect: false,
             maxWidth: "auto",
             minWidth: 135,
             maxHeight: 400,
@@ -77077,6 +77111,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 
         this.loader = BI.createWidget({
             type: "bi.single_select_loader",
+            allowNoSelect: opts.allowNoSelect,
             itemsCreator: opts.itemsCreator,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
@@ -77145,6 +77180,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-trigger bi-border",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -77165,6 +77201,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            allowNoSelect: o.allowNoSelect,
             text: o.text,
             height: o.height,
             itemsCreator: o.itemsCreator,
@@ -77247,6 +77284,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
         });
@@ -77264,6 +77302,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
         this.adapter = BI.createWidget({
             type: "bi.single_select_loader",
+            allowNoSelect: o.allowNoSelect,
             cls: "popup-single-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
@@ -77282,6 +77321,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
 
         this.searcherPane = BI.createWidget({
             type: "bi.single_select_search_pane",
+            allowNoSelect: o.allowNoSelect,
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
             keywordGetter: function () {
@@ -77568,7 +77608,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
             popup: {},
             valueFormatter: BI.emptyFn,
             adapter: null,
-            masker: {}
+            masker: {},
+            allowNoSelect: false
         });
     },
 
@@ -77594,6 +77635,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
             popup: BI.extend({
                 type: "bi.single_select_search_pane",
+                allowNoSelect: o.allowNoSelect,
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
                     return self.editor.getValue();

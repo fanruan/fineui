@@ -14,7 +14,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
             popup: {},
             valueFormatter: BI.emptyFn,
             adapter: null,
-            masker: {}
+            masker: {},
+            allowNoSelect: false
         });
     },
 
@@ -40,6 +41,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
             popup: BI.extend({
                 type: "bi.single_select_search_pane",
+                allowNoSelect: o.allowNoSelect,
                 valueFormatter: o.valueFormatter,
                 keywordGetter: function () {
                     return self.editor.getValue();

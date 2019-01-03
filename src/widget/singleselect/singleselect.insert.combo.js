@@ -8,6 +8,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectInsertCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-combo",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
@@ -32,6 +33,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.single_select_trigger",
             height: o.height,
+            allowNoSelect: o.allowNoSelect,
             // adapter: this.popup,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
@@ -100,6 +102,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             adjustLength: 1,
             popup: {
                 type: "bi.single_select_popup_view",
+                allowNoSelect: o.allowNoSelect,
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);

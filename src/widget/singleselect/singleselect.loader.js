@@ -12,9 +12,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: true
             },
-            el: {
-                height: 400
-            },
+            allowNoSelect: false,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
             onLoaded: BI.emptyFn
@@ -29,6 +27,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
         this.storeValue = opts.value;
         this.button_group = BI.createWidget({
             type: "bi.single_select_list",
+            allowNoSelect: opts.allowNoSelect,
             logic: opts.logic,
             el: BI.extend({
                 onLoaded: opts.onLoaded,
@@ -103,7 +102,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
 
     _createItems: function (items) {
         return BI.createItems(items, {
-            type: "bi.single_select_combo_item",
+            type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
             height: 24,

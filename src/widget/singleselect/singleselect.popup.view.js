@@ -8,6 +8,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectPopupView.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-popup-view",
+            allowNoSelect: false,
             maxWidth: "auto",
             minWidth: 135,
             maxHeight: 400,
@@ -23,6 +24,7 @@ BI.SingleSelectPopupView = BI.inherit(BI.Widget, {
 
         this.loader = BI.createWidget({
             type: "bi.single_select_loader",
+            allowNoSelect: opts.allowNoSelect,
             itemsCreator: opts.itemsCreator,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
