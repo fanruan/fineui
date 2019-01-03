@@ -3189,6 +3189,12 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   top: 0;
   pointer-events: none;
 }
+.bi-basic-button.button-common.hack:after,
+.bi-basic-button.button-success.hack:after,
+.bi-basic-button.button-warning.hack:after,
+.bi-basic-button.button-error.hack:after {
+  content: none;
+}
 .bi-basic-button.button-common:active:after,
 .bi-basic-button.button-success:active:after,
 .bi-basic-button.button-warning:active:after,
@@ -3233,6 +3239,9 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   left: 0;
   top: 0;
   pointer-events: none;
+}
+.bi-basic-button.button-ignore.hack:after {
+  content: none;
 }
 .bi-basic-button.button-ignore:active:after {
   transform: scale(0, 1);
