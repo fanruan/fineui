@@ -16,6 +16,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-trigger bi-border",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -36,6 +37,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
         this.searcher = BI.createWidget(o.searcher, {
             type: "bi.single_select_searcher",
+            allowNoSelect: o.allowNoSelect,
             text: o.text,
             height: o.height,
             itemsCreator: o.itemsCreator,

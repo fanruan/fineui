@@ -144,8 +144,8 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
 
     setValue: function (ob) {
-        this._year = ob.year;
-        this._month = ob.month;
+        this._year = BI.parseInt(ob.year);
+        this._month = BI.parseInt(ob.month);
         this.year.setValue(ob.year);
         this.month.setValue(ob.month);
         this._checkLeftValid();

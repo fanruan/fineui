@@ -184,5 +184,6 @@ BI.i18n = {
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
     "BI-Basic_Billion": "亿",
-    "BI-Basic_Quarter": "季度"
+    "BI-Basic_Quarter": "季度",
+    "BI-Basic_No_Select": "不选"
 };

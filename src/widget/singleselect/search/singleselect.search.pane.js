@@ -16,6 +16,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectSearchPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-search-pane bi-card",
+            allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             keywordGetter: BI.emptyFn
@@ -36,6 +37,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
 
         this.loader = BI.createWidget({
             type: "bi.single_select_search_loader",
+            allowNoSelect: o.allowNoSelect,
             keywordGetter: o.keywordGetter,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
