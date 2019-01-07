@@ -42862,7 +42862,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
     _defaultConfig: function (props) {
         var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-button",
+            baseCls: (conf.baseCls || "") + " bi-button" + ((BI.isIE() && BI.isIE9Below()) ? " hack" : ""),
             minWidth: (props.block === true || props.clear === true) ? 0 : 80,
             height: 24,
             shadow: props.clear !== true,
@@ -52519,7 +52519,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         var down = BI.createWidget({
             type: "bi.icon_button",
             disableSelected: true,
-            cls: "icon-combo-down-icon trigger-triangle-font",
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
             width: 12,
             height: 8
         });
@@ -52605,7 +52605,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var down = BI.createWidget({
             type: "bi.icon_button",
             disableSelected: true,
-            cls: "icon-combo-down-icon trigger-triangle-font",
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
             width: 12,
             height: 8
         });

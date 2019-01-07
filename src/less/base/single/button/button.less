@@ -179,6 +179,9 @@ body .bi-button, #body .bi-button {
       top: 0;
       pointer-events: none;
     }
+    &.hack:after {
+      content: none;
+    }
     &:active:after {
       transform: scale(0, 1);
       .opacity(0.1);
@@ -207,6 +210,9 @@ body .bi-button, #body .bi-button {
       left: 0;
       top: 0;
       pointer-events: none;
+    }
+    &.hack:after {
+      content: none;
     }
     &:active:after {
       transform: scale(0, 1);
