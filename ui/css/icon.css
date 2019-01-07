@@ -422,6 +422,18 @@
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png');
   _background: none;
 }
+.check-half-select-icon.disabled .x-icon {
+  display: block;
+  background: url('resources?path=/com/fr/web/ui/images/2x/icon/half_selected_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/2x/icon/half_selected_disable.png');
+  background-size: contain;
+  _background: none;
+}
+.check-half-select-icon.disabled .x-icon.hack {
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected_disable.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/icon/half_selected_disable.png');
+  _background: none;
+}
 .slider-icon .x-icon {
   display: block;
   background: url('resources?path=/com/fr/web/ui/images/2x/icon/slider_normal_small.png') no-repeat center center;

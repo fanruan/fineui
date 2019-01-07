@@ -51870,7 +51870,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         var down = BI.createWidget({
             type: "bi.icon_button",
             disableSelected: true,
-            cls: "icon-combo-down-icon trigger-triangle-font",
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
             width: 12,
             height: 8
         });
@@ -51956,7 +51956,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var down = BI.createWidget({
             type: "bi.icon_button",
             disableSelected: true,
-            cls: "icon-combo-down-icon trigger-triangle-font",
+            cls: "icon-combo-down-icon trigger-triangle-font icon-size-12",
             width: 12,
             height: 8
         });
