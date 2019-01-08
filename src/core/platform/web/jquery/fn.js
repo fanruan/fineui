@@ -95,7 +95,8 @@ if (jQuery) {
                 }
 
                 if (tidx >= 0) {
-                    this.append(textLeft.substr(0, tidx));
+                    // 标红的text未encode
+                    this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
                     this.append($("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
@@ -104,7 +105,8 @@ if (jQuery) {
                         py = py.substr(tidx + keyword.length);
                     }
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
-                    this.append(textLeft.substr(0, pidx));
+                    // 标红的text未encode
+                    this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
                     this.append($("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
@@ -112,7 +114,8 @@ if (jQuery) {
                     }
                     textLeft = textLeft.substr(pidx + keyword.length);
                 } else {
-                    this.append(textLeft);
+                    // 标红的text未encode
+                    this.append(BI.htmlEncode(textLeft));
                     break;
                 }
             }
