@@ -30163,6 +30163,7 @@ $.extend($.Event.prototype, {
                 }
 
                 if (tidx >= 0) {
+                    // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
                     this.append($("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
@@ -30172,6 +30173,7 @@ $.extend($.Event.prototype, {
                         py = py.substr(tidx + keyword.length);
                     }
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
+                    // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
                     this.append($("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
@@ -30180,6 +30182,7 @@ $.extend($.Event.prototype, {
                     }
                     textLeft = textLeft.substr(pidx + keyword.length);
                 } else {
+                    // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft));
                     break;
                 }
@@ -49747,6 +49750,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
             keyword: o.keyword,
             value: o.value,
             title: o.title || o.text,
+            warningTitle: o.warningTitle,
             py: o.py
         });
     },
