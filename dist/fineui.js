@@ -62974,13 +62974,13 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         tabHeight: 30,
         buttonHeight: 24
     },
-    
+
     props: {
         baseCls: "bi-dynamic-date-popup",
         width: 248,
         height: 344
     },
-    
+
     _init: function () {
         BI.DynamicDatePopup.superclass._init.apply(this, arguments);
         var self = this, opts = this.options, c = this.constants;
@@ -63135,7 +63135,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = BI.print(date, "%Y-%x-%e");
+            date = BI.print(date, "%Y-%X-%d");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
@@ -63242,7 +63242,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                         var text = self._getText(value);
                         var date = BI.getDate();
                         date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%x-%e");
+                        var dateStr = BI.print(date, "%Y-%X-%d");
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
@@ -63352,7 +63352,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%e");
+        var dateStr = BI.print(date, "%Y-%X-%d");
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -63927,7 +63927,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = BI.print(date, "%Y-%x-%e");
+            date = BI.print(date, "%Y-%X-%d");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }

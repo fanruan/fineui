@@ -3,13 +3,13 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         tabHeight: 30,
         buttonHeight: 24
     },
-    
+
     props: {
         baseCls: "bi-dynamic-date-popup",
         width: 248,
         height: 344
     },
-    
+
     _init: function () {
         BI.DynamicDatePopup.superclass._init.apply(this, arguments);
         var self = this, opts = this.options, c = this.constants;
@@ -164,7 +164,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
             this.textButton.setEnable(true);
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
-            date = BI.print(date, "%Y-%x-%e");
+            date = BI.print(date, "%Y-%X-%d");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
