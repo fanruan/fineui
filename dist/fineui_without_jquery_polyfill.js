@@ -28659,16 +28659,9 @@ BI.Msg = function () {
                             },
                             center: {
                                 el: {
-                                    type: "bi.inline_center_adapt",
-                                    scrolly: true,
-                                    hgap: 10,
-                                    vgap: 15,
-                                    items: [{
-                                        type: "bi.label",
-                                        whiteSpace: "normal",
-                                        text: message,
-                                        textAlign: "left"
-                                    }]
+                                    type: "bi.label",
+                                    whiteSpace: "normal",
+                                    text: message
                                 }
                             },
                             south: {
