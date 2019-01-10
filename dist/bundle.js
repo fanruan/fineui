@@ -40811,10 +40811,18 @@ BI.Msg = function () {
                             },
                             center: {
                                 el: {
-                                    type: "bi.center_adapt",
+                                    type: "bi.vertical",
+                                    hgap: 10,
+                                    vgap: 15,
                                     items: [{
-                                        type: "bi.label",
-                                        text: message
+                                        type: "bi.horizontal",
+                                        verticalAlign: BI.VerticalAlign.Middle,
+                                        horizontalAlign: BI.HorizontalAlign.Center,
+                                        items: [{
+                                            type: "bi.label",
+                                            whiteSpace: "normal",
+                                            text: message
+                                        }]
                                     }]
                                 }
                             },
