@@ -40407,18 +40407,15 @@ BI.Msg = function () {
                             },
                             center: {
                                 el: {
-                                    type: "bi.horizontal",
+                                    type: "bi.inline_center_adapt",
                                     scrolly: true,
-                                    scrollx: false,
-                                    verticalAlign: BI.VerticalAlign.Middle,
-                                    horizontalAlign: BI.HorizontalAlign.Center,
                                     hgap: 10,
                                     vgap: 15,
                                     items: [{
                                         type: "bi.label",
                                         whiteSpace: "normal",
                                         text: message,
-                                        textAlign: "center"
+                                        textAlign: "left"
                                     }]
                                 }
                             },
