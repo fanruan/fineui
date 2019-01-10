@@ -40652,18 +40652,18 @@ BI.Msg = function () {
                             },
                             center: {
                                 el: {
-                                    type: "bi.vertical",
+                                    type: "bi.horizontal",
+                                    scrolly: true,
+                                    scrollx: false,
+                                    verticalAlign: BI.VerticalAlign.Middle,
+                                    horizontalAlign: BI.HorizontalAlign.Center,
                                     hgap: 10,
                                     vgap: 15,
                                     items: [{
-                                        type: "bi.horizontal",
-                                        verticalAlign: BI.VerticalAlign.Middle,
-                                        horizontalAlign: BI.HorizontalAlign.Center,
-                                        items: [{
-                                            type: "bi.label",
-                                            whiteSpace: "normal",
-                                            text: message
-                                        }]
+                                        type: "bi.label",
+                                        whiteSpace: "normal",
+                                        text: message,
+                                        textAlign: "center"
                                     }]
                                 }
                             },
