@@ -28,7 +28,6 @@ BI.Label = BI.inherit(BI.Single, {
         var o = this.options;
         return {
             type: "bi.text",
-            textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
             text: o.text,
