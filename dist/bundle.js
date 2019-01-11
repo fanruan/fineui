@@ -40811,11 +40811,9 @@ BI.Msg = function () {
                             },
                             center: {
                                 el: {
-                                    type: "bi.center_adapt",
-                                    items: [{
-                                        type: "bi.label",
-                                        text: message
-                                    }]
+                                    type: "bi.label",
+                                    whiteSpace: "normal",
+                                    text: message
                                 }
                             },
                             south: {
