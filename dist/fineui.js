@@ -46551,6 +46551,7 @@ BI.Label = BI.inherit(BI.Single, {
         var o = this.options;
         return {
             type: "bi.text",
+            textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
             text: o.text,
@@ -53937,7 +53938,7 @@ BI.shortcut("bi.bubble_bar_popup_view", BI.BubblePopupBarView);
  * @class BI.TextBubblePopupBarView
  * @extends BI.BubblePopupView
  */
-BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
+BI.TextBubblePopupBarView = BI.inherit(BI.BubblePopupView, {
 
     props: function () {
         return {
@@ -53975,16 +53976,60 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 self.popup = this;
             },
             el: {
-                type: "bi.label",
-                text: o.text,
-                whiteSpace: "normal",
-                textAlign: "left",
-                ref: function () {
-                    self.text = this;
-                }
+
             },
             buttons: buttons
         };
+    },
+
+    _createToolBar: function () {
+        var o = this.options, self = this;
+
+        var items = [];
+        BI.each(o.buttons, function (i, buttonOpt) {
+            if (BI.isWidget(buttonOpt)) {
+                items.push(buttonOpt);
+            } else {
+                items.push(BI.extend({
+                    type: "bi.button",
+                    height: 24,
+                    handler: function (v) {
+                        self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    }
+                }, buttonOpt));
+            }
+        });
+        return BI.createWidget({
+            type: "bi.center",
+            height: 44,
+            rgap: 15,
+            items: [{
+                type: "bi.right_vertical_adapt",
+                lgap: 10,
+                items: items
+            }]
+        });
+    },
+
+    _createView: function () {
+        var self = this, o = this.options;
+
+        var button =  BI.createWidget({
+            type: "bi.label",
+            cls: "bar-popup-container",
+            text: o.text,
+            whiteSpace: "normal",
+            textAlign: "left",
+            ref: function () {
+                self.text = this;
+            },
+            hgap: 15,
+            tgap: 10
+        });
+
+        button.element.css("min-height", o.minHeight - 44);
+
+        return button;
     },
 
     populate: function (v) {
