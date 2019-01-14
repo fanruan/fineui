@@ -10788,6 +10788,7 @@ BI.Label = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
+            wrapAlign: "center",    // 换行之后的文本的文本是都需要居中对齐，在textAlign为center时生效
             forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
@@ -10805,7 +10806,7 @@ BI.Label = BI.inherit(BI.Single, {
 
     _createJson: function () {
         var o = this.options;
-        return {
+        var obj = {
             type: "bi.text",
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
@@ -10815,6 +10816,10 @@ BI.Label = BI.inherit(BI.Single, {
             py: o.py,
             keyword: o.keyword
         };
+        if(o.textAlign === "center") {
+            obj.textAlign = o.wrapAlign;
+        }
+        return obj;
     },
 
     _init: function () {
