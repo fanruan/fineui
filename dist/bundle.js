@@ -17256,7 +17256,8 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         if (x + tooltip.element.outerWidth() > BI.Widget._renderEngine.createElement("body").outerWidth()) {
             x -= tooltip.element.outerWidth() + 15;
         }
-        if (y + tooltip.element.outerHeight() > BI.Widget._renderEngine.createElement("body").outerHeight()) {
+        var bodyHeight = BI.Widget._renderEngine.createElement("body").outerHeight();
+        if (y + tooltip.element.outerHeight() > bodyHeight || top + tooltip.element.outerHeight() > bodyHeight) {
             y -= tooltip.element.outerHeight() + 15;
             !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {
@@ -46329,6 +46330,7 @@ BI.Label = BI.inherit(BI.Single, {
     _createCenterEl: function () {
         var o = this.options;
         var json = this._createJson();
+        json.textAlign = "left";
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 if (BI.isNumber(o.height) && o.height > 0) {
@@ -46352,6 +46354,7 @@ BI.Label = BI.inherit(BI.Single, {
                     return;
                 }
                 json.width = o.textWidth;
+                json.textAlign = o.textAlign;
                 BI.createWidget({
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
@@ -46399,6 +46402,7 @@ BI.Label = BI.inherit(BI.Single, {
                 return;
             }
             json.width = o.width - 2 * o.hgap;
+            json.textAlign = o.textAlign;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -46470,6 +46474,8 @@ BI.Label = BI.inherit(BI.Single, {
             this.element.css({
                 "line-height": o.height + "px"
             });
+            // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
+            json.textAlign = o.textAlign;
             this.text = BI.createWidget(BI.extend(json, {
                 element: this
             }));
@@ -46497,6 +46503,8 @@ BI.Label = BI.inherit(BI.Single, {
             });
             return;
         }
+        // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
+        json.textAlign = o.textAlign;
         this.text = BI.createWidget(BI.extend(json, {
             element: this
         }));
