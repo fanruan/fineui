@@ -18,6 +18,16 @@
   _background: none;
 }
 
+.background(@class, @backgroundPath, @top:center, @left:center, @repeat: no-repeat) {
+  .@{class} {
+    .image2xPath(@backgroundPath, @top, @left, @repeat);
+
+    &.hack {
+      .imagePath(@backgroundPath, @top, @left, @repeat);
+    }
+  }
+}
+
 // 默认icon
 .icon(@class, @iconPath) {
   .@{class} {
