@@ -17257,7 +17257,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             x -= tooltip.element.outerWidth() + 15;
         }
         var bodyHeight = BI.Widget._renderEngine.createElement("body").outerHeight();
-        if (y + tooltip.element.outerHeight() > bodyHeight || (!opt.belowMouse && top + tooltip.element.outerHeight() > bodyHeight)) {
+        if (y + tooltip.element.outerHeight() > bodyHeight || top + tooltip.element.outerHeight() > bodyHeight) {
             y -= tooltip.element.outerHeight() + 15;
             !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {

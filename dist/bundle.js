@@ -17257,7 +17257,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             x -= tooltip.element.outerWidth() + 15;
         }
         var bodyHeight = BI.Widget._renderEngine.createElement("body").outerHeight();
-        if (y + tooltip.element.outerHeight() > bodyHeight || (!opt.belowMouse && top + tooltip.element.outerHeight() > bodyHeight)) {
+        if (y + tooltip.element.outerHeight() > bodyHeight || top + tooltip.element.outerHeight() > bodyHeight) {
             y -= tooltip.element.outerHeight() + 15;
             !opt.belowMouse && (y = Math.min(y, offset.top - tooltip.element.outerHeight() - 5));
         } else {
@@ -46288,7 +46288,6 @@ BI.Label = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            wrapAlign: "center",    // 换行之后的文本的文本是都需要居中对齐，在textAlign为center时生效
             forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
@@ -46306,7 +46305,7 @@ BI.Label = BI.inherit(BI.Single, {
 
     _createJson: function () {
         var o = this.options;
-        var obj = {
+        return {
             type: "bi.text",
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
@@ -46316,10 +46315,6 @@ BI.Label = BI.inherit(BI.Single, {
             py: o.py,
             keyword: o.keyword
         };
-        if(o.textAlign === "center") {
-            obj.textAlign = o.wrapAlign;
-        }
-        return obj;
     },
 
     _init: function () {
@@ -46335,6 +46330,7 @@ BI.Label = BI.inherit(BI.Single, {
     _createCenterEl: function () {
         var o = this.options;
         var json = this._createJson();
+        json.textAlign = "left";
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 if (BI.isNumber(o.height) && o.height > 0) {
@@ -46358,6 +46354,7 @@ BI.Label = BI.inherit(BI.Single, {
                     return;
                 }
                 json.width = o.textWidth;
+                json.textAlign = o.textAlign;
                 BI.createWidget({
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
@@ -46405,6 +46402,7 @@ BI.Label = BI.inherit(BI.Single, {
                 return;
             }
             json.width = o.width - 2 * o.hgap;
+            json.textAlign = o.textAlign;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -46476,6 +46474,8 @@ BI.Label = BI.inherit(BI.Single, {
             this.element.css({
                 "line-height": o.height + "px"
             });
+            // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
+            json.textAlign = o.textAlign;
             this.text = BI.createWidget(BI.extend(json, {
                 element: this
             }));
@@ -46503,6 +46503,8 @@ BI.Label = BI.inherit(BI.Single, {
             });
             return;
         }
+        // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
+        json.textAlign = o.textAlign;
         this.text = BI.createWidget(BI.extend(json, {
             element: this
         }));
