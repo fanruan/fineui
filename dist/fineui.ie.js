@@ -46228,6 +46228,7 @@ BI.Label = BI.inherit(BI.Single, {
                 this.element.css({
                     "line-height": o.height + "px"
                 });
+                json.textAlign = o.textAlign;
                 BI.createWidget({
                     type: "bi.absolute",
                     scrollable: o.whiteSpace === "normal",
