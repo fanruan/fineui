@@ -72094,7 +72094,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0
