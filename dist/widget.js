@@ -12183,6 +12183,9 @@ BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList)
  * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
+    _constant: {
+        EDITOR_HEIGHT: 24
+    },
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
@@ -12324,7 +12327,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: this._constant.EDITOR_HEIGHT
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -12335,7 +12338,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: this._constant.EDITOR_HEIGHT,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -12527,6 +12530,10 @@ BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
  * Created by zcf_1 on 2017/5/11.
  */
 BI.MultiSelectTree = BI.inherit(BI.Single, {
+    _constant: {
+        EDITOR_HEIGHT: 24
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",
@@ -12620,7 +12627,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 24
+                height: this._constant.EDITOR_HEIGHT
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -12631,7 +12638,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: this._constant.EDITOR_HEIGHT,
                 bottom: 0,
                 left: 0,
                 right: 0

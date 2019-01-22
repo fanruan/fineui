@@ -2,6 +2,10 @@
  * Created by zcf_1 on 2017/5/11.
  */
 BI.MultiSelectTree = BI.inherit(BI.Single, {
+    _constant: {
+        EDITOR_HEIGHT: 24
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",
@@ -95,7 +99,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: 24
+                height: this._constant.EDITOR_HEIGHT
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -106,7 +110,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: this._constant.EDITOR_HEIGHT,
                 bottom: 0,
                 left: 0,
                 right: 0
