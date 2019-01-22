@@ -71245,7 +71245,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
-            height: 24,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
         });
@@ -71384,7 +71383,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: o.height
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -71395,7 +71394,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: o.height,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -71590,7 +71589,6 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-tree",
-            height: 24,
             itemsCreator: BI.emptyFn
         });
     },
@@ -71681,7 +71679,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcher,
-                height: o.height
+                height: 24
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -71692,7 +71690,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: o.height,
+                top: 24,
                 bottom: 0,
                 left: 0,
                 right: 0
