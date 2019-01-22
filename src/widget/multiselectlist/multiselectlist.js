@@ -5,6 +5,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
+            height: 24,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn
         });
@@ -143,7 +144,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.height
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -154,7 +155,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.height,
                 bottom: 0,
                 left: 0,
                 right: 0
