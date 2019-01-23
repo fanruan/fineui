@@ -3,3 +3,4 @@ node_modules/
 #demo.js
 #demo.css
 .DS_Store
+coverage
