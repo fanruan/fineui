@@ -6,7 +6,7 @@ describe("aliasFunctionTest", function () {
     /**
      * test_author_windy
      */
-    it("html编码和解码方法", function () {
+    it("htmlEncode和htmlDecode", function () {
 
         var targetString = "<a>1 2&</a>";
         var encodeString = BI.htmlEncode(targetString);
