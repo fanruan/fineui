@@ -12908,11 +12908,39 @@ if (!_global.BI) {
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return (text == null) ? "" : String(text).replace(/&/g, "&amp;").replace(/\"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\s/g, "&nbsp;");
+        return text === null ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+            switch (v) {
+                case "&":
+                    return "&amp;";
+                case "\"":
+                    return "&quot;";
+                case "<":
+                    return "&lt;";
+                case ">":
+                    return "&gt;";
+                case " ":
+                default:
+                    return "&nbsp;";
+            }
+        });
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return (text == null) ? "" : String(text).replace(/&amp;/g, "&").replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
+        return text === null ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
+            switch (v) {
+                case "&amp;":
+                    return "&";
+                case "&quot;":
+                    return "\"";
+                case "&lt;":
+                    return "<";
+                case "&gt;":
+                    return ">";
+                case "&nbsp;":
+                default:
+                    return " ";
+            }
+        });
     };
 
     BI.cjkEncodeDO = function (o) {
@@ -13084,7 +13112,7 @@ if (!_global.BI) {
     BI.encodeURIComponent = function (url) {
         BI.specialCharsMap = BI.specialCharsMap || {};
         url = url || "";
-        url = BI.replaceAll(url, BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url + "", BI.keys(BI.specialCharsMap || []).join("|"), function (str) {
             switch (str) {
                 case "\\":
                     return BI.specialCharsMap["\\\\"] || str;
@@ -13101,7 +13129,7 @@ if (!_global.BI) {
             reserveSpecialCharsMap[encodeChar] = initialChar;
         });
         url = url || "";
-        url = BI.replaceAll(url, BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
+        url = BI.replaceAll(url + "", BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {
             return reserveSpecialCharsMap[str] || str;
         });
         return _global.decodeURIComponent(url);
