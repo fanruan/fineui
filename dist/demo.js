@@ -10941,7 +10941,7 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
                                 break;
                         }
                         callback({
-                            items: items
+                            items: BI.deepClone(items)
                         });
                     },
                     width: 300,
