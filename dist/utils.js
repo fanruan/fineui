@@ -12908,7 +12908,7 @@ if (!_global.BI) {
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", /&|\"|<|>|\s/, function (v) {
+        return text === null ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             switch (v) {
                 case "&":
                     return "&amp;";
@@ -12926,7 +12926,7 @@ if (!_global.BI) {
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", /&amp;|&quot;|&lt;|&gt;|&nbsp;/, function (v) {
+        return text === null ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
             switch (v) {
                 case "&amp;":
                     return "&";

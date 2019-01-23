@@ -15903,7 +15903,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", /&|\"|<|>|\s/, function (v) {
+        return text === null ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             switch (v) {
                 case "&":
                     return "&amp;";
@@ -15921,7 +15921,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", /&amp;|&quot;|&lt;|&gt;|&nbsp;/, function (v) {
+        return text === null ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
             switch (v) {
                 case "&amp;":
                     return "&";
