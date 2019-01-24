@@ -37502,7 +37502,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (BI.isKey(o.paras.keyword)) {
                 n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
-                n.text = BI.replaceAll((n.text + ""), " ", "&nbsp;");
+                n.text = BI.htmlEncode(n.text + "");
             }
         });
         return nodes;
