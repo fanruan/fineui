@@ -25,6 +25,7 @@ module.exports = function (config) {
             "src/core/wrapper/layout.js",
             "src/core/plugin.js",
             "src/core/**/*.js",
+            "private/prepare.js",
             "src/data/**/*.js",
             "src/**/*.test.js",
             "test/**/*.test.js"
