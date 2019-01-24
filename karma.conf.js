@@ -27,7 +27,7 @@ module.exports = function (config) {
             "src/core/**/*.js",
             "src/data/**/*.js",
             "src/**/*.test.js",
-            "test/**/*.test.js"
+            "test/**/*.js"
         ],
 
 
@@ -35,7 +35,8 @@ module.exports = function (config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             "src/core/alias.js": "coverage",
-            "src/core/base.js": "coverage"
+            "src/core/base.js": "coverage",
+            "src/core/func/date.js": "coverage"
         },
 
 

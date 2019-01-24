@@ -16366,7 +16366,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     BI.decodeURIComponent = function (url) {
         var reserveSpecialCharsMap = {};
         BI.each(BI.specialCharsMap, function (initialChar, encodeChar) {
-            reserveSpecialCharsMap[encodeChar] = initialChar;
+            reserveSpecialCharsMap[encodeChar] = initialChar === "\\\\" ? "\\" : initialChar;
         });
         url = url || "";
         url = BI.replaceAll(url + "", BI.keys(reserveSpecialCharsMap || []).join("|"), function (str) {

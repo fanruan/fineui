@@ -3,6 +3,14 @@
  */
 describe("aliasFunctionTest", function () {
 
+    before(function () {
+        BI.specialCharsMap = {
+            "\\\\": "0",
+            ".": "1",
+            "/": "2"
+        };
+    });
+
     /**
      * test_author_windy
      */
@@ -12,5 +20,15 @@ describe("aliasFunctionTest", function () {
         var encodeString = BI.htmlEncode(targetString);
         expect(encodeString).to.equal("&lt;a&gt;1&nbsp;2&amp;&lt;/a&gt;");
         expect(BI.htmlDecode(encodeString)).to.equal(targetString);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("encodeURIComponent和decodeURIComponent", function () {
+        var targetString = "tableName./\\";
+        var encodeString = BI.encodeURIComponent(targetString);
+        expect(encodeString).to.equal("tableName120");
+        expect(BI.decodeURIComponent(encodeString)).to.equal(targetString);
     });
 });
