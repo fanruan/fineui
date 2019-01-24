@@ -105,6 +105,6 @@ describe("baseFunctionTest", function () {
      */
     it("makeArray", function () {
         var a = BI.makeArray(2, 1);
-        expect(a).to.deep.equal([1, 1, 1]);
+        expect(a).to.deep.equal([1, 1]);
     });
 });
