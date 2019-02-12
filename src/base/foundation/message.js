@@ -158,6 +158,8 @@ BI.Msg = function () {
                             center: {
                                 el: {
                                     type: "bi.label",
+                                    vgap: 10,
+                                    hgap: 20,
                                     whiteSpace: "normal",
                                     text: message
                                 }

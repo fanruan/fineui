@@ -412,7 +412,7 @@
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             switch (v) {
                 case "&":
                     return "&amp;";
@@ -430,7 +430,7 @@
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
             switch (v) {
                 case "&amp;":
                     return "&";

@@ -89,16 +89,18 @@ BI.Label = BI.inherit(BI.Single, {
                 return;
             }
             if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
+                BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
+                    bgap: o.bgap
+                });
+                this.text = BI.createWidget(json);
+                BI.createWidget({
+                    type: "bi.center_adapt",
+                    scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
                 });
@@ -150,15 +152,17 @@ BI.Label = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
+            BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
-                bgap: o.bgap,
+                bgap: o.bgap
+            });
+            this.text = BI.createWidget(json);
+            BI.createWidget({
+                type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
                 items: [this.text]
