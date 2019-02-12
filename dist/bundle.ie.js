@@ -15903,7 +15903,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
     // replace the html special tags
     BI.htmlEncode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             switch (v) {
                 case "&":
                     return "&amp;";
@@ -15921,7 +15921,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
     // html decode
     BI.htmlDecode = function (text) {
-        return text === null ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&amp;|&quot;|&lt;|&gt;|&nbsp;", function (v) {
             switch (v) {
                 case "&amp;":
                     return "&";
@@ -40437,6 +40437,8 @@ BI.Msg = function () {
                             center: {
                                 el: {
                                     type: "bi.label",
+                                    vgap: 10,
+                                    hgap: 20,
                                     whiteSpace: "normal",
                                     text: message
                                 }
@@ -45992,16 +45994,18 @@ BI.Label = BI.inherit(BI.Single, {
                 return;
             }
             if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
+                BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
+                    bgap: o.bgap
+                });
+                this.text = BI.createWidget(json);
+                BI.createWidget({
+                    type: "bi.center_adapt",
+                    scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
                 });
@@ -46053,15 +46057,17 @@ BI.Label = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
+            BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
-                bgap: o.bgap,
+                bgap: o.bgap
+            });
+            this.text = BI.createWidget(json);
+            BI.createWidget({
+                type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
                 items: [this.text]
