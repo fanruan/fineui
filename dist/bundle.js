@@ -37285,7 +37285,13 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var className = "dark", perTime = 100;
 
         function onClick (event, treeId, treeNode) {
-            self.nodes.checkNode(treeNode, !treeNode.checked, true, true);
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            var checked = treeNode.checked;
+            var status = treeNode.getCheckStatus();
+            if(status.half === true && status.checked === true) {
+                checked = false;
+            }
+            self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
         function getUrl (treeId, treeNode) {
@@ -37753,7 +37759,13 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function onClick (event, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj(treeId);
-            zTree.checkNode(treeNode, !treeNode.checked, true, true);
+            // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
+            var checked = treeNode.checked;
+            var status = treeNode.getCheckStatus();
+            if(status.half === true && status.checked === true) {
+                checked = false;
+            }
+            zTree.checkNode(treeNode, !checked, true, true);
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -46483,6 +46495,7 @@ BI.Label = BI.inherit(BI.Single, {
                 this.element.css({
                     "line-height": o.height + "px"
                 });
+                json.textAlign = o.textAlign;
                 BI.createWidget({
                     type: "bi.adaptive",
                     height: o.height,
