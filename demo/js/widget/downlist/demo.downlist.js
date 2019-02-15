@@ -135,7 +135,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
                 type: "bi.label",
                 text: "显示选择值",
                 width: 500,
-                cls: "layout-bg4",
+                cls: "layout-bg3",
                 ref: function (_ref) {
                     self.label = _ref;
                 }

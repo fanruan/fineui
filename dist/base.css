@@ -599,10 +599,10 @@
   border-radius: 2px;
 }
 .bi-search-editor .circle-close-font {
-  font-size: 16px;
+  font-size: 18px;
 }
 .bi-search-editor .search-font {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 /*************BI.SearchEditor******************/
@@ -616,10 +616,10 @@
   font-size: 12px;
 }
 .bi-small-search-editor .close-font {
-  font-size: 18px;
+  font-size: 16px;
 }
 .bi-small-search-editor .search-font {
-  font-size: 18px;
+  font-size: 16px;
 }
 .bi-message-title {
   font-size: 14px;
