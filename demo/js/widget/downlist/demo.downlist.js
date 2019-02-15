@@ -22,6 +22,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this;
+        // test
         return {
             type: "bi.horizontal_adapt",
             items: [{

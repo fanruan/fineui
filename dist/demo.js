@@ -8877,6 +8877,7 @@ BI.shortcut("demo.date_time", Demo.CustomDateTime);Demo.Downlist = BI.inherit(BI
 
     render: function () {
         var self = this;
+        // test
         return {
             type: "bi.horizontal_adapt",
             items: [{
