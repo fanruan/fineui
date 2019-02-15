@@ -19867,23 +19867,23 @@ BI.prepares.push(function () {
             var canvas = document.createElement("canvas");
             var ratio = 2;
             BI.Widget._renderEngine.createElement("body").append(canvas);
-            var w = BI.DOM.getTextSizeWidth(param, 14) + 6;
+            var w = BI.DOM.getTextSizeWidth(param, 12) + 4;
             canvas.width = w * ratio;
-            canvas.height = 24 * ratio;
+            canvas.height = 16 * ratio;
             var ctx = canvas.getContext("2d");
             // ctx.fillStyle = "#EAF2FD";
             ctx.font = 12 * ratio + "px Georgia";
-            ctx.fillStyle = fillStyle || "#3D4D66";
+            ctx.fillStyle = fillStyle || "#3685f2";
             ctx.textBaseline = "middle";
-            ctx.fillText(param, 6 * ratio, 12 * ratio);
+            ctx.fillText(param, 2 * ratio, 9 * ratio);
             BI.Widget._renderEngine.createElement(canvas).destroy();
-            var backColor = backgroundColor || "#EAF2FD";
+            var backColor = backgroundColor || "rgba(54, 133, 242, 0.1)";
             // IE可以放大缩小所以要固定最大最小宽高
             return {
                 width: w,
-                height: 24,
+                height: 16,
                 src: canvas.toDataURL("image/png"),
-                style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 3px; width:" + w + "px;height: 24px; max-width:" + w + "px;max-height: 24px; min-width:" + w + "px;min-height: 24px",
+                style: "background-color: " + backColor + ";vertical-align: middle; margin: 0 1px; width:" + w + "px;height: 16px; max-width:" + w + "px;max-height: 16px; min-width:" + w + "px;min-height: 16px",
                 param: param
             };
         }
