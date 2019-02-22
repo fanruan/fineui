@@ -5763,7 +5763,8 @@ BI.Popover = BI.inherit(BI.Widget, {
             },
             header: null,
             body: null,
-            footer: null
+            footer: null,
+            closable: true // BI-40839 是否显示右上角的关闭按钮
         });
     },
     render: function () {
@@ -5809,13 +5810,15 @@ BI.Popover = BI.inherit(BI.Widget, {
                         bottom: 0
                     }]
                 }, {
-                    el: {
+                    el: o.closable ? {
                         type: "bi.icon_button",
                         cls: "bi-message-close close-font",
                         height: this._constant.HEADER_HEIGHT,
                         handler: function () {
                             self.close();
                         }
+                    } : {
+                        type: "bi.layout"
                     },
                     width: 56
                 }],
