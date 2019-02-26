@@ -129,7 +129,7 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     onKeyDown: function (keyCode, ctrlKey) {
-        if (!this.isValid() || BI.trim(this._lastValidValue) !== BI.trim(this.getValue())) {
+        if (!this.isValid() || BI.trim(this._lastChangedValue) !== BI.trim(this.getValue())) {
             this._checkValidationOnValueChange();
         }
         if (this.isValid() && BI.trim(this.getValue()) !== "") {
@@ -208,7 +208,7 @@ BI.Input = BI.inherit(BI.Single, {
         this.setValid(
             (o.allowBlank === true && BI.trim(v) == "") ||
             (BI.isNotEmptyString(BI.trim(v))
-                && (v === this._lastValidValue ||
+                && (v === this._lastChangedValue ||
                     o.validationChecker.apply(this, [BI.trim(v)]) !== false))
         );
     },
@@ -261,17 +261,18 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
-        return this._lastValidValue;
+        return this._lastChangedValue;
     },
 
     _setValid: function () {
         BI.Input.superclass._setValid.apply(this, arguments);
         if (this.isValid()) {
+            this._lastChangedValue = this.getValue();
             this.element.removeClass("bi-input-error");
             this.fireEvent(BI.Input.EVENT_VALID, BI.trim(this.getValue()), this);
         } else {
-            if (this._lastValidValue === this.getValue()) {
-                this._lastValidValue = null;
+            if (this._lastChangedValue === this.getValue()) {
+                this._lastChangedValue = null;
             }
             this.element.addClass("bi-input-error");
             this.fireEvent(BI.Input.EVENT_ERROR, BI.trim(this.getValue()), this);

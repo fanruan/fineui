@@ -4907,7 +4907,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getValue();
+        var val = this.editor.getLastValidValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -4925,7 +4925,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             this.clear.visible();
         }
     },
-    
+
     isEditing: function () {
         return this.editor.isEditing();
     },
@@ -11030,8 +11030,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        // BI-37541 这个editor不会check内容, 没有上一次有效值的说法
-        var val = this.editor.getValue();
+        var val = this.editor.getLastValidValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -17888,8 +17887,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        // BI-37541 这个editor不会check内容, 没有上一次有效值的说法
-        var val = this.editor.getValue();
+        var val = this.editor.getLastValidValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
