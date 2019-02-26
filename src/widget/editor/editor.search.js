@@ -144,7 +144,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getValue();
+        var val = this.editor.getLastValidValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -162,7 +162,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             this.clear.visible();
         }
     },
-    
+
     isEditing: function () {
         return this.editor.isEditing();
     },
