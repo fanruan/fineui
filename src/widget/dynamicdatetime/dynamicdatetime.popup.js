@@ -123,15 +123,10 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }, {
                                 el: {
                                     type: "bi.dynamic_date_time_select",
+                                    cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    },
-                                    listeners: [{
-                                        eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
-                                        action: function () {
-
-                                        }
-                                    }]
+                                    }
                                 },
                                 height: 40
                             }]

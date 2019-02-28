@@ -71,6 +71,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             }, this.calendar, {
                 el: {
                     type: "bi.dynamic_date_time_select",
+                    cls: "bi-split-top",
                     ref: function () {
                         self.timeSelect = this;
                     },

@@ -1194,71 +1194,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
         });
 
-        this.dateSelect = BI.createWidget({
-            type: "bi.vertical_adapt",
-            cls: "bi-border-top",
-            items: [{
-                type: "bi.label",
-                text: BI.i18nText("BI-Basic_Time"),
-                width: 45
-            }, {
-                type: "bi.date_time_select",
-                max: 23,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.hour = _ref;
-                }
-            }, {
-                type: "bi.label",
-                text: ":",
-                width: 15
-            }, {
-                type: "bi.date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.minute = _ref;
-                }
-            }, {
-                type: "bi.label",
-                text: ":",
-                width: 15
-            }, {
-                type: "bi.date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.second = _ref;
-                }
-            }]
-        });
-
-        this.setValue(opts.value);
-
         this.dateButton = BI.createWidget({
             type: "bi.grid",
             items: [[this.cancelButton, this.okButton]]
@@ -1269,13 +1204,23 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             items: [{
                 el: this.dateCombo
             }, {
-                el: this.dateSelect,
+                el: {
+                    type: "bi.center_adapt",
+                    cls: "bi-split-top",
+                    items: [{
+                        type: "bi.dynamic_date_time_select",
+                        ref: function (_ref) {
+                            self.timeSelect = _ref;
+                        }
+                    }]
+                },
                 height: 50
             }, {
                 el: this.dateButton,
                 height: 30
             }]
         });
+        this.setValue(opts.value);
     },
 
     setValue: function (v) {
@@ -1287,30 +1232,31 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
                 month: date.getMonth() + 1,
                 day: date.getDate()
             });
-            this.hour.setValue(date.getHours());
-            this.minute.setValue(date.getMinutes());
-            this.second.setValue(date.getSeconds());
+            this.timeSelect.setValue({
+                hour: date.getHours(),
+                minute: date.getMinutes(),
+                second: date.getSeconds()
+            });
         } else {
             this.dateCombo.setValue({
                 year: value.year,
                 month: value.month,
                 day: value.day
             });
-            this.hour.setValue(value.hour);
-            this.minute.setValue(value.minute);
-            this.second.setValue(value.second);
+            this.timeSelect.setValue({
+                hour: value.hour,
+                minute: value.minute,
+                second: value.second
+            });
         }
     },
 
     getValue: function () {
-        return {
+        return BI.extend({
             year: this.dateCombo.getValue().year,
             month: this.dateCombo.getValue().month,
-            day: this.dateCombo.getValue().day,
-            hour: this.hour.getValue(),
-            minute: this.minute.getValue(),
-            second: this.second.getValue()
-        };
+            day: this.dateCombo.getValue().day
+        }, this.timeSelect.getValue());
     }
 });
 BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
@@ -1318,117 +1264,6 @@ BI.DateTimePopup.BUTTON_CANCEL_EVENT_CHANGE = "BUTTON_CANCEL_EVENT_CHANGE";
 BI.DateTimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
 BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 /**
- * Created by Urthur on 2017/7/14.
- */
-BI.DateTimeSelect = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.DateTimeSelect.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-date-time-select bi-border",
-            max: 23,
-            min: 0
-        });
-    },
-
-    _init: function () {
-        BI.DateTimeSelect.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            value: this._alertInEditorValue(o.min),
-            allowBlank: false,
-            errorText: function (v) {
-                if(BI.isNumeric(v)) {
-                    return BI.i18nText("BI-Please_Input_Natural_Number");
-                }
-                return BI.i18nText("BI-Numerical_Interval_Input_Data");
-            },
-            validationChecker: function (v) {
-                return BI.isNaturalNumber(v);
-            }
-        });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
-            self._finetuning(0);
-            self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
-        });
-        this.topBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "column-pre-page-h-font top-button bi-border-left bi-border-bottom"
-        });
-        this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            self._finetuning(1);
-            self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
-        });
-        this.bottomBtn = BI.createWidget({
-            type: "bi.icon_button",
-            cls: "column-next-page-h-font bottom-button bi-border-left"
-        });
-        this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
-            self._finetuning(-1);
-            self.fireEvent(BI.DateTimeSelect.EVENT_CONFIRM);
-        });
-        this._finetuning(0);
-        BI.createWidget({
-            type: "bi.htape",
-            element: this,
-            items: [this.editor, {
-                el: {
-                    type: "bi.grid",
-                    columns: 1,
-                    rows: 2,
-                    items: [{
-                        column: 0,
-                        row: 0,
-                        el: this.topBtn
-                    }, {
-                        column: 0,
-                        row: 1,
-                        el: this.bottomBtn
-                    }]
-                },
-                width: 30
-            }]
-        });
-    },
-
-    _alertOutEditorValue: function (v) {
-        if (v > this.options.max) {
-            v = this.options.min;
-        }
-        if (v < this.options.min) {
-            v = this.options.max;
-        }
-        return BI.parseInt(v);
-    },
-
-    _alertInEditorValue: function (v) {
-        if (v > this.options.max) {
-            v = this.options.min;
-        }
-        if (v < this.options.min) {
-            v = this.options.max;
-        }
-        v = v < 10 ? "0" + v : v;
-        return v;
-    },
-
-    _finetuning: function (add) {
-        var v = BI.parseInt(this._alertOutEditorValue(this.editor.getValue()));
-        this.editor.setValue(this._alertInEditorValue(v + add));
-    },
-
-    getValue: function () {
-        var v = this.editor.getValue();
-        return this._alertOutEditorValue(v);
-    },
-
-    setValue: function (v) {
-        this.editor.setValue(this._alertInEditorValue(v));
-        this._finetuning(0);
-    }
-
-});
-BI.DateTimeSelect.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.date_time_select", BI.DateTimeSelect);/**
  * Created by Urthur on 2017/7/14.
  */
 BI.DateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -1563,6 +1398,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             }, this.calendar, {
                 el: {
                     type: "bi.dynamic_date_time_select",
+                    cls: "bi-split-top",
                     ref: function () {
                         self.timeSelect = this;
                     },
@@ -4173,15 +4009,10 @@ BI.extend(BI.DynamicDateTimeCombo, {
                             }, {
                                 el: {
                                     type: "bi.dynamic_date_time_select",
+                                    cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    },
-                                    listeners: [{
-                                        eventName: BI.DynamicDateTimeSelect.EVENT_CONFIRM,
-                                        action: function () {
-
-                                        }
-                                    }]
+                                    }
                                 },
                                 height: 40
                             }]
@@ -4289,7 +4120,7 @@ BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-date-time-select bi-split-top"
+        baseCls: "bi-date-time-select"
     },
 
     render: function () {
@@ -4330,8 +4161,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         }],
                         width: 60,
                         height: 24
-                    },
-                    lgap: 14
+                    }
                 }, {
                     type: "bi.label",
                     text: ":",
@@ -13564,7 +13394,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
-            height: o.height,
+            height: o.height - 2,
             allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
             validationChecker: o.validationChecker,
@@ -13602,6 +13432,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.htape",
+            height: o.height - 2,
             element: this,
             items: [this.editor, {
                 el: {

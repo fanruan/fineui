@@ -44,71 +44,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
         });
 
-        this.dateSelect = BI.createWidget({
-            type: "bi.vertical_adapt",
-            cls: "bi-border-top",
-            items: [{
-                type: "bi.label",
-                text: BI.i18nText("BI-Basic_Time"),
-                width: 45
-            }, {
-                type: "bi.date_time_select",
-                max: 23,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.hour = _ref;
-                }
-            }, {
-                type: "bi.label",
-                text: ":",
-                width: 15
-            }, {
-                type: "bi.date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.minute = _ref;
-                }
-            }, {
-                type: "bi.label",
-                text: ":",
-                width: 15
-            }, {
-                type: "bi.date_time_select",
-                max: 59,
-                min: 0,
-                width: 60,
-                height: 30,
-                listeners: [{
-                    eventName: BI.DateTimeSelect.EVENT_CONFIRM,
-                    action: function () {
-                        self.fireEvent(BI.DateTimePopup.CALENDAR_EVENT_CHANGE);
-                    }
-                }],
-                ref: function (_ref) {
-                    self.second = _ref;
-                }
-            }]
-        });
-
-        this.setValue(opts.value);
-
         this.dateButton = BI.createWidget({
             type: "bi.grid",
             items: [[this.cancelButton, this.okButton]]
@@ -119,13 +54,23 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
             items: [{
                 el: this.dateCombo
             }, {
-                el: this.dateSelect,
+                el: {
+                    type: "bi.center_adapt",
+                    cls: "bi-split-top",
+                    items: [{
+                        type: "bi.dynamic_date_time_select",
+                        ref: function (_ref) {
+                            self.timeSelect = _ref;
+                        }
+                    }]
+                },
                 height: 50
             }, {
                 el: this.dateButton,
                 height: 30
             }]
         });
+        this.setValue(opts.value);
     },
 
     setValue: function (v) {
@@ -137,30 +82,31 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
                 month: date.getMonth() + 1,
                 day: date.getDate()
             });
-            this.hour.setValue(date.getHours());
-            this.minute.setValue(date.getMinutes());
-            this.second.setValue(date.getSeconds());
+            this.timeSelect.setValue({
+                hour: date.getHours(),
+                minute: date.getMinutes(),
+                second: date.getSeconds()
+            });
         } else {
             this.dateCombo.setValue({
                 year: value.year,
                 month: value.month,
                 day: value.day
             });
-            this.hour.setValue(value.hour);
-            this.minute.setValue(value.minute);
-            this.second.setValue(value.second);
+            this.timeSelect.setValue({
+                hour: value.hour,
+                minute: value.minute,
+                second: value.second
+            });
         }
     },
 
     getValue: function () {
-        return {
+        return BI.extend({
             year: this.dateCombo.getValue().year,
             month: this.dateCombo.getValue().month,
-            day: this.dateCombo.getValue().day,
-            hour: this.hour.getValue(),
-            minute: this.minute.getValue(),
-            second: this.second.getValue()
-        };
+            day: this.dateCombo.getValue().day
+        }, this.timeSelect.getValue());
     }
 });
 BI.DateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
