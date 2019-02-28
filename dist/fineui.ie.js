@@ -19849,9 +19849,9 @@ BI.prepares.push(function () {
             return height;
         },
 
-        // 获取滚动条的宽度
+        // 获取滚动条的宽度，页面display: none时候获取到的为0
         getScrollWidth: function () {
-            if (this._scrollWidth == null) {
+            if (BI.isNull(this._scrollWidth) || this._scrollWidth === 0) {
                 var ul = BI.Widget._renderEngine.createElement("<div>").width(50).height(50).css({
                     position: "absolute",
                     top: "-9999px",
@@ -19888,7 +19888,8 @@ BI.prepares.push(function () {
             };
         }
     });
-})();BI.EventListener = {
+})();
+BI.EventListener = {
     listen: function listen (target, eventType, callback) {
         if (target.addEventListener) {
             target.addEventListener(eventType, callback, false);
