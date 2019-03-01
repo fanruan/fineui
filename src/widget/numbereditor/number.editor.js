@@ -24,7 +24,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.sign_editor",
-            height: o.height,
+            height: o.height - 2,
             allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
             validationChecker: o.validationChecker,
@@ -62,6 +62,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
         BI.createWidget({
             type: "bi.htape",
+            height: o.height - 2,
             element: this,
             items: [this.editor, {
                 el: {
