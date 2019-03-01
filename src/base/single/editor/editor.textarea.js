@@ -6,7 +6,7 @@
  */
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
+        return BI.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
             baseCls: "bi-textarea-editor",
             value: ""
         });

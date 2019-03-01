@@ -15803,7 +15803,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
+            var jo = _global.$ ? _global.$.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -16382,25 +16382,25 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     },
 
     _getLeftPosition: function (name, context, offsetStyle) {
-        var position = $.getLeftPosition(context, this.get(name));
+        var position = BI.DOM.getLeftPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
 
     _getBottomPosition: function (name, context, offsetStyle) {
-        var position = $.getBottomPosition(context, this.get(name));
+        var position = BI.DOM.getBottomPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getTopPosition: function (name, context, offsetStyle) {
-        var position = $.getTopPosition(context, this.get(name));
+        var position = BI.DOM.getTopPosition(context, this.get(name));
         position.left = this._getOffsetLeft(name, context, offsetStyle);
         return position;
     },
 
     _getRightPosition: function (name, context, offsetStyle) {
-        var position = $.getRightPosition(context, this.get(name));
+        var position = BI.DOM.getRightPosition(context, this.get(name));
         position.top = this._getOffsetTop(name, context, offsetStyle);
         return position;
     },
@@ -16437,7 +16437,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var position = this._getTopPosition(name, context, offsetStyle);
         this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
         this.get(name).invisible();
-        if (!$.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
+        if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
             if (!this.storeBubbles[name]["left"]) {
                 this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
@@ -16452,7 +16452,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             var position = this._getLeftPosition(name, context, offsetStyle);
             this.get(name).element.css({left: position.left - adjustXOffset, top: position.top - adjustYOffset});
             this.get(name).invisible();
-            if (!$.isLeftSpaceEnough(context, this.get(name), adjustXOffset)) {
+            if (!BI.DOM.isLeftSpaceEnough(context, this.get(name), adjustXOffset)) {
                 if (!this.storeBubbles[name]["right"]) {
                     this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
@@ -16467,7 +16467,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 var position = this._getRightPosition(name, context, offsetStyle);
                 this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
                 this.get(name).invisible();
-                if (!$.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
+                if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
                     if (!this.storeBubbles[name]["bottom"]) {
                         this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
@@ -26599,49 +26599,49 @@ BI.Combo = BI.inherit(BI.Widget, {
         switch (o.direction) {
             case "bottom":
             case "bottom,right":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "right", "left"], o.offsetStyle);
                 break;
             case "top":
             case "top,right":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "right", "left"], o.offsetStyle);
                 break;
             case "left":
             case "left,bottom":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "bottom", "top"], o.offsetStyle);
                 break;
             case "right":
             case "right,bottom":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,left":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["top", "bottom", "left", "right"], o.offsetStyle);
                 break;
             case "bottom,left":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight, ["bottom", "top", "left", "right"], o.offsetStyle);
                 break;
             case "left,top":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["left", "right", "top", "bottom"], o.offsetStyle);
                 break;
             case "right,top":
-                p = $.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
-                p = $.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = BI.DOM.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "custom,bottom":
             case "bottom,custom":
-                p = $.getBottomAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
+                p = BI.DOM.getBottomAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
                 break;
             case "left,custom":
             case "custom,left":
-                p = $.getLeftAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = BI.DOM.getLeftAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
             case "custom,right":
             case "right,custom":
-                p = $.getRightAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
+                p = BI.DOM.getRightAdaptPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength);
                 delete p.top;
                 delete p.adaptHeight;
                 break;
@@ -32204,7 +32204,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
  */
 BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        return $.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
+        return BI.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
             baseCls: "bi-textarea-editor",
             value: ""
         });

@@ -13062,7 +13062,7 @@ if (!_global.BI) {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = $ ? $.parseJSON(text) : _global.JSON.parse(text);
+            var jo = _global.$ ? _global.$.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
