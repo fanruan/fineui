@@ -19391,7 +19391,7 @@ BI.prepares.push(function () {
             var frag = BI.Widget._renderEngine.createFragment();
             BI.each(doms, function (i, dom) {
                 dom instanceof BI.Widget && (dom = dom.element);
-                dom instanceof BI.Widget._renderEngine && dom[0] && frag.appendChild(dom[0]);
+                dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
             });
             return frag;
         },
