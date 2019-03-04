@@ -88,6 +88,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor.focus();
     },
 
+    isEditing: function () {
+        return this.editor.isEditing();
+    },
+
     // 微调
     _finetuning: function (add) {
         var v = BI.parseFloat(this.getValue());

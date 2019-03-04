@@ -4270,7 +4270,17 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
             value = "0" + value;
         }
         if (value.length === 2) {
-            type === BI.DynamicDateTimeSelect.HOUR ? this.minute.focus() : this.second.focus();
+            switch (type) {
+                case BI.DynamicDateTimeSelect.HOUR:
+                    this.hour.isEditing() && this.minute.focus();
+                    break;
+                case BI.DynamicDateTimeSelect.MINUTE:
+                    this.minute.isEditing() && this.second.focus();
+                    break;
+                case BI.DynamicDateTimeSelect.SECOND:
+                default:
+                    break;
+            }
         }
         return value;
     },
@@ -13456,6 +13466,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
 
     focus: function () {
         this.editor.focus();
+    },
+
+    isEditing: function () {
+        return this.editor.isEditing();
     },
 
     // 微调
