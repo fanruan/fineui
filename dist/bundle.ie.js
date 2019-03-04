@@ -78272,7 +78272,295 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 
 });
 
-BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);/**
+BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
+    BI.TimePopup = BI.inherit(BI.Widget, {
+        props: {
+            baseCls: "bi-date-time-popup",
+            height: 68
+        },
+        render: function () {
+            var self = this, o = this.options;
+
+            return {
+                type: "bi.vtape",
+                items: [{
+                    el: {
+                        type: "bi.center_adapt",
+                        cls: "bi-split-top",
+                        items: [{
+                            type: "bi.dynamic_date_time_select",
+                            value: o.value,
+                            ref: function (_ref) {
+                                self.timeSelect = _ref;
+                            }
+                        }]
+                    },
+                    hgap: 10,
+                    height: 44
+                }, {
+                    el: {
+                        type: "bi.grid",
+                        items: [[{
+                            type: "bi.text_button",
+                            forceCenter: true,
+                            cls: "bi-high-light bi-split-top",
+                            shadow: true,
+                            text: BI.i18nText("BI-Basic_Clears"),
+                            listeners: [{
+                                eventName: BI.TextButton.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.TimePopup.BUTTON_CLEAR_EVENT_CHANGE);
+                                }
+                            }]
+                        }, {
+                            type: "bi.text_button",
+                            forceCenter: true,
+                            cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
+                            shadow: true,
+                            text: BI.i18nText("BI-Basic_Now"),
+                            listeners: [{
+                                eventName: BI.TextButton.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.TimePopup.BUTTON_NOW_EVENT_CHANGE);
+                                }
+                            }]
+                        }, {
+                            type: "bi.text_button",
+                            forceCenter: true,
+                            cls: "bi-high-light bi-split-top",
+                            shadow: true,
+                            text: BI.i18nText("BI-Basic_OK"),
+                            listeners: [{
+                                eventName: BI.TextButton.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.TimePopup.BUTTON_OK_EVENT_CHANGE);
+                                }
+                            }]
+                        }]]
+                    },
+                    height: 24
+                }]
+            };
+        },
+
+        setValue: function (v) {
+            var value = v;
+            if (BI.isNull(value)) {
+                var date = BI.getDate();
+                this.timeSelect.setValue({
+                    hour: date.getHours(),
+                    minute: date.getMinutes(),
+                    second: date.getSeconds()
+                });
+            } else {
+                this.timeSelect.setValue({
+                    hour: value.hour,
+                    minute: value.minute,
+                    second: value.second
+                });
+            }
+        },
+
+        getValue: function () {
+            return this.timeSelect.getValue();
+        }
+    });
+    BI.TimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
+    BI.TimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+    BI.TimePopup.BUTTON_NOW_EVENT_CHANGE = "BUTTON_NOW_EVENT_CHANGE";
+    BI.TimePopup.CALENDAR_EVENT_CHANGE = "CALENDAR_EVENT_CHANGE";
+    BI.shortcut("bi.time_popup", BI.TimePopup);
+})();/**
+ * 时间选择
+ * qcc
+ * 2019/2/28
+ */
+
+!(function () {
+    BI.TimeCombo = BI.inherit(BI.Single, {
+        constants: {
+            popupHeight: 80,
+            popupWidth: 240,
+            comboAdjustHeight: 1,
+            border: 1
+        },
+        props: {
+            baseCls: "bi-time-combo bi-border bi-border-radius",
+            width: 80,
+            height: 22
+        },
+
+        render: function () {
+            var self = this, opts = this.options;
+
+            this.storeValue = opts.value;
+
+            var popup = {
+                type: "bi.time_popup",
+                value: opts.value,
+                listeners: [{
+                    eventName: BI.TimePopup.BUTTON_CLEAR_EVENT_CHANGE,
+                    action: function () {
+                        self.setValue();
+                        self.hidePopupView();
+                        self.fireEvent(BI.TimeCombo.EVENT_CANCEL);
+                    }
+                }, {
+                    eventName: BI.TimePopup.BUTTON_OK_EVENT_CHANGE,
+                    action: function () {
+                        self.setValue(self.popup.getValue());
+                        self.hidePopupView();
+                        self.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
+                    }
+                }, {
+                    eventName: BI.TimePopup.BUTTON_NOW_EVENT_CHANGE,
+                    action: function () {
+                        self._setNowTime();
+                    }
+                }],
+                ref: function (_ref) {
+                    self.popup = _ref;
+                }
+            };
+            return {
+                type: "bi.htape",
+                items: [{
+                    type: "bi.absolute",
+                    items: [{
+                        el: {
+                            type: "bi.combo",
+                            container: opts.container,
+                            toggle: false,
+                            isNeedAdjustHeight: false,
+                            isNeedAdjustWidth: false,
+                            el: {
+                                type: "bi.time_trigger",
+                                value: opts.value,
+                                ref: function (_ref) {
+                                    self.trigger = _ref;
+                                }
+                            },
+                            adjustLength: this.constants.comboAdjustHeight,
+                            popup: {
+                                el: popup,
+                                width: this.constants.popupWidth,
+                                stopPropagation: false
+                            },
+                            hideChecker: function (e) {
+                                return self.triggerBtn.element.find(e.target).length === 0;
+                            },
+                            listeners: [{
+                                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                                action: function () {
+                                    self.popup.setValue(self.storeValue);
+                                    self.fireEvent(BI.TimeCombo.EVENT_BEFORE_POPUPVIEW);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.combo = _ref;
+                            }
+                        },
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0
+                    }, {
+                        el: {
+                            type: "bi.icon_button",
+                            cls: "bi-trigger-icon-button time-font icon-size-16",
+                            width: 22,
+                            height: 22,
+                            listeners: [{
+                                eventName: BI.IconButton.EVENT_CHANGE,
+                                action: function () {
+                                    if (self.combo.isViewVisible()) {
+                                        // self.combo.hideView();
+                                    } else {
+                                        self.combo.showView();
+                                    }
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.triggerBtn = _ref;
+                            }
+                        },
+                        top: 0,
+                        right: 0
+                    }]
+                }]
+            };
+        },
+
+        setValue: function (v) {
+            this.storeValue = v;
+            this.trigger.setValue(v);
+        },
+        getValue: function () {
+            return this.storeValue;
+        },
+
+        hidePopupView: function () {
+            this.combo.hideView();
+        },
+
+        _setNowTime: function () {
+            var date = BI.getDate();
+            var nowTome = {
+                hour: date.getHours(),
+                minute: date.getMinutes(),
+                second: date.getSeconds()
+            };
+            this.setValue(nowTome);
+            this.hidePopupView();
+            this.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
+        }
+    });
+
+    BI.TimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
+    BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+    BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+    BI.shortcut("bi.time_combo", BI.TimeCombo);
+})();!(function () {
+    BI.TimeTrigger = BI.inherit(BI.Trigger, {
+        props: {
+            extraCls: "bi-time-trigger",
+            height: 22,
+            width: 80,
+            value: {}
+        },
+        render: function () {
+            var self = this, o = this.options;
+            return {
+                type: "bi.htape",
+                items: [{
+                    el: {
+                        type: "bi.label",
+                        textAlign: "left",
+                        height: o.height,
+                        width: o.width,
+                        text: this._formatValue(o.value),
+                        ref: function (_ref) {
+                            self.text = _ref;
+                        }
+                    },
+                    hgap: 4
+                }]
+            };
+        },
+
+        setValue: function (v) {
+            this.text.setText(this._formatValue(v));
+        },
+
+        _formatValue: function (v) {
+            var now = BI.getDate();
+            return BI.isNotEmptyObject(v) ? BI.print(BI.getDate(now.getFullYear(), now.getMonth(), now.getDay(), v.hour, v.minute, v.second), "%H:%M:%S") : BI.i18nText("BI-Basic_Unrestricted");
+        }
+
+    });
+    BI.shortcut("bi.time_trigger", BI.TimeTrigger);
+})();/**
  * Created by Baron on 2015/10/19.
  */
 BI.DateInterval = BI.inherit(BI.Single, {
@@ -78631,6 +78919,124 @@ BI.TimeInterval.EVENT_VALID = "EVENT_VALID";
 BI.TimeInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);/**
+ * 时间区间
+ * qcc
+ * 2019/2/28
+ */
+
+!(function () {
+    BI.TimePeriods = BI.inherit(BI.Single, {
+        constants: {
+            height: 24,
+            width: 24,
+            lgap: 15,
+            offset: 0
+        },
+        props: {
+            extraCls: "bi-time-interval",
+            value: {}
+        },
+        render: function () {
+            var self = this, o = this.options;
+
+            return {
+                type: "bi.absolute",
+                height: this.constants.height,
+                items: [{
+                    el: {
+                        type: "bi.horizontal_auto",
+                        items: [{
+                            type: "bi.label",
+                            height: this.constants.height,
+                            width: this.constants.width,
+                            text: "-",
+                            ref: function (_ref) {
+                                self.label = _ref;
+                            }
+                        }]
+                    },
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }, {
+                    el: {
+                        type: "bi.center",
+                        height: this.constants.height,
+                        items: [{
+                            type: "bi.absolute",
+                            items: [{
+                                el: BI.extend({
+                                    ref: function (_ref) {
+                                        self.left = _ref;
+                                    }
+                                }, this._createCombo(o.value.start)),
+                                left: this.constants.offset,
+                                right: this.constants.width / 2,
+                                top: 0,
+                                bottom: 0
+                            }]
+                        }, {
+                            type: "bi.absolute",
+                            items: [{
+                                el: BI.extend({
+                                    ref: function (_ref) {
+                                        self.right = _ref;
+                                    }
+                                }, this._createCombo(o.value.end)),
+                                left: this.constants.width / 2,
+                                right: this.constants.offset,
+                                top: 0,
+                                bottom: 0
+                            }]
+                        }]
+                    },
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }]
+            };
+        },
+
+        _createCombo: function (v) {
+            var self = this;
+            return {
+                type: "bi.time_combo",
+                value: v,
+                listeners: [{
+                    eventName: BI.TimeCombo.EVENT_BEFORE_POPUPVIEW,
+                    action: function () {
+                        self.left.hidePopupView();
+                        self.right.hidePopupView();
+                    }
+                }, {
+                    eventName: BI.TimeCombo.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.TimePeriods.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.TimeCombo.EVENT_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.TimePeriods.EVENT_CONFIRM);
+                    }
+                }]
+            };
+        },
+
+        setValue: function (date) {
+            date = date || {};
+            this.left.setValue(date.start);
+            this.right.setValue(date.end);
+        },
+        getValue: function () {
+            return {start: this.left.getValue(), end: this.right.getValue()};
+        }
+    });
+    BI.TimePeriods.EVENT_CONFIRM = "EVENT_CONFIRM";
+    BI.TimePeriods.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.shortcut("bi.time_periods", BI.TimePeriods);
+})();/**
  * 年份展示面板
  *
  * Created by GUY on 2015/9/2.
