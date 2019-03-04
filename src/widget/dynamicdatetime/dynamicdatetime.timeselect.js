@@ -207,5 +207,6 @@ BI.shortcut("bi.dynamic_date_time_select", BI.DynamicDateTimeSelect);
 
 BI.extend(BI.DynamicDateTimeSelect, {
     HOUR: 1,
-    MINUTE: 2
+    MINUTE: 2,
+    SECOND: 3
 });
