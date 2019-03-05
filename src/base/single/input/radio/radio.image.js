@@ -3,9 +3,9 @@
  * @extends BI.Single
  * @type {*|void|Object}
  */
-BI.Radio = BI.inherit(BI.IconButton, {
+BI.ImageRadio = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
-        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.ImageRadio.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-radio radio-icon",
             selected: false,
@@ -18,16 +18,16 @@ BI.Radio = BI.inherit(BI.IconButton, {
     },
 
     _init: function () {
-        BI.Radio.superclass._init.apply(this, arguments);
+        BI.ImageRadio.superclass._init.apply(this, arguments);
     },
 
     doClick: function () {
-        BI.Radio.superclass.doClick.apply(this, arguments);
+        BI.ImageRadio.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
-            this.fireEvent(BI.Radio.EVENT_CHANGE);
+            this.fireEvent(BI.ImageRadio.EVENT_CHANGE);
         }
     }
 });
-BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.ImageRadio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
-BI.shortcut("bi.radio", BI.Radio);
+BI.shortcut("bi.image_radio", BI.ImageRadio);

@@ -19194,6 +19194,27 @@ BI.prepares.push(function () {
         }
         return BI.extend(ob, {type: "bi.inline_center_adapt"});
     });
+
+    BI.Plugin.registerWidget("bi.radio", function (ob) {
+        if (BI.isIE() && BI.getIEVersion() < 9) {
+            return BI.extend(ob, {type: "bi.image_radio"});
+        }
+        return ob;
+    });
+
+    BI.Plugin.registerWidget("bi.checkbox", function (ob) {
+        if (BI.isIE() && BI.getIEVersion() < 9) {
+            return BI.extend(ob, {type: "bi.image_checkbox"});
+        }
+        return ob;
+    });
+
+    BI.Plugin.registerWidget("bi.half_icon_button", function (ob) {
+        if (BI.isIE() && BI.getIEVersion() < 9) {
+            return ob;
+        }
+        return BI.extend(ob, {type: "bi.half_button"});
+    });
 });/**
  * Detect Element Resize.
  * Forked in order to guard against unsafe 'window' and 'document' references.

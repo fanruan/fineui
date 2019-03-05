@@ -1,0 +1,30 @@
+.bi-checkbox .checkbox-context {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-checkbox .checkbox-context:after {
+  position: absolute;
+  display: table;
+  top: 50%;
+  left: 22%;
+  border: 2px solid transparent;
+  border-top: 0;
+  border-left: 0;
+  width: 4px;
+  height: 8px;
+  -webkit-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -moz-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -o-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -ms-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  content: '';
+}
+.bi-checkbox.active .checkbox-context:after,
+.bi-checkbox:active .checkbox-context:after {
+  border-color: #ffffff;
+  opacity: 1;
+}
+.bi-checkbox.disabled .checkbox-context:after {
+  opacity: 0;
+}
