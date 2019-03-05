@@ -78834,7 +78834,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         },
         props: {
             baseCls: "bi-time-combo bi-border bi-border-radius",
-            width: 80,
+            width: 78,
             height: 22
         },
 
@@ -78851,7 +78851,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                     action: function () {
                         self.setValue();
                         self.hidePopupView();
-                        self.fireEvent(BI.TimeCombo.EVENT_CANCEL);
+                        self.fireEvent(BI.TimeCombo.EVENT_CONFIRM);
                     }
                 }, {
                     eventName: BI.TimePopup.BUTTON_OK_EVENT_CHANGE,
@@ -78964,7 +78964,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
-    BI.TimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
