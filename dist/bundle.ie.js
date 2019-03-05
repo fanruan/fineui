@@ -78589,7 +78589,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         },
         props: {
             baseCls: "bi-time-combo bi-border bi-border-radius",
-            width: 80,
+            width: 78,
             height: 22
         },
 
