@@ -71,6 +71,31 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
                     BI.Msg.toast(JSON.stringify(self.interval.getValue()));
                 },
                 width: 300
+            }, {
+                type: "bi.time_periods",
+                value: {
+                    start: {
+                        hour: 7,
+                        minute: 23,
+                        second: 14
+                    },
+                    end: {
+                        hour: 23,
+                        minute: 34,
+                        second: 32
+                    }
+                },
+                ref: function (_ref) {
+                    self.periods = _ref;
+                },
+                width: 180
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.periods.getValue()));
+                },
+                width: 300
             }],
             vgap: 20
         };
