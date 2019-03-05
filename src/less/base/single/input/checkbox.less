@@ -1,0 +1,31 @@
+@import "../../../index";
+
+.bi-checkbox {
+  & .checkbox-context {
+    .border-radius(2px);
+    &:after {
+      position: absolute;
+      display: table;
+      top: 50%;
+      left: 22%;
+      border: 2px solid transparent;
+      border-top: 0;
+      border-left: 0;
+      width: 4px;
+      height: 8px;
+      .transform(rotate(45deg) scale(1) translate(-50%, -50%));
+      content: '';
+    }
+  }
+  &.active, &:active {
+    & .checkbox-context:after {
+      border-color: @color-bi-border-default;
+      opacity: 1;
+    }
+  }
+  &.disabled {
+    & .checkbox-context:after {
+      opacity: 0;
+    }
+  }
+}

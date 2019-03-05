@@ -81,6 +81,35 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
 });
 BI.IconChangeButton.EVENT_CHANGE = "IconChangeButton.EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);/**
+ *  统一的trigger图标按钮
+ *
+ * Created by GUY on 2015/9/16.
+ * @class BI.TriggerIconButton
+ * @extends BI.IconButton
+ */
+BI.TriggerIconButton = BI.inherit(BI.IconButton, {
+
+    _defaultConfig: function () {
+        var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            extraCls: "pull-down-font"
+        });
+    },
+
+    _init: function () {
+        BI.TriggerIconButton.superclass._init.apply(this, arguments);
+    },
+
+    doClick: function () {
+        BI.TriggerIconButton.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.TriggerIconButton.EVENT_CHANGE, this);
+        }
+    }
+});
+BI.TriggerIconButton.EVENT_CHANGE = "TriggerIconButton.EVENT_CHANGE";
+BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);/**
  * guy
  * @extends BI.Single
  * @type {*|void|Object}
@@ -112,35 +141,45 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
 BI.HalfIconButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
 
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);/**
- *  统一的trigger图标按钮
- *
- * Created by GUY on 2015/9/16.
- * @class BI.TriggerIconButton
- * @extends BI.IconButton
+ * guy
+ * @extends BI.Single
+ * @type {*|void|Object}
  */
-BI.TriggerIconButton = BI.inherit(BI.IconButton, {
-
+BI.HalfButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
-        var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
-            extraCls: "pull-down-font"
+            extraCls: "bi-half-button bi-border bi-high-light-border",
+            height: 14,
+            width: 14,
+            selected: false
         });
     },
 
     _init: function () {
-        BI.TriggerIconButton.superclass._init.apply(this, arguments);
+        BI.HalfButton.superclass._init.apply(this, arguments);
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: this.element,
+            items: [{
+                type: "bi.layout",
+                cls: "bi-high-light-background",
+                width: 8,
+                height: 8
+            }]
+        });
     },
 
     doClick: function () {
-        BI.TriggerIconButton.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.TriggerIconButton.EVENT_CHANGE, this);
+        BI.HalfButton.superclass.doClick.apply(this, arguments);
+        if(this.isValid()) {
+            this.fireEvent(BI.HalfButton.EVENT_CHANGE);
         }
     }
 });
-BI.TriggerIconButton.EVENT_CHANGE = "TriggerIconButton.EVENT_CHANGE";
-BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);/**
+BI.HalfButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
+
+BI.shortcut("bi.half_button", BI.HalfButton);/**
  * guy
  * 复选框item
  * @type {*|void|Object}

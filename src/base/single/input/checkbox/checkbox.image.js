@@ -3,11 +3,11 @@
  * @extends BI.Single
  * @type {*|void|Object}
  */
-BI.Checkbox = BI.inherit(BI.IconButton, {
+BI.ImageCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
-        var conf = BI.Checkbox.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.ImageCheckbox.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-checkbox check-box-icon",
+            baseCls: (conf.baseCls || "") + " bi-image-checkbox check-box-icon",
             selected: false,
             handler: BI.emptyFn,
             width: 16,
@@ -18,16 +18,16 @@ BI.Checkbox = BI.inherit(BI.IconButton, {
     },
 
     _init: function () {
-        BI.Checkbox.superclass._init.apply(this, arguments);
+        BI.ImageCheckbox.superclass._init.apply(this, arguments);
     },
 
     doClick: function () {
-        BI.Checkbox.superclass.doClick.apply(this, arguments);
+        BI.ImageCheckbox.superclass.doClick.apply(this, arguments);
         if(this.isValid()) {
             this.fireEvent(BI.Checkbox.EVENT_CHANGE);
         }
     }
 });
-BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
 
-BI.shortcut("bi.checkbox", BI.Checkbox);
+BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);

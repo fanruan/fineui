@@ -863,6 +863,12 @@
 .bi-theme-dark .bi-segment > .first-element {
   border-left: 1px solid #242640;
 }
+.bi-half-button {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
 body .bi-button,
 #body .bi-button {
   -webkit-border-radius: 2px;
@@ -1393,6 +1399,36 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   margin: auto;
   width: 100%;
 }
+.bi-checkbox .checkbox-context {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.bi-checkbox .checkbox-context:after {
+  position: absolute;
+  display: table;
+  top: 50%;
+  left: 22%;
+  border: 2px solid transparent;
+  border-top: 0;
+  border-left: 0;
+  width: 4px;
+  height: 8px;
+  -webkit-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -moz-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -o-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  -ms-transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  transform: rotate(45deg) scale(1) translate(-50%, -50%);
+  content: '';
+}
+.bi-checkbox.active .checkbox-context:after,
+.bi-checkbox:active .checkbox-context:after {
+  border-color: #ffffff;
+  opacity: 1;
+}
+.bi-checkbox.disabled .checkbox-context:after {
+  opacity: 0;
+}
 .bi-file {
   opacity: 0;
   filter: alpha(opacity=0);
@@ -1416,6 +1452,36 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-textarea.bi-input-error {
   border: none;
   color: #ff4949 !important;
+}
+.bi-radio .radio-content {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+.bi-radio .radio-content:after {
+  content: "";
+}
+.bi-radio:active .radio-content:after,
+.bi-radio.active .radio-content:after {
+  width: 6px;
+  height: 6px;
+  display: table;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ffffff;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.bi-radio.disabled:active .radio-content:after,
+.bi-radio.disabled.active .radio-content:after {
+  background-color: transparent;
 }
 .bi-label {
   text-overflow: ellipsis;

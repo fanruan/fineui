@@ -1,0 +1,65 @@
+/**
+ * guy
+ * @extends BI.Single
+ * @type {*|void|Object}
+ */
+BI.Radio = BI.inherit(BI.BasicButton, {
+    _defaultConfig: function () {
+        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            baseCls: (conf.baseCls || "") + " bi-radio",
+            selected: false,
+            handler: BI.emptyFn,
+            width: 16,
+            height: 16,
+            iconWidth: 14,
+            iconHeight: 14
+        });
+    },
+
+    _init: function () {
+        BI.Radio.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        BI.createWidget({
+            type: "bi.center_adapt",
+            element: this.element,
+            items: [{
+                type: "bi.layout",
+                cls: "radio-content bi-border",
+                ref: function (_ref) {
+                    self.radio = _ref;
+                },
+                width: o.iconWidth,
+                height: o.iconHeight
+            }]
+        });
+    },
+
+    _setEnable: function (enable) {
+        BI.Radio.superclass._setEnable.apply(this, arguments);
+        if (enable === true) {
+            this.radio.element.removeClass("base-disabled disabled");
+        } else {
+            this.radio.element.addClass("base-disabled disabled");
+        }
+    },
+
+    doClick: function () {
+        BI.Radio.superclass.doClick.apply(this, arguments);
+        if(this.isValid()) {
+            this.fireEvent(BI.Radio.EVENT_CHANGE);
+        }
+    },
+
+    setSelected: function (b) {
+        BI.Radio.superclass.setSelected.apply(this, arguments);
+        if (b) {
+            this.radio.element.removeClass("bi-border").addClass("bi-high-light-background bi-high-light-border");
+        } else {
+            this.radio.element.removeClass("bi-high-light-background bi-high-light-border").addClass("bi-border");
+        }
+    }
+});
+BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+
+BI.shortcut("bi.radio", BI.Radio);
