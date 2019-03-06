@@ -69,17 +69,17 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-color: rgba(208, 212, 218, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
-.farbtastic .wheel {
+.bi-farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/wheel.png');
   _background: none;
 }
-.farbtastic .overlay {
+.bi-farbtastic .overlay {
   background: url('images/1x/background/mask.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/mask.png');
   _background: none;
 }
-.farbtastic .marker {
+.bi-farbtastic .marker {
   background: url('images/1x/background/marker.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/marker.png');
   _background: none;
