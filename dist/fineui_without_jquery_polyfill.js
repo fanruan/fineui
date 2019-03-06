@@ -24750,7 +24750,8 @@ BI.Text = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            py: ""
+            py: "",
+            highLight: false
         });
     },
 
@@ -24814,6 +24815,9 @@ BI.Text = BI.inherit(BI.Single, {
         }
         if (BI.isKey(o.keyword)) {
             this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+        }
+        if (o.highLight) {
+            this.doHighLight();
         }
     },
 
@@ -33615,7 +33619,8 @@ BI.Label = BI.inherit(BI.Single, {
             bgap: 0,
             text: "",
             py: "",
-            keyword: ""
+            keyword: "",
+            highLight: false
         });
     },
 
@@ -33629,7 +33634,8 @@ BI.Label = BI.inherit(BI.Single, {
             text: o.text,
             value: o.value,
             py: o.py,
-            keyword: o.keyword
+            keyword: o.keyword,
+            highLight: o.highLight
         };
     },
 

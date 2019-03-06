@@ -19,7 +19,8 @@ BI.Text = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            py: ""
+            py: "",
+            highLight: false
         });
     },
 
@@ -83,6 +84,9 @@ BI.Text = BI.inherit(BI.Single, {
         }
         if (BI.isKey(o.keyword)) {
             this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+        }
+        if (o.highLight) {
+            this.doHighLight();
         }
     },
 
