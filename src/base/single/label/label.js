@@ -20,7 +20,8 @@ BI.Label = BI.inherit(BI.Single, {
             bgap: 0,
             text: "",
             py: "",
-            keyword: ""
+            keyword: "",
+            highLight: false
         });
     },
 
@@ -34,7 +35,8 @@ BI.Label = BI.inherit(BI.Single, {
             text: o.text,
             value: o.value,
             py: o.py,
-            keyword: o.keyword
+            keyword: o.keyword,
+            highLight: o.highLight
         };
     },
 
