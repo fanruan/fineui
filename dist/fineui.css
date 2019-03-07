@@ -1990,17 +1990,17 @@ textarea {
 .bi-theme-dark .bi-color-picker-button .color-picker-button-mask {
   border: 1px solid #ffffff;
 }
-.farbtastic .wheel {
+.bi-farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/wheel.png');
   _background: none;
 }
-.farbtastic .overlay {
+.bi-farbtastic .overlay {
   background: url('images/1x/background/mask.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/mask.png');
   _background: none;
 }
-.farbtastic .marker {
+.bi-farbtastic .marker {
   background: url('images/1x/background/marker.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/marker.png');
   _background: none;
@@ -2361,34 +2361,11 @@ textarea {
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
   _background: none;
 }
-.farbtastic {
-  position: relative;
-}
-.farbtastic * {
-  position: absolute;
+.bi-farbtastic * {
   cursor: crosshair;
 }
-.farbtastic,
-.farbtastic .wheel {
-  width: 195px;
-  height: 195px;
-}
-.farbtastic .color,
-.farbtastic .overlay {
-  top: 47px;
-  left: 47px;
-  width: 101px;
-  height: 101px;
-}
-.farbtastic .wheel {
-  width: 195px;
-  height: 195px;
-}
-.farbtastic .marker {
-  width: 17px;
-  height: 17px;
+.bi-farbtastic .marker {
   margin: -8px 0 0 -8px;
-  overflow: hidden;
 }
 .bi-bubble-combo .button-combo-triangle-wrapper {
   position: fixed !important;
@@ -4296,17 +4273,17 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-color: rgba(208, 212, 218, 0.7);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3d0d4da,endColorstr=#b3d0d4da);
 }
-.farbtastic .wheel {
+.bi-farbtastic .wheel {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/wheel.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/background/wheel.png');
   _background: none;
 }
-.farbtastic .overlay {
+.bi-farbtastic .overlay {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/mask.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/background/mask.png');
   _background: none;
 }
-.farbtastic .marker {
+.bi-farbtastic .marker {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/marker.png') no-repeat center center;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='resources?path=/com/fr/web/ui/images/1x/background/marker.png');
   _background: none;
