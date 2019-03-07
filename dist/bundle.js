@@ -53596,7 +53596,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             cls: "button-combo-triangle-wrapper",
             items: [{
                 type: "bi.layout",
-                cls: "bubble-combo-triangle-" + direction + " bi-high-light-border"
+                cls: "bubble-combo-triangle-" + direction
             }]
         });
         pos.el = this.triangle;
