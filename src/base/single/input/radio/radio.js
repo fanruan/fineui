@@ -4,23 +4,20 @@
  * @type {*|void|Object}
  */
 BI.Radio = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-radio",
-            selected: false,
-            handler: BI.emptyFn,
-            width: 16,
-            height: 16,
-            iconWidth: 14,
-            iconHeight: 14
-        });
+
+    props: {
+        baseCls: "bi-radio",
+        selected: false,
+        handler: BI.emptyFn,
+        width: 16,
+        height: 16,
+        iconWidth: 14,
+        iconHeight: 14
     },
 
-    _init: function () {
-        BI.Radio.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        BI.createWidget({
+        return {
             type: "bi.center_adapt",
             element: this.element,
             items: [{
@@ -32,7 +29,7 @@ BI.Radio = BI.inherit(BI.BasicButton, {
                 width: o.iconWidth,
                 height: o.iconHeight
             }]
-        });
+        };
     },
 
     _setEnable: function (enable) {

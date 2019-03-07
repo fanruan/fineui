@@ -17,5 +17,6 @@
 }
 .bi-textarea-editor .textarea-editor-content {
   font-size: 12px;
+  line-height: 21px;
   border: none;
 }
