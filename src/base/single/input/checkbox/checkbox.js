@@ -4,25 +4,21 @@
  * @type {*|void|Object}
  */
 BI.Checkbox = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        var conf = BI.Checkbox.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-checkbox",
-            selected: false,
-            handler: BI.emptyFn,
-            width: 16,
-            height: 16,
-            iconWidth: 14,
-            iconHeight: 14
-        });
+
+    props: {
+        baseCls: "bi-checkbox",
+        selected: false,
+        handler: BI.emptyFn,
+        width: 16,
+        height: 16,
+        iconWidth: 14,
+        iconHeight: 14
     },
 
-    _init: function () {
-        BI.Checkbox.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        BI.createWidget({
+        return {
             type: "bi.center_adapt",
-            element: this.element,
             items: [{
                 type: "bi.default",
                 ref: function (_ref) {
@@ -32,7 +28,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                 width: o.iconWidth,
                 height: o.iconHeight
             }]
-        });
+        };
     },
 
     _setEnable: function (enable) {

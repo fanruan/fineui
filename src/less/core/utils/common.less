@@ -180,22 +180,37 @@ textarea {
 //边框
 .bi-border {
   border: 1px solid @color-bi-border-line;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 .bi-border-top {
   border-top: 1px solid @color-bi-border-line;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 .bi-border-right {
   border-right: 1px solid @color-bi-border-line;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 .bi-border-bottom {
   border-bottom: 1px solid @color-bi-border-line;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 .bi-border-left {
   border-left: 1px solid @color-bi-border-line;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 .bi-theme-dark {
@@ -337,6 +352,16 @@ textarea {
   & .bi-textarea {
     color: @color-bi-text;
   }
+  &.disabled {
+    background-color: transparent !important;
+    color: @color-bi-text-disabled !important;
+    & .bi-input {
+      color: @color-bi-text-disabled !important;
+    }
+    & .bi-textarea {
+      color: @color-bi-text-disabled !important;
+    }
+  }
 }
 
 .bi-error-background {
@@ -351,7 +376,10 @@ textarea {
 }
 
 .bi-high-light-border {
-  border-color: @color-bi-border-highlight;
+  border: 1px solid @color-bi-border-highlight;
+  &.disabled {
+    border-color: @color-bi-border-disabled !important;
+  }
 }
 
 //水印

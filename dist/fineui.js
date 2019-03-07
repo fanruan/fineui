@@ -44665,10 +44665,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 6,
-                right: 6,
-                top: 6,
-                bottom: 6
+                left: 10,
+                right: 10,
+                top: 8,
+                bottom: 8
             }]
         });
 
@@ -45054,25 +45054,21 @@ BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);/**
  * @type {*|void|Object}
  */
 BI.Checkbox = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        var conf = BI.Checkbox.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-checkbox",
-            selected: false,
-            handler: BI.emptyFn,
-            width: 16,
-            height: 16,
-            iconWidth: 14,
-            iconHeight: 14
-        });
+
+    props: {
+        baseCls: "bi-checkbox",
+        selected: false,
+        handler: BI.emptyFn,
+        width: 16,
+        height: 16,
+        iconWidth: 14,
+        iconHeight: 14
     },
 
-    _init: function () {
-        BI.Checkbox.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        BI.createWidget({
+        return {
             type: "bi.center_adapt",
-            element: this.element,
             items: [{
                 type: "bi.default",
                 ref: function (_ref) {
@@ -45082,7 +45078,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                 width: o.iconWidth,
                 height: o.iconHeight
             }]
-        });
+        };
     },
 
     _setEnable: function (enable) {
@@ -46078,23 +46074,20 @@ BI.shortcut("bi.image_radio", BI.ImageRadio);/**
  * @type {*|void|Object}
  */
 BI.Radio = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        var conf = BI.Radio.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-radio",
-            selected: false,
-            handler: BI.emptyFn,
-            width: 16,
-            height: 16,
-            iconWidth: 14,
-            iconHeight: 14
-        });
+
+    props: {
+        baseCls: "bi-radio",
+        selected: false,
+        handler: BI.emptyFn,
+        width: 16,
+        height: 16,
+        iconWidth: 14,
+        iconHeight: 14
     },
 
-    _init: function () {
-        BI.Radio.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
-        BI.createWidget({
+        return {
             type: "bi.center_adapt",
             element: this.element,
             items: [{
@@ -46106,7 +46099,7 @@ BI.Radio = BI.inherit(BI.BasicButton, {
                 width: o.iconWidth,
                 height: o.iconHeight
             }]
-        });
+        };
     },
 
     _setEnable: function (enable) {

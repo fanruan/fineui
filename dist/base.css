@@ -1370,6 +1370,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .bi-textarea-editor .textarea-editor-content {
   font-size: 12px;
+  line-height: 21px;
   border: none;
 }
 .x-icon.b-font {
