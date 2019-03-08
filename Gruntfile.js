@@ -171,7 +171,7 @@ module.exports = function (grunt) {
             },
 
             configJs: {
-                src: ["demo/version.js"],
+                src: ["demo/version.js", "i18n/i18n.cn.js"],
                 dest: "dist/config.js"
             },
             demoJs: {
