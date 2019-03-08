@@ -64419,6 +64419,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.clear.on(BI.IconButton.EVENT_CHANGE, function () {
             self.setValue("");
             self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT);
+            // 从有内容到无内容的清空也是一次change
+            self.fireEvent(BI.SearchEditor.EVENT_CHANGE);
             self.fireEvent(BI.SearchEditor.EVENT_CLEAR);
         });
         BI.createWidget({
