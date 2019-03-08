@@ -144,9 +144,9 @@ BI.i18n = {
     "BI-Basic_Current_Quarter": "本季度",
     "BI-Basic_Year_Month": "年月",
     "BI-Basic_Year_Quarter": "年季度",
-    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
     "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
     "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00",
+    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
     "BI-Basic_Or": "或",
     "BI-Basic_And": "且",
     "BI-Conf_Add_Formula": "添加公式",
@@ -185,5 +185,6 @@ BI.i18n = {
     "BI-Basic_Million": "百万",
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
-    "BI-Basic_No_Select": "不选"
+    "BI-Basic_No_Select": "不选",
+    "BI-Basic_Now": "此刻"
 };

@@ -39,7 +39,7 @@ BI.Date._MN = [
     "九月",
     "十月",
     "十一月",
-    "十二月",];
+    "十二月"];
 
 // short month names
 BI.Date._SMN = [0,
