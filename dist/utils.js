@@ -15855,7 +15855,7 @@ BI.Date._MN = [
     "九月",
     "十月",
     "十一月",
-    "十二月",];
+    "十二月"];
 
 // short month names
 BI.Date._SMN = [0,
@@ -15880,7 +15880,8 @@ BI.Date._QN = ["", "第1季度",
 BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];BI.i18n = {
+BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
     "BI-Multi_Date_YMD": "年/月/日",
@@ -16026,9 +16027,9 @@ BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];BI.i18n = {
     "BI-Basic_Current_Quarter": "本季度",
     "BI-Basic_Year_Month": "年月",
     "BI-Basic_Year_Quarter": "年季度",
-    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
     "BI-Basic_Input_Can_Not_Null": "输入框不能为空",
     "BI-Basic_Date_Time_Error_Text": "日期格式示例:2015-3-11 00:00:00",
+    "BI-Basic_Input_From_To_Number": "请输入{R1}的数值",
     "BI-Basic_Or": "或",
     "BI-Basic_And": "且",
     "BI-Conf_Add_Formula": "添加公式",
@@ -16067,7 +16068,8 @@ BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];BI.i18n = {
     "BI-Basic_Million": "百万",
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
-    "BI-Basic_No_Select": "不选"
+    "BI-Basic_No_Select": "不选",
+    "BI-Basic_Now": "此刻"
 };/**
  * 缓冲池
  * @type {{Buffer: {}}}

@@ -96,18 +96,33 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
+                src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"],
                 dest: "dist/bundle.js"
             },
 
+            versionFineuiJs: {
+                src: ["dist/bundle.js"],
+                dest: "dist/2.0/fineui.js"
+            },
+
             bundleIEJs: {
-                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js"],
+                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"],
                 dest: "dist/bundle.ie.js"
+            },
+
+            versionFineuiIEJs: {
+                src: ["dist/bundle.ie.js"],
+                dest: "dist/2.0/fineui.ie.js"
             },
 
             bundleCss: {
                 src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
                 dest: "dist/bundle.css"
+            },
+
+            versionFineuiCss: {
+                src: ["dist/bundle.css"],
+                dest: "dist/2.0/fineui.css"
             },
 
             fineuiJs: {
@@ -255,7 +270,9 @@ module.exports = function (grunt) {
                     "dist/bundle.ie.min.js": ["<%= concat.bundleIEJs.dest %>"],
                     "dist/utils.min.js": ["<%= concat.utilsJs.dest %>"],
                     "dist/fineui.min.js": ["<%= concat.fineuiJs.dest %>"],
-                    "dist/fineui.ie.min.js": ["<%= concat.fineuiIEJs.dest %>"]
+                    "dist/fineui.ie.min.js": ["<%= concat.fineuiIEJs.dest %>"],
+                    "dist/2.0/fineui.min.js": ["<%= concat.versionFineuiJs.dest %>"],
+                    "dist/2.0/fineui.ie.min.js": ["<%= concat.versionFineuiIEJs.dest %>"]
                 }
             }
         },
@@ -275,6 +292,12 @@ module.exports = function (grunt) {
 
                 dest: "dist/fineui.min.css"
 
+            },
+
+            versionFineuiMinCss: {
+                src: "<%= concat.versionFineuiCss.dest %>",
+
+                dest: "dist/2.0/fineui.min.css"
             }
         },
 
