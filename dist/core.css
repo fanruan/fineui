@@ -589,6 +589,30 @@ textarea {
 .bi-high-light-border.disabled {
   border-color: #d0d4da !important;
 }
+.bi-high-light-border-top {
+  border-top: 1px solid #3685f2;
+}
+.bi-high-light-border-top.disabled {
+  border-color: #d0d4da !important;
+}
+.bi-high-light-border-right {
+  border-right: 1px solid #3685f2;
+}
+.bi-high-light-border-right.disabled {
+  border-color: #d0d4da !important;
+}
+.bi-high-light-border-bottom {
+  border-bottom: 1px solid #3685f2;
+}
+.bi-high-light-border-bottom.disabled {
+  border-color: #d0d4da !important;
+}
+.bi-high-light-border-left {
+  border-left: 1px solid #3685f2;
+}
+.bi-high-light-border-left.disabled {
+  border-color: #d0d4da !important;
+}
 .bi-water-mark {
   color: #9ea6b2;
   cursor: text;
