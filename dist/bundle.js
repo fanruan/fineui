@@ -84214,7 +84214,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 
     // Create the default BI.history.
     BI.history = new History;
-}());BI.resourceURL = "http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/resource/";BI.i18n = {
+}());BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
     "BI-Multi_Date_YMD": "年/月/日",

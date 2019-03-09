@@ -1,1 +1,1 @@
-BI.resourceURL = "resource/";
+

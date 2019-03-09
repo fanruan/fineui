@@ -1,1 +1,0 @@
-BI.resourceURL = "file?path=/com/fr/web/ui/resource";
