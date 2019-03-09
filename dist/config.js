@@ -1,4 +1,4 @@
-BI.resourceURL = "resource/";
+
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",

@@ -84459,4 +84459,4 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         };
     }
     BI.watch = Fix.watch;
-}());BI.resourceURL = "file?path=/com/fr/web/ui/resource";
+}());

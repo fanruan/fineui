@@ -1,1 +1,0 @@
-BI.resourceURL = "http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/resource/";
