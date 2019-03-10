@@ -38,29 +38,6 @@ if (!_global.BI) {
 
     // Utility
     _.extend(BI, {
-        i18nText: function (key) {
-            var localeText = (BI.i18n && BI.i18n[key]) || "";
-            if (!localeText) {
-                localeText = key;
-            }
-            var len = arguments.length;
-            if (len > 1) {
-                if (localeText.indexOf("{R1}") > -1) {
-                    for (var i = 1; i < len; i++) {
-                        var key = "{R" + i + "}";
-                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
-                    }
-                } else {
-                    var args = Array.prototype.slice.call(arguments);
-                    var count = 1;
-                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
-                        return args[count++] + "";
-                    });
-                }
-            }
-            return localeText;
-        },
-
         assert: function (v, is) {
             if (this.isFunction(is)) {
                 if (!is(v)) {

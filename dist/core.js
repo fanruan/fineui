@@ -10185,29 +10185,6 @@ if (!_global.BI) {
 
     // Utility
     _.extend(BI, {
-        i18nText: function (key) {
-            var localeText = (BI.i18n && BI.i18n[key]) || "";
-            if (!localeText) {
-                localeText = key;
-            }
-            var len = arguments.length;
-            if (len > 1) {
-                if (localeText.indexOf("{R1}") > -1) {
-                    for (var i = 1; i < len; i++) {
-                        var key = "{R" + i + "}";
-                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
-                    }
-                } else {
-                    var args = Array.prototype.slice.call(arguments);
-                    var count = 1;
-                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
-                        return args[count++] + "";
-                    });
-                }
-            }
-            return localeText;
-        },
-
         assert: function (v, is) {
             if (this.isFunction(is)) {
                 if (!is(v)) {
@@ -18469,7 +18446,36 @@ _.extend(BI, {
         }
         return location;
     }
-});(function () {
+});!(function () {
+    var i18nStore = {};
+    _.extend(BI, {
+        addI18n: function (i18n) {
+            BI.extend(i18nStore, i18n);
+        },
+        i18nText: function (key) {
+            var localeText = i18nStore[key] || (BI.i18n && BI.i18n[key]) || "";
+            if (!localeText) {
+                localeText = key;
+            }
+            var len = arguments.length;
+            if (len > 1) {
+                if (localeText.indexOf("{R1}") > -1) {
+                    for (var i = 1; i < len; i++) {
+                        var key = "{R" + i + "}";
+                        localeText = BI.replaceAll(localeText, key, arguments[i] + "");
+                    }
+                } else {
+                    var args = Array.prototype.slice.call(arguments);
+                    var count = 1;
+                    return BI.replaceAll(localeText, "\\{\\s*\\}", function () {
+                        return args[count++] + "";
+                    });
+                }
+            }
+            return localeText;
+        }
+    });
+})();(function () {
     var moduleInjection = {};
     BI.module = function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
