@@ -31376,7 +31376,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
-BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);/**
+BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
