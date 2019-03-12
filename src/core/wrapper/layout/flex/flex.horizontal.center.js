@@ -51,4 +51,4 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
-BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
+BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
