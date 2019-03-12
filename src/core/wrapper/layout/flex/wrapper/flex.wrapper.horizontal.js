@@ -8,7 +8,7 @@
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-wrapper-horizontal-layout clearfix",
+            baseCls: "bi-flex-scrollable-horizontal-layout clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -25,7 +25,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-horizontal-layout-wrapper v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-horizontal-layout-wrapper v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -80,4 +80,4 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut("bi.flex_wrapper_horizontal", BI.FlexWrapperHorizontalLayout);
+BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
