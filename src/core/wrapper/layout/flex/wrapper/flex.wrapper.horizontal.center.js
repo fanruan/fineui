@@ -5,13 +5,14 @@
  * @class BI.FlexVerticalCenter
  * @extends BI.Layout
  */
-BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
+BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
-            horizontalAlign: BI.HorizontalAlign.Left,
-            columnSize: [],
-            scrollx: false,
+        return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-wrapper-vertical-center-adapt-layout clearfix",
+            verticalAlign: BI.VerticalAlign.Top,
+            rowSize: [],
+            scrollable: null,
+            scrolly: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -23,13 +24,13 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         var self = this, o = this.options;
         return {
-            type: "bi.flex_horizontal",
+            type: "bi.flex_wrapper_vertical",
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: o.horizontalAlign,
-            columnSize: o.columnSize,
+            horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: o.verticalAlign,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -43,13 +44,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         };
     },
 
-    resize: function () {
-        // console.log("flex_vertical_center_adapt布局不需要resize");
-    },
-
     populate: function (items) {
-        self.populate(items);
+        this.wrapper.populate(items);
     }
 });
-BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
-BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
+BI.shortcut("bi.flex_wrapper_horizontal_adapt", BI.FlexWrapperHorizontalCenter);
+BI.shortcut("bi.flex_wrapper_horizontal_center_adapt", BI.FlexWrapperHorizontalCenter);
