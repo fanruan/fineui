@@ -47,12 +47,12 @@ BI.prepares.push(function () {
     BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         if (!isIE && supportFlex && justOneItem) {
-            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            // 有滚动条的情况下需要用到flex_wrapper_center_adapt布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                // 不是IE用flex_wrapper_center布局
-                return BI.extend(ob, {type: "bi.flex_wrapper_center"});
+                // 不是IE用flex_wrapper_center_adapt布局
+                return BI.extend(ob, {type: "bi.flex_wrapper_center_adapt"});
             }
-            return BI.extend(ob, {type: "bi.flex_center"});
+            return BI.extend(ob, {type: "bi.flex_center_adapt"});
         }
         // 一个item的情况下inline布局睥睨天下
         if(justOneItem) {
@@ -63,12 +63,12 @@ BI.prepares.push(function () {
     BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex();
         if (!isIE && supportFlex) {
-            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            // 有滚动条的情况下需要用到flex_wrapper_center_adapt布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                // 不是IE用flex_wrapper_center布局
-                return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center"});
+                // 不是IE用flex_wrapper_center_adapt布局
+                return BI.extend({}, ob, {type: "bi.flex_wrapper_vertical_center_adapt"});
             }
-            return BI.extend(ob, {type: "bi.flex_vertical_center"});
+            return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
         }
         return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
     });
@@ -80,12 +80,12 @@ BI.prepares.push(function () {
     });
     BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex()) {
-            // 有滚动条的情况下需要用到flex_wrapper_center布局
+            // 有滚动条的情况下需要用到flex_wrapper_center_adapt布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
-                // 不是IE用flex_wrapper_center布局
-                return BI.extend({}, ob, {type: "bi.flex_wrapper_center"});
+                // 不是IE用flex_wrapper_center_adapt布局
+                return BI.extend({}, ob, {type: "bi.flex_wrapper_center_adapt"});
             }
-            return BI.extend(ob, {type: "bi.flex_center"});
+            return BI.extend(ob, {type: "bi.flex_center_adapt"});
         }
         return BI.extend(ob, {type: "bi.inline_center_adapt"});
     });
