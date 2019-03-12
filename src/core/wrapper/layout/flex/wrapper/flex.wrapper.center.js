@@ -8,12 +8,12 @@
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-wrapper-center-layout clearfix"
+            baseCls: "bi-flex-scrollable-center-layout clearfix"
         });
     },
     render: function () {
         BI.FlexCenterLayout.superclass.render.apply(this, arguments);
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-center-layout-wrapper");
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-center-adapt-layout-wrapper");
         this.populate(this.options.items);
     },
 
@@ -34,7 +34,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_center布局不需要resize");
+        // console.log("flex_center_adapt布局不需要resize");
     },
 
     populate: function (items) {
@@ -42,4 +42,4 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut("bi.flex_wrapper_center", BI.FlexCenterLayout);
+BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexCenterLayout);

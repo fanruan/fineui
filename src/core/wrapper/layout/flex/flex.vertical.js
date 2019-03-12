@@ -1,18 +1,17 @@
 /**
- *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
- * @class BI.FlexHorizontalLayout
+ * @class BI.FlexVerticalLayout
  * @extends BI.Layout
  */
-BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
+BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+        return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-vertical-layout",
+            horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
-            columnSize: [],
-            scrollx: true,
+            rowSize: [],
+            scrolly: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -22,33 +21,33 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
-        BI.FlexHorizontalLayout.superclass.render.apply(this, arguments);
+        BI.FlexVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.element.addClass("v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
+        this.element.addClass("h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
+        var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
         var o = this.options;
-        var w = BI.FlexHorizontalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "relative",
             "flex-shrink": "0"
         });
-        if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i]);
+        if (o.rowSize[i] > 0) {
+            w.element.height(o.rowSize[i]);
         }
-        if (o.columnSize[i] === "fill") {
+        if (o.rowSize[i] === "fill") {
             w.element.css("flex", "1");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
+                "margin-top": (i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
+                "margin-left": o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
@@ -65,12 +64,12 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_horizontal布局不需要resize");
+        // console.log("flex_vertical布局不需要resize");
     },
 
     populate: function (items) {
-        BI.FlexHorizontalLayout.superclass.populate.apply(this, arguments);
+        BI.FlexVerticalLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
+BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);

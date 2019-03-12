@@ -5,13 +5,13 @@
  * @class BI.FlexVerticalCenter
  * @extends BI.Layout
  */
-BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
+BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-wrapper-vertical-center clearfix",
-            horizontalAlign: BI.HorizontalAlign.Middle,
+        return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
-            // scrollable: true,
+            scrollx: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -21,55 +21,31 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         });
     },
     render: function () {
-        BI.FlexVerticalCenter.superclass.render.apply(this, arguments);
-        var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-wrapper-vertical-center-wrapper " + o.horizontalAlign);
-        this.populate(this.options.items);
-    },
-
-    _addElement: function (i, item) {
-        var o = this.options;
-        var w = BI.FlexVerticalCenter.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
-        if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-top": o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
-            });
-        }
-        if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
-            w.element.css({
-                "margin-right": o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) + "px"
-            });
-        }
-        if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
-            w.element.css({
-                "margin-bottom": o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) + "px"
-            });
-        }
-        return w;
-    },
-
-    appendFragment: function (frag) {
-        this.$wrapper.append(frag);
-        this.element.append(this.$wrapper);
-    },
-
-    _getWrapper: function () {
-        return this.$wrapper;
-    },
-
-    resize: function () {
-        // console.log("flex_vertical_center布局不需要resize");
+        var self = this, o = this.options;
+        return {
+            type: "bi.flex_scrollable_horizontal",
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
+            verticalAlign: BI.VerticalAlign.Middle,
+            horizontalAlign: o.horizontalAlign,
+            columnSize: o.columnSize,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
+            hgap: o.hgap,
+            vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            items: o.items
+        };
     },
 
     populate: function (items) {
-        BI.FlexVerticalCenter.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate(items);
     }
 });
-BI.shortcut("bi.flex_wrapper_vertical_center", BI.FlexVerticalCenter);
+BI.shortcut("bi.flex_scrollable_vertical_adapt", BI.FlexWrapperVerticalCenter);
+BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCenter);

@@ -1,17 +1,16 @@
 /**
- *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
- * @class BI.FlexVerticalCenter
+ * @class BI.FlexHorizontalCenter
  * @extends BI.Layout
  */
-BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
+BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
-            horizontalAlign: BI.HorizontalAlign.Left,
-            columnSize: [],
-            scrollx: false,
+        return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-horizontal-center-adapt-layout",
+            verticalAlign: BI.VerticalAlign.Top,
+            rowSize: [],
+            scrolly: false,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -23,13 +22,13 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     render: function () {
         var self = this, o = this.options;
         return {
-            type: "bi.flex_horizontal",
+            type: "bi.flex_vertical",
             ref: function (_ref) {
                 self.wrapper = _ref;
             },
-            verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: o.horizontalAlign,
-            columnSize: o.columnSize,
+            horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: o.verticalAlign,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -51,5 +50,5 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
         self.populate(items);
     }
 });
-BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
-BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
+BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
+BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);

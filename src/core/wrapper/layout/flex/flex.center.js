@@ -8,7 +8,7 @@
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-layout"
+            baseCls: "bi-flex-center-adapt-layout"
         });
     },
     render: function () {
@@ -24,7 +24,7 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     resize: function () {
-        // console.log("flex_center布局不需要resize");
+        // console.log("flex_center_adapt布局不需要resize");
     },
 
     populate: function (items) {
@@ -32,4 +32,4 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
         this._mount();
     }
 });
-BI.shortcut("bi.flex_center", BI.FlexCenterLayout);
+BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
