@@ -6,6 +6,7 @@
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-vertical-adapt-layout",
+        horizontalAlign: BI.HorizontalAlign.Left,
         columnSize: [],
         scrollx: false,
         hgap: 0,
@@ -22,7 +23,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: BI.HorizontalAlign.Left,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
