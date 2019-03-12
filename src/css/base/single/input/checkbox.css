@@ -28,3 +28,9 @@
 .bi-checkbox.disabled .checkbox-context:after {
   opacity: 0;
 }
+.bi-checkbox.disabled.active .checkbox-context {
+  background-color: #d0d4da;
+}
+.bi-checkbox.disabled.active .checkbox-context:after {
+  opacity: 1;
+}

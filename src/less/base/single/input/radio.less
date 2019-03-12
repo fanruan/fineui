@@ -21,9 +21,15 @@
     }
   }
   &.disabled {
-    &:active, &.active {
-      & .radio-content:after {
-        background-color: transparent;
+    & .radio-content:after {
+      background-color: transparent;
+    }
+    &.active {
+      & .radio-content {
+        background-color: @color-bi-background-dark-gray;
+        &:after {
+          background-color: @color-bi-background-default;
+        }
       }
     }
   }

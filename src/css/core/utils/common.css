@@ -282,16 +282,6 @@ textarea {
 .bi-high-light-background .bi-textarea {
   color: #ffffff;
 }
-.bi-high-light-background.disabled {
-  background-color: transparent !important;
-  color: #9ea6b2 !important;
-}
-.bi-high-light-background.disabled .bi-input {
-  color: #9ea6b2 !important;
-}
-.bi-high-light-background.disabled .bi-textarea {
-  color: #9ea6b2 !important;
-}
 .bi-error-background {
   background-color: #ff4949;
   color: #ffffff;

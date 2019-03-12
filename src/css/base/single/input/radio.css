@@ -24,7 +24,12 @@
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-.bi-radio.disabled:active .radio-content:after,
-.bi-radio.disabled.active .radio-content:after {
+.bi-radio.disabled .radio-content:after {
   background-color: transparent;
+}
+.bi-radio.disabled.active .radio-content {
+  background-color: #d0d4da;
+}
+.bi-radio.disabled.active .radio-content:after {
+  background-color: #ffffff;
 }
