@@ -2,24 +2,25 @@
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
- * @class BI.FlexCenterLayout
+ * @class BI.FlexWrapperCenterLayout
  * @extends BI.Layout
  */
-BI.FlexCenterLayout = BI.inherit(BI.Layout, {
+BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-layout clearfix"
+        return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-scrollable-center-layout clearfix",
+            scrollable: true
         });
     },
     render: function () {
-        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
+        BI.FlexWrapperCenterLayout.superclass.render.apply(this, arguments);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-center-adapt-layout-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
-        var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
+        var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
         return w;
     },
@@ -38,8 +39,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.FlexCenterLayout.superclass.populate.apply(this, arguments);
+        BI.FlexWrapperCenterLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexCenterLayout);
+BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
