@@ -47,7 +47,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        self.populate(items);
+        this.wrapper.populate(items);
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
