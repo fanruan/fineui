@@ -26,7 +26,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "white-space": "nowrap",
             height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
-            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"

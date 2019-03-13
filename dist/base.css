@@ -1407,6 +1407,12 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-checkbox.disabled .checkbox-context:after {
   opacity: 0;
 }
+.bi-checkbox.disabled.active .checkbox-context {
+  background-color: #d0d4da;
+}
+.bi-checkbox.disabled.active .checkbox-context:after {
+  opacity: 1;
+}
 .bi-file {
   opacity: 0;
   filter: alpha(opacity=0);
@@ -1457,9 +1463,14 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
-.bi-radio.disabled:active .radio-content:after,
-.bi-radio.disabled.active .radio-content:after {
+.bi-radio.disabled .radio-content:after {
   background-color: transparent;
+}
+.bi-radio.disabled.active .radio-content {
+  background-color: #d0d4da;
+}
+.bi-radio.disabled.active .radio-content:after {
+  background-color: #ffffff;
 }
 .bi-label {
   text-overflow: ellipsis;

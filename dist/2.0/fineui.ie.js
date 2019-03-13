@@ -30596,6 +30596,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-center-adapt-layout",
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -30612,7 +30613,7 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             scrollx: o.scrollx,
             items: o.items,
@@ -30646,6 +30647,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-horizontal-adapt-layout",
             verticalAlign: BI.VerticalAlign.Top,
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
             hgap: 0,
@@ -30662,7 +30664,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: BI.VerticalAlign.Top,
-            horizontalAlign: BI.HorizontalAlign.Center,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
@@ -30961,6 +30963,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);/**
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
         baseCls: "bi-vertical-adapt-layout",
+        horizontalAlign: BI.HorizontalAlign.Left,
         columnSize: [],
         scrollx: false,
         hgap: 0,
@@ -30977,7 +30980,7 @@ BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: BI.VerticalAlign.Middle,
-            horizontalAlign: BI.HorizontalAlign.Left,
+            horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
@@ -32943,7 +32946,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "white-space": "nowrap",
             height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
-            width: o.horizontalAlign === BI.HorizontalAlign.Center ? "100%" : "auto",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"

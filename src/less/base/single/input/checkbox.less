@@ -27,5 +27,13 @@
     & .checkbox-context:after {
       opacity: 0;
     }
+    &.active {
+      & .checkbox-context {
+        background-color: @color-bi-background-dark-gray;
+        &:after {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
