@@ -1945,7 +1945,6 @@ textarea {
   -o-flex-wrap: nowrap;
   flex-wrap: nowrap;
   min-height: 100%;
-  float: left;
 }
 .bi-flex-scrollable-horizontal-layout .flex-scrollable-horizontal-layout-wrapper.v-middle {
   /* 09版 */
@@ -2054,7 +2053,6 @@ textarea {
   -o-flex-wrap: nowrap;
   flex-wrap: nowrap;
   min-width: 100%;
-  float: left;
 }
 .bi-flex-scrollable-vertical-layout .flex-scrollable-vertical-layout-wrapper.h-center {
   /* 09版 */
