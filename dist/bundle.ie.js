@@ -19147,8 +19147,8 @@ BI.prepares.push(function () {
             }
             return BI.extend(ob, {type: "bi.table_adapt"});
         }
-        if(!isIE) {
-            if(supportFlex) {
+        if (!isIE) {
+            if (supportFlex) {
                 return BI.extend(ob, {type: "bi.flex_horizontal"});
             }
             return BI.extend(ob, {type: "bi.table_adapt"});
@@ -19166,7 +19166,7 @@ BI.prepares.push(function () {
             return BI.extend(ob, {type: "bi.flex_center_adapt"});
         }
         // 一个item的情况下inline布局睥睨天下
-        if(justOneItem) {
+        if (justOneItem) {
             return BI.extend(ob, {type: "bi.inline_center_adapt"});
         }
         return ob;
@@ -19199,6 +19199,42 @@ BI.prepares.push(function () {
             return BI.extend(ob, {type: "bi.flex_center_adapt"});
         }
         return BI.extend(ob, {type: "bi.inline_center_adapt"});
+    });
+
+    BI.Plugin.registerWidget("bi.flex_horizontal", function (ob) {
+        if (ob.scrollable === true || ob.scrolly === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_vertical", function (ob) {
+        if (ob.scrollable === true || ob.scrollx === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_horizontal_adapt", function (ob) {
+        if (ob.scrollable === true || ob.scrollx === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_vertical_adapt", function (ob) {
+        if (ob.scrollable === true || ob.scrolly === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_horizontal_center_adapt", function (ob) {
+        if (ob.scrollable === true || ob.scrollx === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_vertical_center_adapt", function (ob) {
+        if (ob.scrollable === true || ob.scrolly === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
+        }
+    });
+    BI.Plugin.registerWidget("bi.flex_center_adapt", function (ob) {
+        if (ob.scrollable === true || ob.scrolly === true || ob.scrollx === true) {
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_center_adapt"});
+        }
     });
 
     BI.Plugin.registerWidget("bi.radio", function (ob) {
@@ -31375,7 +31411,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        self.populate(items);
+        this.wrapper.populate(items);
     }
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
@@ -31504,7 +31540,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        self.populate(items);
+        this.wrapper.populate(items);
     }
 });
 BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
