@@ -8,7 +8,7 @@
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-layout clearfix",
+            baseCls: "bi-flex-scrollable-center-adapt-layout clearfix",
             scrollable: true
         });
     },
