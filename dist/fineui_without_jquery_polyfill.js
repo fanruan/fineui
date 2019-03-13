@@ -20512,24 +20512,25 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
- * @class BI.FlexCenterLayout
+ * @class BI.FlexWrapperCenterLayout
  * @extends BI.Layout
  */
-BI.FlexCenterLayout = BI.inherit(BI.Layout, {
+BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
-        return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-layout clearfix"
+        return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
+            baseCls: "bi-flex-scrollable-center-layout clearfix",
+            scrollable: true
         });
     },
     render: function () {
-        BI.FlexCenterLayout.superclass.render.apply(this, arguments);
+        BI.FlexWrapperCenterLayout.superclass.render.apply(this, arguments);
         this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-center-adapt-layout-wrapper");
         this.populate(this.options.items);
     },
 
     _addElement: function (i, item) {
         var o = this.options;
-        var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
+        var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative"});
         return w;
     },
@@ -20548,11 +20549,11 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.FlexCenterLayout.superclass.populate.apply(this, arguments);
+        BI.FlexWrapperCenterLayout.superclass.populate.apply(this, arguments);
         this._mount();
     }
 });
-BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexCenterLayout);/**
+BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);/**
  *自适应水平和垂直方向都居中容器
  * Created by GUY on 2016/12/2.
  *
@@ -20565,8 +20566,8 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
-            scrollable: null,
-            scrolly: true,
+            scrollable: true,
+            scrolly: false,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20698,7 +20699,8 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
-            scrollx: true,
+            scrollx: false,
+            scrollable: true,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -20762,7 +20764,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-scrollable h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
