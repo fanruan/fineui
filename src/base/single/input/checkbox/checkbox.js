@@ -25,8 +25,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                     self.checkbox = _ref;
                 },
                 cls: "checkbox-context bi-border",
-                width: o.iconWidth,
-                height: o.iconHeight
+                width: o.iconWidth - 2,
+                height: o.iconHeight - 2
             }]
         };
     },

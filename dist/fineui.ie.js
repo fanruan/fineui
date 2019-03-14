@@ -44981,8 +44981,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                     self.checkbox = _ref;
                 },
                 cls: "checkbox-context bi-border",
-                width: o.iconWidth,
-                height: o.iconHeight
+                width: o.iconWidth - 2,
+                height: o.iconHeight - 2
             }]
         };
     },
@@ -55986,6 +55986,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
+        this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -56252,7 +56253,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
-        if(BI.isNotNull(o.text)){
+        if (BI.isNotNull(o.text)) {
             this.setState(o.text);
         }
     },

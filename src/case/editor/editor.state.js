@@ -142,7 +142,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
-        if(BI.isNotNull(o.text)){
+        if (BI.isNotNull(o.text)) {
             this.setState(o.text);
         }
     },
