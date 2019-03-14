@@ -12270,7 +12270,7 @@ if (!_global.BI) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
+                component.on(BI.Events.MOUNT, function () {
                     BI.Plugin.getObject(el.type, component);
                 });
                 return component;
@@ -12282,7 +12282,7 @@ if (!_global.BI) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
+                component.on(BI.Events.MOUNT, function () {
                     BI.Plugin.getObject(el.type, component);
                 });
                 return component;

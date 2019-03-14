@@ -12270,7 +12270,7 @@ if (!_global.BI) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
+                component.on(BI.Events.MOUNT, function () {
                     BI.Plugin.getObject(el.type, component);
                 });
                 return component;
@@ -12282,7 +12282,7 @@ if (!_global.BI) {
             w = BI.Plugin.getWidget(el.type, el);
             if (w.type === el.type) {
                 var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
+                component.on(BI.Events.MOUNT, function () {
                     BI.Plugin.getObject(el.type, component);
                 });
                 return component;
@@ -44738,8 +44738,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                     self.checkbox = _ref;
                 },
                 cls: "checkbox-context bi-border",
-                width: o.iconWidth,
-                height: o.iconHeight
+                width: o.iconWidth - 2,
+                height: o.iconHeight - 2
             }]
         };
     },
@@ -55743,6 +55743,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
+        this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -56009,7 +56010,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             items: [this.editor]
         });
         this._showHint();
-        if(BI.isNotNull(o.text)){
+        if (BI.isNotNull(o.text)) {
             this.setState(o.text);
         }
     },
