@@ -3,6 +3,7 @@
 .bi-checkbox {
   & .checkbox-context {
     .border-radius(2px);
+    border: 1px solid @color-bi-border-dark-line;
     &:after {
       position: absolute;
       display: table;
@@ -18,9 +19,12 @@
     }
   }
   &.active, &:active {
-    & .checkbox-context:after {
-      border-color: @color-bi-border-default;
-      opacity: 1;
+    & .checkbox-context{
+      border-color: @color-bi-border-highlight;
+      &:after {
+        border-color: @color-bi-border-default;
+        opacity: 1;
+      }
     }
   }
   &.disabled {
@@ -34,6 +38,14 @@
           opacity: 1;
         }
       }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-checkbox {
+    & .checkbox-context {
+      border-color: @color-bi-border-dark-line-theme-dark;
     }
   }
 }

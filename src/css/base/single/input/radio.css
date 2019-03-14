@@ -2,9 +2,14 @@
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
+  border: 1px solid #9EA6B2;
 }
 .bi-radio .radio-content:after {
   content: "";
+}
+.bi-radio:active .radio-content,
+.bi-radio.active .radio-content {
+  border-color: #3685f2;
 }
 .bi-radio:active .radio-content:after,
 .bi-radio.active .radio-content:after {
@@ -32,4 +37,7 @@
 }
 .bi-radio.disabled.active .radio-content:after {
   background-color: #ffffff;
+}
+.bi-theme-dark .bi-radio .radio-content {
+  border-color: #9EA6B2;
 }

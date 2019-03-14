@@ -22,7 +22,7 @@ BI.Radio = BI.inherit(BI.BasicButton, {
             element: this.element,
             items: [{
                 type: "bi.layout",
-                cls: "radio-content bi-border",
+                cls: "radio-content",
                 ref: function (_ref) {
                     self.radio = _ref;
                 },
@@ -51,9 +51,9 @@ BI.Radio = BI.inherit(BI.BasicButton, {
     setSelected: function (b) {
         BI.Radio.superclass.setSelected.apply(this, arguments);
         if (b) {
-            this.radio.element.removeClass("bi-border").addClass("bi-high-light-background bi-high-light-border");
+            this.radio.element.addClass("bi-high-light-background");
         } else {
-            this.radio.element.removeClass("bi-high-light-background bi-high-light-border").addClass("bi-border");
+            this.radio.element.removeClass("bi-high-light-background");
         }
     }
 });
