@@ -57,6 +57,12 @@ _.extend(BI, {
          * @static
          * @property 取消挂载事件
          */
+        MOUNT: "_MOUNT",
+
+        /**
+         * @static
+         * @property 取消挂载事件
+         */
         UNMOUNT: "_UNMOUNT",
 
         /**
