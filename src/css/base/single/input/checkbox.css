@@ -2,6 +2,7 @@
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  border: 1px solid #9EA6B2;
 }
 .bi-checkbox .checkbox-context:after {
   position: absolute;
@@ -20,6 +21,10 @@
   transform: rotate(45deg) scale(1) translate(-50%, -50%);
   content: '';
 }
+.bi-checkbox.active .checkbox-context,
+.bi-checkbox:active .checkbox-context {
+  border-color: #3685f2;
+}
 .bi-checkbox.active .checkbox-context:after,
 .bi-checkbox:active .checkbox-context:after {
   border-color: #ffffff;
@@ -33,4 +38,7 @@
 }
 .bi-checkbox.disabled.active .checkbox-context:after {
   opacity: 1;
+}
+.bi-theme-dark .bi-checkbox .checkbox-context {
+  border-color: #9EA6B2;
 }

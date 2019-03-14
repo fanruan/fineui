@@ -24,7 +24,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                 ref: function (_ref) {
                     self.checkbox = _ref;
                 },
-                cls: "checkbox-context bi-border",
+                cls: "checkbox-context",
                 width: o.iconWidth - 2,
                 height: o.iconHeight - 2
             }]
@@ -50,9 +50,9 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
     setSelected: function (b) {
         BI.Checkbox.superclass.setSelected.apply(this, arguments);
         if (b) {
-            this.checkbox.element.removeClass("bi-border").addClass("bi-high-light-background bi-high-light-border");
+            this.checkbox.element.addClass("bi-high-light-background");
         } else {
-            this.checkbox.element.removeClass("bi-high-light-background bi-high-light-border").addClass("bi-border");
+            this.checkbox.element.removeClass("bi-high-light-background");
         }
     }
 });

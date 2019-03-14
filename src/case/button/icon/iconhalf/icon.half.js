@@ -7,7 +7,7 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-half-button bi-border bi-high-light-border",
+            extraCls: "bi-half-button bi-high-light-border",
             height: 14,
             width: 14,
             selected: false

@@ -44735,7 +44735,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                 ref: function (_ref) {
                     self.checkbox = _ref;
                 },
-                cls: "checkbox-context bi-border",
+                cls: "checkbox-context",
                 width: o.iconWidth - 2,
                 height: o.iconHeight - 2
             }]
@@ -44761,9 +44761,9 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
     setSelected: function (b) {
         BI.Checkbox.superclass.setSelected.apply(this, arguments);
         if (b) {
-            this.checkbox.element.removeClass("bi-border").addClass("bi-high-light-background bi-high-light-border");
+            this.checkbox.element.addClass("bi-high-light-background");
         } else {
-            this.checkbox.element.removeClass("bi-high-light-background bi-high-light-border").addClass("bi-border");
+            this.checkbox.element.removeClass("bi-high-light-background");
         }
     }
 });
@@ -45753,7 +45753,7 @@ BI.Radio = BI.inherit(BI.BasicButton, {
             element: this.element,
             items: [{
                 type: "bi.layout",
-                cls: "radio-content bi-border",
+                cls: "radio-content",
                 ref: function (_ref) {
                     self.radio = _ref;
                 },
@@ -45782,9 +45782,9 @@ BI.Radio = BI.inherit(BI.BasicButton, {
     setSelected: function (b) {
         BI.Radio.superclass.setSelected.apply(this, arguments);
         if (b) {
-            this.radio.element.removeClass("bi-border").addClass("bi-high-light-background bi-high-light-border");
+            this.radio.element.addClass("bi-high-light-background");
         } else {
-            this.radio.element.removeClass("bi-high-light-background bi-high-light-border").addClass("bi-border");
+            this.radio.element.removeClass("bi-high-light-background");
         }
     }
 });
@@ -49798,7 +49798,7 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         var conf = BI.HalfIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-half-button bi-border bi-high-light-border",
+            extraCls: "bi-half-button bi-high-light-border",
             height: 14,
             width: 14,
             selected: false

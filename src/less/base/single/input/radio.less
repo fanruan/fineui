@@ -3,21 +3,25 @@
 .bi-radio {
   & .radio-content {
     .border-radius(8px);
+    border: 1px solid @color-bi-border-dark-line;
     &:after {
       content: "";
     }
   }
   &:active, &.active {
-    & .radio-content:after {
-      width: 6px;
-      height: 6px;
-      display: table;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      .border-radius(3px);
-      background-color: @color-bi-background-default;
-      .transform(translate(-50%, -50%));
+    & .radio-content {
+      border-color:  @color-bi-border-highlight;
+      &:after {
+        width: 6px;
+        height: 6px;
+        display: table;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        .border-radius(3px);
+        background-color: @color-bi-background-default;
+        .transform(translate(-50%, -50%));
+      }
     }
   }
   &.disabled {
@@ -31,6 +35,14 @@
           background-color: @color-bi-background-default;
         }
       }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-radio {
+    & .radio-content {
+      border-color: @color-bi-border-dark-line-theme-dark;
     }
   }
 }
