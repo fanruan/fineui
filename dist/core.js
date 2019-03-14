@@ -12268,26 +12268,24 @@ if (!_global.BI) {
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
             w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
-                    BI.Plugin.getObject(el.type, component);
-                });
-                return component;
-            }
-            return BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            w.listeners = (w.listeners || []).concat([{
+                eventName: BI.Events.MOUNT,
+                action: function () {
+                    BI.Plugin.getObject(el.type, this);
+                }
+            }]);
+            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
             w = BI.Plugin.getWidget(el.type, el);
-            if (w.type === el.type) {
-                var component = createWidget(w);
-                component.on(BI.Event.MOUNT, function () {
-                    BI.Plugin.getObject(el.type, component);
-                });
-                return component;
-            }
-            return BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            w.listeners = (w.listeners || []).concat([{
+                eventName: BI.Events.MOUNT,
+                action: function () {
+                    BI.Plugin.getObject(el.type, this);
+                }
+            }]);
+            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
         }
         if (BI.isWidget(item.el)) {
             return item.el;
@@ -17379,7 +17377,7 @@ _.extend(BI, {
 
         /**
          * @static
-         * @property 取消挂载事件
+         * @property 挂载事件
          */
         MOUNT: "_MOUNT",
 
