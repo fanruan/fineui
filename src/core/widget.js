@@ -198,6 +198,7 @@
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
+            this.fireEvent(BI.Events.MOUNT);
             predicate && predicate(this);
             return true;
         },
