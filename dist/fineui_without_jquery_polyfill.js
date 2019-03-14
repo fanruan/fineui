@@ -17125,7 +17125,7 @@ _.extend(BI, {
 
         /**
          * @static
-         * @property 取消挂载事件
+         * @property 挂载事件
          */
         MOUNT: "_MOUNT",
 
