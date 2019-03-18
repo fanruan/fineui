@@ -33,6 +33,7 @@
   background-color: transparent;
 }
 .bi-radio.disabled.active .radio-content {
+  border-color: #e8eaed;
   background-color: #d0d4da;
 }
 .bi-radio.disabled.active .radio-content:after {

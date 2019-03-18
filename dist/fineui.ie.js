@@ -44637,8 +44637,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 6,
-                            top: 0,
+                            left: 10,
+                            top: 4,
                             right: 0
                         }]
                     });
