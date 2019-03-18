@@ -34,6 +34,7 @@
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-context {
+  border-color: #e8eaed;
   background-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-context:after {
