@@ -8988,6 +8988,50 @@ BI.shortcut("demo.date_time", Demo.CustomDateTime);Demo.Downlist = BI.inherit(BI
 
                 ]
             }, {
+                type: "bi.multi_layer_down_list_combo",
+                ref: function (_ref) {
+                    self.downlist = _ref;
+                },
+                // value: [{"childValue":22,"value":11},{"value":18},{"value":20}],
+                height: 30,
+                width: 100,
+                items: [
+                    [{
+                        el: {
+                            text: "column 1111",
+                            iconCls1: "dot-e-font",
+                            value: 12
+                        },
+                        children: [{
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }]
+                    }],
+                    [{
+                        el: {
+                            text: "column 1111",
+                            iconCls1: "dot-e-font",
+                            value: 11
+                        },
+                        children: [{
+                            text: "column 1.1",
+                            value: 21,
+                            cls: "dot-e-font"
+                        }, {
+                            text: "column 1.2",
+                            value: 22,
+                            cls: "dot-e-font"
+                        }]
+                    }]
+
+                ]
+
+            }, {
                 type: "bi.label",
                 text: "显示选择值",
                 width: 500,

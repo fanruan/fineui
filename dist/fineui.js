@@ -66382,8 +66382,8 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
 
                     }],
                     cls: "bi-down-list-spliter-container cursor-pointer",
-                    lgap: 10,
-                    rgap: 0
+                    vgap: 5,
+                    lgap: 10
                 });
                 result.push(spliter_container);
             }
