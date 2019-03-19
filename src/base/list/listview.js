@@ -62,7 +62,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items);
+            this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
             this.cache[cnt] = {
                 index: index,
