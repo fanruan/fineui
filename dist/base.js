@@ -6367,7 +6367,7 @@ BI.ListView = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items);
+            this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
             this.cache[cnt] = {
                 index: index,
@@ -6486,7 +6486,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         };
         while ((lastHeight = getElementHeight()) < minContentHeight && index < o.items.length) {
             var items = o.items.slice(index, index + o.blockSize);
-            this.container.addItems(items);
+            this.container.addItems(items, this);
             var addedHeight = getElementHeight() - lastHeight;
             this.cache[cnt] = {
                 index: index,
@@ -6538,7 +6538,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
             }
             if (this.cache[i].destroyed === true) {
                 for (var j = index; j < index + o.blockSize && j < o.items.length; j++) {
-                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])));
+                    var w = this.container._addElement(j, BI.extend({root: true}, BI.stripEL(o.items[j])), this);
                     currentFragment.appendChild(w.element[0]);
                 }
                 this.cache[i].destroyed = false;
