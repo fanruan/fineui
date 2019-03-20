@@ -46,7 +46,22 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                 });
             },
             text: o.text,
-            value: this.storeValue
+            value: this.storeValue,
+            searcher: {
+                popup: {
+                    type: "bi.single_select_search_insert_pane",
+                    listeners: [{
+                        eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
+                        action: function () {
+                            if (!self.trigger.getSearcher().hasMatched()) {
+                                self.storeValue = self.trigger.getSearcher().getKeyword();
+                                assertShowValue();
+                                self._defaultState();
+                            }
+                        }
+                    }]
+                }
+            }
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
