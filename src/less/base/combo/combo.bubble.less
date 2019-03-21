@@ -6,6 +6,8 @@
     // 消除祖先节点设置的line-height:normal对空白节点的行高影响
     line-height: 0;
     .z-index-layer(@zIndex-popup);
+    //  ie10一下无背景色会鼠标穿透
+    .background-color(@background-color-default, 0);
   }
   & .bubble-combo-triangle-left {
     z-index: 1;
