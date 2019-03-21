@@ -78887,15 +78887,9 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
             };
         },
 
-        setValue: function (v) {
-            var value = v;
-            if (BI.isNull(value)) {
-                var date = BI.getDate();
-                this.timeSelect.setValue({
-                    hour: date.getHours(),
-                    minute: date.getMinutes(),
-                    second: date.getSeconds()
-                });
+        setValue: function (value) {
+            if (this._checkValueValid(value)) {
+                this.timeSelect.setValue();
             } else {
                 this.timeSelect.setValue({
                     hour: value.hour,
@@ -78907,6 +78901,10 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
         getValue: function () {
             return this.timeSelect.getValue();
+        },
+
+        _checkValueValid: function (value) {
+            return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
         }
     });
     BI.TimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
@@ -79079,6 +79077,9 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                 items: [{
                     el: {
                         type: "bi.label",
+                        title: function () {
+                            return self.text.getText();
+                        },
                         textAlign: "left",
                         height: o.height,
                         width: o.width,

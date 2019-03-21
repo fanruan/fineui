@@ -13,6 +13,9 @@
                 items: [{
                     el: {
                         type: "bi.label",
+                        title: function () {
+                            return self.text.getText();
+                        },
                         textAlign: "left",
                         height: o.height,
                         width: o.width,

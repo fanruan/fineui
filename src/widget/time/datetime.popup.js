@@ -69,15 +69,9 @@
             };
         },
 
-        setValue: function (v) {
-            var value = v;
-            if (BI.isNull(value)) {
-                var date = BI.getDate();
-                this.timeSelect.setValue({
-                    hour: date.getHours(),
-                    minute: date.getMinutes(),
-                    second: date.getSeconds()
-                });
+        setValue: function (value) {
+            if (this._checkValueValid(value)) {
+                this.timeSelect.setValue();
             } else {
                 this.timeSelect.setValue({
                     hour: value.hour,
@@ -89,6 +83,10 @@
 
         getValue: function () {
             return this.timeSelect.getValue();
+        },
+
+        _checkValueValid: function (value) {
+            return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
         }
     });
     BI.TimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
