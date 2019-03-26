@@ -22965,7 +22965,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.CenterLayout.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
-        var list = [];
+        var list = [], items = o.items;
         BI.each(items, function (i) {
             list.push({
                 column: i,
@@ -23038,7 +23038,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatCenterLayout.superclass.render.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, items = o.items;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
             var widget = BI.createWidget({
@@ -23112,7 +23112,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, items = o.items;
         var list = [];
         BI.each(items, function (i) {
             list.push({
@@ -23186,7 +23186,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, items = o.items;
         var list = [];
         BI.each(items, function (i) {
             list.push({

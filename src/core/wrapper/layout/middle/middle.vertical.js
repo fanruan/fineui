@@ -18,7 +18,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, items = o.items;
         var list = [];
         BI.each(items, function (i) {
             list.push({

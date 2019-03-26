@@ -17,7 +17,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatCenterLayout.superclass.render.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, items = o.items;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
             var widget = BI.createWidget({

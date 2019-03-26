@@ -19,7 +19,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.CenterLayout.superclass.render.apply(this, arguments);
         var self = this, o = this.options;
-        var list = [];
+        var list = [], items = o.items;
         BI.each(items, function (i) {
             list.push({
                 column: i,
