@@ -17,19 +17,6 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("horizontal_center布局不需要resize");
-    },
-
-    addItem: function (item) {
-        // do nothing
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
         var self = this, o = this.options;
         var list = [];
         BI.each(items, function (i) {
@@ -56,18 +43,32 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 list[i].el.addItem(w);
             }
         });
-        BI.createWidget({
+        return {
             type: "bi.grid",
-            element: this,
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             columns: list.length,
             rows: 1,
             items: list
-        });
+        };
+    },
+
+    resize: function () {
+        // console.log("horizontal_center布局不需要resize");
+    },
+
+    addItem: function (item) {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
-        BI.HorizontalCenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate.apply(this.wrapper, arguments);
     }
 });
 BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);

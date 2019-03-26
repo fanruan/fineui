@@ -54,6 +54,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var map = BI.makeArray(rows), widths = {}, heights = {};
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -90,6 +91,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 firstObject(item, row, col);
             }
         }
+
         BI.each(map, function (i) {
             map[i] = BI.makeArray(columns);
         });
@@ -112,7 +114,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 if (!map[i][j]) {
                     throw new Error("item be required");
                 }
-                if(!this.hasWidget(this.getName() + i + "_" + j)) {
+                if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(map[i][j]);
                     this.addWidget(this.getName() + i + "_" + j, w);
                 } else {
@@ -147,6 +149,9 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 totalH += map[i][j].height;
             }
         }
+    },
+
+    update: function () {
     },
 
     populate: function (items) {

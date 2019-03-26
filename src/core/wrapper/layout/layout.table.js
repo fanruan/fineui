@@ -138,6 +138,9 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.TableLayout.superclass.populate.apply(this, arguments);
         this._mount();
