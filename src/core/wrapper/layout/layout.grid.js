@@ -52,6 +52,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < rows; i++) {
             els[i] = [];
         }
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -116,6 +117,9 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                 this.addWidget(els[i][j]);
             }
         }
+    },
+
+    update: function () {
     },
 
     populate: function (items) {

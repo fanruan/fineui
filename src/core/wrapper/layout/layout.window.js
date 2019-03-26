@@ -180,6 +180,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.WindowLayout.superclass.populate.apply(this, arguments);
         this._mount();

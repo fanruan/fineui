@@ -44,6 +44,10 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
         };
     },
 
+    update: function (opt) {
+        return this.wrapper.update(opt);
+    },
+
     populate: function (items) {
         this.wrapper.populate(items);
     }

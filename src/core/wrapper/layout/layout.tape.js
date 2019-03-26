@@ -95,6 +95,14 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         });
     },
 
+    update: function () {
+        var updated;
+        BI.each(this._children, function (i, child) {
+            updated = child.update() || updated;
+        });
+        return updated;
+    },
+
     populate: function (items) {
         BI.HTapeLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -198,6 +206,9 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 return true;
             }
         });
+    },
+
+    update: function () {
     },
 
     populate: function (items) {

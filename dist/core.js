@@ -31429,6 +31429,10 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
         // console.log("flex_vertical_center_adapt布局不需要resize");
     },
 
+    update: function (opt) {
+        return this.wrapper.update(opt);
+    },
+
     populate: function (items) {
         this.wrapper.populate(items);
     }
@@ -31556,6 +31560,10 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 
     resize: function () {
         // console.log("flex_vertical_center_adapt布局不需要resize");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
@@ -31728,6 +31736,10 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
         };
     },
 
+    update: function (opt) {
+        return this.wrapper.update(opt);
+    },
+
     populate: function (items) {
         this.wrapper.populate(items);
     }
@@ -31859,6 +31871,10 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             bgap: o.bgap,
             items: o.items
         };
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
@@ -32271,6 +32287,9 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         }
     },
 
+    update: function (opt) {
+    },
+
     populate: function (items) {
         BI.BorderLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -32598,6 +32617,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var rows = o.rows || o.items.length, columns = o.columns || ((o.items[0] && o.items[0].length) | 0);
         var map = BI.makeArray(rows), widths = {}, heights = {};
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -32634,6 +32654,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 firstObject(item, row, col);
             }
         }
+
         BI.each(map, function (i) {
             map[i] = BI.makeArray(columns);
         });
@@ -32656,7 +32677,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 if (!map[i][j]) {
                     throw new Error("item be required");
                 }
-                if(!this.hasWidget(this.getName() + i + "_" + j)) {
+                if (!this.hasWidget(this.getName() + i + "_" + j)) {
                     var w = BI.createWidget(map[i][j]);
                     this.addWidget(this.getName() + i + "_" + j, w);
                 } else {
@@ -32691,6 +32712,9 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                 totalH += map[i][j].height;
             }
         }
+    },
+
+    update: function () {
     },
 
     populate: function (items) {
@@ -32902,6 +32926,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         for (var i = 0; i < rows; i++) {
             els[i] = [];
         }
+
         function firstElement (item, row, col) {
             if (row === 0) {
                 item.addClass("first-row");
@@ -32966,6 +32991,9 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                 this.addWidget(els[i][j]);
             }
         }
+    },
+
+    update: function () {
     },
 
     populate: function (items) {
@@ -33404,6 +33432,9 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         return BI.TableLayout.superclass.addItem.apply(this, arguments);
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.TableLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -33504,6 +33535,14 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 return true;
             }
         });
+    },
+
+    update: function () {
+        var updated;
+        BI.each(this._children, function (i, child) {
+            updated = child.update() || updated;
+        });
+        return updated;
     },
 
     populate: function (items) {
@@ -33609,6 +33648,9 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 return true;
             }
         });
+    },
+
+    update: function () {
     },
 
     populate: function (items) {
@@ -33751,6 +33793,9 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             throw new Error("item must be array");
         }
         return BI.TdLayout.superclass.addItem.apply(this, arguments);
+    },
+
+    update: function () {
     },
 
     populate: function (items) {
@@ -34001,6 +34046,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
         }
     },
 
+    update: function () {
+    },
+
     populate: function (items) {
         BI.WindowLayout.superclass.populate.apply(this, arguments);
         this._mount();
@@ -34026,19 +34074,6 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 
     render: function () {
         BI.CenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("center布局不需要resize");
-    },
-
-    addItem: function (item) {
-        // do nothing
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
         var self = this, o = this.options;
         var list = [];
         BI.each(items, function (i) {
@@ -34066,18 +34101,32 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
                 list[i].el.addItem(w);
             }
         });
-        BI.createWidget({
+        return {
             type: "bi.grid",
-            element: this,
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             columns: list.length,
             rows: 1,
             items: list
-        });
+        };
+    },
+
+    resize: function () {
+        // console.log("center布局不需要resize");
+    },
+
+    addItem: function (item) {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
-        BI.CenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate.apply(this.wrapper, arguments);
     }
 });
 BI.shortcut("bi.center", BI.CenterLayout);/**
@@ -34099,19 +34148,6 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.FloatCenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("floatcenter布局不需要resize");
-    },
-
-    addItem: function (item) {
-        // do nothing
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
         var self = this, o = this.options;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
@@ -34141,16 +34177,30 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
                 list[i].el.addItem(w);
             }
         });
-        BI.createWidget({
+        return {
             type: "bi.left",
-            element: this,
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             items: list
-        });
+        };
+    },
+
+    resize: function () {
+        // console.log("floatcenter布局不需要resize");
+    },
+
+    addItem: function (item) {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
-        BI.FloatCenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate.apply(this.wrapper, arguments);
     }
 });
 BI.shortcut("bi.float_center", BI.FloatCenterLayout);/**
@@ -34172,19 +34222,6 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     },
     render: function () {
         BI.HorizontalCenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("horizontal_center布局不需要resize");
-    },
-
-    addItem: function (item) {
-        // do nothing
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
         var self = this, o = this.options;
         var list = [];
         BI.each(items, function (i) {
@@ -34211,18 +34248,32 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
                 list[i].el.addItem(w);
             }
         });
-        BI.createWidget({
+        return {
             type: "bi.grid",
-            element: this,
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             columns: list.length,
             rows: 1,
             items: list
-        });
+        };
+    },
+
+    resize: function () {
+        // console.log("horizontal_center布局不需要resize");
+    },
+
+    addItem: function (item) {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
-        BI.HorizontalCenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate.apply(this.wrapper, arguments);
     }
 });
 BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);/**
@@ -34242,21 +34293,9 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             bgap: 0
         });
     },
+
     render: function () {
         BI.VerticalCenterLayout.superclass.render.apply(this, arguments);
-        this.populate(this.options.items);
-    },
-
-    resize: function () {
-        // console.log("vertical_center布局不需要resize");
-    },
-
-    addItem: function (item) {
-        // do nothing
-        throw new Error("cannot be added");
-    },
-
-    stroke: function (items) {
         var self = this, o = this.options;
         var list = [];
         BI.each(items, function (i) {
@@ -34283,18 +34322,32 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
                 list[i].el.addItem(w);
             }
         });
-        BI.createWidget({
+        return {
             type: "bi.grid",
-            element: this,
+            ref: function (_ref) {
+                self.wrapper = _ref;
+            },
             columns: 1,
             rows: list.length,
             items: list
-        });
+        };
+    },
+
+    resize: function () {
+        // console.log("vertical_center布局不需要resize");
+    },
+
+    addItem: function (item) {
+        // do nothing
+        throw new Error("cannot be added");
+    },
+
+    update: function (opt) {
+        return this.wrapper.update(opt);
     },
 
     populate: function (items) {
-        BI.VerticalCenterLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.wrapper.populate.apply(this.wrapper, arguments);
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
