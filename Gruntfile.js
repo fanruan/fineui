@@ -211,6 +211,7 @@ module.exports = function (grunt) {
                     "src/core/ob.js",
                     "src/core/alias.js",
                     "src/core/inject.js",
+                    "src/core/i18n.js",
                     "src/core/utils/*.js",
                     "i18n/i18n.cn.js",
                     "_mobile/date.i18n.cn.js",
