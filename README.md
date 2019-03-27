@@ -10,11 +10,11 @@ Documentation
 
 ### 教程
 
-http://fanruan.coding.me/fineui-doc/
+http://fanruan.design/fineui-doc/index.html
 
 ### Demo
 
-CodingPages: [http://fanruan.coding.me/fineui](http://fanruan.coding.me/fineui)
+在线Demo地址: [http://fanruan.design/fineui-demo/index.html](http://fanruan.design/fineui-demo/index.html)
 
 
 License
