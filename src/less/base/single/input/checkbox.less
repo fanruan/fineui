@@ -1,7 +1,7 @@
 @import "../../../index";
 
 .bi-checkbox {
-  & .checkbox-context {
+  & .checkbox-content {
     .border-radius(2px);
     border: 1px solid @color-bi-border-dark-line;
     &:after {
@@ -19,7 +19,7 @@
     }
   }
   &.active, &:active {
-    & .checkbox-context{
+    & .checkbox-content{
       border-color: @color-bi-border-highlight;
       &:after {
         border-color: @color-bi-border-default;
@@ -28,11 +28,11 @@
     }
   }
   &.disabled {
-    & .checkbox-context:after {
+    & .checkbox-content:after {
       opacity: 0;
     }
     &.active {
-      & .checkbox-context {
+      & .checkbox-content {
         // 深浅主题下border-color是一样的
         border-color: @color-bi-border-line;
         background-color: @color-bi-background-dark-gray;
@@ -46,7 +46,7 @@
 
 .bi-theme-dark {
   .bi-checkbox {
-    & .checkbox-context {
+    & .checkbox-content {
       border-color: @color-bi-border-dark-line-theme-dark;
     }
   }
