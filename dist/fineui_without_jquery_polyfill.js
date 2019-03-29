@@ -25112,7 +25112,8 @@ BI.Text = BI.inherit(BI.Single, {
         }
         this.element.css({
             textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace
+            whiteSpace: o.whiteSpace,
+            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -32743,7 +32744,8 @@ BI.Html = BI.inherit(BI.Single, {
         }
         this.element.css({
             textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace
+            whiteSpace: o.whiteSpace,
+            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
         });
         if (o.handler) {
             this.text = BI.createWidget({
