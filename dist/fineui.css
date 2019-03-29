@@ -3047,6 +3047,10 @@ body .bi-button.clear:active,
   opacity: 0.8;
   filter: alpha(opacity=80);
 }
+body .bi-button.clear:after,
+#body .bi-button.clear:after {
+  display: none;
+}
 body .bi-button.ghost,
 #body .bi-button.ghost {
   font-size: inherit;
