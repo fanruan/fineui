@@ -1384,13 +1384,13 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   margin: auto;
   width: 100%;
 }
-.bi-checkbox .checkbox-context {
+.bi-checkbox .checkbox-content {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
   border: 1px solid #9EA6B2;
 }
-.bi-checkbox .checkbox-context:after {
+.bi-checkbox .checkbox-content:after {
   position: absolute;
   display: table;
   top: 50%;
@@ -1407,26 +1407,26 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   transform: rotate(45deg) scale(1) translate(-50%, -50%);
   content: '';
 }
-.bi-checkbox.active .checkbox-context,
-.bi-checkbox:active .checkbox-context {
+.bi-checkbox.active .checkbox-content,
+.bi-checkbox:active .checkbox-content {
   border-color: #3685f2;
 }
-.bi-checkbox.active .checkbox-context:after,
-.bi-checkbox:active .checkbox-context:after {
+.bi-checkbox.active .checkbox-content:after,
+.bi-checkbox:active .checkbox-content:after {
   border-color: #ffffff;
   opacity: 1;
 }
-.bi-checkbox.disabled .checkbox-context:after {
+.bi-checkbox.disabled .checkbox-content:after {
   opacity: 0;
 }
-.bi-checkbox.disabled.active .checkbox-context {
+.bi-checkbox.disabled.active .checkbox-content {
   border-color: #e8eaed;
   background-color: #d0d4da;
 }
-.bi-checkbox.disabled.active .checkbox-context:after {
+.bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
 }
-.bi-theme-dark .bi-checkbox .checkbox-context {
+.bi-theme-dark .bi-checkbox .checkbox-content {
   border-color: #9EA6B2;
 }
 .bi-file {
@@ -1498,17 +1498,15 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-color: #9EA6B2;
 }
 .bi-label {
-  text-overflow: ellipsis;
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
-  white-space: nowrap;
   word-break: break-all;
 }
 .bi-text {
-  text-overflow: ellipsis;
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
-  white-space: nowrap;
   -webkit-box-sizing: border-box;
   /*Safari3.2+*/
   -moz-box-sizing: border-box;

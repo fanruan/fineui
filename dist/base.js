@@ -9352,7 +9352,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
                 ref: function (_ref) {
                     self.checkbox = _ref;
                 },
-                cls: "checkbox-context",
+                cls: "checkbox-content",
                 width: o.iconWidth - 2,
                 height: o.iconHeight - 2
             }]
