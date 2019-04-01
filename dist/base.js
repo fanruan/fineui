@@ -9860,7 +9860,11 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     self_.clean(); // remove files from list
                     self_.hide(); // hide progress bars and enable input file
 
-                    // BI.Msg.toast("onload");
+                    if (200 > xhr.status || xhr.status > 399) {
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), {level: "error"});
+                        self.fireEvent(BI.File.EVENT_ERROR);
+                        return;
+                    }
                     self.fireEvent(BI.File.EVENT_UPLOADED);
                     // enable again the submit button/element
                 }, 1000);
