@@ -52805,6 +52805,10 @@ BI.shortcut("bi.color_picker", BI.ColorPicker);/**
  */
 BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
+    constants: {
+        REB_WIDTH: 32
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.ColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
@@ -52815,7 +52819,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.ColorPickerEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, c = this.constants;
         this.storeValue = {};
         this.colorShow = BI.createWidget({
             type: "bi.layout",
@@ -52840,7 +52844,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 30,
+            width: c.REB_WIDTH,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -52918,19 +52922,19 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                         width: 20
                     }, {
                         el: this.R,
-                        width: 30
+                        width: c.REB_WIDTH
                     }, {
                         el: RGB[1],
                         width: 20
                     }, {
                         el: this.G,
-                        width: 30
+                        width: c.REB_WIDTH
                     }, {
                         el: RGB[2],
                         width: 20
                     }, {
                         el: this.B,
-                        width: 30
+                        width: c.REB_WIDTH
                     }, {
                         el: this.transparent,
                         width: 16,
@@ -53044,6 +53048,10 @@ BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);/**
  */
 BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
 
+    constants: {
+        REB_WIDTH: 32
+    },
+
     _defaultConfig: function () {
         return BI.extend(BI.SimpleColorPickerEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-picker-editor",
@@ -53054,7 +53062,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
 
     _init: function () {
         BI.SimpleColorPickerEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, c = this.constants;
         this.colorShow = BI.createWidget({
             type: "bi.layout",
             cls: "color-picker-editor-display bi-card bi-border",
@@ -53078,7 +53086,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: 32,
+            width: c.REB_WIDTH,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -53106,19 +53114,19 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
                 width: 20
             }, {
                 el: this.R,
-                width: 30
+                width: c.REB_WIDTH
             }, {
                 el: RGB[1],
                 width: 20
             }, {
                 el: this.G,
-                width: 30
+                width: c.REB_WIDTH
             }, {
                 el: RGB[2],
                 width: 20
             }, {
                 el: this.B,
-                width: 30
+                width: c.REB_WIDTH
             }]
         });
     },
