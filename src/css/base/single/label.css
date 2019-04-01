@@ -1,7 +1,6 @@
 .bi-label {
-  text-overflow: ellipsis;
+  overflow: hidden;
   overflow-x: hidden;
   overflow-y: hidden;
-  white-space: nowrap;
   word-break: break-all;
 }
