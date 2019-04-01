@@ -45702,7 +45702,11 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     self_.clean(); // remove files from list
                     self_.hide(); // hide progress bars and enable input file
 
-                    // BI.Msg.toast("onload");
+                    if (200 > xhr.status || xhr.status > 399) {
+                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Error"), {level: "error"});
+                        self.fireEvent(BI.File.EVENT_ERROR);
+                        return;
+                    }
                     self.fireEvent(BI.File.EVENT_UPLOADED);
                     // enable again the submit button/element
                 }, 1000);
@@ -84807,7 +84811,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Word_Align_Right": "文字居右",
     "BI-Summary_Values": "汇总",
     "BI-Basic_Clear": "清除",
-    "BI-Upload_File_Size_Error": "文件大小不支",
+    "BI-Upload_File_Size_Error": "文件大小不支持",
     "BI-Up_Page": "向上翻页",
     "BI-Basic_Simple_Sunday": "日",
     "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
@@ -84819,6 +84823,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Continue_Select": "继续选择",
     "BI-Please_Input_Positive_Integer": "请输入正整数",
     "BI-Upload_File_Type_Error": "文件类型不支持",
+    "BI-Upload_File_Error": "文件上传失败",
     "BI-Basic_Friday": "星期五",
     "BI-Down_Page": "向下翻页",
     "BI-Basic_Monday": "星期一",

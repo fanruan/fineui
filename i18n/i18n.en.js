@@ -102,6 +102,7 @@ BI.i18n = {
     "BI-Continue_Select": "Continue Select",
     "BI-Please_Input_Positive_Integer": "Please Input Positive Integer",
     "BI-Upload_File_Type_Error": "",
+    "BI-Upload_File_Error": "",
     "BI-Basic_Friday": "Friday",
     "BI-Down_Page": "Down",
     "BI-Basic_Monday": "Monday",
