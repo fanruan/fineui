@@ -17,15 +17,17 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            textAlign: "left"
         });
     },
 
     render: function () {
         BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
         this.element.css({
             whiteSpace: "nowrap",
-            textAlign: "left"
+            textAlign: o.textAlign
         });
         this.populate(this.options.items);
     },
