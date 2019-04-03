@@ -30792,6 +30792,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                         type: "bi.vertical_adapt",
                         height: "100%",
                         items: o.items.right,
+                        textAlign: "right",
                         hgap: o.rhgap,
                         lgap: o.rlgap,
                         rgap: o.rrgap
@@ -30887,6 +30888,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 el: {
                     type: "bi.vertical_adapt",
                     height: "100%",
+                    textAlign: "right",
                     items: o.items,
                     lgap: o.lgap,
                     hgap: o.hgap,
@@ -31294,15 +31296,17 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0
+            bgap: 0,
+            textAlign: "left"
         });
     },
 
     render: function () {
         BI.InlineVerticalAdaptLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
         this.element.css({
             whiteSpace: "nowrap",
-            textAlign: "left"
+            textAlign: o.textAlign
         });
         this.populate(this.options.items);
     },

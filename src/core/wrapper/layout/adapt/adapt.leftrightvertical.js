@@ -47,6 +47,7 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                         type: "bi.vertical_adapt",
                         height: "100%",
                         items: o.items.right,
+                        textAlign: "right",
                         hgap: o.rhgap,
                         lgap: o.rlgap,
                         rgap: o.rrgap
@@ -142,6 +143,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 el: {
                     type: "bi.vertical_adapt",
                     height: "100%",
+                    textAlign: "right",
                     items: o.items,
                     lgap: o.lgap,
                     hgap: o.hgap,
