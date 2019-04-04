@@ -17,7 +17,7 @@ Demo.Title = BI.inherit(BI.Widget, {
                 cls: "layout-bg6",
                 height: 50,
                 disabled: true,
-                warningTitle: "移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示移上去有title错误提示",
+                warningTitle: "title错误提示",
                 text: "移上去有title错误提示",
                 textAlign: "center"
             }, {
@@ -27,7 +27,7 @@ Demo.Title = BI.inherit(BI.Widget, {
                 disabled: true,
                 tipType: "success",
                 title: "自定义title提示效果",
-                warningTitle: "080a241d-7372-4921-b171-b9ed2d4a9dd6",
+                warningTitle: "自定义title提示效果",
                 text: "自定义title提示效果",
                 textAlign: "center"
             }],
