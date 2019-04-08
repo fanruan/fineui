@@ -12,7 +12,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
     },
 
     _const: {
-        height: 20
+        height: 18
     },
 
     _init: function () {
