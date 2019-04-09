@@ -18,7 +18,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             level: "success", // success或warning
             stopEvent: false,
             stopPropagation: false,
-            height: 20
+            height: 18
         });
     },
     _init: function () {
@@ -51,7 +51,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        textHeight: 16
+                        textHeight: 18
                     };
                 })
             });
@@ -63,8 +63,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 whiteSpace: "normal",
                 text: o.text,
                 textHeight: 16,
-                hgap: this._const.hgap,
-                vgap: this._const.vgap
+                hgap: this._const.hgap
             });
         }
     },
