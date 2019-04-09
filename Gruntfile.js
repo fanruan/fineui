@@ -223,7 +223,6 @@ module.exports = function (grunt) {
         },
 
 
-
         less: {
             demo: {
                 expand: true,
@@ -332,7 +331,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/app.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,

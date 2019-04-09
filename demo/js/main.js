@@ -2,8 +2,23 @@ Demo.Main = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-main bi-background"
     },
+
+    _store: function () {
+        return BI.Stores.getStore("demo.store.main");
+    },
+
+    watch: {
+        activeCard: function (v) {
+            this.center.setValue(v);
+        }
+    },
+
+    beforeInit: function (cb) {
+        this.store.init(cb);
+    },
+
     render: function () {
-        var center;
+        var self = this;
         return {
             type: "bi.border",
             items: {
@@ -14,7 +29,7 @@ Demo.Main = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: Demo.North.EVENT_VALUE_CHANGE,
                             action: function (v) {
-                                center.setValue(v);
+                                self.store.handleTreeSelectChange(v);
                             }
                         }]
                     }
@@ -26,7 +41,7 @@ Demo.Main = BI.inherit(BI.Widget, {
                         listeners: [{
                             eventName: Demo.West.EVENT_VALUE_CHANGE,
                             action: function (v) {
-                                center.setValue(v);
+                                self.store.handleTreeSelectChange(v);
                             }
                         }]
                     }
@@ -35,7 +50,7 @@ Demo.Main = BI.inherit(BI.Widget, {
                     el: {
                         type: "demo.center",
                         ref: function (_ref) {
-                            center = _ref;
+                            self.center = _ref;
                         }
                     }
                 }
