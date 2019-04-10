@@ -2,9 +2,11 @@ Demo.West = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-west bi-border-right bi-card"
     },
+
     mounted: function () {
         this.searcher.setAdapter(this.tree);
     },
+
     render: function () {
         var self = this;
         return {
@@ -48,6 +50,7 @@ Demo.West = BI.inherit(BI.Widget, {
                         self.fireEvent(Demo.West.EVENT_VALUE_CHANGE, v);
                     }
                 }],
+                value: Demo.showIndex,
                 items: Demo.CONFIG,
                 ref: function (ref) {
                     self.tree = ref;
