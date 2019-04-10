@@ -3,23 +3,42 @@ Demo = {
 };
 $(function () {
     var ref;
-    var AppRouter = BI.inherit(BI.Router, {
+
+    BI.each(Demo.CONFIG, function (index, item) {
+        !item.id && (item.id = item.value || item.text);
+    });
+    var tree = BI.Tree.transformToTreeFormat(Demo.CONFIG);
+
+    var obj = {
         routes: {
             "": "index"
         },
         index: function () {
-            BI.createWidget({
-                type: "demo.main",
-                ref: function (_ref) {
-                    console.log(_ref);
-                    ref = _ref;
-                },
-                element: "#wrapper"
-            });
+            Demo.showIndex = "demo.face";
+        }
+    };
+
+    BI.Tree.traversal(tree, function (index, node) {
+        if (!node.children || BI.isEmptyArray(node.children)) {
+            obj.routes[node.text] = node.text;
+            obj[node.text] = function () {
+                Demo.showIndex = node.value;
+            };
         }
     });
+
+    var AppRouter = BI.inherit(BI.Router, obj);
     new AppRouter;
     BI.history.start();
+
+    BI.createWidget({
+        type: "demo.main",
+        ref: function (_ref) {
+            console.log(_ref);
+            ref = _ref;
+        },
+        element: "#wrapper"
+    });
 });Demo.Button = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-button"
@@ -2661,7 +2680,7 @@ BI.shortcut("demo.text_trigger", Demo.Func);Demo.Center = BI.inherit(BI.Widget, 
                 self.tab = this;
             },
             single: true,
-            showIndex: "demo.face",
+            showIndex: Demo.showIndex,
             cardCreator: function (v) {
                 return BI.createWidget({
                     type: v
@@ -8101,8 +8120,23 @@ BI.shortcut("demo.face", Demo.Face);(function () {
     props: {
         baseCls: "demo-main bi-background"
     },
+
+    _store: function () {
+        return BI.Stores.getStore("demo.store.main");
+    },
+
+    watch: {
+        activeCard: function (v) {
+            this.center.setValue(v);
+        }
+    },
+
+    beforeInit: function (cb) {
+        this.store.init(cb);
+    },
+
     render: function () {
-        var center;
+        var self = this;
         return {
             type: "bi.border",
             items: {
@@ -8113,7 +8147,7 @@ BI.shortcut("demo.face", Demo.Face);(function () {
                         listeners: [{
                             eventName: Demo.North.EVENT_VALUE_CHANGE,
                             action: function (v) {
-                                center.setValue(v);
+                                self.store.handleTreeSelectChange(v);
                             }
                         }]
                     }
@@ -8125,7 +8159,7 @@ BI.shortcut("demo.face", Demo.Face);(function () {
                         listeners: [{
                             eventName: Demo.West.EVENT_VALUE_CHANGE,
                             action: function (v) {
-                                center.setValue(v);
+                                self.store.handleTreeSelectChange(v);
                             }
                         }]
                     }
@@ -8134,7 +8168,7 @@ BI.shortcut("demo.face", Demo.Face);(function () {
                     el: {
                         type: "demo.center",
                         ref: function (_ref) {
-                            center = _ref;
+                            self.center = _ref;
                         }
                     }
                 }
@@ -8142,7 +8176,71 @@ BI.shortcut("demo.face", Demo.Face);(function () {
         };
     }
 });
-BI.shortcut("demo.main", Demo.Main);Demo.North = BI.inherit(BI.Widget, {
+BI.shortcut("demo.main", Demo.Main);!(function () {
+    var Store = BI.inherit(Fix.Model, {
+        _init: function () {
+
+        },
+
+        state: function () {
+            return {
+                activeCard: Demo.showIndex
+            };
+        },
+
+        computed: {},
+
+        watch: {},
+
+        actions: {
+            init: function (cb) {
+                var tree = BI.Tree.transformToTreeFormat(Demo.CONFIG);
+                var traversal = function (array, callback) {
+                    var t = [];
+                    BI.some(array, function (i, item) {
+                        var match = callback(i, item);
+                        if (match) {
+                            t.push(item.id);
+                        }
+                        var b = traversal(item.children, callback);
+                        if (BI.isNotEmptyArray(b)) {
+                            t = BI.concat([item.id], b);
+                        }
+                    });
+                    return t;
+                };
+                var paths = traversal(tree, function (index, node) {
+                    if (!node.children || BI.isEmptyArray(node.children)) {
+                        if (node.value === Demo.showIndex) {
+                            return true;
+                        }
+                    }
+                });
+                BI.each(Demo.CONFIG, function (index, item) {
+                    if (BI.contains(paths, item.id)) {
+                        item.open = true;
+                    }
+                });
+
+                cb();
+            },
+
+            handleTreeSelectChange: function (v) {
+                this.model.activeCard = v;
+                var matched = BI.some(Demo.CONFIG, function (index, item) {
+                    if (item.value === v) {
+                        BI.history.navigate(item.text, {trigger: true});
+                        return true;
+                    }
+                });
+                if (!matched) {
+                    BI.history.navigate("", {trigger: true});
+                }
+            }
+        }
+    });
+    BI.store("demo.store.main", Store);
+})();Demo.North = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-north"
     },
@@ -8271,9 +8369,11 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-west bi-border-right bi-card"
     },
+
     mounted: function () {
         this.searcher.setAdapter(this.tree);
     },
+
     render: function () {
         var self = this;
         return {
@@ -8317,6 +8417,7 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
                         self.fireEvent(Demo.West.EVENT_VALUE_CHANGE, v);
                     }
                 }],
+                value: Demo.showIndex,
                 items: Demo.CONFIG,
                 ref: function (ref) {
                     self.tree = ref;
