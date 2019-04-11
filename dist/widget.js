@@ -8631,32 +8631,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _adjust: function (callback) {
         var self = this, o = this.options;
-        if (!this._count) {
-            o.itemsCreator({
-                type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
-            }, function (res) {
-                self._count = res.count;
-                adjust();
-                callback();
-            });
-        } else {
-            adjust();
-            callback();
-
-        }
-
+        adjust();
+        callback();
         function adjust () {
-            if (self.storeValue.type === BI.Selection.All && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.Multi,
-                    value: []
-                };
-            } else if (self.storeValue.type === BI.Selection.Multi && self.storeValue.value.length >= self._count) {
-                self.storeValue = {
-                    type: BI.Selection.All,
-                    value: []
-                };
-            }
             if (self.wants2Quit === true) {
                 self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
@@ -8709,7 +8686,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
         this.combo.populate.apply(this.combo, arguments);
     }
 });

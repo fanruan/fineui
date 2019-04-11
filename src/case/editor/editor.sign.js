@@ -134,7 +134,6 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
-        this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -146,6 +145,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             } else {
                 this.text.setValue(this.editor.getValue());
                 this.text.element.removeClass("bi-water-mark");
+                this.text.doRedMark(o.keyword);
             }
         }, this));
     },
