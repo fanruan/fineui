@@ -4681,6 +4681,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                                 }
                             }]
                         },
+                        value: o.value,
                         maxHeight: 252
                     },
                     listeners: [{
@@ -4760,7 +4761,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     getValue: function () {
-        var value = this.popup.getValue();
+        var value = this.combo.getValue();
         return BI.isNull(value) ? [] : (BI.isArray(value) ? value : [value]);
     }
 });
