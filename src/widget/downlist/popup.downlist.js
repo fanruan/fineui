@@ -87,6 +87,9 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
             BI.each(it, function (i, item) {
                 if (BI.isNotEmptyArray(item.children) && !BI.isEmpty(item.el)) {
                     item.type = "bi.combo_group";
+                    // popup未初始化返回的是options中的value, 在经过buttontree的getValue concat之后，无法区分值来自options
+                    // 还是item自身, 这边控制defaultInit为true来避免这个问题
+                    item.isDefaultInit = true;
                     item.cls = "down-list-group";
                     item.trigger = "hover";
                     item.isNeedAdjustWidth = false;
