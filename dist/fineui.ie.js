@@ -61962,7 +61962,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
     _checkValues: function (values) {
         var value = [];
-        BI.each(this.options.items, function (idx, itemGroup) {
+        BI.each(this.items, function (idx, itemGroup) {
             BI.each(itemGroup, function (id, item) {
                 if(BI.isNotNull(item.children)) {
                     var childValues = BI.map(item.children, "value");
