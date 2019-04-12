@@ -7,7 +7,7 @@
 
     BI.extend(BI.DOM, {
         ready: function (fn) {
-            $(fn);
+            BI.Widget._renderEngine.createElement(document).ready(fn);
         }
     });
 
