@@ -19686,6 +19686,13 @@ BI.prepares.push(function () {
  */
 !(function () {
     BI.DOM = {};
+
+    BI.extend(BI.DOM, {
+        ready: function (fn) {
+            BI.Widget._renderEngine.createElement(document).ready(fn);
+        }
+    });
+
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
