@@ -31215,7 +31215,11 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.width(width);
         }
-        td.element.css({"max-width": o.columnSize[i] + "px"});
+        // 对于表现为td的元素设置最大宽度，有几点需要注意
+        // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
+        // 2、不能给多个td设置最大宽度，这样只会平分宽度
+        // 3、多百分比宽度就算了
+        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -33315,7 +33319,11 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
             td = this.getWidgetByName(this._getChildName(i));
             td.element.attr("width", width);
         }
-        td.element.css({"max-width": o.columnSize[i] + "px"});
+        // 对于表现为td的元素设置最大宽度，有几点需要注意
+        // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
+        // 2、不能给多个td设置最大宽度，这样只会平分宽度
+        // 3、多百分比宽度就算了
+        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width + "px"});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -82553,7 +82561,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-all-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true
@@ -82675,7 +82683,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
     props: {
         baseCls: "bi-all-value-multi-text-value-combo",
         width: 200,
-        height: 30,
+        height: 24,
         items: []
     },
 
@@ -83422,7 +83430,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn
         });
@@ -83614,7 +83622,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true

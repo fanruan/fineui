@@ -12,7 +12,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true
