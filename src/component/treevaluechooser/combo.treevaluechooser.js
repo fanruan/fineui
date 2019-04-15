@@ -11,7 +11,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn
         });

@@ -22788,7 +22788,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         return BI.extend(BI.AllValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-all-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true
@@ -22910,7 +22910,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
     props: {
         baseCls: "bi-all-value-multi-text-value-combo",
         width: 200,
-        height: 30,
+        height: 24,
         items: []
     },
 
@@ -23657,7 +23657,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn
         });
@@ -23849,7 +23849,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         return BI.extend(BI.ValueChooserCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-value-chooser-combo",
             width: 200,
-            height: 30,
+            height: 24,
             items: null,
             itemsCreator: BI.emptyFn,
             cache: true

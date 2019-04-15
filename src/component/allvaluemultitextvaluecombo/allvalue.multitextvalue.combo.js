@@ -3,7 +3,7 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-all-value-multi-text-value-combo",
         width: 200,
-        height: 30,
+        height: 24,
         items: []
     },
 
