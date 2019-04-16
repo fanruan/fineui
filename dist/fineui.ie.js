@@ -18350,7 +18350,7 @@ _.extend(BI.Func, {
         name = name || "";
         while (true) {
             if (BI.every(array, function (i, item) {
-                    return item.name !== name;
+                    return BI.isKey(item) ? item !== name : item.name !== name;
                 })) {
                 break;
             }
