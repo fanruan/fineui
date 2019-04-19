@@ -54,8 +54,10 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
-                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(keyCode)) {
+                // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
+                // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
+                var originalEvent = e.originalEvent;
+                if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
                     keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
