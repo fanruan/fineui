@@ -539,7 +539,7 @@
             var i, direct;
             var leftRight = [], topBottom = [];
             var isNeedAdaptHeight = false, tbFirst = false, lrFirst = false;
-            var left, top, pos;
+            var left, top, pos, firstDir = directions[0];
             for (i = 0; i < directions.length; i++) {
                 direct = directions[i];
                 switch (direct) {
@@ -649,39 +649,45 @@
                 }
             }
 
+            // 此处为四个方向放不下时挑空间最大的方向去放置, 也就是说我设置了弹出方向为"bottom,left",
+            // 最后发现实际弹出方向可能是"top,left"，那么此时外界获取popup的方向应该是"top,left"
             switch (directions[0]) {
                 case "left":
                 case "right":
                     if (BI.DOM.isRightSpaceLarger(combo)) {
                         left = BI.DOM.getRightAdaptPosition(combo, popup, extraWidth).left;
+                        firstDir = "right";
                     } else {
                         left = BI.DOM.getLeftAdaptPosition(combo, popup, extraWidth).left;
+                        firstDir = "left";
                     }
                     if (topBottom[0] === "bottom") {
                         pos = BI.DOM.getTopAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                         pos.left = left;
-                        pos.dir = directions[0] + ",bottom";
+                        pos.dir = firstDir + ",bottom";
                         return pos;
                     }
                     pos = BI.DOM.getBottomAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                     pos.left = left;
-                    pos.dir = directions[0] + ",top";
+                    pos.dir = firstDir + ",top";
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
                         pos = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        firstDir = "bottom";
                     } else {
                         pos = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        firstDir = "top";
                     }
                     if (leftRight[0] === "right") {
                         left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
                         pos.left = left;
-                        pos.dir = directions[0] + ",right";
+                        pos.dir = firstDir + ",right";
                         return pos;
                     }
                     left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
                     pos.left = left;
-                    pos.dir = directions[0] + ",left";
+                    pos.dir = firstDir + ",left";
                     return pos;
             }
         },
