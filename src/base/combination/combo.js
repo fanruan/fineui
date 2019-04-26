@@ -469,7 +469,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
