@@ -28,6 +28,9 @@
     }
   }
   &.disabled {
+    & .checkbox-content {
+      background-color: @color-bi-background-dark-gray;
+    }
     & .checkbox-content:after {
       opacity: 0;
     }
@@ -35,7 +38,6 @@
       & .checkbox-content {
         // 深浅主题下border-color是一样的
         border-color: @color-bi-border-line;
-        background-color: @color-bi-background-dark-gray;
         &:after {
           opacity: 1;
         }

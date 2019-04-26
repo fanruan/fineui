@@ -20221,7 +20221,7 @@ BI.prepares.push(function () {
             var i, direct;
             var leftRight = [], topBottom = [];
             var isNeedAdaptHeight = false, tbFirst = false, lrFirst = false;
-            var left, top, pos;
+            var left, top, pos, firstDir = directions[0];
             for (i = 0; i < directions.length; i++) {
                 direct = directions[i];
                 switch (direct) {
@@ -20331,39 +20331,45 @@ BI.prepares.push(function () {
                 }
             }
 
+            // 此处为四个方向放不下时挑空间最大的方向去放置, 也就是说我设置了弹出方向为"bottom,left",
+            // 最后发现实际弹出方向可能是"top,left"，那么此时外界获取popup的方向应该是"top,left"
             switch (directions[0]) {
                 case "left":
                 case "right":
                     if (BI.DOM.isRightSpaceLarger(combo)) {
                         left = BI.DOM.getRightAdaptPosition(combo, popup, extraWidth).left;
+                        firstDir = "right";
                     } else {
                         left = BI.DOM.getLeftAdaptPosition(combo, popup, extraWidth).left;
+                        firstDir = "left";
                     }
                     if (topBottom[0] === "bottom") {
                         pos = BI.DOM.getTopAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                         pos.left = left;
-                        pos.dir = directions[0] + ",bottom";
+                        pos.dir = firstDir + ",bottom";
                         return pos;
                     }
                     pos = BI.DOM.getBottomAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                     pos.left = left;
-                    pos.dir = directions[0] + ",top";
+                    pos.dir = firstDir + ",top";
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
                         pos = BI.DOM.getBottomAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        firstDir = "bottom";
                     } else {
                         pos = BI.DOM.getTopAdaptPosition(combo, popup, extraHeight, needAdaptHeight);
+                        firstDir = "top";
                     }
                     if (leftRight[0] === "right") {
                         left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
                         pos.left = left;
-                        pos.dir = directions[0] + ",right";
+                        pos.dir = firstDir + ",right";
                         return pos;
                     }
                     left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
                     pos.left = left;
-                    pos.dir = directions[0] + ",left";
+                    pos.dir = firstDir + ",left";
                     return pos;
             }
         },
@@ -41851,7 +41857,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
             this.view.element.css({"max-height": resetHeight + "px"});
     },
@@ -45769,8 +45775,10 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
-                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(keyCode)) {
+                // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
+                // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
+                var originalEvent = e.originalEvent;
+                if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
                     keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;

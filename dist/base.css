@@ -1416,12 +1416,14 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-color: #ffffff;
   opacity: 1;
 }
+.bi-checkbox.disabled .checkbox-content {
+  background-color: #d0d4da;
+}
 .bi-checkbox.disabled .checkbox-content:after {
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-content {
   border-color: #e8eaed;
-  background-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
