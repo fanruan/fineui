@@ -51,5 +51,10 @@
     & .checkbox-content {
       border-color: @color-bi-border-dark-line-theme-dark;
     }
+    &.active, &:active {
+      & .checkbox-content {
+        border-color: @color-bi-border-highlight;
+      }
+    }
   }
 }

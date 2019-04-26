@@ -45,3 +45,7 @@
 .bi-theme-dark .bi-checkbox .checkbox-content {
   border-color: #9EA6B2;
 }
+.bi-theme-dark .bi-checkbox.active .checkbox-content,
+.bi-theme-dark .bi-checkbox:active .checkbox-content {
+  border-color: #3685f2;
+}
