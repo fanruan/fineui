@@ -27057,7 +27057,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
@@ -29779,7 +29780,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
             this.view.element.css({"max-height": resetHeight + "px"});
     },
@@ -33072,8 +33073,10 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
-                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(keyCode)) {
+                // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
+                // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
+                var originalEvent = e.originalEvent;
+                if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
                     keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
@@ -38304,7 +38307,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 

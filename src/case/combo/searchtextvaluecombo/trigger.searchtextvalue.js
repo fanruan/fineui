@@ -77,7 +77,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 
