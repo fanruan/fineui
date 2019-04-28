@@ -37,7 +37,7 @@
     &.active {
       & .checkbox-content {
         // 深浅主题下border-color是一样的
-        border-color: @color-bi-border-line;
+        border-color: @color-bi-border-disabled;
         &:after {
           opacity: 1;
         }
@@ -50,6 +50,21 @@
   .bi-checkbox {
     & .checkbox-content {
       border-color: @color-bi-border-dark-line-theme-dark;
+    }
+    &.active, &:active {
+      & .checkbox-content {
+        border-color: @color-bi-border-highlight;
+      }
+    }
+    &.disabled {
+      & .checkbox-content {
+        background-color: @color-bi-background-dark-gray-theme-dark;
+      }
+      &.active {
+        & .checkbox-content {
+          border-color: @color-bi-border-disabled-theme-dark;
+        }
+      }
     }
   }
 }
