@@ -39539,7 +39539,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
@@ -55297,7 +55298,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 
@@ -60047,7 +60048,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 
