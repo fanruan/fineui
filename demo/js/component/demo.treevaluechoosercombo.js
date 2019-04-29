@@ -5,7 +5,7 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     render: function () {
 
         var widget = BI.createWidget({
-            type: "bi.tree_value_chooser_combo",
+            type: "bi.tree_value_chooser_insert_combo",
             width: 300,
             // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {

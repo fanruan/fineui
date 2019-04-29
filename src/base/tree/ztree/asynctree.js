@@ -18,7 +18,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this;
         var setting = {
             async: {
-                enable: false,
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
                 otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
@@ -108,6 +108,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    // 用来更新this.options.paras.selectedValues, 和ztree内部无关
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
@@ -153,7 +154,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
-
+            // 展开节点是没有分页的
             if (hasNext === true) {
                 BI.delay(function () {
                     times++;
@@ -170,6 +171,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
+    // a,b 两棵树
+    // a->b b->a 做两次校验, 构造一个校验后的map
+    // e.g. 以a为基准，如果b没有此节点，则在map中添加。 如b有,且是全选的, 则在map中构造全选（为什么不添加a的值呢？ 因为这次是取并集）, 如果b中也有和a一样的存值，就递归
     _join: function (valueA, valueB) {
         var self = this;
         var map = {};

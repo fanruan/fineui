@@ -1423,13 +1423,23 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-content {
-  border-color: #e8eaed;
+  border-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
 }
 .bi-theme-dark .bi-checkbox .checkbox-content {
   border-color: #9EA6B2;
+}
+.bi-theme-dark .bi-checkbox.active .checkbox-content,
+.bi-theme-dark .bi-checkbox:active .checkbox-content {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-checkbox.disabled .checkbox-content {
+  background-color: #606479;
+}
+.bi-theme-dark .bi-checkbox.disabled.active .checkbox-content {
+  border-color: #606479;
 }
 .bi-file {
   opacity: 0;

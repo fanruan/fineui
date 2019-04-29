@@ -1727,8 +1727,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             async: {
                 enable: true,
                 url: getUrl,
-                autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                autoParam: ["id", "name"],  // 节点展开异步请求自动提交id和name
+                otherParam: BI.cjkEncodeDO(paras) // 静态参数
             },
             check: {
                 enable: true
@@ -1736,16 +1736,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
             data: {
                 key: {
                     title: "title",
-                    name: "text"
+                    name: "text"    // 节点的name属性替换成text
                 },
                 simpleData: {
-                    enable: true
+                    enable: true    // 可以穿id,pid属性的对象数组
                 }
             },
             view: {
                 showIcon: false,
                 expandSpeed: "",
-                nameIsHTML: true,
+                nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false
             },
             callback: {
@@ -1768,6 +1768,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if(status.half === true && status.checked === true) {
                 checked = false;
             }
+            // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
             self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
@@ -1790,7 +1791,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning");
+            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -1828,9 +1829,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                zTree.updateNode(treeNode);
+                zTree.updateNode(treeNode); // 刷新一下当前节点，如果treeNode.xxx被改了的话
             }
-            zTree.reAsyncChildNodes(treeNode, reloadType, true);
+            zTree.reAsyncChildNodes(treeNode, reloadType, true); // 强制加载子节点，reloadType === refresh为先清空再加载，否则为追加到现有子节点之后
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -1908,15 +1909,18 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         var parent = node.parentValues || self._getParentValues(node);
         var path = parent.concat(this._getNodeValue(node));
+        // 当前节点是全选的，因为上面的判断已经排除了不选和半选
         if (BI.isNotEmptyArray(node.children) || checkState.half === false) {
             this._buildTree(map, path);
             return;
         }
+        // 剩下的就是半选不展开的节点，因为不知道里面是什么情况，所以借助selectedValues(这个是完整的选中情况)
         var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
 
+    // 获取的是以values最后一个节点为根的子树
     _getTree: function (map, values) {
         var cur = map;
         BI.any(values, function (i, value) {
@@ -1928,6 +1932,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return cur;
     },
 
+    // 以values为path一路向里补充map, 并在末尾节点添加key: value节点
     _addTreeNode: function (map, values, key, value) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -1955,7 +1960,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
-        track(rootNoots);
+        track(rootNoots); // 可以看到这个方法没有递归调用，所以在_getHalfSelectedValues中需要关心全选的节点
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -2203,7 +2208,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this;
         var setting = {
             async: {
-                enable: false,
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
                 otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
@@ -2293,6 +2298,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    // 用来更新this.options.paras.selectedValues, 和ztree内部无关
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
@@ -2338,7 +2344,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
-
+            // 展开节点是没有分页的
             if (hasNext === true) {
                 BI.delay(function () {
                     times++;
@@ -2355,6 +2361,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
+    // a,b 两棵树
+    // a->b b->a 做两次校验, 构造一个校验后的map
+    // e.g. 以a为基准，如果b没有此节点，则在map中添加。 如b有,且是全选的, 则在map中构造全选（为什么不添加a的值呢？ 因为这次是取并集）, 如果b中也有和a一样的存值，就递归
     _join: function (valueA, valueB) {
         var self = this;
         var map = {};
@@ -2449,6 +2458,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             // 如果选中的值中不存在该值不处理
+            // 因为反正是不选中，没必要管
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -2456,6 +2466,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (t == null) {
                     return;
                 }
+                // 选中中国-江苏, 搜索南京，取消勾选
                 if (BI.isEmpty(t)) {
                     break;
                 }
@@ -2519,9 +2530,8 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
             o.paras.lastSearchValue = d.lastSearchValue;
-            if (nodes.length > 0) {
-                callback(self._dealWidthNodes(nodes));
-            }
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
             self.setTipVisible(nodes.length <= 0);
             self.loaded();
             if (!hasNext) {
@@ -3427,7 +3437,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
@@ -6149,7 +6160,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
             this.view.element.css({"max-height": resetHeight + "px"});
     },
@@ -10067,8 +10078,10 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
-                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(keyCode)) {
+                // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
+                // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
+                var originalEvent = e.originalEvent;
+                if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
                     keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;

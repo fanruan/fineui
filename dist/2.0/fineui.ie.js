@@ -37190,8 +37190,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             async: {
                 enable: true,
                 url: getUrl,
-                autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                autoParam: ["id", "name"],  // 节点展开异步请求自动提交id和name
+                otherParam: BI.cjkEncodeDO(paras) // 静态参数
             },
             check: {
                 enable: true
@@ -37199,16 +37199,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
             data: {
                 key: {
                     title: "title",
-                    name: "text"
+                    name: "text"    // 节点的name属性替换成text
                 },
                 simpleData: {
-                    enable: true
+                    enable: true    // 可以穿id,pid属性的对象数组
                 }
             },
             view: {
                 showIcon: false,
                 expandSpeed: "",
-                nameIsHTML: true,
+                nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false
             },
             callback: {
@@ -37231,6 +37231,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if(status.half === true && status.checked === true) {
                 checked = false;
             }
+            // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
             self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
@@ -37253,7 +37254,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning");
+            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -37291,9 +37292,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                zTree.updateNode(treeNode);
+                zTree.updateNode(treeNode); // 刷新一下当前节点，如果treeNode.xxx被改了的话
             }
-            zTree.reAsyncChildNodes(treeNode, reloadType, true);
+            zTree.reAsyncChildNodes(treeNode, reloadType, true); // 强制加载子节点，reloadType === refresh为先清空再加载，否则为追加到现有子节点之后
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -37371,15 +37372,18 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         var parent = node.parentValues || self._getParentValues(node);
         var path = parent.concat(this._getNodeValue(node));
+        // 当前节点是全选的，因为上面的判断已经排除了不选和半选
         if (BI.isNotEmptyArray(node.children) || checkState.half === false) {
             this._buildTree(map, path);
             return;
         }
+        // 剩下的就是半选不展开的节点，因为不知道里面是什么情况，所以借助selectedValues(这个是完整的选中情况)
         var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
 
+    // 获取的是以values最后一个节点为根的子树
     _getTree: function (map, values) {
         var cur = map;
         BI.any(values, function (i, value) {
@@ -37391,6 +37395,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return cur;
     },
 
+    // 以values为path一路向里补充map, 并在末尾节点添加key: value节点
     _addTreeNode: function (map, values, key, value) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -37418,7 +37423,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
-        track(rootNoots);
+        track(rootNoots); // 可以看到这个方法没有递归调用，所以在_getHalfSelectedValues中需要关心全选的节点
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -37666,7 +37671,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this;
         var setting = {
             async: {
-                enable: false,
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
                 otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
@@ -37756,6 +37761,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    // 用来更新this.options.paras.selectedValues, 和ztree内部无关
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
@@ -37801,7 +37807,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
-
+            // 展开节点是没有分页的
             if (hasNext === true) {
                 BI.delay(function () {
                     times++;
@@ -37818,6 +37824,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
+    // a,b 两棵树
+    // a->b b->a 做两次校验, 构造一个校验后的map
+    // e.g. 以a为基准，如果b没有此节点，则在map中添加。 如b有,且是全选的, 则在map中构造全选（为什么不添加a的值呢？ 因为这次是取并集）, 如果b中也有和a一样的存值，就递归
     _join: function (valueA, valueB) {
         var self = this;
         var map = {};
@@ -37912,6 +37921,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             // 如果选中的值中不存在该值不处理
+            // 因为反正是不选中，没必要管
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -37919,6 +37929,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (t == null) {
                     return;
                 }
+                // 选中中国-江苏, 搜索南京，取消勾选
                 if (BI.isEmpty(t)) {
                     break;
                 }
@@ -37982,9 +37993,8 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
             o.paras.lastSearchValue = d.lastSearchValue;
-            if (nodes.length > 0) {
-                callback(self._dealWidthNodes(nodes));
-            }
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
             self.setTipVisible(nodes.length <= 0);
             self.loaded();
             if (!hasNext) {
@@ -38890,7 +38900,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
@@ -72488,6 +72499,291 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 BI.MultiTreeCombo.EVENT_CONFIRM = "MultiTreeCombo.EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);/**
+ * 可以往当前选中节点下添加新值的下拉树
+ * @class BI.MultiTreeInsertCombo
+ * @extends BI.Single
+ */
+
+BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
+
+    constants: {
+        offset: {
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 25
+        }
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MultiTreeInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-multi-tree-insert-combo",
+            itemsCreator: BI.emptyFn,
+            valueFormatter: BI.emptyFn,
+            height: 24
+        });
+    },
+
+    _init: function () {
+        BI.MultiTreeInsertCombo.superclass._init.apply(this, arguments);
+
+        var self = this, o = this.options;
+
+        var isInit = false;
+        var want2showCounter = false;
+
+        this.storeValue = {value: o.value || {}};
+
+        this.trigger = BI.createWidget({
+            type: "bi.multi_select_trigger",
+            height: o.height,
+            valueFormatter: o.valueFormatter,
+            // adapter: this.popup,
+            masker: {
+                offset: this.constants.offset
+            },
+            searcher: {
+                type: "bi.multi_tree_searcher",
+                itemsCreator: o.itemsCreator,
+                popup: {
+                    type: "bi.multi_tree_search_insert_pane",
+                    listeners: [{
+                        eventName: BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM,
+                        action: function () {
+                            self.storeValue.value[self.trigger.getSearcher().getKeyword()] = {};
+                            self._assertShowValue();
+                            // setValue以更新paras.value, 之后从search popup中拿到的就能有add的值了
+                            self.combo.setValue(self.storeValue);
+                            self.trigger.stopEditing();
+                        }
+                    }]
+                }
+            },
+            switcher: {
+                el: {
+                    type: "bi.multi_tree_check_selected_button"
+                },
+                popup: {
+                    type: "bi.multi_tree_check_pane",
+                    itemsCreator: o.itemsCreator
+                }
+            },
+            value: {value: o.value || {}}
+
+        });
+
+        this.combo = BI.createWidget({
+            type: "bi.combo",
+            toggle: false,
+            container: o.container,
+            el: this.trigger,
+            adjustLength: 1,
+            popup: {
+                type: "bi.multi_tree_popup_view",
+                ref: function () {
+                    self.popup = this;
+                    self.trigger.setAdapter(this);
+                },
+                listeners: [{
+                    eventName: BI.MultiTreePopup.EVENT_AFTERINIT,
+                    action: function () {
+                        self.trigger.getCounter().adjustView();
+                        isInit = true;
+                        if (want2showCounter === true) {
+                            showCounter();
+                        }
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CHANGE,
+                    action: function () {
+                        change = true;
+                        var val = {
+                            type: BI.Selection.Multi,
+                            value: this.hasChecked() ? this.getValue() : {}
+                        };
+                        self.trigger.getSearcher().setState(val);
+                        self.trigger.getCounter().setButtonChecked(val);
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
+                    action: function () {
+                        self.combo.hideView();
+                    }
+                }, {
+                    eventName: BI.MultiTreePopup.EVENT_CLICK_CLEAR,
+                    action: function () {
+                        clear = true;
+                        self.setValue();
+                        self._defaultState();
+                    }
+                }],
+                itemsCreator: o.itemsCreator,
+                onLoaded: function () {
+                    BI.nextTick(function () {
+                        self.trigger.getCounter().adjustView();
+                        self.trigger.getSearcher().adjustView();
+                    });
+                }
+            },
+            value: {value: o.value || {}},
+            hideChecker: function (e) {
+                return triggerBtn.element.find(e.target).length === 0;
+            }
+        });
+
+        var change = false;
+        var clear = false;          // 标识当前是否点击了清空
+
+        var isSearching = function () {
+            return self.trigger.getSearcher().isSearching();
+        };
+
+        var isPopupView = function () {
+            return self.combo.isViewVisible();
+        };
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
+            self.storeValue = {value: self.combo.getValue()};
+            this.setValue(self.storeValue);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
+            self.storeValue = {value: this.getValue()};
+            self.combo.setValue(self.storeValue);
+            BI.nextTick(function () {
+                if (isPopupView()) {
+                    self.combo.populate();
+                }
+            });
+        });
+
+        function showCounter () {
+            if (isSearching()) {
+                self.storeValue = {value: self.trigger.getValue()};
+            } else if (isPopupView()) {
+                self.storeValue = {value: self.combo.getValue()};
+            }
+            self.trigger.setValue(self.storeValue);
+        }
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
+            if (want2showCounter === false) {
+                want2showCounter = true;
+            }
+            if (isInit === true) {
+                want2showCounter = null;
+                showCounter();
+            }
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_TRIGGER_CLICK, function () {
+            self.combo.toggle();
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function () {
+            var checked = this.getSearcher().hasChecked();
+            var val = {
+                type: BI.Selection.Multi,
+                value: checked ? {1: 1} : {}
+            };
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getCounter().setButtonChecked(val);
+        });
+
+        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            if (isSearching()) {
+                return;
+            }
+            if (change === true) {
+                self.storeValue = {value: self.combo.getValue()};
+                change = false;
+            }
+            self.combo.setValue(self.storeValue);
+            self.populate();
+
+        });
+        this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
+            if (isSearching()) {
+                self.trigger.stopEditing();
+                self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CONFIRM);
+            } else {
+                if (isPopupView()) {
+                    self.trigger.stopEditing();
+                    self.storeValue = {value: self.combo.getValue()};
+                    if (clear === true) {
+                        self.storeValue = {value: {}};
+                    }
+                    self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CONFIRM);
+                }
+            }
+            clear = false;
+            change = false;
+        });
+
+        var triggerBtn = BI.createWidget({
+            type: "bi.trigger_icon_button",
+            width: o.height,
+            height: o.height,
+            cls: "multi-select-trigger-icon-button"
+        });
+        triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
+            self.trigger.getCounter().hideView();
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            } else {
+                self.combo.showView();
+            }
+        });
+        BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: this.combo,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: triggerBtn,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }]
+        });
+    },
+
+    _assertShowValue: function () {
+        this.trigger.getSearcher().setState(this.storeValue);
+        this.trigger.getCounter().setButtonChecked(this.storeValue);
+    },
+
+    _defaultState: function () {
+        this.trigger.stopEditing();
+        this.combo.hideView();
+    },
+
+    setValue: function (v) {
+        this.storeValue.value = v || {};
+        this.combo.setValue({
+            value: v || {}
+        });
+    },
+
+    getValue: function () {
+        return this.storeValue.value;
+    },
+
+    populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    }
+});
+
+BI.MultiTreeInsertCombo.EVENT_CONFIRM = "MultiTreeInsertCombo.EVENT_CONFIRM";
+
+BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);/**
  * 带加载的多选下拉面板
  * @class BI.MultiTreePopup
  * @extends BI.Pane
@@ -72724,6 +73020,111 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
 BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);/**
+ *
+ * 在搜索框中输入文本弹出的面板
+ * @class BI.MultiTreeSearchInsertPane
+ * @extends BI.Pane
+ */
+
+BI.MultiTreeSearchInsertPane = BI.inherit(BI.Widget, {
+
+    constants: {
+        height: 24,
+    },
+
+    props: {
+        baseCls: "bi-multi-tree-search-insert-pane bi-card",
+        itemsCreator: BI.emptyFn,
+        keywordGetter: BI.emptyFn
+    },
+
+    render: function () {
+        var self = this, opts = this.options;
+
+        return {
+            type: "bi.vertical",
+            items: [{
+                type: "bi.text_button",
+                invisible: true,
+                ref: function (_ref) {
+                    self.addTip = _ref;
+                },
+                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                height: this.constants.height,
+                cls: "bi-high-light",
+                hgap: 5,
+                handler: function () {
+                    self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM, opts.keywordGetter());
+                }
+            }, {
+                type: "bi.part_tree",
+                tipText: BI.i18nText("BI-No_Select"),
+                itemsCreator: function (op, callback) {
+                    op.keyword = opts.keywordGetter();
+                    opts.itemsCreator(op, function (res) {
+                        callback(res);
+                        self.setKeyword(opts.keywordGetter(), res.items);
+                    });
+                },
+                ref: function (_ref) {
+                    self.partTree = _ref;
+                },
+                value: opts.value,
+                listeners: [{
+                    eventName: BI.Controller.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                    }
+                }, {
+                    eventName: BI.TreeView.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_CHANGE);
+                    }
+                }]
+            }]
+        };
+    },
+
+    setKeyword: function (keyword, nodes) {
+        var isAddTipVisible = BI.isEmptyArray(nodes);
+        this.addTip.setVisible(isAddTipVisible);
+        this.partTree.setVisible(!isAddTipVisible);
+        isAddTipVisible && this.addTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    hasChecked: function () {
+        return this.partTree.hasChecked();
+    },
+
+    setValue: function (v) {
+        this.setSelectedValue(v.value);
+    },
+
+    setSelectedValue: function (v) {
+        v || (v = {});
+        this.partTree.setSelectedValue(v);
+    },
+
+    getValue: function () {
+        return this.partTree.getValue();
+    },
+
+    empty: function () {
+        this.partTree.empty();
+    },
+
+    populate: function (op) {
+        this.partTree.stroke.apply(this.partTree, arguments);
+    }
+});
+
+BI.MultiTreeSearchInsertPane.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.MultiTreeSearchInsertPane.EVENT_CLICK_CONFIRM = "EVENT_CLICK_CONFIRM";
+BI.MultiTreeSearchInsertPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
+BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+
+BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);/**
  * searcher
  * Created by guy on 15/11/3.
  * @class BI.MultiTreeSearcher
@@ -82600,10 +83001,19 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             BI.each(selected, function (k) {
                 var node = self._getTreeNode(parentValues, k);
-                var newParents = BI.clone(parentValues);
-                newParents.push(node.value);
-                createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
-                doCheck(newParents, node, selected[k]);
+                // 找不到就是新增值
+                if(BI.isNull(node)) {
+                    createOneJson({
+                        id: BI.UUID(),
+                        text: k,
+                        value: k
+                    }, BI.UUID(), 0);
+                } else {
+                    var newParents = BI.clone(parentValues);
+                    newParents.push(node.value);
+                    createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
+                    doCheck(newParents, node, selected[k]);
+                }
             });
         }
 
@@ -82863,7 +83273,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var result = [];
         var keyword = op.keyword || "";
         var selectedValues = op.selectedValues;
-        var lastSearchValue = op.lastSearchValue || "";
+        var lastSearchValue = op.lastSearchValue || ""; // 一次请求100个，但是搜索是拿全部的，lastSearchValue是上一次遍历到的节点索引
         var output = search();
         BI.nextTick(function () {
             callback({
@@ -82899,6 +83309,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 if (output.length > self._const.perPage) {
                     break;
                 }
+            }
+
+            // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
+            if (op.times === 1) {
+                var nodes = self._getAddedValueNode([], selectedValues);
+                result = BI.concat(BI.filter(nodes, function (idx, node) {
+                    var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+                    return find.find.length > 0 || find.match.length > 0;
+                }), result);
             }
             return output;
         }
@@ -83029,6 +83448,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 halfCheck: state[1]
             });
         }
+        // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
+        if (parentValues.length === 0 && times === 1) {
+            result = BI.concat(self._getAddedValueNode(parentValues, selectedValues), result);
+        }
         BI.nextTick(function () {
             callback({
                 items: result,
@@ -83093,6 +83516,22 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             return [check, halfCheck];
         }
+    },
+
+    _getAddedValueNode: function (parentValues, selectedValues) {
+        var nodes = this._getChildren(parentValues);
+        return BI.map(BI.difference(BI.keys(selectedValues), BI.map(nodes, "value")), function (idx, v) {
+            return {
+                id: BI.UUID(),
+                pId: nodes.length > 0 ? nodes[0].pId : BI.UUID(),
+                value: v,
+                text: v,
+                times: 1,
+                isParent: false,
+                checked: true,
+                halfCheck: false
+            };
+        });
     },
 
     _getNode: function (selectedValues, parentValues) {
@@ -83181,6 +83620,59 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         return this._getChildren(parentValues).length;
     }
 });/**
+ * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
+ *
+ * Created by GUY on 2015/10/29.
+ * @class BI.TreeValueChooserInsertCombo
+ * @extends BI.Widget
+ */
+BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.TreeValueChooserInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-tree-value-chooser-insert-combo",
+            width: 200,
+            height: 24,
+            items: null,
+            itemsCreator: BI.emptyFn
+        });
+    },
+
+    _init: function () {
+        BI.TreeValueChooserInsertCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this._initData(o.items);
+        }
+        this.combo = BI.createWidget({
+            type: "bi.multi_tree_insert_combo",
+            element: this,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height
+        });
+
+        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
+            self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+        });
+    },
+
+    setValue: function (v) {
+        this.combo.setValue(v);
+    },
+
+    getValue: function () {
+        return this.combo.getValue();
+    },
+
+    populate: function (items) {
+        this._initData(items);
+        this.combo.populate.apply(this.combo, arguments);
+    }
+});
+BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "TreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.

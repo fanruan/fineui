@@ -45,6 +45,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
         } else {
             // 如果选中的值中不存在该值不处理
+            // 因为反正是不选中，没必要管
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -52,6 +53,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (t == null) {
                     return;
                 }
+                // 选中中国-江苏, 搜索南京，取消勾选
                 if (BI.isEmpty(t)) {
                     break;
                 }
@@ -115,9 +117,8 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
             o.paras.lastSearchValue = d.lastSearchValue;
-            if (nodes.length > 0) {
-                callback(self._dealWidthNodes(nodes));
-            }
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
             self.setTipVisible(nodes.length <= 0);
             self.loaded();
             if (!hasNext) {
