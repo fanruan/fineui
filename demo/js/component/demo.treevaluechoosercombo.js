@@ -5,18 +5,28 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     render: function () {
 
         var widget = BI.createWidget({
-            type: "bi.tree_value_chooser_combo",
+            type: "bi.tree_value_chooser_insert_combo",
             width: 300,
             // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {
                 callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
             }
         });
+        var widget1 = BI.createWidget({
+            type: "bi.list_tree_value_chooser_insert_combo",
+            itemsCreator: function (op, callback) {
+                callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
+            }
+        });
         return {
             type: "bi.vertical",
-            hgap: 200,
-            vgap: 10,
-            items: [widget]
+            items: [{
+                type: "bi.vertical_adapt",
+                hgap: 200,
+                vgap: 10,
+                items: [widget, widget1]
+            }]
+
         };
     }
 });
