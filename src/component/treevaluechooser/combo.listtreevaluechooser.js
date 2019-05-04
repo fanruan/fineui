@@ -32,7 +32,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             height: o.height
         });
 
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
+        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
         });
     },

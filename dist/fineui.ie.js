@@ -73441,7 +73441,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 BI.MultiTreeInsertCombo.EVENT_CONFIRM = "MultiTreeInsertCombo.EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);/**
- * 可以往当前选中节点下添加新值的下拉树
+ * 选中节点不影响父子节点状态的下拉树
  * @class BI.MultiTreeListCombo
  * @extends BI.Single
  */
@@ -84778,20 +84778,20 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         if(!BI.has(result, node.id)) {
                             createOneJson(node, node.parent && node.parent.id);
                         }
-                        result[node.id].isLeaf = id === path.length - 1;
+                        result[node.id].isLeaf !== true && (result[node.id].isLeaf = id === path.length - 1);
                     }
                 });
             });
         }
 
-        function createOneJson(node, pId, leaf) {
+        function createOneJson(node, pId) {
             result[node.id] = {
                 id: node.id,
                 pId: pId,
                 text: node.text,
                 value: node.value,
                 open: true,
-                isLeaf: leaf
+                isLeaf: node.isLeaf
             };
         }
     },
@@ -85037,7 +85037,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             height: o.height
         });
 
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
+        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
         });
     },
@@ -85090,7 +85090,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             height: o.height
         });
 
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
+        this.combo.on(BI.MultiTreeInsertCombo.EVENT_CONFIRM, function () {
             self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
         });
     },

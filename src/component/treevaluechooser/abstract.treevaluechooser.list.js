@@ -33,20 +33,20 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                         if(!BI.has(result, node.id)) {
                             createOneJson(node, node.parent && node.parent.id);
                         }
-                        result[node.id].isLeaf = id === path.length - 1;
+                        result[node.id].isLeaf !== true && (result[node.id].isLeaf = id === path.length - 1);
                     }
                 });
             });
         }
 
-        function createOneJson(node, pId, leaf) {
+        function createOneJson(node, pId) {
             result[node.id] = {
                 id: node.id,
                 pId: pId,
                 text: node.text,
                 value: node.value,
                 open: true,
-                isLeaf: leaf
+                isLeaf: node.isLeaf
             };
         }
     },

@@ -2713,6 +2713,19 @@ BI.shortcut("demo.center", Demo.Center);Demo.TreeValueChooser = BI.inherit(BI.Wi
                 callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
             }
         });
+        widget.setValue({
+            "中国": {
+                "安徽省": {
+                    "安庆市": {}
+                }
+            },
+            "newValue": {}
+        });
+        widget1.setValue([
+            ["中国", "安徽省"],
+            ["中国", "安徽省", "安庆市"],
+            ["newValue"]
+        ]);
         return {
             type: "bi.vertical",
             items: [{

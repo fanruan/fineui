@@ -1,5 +1,5 @@
 /**
- * 可以往当前选中节点下添加新值的下拉树
+ * 选中节点不影响父子节点状态的下拉树
  * @class BI.MultiTreeListCombo
  * @extends BI.Single
  */
