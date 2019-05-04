@@ -42,7 +42,14 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator({
+                type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
+                selectedValues: self.options.paras.selectedValues
+            }, function (res) {
+                self.options.paras.selectedValues = res;
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            });
         } else {
             // 如果选中的值中不存在该值不处理
             // 因为反正是不选中，没必要管
@@ -144,12 +151,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     getValue: function () {
         var o = this.options;
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        o.itemsCreator({
-            type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selectedValues: result
-        }, function (res) {
-            result = res;
-        });
         return result;
     },
 

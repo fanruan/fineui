@@ -2707,11 +2707,21 @@ BI.shortcut("demo.center", Demo.Center);Demo.TreeValueChooser = BI.inherit(BI.Wi
                 callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
             }
         });
+        var widget1 = BI.createWidget({
+            type: "bi.list_tree_value_chooser_insert_combo",
+            itemsCreator: function (op, callback) {
+                callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
+            }
+        });
         return {
             type: "bi.vertical",
-            hgap: 200,
-            vgap: 10,
-            items: [widget]
+            items: [{
+                type: "bi.vertical_adapt",
+                hgap: 200,
+                vgap: 10,
+                items: [widget, widget1]
+            }]
+
         };
     }
 });

@@ -72,8 +72,8 @@
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
@@ -118,8 +118,8 @@
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
@@ -1613,6 +1613,21 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   text-decoration: none;
 }
 .bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.bi-list-display-tree .ztree li a,
+.bi-list-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-list-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-list-display-tree .ztree li a.curSelectedNode {
   padding-top: 1px;
   border: none;
   background-color: inherit;

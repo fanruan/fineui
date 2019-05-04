@@ -14,52 +14,65 @@ BI.MultiTreeSearchInsertPane = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-multi-tree-search-insert-pane bi-card",
         itemsCreator: BI.emptyFn,
-        keywordGetter: BI.emptyFn
+        keywordGetter: BI.emptyFn,
+        el: {
+            type: "bi.part_tree"
+        }
     },
 
     render: function () {
         var self = this, opts = this.options;
 
         return {
-            type: "bi.vertical",
+            type: "bi.absolute",
             items: [{
-                type: "bi.text_button",
-                invisible: true,
-                ref: function (_ref) {
-                    self.addTip = _ref;
+                el: {
+                    type: "bi.text_button",
+                    invisible: true,
+                    ref: function (_ref) {
+                        self.addTip = _ref;
+                    },
+                    text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                    height: this.constants.height,
+                    cls: "bi-high-light",
+                    handler: function () {
+                        self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM, opts.keywordGetter());
+                    }
                 },
-                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
-                height: this.constants.height,
-                cls: "bi-high-light",
-                hgap: 5,
-                handler: function () {
-                    self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM, opts.keywordGetter());
-                }
+                top: 5,
+                left: 0,
+                right: 0
             }, {
-                type: "bi.part_tree",
-                tipText: BI.i18nText("BI-No_Select"),
-                itemsCreator: function (op, callback) {
-                    op.keyword = opts.keywordGetter();
-                    opts.itemsCreator(op, function (res) {
-                        callback(res);
-                        self.setKeyword(opts.keywordGetter(), res.items);
-                    });
-                },
-                ref: function (_ref) {
-                    self.partTree = _ref;
-                },
-                value: opts.value,
-                listeners: [{
-                    eventName: BI.Controller.EVENT_CHANGE,
-                    action: function () {
-                        self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-                    }
-                }, {
-                    eventName: BI.TreeView.EVENT_CHANGE,
-                    action: function () {
-                        self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_CHANGE);
-                    }
-                }]
+                el: BI.extend({
+                    type: "bi.part_tree",
+                    tipText: BI.i18nText("BI-No_Select"),
+                    itemsCreator: function (op, callback) {
+                        op.keyword = opts.keywordGetter();
+                        opts.itemsCreator(op, function (res) {
+                            callback(res);
+                            self.setKeyword(opts.keywordGetter(), res.items);
+                        });
+                    },
+                    ref: function (_ref) {
+                        self.partTree = _ref;
+                    },
+                    value: opts.value,
+                    listeners: [{
+                        eventName: BI.Controller.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                        }
+                    }, {
+                        eventName: BI.TreeView.EVENT_CHANGE,
+                        action: function () {
+                            self.fireEvent(BI.MultiTreeSearchInsertPane.EVENT_CHANGE);
+                        }
+                    }]
+                }, opts.el),
+                left: 0,
+                top: 0,
+                bottom: 0,
+                right: 0
             }]
         };
     },

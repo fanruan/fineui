@@ -19,3 +19,18 @@
   opacity: 1;
   filter: alpha(opacity=100);
 }
+
+.bi-list-display-tree .ztree li a,
+.bi-list-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-list-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-list-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}

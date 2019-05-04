@@ -425,6 +425,8 @@
 		makeChkClass: function(setting, node) {
 			var checkedKey = setting.data.key.checked,
 			c = consts.checkbox, r = consts.radio,
+			checkboxType = setting.check.chkboxType;
+			var notEffectByOtherNode = (checkboxType.Y === "" && checkboxType.N === "");
 			fullStyle = "";
 			if (node.chkDisabled === true) {
 				fullStyle = c.DISABLED;
@@ -433,7 +435,7 @@
 			} else if (setting.check.chkStyle == r.STYLE) {
 				fullStyle = (node.check_Child_State < 1)? c.FULL:c.PART;
 			} else {
-				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) ? c.FULL:c.PART) : ((node.check_Child_State < 1)? c.FULL:c.PART);
+				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) || notEffectByOtherNode ? c.FULL:c.PART) : ((node.check_Child_State < 1 || notEffectByOtherNode)? c.FULL:c.PART);
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;
