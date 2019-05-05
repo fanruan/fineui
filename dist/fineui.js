@@ -36033,7 +36033,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initMixins(this, mixins);
-            this._init();
+            this.init();
             initState(this, state);
             initComputed(this, computed);
             initWatch(this, watch$$1);
@@ -36045,6 +36045,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         Model.prototype._init = function _init() {};
+
+        Model.prototype.init = function init() {
+            this._init();
+        };
 
         Model.prototype.destroy = function destroy() {
             for (var _key3 in this._computedWatchers) {
@@ -59923,7 +59927,7 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
         }
 
         function getFont(treeId, node) {
-            return node.font ? node.font : {color: "#999999"};
+            return node.isLeaf ? {} : {color: "#999999"};
         }
 
         return setting;
@@ -59938,9 +59942,6 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
                 if (node.count > 0) {
                     node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
                 }
-            }
-            if(node.isLeaf === true) {
-                node.font = {color: "#3d4d66"};
             }
         });
         return nodes;

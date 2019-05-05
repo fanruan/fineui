@@ -1357,7 +1357,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initMixins(this, mixins);
-            this._init();
+            this.init();
             initState(this, state);
             initComputed(this, computed);
             initWatch(this, watch$$1);
@@ -1369,6 +1369,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         Model.prototype._init = function _init() {};
+
+        Model.prototype.init = function init() {
+            this._init();
+        };
 
         Model.prototype.destroy = function destroy() {
             for (var _key3 in this._computedWatchers) {
