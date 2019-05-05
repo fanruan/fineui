@@ -1727,8 +1727,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             async: {
                 enable: true,
                 url: getUrl,
-                autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                autoParam: ["id", "name"],  // 节点展开异步请求自动提交id和name
+                otherParam: BI.cjkEncodeDO(paras) // 静态参数
             },
             check: {
                 enable: true
@@ -1736,16 +1736,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
             data: {
                 key: {
                     title: "title",
-                    name: "text"
+                    name: "text"    // 节点的name属性替换成text
                 },
                 simpleData: {
-                    enable: true
+                    enable: true    // 可以穿id,pid属性的对象数组
                 }
             },
             view: {
                 showIcon: false,
                 expandSpeed: "",
-                nameIsHTML: true,
+                nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false
             },
             callback: {
@@ -1768,6 +1768,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if(status.half === true && status.checked === true) {
                 checked = false;
             }
+            // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
             self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
@@ -1790,7 +1791,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning");
+            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -1828,9 +1829,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                zTree.updateNode(treeNode);
+                zTree.updateNode(treeNode); // 刷新一下当前节点，如果treeNode.xxx被改了的话
             }
-            zTree.reAsyncChildNodes(treeNode, reloadType, true);
+            zTree.reAsyncChildNodes(treeNode, reloadType, true); // 强制加载子节点，reloadType === refresh为先清空再加载，否则为追加到现有子节点之后
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -1908,15 +1909,18 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         var parent = node.parentValues || self._getParentValues(node);
         var path = parent.concat(this._getNodeValue(node));
+        // 当前节点是全选的，因为上面的判断已经排除了不选和半选
         if (BI.isNotEmptyArray(node.children) || checkState.half === false) {
             this._buildTree(map, path);
             return;
         }
+        // 剩下的就是半选不展开的节点，因为不知道里面是什么情况，所以借助selectedValues(这个是完整的选中情况)
         var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
 
+    // 获取的是以values最后一个节点为根的子树
     _getTree: function (map, values) {
         var cur = map;
         BI.any(values, function (i, value) {
@@ -1928,6 +1932,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return cur;
     },
 
+    // 以values为path一路向里补充map, 并在末尾节点添加key: value节点
     _addTreeNode: function (map, values, key, value) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -1955,7 +1960,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
-        track(rootNoots);
+        track(rootNoots); // 可以看到这个方法没有递归调用，所以在_getHalfSelectedValues中需要关心全选的节点
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -2203,7 +2208,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this;
         var setting = {
             async: {
-                enable: false,
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
                 otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
@@ -2293,6 +2298,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    // 用来更新this.options.paras.selectedValues, 和ztree内部无关
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
@@ -2338,7 +2344,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
-
+            // 展开节点是没有分页的
             if (hasNext === true) {
                 BI.delay(function () {
                     times++;
@@ -2355,6 +2361,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
+    // a,b 两棵树
+    // a->b b->a 做两次校验, 构造一个校验后的map
+    // e.g. 以a为基准，如果b没有此节点，则在map中添加。 如b有,且是全选的, 则在map中构造全选（为什么不添加a的值呢？ 因为这次是取并集）, 如果b中也有和a一样的存值，就递归
     _join: function (valueA, valueB) {
         var self = this;
         var map = {};
@@ -2446,9 +2455,17 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator({
+                type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
+                selectedValues: self.options.paras.selectedValues
+            }, function (res) {
+                self.options.paras.selectedValues = res;
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            });
         } else {
             // 如果选中的值中不存在该值不处理
+            // 因为反正是不选中，没必要管
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -2456,6 +2473,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (t == null) {
                     return;
                 }
+                // 选中中国-江苏, 搜索南京，取消勾选
                 if (BI.isEmpty(t)) {
                     break;
                 }
@@ -2519,9 +2537,8 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
             o.paras.lastSearchValue = d.lastSearchValue;
-            if (nodes.length > 0) {
-                callback(self._dealWidthNodes(nodes));
-            }
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
             self.setTipVisible(nodes.length <= 0);
             self.loaded();
             if (!hasNext) {
@@ -2547,12 +2564,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     getValue: function () {
         var o = this.options;
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        o.itemsCreator({
-            type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selectedValues: result
-        }, function (res) {
-            result = res;
-        });
         return result;
     },
 
@@ -2567,7 +2578,333 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     }
 });
 
-BI.shortcut("bi.part_tree", BI.PartTree);BI.prepares.push(function () {
+BI.shortcut("bi.part_tree", BI.PartTree);/**
+ * author: windy
+ * 继承自treeView, 此树的父子节点的勾选状态互不影响, 此树不会有半选节点
+ * 返回value格式为[["A"], ["A", "a"]]表示勾选了A且勾选了a
+ * @class BI.ListTreeView
+ * @extends BI.TreeView
+ */
+BI.ListTreeView = BI.inherit(BI.TreeView, {
+
+    _constants: {
+        SPLIT: "<|>"
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {});
+    },
+    _init: function () {
+        BI.ListTreeView.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.storeValue = o.value || {};
+    },
+
+    // 配置属性
+    _configSetting: function () {
+        var paras = this.options.paras;
+        var self = this;
+        var setting = {
+            async: {
+                enable: false
+            },
+            check: {
+                enable: true,
+                chkboxType: {Y: "", N: ""}
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true,
+                dblClickExpand: false
+            },
+            callback: {
+                onCheck: onCheck,
+                onClick: onClick
+            }
+        };
+
+        function onClick (event, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var checked = treeNode.checked;
+            self._checkValue(treeNode, !checked);
+            zTree.checkNode(treeNode, !checked, true, true);
+        }
+
+        function onCheck (event, treeId, treeNode) {
+            self._selectTreeNode(treeId, treeNode);
+        }
+
+        return setting;
+    },
+
+    _selectTreeNode: function (treeId, treeNode) {
+        this._checkValue(treeNode, treeNode.checked);
+        BI.ListTreeView.superclass._selectTreeNode.apply(this, arguments);
+    },
+
+    _transArrayToMap: function (treeArrays) {
+        var self = this;
+        var map = {};
+        BI.each(treeArrays, function (idx, array) {
+            var key = array.join(self._constants.SPLIT);
+            map[key] = true;
+        });
+        return map;
+    },
+
+    _transMapToArray: function (treeMap) {
+        var self = this;
+        var array = [];
+        BI.each(treeMap, function (key) {
+            var item = key.split(self._constants.SPLIT);
+            array.push(item);
+        });
+        return array;
+    },
+
+    _checkValue: function (treeNode, checked) {
+        var key = BI.concat(this._getParentValues(treeNode), this._getNodeValue(treeNode)).join(this._constants.SPLIT);
+        if(checked) {
+            this.storeValue[key] = true;
+        } else {
+            delete this.storeValue[key];
+        }
+    },
+
+    setSelectedValue: function (value) {
+        this.options.paras.selectedValues = value || [];
+        this.storeValue = this._transArrayToMap(value);
+    },
+
+    getValue: function () {
+        return this._transMapToArray(this.storeValue);
+    }
+});
+
+BI.shortcut("bi.list_tree_view", BI.ListTreeView);/**
+ * author: windy
+ * 继承自treeView, 此树的父子节点的勾选状态互不影响, 此树不会有半选节点
+ * 返回value格式为["A", ["A", "a"]]表示勾选了A且勾选了a
+ * @class BI.ListListAsyncTree
+ * @extends BI.TreeView
+ */
+BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ListAsyncTree.superclass._defaultConfig.apply(this, arguments), {});
+    },
+    _init: function () {
+        BI.ListAsyncTree.superclass._init.apply(this, arguments);
+    },
+
+    // 配置属性
+    _configSetting: function () {
+        var paras = this.options.paras;
+        var self = this;
+        var setting = {
+            async: {
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
+                otherParam: BI.cjkEncodeDO(paras)
+            },
+            check: {
+                enable: true,
+                chkboxType: {Y: "", N: ""}
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true,
+                dblClickExpand: false
+            },
+            callback: {
+                onCheck: onCheck,
+                beforeExpand: beforeExpand,
+                beforeCheck: beforeCheck,
+                onClick: onClick
+            }
+        };
+
+        function beforeCheck (treeId, treeNode) {
+            treeNode.half = false;
+        }
+
+        function onClick (event, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var checked = treeNode.checked;
+            self._checkValue(treeNode, !checked);
+            zTree.checkNode(treeNode, !checked, true, true);
+        }
+
+        function beforeExpand (treeId, treeNode) {
+            self._beforeExpandNode(treeId, treeNode);
+        }
+
+        function onCheck (event, treeId, treeNode) {
+            self._selectTreeNode(treeId, treeNode);
+        }
+
+        return setting;
+    },
+
+    // 展开节点
+    _beforeExpandNode: function (treeId, treeNode) {
+        var self = this, o = this.options;
+        var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
+        var op = BI.extend({}, o.paras, {
+            id: treeNode.id,
+            times: 1,
+            parentValues: parentValues.concat(this._getNodeValue(treeNode))
+        });
+        var complete = function (d) {
+            var nodes = d.items || [];
+            if (nodes.length > 0) {
+                callback(self._dealWidthNodes(nodes), !!d.hasNext);
+            }
+        };
+        var times = 1;
+
+        function callback (nodes, hasNext) {
+            self.nodes.addNodes(treeNode, nodes);
+            // 展开节点是没有分页的
+            if (hasNext === true) {
+                BI.delay(function () {
+                    times++;
+                    op.times = times;
+                    o.itemsCreator(op, complete);
+                }, 100);
+            }
+        }
+
+        if (!treeNode.children) {
+            setTimeout(function () {
+                o.itemsCreator(op, complete);
+            }, 17);
+        }
+    },
+
+    hasChecked: function () {
+        return !BI.isEmpty(this.options.paras.selectedValues) || BI.ListAsyncTree.superclass.hasChecked.apply(this, arguments);
+    },
+
+    // 生成树方法
+    stroke: function (config) {
+        delete this.options.keyword;
+        BI.extend(this.options.paras, config);
+        var setting = this._configSetting();
+        this._initTree(setting);
+    }
+});
+
+BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);/**
+ * guy
+ * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
+ * @class BI.ListPartTree
+ * @extends BI.AsyncTree
+ */
+BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ListPartTree.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.ListPartTree.superclass._init.apply(this, arguments);
+    },
+
+    _loadMore: function () {
+        var self = this, o = this.options;
+        var op = BI.extend({}, o.paras, {
+            type: BI.TreeView.REQ_TYPE_INIT_DATA,
+            times: ++this.times
+        });
+        this.tip.setLoading();
+        o.itemsCreator(op, function (d) {
+            var hasNext = !!d.hasNext, nodes = d.items || [];
+            o.paras.lastSearchValue = d.lastSearchValue;
+            if (self._stop === true) {
+                return;
+            }
+            if (!hasNext) {
+                self.tip.setEnd();
+            } else {
+                self.tip.setLoaded();
+            }
+            if (nodes.length > 0) {
+                self.nodes.addNodes(null, self._dealWidthNodes(nodes));
+            }
+        });
+    },
+
+    _initTree: function (setting, keyword) {
+        var self = this, o = this.options;
+        this.times = 1;
+        var tree = this.tree;
+        tree.empty();
+        self.tip.setVisible(false);
+        this.loading();
+        var op = BI.extend({}, o.paras, {
+            type: BI.TreeView.REQ_TYPE_INIT_DATA,
+            times: this.times
+        });
+        var complete = function (d) {
+            if (self._stop === true || keyword != o.paras.keyword) {
+                return;
+            }
+            var hasNext = !!d.hasNext, nodes = d.items || [];
+            o.paras.lastSearchValue = d.lastSearchValue;
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
+            self.setTipVisible(nodes.length <= 0);
+            self.loaded();
+            if (!hasNext) {
+                self.tip.invisible();
+            } else {
+                self.tip.setLoaded();
+            }
+            self.fireEvent(BI.Events.AFTERINIT);
+        };
+
+        function callback (nodes) {
+            if (self._stop === true) {
+                return;
+            }
+            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+        }
+
+        BI.delay(function () {
+            o.itemsCreator(op, complete);
+        }, 100);
+    },
+
+    // 生成树方法
+    stroke: function (config) {
+        var o = this.options;
+        delete o.paras.keyword;
+        BI.extend(o.paras, config);
+        delete o.paras.lastSearchValue;
+        var setting = this._configSetting();
+        this._initTree(setting, o.paras.keyword);
+    }
+});
+
+BI.shortcut("bi.list_part_tree", BI.ListPartTree);BI.prepares.push(function () {
     BI.Resizers = new BI.ResizeController();
     BI.Layers = new BI.LayerController();
     BI.Maskers = new BI.MaskersController();
@@ -14070,6 +14407,8 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		makeChkClass: function(setting, node) {
 			var checkedKey = setting.data.key.checked,
 			c = consts.checkbox, r = consts.radio,
+			checkboxType = setting.check.chkboxType;
+			var notEffectByOtherNode = (checkboxType.Y === "" && checkboxType.N === "");
 			fullStyle = "";
 			if (node.chkDisabled === true) {
 				fullStyle = c.DISABLED;
@@ -14078,7 +14417,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 			} else if (setting.check.chkStyle == r.STYLE) {
 				fullStyle = (node.check_Child_State < 1)? c.FULL:c.PART;
 			} else {
-				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) ? c.FULL:c.PART) : ((node.check_Child_State < 1)? c.FULL:c.PART);
+				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) || notEffectByOtherNode ? c.FULL:c.PART) : ((node.check_Child_State < 1 || notEffectByOtherNode)? c.FULL:c.PART);
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;

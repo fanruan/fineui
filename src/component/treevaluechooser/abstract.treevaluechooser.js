@@ -92,10 +92,19 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             BI.each(selected, function (k) {
                 var node = self._getTreeNode(parentValues, k);
-                var newParents = BI.clone(parentValues);
-                newParents.push(node.value);
-                createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
-                doCheck(newParents, node, selected[k]);
+                // 找不到就是新增值
+                if(BI.isNull(node)) {
+                    createOneJson({
+                        id: BI.UUID(),
+                        text: k,
+                        value: k
+                    }, BI.UUID(), 0);
+                } else {
+                    var newParents = BI.clone(parentValues);
+                    newParents.push(node.value);
+                    createOneJson(node, node.parent && node.parent.id, getCount(selected[k], newParents));
+                    doCheck(newParents, node, selected[k]);
+                }
             });
         }
 
@@ -355,7 +364,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var result = [];
         var keyword = op.keyword || "";
         var selectedValues = op.selectedValues;
-        var lastSearchValue = op.lastSearchValue || "";
+        var lastSearchValue = op.lastSearchValue || ""; // 一次请求100个，但是搜索是拿全部的，lastSearchValue是上一次遍历到的节点索引
         var output = search();
         BI.nextTick(function () {
             callback({
@@ -391,6 +400,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 if (output.length > self._const.perPage) {
                     break;
                 }
+            }
+
+            // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
+            if (op.times === 1) {
+                var nodes = self._getAddedValueNode([], selectedValues);
+                result = BI.concat(BI.filter(nodes, function (idx, node) {
+                    var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+                    return find.find.length > 0 || find.match.length > 0;
+                }), result);
             }
             return output;
         }
@@ -521,6 +539,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 halfCheck: state[1]
             });
         }
+        // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
+        if (parentValues.length === 0 && times === 1) {
+            result = BI.concat(self._getAddedValueNode(parentValues, selectedValues), result);
+        }
         BI.nextTick(function () {
             callback({
                 items: result,
@@ -585,6 +607,22 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             return [check, halfCheck];
         }
+    },
+
+    _getAddedValueNode: function (parentValues, selectedValues) {
+        var nodes = this._getChildren(parentValues);
+        return BI.map(BI.difference(BI.keys(selectedValues), BI.map(nodes, "value")), function (idx, v) {
+            return {
+                id: BI.UUID(),
+                pId: nodes.length > 0 ? nodes[0].pId : BI.UUID(),
+                value: v,
+                text: v,
+                times: 1,
+                isParent: false,
+                checked: true,
+                halfCheck: false
+            };
+        });
     },
 
     _getNode: function (selectedValues, parentValues) {

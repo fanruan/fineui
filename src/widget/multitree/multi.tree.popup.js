@@ -11,24 +11,27 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
             maxWidth: "auto",
             minWidth: 100,
             maxHeight: 400,
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            el: {
+                type: "bi.async_tree"
+            }
         });
     },
 
     _init: function () {
         BI.MultiTreePopup.superclass._init.apply(this, arguments);
 
-        var self = this, opts = this.options;
+        var self = this, opts = this.options, v = opts.value;
 
         this.selectedValues = {};
 
-        this.tree = BI.createWidget({
+        this.tree = BI.createWidget(opts.el, {
             type: "bi.async_tree",
             height: 400,
             cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
             onLoaded: opts.onLoaded,
-            value: opts.value || {}
+            value: v.value || {}
         });
 
         this.popupView = BI.createWidget({

@@ -1,0 +1,17 @@
+@import "../../index";
+
+.bi-list-display-tree{
+
+  & .ztree li a, & .ztree li span{
+    cursor: default !important;
+  }
+  & .ztree li a:hover{
+    text-decoration: none;
+  }
+  & .ztree li a.curSelectedNode{
+    padding-top: 1px;
+    border: none;
+    background-color: inherit;
+    .opacity(1);
+  }
+}

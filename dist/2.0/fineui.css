@@ -2228,8 +2228,8 @@ textarea {
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
@@ -2274,8 +2274,8 @@ textarea {
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
@@ -3579,13 +3579,23 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-content {
-  border-color: #e8eaed;
+  border-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
 }
 .bi-theme-dark .bi-checkbox .checkbox-content {
   border-color: #9EA6B2;
+}
+.bi-theme-dark .bi-checkbox.active .checkbox-content,
+.bi-theme-dark .bi-checkbox:active .checkbox-content {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-checkbox.disabled .checkbox-content {
+  background-color: #606479;
+}
+.bi-theme-dark .bi-checkbox.disabled.active .checkbox-content {
+  border-color: #606479;
 }
 .bi-file {
   opacity: 0;
@@ -3759,6 +3769,21 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   text-decoration: none;
 }
 .bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.bi-list-display-tree .ztree li a,
+.bi-list-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-list-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-list-display-tree .ztree li a.curSelectedNode {
   padding-top: 1px;
   border: none;
   background-color: inherit;
@@ -4548,8 +4573,8 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
   _background: none;
 }
@@ -4594,8 +4619,8 @@ textarea::-webkit-scrollbar-thumb:hover {
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
+  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
   _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
