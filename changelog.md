@@ -4,6 +4,7 @@
 - 新增`bi.multi_tree_insert_combo`控件, 此下拉树可以插入不存在的新值
 - 新增`bi.list_tree_value_chooser_insert_combo`部件, 封装`bi.multi_tree_list_combo`数据处理逻辑
 - 新增`bi.tree_value_chooser_insert_combo`部件, 封装`bi.multi_tree_insert_combo`数据处理逻辑
+- 增加BI.DOM.ready方法
 
 2.0(2019-03)
 - 新增`bi.time_combo`时分秒控件和`bi.time_periods`时间选择区间，时间区间无有效值校验
@@ -34,6 +35,3 @@
 
 2.0(2018-08)
 - 增加BI.mount方法，支持同构
-
-2.0(2019-04)
-- 增加BI.DOM.ready方法
