@@ -8,7 +8,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TreeView.superclass._defaultConfig.apply(this, arguments), {
             _baseCls: "bi-tree",
-            paras: {},
+            paras: {
+                selectedValues: {}
+            },
             itemsCreator: BI.emptyFn
         });
     },
