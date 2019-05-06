@@ -332,8 +332,9 @@
   }
 }
 
+@defaultFontName: 'fineui';
 // 添加字体资源
-.addFontRes(@name, @fontUrl) {
+.addFontRes(@name: @defaultFontName, @fontUrl: @fontUrl) {
   @font-face {
     font-family: "@{name}";
     src: url('@{fontUrl}iconfont.eot');
@@ -342,7 +343,7 @@
 }
 
 // 激活字体
-.activateFont(@fonts) {
+.activateFont(@fonts: false) {
   @baseProperty: {
     font-style: normal;
     -webkit-font-smoothing: antialiased;
@@ -350,8 +351,13 @@
     -moz-osx-font-smoothing: grayscale;
   };
 
-  .b-font {
-    font-family: @fonts;
+  .b-font when (@fonts = false){
+    font-family: @defaultFontName;
+    @baseProperty();
+  }
+
+  .b-font when not (@fonts = false){
+    font-family: @fonts, @defaultFontName;
     @baseProperty();
   }
 }
