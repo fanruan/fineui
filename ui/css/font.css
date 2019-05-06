@@ -1,5 +1,5 @@
 @font-face {
-  font-family: 'bi';
+  font-family: "bi";
   src: url('resources?path=/com/fr/web/ui/font/iconfont.eot');
   src: url('resources?path=/com/fr/web/ui/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('resources?path=/com/fr/web/ui/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('resources?path=/com/fr/web/ui/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('resources?path=/com/fr/web/ui/font/iconfont.svg#svgFontName') format('svg');
   /*  iOS 4.1- */
