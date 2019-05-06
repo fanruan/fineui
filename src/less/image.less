@@ -350,11 +350,7 @@
     -moz-osx-font-smoothing: grayscale;
   };
 
-  .b-font when not ((length(@fonts) = 1) and (extract(@fonts, 1) = "bi")) {
-    font-family: @fonts, "bi";
-    @baseProperty();
-  }
-  .b-font when ((length(@fonts) = 1) and (extract(@fonts, 1) = "bi")) {
+  .b-font {
     font-family: @fonts;
     @baseProperty();
   }
