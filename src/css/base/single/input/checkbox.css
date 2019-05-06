@@ -21,6 +21,10 @@
   transform: rotate(45deg) scale(1) translate(-50%, -50%);
   content: '';
 }
+.bi-checkbox .checkbox-content.hover,
+.bi-checkbox .checkbox-content:hover {
+  border-color: #3685f2;
+}
 .bi-checkbox.active .checkbox-content,
 .bi-checkbox:active .checkbox-content {
   border-color: #3685f2;
@@ -31,27 +35,33 @@
   opacity: 1;
 }
 .bi-checkbox.disabled .checkbox-content {
-  background-color: #d0d4da;
+  background-color: #F2F4F7;
+  border-color: #d0d4da;
 }
 .bi-checkbox.disabled .checkbox-content:after {
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-content {
-  border-color: #d0d4da;
+  background-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
 }
 .bi-theme-dark .bi-checkbox .checkbox-content {
-  border-color: #9EA6B2;
+  border-color: #878D9F;
+}
+.bi-theme-dark .bi-checkbox .checkbox-content.hover,
+.bi-theme-dark .bi-checkbox .checkbox-content:hover {
+  border-color: #3685f2;
 }
 .bi-theme-dark .bi-checkbox.active .checkbox-content,
 .bi-theme-dark .bi-checkbox:active .checkbox-content {
   border-color: #3685f2;
 }
 .bi-theme-dark .bi-checkbox.disabled .checkbox-content {
-  background-color: #606479;
+  background-color: #2F3149;
 }
 .bi-theme-dark .bi-checkbox.disabled.active .checkbox-content {
+  background-color: #606479;
   border-color: #606479;
 }

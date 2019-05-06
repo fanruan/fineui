@@ -946,7 +946,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             context && defineContext(this, context);
 
             initMixins(this, mixins);
-            this._init();
+            this.init();
             initState(this, state);
             initComputed(this, computed);
             digest(this);
@@ -957,6 +957,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         Model.prototype._init = function _init() {};
+
+        Model.prototype.init = function init() {
+            this._init();
+        };
 
         Model.prototype.destroy = function destroy() {
             this.alive = false;

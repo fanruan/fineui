@@ -17,6 +17,9 @@
       .transform(rotate(45deg) scale(1) translate(-50%, -50%));
       content: '';
     }
+    &.hover, &:hover {
+      border-color: @color-bi-border-highlight;
+    }
   }
   &.active, &:active {
     & .checkbox-content{
@@ -29,15 +32,15 @@
   }
   &.disabled {
     & .checkbox-content {
-      background-color: @color-bi-background-dark-gray;
+      background-color: @color-bi-background-disabled;
+      border-color: @color-bi-border-disabled;
     }
     & .checkbox-content:after {
       opacity: 0;
     }
     &.active {
       & .checkbox-content {
-        // 深浅主题下border-color是一样的
-        border-color: @color-bi-border-disabled;
+        background-color: @color-bi-background-dark-gray;
         &:after {
           opacity: 1;
         }
@@ -50,6 +53,9 @@
   .bi-checkbox {
     & .checkbox-content {
       border-color: @color-bi-border-dark-line-theme-dark;
+      &.hover, &:hover {
+        border-color: @color-bi-border-highlight;
+      }
     }
     &.active, &:active {
       & .checkbox-content {
@@ -58,10 +64,11 @@
     }
     &.disabled {
       & .checkbox-content {
-        background-color: @color-bi-background-dark-gray-theme-dark;
+        background-color: @color-bi-background-disabled-theme-dark;
       }
       &.active {
         & .checkbox-content {
+          background-color: @color-bi-background-dark-gray-theme-dark;
           border-color: @color-bi-border-disabled-theme-dark;
         }
       }
