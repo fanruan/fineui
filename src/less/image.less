@@ -332,6 +332,36 @@
   }
 }
 
+@defaultFontName: 'fineui';
+// 添加字体资源
+.addFontRes(@name: @defaultFontName, @fontUrl: @fontUrl) {
+  @font-face {
+    font-family: "@{name}";
+    src: url('@{fontUrl}iconfont.eot');
+    src: url('@{fontUrl}iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('@{fontUrl}iconfont.woff') format('woff'), /* chrome、firefox */ url('@{fontUrl}iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('@{fontUrl}iconfont.svg#svgFontName') format('svg'); /*  iOS 4.1- */
+  }
+}
+
+// 激活字体
+.activateFont(@fonts: false) {
+  @baseProperty: {
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  };
+
+  .b-font when (@fonts = false){
+    font-family: @defaultFontName;
+    @baseProperty();
+  }
+
+  .b-font when not (@fonts = false){
+    font-family: @fonts, @defaultFontName;
+    @baseProperty();
+  }
+}
+
 // 默认font
 .font(@class,@content, @color: @color-bi-font-native) {
   @fc: "\@{content}";
