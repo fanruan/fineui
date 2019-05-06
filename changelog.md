@@ -5,7 +5,7 @@
 > @fontList: "dec", "report";
 > .addFontRes("dec");
 > .addFontRes("report");
-> .activeFont(@fontList);
+> .activateFont(@fontList);
 
 以上即可使用自定义的dec,report字体和fineui的资源字体
 
