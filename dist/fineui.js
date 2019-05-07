@@ -36718,16 +36718,21 @@ BI.Text = BI.inherit(BI.Single, {
         }
     },
 
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
     mounted: function () {
         var o = this.options;
-
-        if (BI.isKey(o.text)) {
-            this.setText(o.text);
+        var text = this._getShowText();
+        if (BI.isKey(text)) {
+            this.setText(text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
         }
         if (o.highLight) {
             this.doHighLight();
@@ -36738,13 +36743,13 @@ BI.Text = BI.inherit(BI.Single, {
         var o = this.options;
         // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
         o.keyword = keyword;
-        this.text.element.__textKeywordMarked__(o.text || o.value, keyword, o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, keyword, o.py);
     },
 
     unRedMark: function () {
         var o = this.options;
         o.keyword = "";
-        this.text.element.__textKeywordMarked__(o.text || o.value, "", o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, "", o.py);
     },
 
     doHighLight: function () {
@@ -36769,7 +36774,7 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.htmlEncode(text));
+        this.text.element.html(BI.htmlEncode(this._getShowText()));
     }
 });
 
