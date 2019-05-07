@@ -14923,9 +14923,22 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else {
-                var node = addNode(newStartVnode);
-                insertBefore(node, oldStartVnode);
-                newStartVnode = newCh[++newStartIdx];
+                var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
+                if (BI.isNull(sameOldVnode)) {  //  不存在就把新的放到左边
+                    var node = addNode(newStartVnode);
+                    insertBefore(node, oldStartVnode);
+                    newStartVnode = newCh[++newStartIdx];
+                } else {   //  如果新节点在就旧节点区间中存在就复用一下
+                    BI.each(oldCh, function (index, child) {
+                        if (child && sameVnode(child, newStartVnode)) {
+                            updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
+                            children[sameOldVnode.key == null ? self._getChildName(index) : sameOldVnode.key] = self._children[self._getChildName(index)];
+                            oldCh[index] = undefined;
+                            insertBefore(sameOldVnode, oldStartVnode);
+                        }
+                    });
+                    newStartVnode = newCh[++newStartIdx];
+                }
             }
         }
         if (oldStartIdx > oldEndIdx) {
@@ -14969,9 +14982,13 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? self._getChildName(startIdx) : node.key;
-                children[key]._destroy();
+                var ch = vnodes[startIdx];
+                if (BI.isNotNull(ch)) {
+                    var node = self._getOptions(ch);
+                    var key = node.key == null ? self._getChildName(startIdx) : node.key;
+                    delete self._children[self._getChildName(key)];
+                    children[key]._destroy();
+                }
             }
         }
 
@@ -14995,6 +15012,16 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 self._getWrapper().append(children[insertKey].element);
             }
+        }
+
+        function findOldVnode (vnodes, vNode, beginIdx, endIdx) {
+            var i, found;
+            for (i = beginIdx; i <= endIdx; ++i) {
+                if (vnodes[i] && sameVnode(vnodes[i], vNode)) {
+                    found = vnodes[i];
+                }
+            }
+            return found;
         }
 
         return updated;
