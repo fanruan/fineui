@@ -6,15 +6,15 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 290,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-time-combo bi-border bi-border-radius",
             width: 200,
-            height: 24
+            height: 24,
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -31,16 +31,16 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
             behaviors: opts.behaviors,
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
         self.setValue(this.storeValue);
