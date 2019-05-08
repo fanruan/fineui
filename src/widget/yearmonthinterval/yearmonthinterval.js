@@ -10,7 +10,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     props: {
         extraCls: "bi-year-month-interval",
         minDate: "1900-01-01",
-        macDate: "2099-12-31"
+        maxDate: "2099-12-31"
     },
 
     _init: function () {
