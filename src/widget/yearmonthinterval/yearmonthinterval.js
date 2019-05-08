@@ -4,13 +4,13 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         width: 25,
         lgap: 15,
         offset: -15,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
 
     props: {
-        extraCls: "bi-year-month-interval"
+        extraCls: "bi-year-month-interval",
+        minDate: "1900-01-01",
+        macDate: "2099-12-31"
     },
 
     _init: function () {
@@ -117,7 +117,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
 
     // 判是否在最大最小之间
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, 1, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, 1, o.minDate, o.maxDate)[0];
     },
 
     // 判格式合法

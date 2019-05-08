@@ -7,14 +7,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         width: 24,
         lgap: 15,
         offset: 0,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
     _defaultConfig: function () {
         var conf = BI.TimeInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-time-interval"
+            extraCls: "bi-time-interval",
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -136,7 +136,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, o.minDate, o.maxDate)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
