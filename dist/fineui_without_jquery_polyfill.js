@@ -25225,7 +25225,15 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.htmlEncode(this._getShowText()));
+        if (BI.isIE9Below()) {
+            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            return;
+        }
+        if (/&|\"|<|>|\\s/.test(text)) {
+            this.text.element[0].textContent = BI.htmlEncode(this._getShowText());
+        } else {
+            this.text.element[0].textContent = this._getShowText();
+        }
     }
 });
 
