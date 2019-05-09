@@ -24,7 +24,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         BI.MultiListTreeSearcher.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget({
-            type: "bi.multi_select_editor",
+            type: "bi.multi_select_block_editor",
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
@@ -108,28 +108,29 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
     },
 
     setState: function (ob) {
-        var o = this.options;
-        ob || (ob = {});
-        ob.value || (ob.value = []);
-        var count = 0;
-        if (BI.isNumber(ob)) {
-            this.editor.setState(ob);
-        } else if (BI.size(ob.value) === 0) {
-            this.editor.setState(BI.Selection.None);
-        } else {
-            var text = "";
-            BI.each(ob.value, function (idx, path) {
-                var childValue = BI.last(path);
-                text += (o.valueFormatter(childValue + "") || childValue) + "; ";
-                count++;
-            });
-
-            if (count > 20) {
-                this.editor.setState(BI.Selection.Multi);
-            } else {
-                this.editor.setState(text);
-            }
-        }
+        // var o = this.options;
+        // ob || (ob = {});
+        // ob.value || (ob.value = []);
+        // var count = 0;
+        // if (BI.isNumber(ob)) {
+        //     this.editor.setState(ob);
+        // } else if (BI.size(ob.value) === 0) {
+        //     this.editor.setState(BI.Selection.None);
+        // } else {
+        //     var text = "";
+        //     BI.each(ob.value, function (idx, path) {
+        //         var childValue = BI.last(path);
+        //         text += (o.valueFormatter(childValue + "") || childValue) + "; ";
+        //         count++;
+        //     });
+        //
+        //     if (count > 20) {
+        //         this.editor.setState(BI.Selection.Multi);
+        //     } else {
+        //         this.editor.setState(text);
+        //     }
+        // }
+        this.editor.setState(ob.value);
     },
 
     setValue: function (ob) {

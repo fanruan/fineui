@@ -7,64 +7,47 @@
 BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-multi-select-editor",
+        baseCls: "bi-multi-select-block-editor",
         el: {}
     },
 
     render: function () {
+        var self = this;
         return {
-            type: "bi.htape",
+            type: "bi.inline_vertical_adapt",
+            scrollx: false,
             items: [{
-                type: "bi.vertical_adapt",
-                items: [],
-                width: 24
-            }, {
                 el: {
-                    type: "bi.editor"
+                    type: "bi.inline_vertical_adapt",
+                    tagName: "ul",
+                    cls: "label-wrapper",
+                    ref: function (_ref) {
+                        self.labelWrapper = _ref;
+                    },
+                    items: [],
+                    hgap: 5
+                }
+            }, {
+                type: "bi.sign_editor",
+                allowBlank: true,
+                cls: "search-editor",
+                ref: function (_ref) {
+                    self.editor = _ref;
                 },
-
+                listeners: [{
+                    eventName: BI.Controller.EVENT_CHANGE,
+                    action: function () {
+                        self.fireEvent(BI.Controller.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_PAUSE,
+                    action: function () {
+                        self.fireEvent(BI.MultiSelectBlockEditor.EVENT_PAUSE);
+                    }
+                }],
+                height: 22
             }]
         };
-    },
-
-    mounted: function () {
-        this._checkSize();
-    },
-
-    getBlockSize: function() {
-        // return BI.redu
-    },
-
-    _checkSize: function () {
-        this.comboWrapper.attr("items")[0].width = o.height;
-        this.comboWrapper.resize();
-    },
-
-    _init: function () {
-        BI.MultiSelectBlockEditor.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.editor = BI.createWidget(o.el, {
-            type: "bi.state_editor",
-            element: this,
-            height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
-            allowBlank: true,
-            value: o.value,
-            text: o.text,
-            tipType: o.tipType,
-            warningTitle: o.warningTitle,
-        });
-
-        this.editor.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
-            self.fireEvent(BI.MultiSelectBlockEditor.EVENT_PAUSE);
-        });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
-        });
     },
 
     focus: function () {
@@ -76,15 +59,21 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (state) {
-        this.editor.setState(state);
+        var values = BI.map(state, function (idx, path) {
+            return BI.last(path);
+        });
+        this.labelWrapper.populate(BI.map(values, function (idx, value) {
+            return {
+                type: "bi.text_button",
+                tagName: "li",
+                cls: "bi-border-radius bi-list-item-select label-item",
+                text: value
+            };
+        }));
     },
 
     setValue: function (v) {
         this.editor.setValue(v);
-    },
-
-    setTipType: function (v) {
-        this.editor.setTipType(v);
     },
 
     getValue: function () {
@@ -93,7 +82,6 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
             return v[v.length - 1];
         }
         return "";
-
     },
 
     getKeywords: function () {
