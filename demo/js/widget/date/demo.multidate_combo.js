@@ -20,15 +20,24 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300
-                // value: {
-                //     type: 1,
-                //     value: {
-                //         year: 2018,
-                //         month: 2,
-                //         day: 23
-                //     }
-                // }
+                width: 300,
+                // format: "%Y-%X-%d", // yyyy-MM-dd
+                // format: "%Y/%X/%d", // yyyy/MM/dd
+                // format: "%Y-%x-%e",  // yyyy-M-d
+                // format: "%Y/%x/%e",  // yyyy/M/d
+                // format: "%X/%d/%Y",  // MM/dd/yyyy
+                // format: "%X/%e/%y",  // MM/d/yy
+                // format: "%X.%d.%Y",  // MM.dd.yyyy
+                // format: "%X.%e.%Y",  // MM.d.yyyy
+                // format: "%X-%e-%y",  // MM.d.yyyy
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 2,
+                        day: 23
+                    }
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",

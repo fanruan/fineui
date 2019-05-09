@@ -4,14 +4,16 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d %H:%M:%S"
     },
 
     props: {
         extraCls: "bi-date-time-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "%Y-%X-%d %H:%M:%S" // 显示的日期格式化方式
     },
 
     _init: function () {
@@ -22,9 +24,10 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                self._isDefaultDateFormat() && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -38,10 +41,11 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Basic_Date_Time_Error_Text");
+                var str = "";
+                if (self._isDefaultDateFormat()) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
             title: function () {
                 var storeValue = self.storeValue || {};
@@ -51,7 +55,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, o.format);
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
@@ -59,7 +63,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                             return "";
                         }
                         return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), "%Y-%X-%d %H:%M:%S");
+                            value.second || 0), o.format);
                 }
             }
         });
@@ -86,7 +90,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split(/-|\s|:/);
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -119,8 +124,55 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         });
         this.setValue(o.value);
     },
+
+    _isDefaultDateFormat: function () {
+        return this.options.format === this._const.compareFormat;
+    },
+
+    _getStandardDateStr: function (v) {
+        var result = [0, 1, 2, 3, 4, 5];
+        var formatArray = this.options.format.match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                    result[2] = idx;
+                    break;
+                case "%H":
+                case "%h":
+                    result[3] = idx;
+                    break;
+                case "%M":
+                case "%m":
+                    result[4] = idx;
+                    break;
+                case "%S":
+                case "%s":
+                default:
+                    result[5] = idx;
+                    break;
+            }
+        });
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        BI.each(dateArray, function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        return newArray.slice(0, 3).join("-") + " " + newArray.slice(3).join(":");
+    },
+
     _dateCheck: function (date) {
-        return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
+        var o = this.options;
+        return BI.print(BI.parseDateTime(date, o.format), o.format) === date ||
+            BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%x-%e %H:%M:%S"), "%Y-%x-%e %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date ||
@@ -158,7 +210,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _monthCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d");
+        var date = BI.parseDateTime(v, this.options.format);
         var dateStr = BI.print(date, "%Y-%X-%d");
         return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
             BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
@@ -242,7 +294,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     this.editor.setValue("");
                 } else {
                     var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0), "%Y-%X-%d %H:%M:%S");
+                        value.second || 0), this.options.format);
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
