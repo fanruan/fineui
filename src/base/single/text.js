@@ -55,7 +55,7 @@ BI.Text = BI.inherit(BI.Single, {
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : ""
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -73,15 +73,7 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    _getShowText: function () {
-        var o = this.options;
-        return BI.isFunction(o.text) ? o.text() : o.text;
-    },
-
-    mounted: function () {
-        var o = this.options;
         var text = this._getShowText();
         if (BI.isKey(text)) {
             this.setText(text);
@@ -95,6 +87,12 @@ BI.Text = BI.inherit(BI.Single, {
             this.doHighLight();
         }
     },
+
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
 
     doRedMark: function (keyword) {
         var o = this.options;
