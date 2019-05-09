@@ -55,7 +55,7 @@ BI.Text = BI.inherit(BI.Single, {
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : ""
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -73,15 +73,7 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    _getShowText: function () {
-        var o = this.options;
-        return BI.isFunction(o.text) ? o.text() : o.text;
-    },
-
-    mounted: function () {
-        var o = this.options;
         var text = this._getShowText();
         if (BI.isKey(text)) {
             this.setText(text);
@@ -95,6 +87,12 @@ BI.Text = BI.inherit(BI.Single, {
             this.doHighLight();
         }
     },
+
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
 
     doRedMark: function (keyword) {
         var o = this.options;
@@ -131,7 +129,15 @@ BI.Text = BI.inherit(BI.Single, {
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
         this.options.text = text;
-        this.text.element.html(BI.htmlEncode(this._getShowText()));
+        if (BI.isIE9Below()) {
+            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            return;
+        }
+        if (/&|\"|<|>|\\s/.test(text)) {
+            this.text.element[0].textContent = BI.htmlEncode(this._getShowText());
+        } else {
+            this.text.element[0].textContent = this._getShowText();
+        }
     }
 });
 
