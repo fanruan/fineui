@@ -12884,21 +12884,16 @@ if (!_global.BI) {
     };
 
     // replace the html special tags
+    var specialTags = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return specialTags[v] ? specialTags[v] : "&nbsp;";
         });
     };
     // html decode

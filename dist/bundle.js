@@ -15919,21 +15919,16 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
 
     // replace the html special tags
+    var specialTags = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return specialTags[v] ? specialTags[v] : "&nbsp;";
         });
     };
     // html decode
@@ -36480,7 +36475,7 @@ BI.Text = BI.inherit(BI.Single, {
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : ""
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -36498,15 +36493,7 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    _getShowText: function () {
-        var o = this.options;
-        return BI.isFunction(o.text) ? o.text() : o.text;
-    },
-
-    mounted: function () {
-        var o = this.options;
         var text = this._getShowText();
         if (BI.isKey(text)) {
             this.setText(text);
@@ -36520,6 +36507,12 @@ BI.Text = BI.inherit(BI.Single, {
             this.doHighLight();
         }
     },
+
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
 
     doRedMark: function (keyword) {
         var o = this.options;
@@ -61417,15 +61410,15 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 290,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-time-combo bi-border bi-border-radius",
             width: 200,
-            height: 24
+            height: 24,
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -61442,16 +61435,16 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
             behaviors: opts.behaviors,
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
         self.setValue(this.storeValue);
@@ -63098,14 +63091,14 @@ BI.extend(BI.DynamicDateCard, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22
+        height: 22,
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31"
     },
 
 
@@ -63141,8 +63134,8 @@ BI.extend(BI.DynamicDateCard, {
                         isNeedAdjustWidth: false,
                         el: {
                             type: "bi.dynamic_date_trigger",
-                            min: this.constants.DATE_MIN_VALUE,
-                            max: this.constants.DATE_MAX_VALUE,
+                            min: opts.minDate,
+                            max: opts.maxDate,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -63223,8 +63216,8 @@ BI.extend(BI.DynamicDateCard, {
                             el: {
                                 type: "bi.dynamic_date_popup",
                                 behaviors: opts.behaviors,
-                                min: this.constants.DATE_MIN_VALUE,
-                                max: this.constants.DATE_MAX_VALUE,
+                                min: opts.minDate,
+                                max: opts.maxDate,
                                 value: opts.value,
                                 ref: function () {
                                     self.popup = this;
@@ -63993,14 +63986,14 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
-        height: 22
+        height: 22,
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31"
     },
 
 
@@ -64036,8 +64029,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         isNeedAdjustWidth: false,
                         el: {
                             type: "bi.dynamic_date_time_trigger",
-                            min: this.constants.DATE_MIN_VALUE,
-                            max: this.constants.DATE_MAX_VALUE,
+                            min: opts.minDate,
+                            max: opts.maxDate,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -64118,8 +64111,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
                                 behaviors: opts.behaviors,
-                                min: this.constants.DATE_MIN_VALUE,
-                                max: this.constants.DATE_MAX_VALUE,
+                                min: opts.minDate,
+                                max: opts.maxDate,
                                 value: opts.value,
                                 ref: function () {
                                     self.popup = this;
@@ -80905,14 +80898,14 @@ BI.DateInterval = BI.inherit(BI.Single, {
         width: 24,
         lgap: 15,
         offset: 0,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
     _defaultConfig: function () {
         var conf = BI.DateInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-date-interval"
+            extraCls: "bi-date-interval",
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -81034,7 +81027,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
             BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, o.minDate, o.maxDate)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
@@ -81084,14 +81078,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         width: 24,
         lgap: 15,
         offset: 0,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
     _defaultConfig: function () {
         var conf = BI.TimeInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-time-interval"
+            extraCls: "bi-time-interval",
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -81213,7 +81207,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, o.minDate, o.maxDate)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
@@ -82987,13 +82982,13 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         width: 25,
         lgap: 15,
         offset: -15,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
 
     props: {
-        extraCls: "bi-year-month-interval"
+        extraCls: "bi-year-month-interval",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31"
     },
 
     _init: function () {
@@ -83100,7 +83095,8 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
 
     // 判是否在最大最小之间
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, 1, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, 1, o.minDate, o.maxDate)[0];
     },
 
     // 判格式合法
