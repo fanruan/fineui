@@ -15665,7 +15665,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
 
     // replace the html special tags
-    var specialTags = {
+    var SPECIAL_TAGS = {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
@@ -15674,7 +15674,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            return specialTags[v] ? specialTags[v] : "&nbsp;";
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
     // html decode
