@@ -64992,7 +64992,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _monthCheck: function (v) {
-        var date = BI.parseDateTime(v, this.options.format);
+        var date = BI.parseDateTime(v, "%Y-%X-%d");
         var dateStr = BI.print(date, "%Y-%X-%d");
         return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
             BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
