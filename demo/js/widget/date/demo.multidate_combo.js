@@ -21,6 +21,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
                 // format: "%Y-%X-%d", // yyyy-MM-dd
                 // format: "%Y/%X/%d", // yyyy/MM/dd
                 // format: "%Y-%x-%e",  // yyyy-M-d
@@ -51,6 +52,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datetimecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
                 // format: "%Y-%X-%d %H:%M:%S", // yyyy-MM-dd HH:mm:ss
                 // format: "%Y/%X/%d %H:%M:%S", // yyyy/MM/dd HH:mm:ss
                 // format: "%Y-%X-%d %I:%M:%S",  // yyyy-MM-dd hh:mm:ss

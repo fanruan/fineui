@@ -135,7 +135,8 @@
 
         _getTitle: function () {
             var storeValue = this.storeValue || {};
-            return BI.print(BI.getDate(storeValue.year, (storeValue.month - 1), storeValue.day), this._getFormatString());
+            var date = BI.getDate();
+            return BI.print(BI.getDate(date.getFullYear(), 0, 1, storeValue.hour, storeValue.minute, storeValue.second), this._getFormatString());
         },
 
         _getFormatString: function () {

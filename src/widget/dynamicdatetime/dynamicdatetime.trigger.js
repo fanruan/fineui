@@ -13,7 +13,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
-        format: "" // 显示的日期格式化方式
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -47,25 +48,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 }
                 return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, self._getFormatString());
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), self._getFormatString());
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
@@ -122,7 +105,42 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 width: 24
             }]
         });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
+    },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                    value.second || 0), this._getFormatString());
+        }
     },
 
     _getStandardDateStr: function (v) {
