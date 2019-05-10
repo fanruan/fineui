@@ -134,9 +134,9 @@ BI.Text = BI.inherit(BI.Single, {
             return;
         }
         if (/&|\"|<|>|\\s/.test(text)) {
-            this.text.element[0].textContent = BI.htmlEncode(this._getShowText());
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
         } else {
-            this.text.element[0].textContent = this._getShowText();
+            this.text.element[0].innerHTML = this._getShowText();
         }
     }
 });
