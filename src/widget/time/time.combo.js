@@ -15,12 +15,14 @@
         props: {
             baseCls: "bi-time-combo bi-border bi-border-radius",
             width: 78,
-            height: 22
+            height: 22,
+            format: "",
+            allowEdit: false
         },
 
         render: function () {
             var self = this, opts = this.options;
-
+            this.storeTriggerValue = "";
             this.storeValue = opts.value;
 
             var popup = {
@@ -63,10 +65,74 @@
                             isNeedAdjustWidth: false,
                             el: {
                                 type: "bi.time_trigger",
+                                allowEdit: opts.allowEdit,
+                                format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
                                     self.trigger = _ref;
-                                }
+                                },
+                                listeners: [{
+                                    eventName: "EVENT_KEY_DOWN",
+                                    action: function () {
+                                        if (self.combo.isViewVisible()) {
+                                            self.combo.hideView();
+                                        }
+                                    }
+                                }, {
+                                    eventName: "EVENT_STOP",
+                                    action: function () {
+                                        if (!self.combo.isViewVisible()) {
+                                            self.combo.showView();
+                                        }
+                                    }
+                                }, {
+                                    eventName: "EVENT_FOCUS",
+                                    action: function () {
+                                        self.storeTriggerValue = self.trigger.getKey();
+                                        if (!self.combo.isViewVisible()) {
+                                            self.combo.showView();
+                                        }
+                                        self.fireEvent("EVENT_FOCUS");
+                                    }
+                                }, {
+                                    eventName: "EVENT_ERROR",
+                                    action: function () {
+                                        var date = BI.getDate();
+                                        self.storeValue = {
+                                            hour: date.getHours(),
+                                            minute: date.getMinutes(),
+                                            second: date.getSeconds()
+                                        };
+                                        self.fireEvent("EVENT_ERROR");
+                                    }
+                                }, {
+                                    eventName: "EVENT_VALID",
+                                    action: function () {
+                                        self.fireEvent("EVENT_VALID");
+                                    }
+                                }, {
+                                    eventName: "EVENT_CHANGE",
+                                    action: function () {
+                                        self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }, {
+                                    eventName: "EVENT_CONFIRM",
+                                    action: function () {
+                                        if (self.combo.isViewVisible()) {
+                                            return;
+                                        }
+                                        var dateStore = self.storeTriggerValue;
+                                        var dateObj = self.trigger.getKey();
+                                        if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
+                                            self.storeValue = self.trigger.getValue();
+                                            self.setValue(self.trigger.getValue());
+                                        } else if (BI.isEmptyString(dateObj)) {
+                                            self.storeValue = null;
+                                            self.trigger.setValue();
+                                        }
+                                        self.fireEvent("EVENT_CONFIRM");
+                                    }
+                                }]
                             },
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
@@ -90,7 +156,7 @@
                         },
                         top: 0,
                         left: 0,
-                        right: 0,
+                        right: 22,
                         bottom: 0
                     }, {
                         el: {
