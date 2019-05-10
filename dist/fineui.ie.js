@@ -36394,9 +36394,10 @@ BI.Text = BI.inherit(BI.Single, {
             this.text.element.html(BI.htmlEncode(this._getShowText()));
             return;
         }
-        if (/&|\"|<|>|\\s/.test(text)) {
-            this.text.element[0].textContent = BI.htmlEncode(this._getShowText());
+        if (/\s/.test(text)) {
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
         } else {
+            //  textContent性能更好,并且原生防xss
             this.text.element[0].textContent = this._getShowText();
         }
     }
