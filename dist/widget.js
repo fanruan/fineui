@@ -2710,7 +2710,8 @@ BI.extend(BI.DynamicDateCard, {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22,
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        format: ""
     },
 
 
@@ -2748,6 +2749,7 @@ BI.extend(BI.DynamicDateCard, {
                             type: "bi.dynamic_date_trigger",
                             min: opts.minDate,
                             max: opts.maxDate,
+                            format: opts.format,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -3332,14 +3334,16 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d"
     },
 
     props: {
         extraCls: "bi-date-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "" // 显示的日期格式化方式
     },
 
     _init: function () {
@@ -3350,9 +3354,10 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                !BI.isKey(o.format) && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -3366,10 +3371,11 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Date_Trigger_Error_Text");
+                var str = "";
+                if (!BI.isKey(o.format)) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
             title: function () {
                 var storeValue = self.storeValue || {};
@@ -3380,14 +3386,14 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                         var text = self._getText(value);
                         var date = BI.getDate();
                         date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%X-%d");
+                        var dateStr = BI.print(date, self._getFormatString());
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
                         if (BI.isNull(value) || BI.isNull(value.day)) {
                             return "";
                         }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
+                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), self._getFormatString());
                 }
             }
         });
@@ -3414,7 +3420,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split("-");
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -3449,6 +3456,45 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         });
         this.setValue(o.value);
     },
+
+    _getStandardDateStr: function (v) {
+        var c = this._const;
+        var result = [0, 1, 2];
+        var formatArray = this._getFormatString().match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                default:
+                    result[2] = idx;
+                    break;
+            }
+        });
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        BI.each(dateArray, function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        // 这边之所以不直接返回join结果是因为年的格式可能只有2位，所以需要format一下
+        if(newArray.length === result.length && newArray[0].length === 2) {
+            return BI.print(BI.parseDateTime(newArray.join("-"), c.compareFormat), c.compareFormat);
+        }
+        // 这边format成-20-也没关系, 反正都是不合法的
+        return newArray.join("-");
+    },
+
+    _getFormatString: function () {
+        return this.options.format || this._const.compareFormat;
+    },
+
     _dateCheck: function (date) {
         return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
@@ -3478,19 +3524,19 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _yearCheck: function (v) {
-        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        var date = BI.print(BI.parseDateTime(v, this._getFormatString()), this._const.compareFormat);
         return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = BI.print(date, "%Y-%X-%d");
+        var date = BI.parseDateTime(v, this._getFormatString());
+        var dateStr = BI.print(date, this._const.compareFormat);
         return (date.getMonth() >= 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
             BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%d");
+        var dateStr = BI.print(date, this._getFormatString());
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -3566,7 +3612,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), this._getFormatString());
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -3605,7 +3651,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
         height: 22,
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        format: ""
     },
 
 
@@ -3643,6 +3690,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_time_trigger",
                             min: opts.minDate,
                             max: opts.maxDate,
+                            format: opts.format,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -4337,14 +4385,16 @@ BI.extend(BI.DynamicDateTimeSelect, {
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d %H:%M:%S"
     },
 
     props: {
         extraCls: "bi-date-time-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "" // 显示的日期格式化方式
     },
 
     _init: function () {
@@ -4355,9 +4405,10 @@ BI.extend(BI.DynamicDateTimeSelect, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                !BI.isKey(o.format) && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -4371,10 +4422,11 @@ BI.extend(BI.DynamicDateTimeSelect, {
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Basic_Date_Time_Error_Text");
+                var str = "";
+                if (BI.isKey(o.format)) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
             title: function () {
                 var storeValue = self.storeValue || {};
@@ -4384,7 +4436,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     case BI.DynamicDateCombo.Dynamic:
                         var text = self._getText(value);
                         var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
+                        var dateStr = BI.print(date, self._getFormatString());
                         return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
                     case BI.DynamicDateCombo.Static:
                     default:
@@ -4392,7 +4444,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                             return "";
                         }
                         return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), "%Y-%X-%d %H:%M:%S");
+                            value.second || 0), self._getFormatString());
                 }
             }
         });
@@ -4419,7 +4471,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split(/-|\s|:/);
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -4452,6 +4505,57 @@ BI.extend(BI.DynamicDateTimeSelect, {
         });
         this.setValue(o.value);
     },
+
+    _getStandardDateStr: function (v) {
+        var result = [];
+        var hasSecond = false;
+        var formatArray = this._getFormatString().match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                    result[2] = idx;
+                    break;
+                case "%S":
+                    hasSecond = true;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        // 处理乱序的年月日
+        BI.each(dateArray.slice(0, 3), function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        // 拼接时分秒和pm
+        var suffixArray = dateArray.slice(3);
+        // hh:mm
+        if(suffixArray.length === 2 && !hasSecond) {
+            suffixArray.push("00");
+        }
+        var suffixString = suffixArray.join(":");
+        var dateString = newArray.slice(0, 3).join("-");
+        if (BI.isNotEmptyString(suffixString)) {
+            dateString += " " + suffixString;
+        }
+        return dateString;
+    },
+
+    _getFormatString: function () {
+        return this.options.format || this._const.compareFormat;
+    },
+
     _dateCheck: function (date) {
         return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
@@ -4491,14 +4595,14 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _monthCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d");
+        var date = BI.parseDateTime(v, this.options.format);
         var dateStr = BI.print(date, "%Y-%X-%d");
         return (date.getMonth() > 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
             BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%e %H:%M:%S");
+        var dateStr = BI.print(date, this._getFormatString());
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -4575,7 +4679,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                 } else {
                     var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0), "%Y-%X-%d %H:%M:%S");
+                        value.second || 0), this._getFormatString());
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }

@@ -10,7 +10,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22,
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        format: ""
     },
 
 
@@ -48,6 +49,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_trigger",
                             min: opts.minDate,
                             max: opts.maxDate,
+                            format: opts.format,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
