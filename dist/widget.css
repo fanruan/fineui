@@ -320,6 +320,10 @@
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+.bi-time-trigger .show-text {
+  background-color: rgba(255, 255, 255, 0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff,endColorstr=#00ffffff);
+}
 .bi-date-interval.time-error .bi-input {
   color: #ff4949;
 }

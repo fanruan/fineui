@@ -11,7 +11,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
-        format: ""
+        format: "",
+        allowEdit: true
     },
 
 
@@ -50,6 +51,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             min: opts.minDate,
                             max: opts.maxDate,
                             format: opts.format,
+                            allowEdit: opts.allowEdit,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
