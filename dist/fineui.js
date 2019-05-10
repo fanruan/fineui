@@ -65065,7 +65065,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
-                if (BI.isKey(o.format)) {
+                if (!BI.isKey(o.format)) {
                     str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
                 return str;
