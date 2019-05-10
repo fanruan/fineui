@@ -11,7 +11,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
-        format: "%Y-%X-%d"
+        format: ""
     },
 
 
