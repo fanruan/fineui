@@ -133,10 +133,11 @@ BI.Text = BI.inherit(BI.Single, {
             this.text.element.html(BI.htmlEncode(this._getShowText()));
             return;
         }
-        if (/&|\"|<|>|\\s/.test(text)) {
+        if (/\s/.test(text)) {
             this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
         } else {
-            this.text.element[0].innerHTML = this._getShowText();
+            //  textContent性能更好,并且原生防xss
+            this.text.element[0].textContent = this._getShowText();
         }
     }
 });
