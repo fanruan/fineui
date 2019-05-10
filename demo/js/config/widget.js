@@ -172,6 +172,10 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.date_time"
 }, {
     pId: 412,
+    text: "bi.time_combo",
+    value: "demo.time_combo"
+}, {
+    pId: 412,
     text: "bi.time_interval",
     value: "demo.time_interval"
 }, {
