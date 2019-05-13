@@ -13,7 +13,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -32,6 +33,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
             // adapter: this.popup,
