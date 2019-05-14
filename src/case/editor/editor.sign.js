@@ -101,6 +101,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             self._checkText();
             self.fireEvent(BI.SignEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SignEditor.EVENT_START, arguments);
         });
@@ -250,6 +255,7 @@ BI.SignEditor.EVENT_START = "EVENT_START";
 BI.SignEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SignEditor.EVENT_STOP = "EVENT_STOP";
 BI.SignEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignEditor.EVENT_VALID = "EVENT_VALID";
 BI.SignEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SignEditor.EVENT_ENTER = "EVENT_ENTER";

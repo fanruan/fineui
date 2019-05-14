@@ -44511,6 +44511,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -44655,6 +44658,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";
@@ -45965,9 +45969,13 @@ BI.Input = BI.inherit(BI.Single, {
             self._isEditing = false;
             self._start = false;
             if (self.isValid()) {
+                var lastValidValue = self._lastValidValue;
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
+                if(self._lastValidValue !== lastValidValue) {
+                    self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
+                }
             }
             self.fireEvent(BI.Input.EVENT_BLUR);
         }
@@ -46153,6 +46161,7 @@ BI.Input.EVENT_BACKSPACE = "EVENT_BACKSPACE";
 BI.Input.EVENT_START = "EVENT_START";
 BI.Input.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Input.EVENT_STOP = "EVENT_STOP";
+BI.Input.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Input.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.Input.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Input.EVENT_EMPTY = "EVENT_EMPTY";
@@ -55748,6 +55757,9 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);
         });
@@ -55812,6 +55824,7 @@ BI.ClearEditor.EVENT_START = "EVENT_START";
 BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
 BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ClearEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
 BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -55918,6 +55931,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.ShelterEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.ShelterEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ShelterEditor.EVENT_START, arguments);
@@ -56071,6 +56089,7 @@ BI.ShelterEditor.EVENT_START = "EVENT_START";
 BI.ShelterEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ShelterEditor.EVENT_STOP = "EVENT_STOP";
 BI.ShelterEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ShelterEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ShelterEditor.EVENT_VALID = "EVENT_VALID";
 BI.ShelterEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ShelterEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56181,6 +56200,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.SignEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SignEditor.EVENT_START, arguments);
@@ -56331,6 +56355,7 @@ BI.SignEditor.EVENT_START = "EVENT_START";
 BI.SignEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SignEditor.EVENT_STOP = "EVENT_STOP";
 BI.SignEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignEditor.EVENT_VALID = "EVENT_VALID";
 BI.SignEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SignEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56450,6 +56475,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self._showHint();
             self.fireEvent(BI.StateEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.StateEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.StateEditor.EVENT_START, arguments);
@@ -56614,6 +56643,7 @@ BI.StateEditor.EVENT_START = "EVENT_START";
 BI.StateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.StateEditor.EVENT_STOP = "EVENT_STOP";
 BI.StateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.StateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.StateEditor.EVENT_VALID = "EVENT_VALID";
 BI.StateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.StateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56722,6 +56752,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self._showHint();
             self.fireEvent(BI.SimpleStateEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SimpleStateEditor.EVENT_START, arguments);
@@ -56872,6 +56906,7 @@ BI.SimpleStateEditor.EVENT_START = "EVENT_START";
 BI.SimpleStateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SimpleStateEditor.EVENT_STOP = "EVENT_STOP";
 BI.SimpleStateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SimpleStateEditor.EVENT_VALID = "EVENT_VALID";
 BI.SimpleStateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SimpleStateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -62704,7 +62739,8 @@ BI.extend(BI.DynamicDateCard, {
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
-        format: ""
+        format: "",
+        allowEdit: true
     },
 
 
@@ -62743,6 +62779,7 @@ BI.extend(BI.DynamicDateCard, {
                             min: opts.minDate,
                             max: opts.maxDate,
                             format: opts.format,
+                            allowEdit: opts.allowEdit,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -63336,7 +63373,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
-        format: "" // 显示的日期格式化方式
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -63370,25 +63408,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 }
                 return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.getDate();
-                        date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, self._getFormatString());
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), self._getFormatString());
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
@@ -63447,7 +63467,41 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 width: 24
             }]
         });
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
+    },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.getDate();
+                date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day), this._getFormatString());
+        }
     },
 
     _getStandardDateStr: function (v) {
@@ -63645,7 +63699,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
-        format: ""
+        format: "",
+        allowEdit: true
     },
 
 
@@ -63683,6 +63738,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             type: "bi.dynamic_date_time_trigger",
                             min: opts.minDate,
                             max: opts.maxDate,
+                            allowEdit: opts.allowEdit,
                             format: opts.format,
                             height: opts.height,
                             value: opts.value,
@@ -64387,7 +64443,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
         height: 24,
-        format: "" // 显示的日期格式化方式
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -64421,25 +64478,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 }
                 return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, self._getFormatString());
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), self._getFormatString());
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
@@ -64496,7 +64535,42 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 width: 24
             }]
         });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
+    },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                    value.second || 0), this._getFormatString());
+        }
     },
 
     _getStandardDateStr: function (v) {
@@ -64813,6 +64887,9 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.SearchEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SearchEditor.EVENT_START);
         });
@@ -64890,6 +64967,7 @@ BI.SearchEditor.EVENT_START = "EVENT_START";
 BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
 BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SearchEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
 BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -65000,6 +65078,9 @@ BI.TextEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
             self.fireEvent(BI.TextEditor.EVENT_REMOVE);
         });
@@ -65072,6 +65153,7 @@ BI.TextEditor.EVENT_START = "EVENT_START";
 BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.TextEditor.EVENT_STOP = "EVENT_STOP";
 BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.TextEditor.EVENT_VALID = "EVENT_VALID";
 BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -68809,7 +68891,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -68828,6 +68911,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -69591,7 +69675,8 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -69669,6 +69754,20 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -70294,7 +70393,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -70369,6 +70469,20 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -73073,7 +73187,8 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            allowEdit: true
         });
     },
 
@@ -73089,6 +73204,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -73358,7 +73474,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-list-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            allowEdit: true
         });
     },
 
@@ -73374,6 +73491,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -74747,7 +74865,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setFocusEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_FOCUS, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, function () {
             self._setTitle("");
             switch (self._checkValidation()) {
                 case c.typeError:
@@ -74776,7 +74894,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_BLUR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_BLUR, function () {
             BI.Bubbles.hide(c.typeError);
             BI.Bubbles.hide(c.numberError);
             BI.Bubbles.hide(c.signalError);
@@ -74798,7 +74916,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setErrorEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_ERROR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
@@ -74811,7 +74929,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setValidEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_VALID, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_VALID, function () {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
@@ -74836,7 +74954,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setEditorValueChangedEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_CHANGE, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, function () {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
@@ -74861,7 +74979,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
-        w.on(BI.Editor.EVENT_CONFIRM, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
         });
     },
@@ -75026,32 +75144,37 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
                 listeners: [{
                     eventName: BI.Editor.EVENT_ERROR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_ERROR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_FOCUS,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_FOCUS, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_BLUR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_BLUR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_BLUR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_VALID,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_VALID, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_VALID, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CHANGE,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CHANGE, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CONFIRM,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_CHANGE_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM, arguments);
                     }
                 }]
             }]
@@ -75075,6 +75198,13 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
     }
 });
 
+BI.NumberIntervalSingleEidtor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.NumberIntervalSingleEidtor.EVENT_BLUR = "EVENT_BLUR";
+BI.NumberIntervalSingleEidtor.EVENT_ERROR = "EVENT_ERROR";
+BI.NumberIntervalSingleEidtor.EVENT_VALID = "EVENT_VALID";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
+BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);/**
  * 季度下拉框
  *
@@ -79022,6 +79152,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             self._checkText();
             self.fireEvent(BI.SignTextEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignTextEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
             self._checkText();
         });
@@ -79142,6 +79277,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SignTextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignTextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);/**
@@ -80759,7 +80895,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
         _getTitle: function () {
             var storeValue = this.storeValue || {};
-            return BI.print(BI.getDate(storeValue.year, (storeValue.month - 1), storeValue.day), this._getFormatString());
+            var date = BI.getDate();
+            return BI.print(BI.getDate(date.getFullYear(), 0, 1, storeValue.hour, storeValue.minute, storeValue.second), this._getFormatString());
         },
 
         _getFormatString: function () {

@@ -9022,6 +9022,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -9166,6 +9169,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";
@@ -10476,9 +10480,13 @@ BI.Input = BI.inherit(BI.Single, {
             self._isEditing = false;
             self._start = false;
             if (self.isValid()) {
+                var lastValidValue = self._lastValidValue;
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
+                if(self._lastValidValue !== lastValidValue) {
+                    self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
+                }
             }
             self.fireEvent(BI.Input.EVENT_BLUR);
         }
@@ -10664,6 +10672,7 @@ BI.Input.EVENT_BACKSPACE = "EVENT_BACKSPACE";
 BI.Input.EVENT_START = "EVENT_START";
 BI.Input.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Input.EVENT_STOP = "EVENT_STOP";
+BI.Input.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Input.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.Input.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Input.EVENT_EMPTY = "EVENT_EMPTY";
