@@ -8866,6 +8866,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
                 // format: "%Y-%X-%d", // yyyy-MM-dd
                 // format: "%Y/%X/%d", // yyyy/MM/dd
                 // format: "%Y-%x-%e",  // yyyy-M-d
@@ -8896,6 +8897,7 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datetimecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
                 // format: "%Y-%X-%d %H:%M:%S", // yyyy-MM-dd HH:mm:ss
                 // format: "%Y/%X/%d %H:%M:%S", // yyyy/MM/dd HH:mm:ss
                 // format: "%Y-%X-%d %I:%M:%S",  // yyyy-MM-dd hh:mm:ss
@@ -9286,6 +9288,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var self = this;
         var widget = BI.createWidget({
             type: "bi.multi_select_insert_combo",
+            // allowEdit: false,
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {

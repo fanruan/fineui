@@ -185,6 +185,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -329,6 +332,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";

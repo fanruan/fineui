@@ -109,6 +109,9 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.SearchEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SearchEditor.EVENT_START);
         });
@@ -186,6 +189,7 @@ BI.SearchEditor.EVENT_START = "EVENT_START";
 BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
 BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SearchEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
 BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
