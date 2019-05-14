@@ -19473,7 +19473,7 @@ BI.prepares.push(function () {
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = BI.Widget._renderEngine._data(fromElement[0]);
+            var elemData = jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
