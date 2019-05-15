@@ -19,6 +19,7 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.inline_vertical_adapt",
+                    scrollable: false,
                     tagName: "ul",
                     cls: "label-wrapper",
                     ref: function (_ref) {
@@ -40,14 +41,36 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
                         self.fireEvent(BI.Controller.EVENT_CHANGE);
                     }
                 }, {
-                    eventName: BI.Editor.EVENT_PAUSE,
+                    eventName: BI.SignEditor.EVENT_PAUSE,
                     action: function () {
                         self.fireEvent(BI.MultiSelectBlockEditor.EVENT_PAUSE);
+                    }
+                }, {
+                    eventName: BI.SignEditor.EVENT_STOP,
+                    action: function () {
+                        self.fireEvent(BI.MultiSelectBlockEditor.EVENT_STOP);
+                    }
+                }, {
+                    eventName: BI.SignEditor.EVENT_KEY_DOWN,
+                    action: function (keyCode) {
+                        // if(keyCode === ) {
+                        //
+                        // }
+                        self.fireEvent(BI.MultiSelectBlockEditor.EVENT_KEY_DOWN);
                     }
                 }],
                 height: 22
             }]
         };
+    },
+
+    _checkPosition: function () {
+        var width = this.element.width();
+        var blockRegionWidth = width - 25 > 0 ? width - 25 : 0;
+        var blockWrapWidth = this.labelWrapper.element.width();
+        if (blockRegionWidth < blockWrapWidth) {
+            this.labelWrapper.element.width(blockRegionWidth);
+        }
     },
 
     focus: function () {
@@ -59,6 +82,7 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (state) {
+        var self = this;
         var values = BI.map(state, function (idx, path) {
             return BI.last(path);
         });
@@ -70,6 +94,9 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
                 text: value
             };
         }));
+        BI.defer(function () {
+            self._checkPosition();
+        });
     },
 
     setValue: function (v) {
@@ -97,5 +124,6 @@ BI.MultiSelectBlockEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.MultiSelectBlockEditor.EVENT_PAUSE = "MultiSelectBlockEditor.EVENT_PAUSE";
+BI.MultiSelectBlockEditor.EVENT_PAUSE = "EVENT_PAUSE";
+BI.MultiSelectBlockEditor.EVENT_STOP = "EVENT_STOP";
 BI.shortcut("bi.multi_select_block_editor", BI.MultiSelectBlockEditor);
