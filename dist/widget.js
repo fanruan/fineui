@@ -1164,7 +1164,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top bi-border-right",
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
@@ -1175,7 +1174,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.okButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
@@ -3137,7 +3135,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -3150,7 +3147,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -3166,7 +3162,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -3982,7 +3977,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -3995,7 +3989,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -4011,7 +4004,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -20448,7 +20440,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         type: "bi.grid",
                         items: [[{
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Clears"),
@@ -20460,7 +20451,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Now"),
@@ -20472,7 +20462,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_OK"),
@@ -21791,7 +21780,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -21804,7 +21792,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         textHeight: c.buttonHeight - 1,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
@@ -21820,7 +21807,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -22549,7 +22535,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -22562,7 +22547,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -22578,7 +22562,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -23552,7 +23535,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -23565,7 +23547,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -23581,7 +23562,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
