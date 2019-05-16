@@ -25,6 +25,7 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.multi_select_block_editor",
+            valueFormatter: o.valueFormatter,
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
