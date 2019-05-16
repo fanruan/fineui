@@ -5932,6 +5932,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },
@@ -6203,6 +6207,10 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -6455,6 +6463,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (k) {
@@ -6730,6 +6742,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (k) {

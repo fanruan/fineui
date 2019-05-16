@@ -215,6 +215,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
