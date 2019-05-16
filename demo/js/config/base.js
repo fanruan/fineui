@@ -6,6 +6,10 @@ Demo.BASE_CONFIG = [{
     pId: 2,
     text: "bi.label",
     value: "demo.label"
+},{
+    pId: 2,
+    text: "bi.label_scene",
+    value: "demo.label_scene"
 }, {
     pId: 2,
     text: "bi.icon_label",

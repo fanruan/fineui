@@ -25148,10 +25148,14 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : ""
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -30823,7 +30827,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
             ghost: false, // 是否幽灵显示, 即正常状态无背景
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: props.clear ? 0 : 10,
@@ -30877,7 +30880,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
-                forceCenter: o.forceCenter,
                 textWidth: o.textWidth,
                 textHeight: o.textHeight,
                 hgap: o.hgap,
@@ -30960,7 +30962,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             baseCls: (conf.baseCls || "") + " bi-text-button",
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -30981,7 +30982,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             whiteSpace: o.whiteSpace,
             textWidth: o.textWidth,
             textHeight: o.textHeight,
-            forceCenter: o.forceCenter,
             width: o.width,
             height: o.height,
             hgap: o.hgap,
@@ -32205,7 +32205,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                forceCenter: true,
                 height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
@@ -33477,7 +33476,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -33517,28 +33515,22 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -33551,16 +33543,18 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 return;
             }
             if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
+                BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
+                    bgap: o.bgap
+                });
+                this.text = BI.createWidget(json);
+                BI.createWidget({
+                    type: "bi.center_adapt",
+                    scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
                 });
@@ -33570,33 +33564,37 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 this.element.css({
                     "line-height": o.height + "px"
                 });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
+            BI.extend(json, {
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -33610,41 +33608,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -33653,17 +33616,28 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 tgap: o.tgap,
                 bgap: o.bgap
             });
+            this.text = BI.createWidget(json);
+            BI.createWidget({
+                type: "bi.center_adapt",
+                scrollable: true,
+                element: this,
+                items: [this.text]
+            });
+            return;
+        }
+        if (BI.isNumber(o.height) && o.height > 0) {
             this.element.css({
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this
+                element: this,
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -33674,22 +33648,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -33701,21 +33667,16 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.vertical_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
                 BI.createWidget({
@@ -33734,42 +33695,23 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) {
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
@@ -33787,7 +33729,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
@@ -33808,66 +33749,23 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -33878,23 +33776,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -33992,7 +33881,6 @@ BI.Label = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -34039,29 +33927,22 @@ BI.Label = BI.inherit(BI.Single, {
         json.textAlign = "left";
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                json.textAlign = o.textAlign;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -34073,7 +33954,7 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (o.whiteSpace == "normal") {
+            if (o.whiteSpace == "normal") { // 1.3
                 BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -34091,39 +33972,42 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (BI.isNumber(o.height) && o.height > 0) {
+            if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                 this.element.css({
                     "line-height": o.height + "px"
                 });
                 json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
-            json.textAlign = o.textAlign;
+            BI.extend(json, { // 1.5
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {  // 1.6
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -34136,7 +34020,7 @@ BI.Label = BI.inherit(BI.Single, {
             });
             return;
         }
-        if (o.whiteSpace == "normal") {
+        if (o.whiteSpace == "normal") { // 1.7
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -34148,54 +34032,26 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
+                scrollable: true,
                 element: this,
                 items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
-            BI.extend(json, {
+        if (BI.isNumber(o.height) && o.height > 0) { // 1.8
+            this.element.css({
+                "line-height": o.height + "px"
+            });
+            json.textAlign = o.textAlign;
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-            json.textAlign = o.textAlign;
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -34206,24 +34062,14 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-        json.textAlign = o.textAlign;
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -34233,26 +34079,21 @@ BI.Label = BI.inherit(BI.Single, {
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
+                if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.vertical_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                BI.createWidget({
+                BI.createWidget({ // 2.2
                     type: "bi.vertical_adapt",
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
@@ -34268,46 +34109,27 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) { // 2.3
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
+            BI.createWidget({ // 2.4
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -34321,12 +34143,11 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
-            BI.createWidget({
+            BI.createWidget({  // 2.5
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -34342,66 +34163,23 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, { // 2.6
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -34412,23 +34190,14 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -44233,7 +44002,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top bi-border-right",
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
@@ -44244,7 +44012,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.okButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
@@ -46206,7 +45973,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -46219,7 +45985,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -46235,7 +46000,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -47051,7 +46815,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -47064,7 +46827,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -47080,7 +46842,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -63517,7 +63278,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         type: "bi.grid",
                         items: [[{
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Clears"),
@@ -63529,7 +63289,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Now"),
@@ -63541,7 +63300,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_OK"),
@@ -64860,7 +64618,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -64873,7 +64630,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         textHeight: c.buttonHeight - 1,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
@@ -64889,7 +64645,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -65618,7 +65373,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -65631,7 +65385,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -65647,7 +65400,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -66621,7 +66373,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -66634,7 +66385,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -66650,7 +66400,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
