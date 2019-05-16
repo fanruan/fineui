@@ -79,7 +79,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试激活状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -101,7 +100,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试选中状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -144,7 +142,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     text: "这个按钮是灰化的",
-                    forceCenter: true,
                     disabled: true
                 }
             }]
@@ -181,7 +178,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试悬浮状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -203,7 +199,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试激活状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -225,7 +220,6 @@ Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试选中状态",
-                    forceCenter: true
                 }
             }]
         };

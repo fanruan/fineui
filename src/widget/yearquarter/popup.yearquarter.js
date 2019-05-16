@@ -25,7 +25,6 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -38,7 +37,6 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -54,7 +52,6 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,

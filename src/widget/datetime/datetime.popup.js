@@ -14,7 +14,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top bi-border-right",
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
@@ -25,7 +24,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.okButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")

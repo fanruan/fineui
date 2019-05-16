@@ -25,7 +25,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
             ghost: false, // 是否幽灵显示, 即正常状态无背景
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: props.clear ? 0 : 10,
@@ -79,7 +78,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
-                forceCenter: o.forceCenter,
                 textWidth: o.textWidth,
                 textHeight: o.textHeight,
                 hgap: o.hgap,

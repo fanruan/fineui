@@ -28,7 +28,6 @@
                         type: "bi.grid",
                         items: [[{
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Clears"),
@@ -40,7 +39,6 @@
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Now"),
@@ -52,7 +50,6 @@
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_OK"),
