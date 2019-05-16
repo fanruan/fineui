@@ -36148,7 +36148,8 @@ BI.Text = BI.inherit(BI.Single, {
 
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
-        this.options.text = text;
+        //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
+        this.options.text = BI.isNotNull(text) ? text : "";
         if (BI.isIE9Below()) {
             this.text.element.html(BI.htmlEncode(this._getShowText()));
             return;
