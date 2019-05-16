@@ -83,6 +83,9 @@ BI.TextEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
             self.fireEvent(BI.TextEditor.EVENT_REMOVE);
         });
@@ -155,6 +158,7 @@ BI.TextEditor.EVENT_START = "EVENT_START";
 BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.TextEditor.EVENT_STOP = "EVENT_STOP";
 BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.TextEditor.EVENT_VALID = "EVENT_VALID";
 BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";

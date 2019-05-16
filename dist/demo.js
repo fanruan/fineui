@@ -3506,6 +3506,10 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.date_time"
 }, {
     pId: 412,
+    text: "bi.time_combo",
+    value: "demo.time_combo"
+}, {
+    pId: 412,
     text: "bi.time_interval",
     value: "demo.time_interval"
 }, {
@@ -8861,15 +8865,25 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300
-                // value: {
-                //     type: 1,
-                //     value: {
-                //         year: 2018,
-                //         month: 2,
-                //         day: 23
-                //     }
-                // }
+                width: 300,
+                // allowEdit: false,
+                // format: "%Y-%X-%d", // yyyy-MM-dd
+                // format: "%Y/%X/%d", // yyyy/MM/dd
+                // format: "%Y-%x-%e",  // yyyy-M-d
+                // format: "%Y/%x/%e",  // yyyy/M/d
+                // format: "%X/%d/%Y",  // MM/dd/yyyy
+                // format: "%X/%e/%y",  // MM/d/yy
+                // format: "%X.%d.%Y",  // MM.dd.yyyy
+                // format: "%X.%e.%Y",  // MM.d.yyyy
+                // format: "%X-%e-%y",  // MM.d.yyyy
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 2,
+                        day: 23
+                    }
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -8883,6 +8897,25 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datetimecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
+                // format: "%Y-%X-%d %H:%M:%S", // yyyy-MM-dd HH:mm:ss
+                // format: "%Y/%X/%d %H:%M:%S", // yyyy/MM/dd HH:mm:ss
+                // format: "%Y-%X-%d %I:%M:%S",  // yyyy-MM-dd hh:mm:ss
+                // format: "%Y/%X/%d %I:%M:%S",  // yyyy/MM/dd hh:mm:ss
+                // format: "%Y-%X-%d %H:%M:%S %p",  // yyyy-MM-dd HH:mm:ss a
+                // format: "Y/%X/%d %H:%M:%S %p",  // yyyy/MM/dd HH:mm:ss a
+                // format: "%Y-%X-%d %I:%M:%S %p",  // yyyy-MM-dd hh:mm:ss a
+                // format: "%Y/%X/%d %I:%M:%S %p",  // yyyy/MM/dd hh:mm:ss a
+                // format: "%X/%d/%Y %I:%M:%S",  // MM/dd/yyyy hh:mm:ss
+                // format: "%X/%d/%Y %H:%M:%S",  // MM/dd/yyyy HH:mm:ss
+                // format: "%X/%d/%Y %I:%M:%S",  // MM/dd/yyyy hh:mm:ss a
+                // format: "%X/%d/%Y %H:%M:%S %p",  // MM/dd/yyyy HH:mm:ss a
+                // format: "%X/%d/%Y %I:%M:%S %p",  // MM/dd/yyyy hh:mm:ss a
+                // format: "%X/%d/%Y %H:%M:%S %p",  // MM/dd/yyyy HH:mm:ss a
+                // format: "%X/%d/%Y %l:%M %p",  // MM/dd/yyyy h:mm a
+                // format: "%X-%d-%Y %k:%M %p",  // MM/dd/yyyy H:mm a
+                // format: "%Y-%x-%e %l:%M",  // yyyy-M-d h:mm
+                // format: "%Y-%x-%e %k:%M",  // yyyy-M-d H:mm
                 value: {
                     type: 1,
                     value: {
@@ -9255,6 +9288,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var self = this;
         var widget = BI.createWidget({
             type: "bi.multi_select_insert_combo",
+            // allowEdit: false,
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
@@ -10058,6 +10092,53 @@ Demo.Slider = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.slider", Demo.Slider);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.TimeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.time_combo",
+                ref: function (_ref) {
+                    self.timeCombo = _ref;
+                },
+                // allowEdit: true,
+                // format: "%H:%M:%S",  // HH:mm:ss
+                // format: "%I:%M:%S",  // hh:mm:ss
+                // format: "%l:%M:%S",  // h:mm:ss
+                // format: "%k:%M:%S",  // H:mm:ss
+                // format: "%l:%M:%S %p",  // h:mm:ss a
+                // format: "%l:%M",  // h:mm
+                // format: "%k:%M",  // H:mm
+                // format: "%I:%M",  // hh:mm
+                // format: "%H:%M",  // HH:mm
+                // format: "%M:%S",  // mm:ss
+                value: {
+                    hour: 12,
+                    minute: 0,
+                    second: 0
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.timeCombo.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        };
+    }
+});
+
+BI.shortcut("demo.time_combo", Demo.TimeCombo);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.TimeInterval = BI.inherit(BI.Widget, {

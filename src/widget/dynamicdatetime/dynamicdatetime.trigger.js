@@ -4,14 +4,17 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d %H:%M:%S"
     },
 
     props: {
         extraCls: "bi-date-time-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -22,9 +25,10 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                !BI.isKey(o.format) && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -38,30 +42,13 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Basic_Date_Time_Error_Text");
+                var str = "";
+                if (!BI.isKey(o.format)) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), "%Y-%X-%d %H:%M:%S");
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
@@ -86,7 +73,8 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split(/-|\s|:/);
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -117,8 +105,94 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                 width: 24
             }]
         });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
     },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                    value.second || 0), this._getFormatString());
+        }
+    },
+
+    _getStandardDateStr: function (v) {
+        var result = [];
+        var hasSecond = false;
+        var formatArray = this._getFormatString().match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                    result[2] = idx;
+                    break;
+                case "%S":
+                    hasSecond = true;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        // 处理乱序的年月日
+        BI.each(dateArray.slice(0, 3), function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        // 拼接时分秒和pm
+        var suffixArray = dateArray.slice(3);
+        // hh:mm
+        if(suffixArray.length === 2 && !hasSecond) {
+            suffixArray.push("00");
+        }
+        var suffixString = suffixArray.join(":");
+        var dateString = newArray.slice(0, 3).join("-");
+        if (BI.isNotEmptyString(suffixString)) {
+            dateString += " " + suffixString;
+        }
+        return dateString;
+    },
+
+    _getFormatString: function () {
+        return this.options.format || this._const.compareFormat;
+    },
+
     _dateCheck: function (date) {
         return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
@@ -165,7 +239,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%e %H:%M:%S");
+        var dateStr = BI.print(date, this._getFormatString());
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -242,7 +316,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     this.editor.setValue("");
                 } else {
                     var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0), "%Y-%X-%d %H:%M:%S");
+                        value.second || 0), this._getFormatString());
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }

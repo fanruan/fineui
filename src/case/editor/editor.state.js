@@ -111,6 +111,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.StateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.StateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.StateEditor.EVENT_START, arguments);
         });
@@ -274,6 +278,7 @@ BI.StateEditor.EVENT_START = "EVENT_START";
 BI.StateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.StateEditor.EVENT_STOP = "EVENT_STOP";
 BI.StateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.StateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.StateEditor.EVENT_VALID = "EVENT_VALID";
 BI.StateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.StateEditor.EVENT_ENTER = "EVENT_ENTER";

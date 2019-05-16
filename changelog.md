@@ -1,5 +1,10 @@
 # 更新日志
 2.0(2019-05)
+- editor类控件新增EVENT_CHANGE_CONFIRM事件
+- 复选下拉控件和树下拉控件支持trigger是否可编辑
+- 时分秒控件支持自定义时间显示格式和是否可编辑
+- 日期/时间/日期区间/时间区间支持自定义日期选择范围和是否可编辑
+- 日期/时间/日期区间/时间区间支持自定义日期显示格式和是否可编辑
 - 增加less函数: 字体资源添加函数addFontRe和字体激活函数activeFont
 
 > @fontList: "dec", "report";
@@ -8,7 +13,6 @@
 > .activateFont(@fontList);
 
 以上即可使用自定义的dec,report字体和fineui的资源字体
-
 
 2.0(2019-04)
 - 新增`bi.multi_tree_list_combo`控件, 此下拉树勾选节点时不会影响父子节点的勾选状态
