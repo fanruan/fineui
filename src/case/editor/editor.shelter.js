@@ -222,6 +222,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },

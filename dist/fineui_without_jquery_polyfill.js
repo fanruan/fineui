@@ -32455,6 +32455,10 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     getValue: function () {
         if (!this.isValid()) {
             return BI.trim(this.editor.getLastValidValue());
@@ -33328,6 +33332,10 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
+        return this._lastValidValue;
+    },
+
+    getLastChangedValue: function () {
         return this._lastChangedValue;
     },
 
@@ -39142,6 +39150,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },
@@ -39413,6 +39425,10 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -39665,6 +39681,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (k) {
@@ -39940,6 +39960,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (k) {
@@ -47730,7 +47754,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -47740,6 +47764,10 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (v) {
@@ -53866,7 +53894,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -61730,7 +61758,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -62057,6 +62085,10 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (v) {

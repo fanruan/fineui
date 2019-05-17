@@ -267,6 +267,10 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
+        return this._lastValidValue;
+    },
+
+    getLastChangedValue: function () {
         return this._lastChangedValue;
     },
 
