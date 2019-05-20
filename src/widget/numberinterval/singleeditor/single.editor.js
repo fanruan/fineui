@@ -25,32 +25,37 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.Editor.EVENT_ERROR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_ERROR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_FOCUS,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_FOCUS, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_BLUR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_BLUR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_BLUR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_VALID,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_VALID, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_VALID, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CHANGE,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CHANGE, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CONFIRM,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_CHANGE_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM, arguments);
                     }
                 }]
             }]
@@ -74,4 +79,11 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
     }
 });
 
+BI.NumberIntervalSingleEidtor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.NumberIntervalSingleEidtor.EVENT_BLUR = "EVENT_BLUR";
+BI.NumberIntervalSingleEidtor.EVENT_ERROR = "EVENT_ERROR";
+BI.NumberIntervalSingleEidtor.EVENT_VALID = "EVENT_VALID";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
+BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);

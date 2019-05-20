@@ -63,6 +63,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             self._checkText();
             self.fireEvent(BI.SignTextEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignTextEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
             self._checkText();
         });
@@ -162,6 +167,10 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (v) {
         this.editor.setValue(v);
         this._checkText();
@@ -183,6 +192,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SignTextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignTextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);

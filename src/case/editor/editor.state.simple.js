@@ -99,6 +99,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.SimpleStateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SimpleStateEditor.EVENT_START, arguments);
         });
@@ -197,6 +201,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
@@ -248,6 +256,7 @@ BI.SimpleStateEditor.EVENT_START = "EVENT_START";
 BI.SimpleStateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SimpleStateEditor.EVENT_STOP = "EVENT_STOP";
 BI.SimpleStateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SimpleStateEditor.EVENT_VALID = "EVENT_VALID";
 BI.SimpleStateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SimpleStateEditor.EVENT_ENTER = "EVENT_ENTER";

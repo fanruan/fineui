@@ -15177,9 +15177,22 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else {
-                var node = addNode(newStartVnode);
-                insertBefore(node, oldStartVnode);
-                newStartVnode = newCh[++newStartIdx];
+                var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
+                if (BI.isNull(sameOldVnode)) {  //  不存在就把新的放到左边
+                    var node = addNode(newStartVnode);
+                    insertBefore(node, oldStartVnode);
+                    newStartVnode = newCh[++newStartIdx];
+                } else {   //  如果新节点在就旧节点区间中存在就复用一下
+                    BI.each(oldCh, function (index, child) {
+                        if (child && sameVnode(child, newStartVnode)) {
+                            updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
+                            children[sameOldVnode.key == null ? self._getChildName(index) : sameOldVnode.key] = self._children[self._getChildName(index)];
+                            oldCh[index] = undefined;
+                            insertBefore(sameOldVnode, oldStartVnode);
+                        }
+                    });
+                    newStartVnode = newCh[++newStartIdx];
+                }
             }
         }
         if (oldStartIdx > oldEndIdx) {
@@ -15223,9 +15236,13 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? self._getChildName(startIdx) : node.key;
-                children[key]._destroy();
+                var ch = vnodes[startIdx];
+                if (BI.isNotNull(ch)) {
+                    var node = self._getOptions(ch);
+                    var key = node.key == null ? self._getChildName(startIdx) : node.key;
+                    delete self._children[self._getChildName(key)];
+                    children[key]._destroy();
+                }
             }
         }
 
@@ -15249,6 +15266,16 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 self._getWrapper().append(children[insertKey].element);
             }
+        }
+
+        function findOldVnode (vnodes, vNode, beginIdx, endIdx) {
+            var i, found;
+            for (i = beginIdx; i <= endIdx; ++i) {
+                if (vnodes[i] && sameVnode(vnodes[i], vNode)) {
+                    found = vnodes[i];
+                }
+            }
+            return found;
         }
 
         return updated;
@@ -15892,21 +15919,16 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
 
     // replace the html special tags
+    var SPECIAL_TAGS = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
     // html decode
@@ -18017,8 +18039,8 @@ _.extend(BI, {
         s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
         s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
         s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-        s["%k"] = hr;		// hour, range 0 to 23 (24h format)
-        s["%l"] = ir;		// hour, range 1 to 12 (12h format)
+        s["%k"] = hr + "";		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir + "";		// hour, range 1 to 12 (12h format)
         s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
         s["%x"] = m + 1; // month, range 1 to 12
         s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
@@ -19451,7 +19473,7 @@ BI.prepares.push(function () {
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = BI.Widget._renderEngine._data(fromElement[0]);
+            var elemData = jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
@@ -36046,10 +36068,14 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -36067,15 +36093,7 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    _getShowText: function () {
-        var o = this.options;
-        return BI.isFunction(o.text) ? o.text() : o.text;
-    },
-
-    mounted: function () {
-        var o = this.options;
         var text = this._getShowText();
         if (BI.isKey(text)) {
             this.setText(text);
@@ -36089,6 +36107,12 @@ BI.Text = BI.inherit(BI.Single, {
             this.doHighLight();
         }
     },
+
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
 
     doRedMark: function (keyword) {
         var o = this.options;
@@ -36124,8 +36148,18 @@ BI.Text = BI.inherit(BI.Single, {
 
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
-        this.options.text = text;
-        this.text.element.html(BI.htmlEncode(this._getShowText()));
+        //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
+        this.options.text = BI.isNotNull(text) ? text : "";
+        if (BI.isIE9Below()) {
+            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            return;
+        }
+        if (/\s/.test(text)) {
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
+        } else {
+            //  textContent性能更好,并且原生防xss
+            this.text.element[0].textContent = this._getShowText();
+        }
     }
 });
 
@@ -42966,7 +43000,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
             ghost: false, // 是否幽灵显示, 即正常状态无背景
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: props.clear ? 0 : 10,
@@ -43020,7 +43053,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
-                forceCenter: o.forceCenter,
                 textWidth: o.textWidth,
                 textHeight: o.textHeight,
                 hgap: o.hgap,
@@ -43103,7 +43135,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             baseCls: (conf.baseCls || "") + " bi-text-button",
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -43124,7 +43155,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             whiteSpace: o.whiteSpace,
             textWidth: o.textWidth,
             textHeight: o.textHeight,
-            forceCenter: o.forceCenter,
             width: o.width,
             height: o.height,
             hgap: o.hgap,
@@ -44348,7 +44378,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                forceCenter: true,
                 height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
@@ -44482,6 +44511,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -44595,6 +44627,10 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     getValue: function () {
         if (!this.isValid()) {
             return BI.trim(this.editor.getLastValidValue());
@@ -44626,6 +44662,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";
@@ -45936,9 +45973,13 @@ BI.Input = BI.inherit(BI.Single, {
             self._isEditing = false;
             self._start = false;
             if (self.isValid()) {
+                var lastValidValue = self._lastValidValue;
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
+                if(self._lastValidValue !== lastValidValue) {
+                    self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
+                }
             }
             self.fireEvent(BI.Input.EVENT_BLUR);
         }
@@ -46088,6 +46129,10 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
+        return this._lastValidValue;
+    },
+
+    getLastChangedValue: function () {
         return this._lastChangedValue;
     },
 
@@ -46124,6 +46169,7 @@ BI.Input.EVENT_BACKSPACE = "EVENT_BACKSPACE";
 BI.Input.EVENT_START = "EVENT_START";
 BI.Input.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Input.EVENT_STOP = "EVENT_STOP";
+BI.Input.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Input.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.Input.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Input.EVENT_EMPTY = "EVENT_EMPTY";
@@ -46236,7 +46282,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -46276,28 +46321,22 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -46310,16 +46349,18 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 return;
             }
             if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
+                BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
+                    bgap: o.bgap
+                });
+                this.text = BI.createWidget(json);
+                BI.createWidget({
+                    type: "bi.center_adapt",
+                    scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
                 });
@@ -46329,33 +46370,37 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 this.element.css({
                     "line-height": o.height + "px"
                 });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
+            BI.extend(json, {
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -46369,41 +46414,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -46412,17 +46422,28 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 tgap: o.tgap,
                 bgap: o.bgap
             });
+            this.text = BI.createWidget(json);
+            BI.createWidget({
+                type: "bi.center_adapt",
+                scrollable: true,
+                element: this,
+                items: [this.text]
+            });
+            return;
+        }
+        if (BI.isNumber(o.height) && o.height > 0) {
             this.element.css({
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this
+                element: this,
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -46433,22 +46454,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -46460,21 +46473,16 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.vertical_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
                 BI.createWidget({
@@ -46493,42 +46501,23 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) {
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
@@ -46546,7 +46535,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
@@ -46567,66 +46555,23 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -46637,23 +46582,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -46751,7 +46687,6 @@ BI.Label = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -46798,29 +46733,22 @@ BI.Label = BI.inherit(BI.Single, {
         json.textAlign = "left";
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                json.textAlign = o.textAlign;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -46832,7 +46760,7 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (o.whiteSpace == "normal") {
+            if (o.whiteSpace == "normal") { // 1.3
                 BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -46850,39 +46778,42 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (BI.isNumber(o.height) && o.height > 0) {
+            if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                 this.element.css({
                     "line-height": o.height + "px"
                 });
                 json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
-            json.textAlign = o.textAlign;
+            BI.extend(json, { // 1.5
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {  // 1.6
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -46895,7 +46826,7 @@ BI.Label = BI.inherit(BI.Single, {
             });
             return;
         }
-        if (o.whiteSpace == "normal") {
+        if (o.whiteSpace == "normal") { // 1.7
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -46907,54 +46838,26 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
+                scrollable: true,
                 element: this,
                 items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
-            BI.extend(json, {
+        if (BI.isNumber(o.height) && o.height > 0) { // 1.8
+            this.element.css({
+                "line-height": o.height + "px"
+            });
+            json.textAlign = o.textAlign;
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-            json.textAlign = o.textAlign;
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -46965,24 +46868,14 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-        json.textAlign = o.textAlign;
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -46992,26 +46885,21 @@ BI.Label = BI.inherit(BI.Single, {
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
+                if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.vertical_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                BI.createWidget({
+                BI.createWidget({ // 2.2
                     type: "bi.vertical_adapt",
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
@@ -47027,46 +46915,27 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) { // 2.3
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
+            BI.createWidget({ // 2.4
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -47080,12 +46949,11 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
-            BI.createWidget({
+            BI.createWidget({  // 2.5
                 type: "bi.vertical_adapt",
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
@@ -47101,66 +46969,23 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, { // 2.6
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -47171,23 +46996,14 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -55719,6 +55535,9 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);
         });
@@ -55783,6 +55602,7 @@ BI.ClearEditor.EVENT_START = "EVENT_START";
 BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
 BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ClearEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
 BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -55889,6 +55709,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.ShelterEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.ShelterEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ShelterEditor.EVENT_START, arguments);
@@ -56008,6 +55833,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },
@@ -56042,6 +55871,7 @@ BI.ShelterEditor.EVENT_START = "EVENT_START";
 BI.ShelterEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ShelterEditor.EVENT_STOP = "EVENT_STOP";
 BI.ShelterEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ShelterEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ShelterEditor.EVENT_VALID = "EVENT_VALID";
 BI.ShelterEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ShelterEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56152,6 +55982,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.SignEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SignEditor.EVENT_START, arguments);
@@ -56273,6 +56108,10 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -56302,6 +56141,7 @@ BI.SignEditor.EVENT_START = "EVENT_START";
 BI.SignEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SignEditor.EVENT_STOP = "EVENT_STOP";
 BI.SignEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignEditor.EVENT_VALID = "EVENT_VALID";
 BI.SignEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SignEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56422,6 +56262,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.StateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.StateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.StateEditor.EVENT_START, arguments);
         });
@@ -56522,6 +56366,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
@@ -56585,6 +56433,7 @@ BI.StateEditor.EVENT_START = "EVENT_START";
 BI.StateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.StateEditor.EVENT_STOP = "EVENT_STOP";
 BI.StateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.StateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.StateEditor.EVENT_VALID = "EVENT_VALID";
 BI.StateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.StateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -56694,6 +56543,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.SimpleStateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SimpleStateEditor.EVENT_START, arguments);
         });
@@ -56792,6 +56645,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
@@ -56843,6 +56700,7 @@ BI.SimpleStateEditor.EVENT_START = "EVENT_START";
 BI.SimpleStateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SimpleStateEditor.EVENT_STOP = "EVENT_STOP";
 BI.SimpleStateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SimpleStateEditor.EVENT_VALID = "EVENT_VALID";
 BI.SimpleStateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SimpleStateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -60986,15 +60844,15 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 290,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
     _defaultConfig: function () {
         return BI.extend(BI.DateTimeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-time-combo bi-border bi-border-radius",
             width: 200,
-            height: 24
+            height: 24,
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -61011,16 +60869,16 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
         };
         this.trigger = BI.createWidget({
             type: "bi.date_time_trigger",
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
 
         this.popup = BI.createWidget({
             type: "bi.date_time_popup",
             behaviors: opts.behaviors,
-            min: this.constants.DATE_MIN_VALUE,
-            max: this.constants.DATE_MAX_VALUE,
+            min: opts.minDate,
+            max: opts.maxDate,
             value: opts.value
         });
         self.setValue(this.storeValue);
@@ -61128,7 +60986,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
         var self = this, opts = this.options;
         this.cancelButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top bi-border-right",
             shadow: true,
             text: BI.i18nText("BI-Basic_Cancel")
@@ -61139,7 +60996,6 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
 
         this.okButton = BI.createWidget({
             type: "bi.text_button",
-            forceCenter: true,
             cls: "multidate-popup-button bi-border-top",
             shadow: true,
             text: BI.i18nText("BI-Basic_OK")
@@ -62667,14 +62523,16 @@ BI.extend(BI.DynamicDateCard, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22
+        height: 22,
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        format: "",
+        allowEdit: true
     },
 
 
@@ -62710,8 +62568,10 @@ BI.extend(BI.DynamicDateCard, {
                         isNeedAdjustWidth: false,
                         el: {
                             type: "bi.dynamic_date_trigger",
-                            min: this.constants.DATE_MIN_VALUE,
-                            max: this.constants.DATE_MAX_VALUE,
+                            min: opts.minDate,
+                            max: opts.maxDate,
+                            format: opts.format,
+                            allowEdit: opts.allowEdit,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -62792,8 +62652,8 @@ BI.extend(BI.DynamicDateCard, {
                             el: {
                                 type: "bi.dynamic_date_popup",
                                 behaviors: opts.behaviors,
-                                min: this.constants.DATE_MIN_VALUE,
-                                max: this.constants.DATE_MAX_VALUE,
+                                min: opts.minDate,
+                                max: opts.maxDate,
                                 value: opts.value,
                                 ref: function () {
                                     self.popup = this;
@@ -63097,7 +62957,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Clear"),
@@ -63110,7 +62969,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -63126,7 +62984,6 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -63296,14 +63153,17 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d"
     },
 
     props: {
         extraCls: "bi-date-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -63314,9 +63174,10 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                !BI.isKey(o.format) && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -63330,30 +63191,13 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Date_Trigger_Error_Text");
+                var str = "";
+                if (!BI.isKey(o.format)) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.getDate();
-                        date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%X-%d");
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
@@ -63378,7 +63222,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split("-");
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -63411,8 +63256,81 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                 width: 24
             }]
         });
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
     },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.getDate();
+                date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day), this._getFormatString());
+        }
+    },
+
+    _getStandardDateStr: function (v) {
+        var c = this._const;
+        var result = [0, 1, 2];
+        var formatArray = this._getFormatString().match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                default:
+                    result[2] = idx;
+                    break;
+            }
+        });
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        BI.each(dateArray, function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        // 这边之所以不直接返回join结果是因为年的格式可能只有2位，所以需要format一下
+        if(newArray.length === result.length && newArray[0].length === 2) {
+            return BI.print(BI.parseDateTime(newArray.join("-"), c.compareFormat), c.compareFormat);
+        }
+        // 这边format成-20-也没关系, 反正都是不合法的
+        return newArray.join("-");
+    },
+
+    _getFormatString: function () {
+        return this.options.format || this._const.compareFormat;
+    },
+
     _dateCheck: function (date) {
         return BI.print(BI.parseDateTime(date, "%Y-%x-%d"), "%Y-%x-%d") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d"), "%Y-%X-%d") === date ||
@@ -63442,19 +63360,19 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
     },
 
     _yearCheck: function (v) {
-        var date = BI.print(BI.parseDateTime(v, "%Y-%X-%d"), "%Y-%X-%d");
+        var date = BI.print(BI.parseDateTime(v, this._getFormatString()), this._const.compareFormat);
         return BI.print(BI.parseDateTime(v, "%Y"), "%Y") === v && date >= this.options.min && date <= this.options.max;
     },
 
     _monthCheck: function (v) {
-        var date = BI.parseDateTime(v, "%Y-%X-%d");
-        var dateStr = BI.print(date, "%Y-%X-%d");
+        var date = BI.parseDateTime(v, this._getFormatString());
+        var dateStr = BI.print(date, this._const.compareFormat);
         return (date.getMonth() >= 0 && (BI.print(BI.parseDateTime(v, "%Y-%X"), "%Y-%X") === v ||
             BI.print(BI.parseDateTime(v, "%Y-%x"), "%Y-%x") === v)) && dateStr >= this.options.min && dateStr <= this.options.max;
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%d");
+        var dateStr = BI.print(date, this._getFormatString());
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -63530,7 +63448,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     this.editor.setState("");
                     this.editor.setValue("");
                 } else {
-                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), "%Y-%X-%d");
+                    var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day), this._getFormatString());
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -63562,14 +63480,16 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
-        height: 22
+        height: 22,
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        format: "",
+        allowEdit: true
     },
 
 
@@ -63605,8 +63525,10 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         isNeedAdjustWidth: false,
                         el: {
                             type: "bi.dynamic_date_time_trigger",
-                            min: this.constants.DATE_MIN_VALUE,
-                            max: this.constants.DATE_MAX_VALUE,
+                            min: opts.minDate,
+                            max: opts.maxDate,
+                            allowEdit: opts.allowEdit,
+                            format: opts.format,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -63687,8 +63609,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
                                 behaviors: opts.behaviors,
-                                min: this.constants.DATE_MIN_VALUE,
-                                max: this.constants.DATE_MAX_VALUE,
+                                min: opts.minDate,
+                                max: opts.maxDate,
                                 value: opts.value,
                                 ref: function () {
                                     self.popup = this;
@@ -63877,7 +63799,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -63890,7 +63811,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -63906,7 +63826,6 @@ BI.extend(BI.DynamicDateTimeCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -64301,14 +64220,17 @@ BI.extend(BI.DynamicDateTimeSelect, {
         vgap: 2,
         yearLength: 4,
         yearMonthLength: 6,
-        yearFullMonthLength: 7
+        yearFullMonthLength: 7,
+        compareFormat: "%Y-%X-%d %H:%M:%S"
     },
 
     props: {
         extraCls: "bi-date-time-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 24
+        height: 24,
+        format: "", // 显示的日期格式化方式
+        allowEdit: true // 是否允许编辑
     },
 
     _init: function () {
@@ -64319,9 +64241,10 @@ BI.extend(BI.DynamicDateTimeSelect, {
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
-                var date = v.match(/\d+/g);
-                self._autoAppend(v, date);
-                return self._dateCheck(v) && BI.checkDateLegal(v) && self._checkVoid({
+                var formatStr = self._getStandardDateStr(v);
+                var date = formatStr.match(/\d+/g);
+                !BI.isKey(o.format) && self._autoAppend(v, date);
+                return self._dateCheck(formatStr) && BI.checkDateLegal(formatStr) && self._checkVoid({
                     year: date[0] | 0,
                     month: date[1] | 0,
                     day: date[2] | 0
@@ -64335,30 +64258,13 @@ BI.extend(BI.DynamicDateTimeSelect, {
             allowBlank: true,
             watermark: BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
-                if (self.editor.isEditing()) {
-                    return BI.i18nText("BI-Basic_Date_Time_Error_Text");
+                var str = "";
+                if (!BI.isKey(o.format)) {
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Basic_Date_Time_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
-                return BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                return str;
             },
-            title: function () {
-                var storeValue = self.storeValue || {};
-                var type = storeValue.type || BI.DynamicDateCombo.Static;
-                var value = storeValue.value;
-                switch (type) {
-                    case BI.DynamicDateCombo.Dynamic:
-                        var text = self._getText(value);
-                        var date = BI.DynamicDateHelper.getCalculation(value);
-                        var dateStr = BI.print(date, "%Y-%x-%e %H:%M:%S");
-                        return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
-                    case BI.DynamicDateCombo.Static:
-                    default:
-                        if (BI.isNull(value) || BI.isNull(value.day)) {
-                            return "";
-                        }
-                        return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                            value.second || 0), "%Y-%X-%d %H:%M:%S");
-                }
-            }
+            title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
@@ -64383,7 +64289,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
             }
 
             if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
-                var date = value.split(/-|\s|:/);
+                var formatStr = self._getStandardDateStr(value);
+                var date = formatStr.match(/\d+/g);
                 self.storeValue = {
                     type: BI.DynamicDateCombo.Static,
                     value: {
@@ -64414,8 +64321,94 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 width: 24
             }]
         });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.text",
+                    title: BI.bind(this._getTitle, this)
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        });
         this.setValue(o.value);
     },
+
+    _getTitle: function () {
+        var storeValue = this.storeValue || {};
+        var type = storeValue.type || BI.DynamicDateCombo.Static;
+        var value = storeValue.value;
+        switch (type) {
+            case BI.DynamicDateCombo.Dynamic:
+                var text = this._getText(value);
+                var date = BI.DynamicDateHelper.getCalculation(value);
+                var dateStr = BI.print(date, this._getFormatString());
+                return BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr);
+            case BI.DynamicDateCombo.Static:
+            default:
+                if (BI.isNull(value) || BI.isNull(value.day)) {
+                    return "";
+                }
+                return BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
+                    value.second || 0), this._getFormatString());
+        }
+    },
+
+    _getStandardDateStr: function (v) {
+        var result = [];
+        var hasSecond = false;
+        var formatArray = this._getFormatString().match(/%./g);
+        BI.each(formatArray, function (idx, v) {
+            switch (v) {
+                case "%Y":
+                case "%y":
+                    result[0] = idx;
+                    break;
+                case "%X":
+                case "%x":
+                    result[1] = idx;
+                    break;
+                case "%d":
+                case "%e":
+                    result[2] = idx;
+                    break;
+                case "%S":
+                    hasSecond = true;
+                    break;
+                default:
+                    break;
+            }
+        });
+
+        var dateArray = v.match(/\d+/g);
+        var newArray = [];
+        // 处理乱序的年月日
+        BI.each(dateArray.slice(0, 3), function (idx) {
+            newArray[idx] = dateArray[result[idx]];
+        });
+        // 拼接时分秒和pm
+        var suffixArray = dateArray.slice(3);
+        // hh:mm
+        if(suffixArray.length === 2 && !hasSecond) {
+            suffixArray.push("00");
+        }
+        var suffixString = suffixArray.join(":");
+        var dateString = newArray.slice(0, 3).join("-");
+        if (BI.isNotEmptyString(suffixString)) {
+            dateString += " " + suffixString;
+        }
+        return dateString;
+    },
+
+    _getFormatString: function () {
+        return this.options.format || this._const.compareFormat;
+    },
+
     _dateCheck: function (date) {
         return BI.print(BI.parseDateTime(date, "%Y-%x-%d %H:%M:%S"), "%Y-%x-%d %H:%M:%S") === date ||
             BI.print(BI.parseDateTime(date, "%Y-%X-%d %H:%M:%S"), "%Y-%X-%d %H:%M:%S") === date ||
@@ -64462,7 +64455,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _setInnerValue: function (date) {
-        var dateStr = BI.print(date, "%Y-%X-%e %H:%M:%S");
+        var dateStr = BI.print(date, this._getFormatString());
         this.editor.setState(dateStr);
         this.editor.setValue(dateStr);
     },
@@ -64539,7 +64532,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     this.editor.setValue("");
                 } else {
                     var dateStr = BI.print(BI.getDate(value.year, (value.month - 1), value.day, value.hour || 0, value.minute || 0,
-                        value.second || 0), "%Y-%X-%d %H:%M:%S");
+                        value.second || 0), this._getFormatString());
                     this.editor.setState(dateStr);
                     this.editor.setValue(dateStr);
                 }
@@ -64680,6 +64673,9 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.SearchEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.SearchEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SearchEditor.EVENT_START);
         });
@@ -64717,7 +64713,7 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -64727,6 +64723,10 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     getLastValidValue: function () {
         return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     setValue: function (v) {
@@ -64757,6 +64757,7 @@ BI.SearchEditor.EVENT_START = "EVENT_START";
 BI.SearchEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SearchEditor.EVENT_STOP = "EVENT_STOP";
 BI.SearchEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SearchEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SearchEditor.EVENT_VALID = "EVENT_VALID";
 BI.SearchEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SearchEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -64867,6 +64868,9 @@ BI.TextEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.TextEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.TextEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_REMOVE, function (v) {
             self.fireEvent(BI.TextEditor.EVENT_REMOVE);
         });
@@ -64939,6 +64943,7 @@ BI.TextEditor.EVENT_START = "EVENT_START";
 BI.TextEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.TextEditor.EVENT_STOP = "EVENT_STOP";
 BI.TextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.TextEditor.EVENT_VALID = "EVENT_VALID";
 BI.TextEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.TextEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -68676,7 +68681,8 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -68695,6 +68701,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -69458,7 +69465,8 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -69536,6 +69544,20 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -70161,7 +70183,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -70236,6 +70259,20 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -70816,7 +70853,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -72940,7 +72977,8 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-insert-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            allowEdit: true
         });
     },
 
@@ -72956,6 +72994,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -73225,7 +73264,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-list-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            allowEdit: true
         });
     },
 
@@ -73241,6 +73281,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -74614,7 +74655,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setFocusEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_FOCUS, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, function () {
             self._setTitle("");
             switch (self._checkValidation()) {
                 case c.typeError:
@@ -74643,7 +74684,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_BLUR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_BLUR, function () {
             BI.Bubbles.hide(c.typeError);
             BI.Bubbles.hide(c.numberError);
             BI.Bubbles.hide(c.signalError);
@@ -74665,7 +74706,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setErrorEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_ERROR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
@@ -74678,7 +74719,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setValidEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_VALID, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_VALID, function () {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
@@ -74703,7 +74744,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setEditorValueChangedEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_CHANGE, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, function () {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
@@ -74728,7 +74769,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
-        w.on(BI.Editor.EVENT_CONFIRM, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
         });
     },
@@ -74893,32 +74934,37 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
                 listeners: [{
                     eventName: BI.Editor.EVENT_ERROR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_ERROR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_ERROR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_FOCUS,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_FOCUS, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_BLUR,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_BLUR, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_BLUR, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_VALID,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_VALID, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_VALID, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CHANGE,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CHANGE, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, arguments);
                     }
                 }, {
                     eventName: BI.Editor.EVENT_CONFIRM,
                     action: function () {
-                        self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, arguments);
+                    }
+                }, {
+                    eventName: BI.Editor.EVENT_CHANGE_CONFIRM,
+                    action: function () {
+                        self.fireEvent(BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM, arguments);
                     }
                 }]
             }]
@@ -74942,6 +74988,13 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
     }
 });
 
+BI.NumberIntervalSingleEidtor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.NumberIntervalSingleEidtor.EVENT_BLUR = "EVENT_BLUR";
+BI.NumberIntervalSingleEidtor.EVENT_ERROR = "EVENT_ERROR";
+BI.NumberIntervalSingleEidtor.EVENT_VALID = "EVENT_VALID";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
+BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);/**
  * 季度下拉框
  *
@@ -78664,7 +78717,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);
@@ -78889,6 +78942,11 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
             self._checkText();
             self.fireEvent(BI.SignTextEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignTextEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_ERROR, function () {
             self._checkText();
         });
@@ -78988,6 +79046,10 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (v) {
         this.editor.setValue(v);
         this._checkText();
@@ -79009,6 +79071,7 @@ BI.SignTextEditor = BI.inherit(BI.Widget, {
     }
 });
 BI.SignTextEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignTextEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);/**
@@ -80207,7 +80270,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         type: "bi.grid",
                         items: [[{
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Clears"),
@@ -80219,7 +80281,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_Now"),
@@ -80231,7 +80292,6 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             }]
                         }, {
                             type: "bi.text_button",
-                            forceCenter: true,
                             cls: "bi-high-light bi-split-top",
                             shadow: true,
                             text: BI.i18nText("BI-Basic_OK"),
@@ -80290,12 +80350,14 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         props: {
             baseCls: "bi-time-combo bi-border bi-border-radius",
             width: 78,
-            height: 22
+            height: 22,
+            format: "",
+            allowEdit: false
         },
 
         render: function () {
             var self = this, opts = this.options;
-
+            this.storeTriggerValue = "";
             this.storeValue = opts.value;
 
             var popup = {
@@ -80338,10 +80400,74 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             isNeedAdjustWidth: false,
                             el: {
                                 type: "bi.time_trigger",
+                                allowEdit: opts.allowEdit,
+                                format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
                                     self.trigger = _ref;
-                                }
+                                },
+                                listeners: [{
+                                    eventName: "EVENT_KEY_DOWN",
+                                    action: function () {
+                                        if (self.combo.isViewVisible()) {
+                                            self.combo.hideView();
+                                        }
+                                    }
+                                }, {
+                                    eventName: "EVENT_STOP",
+                                    action: function () {
+                                        if (!self.combo.isViewVisible()) {
+                                            self.combo.showView();
+                                        }
+                                    }
+                                }, {
+                                    eventName: "EVENT_FOCUS",
+                                    action: function () {
+                                        self.storeTriggerValue = self.trigger.getKey();
+                                        if (!self.combo.isViewVisible()) {
+                                            self.combo.showView();
+                                        }
+                                        self.fireEvent("EVENT_FOCUS");
+                                    }
+                                }, {
+                                    eventName: "EVENT_ERROR",
+                                    action: function () {
+                                        var date = BI.getDate();
+                                        self.storeValue = {
+                                            hour: date.getHours(),
+                                            minute: date.getMinutes(),
+                                            second: date.getSeconds()
+                                        };
+                                        self.fireEvent("EVENT_ERROR");
+                                    }
+                                }, {
+                                    eventName: "EVENT_VALID",
+                                    action: function () {
+                                        self.fireEvent("EVENT_VALID");
+                                    }
+                                }, {
+                                    eventName: "EVENT_CHANGE",
+                                    action: function () {
+                                        self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }, {
+                                    eventName: "EVENT_CONFIRM",
+                                    action: function () {
+                                        if (self.combo.isViewVisible()) {
+                                            return;
+                                        }
+                                        var dateStore = self.storeTriggerValue;
+                                        var dateObj = self.trigger.getKey();
+                                        if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
+                                            self.storeValue = self.trigger.getValue();
+                                            self.setValue(self.trigger.getValue());
+                                        } else if (BI.isEmptyString(dateObj)) {
+                                            self.storeValue = null;
+                                            self.trigger.setValue();
+                                        }
+                                        self.fireEvent("EVENT_CONFIRM");
+                                    }
+                                }]
                             },
                             adjustLength: this.constants.comboAdjustHeight,
                             popup: {
@@ -80365,7 +80491,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         },
                         top: 0,
                         left: 0,
-                        right: 0,
+                        right: 22,
                         bottom: 0
                     }, {
                         el: {
@@ -80425,42 +80551,165 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
     BI.shortcut("bi.time_combo", BI.TimeCombo);
 })();!(function () {
     BI.TimeTrigger = BI.inherit(BI.Trigger, {
+
+        _const: {
+            COMPARE_FORMAT: "%H:%M:%S",
+            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S",
+            FORMAT_ARRAY: [
+                "%H:%M:%S",  // HH:mm:ss
+                "%I:%M:%S",  // hh:mm:ss
+                "%l:%M:%S",  // h:mm:ss
+                "%k:%M:%S",  // H:mm:ss
+                "%l:%M:%S %p",  // h:mm:ss a
+                "%l:%M:%S %P",  // h:mm:ss a
+                "%l:%M",  // h:mm
+                "%k:%M",  // H:mm
+                "%I:%M",  // hh:mm
+                "%H:%M",  // HH:mm
+                "%M:%S"   // mm:ss
+            ],
+            DEFAULT_DATE_STRING: "2000-01-01"
+        },
+
         props: {
             extraCls: "bi-time-trigger",
-            height: 22,
-            width: 80,
-            value: {}
+            value: {},
+            format: "",
+            allowEdit: false
         },
+
         render: function () {
             var self = this, o = this.options;
+            this.storeTriggerValue = "";
+            this.storeValue = o.value;
             return {
-                type: "bi.htape",
+                type: "bi.absolute",
                 items: [{
                     el: {
-                        type: "bi.label",
-                        title: function () {
-                            return self.text.getText();
-                        },
-                        textAlign: "left",
+                        type: "bi.sign_editor",
                         height: o.height,
-                        width: o.width,
-                        text: this._formatValue(o.value),
+                        validationChecker: function (v) {
+                            return self._dateCheck(v);
+                        },
+                        quitChecker: function () {
+                            return false;
+                        },
                         ref: function (_ref) {
-                            self.text = _ref;
-                        }
+                            self.editor = _ref;
+                        },
+                        value: this._formatValue(o.value),
+                        hgap: 4,
+                        allowBlank: true,
+                        watermark: BI.i18nText("BI-Basic_Unrestricted"),
+                        title: BI.bind(this._getTitle, this),
+                        listeners: [{
+                            eventName: "EVENT_KEY_DOWN",
+                            action: function () {
+                                self.fireEvent("EVENT_KEY_DOWN");
+                            }
+                        }, {
+                            eventName: "EVENT_FOCUS",
+                            action: function () {
+                                self.storeTriggerValue = self.getKey();
+                                self.fireEvent("EVENT_FOCUS");
+                            }
+                        }, {
+                            eventName: "EVENT_STOP",
+                            action: function () {
+                                self.fireEvent("EVENT_STOP");
+                            }
+                        }, {
+                            eventName: "EVENT_VALID",
+                            action: function () {
+                                self.fireEvent("EVENT_VALID");
+                            }
+                        }, {
+                            eventName: "EVENT_ERROR",
+                            action: function () {
+                                self.fireEvent("EVENT_ERROR");
+                            }
+                        }, {
+                            eventName: "EVENT_CONFIRM",
+                            action: function () {
+                                var value = self.editor.getValue();
+                                if (BI.isNotNull(value)) {
+                                    self.editor.setState(value);
+                                }
+                                if (BI.isNotEmptyString(value) && !BI.isEqual(self.storeTriggerValue, self.getKey())) {
+                                    var date = value.match(/\d+/g);
+                                    self.storeValue = {
+                                        hour: date[0] | 0,
+                                        minute: date[1] | 0,
+                                        second: date[2] | 0
+                                    };
+                                }
+                                self.fireEvent("EVENT_CONFIRM");
+                            }
+                        }, {
+                            eventName: "EVENT_START",
+                            action: function () {
+                                self.fireEvent("EVENT_START");
+                            }
+                        }, {
+                            eventName: "EVENT_CHANGE",
+                            action: function () {
+                                self.fireEvent("EVENT_CHANGE");
+                            }
+                        }]
                     },
-                    hgap: 4
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }, {
+                    el: {
+                        type: "bi.text",
+                        invisible: o.allowEdit,
+                        cls: "show-text",
+                        title: BI.bind(this._getTitle, this),
+                        hgap: 4
+                    },
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
                 }]
             };
         },
 
-        setValue: function (v) {
-            this.text.setText(this._formatValue(v));
+        _dateCheck: function (date) {
+            var c = this._const;
+            return BI.any(c.FORMAT_ARRAY, function (idx, format) {
+                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + date, c.COMPLETE_COMPARE_FORMAT), format) === date;
+            });
+        },
+
+        _getTitle: function () {
+            var storeValue = this.storeValue || {};
+            var date = BI.getDate();
+            return BI.print(BI.getDate(date.getFullYear(), 0, 1, storeValue.hour, storeValue.minute, storeValue.second), this._getFormatString());
+        },
+
+        _getFormatString: function () {
+            return this.options.format || this._const.COMPARE_FORMAT;
         },
 
         _formatValue: function (v) {
             var now = BI.getDate();
-            return BI.isNotEmptyObject(v) ? BI.print(BI.getDate(now.getFullYear(), now.getMonth(), now.getDay(), v.hour, v.minute, v.second), "%H:%M:%S") : BI.i18nText("BI-Basic_Unrestricted");
+            return BI.isNotEmptyObject(v) ? BI.print(BI.getDate(now.getFullYear(), now.getMonth(), now.getDay(), v.hour, v.minute, v.second), this._getFormatString()) : BI.i18nText("BI-Basic_Unrestricted");
+        },
+
+        getKey: function () {
+            return this.editor.getValue();
+        },
+
+        setValue: function (v) {
+            this.storeValue = v;
+            this.editor.setValue(this._formatValue(v));
+        },
+
+        getValue: function () {
+            return this.storeValue;
         }
 
     });
@@ -80474,14 +80723,14 @@ BI.DateInterval = BI.inherit(BI.Single, {
         width: 24,
         lgap: 15,
         offset: 0,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
     _defaultConfig: function () {
         var conf = BI.DateInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-date-interval"
+            extraCls: "bi-date-interval",
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -80603,7 +80852,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
             BI.print(BI.parseDateTime(date, "%Y-%X-%e"), "%Y-%X-%e") === date;
     },
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, o.minDate, o.maxDate)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
@@ -80653,14 +80903,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         width: 24,
         lgap: 15,
         offset: 0,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
     _defaultConfig: function () {
         var conf = BI.TimeInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-time-interval"
+            extraCls: "bi-time-interval",
+            minDate: "1900-01-01",
+            maxDate: "2099-12-31"
         });
     },
     _init: function () {
@@ -80782,7 +81032,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             BI.print(BI.parseDateTime(date, "%Y-%X-%e %H:%M:%S"), "%Y-%X-%e %H:%M:%S") === date;
     },
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, obj.day, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, obj.day, o.minDate, o.maxDate)[0];
     },
     _check: function (smallDate, bigDate) {
         var smallObj = smallDate.match(/\d+/g), bigObj = bigDate.match(/\d+/g);
@@ -81359,7 +81610,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -81372,7 +81622,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         textHeight: c.buttonHeight - 1,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
@@ -81388,7 +81637,6 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -82117,7 +82365,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -82130,7 +82377,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -82146,7 +82392,6 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -82556,13 +82801,13 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
         width: 25,
         lgap: 15,
         offset: -15,
-        timeErrorCls: "time-error",
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        timeErrorCls: "time-error"
     },
 
     props: {
-        extraCls: "bi-year-month-interval"
+        extraCls: "bi-year-month-interval",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31"
     },
 
     _init: function () {
@@ -82669,7 +82914,8 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
 
     // 判是否在最大最小之间
     _checkVoid: function (obj) {
-        return !BI.checkDateVoid(obj.year, obj.month, 1, this.constants.DATE_MIN_VALUE, this.constants.DATE_MAX_VALUE)[0];
+        var o = this.options;
+        return !BI.checkDateVoid(obj.year, obj.month, 1, o.minDate, o.maxDate)[0];
     },
 
     // 判格式合法
@@ -83119,7 +83365,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                     type: "bi.grid",
                     items: [[{
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
@@ -83132,7 +83377,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
@@ -83148,7 +83392,6 @@ BI.extend(BI.DynamicYearQuarterCombo, {
                         }]
                     }, {
                         type: "bi.text_button",
-                        forceCenter: true,
                         cls: "bi-split-top bi-high-light",
                         shadow: true,
                         textHeight: c.buttonHeight - 1,

@@ -15177,9 +15177,22 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else {
-                var node = addNode(newStartVnode);
-                insertBefore(node, oldStartVnode);
-                newStartVnode = newCh[++newStartIdx];
+                var sameOldVnode = findOldVnode(oldCh, newStartVnode, oldStartIdx, oldEndIdx);
+                if (BI.isNull(sameOldVnode)) {  //  不存在就把新的放到左边
+                    var node = addNode(newStartVnode);
+                    insertBefore(node, oldStartVnode);
+                    newStartVnode = newCh[++newStartIdx];
+                } else {   //  如果新节点在就旧节点区间中存在就复用一下
+                    BI.each(oldCh, function (index, child) {
+                        if (child && sameVnode(child, newStartVnode)) {
+                            updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
+                            children[sameOldVnode.key == null ? self._getChildName(index) : sameOldVnode.key] = self._children[self._getChildName(index)];
+                            oldCh[index] = undefined;
+                            insertBefore(sameOldVnode, oldStartVnode);
+                        }
+                    });
+                    newStartVnode = newCh[++newStartIdx];
+                }
             }
         }
         if (oldStartIdx > oldEndIdx) {
@@ -15223,9 +15236,13 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function removeVnodes (vnodes, startIdx, endIdx) {
             for (; startIdx <= endIdx; ++startIdx) {
-                var node = self._getOptions(vnodes[startIdx]);
-                var key = node.key == null ? self._getChildName(startIdx) : node.key;
-                children[key]._destroy();
+                var ch = vnodes[startIdx];
+                if (BI.isNotNull(ch)) {
+                    var node = self._getOptions(ch);
+                    var key = node.key == null ? self._getChildName(startIdx) : node.key;
+                    delete self._children[self._getChildName(key)];
+                    children[key]._destroy();
+                }
             }
         }
 
@@ -15249,6 +15266,16 @@ BI.Layout = BI.inherit(BI.Widget, {
             } else {
                 self._getWrapper().append(children[insertKey].element);
             }
+        }
+
+        function findOldVnode (vnodes, vNode, beginIdx, endIdx) {
+            var i, found;
+            for (i = beginIdx; i <= endIdx; ++i) {
+                if (vnodes[i] && sameVnode(vnodes[i], vNode)) {
+                    found = vnodes[i];
+                }
+            }
+            return found;
         }
 
         return updated;
@@ -15892,21 +15919,16 @@ BI.ShowAction = BI.inherit(BI.Action, {
     };
 
     // replace the html special tags
+    var SPECIAL_TAGS = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
     // html decode
@@ -18017,8 +18039,8 @@ _.extend(BI, {
         s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
         s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
         s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-        s["%k"] = hr;		// hour, range 0 to 23 (24h format)
-        s["%l"] = ir;		// hour, range 1 to 12 (12h format)
+        s["%k"] = hr + "";		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir + "";		// hour, range 1 to 12 (12h format)
         s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
         s["%x"] = m + 1; // month, range 1 to 12
         s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
@@ -19451,7 +19473,7 @@ BI.prepares.push(function () {
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = BI.Widget._renderEngine._data(fromElement[0]);
+            var elemData = jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
