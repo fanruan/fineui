@@ -168,7 +168,7 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_BACKSPACE);
             }
         }
-        this.fireEvent(BI.Input.EVENT_KEY_DOWN, keyCode);
+        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
         if (BI.isEndWithBlank(this.getValue())) {
             this._pause = true;

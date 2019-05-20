@@ -4,8 +4,8 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
     },
     render: function () {
 
-        this.widget = BI.createWidget({
-            type: "bi.list_tree_value_chooser_insert_combo",
+        var widget = BI.createWidget({
+            type: "bi.tree_value_chooser_combo",
             width: 300,
             // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {
@@ -16,18 +16,8 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             hgap: 200,
             vgap: 10,
-            items: [this.widget]
+            items: [widget]
         };
-    },
-
-    mounted: function () {
-        this.widget.setValue([
-            ["中国", "安徽省"],
-            ["中国", "澳门特别行政区"],
-            ["中国", "北京市"],
-            ["中国", "福建省"],
-            ["中国", "甘肃省"]
-        ]);
     }
 });
 BI.shortcut("demo.tree_value_chooser_combo", Demo.TreeValueChooser);
