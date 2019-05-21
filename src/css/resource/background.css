@@ -1,212 +1,264 @@
 .bi-farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-farbtastic .overlay {
   background: url('images/1x/background/mask.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-farbtastic .marker {
   background: url('images/1x/background/marker.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li ul.line {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li ul.line {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_true_full {
   background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_true_full_focus {
   background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_true_part {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_true_part_focus {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_full {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_full_focus {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.root_open {
   background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_open {
   background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.root_close {
   background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_close {
   background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.roots_open {
   background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
   background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.roots_close {
   background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
   background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.center_open {
   background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_open {
   background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.center_close {
   background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_close {
   background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.bottom_open {
   background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
   background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.bottom_close {
   background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
   background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.roots_docu {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.center_docu {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
 }
 .ztree li span.button.ico_loading {
   background: url('images/1x/icon/loading.gif') no-repeat center center;
+  background-size: contain;
 }
 .base-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  background-size: contain;
 }
 .bi-theme-dark .base-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  background-size: contain;
 }
 .first-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .first-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .mid-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .mid-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .last-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-theme-dark .last-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
 }
 .loading-background {
   background: url('images/2x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
+  background-size: contain;
 }
 .auto-color-background {
   background: url('images/2x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color.png');
+  background-size: contain;
 }
 .auto-color-normal-background {
   background: url('images/2x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal.png');
+  background-size: contain;
 }
 .auto-color-normal-disabled-background {
   background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
+  background-size: contain;
 }
 .trans-color-background {
   background: url('images/2x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_normal.png');
+  background-size: contain;
 }
 .trans-color-disabled-background {
   background: url('images/2x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
+  background-size: contain;
 }
 .auto-color-background.hack {
   background: url('images/1x/background/auto_color.png') no-repeat center center;
+  background-size: contain;
 }
 .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
+  background-size: contain;
 }
 .auto-color-normal-disabled-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
+  background-size: contain;
 }
 .trans-color-background.hack {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
+  background-size: contain;
 }
 .trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
+  background-size: contain;
 }
