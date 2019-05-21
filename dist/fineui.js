@@ -19403,12 +19403,12 @@ BI.prepares.push(function () {
     // 2、IE或者不支持flex的浏览器下使用inline布局
     // 3、在2的情况下如果布局的items大于1的话使用display:table的布局
     // 4、在3的情况下如果IE版本低于8使用table标签布局
-    var _isSupprtFlex;
+    var _isSupportFlex;
     var isSupportFlex = function () {
-        if (_isSupprtFlex == null) {
-            _isSupprtFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
+        if (_isSupportFlex == null) {
+            _isSupportFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
-        return _isSupprtFlex;
+        return _isSupportFlex;
     };
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
