@@ -37043,7 +37043,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
  */
 BI.Tip = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.Tip.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
@@ -47752,22 +47752,22 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.label",
+                        type: "bi.text",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        textHeight: 18
+                        height: 18
                     };
                 })
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.label",
+                type: "bi.text",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 16,
+                height: 16,
                 hgap: this._const.hgap
             });
         }
