@@ -19158,12 +19158,12 @@ BI.prepares.push(function () {
     // 2、IE或者不支持flex的浏览器下使用inline布局
     // 3、在2的情况下如果布局的items大于1的话使用display:table的布局
     // 4、在3的情况下如果IE版本低于8使用table标签布局
-    var _isSupprtFlex;
+    var _isSupportFlex;
     var isSupportFlex = function () {
-        if (_isSupprtFlex == null) {
-            _isSupprtFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
+        if (_isSupportFlex == null) {
+            _isSupportFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
         }
-        return _isSupprtFlex;
+        return _isSupportFlex;
     };
     BI.Plugin.registerWidget("bi.horizontal", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
@@ -37043,7 +37043,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
  */
 BI.Tip = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.Tip.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
@@ -47752,22 +47752,22 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.label",
+                        type: "bi.text",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        textHeight: 18
+                        height: 18
                     };
                 })
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.label",
+                type: "bi.text",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 16,
+                height: 16,
                 hgap: this._const.hgap
             });
         }

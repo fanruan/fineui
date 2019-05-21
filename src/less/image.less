@@ -2,20 +2,15 @@
 
 .imagePath(none) {
   background: none;
-  _filter: none;
 }
 
 .imagePath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{imageUrl}@{path}') @repeat @left @top;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{imageUrl}@{path}');
-  _background: none;
 }
 
 .image2xPath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{image2xUrl}@{path}') @repeat @left @top;
   _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{image2xUrl}@{path}');
-  background-size: contain;
-  _background: none;
 }
 
 .background(@class, @backgroundPath, @top:center, @left:center, @repeat: no-repeat) {
