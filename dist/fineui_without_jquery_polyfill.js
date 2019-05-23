@@ -62141,6 +62141,8 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.text_button",
+                    width: 16,
+                    height: 16,
                     forceNotSelected: true,
                     cls: "slider-button bi-list-item-select3 bi-high-light-border",
                     ref: function () {
