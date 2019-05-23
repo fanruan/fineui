@@ -19705,7 +19705,7 @@ BI.prepares.push(function () {
                 });
             });
             var fromChildren = fromElement.children(), toChildren = toElement.children();
-            if(fromChildren.length !== toChildren.length) {
+            if (fromChildren.length !== toChildren.length) {
                 throw new Error("不匹配");
             }
             BI.each(fromChildren, function (i, child) {
@@ -19959,14 +19959,14 @@ BI.prepares.push(function () {
             return tempValue;
         },
 
-        rgba2rgb: function (rgbColour, BGcolor) {
-            if (BI.isNull(BGcolor)) {
-                BGcolor = 1;
+        rgba2rgb: function (rgbColor, bgColor) {
+            if (BI.isNull(bgColor)) {
+                bgColor = 1;
             }
-            if (rgbColour.substr(0, 4) != "rgba") {
+            if (rgbColor.substr(0, 4) != "rgba") {
                 return "";
             }
-            var rgbValues = rgbColour.match(/\d+(\.\d+)?/g);
+            var rgbValues = rgbColor.match(/\d+(\.\d+)?/g);
             if (rgbValues.length < 4) {
                 return "";
             }
@@ -19975,9 +19975,9 @@ BI.prepares.push(function () {
             var B = BI.parseFloat(rgbValues[2]);
             var A = BI.parseFloat(rgbValues[3]);
 
-            return "rgb(" + Math.floor(255 * (BGcolor * (1 - A )) + R * A) + "," +
-                Math.floor(255 * (BGcolor * (1 - A )) + G * A) + "," +
-                Math.floor(255 * (BGcolor * (1 - A )) + B * A) + ")";
+            return "rgb(" + Math.floor(255 * (bgColor * (1 - A)) + R * A) + "," +
+                Math.floor(255 * (bgColor * (1 - A)) + G * A) + "," +
+                Math.floor(255 * (bgColor * (1 - A)) + B * A) + ")";
         }
     });
 
@@ -20014,7 +20014,8 @@ BI.prepares.push(function () {
         },
 
         isRightSpaceEnough: function (combo, popup, extraWidth) {
-            var viewBounds = popup.element.bounds(), windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var viewBounds = popup.element.bounds(),
+                windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             return BI.DOM.getRightPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
         },
 
@@ -20023,7 +20024,8 @@ BI.prepares.push(function () {
         },
 
         isBottomSpaceEnough: function (combo, popup, extraHeight) {
-            var viewBounds = popup.element.bounds(), windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var viewBounds = popup.element.bounds(),
+                windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             return BI.DOM.getBottomPosition(combo, popup, extraHeight).top + viewBounds.height <= windowBounds.height;
         },
 
@@ -20038,7 +20040,8 @@ BI.prepares.push(function () {
         },
 
         getLeftAlignPosition: function (combo, popup, extraWidth) {
-            var viewBounds = popup.element.bounds(), windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var viewBounds = popup.element.bounds(),
+                windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             var left = combo.element.offset().left + extraWidth;
             if (left + viewBounds.width > windowBounds.width) {
                 left = windowBounds.width - viewBounds.width;
@@ -20108,7 +20111,8 @@ BI.prepares.push(function () {
         },
 
         getTopAdaptPosition: function (combo, popup, extraHeight, needAdaptHeight) {
-            var popupBounds = popup.element.bounds(), windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            var popupBounds = popup.element.bounds(),
+                windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             if (BI.DOM.isTopSpaceEnough(combo, popup, extraHeight)) {
                 return BI.DOM.getTopPosition(combo, popup, extraHeight);
             }
