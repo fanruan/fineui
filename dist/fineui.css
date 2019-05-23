@@ -2177,35 +2177,27 @@ textarea {
 }
 .bi-farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-farbtastic .overlay {
   background: url('images/1x/background/mask.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-farbtastic .marker {
   background: url('images/1x/background/marker.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li ul.line {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li ul.line {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
-  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
@@ -2241,159 +2233,120 @@ textarea {
 }
 .ztree.hack li span.button.chk.checkbox_false_full {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_full_focus {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.root_open {
   background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_open {
   background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.root_close {
   background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_close {
   background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_open {
   background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
   background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_close {
   background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
   background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_open {
   background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_open {
   background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_close {
   background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_close {
   background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_open {
   background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
   background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_close {
   background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
   background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_docu {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_docu {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.ico_loading {
   background: url('images/1x/icon/loading.gif') no-repeat center center;
-  background-size: contain;
 }
 .base-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
-  background-size: contain;
 }
 .bi-theme-dark .base-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
-  background-size: contain;
 }
 .first-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .first-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .mid-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .mid-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .last-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .last-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .loading-background {
   background: url('images/2x/icon/loading.gif') no-repeat center center;
@@ -2421,23 +2374,18 @@ textarea {
 }
 .auto-color-background.hack {
   background: url('images/1x/background/auto_color.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-normal-disabled-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-background.hack {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-color-picker-editor .color-picker-editor-display {
   -webkit-border-radius: 2px;
@@ -2450,7 +2398,6 @@ textarea {
 }
 .bi-color-picker-editor.disabled .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-color-picker-editor.disabled .trans-color-background {
   background: url('images/2x/background/trans_disable.png') no-repeat center center;
@@ -2458,7 +2405,6 @@ textarea {
 }
 .bi-color-picker-editor.disabled .trans-color-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-farbtastic * {
   cursor: crosshair;
@@ -2866,7 +2812,6 @@ textarea {
 }
 .bi-loading-widget.hack {
   background: url('images/1x/icon/wave_loading.gif') no-repeat center center;
-  background-size: contain;
 }
 .bi-loading-widget.hack .animate-rect {
   background-color: rgba(54, 133, 242, 0);
@@ -4468,35 +4413,27 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-farbtastic .wheel {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/wheel.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-farbtastic .overlay {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/mask.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-farbtastic .marker {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/marker.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li ul.line {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li ul.line {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
-  background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('resources?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat center center;
@@ -4532,159 +4469,120 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .ztree.hack li span.button.chk.checkbox_false_full {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_full_focus {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.root_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.root_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.root_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.roots_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.center_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.bottom_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .ztree li span.button.ico_loading {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/loading.gif') no-repeat center center;
-  background-size: contain;
 }
 .base-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
-  background-size: contain;
 }
 .bi-theme-dark .base-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
-  background-size: contain;
 }
 .first-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .first-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .mid-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .mid-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .last-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .last-line-conn-background {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .loading-background {
   background: url('resources?path=/com/fr/web/ui/images/2x/icon/loading.gif') no-repeat center center;
@@ -4712,23 +4610,18 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .auto-color-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/auto_color.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-normal-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/auto_color_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-normal-disabled-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/trans_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-disabled-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/trans_disable.png') no-repeat center center;
-  background-size: contain;
 }
 @font-face {
   font-family: "fineui";
@@ -5640,7 +5533,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-collapse-icon-type1 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-collapse-icon-type2 .x-icon {
   display: block;
@@ -5649,7 +5541,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-collapse-icon-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-collapse-icon-type3 .x-icon {
   display: block;
@@ -5658,7 +5549,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-collapse-icon-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-collapse-icon-type4 .x-icon {
   display: block;
@@ -5667,7 +5557,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-collapse-icon-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-expand-icon-type1 .x-icon {
   display: block;
@@ -5676,7 +5565,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-expand-icon-type1 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-expand-icon-type2 .x-icon {
   display: block;
@@ -5685,7 +5573,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-expand-icon-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-expand-icon-type3 .x-icon {
   display: block;
@@ -5694,7 +5581,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-expand-icon-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-expand-icon-type4 .x-icon {
   display: block;
@@ -5703,7 +5589,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-expand-icon-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-vertical-line-type2 .x-icon {
   display: block;
@@ -5712,7 +5597,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-vertical-line-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-vertical-line-type3 .x-icon {
   display: block;
@@ -5721,7 +5605,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-vertical-line-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .tree-vertical-line-type4 .x-icon {
   display: block;
@@ -5730,7 +5613,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .tree-vertical-line-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-collapse-icon-type1 .x-icon {
   display: block;
@@ -5739,7 +5621,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-collapse-icon-type1 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-collapse-icon-type2 .x-icon {
   display: block;
@@ -5748,7 +5629,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-collapse-icon-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-collapse-icon-type3 .x-icon {
   display: block;
@@ -5757,7 +5637,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-collapse-icon-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-collapse-icon-type4 .x-icon {
   display: block;
@@ -5766,7 +5645,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-collapse-icon-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-expand-icon-type1 .x-icon {
   display: block;
@@ -5775,7 +5653,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-expand-icon-type1 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-expand-icon-type2 .x-icon {
   display: block;
@@ -5784,7 +5661,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-expand-icon-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-expand-icon-type3 .x-icon {
   display: block;
@@ -5793,7 +5669,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-expand-icon-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-expand-icon-type4 .x-icon {
   display: block;
@@ -5802,7 +5677,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-expand-icon-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-vertical-line-type2 .x-icon {
   display: block;
@@ -5811,7 +5685,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-vertical-line-type2 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-vertical-line-type3 .x-icon {
   display: block;
@@ -5820,7 +5693,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-vertical-line-type3 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  background-size: contain;
 }
 .bi-theme-dark .tree-vertical-line-type4 .x-icon {
   display: block;
@@ -5829,7 +5701,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-theme-dark .tree-vertical-line-type4 .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon .x-icon {
   display: block;
@@ -5838,7 +5709,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon:hover .x-icon,
 .check-box-icon.hover .x-icon {
@@ -5849,7 +5719,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 .check-box-icon:hover .x-icon.hack,
 .check-box-icon.hover .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon:active .x-icon {
   display: block;
@@ -5858,7 +5727,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon:active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon.active .x-icon {
   display: block;
@@ -5867,7 +5735,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_active.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon.disabled .x-icon {
   display: block;
@@ -5876,7 +5743,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .check-box-icon.disabled.active .x-icon {
   display: block;
@@ -5885,7 +5751,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-box-icon.disabled.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_disable2.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon .x-icon {
   display: block;
@@ -5894,7 +5759,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .radio-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon:hover .x-icon,
 .radio-icon.hover .x-icon {
@@ -5905,7 +5769,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 .radio-icon:hover .x-icon.hack,
 .radio-icon.hover .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon:active .x-icon {
   display: block;
@@ -5914,7 +5777,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .radio-icon:active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon.active .x-icon {
   display: block;
@@ -5923,7 +5785,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .radio-icon.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_active.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon.disabled .x-icon {
   display: block;
@@ -5932,7 +5793,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .radio-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .radio-icon.disabled.active .x-icon {
   display: block;
@@ -5941,7 +5801,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .radio-icon.disabled.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/radio_disable2.png') no-repeat center center;
-  background-size: contain;
 }
 .check-half-select-icon .x-icon {
   display: block;
@@ -5950,7 +5809,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-half-select-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
-  background-size: contain;
 }
 .check-half-select-icon.disabled .x-icon {
   display: block;
@@ -5959,7 +5817,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .check-half-select-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .slider-icon .x-icon {
   display: block;
@@ -5968,7 +5825,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .slider-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png') no-repeat center center;
-  background-size: contain;
 }
 .slider-icon:hover .x-icon,
 .slider-icon.hover .x-icon {
@@ -5979,7 +5835,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 .slider-icon:hover .x-icon.hack,
 .slider-icon.hover .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/slider_active_small.png') no-repeat center center;
-  background-size: contain;
 }
 .slider-icon.disabled .x-icon {
   display: block;
@@ -5988,7 +5843,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .slider-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/slider_normal_small.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-icon .x-icon {
   display: block;
@@ -5997,7 +5851,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .auto-color-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/auto_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-icon.active .x-icon {
   display: block;
@@ -6006,7 +5859,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .auto-color-icon.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/auto_select.png') no-repeat center center;
-  background-size: contain;
 }
 .auto-color-icon.disabled .x-icon {
   display: block;
@@ -6015,7 +5867,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .auto-color-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/auto_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-icon .x-icon {
   display: block;
@@ -6024,7 +5875,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trans-color-icon .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/trans_normal.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-icon.active .x-icon {
   display: block;
@@ -6033,7 +5883,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trans-color-icon.active .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/trans_select.png') no-repeat center center;
-  background-size: contain;
 }
 .trans-color-icon.disabled .x-icon {
   display: block;
@@ -6042,7 +5891,6 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trans-color-icon.disabled .x-icon.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/trans_disable.png') no-repeat center center;
-  background-size: contain;
 }
 .icon-size-12 .b-font {
   font-size: 12px;

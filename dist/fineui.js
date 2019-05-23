@@ -19374,27 +19374,6 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
     _init: function () {
         BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
-});// BI请求
-_.extend(BI, {
-
-    ajax: function (option) {
-        option || (option = {});
-        var async = option.async;
-        option.data = BI.cjkEncodeDO(option.data || {});
-
-        $.ajax({
-            url: option.url,
-            type: "POST",
-            data: option.data,
-            async: async,
-            error: option.error,
-            complete: function (res, status) {
-                if (BI.isFunction(option.complete)) {
-                    option.complete(BI.jsonDecode(res.responseText), status);
-                }
-            }
-        });
-    }
 });// 工程配置
 BI.prepares.push(function () {
     // 注册布局
