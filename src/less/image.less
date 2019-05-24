@@ -6,7 +6,6 @@
 
 .imagePath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{imageUrl}@{path}') @repeat @left @top;
-  background-size: contain;
 }
 
 .image2xPath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
