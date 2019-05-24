@@ -47,11 +47,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.text",
+                        type: "bi.label",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        height: 18
+                        textHeight: 18
                     };
                 })
             });
