@@ -32801,10 +32801,14 @@ BI.Html = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -34551,11 +34555,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.text",
+                        type: "bi.label",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        height: 18
+                        textHeight: 18
                     };
                 })
             });
