@@ -30,7 +30,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 10,
+                left: 4,
                 right: 10,
                 top: 4,
                 bottom: 8
@@ -83,7 +83,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         type: "bi.text_button",
                         cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 22,
+                        height: 20,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -96,7 +96,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 10,
+                            left: 4,
                             top: 4,
                             right: 0
                         }]
