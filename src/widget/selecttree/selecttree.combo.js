@@ -7,7 +7,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-tree-combo",
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: "",
