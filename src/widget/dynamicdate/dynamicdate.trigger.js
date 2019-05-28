@@ -14,7 +14,8 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -40,11 +41,11 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
                 return str;
             },
