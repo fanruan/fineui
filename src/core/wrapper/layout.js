@@ -299,21 +299,16 @@ BI.Layout = BI.inherit(BI.Widget, {
     addItems: function (items, context) {
         var self = this, o = this.options;
         var fragment = BI.Widget._renderEngine.createFragment();
-        var wrapper = this._getWrapper();
         var added = [];
         BI.each(items, function (i, item) {
             var w = self._addElement(o.items.length, item, context);
             self._children[self._getChildName(o.items.length)] = w;
             o.items.push(item);
             added.push(w);
-            var node = w.element[0];
-            // BI-45290 wrapper中已包含的node不需要再次添加（添加可能导致内部滚动条位置重置）
-            if (!wrapper[0].contains(node)) {
-                fragment.appendChild(node);
-            }
+            fragment.appendChild(w.element[0]);
         });
         if (this._isMounted) {
-            wrapper.append(fragment);
+            this._getWrapper().append(fragment);
             BI.each(added, function (i, w) {
                 w._mount();
             });
