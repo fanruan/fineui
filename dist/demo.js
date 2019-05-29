@@ -1854,7 +1854,7 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: combo1,
-                left: 10,
+                left: 150,
                 top: 10
             }, {
                 el: combo2,
