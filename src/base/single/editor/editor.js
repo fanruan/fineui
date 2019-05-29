@@ -240,7 +240,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
