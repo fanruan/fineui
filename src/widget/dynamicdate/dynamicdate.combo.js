@@ -52,6 +52,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             max: opts.maxDate,
                             format: opts.format,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {

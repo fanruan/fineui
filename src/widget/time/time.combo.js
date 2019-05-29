@@ -66,6 +66,7 @@
                             el: {
                                 type: "bi.time_trigger",
                                 allowEdit: opts.allowEdit,
+                                watermark: opts.watermark,
                                 format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
@@ -212,6 +213,8 @@
 
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
+    BI.TimeCombo.EVENT_ERROR = "EVENT_ERROR";
     BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
     BI.shortcut("bi.time_combo", BI.TimeCombo);
 })();
