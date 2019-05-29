@@ -6,7 +6,6 @@
         }
         kv[xtype] = cls;
     };
-
     // 根据配置属性生成widget
     var createWidget = function (config) {
         if (config["classType"]) {

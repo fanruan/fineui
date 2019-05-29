@@ -276,7 +276,6 @@ li {
 }
 i {
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 input,
@@ -4633,7 +4632,6 @@ textarea::-webkit-scrollbar-thumb:hover {
   font-family: 'fineui';
   font-style: normal;
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 .close-font .b-font {
