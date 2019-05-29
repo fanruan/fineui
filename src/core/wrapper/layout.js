@@ -307,9 +307,8 @@ BI.Layout = BI.inherit(BI.Widget, {
             o.items.push(item);
             added.push(w);
             var node = w.element[0];
-            var childNodes = wrapper[0].childNodes;
             // BI-45290 wrapper中已包含的node不需要再次添加（添加可能导致内部滚动条位置重置）
-            if (!BI.contains(childNodes, node)) {
+            if (!wrapper[0].contains(node)) {
                 fragment.appendChild(node);
             }
         });
