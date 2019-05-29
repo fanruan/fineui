@@ -5,7 +5,7 @@ Demo.BASE_CONFIG = [{
 }, {
     pId: 2,
     text: "bi.label",
-    value: "demo.mixin"
+    value: "demo.label"
 },{
     pId: 2,
     text: "bi.label_scene",

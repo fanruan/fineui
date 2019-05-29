@@ -45198,7 +45198,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
@@ -45422,9 +45422,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 10,
+                left: 4,
                 right: 10,
-                top: 8,
+                top: 4,
                 bottom: 8
             }]
         });
@@ -45473,9 +45473,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark",
+                        cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 30,
+                        height: 20,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -45488,7 +45488,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 10,
+                            left: 4,
                             top: 4,
                             right: 0
                         }]
@@ -63209,6 +63209,7 @@ BI.extend(BI.DynamicDateCard, {
                             max: opts.maxDate,
                             format: opts.format,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -63800,7 +63801,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -63826,11 +63828,11 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
                 return str;
             },
@@ -64165,6 +64167,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             min: opts.minDate,
                             max: opts.maxDate,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             format: opts.format,
                             height: opts.height,
                             value: opts.value,
@@ -64867,7 +64870,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -64893,7 +64897,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
@@ -77332,7 +77336,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-tree-combo",
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: "",
@@ -81040,6 +81044,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             el: {
                                 type: "bi.time_trigger",
                                 allowEdit: opts.allowEdit,
+                                watermark: opts.watermark,
                                 format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
@@ -81186,6 +81191,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
+    BI.TimeCombo.EVENT_ERROR = "EVENT_ERROR";
     BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
     BI.shortcut("bi.time_combo", BI.TimeCombo);
 })();!(function () {
@@ -81239,7 +81246,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         value: this._formatValue(o.value),
                         hgap: 4,
                         allowBlank: true,
-                        watermark: BI.i18nText("BI-Basic_Unrestricted"),
+                        watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
                         title: BI.bind(this._getTitle, this),
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
