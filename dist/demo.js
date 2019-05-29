@@ -3361,7 +3361,7 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
 }, {
     pId: 2,
     text: "bi.label",
-    value: "demo.label"
+    value: "demo.mixin"
 },{
     pId: 2,
     text: "bi.label_scene",

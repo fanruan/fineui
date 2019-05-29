@@ -12478,7 +12478,6 @@ if (!_global.BI) {
         }
         kv[xtype] = cls;
     };
-
     // 根据配置属性生成widget
     var createWidget = function (config) {
         if (config["classType"]) {
@@ -47103,13 +47102,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -47122,7 +47122,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -47158,7 +47158,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47176,7 +47176,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47223,7 +47223,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
@@ -47517,13 +47517,14 @@ BI.Label = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -47536,7 +47537,7 @@ BI.Label = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({ // 2.2
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -47572,7 +47573,7 @@ BI.Label = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({ // 2.4
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47590,7 +47591,7 @@ BI.Label = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({  // 2.5
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47637,7 +47638,7 @@ BI.Label = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
