@@ -12234,18 +12234,6 @@ if (!_global.BI) {
         kv[xtype] = cls;
     };
 
-    BI.mixin = function (xtype, mixins) {
-        var cls;
-        if (BI.isNull(mixins) && BI.isPlainObject(xtype)) {
-            cls = BI.OB;
-            mixins = xtype;
-            BI.extend(cls.prototype, mixins);
-            return;
-        }
-        cls = kv[xtype];
-        BI.extend(cls.prototype, mixins);
-    };
-
     // 根据配置属性生成widget
     var createWidget = function (config) {
         if (config["classType"]) {
