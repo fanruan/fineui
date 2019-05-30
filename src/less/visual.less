@@ -314,3 +314,14 @@
   -o-transform-origin:      @x @y;
   transform-origin:         @x @y;
 }
+
+.hover-visible(@cls) {
+  & .@{cls} {
+    visibility: hidden;
+  }
+  &:hover {
+    & .@{cls} {
+      visibility: visible;
+    }
+  }
+}
