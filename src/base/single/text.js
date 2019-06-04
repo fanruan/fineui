@@ -85,7 +85,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();

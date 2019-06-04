@@ -36084,7 +36084,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
@@ -36146,7 +36146,8 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);
+/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -60260,7 +60261,8 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             max: this.options.max,
             year: date.year,
             month: date.month,
-            day: this.selectedTime.day
+            // BI-45616 此处为确定当前应该展示哪个年月对应的Calendar, day不是关键数据, 给1号就可
+            day: 1
         });
         return calendar;
     },
