@@ -612,7 +612,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
@@ -674,7 +674,8 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);
+/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -11522,15 +11523,6 @@ BI.Label = BI.inherit(BI.Single, {
             element: this,
             items: [this.text]
         });
-    },
-
-    _setEnable: function (enable) {
-        BI.Label.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
     },
 
     doRedMark: function () {

@@ -12826,6 +12826,7 @@ if (!_global.BI) {
         return left;
     }
 
+
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
         if (typeof text !== "string") {
@@ -13079,6 +13080,20 @@ if (!_global.BI) {
 
             return o;
         })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
     };
 
     BI.encodeURIComponent = function (url) {

@@ -1948,7 +1948,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return BI.extend(td, {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
