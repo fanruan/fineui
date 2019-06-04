@@ -31,7 +31,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
