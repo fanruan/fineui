@@ -6027,7 +6027,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -22235,7 +22235,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -23275,7 +23275,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         return BI.map(items, function (j, item) {
             return BI.extend(item, {
                 type: "bi.text_item",
-                cls: "bi-list-item-active",
+                cls: "bi-list-item-select",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 once: false,

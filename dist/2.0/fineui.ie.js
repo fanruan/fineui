@@ -15861,6 +15861,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         return left;
     }
 
+
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
         if (typeof text !== "string") {
@@ -16114,6 +16115,20 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
             return o;
         })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
     };
 
     BI.encodeURIComponent = function (url) {
@@ -46997,15 +47012,6 @@ BI.Label = BI.inherit(BI.Single, {
         });
     },
 
-    _setEnable: function (enable) {
-        BI.Label.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-    },
-
     doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
@@ -51839,7 +51845,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return BI.extend(td, {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
@@ -65839,7 +65845,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -82047,7 +82053,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -83087,7 +83093,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         return BI.map(items, function (j, item) {
             return BI.extend(item, {
                 type: "bi.text_item",
-                cls: "bi-list-item-active",
+                cls: "bi-list-item-select",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 once: false,
