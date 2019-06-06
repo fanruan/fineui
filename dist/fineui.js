@@ -45840,8 +45840,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {
@@ -75003,6 +75003,9 @@ BI.shortcut("bi.number_editor", BI.NumberEditor);// 小于号的值为：0，小
  *
  */
 BI.NumberInterval = BI.inherit(BI.Single, {
+    props: {
+        allowBlank: true
+    },
     constants: {
         typeError: "typeBubble",
         numberError: "numberBubble",
@@ -75033,8 +75036,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: BI.isString(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
+            allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
             tipType: "success",
@@ -75073,8 +75076,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: BI.isString(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
+            allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
             tipType: "success",
