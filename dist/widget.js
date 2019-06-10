@@ -14536,9 +14536,6 @@ BI.shortcut("bi.number_editor", BI.NumberEditor);// 小于号的值为：0，小
  *
  */
 BI.NumberInterval = BI.inherit(BI.Single, {
-    props: {
-        allowBlank: true
-    },
     constants: {
         typeError: "typeBubble",
         numberError: "numberBubble",
@@ -14560,7 +14557,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             extraCls: "bi-number-interval",
             height: 24,
             validation: "valid",
-            closeMin: true
+            closeMin: true,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
     _init: function () {
@@ -14569,7 +14568,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.isString(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: o.watermark,
             allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
@@ -14609,7 +14608,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.isString(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: o.watermark,
             allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
