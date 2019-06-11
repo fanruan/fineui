@@ -45595,8 +45595,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {
@@ -74779,7 +74779,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             extraCls: "bi-number-interval",
             height: 24,
             validation: "valid",
-            closeMin: true
+            closeMin: true,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
     _init: function () {
@@ -74788,8 +74790,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
             tipType: "success",
@@ -74828,8 +74830,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
             tipType: "success",
