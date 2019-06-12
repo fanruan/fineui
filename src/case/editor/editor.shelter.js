@@ -99,6 +99,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             self._checkText();
             self.fireEvent(BI.ShelterEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.ShelterEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ShelterEditor.EVENT_START, arguments);
         });
@@ -217,6 +222,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },
@@ -251,6 +260,7 @@ BI.ShelterEditor.EVENT_START = "EVENT_START";
 BI.ShelterEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ShelterEditor.EVENT_STOP = "EVENT_STOP";
 BI.ShelterEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ShelterEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ShelterEditor.EVENT_VALID = "EVENT_VALID";
 BI.ShelterEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ShelterEditor.EVENT_ENTER = "EVENT_ENTER";

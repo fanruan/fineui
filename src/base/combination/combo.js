@@ -10,6 +10,9 @@ BI.Combo = BI.inherit(BI.Widget, {
             trigger: "click",
             toggle: true,
             direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,left
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -67,14 +70,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -472,7 +474,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },

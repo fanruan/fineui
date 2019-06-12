@@ -25,7 +25,8 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             max: this.options.max,
             year: date.year,
             month: date.month,
-            day: this.selectedTime.day
+            // BI-45616 此处为确定当前应该展示哪个年月对应的Calendar, day不是关键数据, 给1号就可
+            day: 1
         });
         return calendar;
     },

@@ -2,20 +2,15 @@
 
 .imagePath(none) {
   background: none;
-  _filter: none;
 }
 
 .imagePath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{imageUrl}@{path}') @repeat @left @top;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{imageUrl}@{path}');
-  _background: none;
 }
 
 .image2xPath(@path, @top:center, @left:center, @repeat: no-repeat) when not (@path = none) {
   background: url('@{image2xUrl}@{path}') @repeat @left @top;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@{image2xUrl}@{path}');
   background-size: contain;
-  _background: none;
 }
 
 .background(@class, @backgroundPath, @top:center, @left:center, @repeat: no-repeat) {
@@ -329,6 +324,35 @@
     & .b-font {
       font-size: @fontSize;
     }
+  }
+}
+
+@defaultFontName: 'fineui';
+// 添加字体资源
+.addFontRes(@name: @defaultFontName, @fontUrl: @fontUrl) {
+  @font-face {
+    font-family: "@{name}";
+    src: url('@{fontUrl}iconfont.eot');
+    src: url('@{fontUrl}iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('@{fontUrl}iconfont.woff') format('woff'), /* chrome、firefox */ url('@{fontUrl}iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('@{fontUrl}iconfont.svg#svgFontName') format('svg'); /*  iOS 4.1- */
+  }
+}
+
+// 激活字体
+.activateFont(@fonts: false) {
+  @baseProperty: {
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  };
+
+  .b-font when (@fonts = false){
+    font-family: @defaultFontName;
+    @baseProperty();
+  }
+
+  .b-font when not (@fonts = false){
+    font-family: @fonts, @defaultFontName;
+    @baseProperty();
   }
 }
 

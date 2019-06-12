@@ -11,8 +11,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {

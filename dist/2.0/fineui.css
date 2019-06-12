@@ -276,7 +276,6 @@ li {
 }
 i {
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 input,
@@ -2177,347 +2176,215 @@ textarea {
 }
 .bi-farbtastic .wheel {
   background: url('images/1x/background/wheel.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/wheel.png');
-  _background: none;
 }
 .bi-farbtastic .overlay {
   background: url('images/1x/background/mask.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/mask.png');
-  _background: none;
 }
 .bi-farbtastic .marker {
   background: url('images/1x/background/marker.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/marker.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .ztree li ul.line {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li ul.line {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_full {
   background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_full_focus {
   background: url('images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/check_box_active.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_part {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_part_focus {
   background: url('images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_full {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_full_focus {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_full {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/check_box_active.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_part {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree li span.button.root_open {
   background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.root_open {
   background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_1.png');
-  _background: none;
 }
 .ztree li span.button.root_close {
   background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.root_close {
   background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_1.png');
-  _background: none;
 }
 .ztree li span.button.roots_open {
   background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
   background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_2.png');
-  _background: none;
 }
 .ztree li span.button.roots_close {
   background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
   background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_2.png');
-  _background: none;
 }
 .ztree li span.button.center_open {
   background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_open {
   background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_3.png');
-  _background: none;
 }
 .ztree li span.button.center_close {
   background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_close {
   background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_3.png');
-  _background: none;
 }
 .ztree li span.button.bottom_open {
   background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_expand_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
   background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_expand_4.png');
-  _background: none;
 }
 .ztree li span.button.bottom_close {
   background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_collapse_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
   background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_collapse_4.png');
-  _background: none;
 }
 .ztree li span.button.roots_docu {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
 }
 .ztree li span.button.center_docu {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
 }
 .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
 }
 .ztree li span.button.ico_loading {
   background: url('images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/loading.gif');
-  _background: none;
 }
 .base-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
 }
 .bi-theme-dark .base-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
 }
 .first-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-theme-dark .first-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
 }
 .mid-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-theme-dark .mid-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
 }
 .last-line-conn-background {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .bi-theme-dark .last-line-conn-background {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
 }
 .loading-background {
   background: url('images/2x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/icon/loading.gif');
   background-size: contain;
-  _background: none;
 }
 .auto-color-background {
   background: url('images/2x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-normal-background {
   background: url('images/2x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-normal-disabled-background {
   background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-background {
   background: url('images/2x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_normal.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-disabled-background {
   background: url('images/2x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-background.hack {
   background: url('images/1x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color.png');
-  _background: none;
 }
 .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal.png');
-  _background: none;
 }
 .auto-color-normal-disabled-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
-  _background: none;
 }
 .trans-color-background.hack {
   background: url('images/1x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_normal.png');
-  _background: none;
 }
 .trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
-  _background: none;
 }
 .bi-color-picker-editor .color-picker-editor-display {
   -webkit-border-radius: 2px;
@@ -2526,25 +2393,17 @@ textarea {
 }
 .bi-color-picker-editor.disabled .auto-color-normal-background {
   background: url('images/2x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/auto_color_normal_disable.png');
   background-size: contain;
-  _background: none;
 }
 .bi-color-picker-editor.disabled .auto-color-normal-background.hack {
   background: url('images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/auto_color_normal_disable.png');
-  _background: none;
 }
 .bi-color-picker-editor.disabled .trans-color-background {
   background: url('images/2x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/2x/background/trans_disable.png');
   background-size: contain;
-  _background: none;
 }
 .bi-color-picker-editor.disabled .trans-color-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/background/trans_disable.png');
-  _background: none;
 }
 .bi-farbtastic * {
   cursor: crosshair;
@@ -2952,8 +2811,6 @@ textarea {
 }
 .bi-loading-widget.hack {
   background: url('images/1x/icon/wave_loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/1x/icon/wave_loading.gif');
-  _background: none;
 }
 .bi-loading-widget.hack .animate-rect {
   background-color: rgba(54, 133, 242, 0);
@@ -3473,12 +3330,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark #body .bi-button.button-common.disabled.ghost .b-font:before {
   color: #ffffff !important;
 }
-
 .bi-single-select-icon-text-item:active .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
   color: #3685f2;
 }
-
 .bi-switch {
   -webkit-border-radius: 40px 40px 40px 40px;
   -moz-border-radius: 40px 40px 40px 40px;
@@ -3513,17 +3368,12 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark .bi-switch.disabled:active {
   background-color: #2F3149;
 }
-
 .bi-multifile-editor .multifile-editor {
   text-align: right;
   cursor: pointer;
   font-size: 100px;
   z-index: 2;
 }
-
-
-
-
 
 .bi-textarea-editor {
   overflow: hidden;
@@ -3563,6 +3413,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   transform: rotate(45deg) scale(1) translate(-50%, -50%);
   content: '';
 }
+.bi-checkbox .checkbox-content.hover,
+.bi-checkbox .checkbox-content:hover {
+  border-color: #3685f2;
+}
 .bi-checkbox.active .checkbox-content,
 .bi-checkbox:active .checkbox-content {
   border-color: #3685f2;
@@ -3572,18 +3426,36 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   border-color: #ffffff;
   opacity: 1;
 }
+.bi-checkbox.disabled .checkbox-content {
+  background-color: #F2F4F7;
+  border-color: #d0d4da;
+}
 .bi-checkbox.disabled .checkbox-content:after {
   opacity: 0;
 }
 .bi-checkbox.disabled.active .checkbox-content {
-  border-color: #e8eaed;
   background-color: #d0d4da;
 }
 .bi-checkbox.disabled.active .checkbox-content:after {
   opacity: 1;
 }
 .bi-theme-dark .bi-checkbox .checkbox-content {
-  border-color: #9EA6B2;
+  border-color: #878D9F;
+}
+.bi-theme-dark .bi-checkbox .checkbox-content.hover,
+.bi-theme-dark .bi-checkbox .checkbox-content:hover {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-checkbox.active .checkbox-content,
+.bi-theme-dark .bi-checkbox:active .checkbox-content {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-checkbox.disabled .checkbox-content {
+  background-color: #2F3149;
+}
+.bi-theme-dark .bi-checkbox.disabled.active .checkbox-content {
+  background-color: #606479;
+  border-color: #606479;
 }
 .bi-file {
   opacity: 0;
@@ -3618,6 +3490,10 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-radio .radio-content:after {
   content: "";
 }
+.bi-radio .radio-content.hover,
+.bi-radio .radio-content:hover {
+  border-color: #3685f2;
+}
 .bi-radio:active .radio-content,
 .bi-radio.active .radio-content {
   border-color: #3685f2;
@@ -3640,18 +3516,40 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+.bi-radio.disabled .radio-content {
+  background-color: #F2F4F7;
+  border-color: #d0d4da;
+}
 .bi-radio.disabled .radio-content:after {
   background-color: transparent;
 }
 .bi-radio.disabled.active .radio-content {
-  border-color: #e8eaed;
   background-color: #d0d4da;
 }
 .bi-radio.disabled.active .radio-content:after {
   background-color: #ffffff;
 }
 .bi-theme-dark .bi-radio .radio-content {
-  border-color: #9EA6B2;
+  border-color: #878D9F;
+}
+.bi-theme-dark .bi-radio .radio-content.hover,
+.bi-theme-dark .bi-radio .radio-content:hover {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-radio.active .radio-content,
+.bi-theme-dark .bi-radio:active .radio-content {
+  border-color: #3685f2;
+}
+.bi-theme-dark .bi-radio.disabled .radio-content {
+  background-color: #2F3149;
+}
+.bi-theme-dark .bi-radio.disabled .radio-content.hover,
+.bi-theme-dark .bi-radio.disabled .radio-content:hover {
+  border-color: #878D9F;
+}
+.bi-theme-dark .bi-radio.disabled.active .radio-content {
+  background-color: #606479;
+  border-color: #606479;
 }
 .bi-label {
   overflow: hidden;
@@ -3757,6 +3655,21 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   text-decoration: none;
 }
 .bi-display-tree .ztree li a.curSelectedNode {
+  padding-top: 1px;
+  border: none;
+  background-color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.bi-list-display-tree .ztree li a,
+.bi-list-display-tree .ztree li span {
+  cursor: default !important;
+}
+.bi-list-display-tree .ztree li a:hover {
+  text-decoration: none;
+}
+.bi-list-display-tree .ztree li a.curSelectedNode {
   padding-top: 1px;
   border: none;
   background-color: inherit;
@@ -4379,6 +4292,10 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
+.bi-time-trigger .show-text {
+  background-color: rgba(255, 255, 255, 0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff,endColorstr=#00ffffff);
+}
 .bi-date-interval.time-error .bi-input {
   color: #ff4949;
 }
@@ -4495,359 +4412,226 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .bi-farbtastic .wheel {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/wheel.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/wheel.png');
-  _background: none;
 }
 .bi-farbtastic .overlay {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/mask.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/mask.png');
-  _background: none;
 }
 .bi-farbtastic .marker {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/marker.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/marker.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .ztree li ul.line {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li ul.line {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_full_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_full {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_full_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_part {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree li span.button.chk.checkbox_true_part_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_full {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_full_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
-  _background: none;
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_full {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_full_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_part {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree.hack li span.button.chk.checkbox_true_part_focus {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
-  _background: none;
 }
 .ztree li span.button.root_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.root_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_1.png');
-  _background: none;
 }
 .ztree li span.button.root_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_1.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.root_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_1.png');
-  _background: none;
 }
 .ztree li span.button.roots_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_2.png');
-  _background: none;
 }
 .ztree li span.button.roots_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_2.png');
-  _background: none;
 }
 .ztree li span.button.center_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_3.png');
-  _background: none;
 }
 .ztree li span.button.center_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_3.png');
-  _background: none;
 }
 .ztree li span.button.bottom_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_4.png');
-  _background: none;
 }
 .ztree li span.button.bottom_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_4.png');
-  _background: none;
 }
 .ztree li span.button.roots_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
 }
 .ztree li span.button.center_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
 }
 .ztree li span.button.bottom_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
 }
 .ztree li span.button.ico_loading {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/loading.gif');
-  _background: none;
 }
 .base-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png');
-  _background: none;
 }
 .bi-theme-dark .base-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png');
-  _background: none;
 }
 .first-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-theme-dark .first-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
 }
 .mid-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-theme-dark .mid-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
 }
 .last-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .bi-theme-dark .last-line-conn-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
 }
 .loading-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/loading.gif') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/loading.gif');
   background-size: contain;
-  _background: none;
 }
 .auto-color-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-normal-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color_normal.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-normal-disabled-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/auto_color_normal_disable.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/trans_normal.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-disabled-background {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/background/trans_disable.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-background.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color.png');
-  _background: none;
 }
 .auto-color-normal-background.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color_normal.png');
-  _background: none;
 }
 .auto-color-normal-disabled-background.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color_normal_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/auto_color_normal_disable.png');
-  _background: none;
 }
 .trans-color-background.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/trans_normal.png');
-  _background: none;
 }
 .trans-color-disabled-background.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/background/trans_disable.png');
-  _background: none;
 }
 @font-face {
-  font-family: 'bi';
+  font-family: "fineui";
   src: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot');
   src: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.svg#svgFontName') format('svg');
   /*  iOS 4.1- */
 }
 .b-font {
-  font-family: "bi";
+  font-family: 'fineui';
   font-style: normal;
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
 .close-font .b-font {
@@ -5743,548 +5527,368 @@ textarea::-webkit-scrollbar-thumb:hover {
 .tree-collapse-icon-type1 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_1.png');
   background-size: contain;
-  _background: none;
 }
 .tree-collapse-icon-type1 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_1.png');
-  _background: none;
 }
 .tree-collapse-icon-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_2.png');
   background-size: contain;
-  _background: none;
 }
 .tree-collapse-icon-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_2.png');
-  _background: none;
 }
 .tree-collapse-icon-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_3.png');
   background-size: contain;
-  _background: none;
 }
 .tree-collapse-icon-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_3.png');
-  _background: none;
 }
 .tree-collapse-icon-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_collapse_4.png');
   background-size: contain;
-  _background: none;
 }
 .tree-collapse-icon-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_collapse_4.png');
-  _background: none;
 }
 .tree-expand-icon-type1 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_1.png');
   background-size: contain;
-  _background: none;
 }
 .tree-expand-icon-type1 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_1.png');
-  _background: none;
 }
 .tree-expand-icon-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_2.png');
   background-size: contain;
-  _background: none;
 }
 .tree-expand-icon-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_2.png');
-  _background: none;
 }
 .tree-expand-icon-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_3.png');
   background-size: contain;
-  _background: none;
 }
 .tree-expand-icon-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_3.png');
-  _background: none;
 }
 .tree-expand-icon-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_expand_4.png');
   background-size: contain;
-  _background: none;
 }
 .tree-expand-icon-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_expand_4.png');
-  _background: none;
 }
 .tree-vertical-line-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_2.png');
   background-size: contain;
-  _background: none;
 }
 .tree-vertical-line-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_2.png');
-  _background: none;
 }
 .tree-vertical-line-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_3.png');
   background-size: contain;
-  _background: none;
 }
 .tree-vertical-line-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_3.png');
-  _background: none;
 }
 .tree-vertical-line-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/tree_vertical_line_4.png');
   background-size: contain;
-  _background: none;
 }
 .tree-vertical-line-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png');
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type1 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_1.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type1 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_1.png');
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_2.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_2.png');
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_3.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_3.png');
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_collapse_4.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-collapse-icon-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_collapse_4.png');
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type1 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_1.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type1 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_1.png');
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_2.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_2.png');
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_3.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_3.png');
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_expand_4.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-expand-icon-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_expand_4.png');
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type2 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_2.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type2 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_2.png');
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type3 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_3.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type3 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_3.png');
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type4 .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/dark/tree_vertical_line_4.png');
   background-size: contain;
-  _background: none;
 }
 .bi-theme-dark .tree-vertical-line-type4 .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_4.png');
-  _background: none;
 }
 .check-box-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .check-box-icon:hover .x-icon,
 .check-box-icon.hover .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon:hover .x-icon.hack,
 .check-box-icon.hover .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .check-box-icon:active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon:active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_normal.png');
-  _background: none;
 }
 .check-box-icon.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_active.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_active.png');
-  _background: none;
 }
 .check-box-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_disable.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_disable.png');
-  _background: none;
 }
 .check-box-icon.disabled.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_disable2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_disable2.png');
   background-size: contain;
-  _background: none;
 }
 .check-box-icon.disabled.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_disable2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/check_box_disable2.png');
-  _background: none;
 }
 .radio-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png');
-  _background: none;
 }
 .radio-icon:hover .x-icon,
 .radio-icon.hover .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon:hover .x-icon.hack,
 .radio-icon.hover .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png');
-  _background: none;
 }
 .radio-icon:active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_normal.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon:active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_normal.png');
-  _background: none;
 }
 .radio-icon.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_active.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_active.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_active.png');
-  _background: none;
 }
 .radio-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_disable.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_disable.png');
-  _background: none;
 }
 .radio-icon.disabled.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_disable2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/radio_disable2.png');
   background-size: contain;
-  _background: none;
 }
 .radio-icon.disabled.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_disable2.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/radio_disable2.png');
-  _background: none;
 }
 .check-half-select-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected.png');
   background-size: contain;
-  _background: none;
 }
 .check-half-select-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected.png');
-  _background: none;
 }
 .check-half-select-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/half_selected_disable.png');
   background-size: contain;
-  _background: none;
 }
 .check-half-select-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/half_selected_disable.png');
-  _background: none;
 }
 .slider-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_normal_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_normal_small.png');
   background-size: contain;
-  _background: none;
 }
 .slider-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_normal_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_normal_small.png');
-  _background: none;
 }
 .slider-icon:hover .x-icon,
 .slider-icon.hover .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_active_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_active_small.png');
   background-size: contain;
-  _background: none;
 }
 .slider-icon:hover .x-icon.hack,
 .slider-icon.hover .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_active_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_active_small.png');
-  _background: none;
 }
 .slider-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_normal_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/slider_normal_small.png');
   background-size: contain;
-  _background: none;
 }
 .slider-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_normal_small.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/slider_normal_small.png');
-  _background: none;
 }
 .auto-color-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_normal.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_normal.png');
-  _background: none;
 }
 .auto-color-icon.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_select.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_select.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-icon.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_select.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_select.png');
-  _background: none;
 }
 .auto-color-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/auto_disable.png');
   background-size: contain;
-  _background: none;
 }
 .auto-color-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/auto_disable.png');
-  _background: none;
 }
 .trans-color-icon .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_normal.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-icon .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_normal.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_normal.png');
-  _background: none;
 }
 .trans-color-icon.active .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_select.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_select.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-icon.active .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_select.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_select.png');
-  _background: none;
 }
 .trans-color-icon.disabled .x-icon {
   display: block;
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/trans_disable.png');
   background-size: contain;
-  _background: none;
 }
 .trans-color-icon.disabled .x-icon.hack {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_disable.png') no-repeat center center;
-  _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/trans_disable.png');
-  _background: none;
 }
 .icon-size-12 .b-font {
   font-size: 12px;

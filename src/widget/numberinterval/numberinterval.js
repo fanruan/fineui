@@ -26,7 +26,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             extraCls: "bi-number-interval",
             height: 24,
             validation: "valid",
-            closeMin: true
+            closeMin: true,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
     _init: function () {
@@ -35,8 +37,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
             tipType: "success",
@@ -75,8 +77,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
             tipType: "success",
@@ -307,7 +309,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setFocusEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_FOCUS, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_FOCUS, function () {
             self._setTitle("");
             switch (self._checkValidation()) {
                 case c.typeError:
@@ -336,7 +338,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     },
     _setBlurEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_BLUR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_BLUR, function () {
             BI.Bubbles.hide(c.typeError);
             BI.Bubbles.hide(c.numberError);
             BI.Bubbles.hide(c.signalError);
@@ -358,7 +360,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setErrorEvent: function (w) {
         var c = this.constants, self = this;
-        w.on(BI.Editor.EVENT_ERROR, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_ERROR, function () {
             self._checkValidation();
             BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
                 offsetStyle: "left",
@@ -371,7 +373,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setValidEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_VALID, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_VALID, function () {
             switch (self._checkValidation()) {
                 case c.numberError:
                     BI.Bubbles.show(c.numberError, BI.i18nText("BI-Numerical_Interval_Number_Value"), self, {
@@ -396,7 +398,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
 
     _setEditorValueChangedEvent: function (w) {
         var self = this, c = this.constants;
-        w.on(BI.Editor.EVENT_CHANGE, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CHANGE, function () {
             switch (self._checkValidation()) {
                 case c.typeError:
                     BI.Bubbles.show(c.typeError, BI.i18nText("BI-Numerical_Interval_Input_Data"), self, {
@@ -421,7 +423,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             }
             self.fireEvent(BI.NumberInterval.EVENT_CHANGE);
         });
-        w.on(BI.Editor.EVENT_CONFIRM, function () {
+        w.on(BI.NumberIntervalSingleEidtor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberInterval.EVENT_CONFIRM);
         });
     },

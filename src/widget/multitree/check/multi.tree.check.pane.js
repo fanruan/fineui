@@ -14,7 +14,10 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiTreeCheckPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-check-pane bi-background",
-            onClickContinueSelect: BI.emptyFn
+            onClickContinueSelect: BI.emptyFn,
+            el: {
+                type: "bi.display_tree"
+            }
         });
     },
 
@@ -56,7 +59,7 @@ BI.MultiTreeCheckPane = BI.inherit(BI.Pane, {
                 }]
         });
 
-        this.display = BI.createWidget({
+        this.display = BI.createWidget(opts.el, {
             type: "bi.display_tree",
             cls: "bi-multi-tree-display",
             itemsCreator: function (op, callback) {

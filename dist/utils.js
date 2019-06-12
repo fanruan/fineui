@@ -10753,8 +10753,8 @@ _.extend(BI, {
         s["%H"] = (hr < 10) ? ("0" + hr) : hr; // hour, range 00 to 23 (24h format)
         s["%I"] = (ir < 10) ? ("0" + ir) : ir; // hour, range 01 to 12 (12h format)
         s["%j"] = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy; // day of the year (range 001 to 366)
-        s["%k"] = hr;		// hour, range 0 to 23 (24h format)
-        s["%l"] = ir;		// hour, range 1 to 12 (12h format)
+        s["%k"] = hr + "";		// hour, range 0 to 23 (24h format)
+        s["%l"] = ir + "";		// hour, range 1 to 12 (12h format)
         s["%X"] = (m < 9) ? ("0" + (1 + m)) : (1 + m); // month, range 01 to 12
         s["%x"] = m + 1; // month, range 1 to 12
         s["%M"] = (min < 10) ? ("0" + min) : min; // minute, range 00 to 59
@@ -11014,8 +11014,8 @@ if (!_global.BI) {
         },
 
         createItems: function (data, innerAttr, outerAttr) {
-            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr);
-            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr);
+            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr || {});
+            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr || {});
             return BI.map(data, function (i, item) {
                 if (BI.isArray(item)) {
                     return BI.createItems(item, innerAttr, outerAttr);
@@ -12826,6 +12826,7 @@ if (!_global.BI) {
         return left;
     }
 
+
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
         if (typeof text !== "string") {
@@ -12884,21 +12885,16 @@ if (!_global.BI) {
     };
 
     // replace the html special tags
+    var SPECIAL_TAGS = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
     // html decode
@@ -13084,6 +13080,20 @@ if (!_global.BI) {
 
             return o;
         })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
     };
 
     BI.encodeURIComponent = function (url) {

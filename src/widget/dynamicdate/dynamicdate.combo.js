@@ -3,14 +3,16 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         popupHeight: 259,
         popupWidth: 270,
         comboAdjustHeight: 1,
-        border: 1,
-        DATE_MIN_VALUE: "1900-01-01",
-        DATE_MAX_VALUE: "2099-12-31"
+        border: 1
     },
 
     props: {
         baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22
+        height: 22,
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
+        format: "",
+        allowEdit: true
     },
 
 
@@ -46,8 +48,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         isNeedAdjustWidth: false,
                         el: {
                             type: "bi.dynamic_date_trigger",
-                            min: this.constants.DATE_MIN_VALUE,
-                            max: this.constants.DATE_MAX_VALUE,
+                            min: opts.minDate,
+                            max: opts.maxDate,
+                            format: opts.format,
+                            allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -128,8 +133,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.dynamic_date_popup",
                                 behaviors: opts.behaviors,
-                                min: this.constants.DATE_MIN_VALUE,
-                                max: this.constants.DATE_MAX_VALUE,
+                                min: opts.minDate,
+                                max: opts.maxDate,
                                 value: opts.value,
                                 ref: function () {
                                     self.popup = this;

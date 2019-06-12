@@ -8,7 +8,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TreeView.superclass._defaultConfig.apply(this, arguments), {
             _baseCls: "bi-tree",
-            paras: {},
+            paras: {
+                selectedValues: {}
+            },
             itemsCreator: BI.emptyFn
         });
     },
@@ -71,8 +73,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             async: {
                 enable: true,
                 url: getUrl,
-                autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                autoParam: ["id", "name"],  // 节点展开异步请求自动提交id和name
+                otherParam: BI.cjkEncodeDO(paras) // 静态参数
             },
             check: {
                 enable: true
@@ -80,16 +82,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
             data: {
                 key: {
                     title: "title",
-                    name: "text"
+                    name: "text"    // 节点的name属性替换成text
                 },
                 simpleData: {
-                    enable: true
+                    enable: true    // 可以穿id,pid属性的对象数组
                 }
             },
             view: {
                 showIcon: false,
                 expandSpeed: "",
-                nameIsHTML: true,
+                nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false
             },
             callback: {
@@ -112,6 +114,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if(status.half === true && status.checked === true) {
                 checked = false;
             }
+            // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
             self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
@@ -134,7 +137,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning");
+            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -172,9 +175,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                zTree.updateNode(treeNode);
+                zTree.updateNode(treeNode); // 刷新一下当前节点，如果treeNode.xxx被改了的话
             }
-            zTree.reAsyncChildNodes(treeNode, reloadType, true);
+            zTree.reAsyncChildNodes(treeNode, reloadType, true); // 强制加载子节点，reloadType === refresh为先清空再加载，否则为追加到现有子节点之后
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -252,15 +255,18 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         var parent = node.parentValues || self._getParentValues(node);
         var path = parent.concat(this._getNodeValue(node));
+        // 当前节点是全选的，因为上面的判断已经排除了不选和半选
         if (BI.isNotEmptyArray(node.children) || checkState.half === false) {
             this._buildTree(map, path);
             return;
         }
+        // 剩下的就是半选不展开的节点，因为不知道里面是什么情况，所以借助selectedValues(这个是完整的选中情况)
         var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
 
+    // 获取的是以values最后一个节点为根的子树
     _getTree: function (map, values) {
         var cur = map;
         BI.any(values, function (i, value) {
@@ -272,6 +278,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return cur;
     },
 
+    // 以values为path一路向里补充map, 并在末尾节点添加key: value节点
     _addTreeNode: function (map, values, key, value) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -299,7 +306,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
-        track(rootNoots);
+        track(rootNoots); // 可以看到这个方法没有递归调用，所以在_getHalfSelectedValues中需要关心全选的节点
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();

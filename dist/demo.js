@@ -495,7 +495,596 @@ BI.shortcut("demo.icon_label", Demo.IconLabel);Demo.Label = BI.inherit(BI.Widget
         };
     }
 });
-BI.shortcut("demo.label", Demo.Label);Demo.Message = BI.inherit(BI.Widget, {
+BI.shortcut("demo.label", Demo.Label);/**
+ * 整理所有label场景
+ */
+Demo.LabelScene = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-label"
+    },
+    render: function () {
+        var items = [];
+
+        items.push(this.createExpander("1.1.1 文字居中,有宽度和高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg6",
+            text: "设置了textWidth,则一定是嵌套结构,因此需要用center_adapt布局容纳一下.为了实现不足一行时文字水平居中,超出一行时左对齐,需要设置maxWidth.",
+            whiteSpace: "normal",
+            height: 50,
+            width: 500,
+            textWidth: 200,
+            textAlign: "center"
+        }));
+
+        items.push(this.createExpander("1.1.2 居中,有宽度和高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg6",
+            text: "居中,有宽度高度,有文字宽度,whiteSpace为nowrap,maxWidth会限制文字",
+            whiteSpace: "nowrap",
+            height: 50,
+            width: 500,
+            textWidth: 350,
+            textAlign: "center"
+        }));
+
+        items.push((this.createExpander("1.2.1 居中,有宽度无高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg6",
+            text: "居中,有宽度无高度,有文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            width: 500,
+            textWidth: 200,
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.2.1 居中,有宽度无高度,有文字宽度,whiteSpace为normal,高度被父容器拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg6",
+                        text: "此时虽然没有对label设置高度,但由于使用了center_adapt布局,依然会垂直方向居中",
+                        whiteSpace: "normal",
+                        width: 500,
+                        textWidth: 200,
+                        textAlign: "center"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("1.2.2 居中,有宽度无高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg6",
+            text: "居中,有宽度无高度,有文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            width: 500,
+            textWidth: 350,
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.3.1 居中,有宽度和高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,有宽度高度,无文字宽度,whiteSpace为normal,只需用center_adapt布局包一下即可.度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,whiteSpace为normal",
+            width: 500,
+            whiteSpace: "normal",
+            textAlign: "center",
+            height: 50
+        })));
+
+        items.push((this.createExpander("1.3.2 居中,有宽度无高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "居中,有宽度无高度,无文字宽度,whiteSpace为normal,只需用center_adapt布局包一下即可.度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,下即可.居中,有宽度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,度,无文字宽度,whiteSpace为normal居中,有宽度,无文字宽度,whiteSpace为normal",
+                        width: 500,
+                        whiteSpace: "normal",
+                        textAlign: "center"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("1.4 居中,有宽度和高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,有宽度500有高度50,无文字宽度,whiteSpace为nowrap,此处无需两层div,设置text即可,然后设置line-height为传入高度即可实现垂直方向居中",
+            width: 500,
+            whiteSpace: "nowrap",
+            textAlign: "center",
+            height: 50
+        })));
+
+        items.push((this.createExpander("1.5.1 居中,有宽度无高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,有宽度500无高度,无文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            width: 500,
+            whiteSpace: "nowrap",
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.5.2 居中,有宽度无高度,无文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 50,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "居中,有宽度500无高度,无文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        width: 500,
+                        whiteSpace: "nowrap",
+                        textAlign: "center"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("1.6.1 居中,无宽度无高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度,有文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            textWidth: 500,
+            whiteSpace: "nowrap",
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.6.2 居中,无宽度无高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度,有文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            textWidth: 500,
+            whiteSpace: "normal",
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.6.3 居中,无宽度无,有文字宽度,whiteSpace为normal,被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "居中,无宽度,有文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        textWidth: 500,
+                        whiteSpace: "normal",
+                        textAlign: "center"
+                    },
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("1.7.1 居中,无宽度无高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度无高度,无文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.7.2 居中,无宽度无高度,无文字宽度,whiteSpace为normal,被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "居中,无宽度无高度,无文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "center"
+                    },
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("1.7.3 居中,无宽度有高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度有高度,无文字宽度,whiteSpace为normal,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            height: 50,
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.8 居中,无宽度有高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度有高度,无文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            height: 50,
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.9 居中,无宽度无高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg3",
+            text: "居中,无宽度无高度,无文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "center"
+        })));
+
+        items.push((this.createExpander("1.9.1 居中,无宽度无高度,无文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 50,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg3",
+                        text: "居中,无宽度无高度,无文字宽度,whiteSpace为nowrap,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数,凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "nowrap",
+                        textAlign: "center"
+                    },
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.1.1 居左,有宽度有高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度有高度,有文字宽度,whiteSpace为normal，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            textWidth: 300,
+            height: 50,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.1.2 居左,有宽度有高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度有高度,有文字宽度,whiteSpace为normal，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "left",
+            textWidth: 300,
+            height: 50,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.2.1 居左,有宽度无高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度无高度,有文字宽度,whiteSpace为normal，不设置高度，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            textWidth: 300,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.2.2 居左,有宽度无高度,有文字宽度,whiteSpace为normal,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,有宽度无高度,有文字宽度,whiteSpace为normal，不设置高度，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "left",
+                        textWidth: 300,
+                        width: 500
+                    },
+                    top: 0,
+                    bottom: 0,
+                    left: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.2.3 居左,有宽度无高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度无高度,有文字宽度,whiteSpace为nowrap，不设置高度，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "left",
+            textWidth: 300,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.2.4 居左,有宽度无高度,有文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,有宽度无高度,有文字宽度,whiteSpace为nowrap，不设置高度，为了演示这个是真的是normal的我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "nowrap",
+                        textAlign: "left",
+                        textWidth: 300,
+                        width: 500
+                    },
+                    top: 0,
+                    bottom: 0,
+                    left: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.3.1 居左,有宽度有高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度有高度,无文字宽度,whiteSpace为nowrap，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "left",
+            height: 50,
+            vgap: 5,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.3.2 居左,有宽度有高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度有高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            height: 50,
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.4.1 居左,有宽度无高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,有宽度无高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            width: 500
+        })));
+
+        items.push((this.createExpander("2.4.2 居左,有宽度无高度,无文字宽度,whiteSpace为normal,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg1",
+                        text: "居左,有宽度无高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "left",
+                        width: 500
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.5.1 居左,无宽度无高度,有文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度无高度,有文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            textWidth: 300
+        })));
+
+        items.push((this.createExpander("2.5.2 居左,无宽度无高度,有文字宽度,whiteSpace为normal,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,有文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "left",
+                        textWidth: 300
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.5.3 居左,无宽度无高度,有文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度无高度,有文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "left",
+            textWidth: 300
+        })));
+
+        items.push((this.createExpander("2.5.4 居左,无宽度无高度,有文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,有文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "nowrap",
+                        textAlign: "left",
+                        textWidth: 300
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.6.1 居左,无宽度有高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度有高度,无文字宽度,whiteSpace为nowrap，注意这个是设置了vgap的,为了实现居中,lineHeight要做计算,才能准确的垂直居中",
+            whiteSpace: "nowrap",
+            textAlign: "left",
+            vgap: 10,
+            height: 50
+        })));
+
+        items.push((this.createExpander("2.6.2 居左,无宽度有高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度有高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left",
+            height: 50
+        })));
+
+        items.push((this.createExpander("2.7.1 居左,无宽度无高度,无文字宽度,whiteSpace为normal", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度无高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "normal",
+            textAlign: "left"
+        })));
+
+        items.push((this.createExpander("2.7.2 居左,无宽度无高度,无文字宽度,whiteSpace为normal,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "left"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.7.3 居左,无宽度无高度,无文字宽度,whiteSpace为nowrap", {
+            type: "bi.label",
+            cls: "layout-bg2",
+            text: "居左,无宽度无高度,无文字宽度,whiteSpace为nowrap，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+            whiteSpace: "nowrap",
+            textAlign: "left"
+        })));
+
+        items.push((this.createExpander("2.7.4 居左,无宽度无高度,无文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,无文字宽度,whiteSpace为nowrap，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "nowrap",
+                        textAlign: "left"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.8 居左,无宽度无高度,无文字宽度,whiteSpace为nowrap,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,无文字宽度,whiteSpace为nowrap，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "nowrap",
+                        textAlign: "left"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        items.push((this.createExpander("2.8.2 居左,无宽度无高度,无文字宽度,whiteSpace为normal,高度被父级拉满", {
+            type: "bi.absolute",
+            height: 100,
+            items: [
+                {
+                    el: {
+                        type: "bi.label",
+                        cls: "layout-bg2",
+                        text: "居左,无宽度无高度,无文字宽度,whiteSpace为normal，我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数,我凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数，凑点字数",
+                        whiteSpace: "normal",
+                        textAlign: "left"
+                    },
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0
+                }
+            ]
+        })));
+
+        return {
+            type: "bi.vertical",
+            items: items,
+            hgap: 300,
+            vgap: 20
+        };
+    },
+
+    createExpander: function (text, popup) {
+        return {
+            type: "bi.vertical",
+            items: [
+                {
+                    type: "bi.label",
+                    cls: "demo-font-weight-bold",
+                    textAlign: "left",
+                    text: text,
+                    height: 30
+                }, {
+                    el: popup
+                }
+            ]
+        };
+    }
+});
+BI.shortcut("demo.label_scene", Demo.LabelScene);Demo.Message = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-bubble"
     },
@@ -1265,7 +1854,7 @@ BI.shortcut("demo.tree_view", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: combo1,
-                left: 10,
+                left: 150,
                 top: 10
             }, {
                 el: combo2,
@@ -2773,6 +3362,10 @@ BI.shortcut("demo.value_chooser_pane", Demo.ValueChooserPane);Demo.BASE_CONFIG =
     pId: 2,
     text: "bi.label",
     value: "demo.label"
+},{
+    pId: 2,
+    text: "bi.label_scene",
+    value: "demo.label_scene"
 }, {
     pId: 2,
     text: "bi.icon_label",
@@ -3190,6 +3783,10 @@ Demo.COMPONENT_CONFIG = [{
     value: "demo.combo2"
 }, {
     pId: 10201,
+    text: "bi.combo(內部位置)",
+    value: "demo.combo3"
+}, {
+    pId: 10201,
     text: "bi.expander",
     value: "demo.expander"
 }, {
@@ -3504,6 +4101,10 @@ Demo.COMPONENT_CONFIG = [{
     pId: 412,
     text: "bi.date_time",
     value: "demo.date_time"
+}, {
+    pId: 412,
+    text: "bi.time_combo",
+    value: "demo.time_combo"
 }, {
     pId: 412,
     text: "bi.time_interval",
@@ -4264,6 +4865,80 @@ BI.shortcut("demo.combo", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.combo2", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: "demo-func"
+    },
+
+    _createEl: function () {
+        return {
+            type: "bi.label",
+            cls:"bi-border",
+            height: "100%",
+            text: "点击"
+        };
+    },
+
+    oneCombo: function () {
+        return BI.createWidget({
+            type: "bi.combo",
+            direction: "right,innerRight",
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            el: this._createEl(),
+            popup: {
+                el: {
+                    type: "bi.layout",
+                    width: 200,
+                    height: 200
+                }
+            }
+        });
+    },
+
+    twoCombo: function () {
+        return BI.createWidget({
+            type: "bi.combo",
+            direction: "right,innerRight",
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            el: this._createEl(),
+            popup: {
+                el: {
+                    type: "bi.layout",
+                    width: 1000,
+                    height: 200
+                }
+            }
+        });
+    },
+
+    threeCombo: function () {
+        return BI.createWidget({
+            type: "bi.combo",
+            direction: "right,innerRight",
+            isNeedAdjustWidth: false,
+            isNeedAdjustHeight: false,
+            el: this._createEl(),
+            popup: {
+                el: {
+                    type: "bi.layout",
+                    width: 400,
+                    height: 200
+                }
+            }
+        });
+    },
+
+    render: function () {
+        return {
+            type: "bi.grid",
+            hgap: 10,
+            vgap: 5,
+            items: [[this.oneCombo()], [this.twoCombo()], [this.threeCombo()]]
+        };
+    }
+});
+BI.shortcut("demo.combo3", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
     props: {
         baseCls: "demo-func"
     },
@@ -6607,7 +7282,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试激活状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -6629,7 +7303,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试选中状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -6672,7 +7345,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                 el: {
                     type: "bi.text_button",
                     text: "这个按钮是灰化的",
-                    forceCenter: true,
                     disabled: true
                 }
             }]
@@ -6709,7 +7381,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试悬浮状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -6731,7 +7402,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试激活状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -6753,7 +7423,6 @@ BI.shortcut("demo.searcher_view", Demo.Func);Demo.Face = BI.inherit(BI.Widget, {
                     type: "bi.text_button",
                     cls: "bi-list-item-active",
                     text: "测试选中状态",
-                    forceCenter: true
                 }
             }]
         };
@@ -8861,15 +9530,25 @@ Demo.Date = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.datecombo = this;
                 },
-                width: 300
-                // value: {
-                //     type: 1,
-                //     value: {
-                //         year: 2018,
-                //         month: 2,
-                //         day: 23
-                //     }
-                // }
+                width: 300,
+                // allowEdit: false,
+                // format: "%Y-%X-%d", // yyyy-MM-dd
+                // format: "%Y/%X/%d", // yyyy/MM/dd
+                // format: "%Y-%x-%e",  // yyyy-M-d
+                // format: "%Y/%x/%e",  // yyyy/M/d
+                // format: "%X/%d/%Y",  // MM/dd/yyyy
+                // format: "%X/%e/%y",  // MM/d/yy
+                // format: "%X.%d.%Y",  // MM.dd.yyyy
+                // format: "%X.%e.%Y",  // MM.d.yyyy
+                // format: "%X-%e-%y",  // MM.d.yyyy
+                value: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 2,
+                        day: 23
+                    }
+                }
             }, {
                 type: "bi.button",
                 text: "getValue",
@@ -8883,6 +9562,25 @@ Demo.Date = BI.inherit(BI.Widget, {
                     self.datetimecombo = this;
                 },
                 width: 300,
+                // allowEdit: false,
+                // format: "%Y-%X-%d %H:%M:%S", // yyyy-MM-dd HH:mm:ss
+                // format: "%Y/%X/%d %H:%M:%S", // yyyy/MM/dd HH:mm:ss
+                // format: "%Y-%X-%d %I:%M:%S",  // yyyy-MM-dd hh:mm:ss
+                // format: "%Y/%X/%d %I:%M:%S",  // yyyy/MM/dd hh:mm:ss
+                // format: "%Y-%X-%d %H:%M:%S %p",  // yyyy-MM-dd HH:mm:ss a
+                // format: "Y/%X/%d %H:%M:%S %p",  // yyyy/MM/dd HH:mm:ss a
+                // format: "%Y-%X-%d %I:%M:%S %p",  // yyyy-MM-dd hh:mm:ss a
+                // format: "%Y/%X/%d %I:%M:%S %p",  // yyyy/MM/dd hh:mm:ss a
+                // format: "%X/%d/%Y %I:%M:%S",  // MM/dd/yyyy hh:mm:ss
+                // format: "%X/%d/%Y %H:%M:%S",  // MM/dd/yyyy HH:mm:ss
+                // format: "%X/%d/%Y %I:%M:%S",  // MM/dd/yyyy hh:mm:ss a
+                // format: "%X/%d/%Y %H:%M:%S %p",  // MM/dd/yyyy HH:mm:ss a
+                // format: "%X/%d/%Y %I:%M:%S %p",  // MM/dd/yyyy hh:mm:ss a
+                // format: "%X/%d/%Y %H:%M:%S %p",  // MM/dd/yyyy HH:mm:ss a
+                // format: "%X/%d/%Y %l:%M %p",  // MM/dd/yyyy h:mm a
+                // format: "%X-%d-%Y %k:%M %p",  // MM/dd/yyyy H:mm a
+                // format: "%Y-%x-%e %l:%M",  // yyyy-M-d h:mm
+                // format: "%Y-%x-%e %k:%M",  // yyyy-M-d H:mm
                 value: {
                     type: 1,
                     value: {
@@ -9255,6 +9953,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
         var self = this;
         var widget = BI.createWidget({
             type: "bi.multi_select_insert_combo",
+            // allowEdit: false,
             itemsCreator: BI.bind(this._itemsCreator, this),
             width: 200,
             value: {
@@ -10058,6 +10757,53 @@ Demo.Slider = BI.inherit(BI.Widget, {
     }
 });
 BI.shortcut("demo.slider", Demo.Slider);/**
+ * Created by Dailer on 2017/7/13.
+ */
+Demo.TimeCombo = BI.inherit(BI.Widget, {
+    props: {
+        baseCls: ""
+    },
+
+    render: function () {
+        var self = this;
+        return {
+            type: "bi.horizontal_auto",
+            items: [{
+                type: "bi.time_combo",
+                ref: function (_ref) {
+                    self.timeCombo = _ref;
+                },
+                // allowEdit: true,
+                // format: "%H:%M:%S",  // HH:mm:ss
+                // format: "%I:%M:%S",  // hh:mm:ss
+                // format: "%l:%M:%S",  // h:mm:ss
+                // format: "%k:%M:%S",  // H:mm:ss
+                // format: "%l:%M:%S %p",  // h:mm:ss a
+                // format: "%l:%M",  // h:mm
+                // format: "%k:%M",  // H:mm
+                // format: "%I:%M",  // hh:mm
+                // format: "%H:%M",  // HH:mm
+                // format: "%M:%S",  // mm:ss
+                value: {
+                    hour: 12,
+                    minute: 0,
+                    second: 0
+                },
+                width: 300
+            }, {
+                type: "bi.button",
+                text: "getValue",
+                handler: function () {
+                    BI.Msg.toast(JSON.stringify(self.timeCombo.getValue()));
+                },
+                width: 300
+            }],
+            vgap: 20
+        };
+    }
+});
+
+BI.shortcut("demo.time_combo", Demo.TimeCombo);/**
  * Created by Dailer on 2017/7/13.
  */
 Demo.TimeInterval = BI.inherit(BI.Widget, {

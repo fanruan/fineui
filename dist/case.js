@@ -1948,7 +1948,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return BI.extend(td, {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
@@ -4914,7 +4914,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 
@@ -5634,6 +5634,9 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);
         });
@@ -5698,6 +5701,7 @@ BI.ClearEditor.EVENT_START = "EVENT_START";
 BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
 BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ClearEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
 BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -5804,6 +5808,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.ShelterEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.ShelterEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ShelterEditor.EVENT_START, arguments);
@@ -5923,6 +5932,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setTextStyle: function (style) {
         this.text.setStyle(style);
     },
@@ -5957,6 +5970,7 @@ BI.ShelterEditor.EVENT_START = "EVENT_START";
 BI.ShelterEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ShelterEditor.EVENT_STOP = "EVENT_STOP";
 BI.ShelterEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ShelterEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ShelterEditor.EVENT_VALID = "EVENT_VALID";
 BI.ShelterEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ShelterEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -6067,6 +6081,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self._checkText();
             self.fireEvent(BI.SignEditor.EVENT_CONFIRM, arguments);
+        });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self._checkText();
+            self.fireEvent(BI.SignEditor.EVENT_CHANGE_CONFIRM, arguments);
         });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SignEditor.EVENT_START, arguments);
@@ -6188,6 +6207,10 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
         this._checkText();
@@ -6217,6 +6240,7 @@ BI.SignEditor.EVENT_START = "EVENT_START";
 BI.SignEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SignEditor.EVENT_STOP = "EVENT_STOP";
 BI.SignEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SignEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SignEditor.EVENT_VALID = "EVENT_VALID";
 BI.SignEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SignEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -6337,6 +6361,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.StateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.StateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.StateEditor.EVENT_START, arguments);
         });
@@ -6437,6 +6465,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
@@ -6500,6 +6532,7 @@ BI.StateEditor.EVENT_START = "EVENT_START";
 BI.StateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.StateEditor.EVENT_STOP = "EVENT_STOP";
 BI.StateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.StateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.StateEditor.EVENT_VALID = "EVENT_VALID";
 BI.StateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.StateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -6609,6 +6642,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             self._showHint();
             self.fireEvent(BI.SimpleStateEditor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self._showHint();
+            self.fireEvent(BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.SimpleStateEditor.EVENT_START, arguments);
         });
@@ -6707,6 +6744,10 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     setValue: function (k) {
         this.editor.setValue(k);
     },
@@ -6758,6 +6799,7 @@ BI.SimpleStateEditor.EVENT_START = "EVENT_START";
 BI.SimpleStateEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SimpleStateEditor.EVENT_STOP = "EVENT_STOP";
 BI.SimpleStateEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.SimpleStateEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.SimpleStateEditor.EVENT_VALID = "EVENT_VALID";
 BI.SimpleStateEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.SimpleStateEditor.EVENT_ENTER = "EVENT_ENTER";
@@ -9155,6 +9197,83 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
 BI.DisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.display_tree", BI.DisplayTree);/**
+ * guy
+ * 异步树
+ * @class BI.ListListDisplayTree
+ * @extends BI.TreeView
+ */
+BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ListDisplayTree.superclass._defaultConfig.apply(this, arguments), {
+            extraCls: "bi-list-display-tree"
+        });
+    },
+    _init: function () {
+        BI.ListDisplayTree.superclass._init.apply(this, arguments);
+    },
+
+    // 配置属性
+    _configSetting: function () {
+        var setting = {
+            view: {
+                selectedMulti: false,
+                dblClickExpand: false,
+                showIcon: false,
+                nameIsHTML: true,
+                showTitle: false,
+                fontCss: getFont
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeCollapse: beforeCollapse
+            }
+        };
+
+        function beforeCollapse(treeId, treeNode) {
+            return false;
+        }
+
+        function getFont(treeId, node) {
+            return node.isLeaf ? {} : {color: "#999999"};
+        }
+
+        return setting;
+    },
+
+    _dealWidthNodes: function (nodes) {
+        nodes = BI.ListDisplayTree.superclass._dealWidthNodes.apply(this, arguments);
+        var self = this, o = this.options;
+        BI.each(nodes, function (i, node) {
+            node.isParent = node.isParent || node.parent;
+            if (node.text == null) {
+                if (node.count > 0) {
+                    node.text = node.value + "(" + BI.i18nText("BI-Basic_Altogether") + node.count + BI.i18nText("BI-Basic_Count") + ")";
+                }
+            }
+        });
+        return nodes;
+    },
+
+    initTree: function (nodes, setting) {
+        var setting = setting || this._configSetting();
+        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+    },
+
+    destroy: function () {
+        BI.ListDisplayTree.superclass.destroy.apply(this, arguments);
+    }
+});
+BI.ListDisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
+
+BI.shortcut("bi.list_display_tree", BI.ListDisplayTree);/**
  * 简单的多选树
  *
  * Created by GUY on 2016/2/16.
@@ -9664,7 +9783,7 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         if (result.length > 0) {
             return result.join(",");
         } else {
-            return o.text;
+            return BI.isFunction(o.text) ? o.text() : o.text;
         }
     },
 

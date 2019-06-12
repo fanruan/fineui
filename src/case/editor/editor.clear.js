@@ -101,6 +101,9 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.Editor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.ClearEditor.EVENT_CONFIRM);
         });
+        this.editor.on(BI.Editor.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.ClearEditor.EVENT_CHANGE_CONFIRM);
+        });
         this.editor.on(BI.Editor.EVENT_START, function () {
             self.fireEvent(BI.ClearEditor.EVENT_START);
         });
@@ -165,6 +168,7 @@ BI.ClearEditor.EVENT_START = "EVENT_START";
 BI.ClearEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.ClearEditor.EVENT_STOP = "EVENT_STOP";
 BI.ClearEditor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ClearEditor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.ClearEditor.EVENT_VALID = "EVENT_VALID";
 BI.ClearEditor.EVENT_ERROR = "EVENT_ERROR";
 BI.ClearEditor.EVENT_ENTER = "EVENT_ENTER";

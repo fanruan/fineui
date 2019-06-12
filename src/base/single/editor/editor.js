@@ -51,7 +51,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                forceCenter: true,
                 height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
@@ -185,6 +184,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -238,7 +240,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
@@ -298,6 +300,10 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     getValue: function () {
         if (!this.isValid()) {
             return BI.trim(this.editor.getLastValidValue());
@@ -329,6 +335,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";

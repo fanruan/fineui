@@ -52,10 +52,14 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -73,35 +77,38 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    mounted: function () {
-        var o = this.options;
-
-        if (BI.isKey(o.text)) {
-            this.setText(o.text);
+        var text = this._getShowText();
+        if (BI.isKey(text)) {
+            this.setText(text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
         }
     },
 
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
+
     doRedMark: function (keyword) {
         var o = this.options;
         // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
         o.keyword = keyword;
-        this.text.element.__textKeywordMarked__(o.text || o.value, keyword, o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, keyword, o.py);
     },
 
     unRedMark: function () {
         var o = this.options;
         o.keyword = "";
-        this.text.element.__textKeywordMarked__(o.text || o.value, "", o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, "", o.py);
     },
 
     doHighLight: function () {
@@ -125,8 +132,18 @@ BI.Text = BI.inherit(BI.Single, {
 
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
-        this.options.text = text;
-        this.text.element.html(BI.htmlEncode(text));
+        //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
+        this.options.text = BI.isNotNull(text) ? text : "";
+        if (BI.isIE9Below()) {
+            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            return;
+        }
+        if (/\s/.test(text)) {
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
+        } else {
+            //  textContent性能更好,并且原生防xss
+            this.text.element[0].textContent = this._getShowText();
+        }
     }
 });
 

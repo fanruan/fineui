@@ -64,7 +64,7 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     },
 
     getKeywords: function () {
-        var val = this.editor.getLastValidValue();
+        var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
         if (BI.isEndWithBlank(val)) {
             return keywords.concat([" "]);

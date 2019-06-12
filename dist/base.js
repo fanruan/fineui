@@ -579,10 +579,14 @@ BI.Text = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
-            textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -600,35 +604,38 @@ BI.Text = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
 
-    mounted: function () {
-        var o = this.options;
-
-        if (BI.isKey(o.text)) {
-            this.setText(o.text);
+        var text = this._getShowText();
+        if (BI.isKey(text)) {
+            this.setText(text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(o.text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
         }
     },
 
+    _getShowText: function () {
+        var o = this.options;
+        return BI.isFunction(o.text) ? o.text() : o.text;
+    },
+
+
     doRedMark: function (keyword) {
         var o = this.options;
         // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
         o.keyword = keyword;
-        this.text.element.__textKeywordMarked__(o.text || o.value, keyword, o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, keyword, o.py);
     },
 
     unRedMark: function () {
         var o = this.options;
         o.keyword = "";
-        this.text.element.__textKeywordMarked__(o.text || o.value, "", o.py);
+        this.text.element.__textKeywordMarked__(this._getShowText() || o.value, "", o.py);
     },
 
     doHighLight: function () {
@@ -652,12 +659,23 @@ BI.Text = BI.inherit(BI.Single, {
 
     setText: function (text) {
         BI.Text.superclass.setText.apply(this, arguments);
-        this.options.text = text;
-        this.text.element.html(BI.htmlEncode(text));
+        //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
+        this.options.text = BI.isNotNull(text) ? text : "";
+        if (BI.isIE9Below()) {
+            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            return;
+        }
+        if (/\s/.test(text)) {
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
+        } else {
+            //  textContent性能更好,并且原生防xss
+            this.text.element[0].textContent = this._getShowText();
+        }
     }
 });
 
-BI.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);
+/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -1133,7 +1151,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
  */
 BI.Tip = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        var conf = BI.Link.superclass._defaultConfig.apply(this, arguments);
+        var conf = BI.Tip.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-tip",
             zIndex: BI.zIndex_tip
@@ -1664,7 +1682,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TreeView.superclass._defaultConfig.apply(this, arguments), {
             _baseCls: "bi-tree",
-            paras: {},
+            paras: {
+                selectedValues: {}
+            },
             itemsCreator: BI.emptyFn
         });
     },
@@ -1727,8 +1747,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             async: {
                 enable: true,
                 url: getUrl,
-                autoParam: ["id", "name"],
-                otherParam: BI.cjkEncodeDO(paras)
+                autoParam: ["id", "name"],  // 节点展开异步请求自动提交id和name
+                otherParam: BI.cjkEncodeDO(paras) // 静态参数
             },
             check: {
                 enable: true
@@ -1736,16 +1756,16 @@ BI.TreeView = BI.inherit(BI.Pane, {
             data: {
                 key: {
                     title: "title",
-                    name: "text"
+                    name: "text"    // 节点的name属性替换成text
                 },
                 simpleData: {
-                    enable: true
+                    enable: true    // 可以穿id,pid属性的对象数组
                 }
             },
             view: {
                 showIcon: false,
                 expandSpeed: "",
-                nameIsHTML: true,
+                nameIsHTML: true,   // 节点可以用html标签代替
                 dblClickExpand: false
             },
             callback: {
@@ -1768,6 +1788,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if(status.half === true && status.checked === true) {
                 checked = false;
             }
+            // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
             self.nodes.checkNode(treeNode, !checked, true, true);
         }
 
@@ -1790,7 +1811,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 }
                 return true;
             }
-            BI.Msg.toast("Please Wait。", "warning");
+            BI.Msg.toast("Please Wait。", "warning"); // 不展开节点，也不触发onExpand事件
             return false;
 
         }
@@ -1828,9 +1849,9 @@ BI.TreeView = BI.inherit(BI.Pane, {
         function ajaxGetNodes (treeNode, reloadType) {
             var zTree = self.nodes;
             if (reloadType == "refresh") {
-                zTree.updateNode(treeNode);
+                zTree.updateNode(treeNode); // 刷新一下当前节点，如果treeNode.xxx被改了的话
             }
-            zTree.reAsyncChildNodes(treeNode, reloadType, true);
+            zTree.reAsyncChildNodes(treeNode, reloadType, true); // 强制加载子节点，reloadType === refresh为先清空再加载，否则为追加到现有子节点之后
         }
 
         function beforeCheck (treeId, treeNode) {
@@ -1908,15 +1929,18 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
         var parent = node.parentValues || self._getParentValues(node);
         var path = parent.concat(this._getNodeValue(node));
+        // 当前节点是全选的，因为上面的判断已经排除了不选和半选
         if (BI.isNotEmptyArray(node.children) || checkState.half === false) {
             this._buildTree(map, path);
             return;
         }
+        // 剩下的就是半选不展开的节点，因为不知道里面是什么情况，所以借助selectedValues(这个是完整的选中情况)
         var storeValues = BI.deepClone(this.options.paras.selectedValues);
         var treeNode = this._getTree(storeValues, path);
         this._addTreeNode(map, parent, this._getNodeValue(node), treeNode);
     },
 
+    // 获取的是以values最后一个节点为根的子树
     _getTree: function (map, values) {
         var cur = map;
         BI.any(values, function (i, value) {
@@ -1928,6 +1952,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         return cur;
     },
 
+    // 以values为path一路向里补充map, 并在末尾节点添加key: value节点
     _addTreeNode: function (map, values, key, value) {
         var cur = map;
         BI.each(values, function (i, value) {
@@ -1955,7 +1980,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         var self = this;
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
-        track(rootNoots);
+        track(rootNoots); // 可以看到这个方法没有递归调用，所以在_getHalfSelectedValues中需要关心全选的节点
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -2203,7 +2228,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var self = this;
         var setting = {
             async: {
-                enable: false,
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
                 otherParam: BI.cjkEncodeDO(paras)
             },
             check: {
@@ -2293,6 +2318,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return setting;
     },
 
+    // 用来更新this.options.paras.selectedValues, 和ztree内部无关
     _selectTreeNode: function (treeId, treeNode) {
         var self = this, o = this.options;
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
@@ -2338,7 +2364,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback (nodes, hasNext) {
             self.nodes.addNodes(treeNode, nodes);
-
+            // 展开节点是没有分页的
             if (hasNext === true) {
                 BI.delay(function () {
                     times++;
@@ -2355,6 +2381,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
     },
 
+    // a,b 两棵树
+    // a->b b->a 做两次校验, 构造一个校验后的map
+    // e.g. 以a为基准，如果b没有此节点，则在map中添加。 如b有,且是全选的, 则在map中构造全选（为什么不添加a的值呢？ 因为这次是取并集）, 如果b中也有和a一样的存值，就递归
     _join: function (valueA, valueB) {
         var self = this;
         var map = {};
@@ -2446,9 +2475,17 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator({
+                type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
+                selectedValues: self.options.paras.selectedValues
+            }, function (res) {
+                self.options.paras.selectedValues = res;
+                BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
+            });
         } else {
             // 如果选中的值中不存在该值不处理
+            // 因为反正是不选中，没必要管
             var t = this.options.paras.selectedValues;
             var p = parentValues.concat(name);
             for (var i = 0, len = p.length; i < len; i++) {
@@ -2456,6 +2493,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
                 if (t == null) {
                     return;
                 }
+                // 选中中国-江苏, 搜索南京，取消勾选
                 if (BI.isEmpty(t)) {
                     break;
                 }
@@ -2519,9 +2557,8 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             }
             var hasNext = !!d.hasNext, nodes = d.items || [];
             o.paras.lastSearchValue = d.lastSearchValue;
-            if (nodes.length > 0) {
-                callback(self._dealWidthNodes(nodes));
-            }
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
             self.setTipVisible(nodes.length <= 0);
             self.loaded();
             if (!hasNext) {
@@ -2547,12 +2584,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     getValue: function () {
         var o = this.options;
         var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        o.itemsCreator({
-            type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-            selectedValues: result
-        }, function (res) {
-            result = res;
-        });
         return result;
     },
 
@@ -2567,7 +2598,333 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     }
 });
 
-BI.shortcut("bi.part_tree", BI.PartTree);BI.prepares.push(function () {
+BI.shortcut("bi.part_tree", BI.PartTree);/**
+ * author: windy
+ * 继承自treeView, 此树的父子节点的勾选状态互不影响, 此树不会有半选节点
+ * 返回value格式为[["A"], ["A", "a"]]表示勾选了A且勾选了a
+ * @class BI.ListTreeView
+ * @extends BI.TreeView
+ */
+BI.ListTreeView = BI.inherit(BI.TreeView, {
+
+    _constants: {
+        SPLIT: "<|>"
+    },
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {});
+    },
+    _init: function () {
+        BI.ListTreeView.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.storeValue = o.value || {};
+    },
+
+    // 配置属性
+    _configSetting: function () {
+        var paras = this.options.paras;
+        var self = this;
+        var setting = {
+            async: {
+                enable: false
+            },
+            check: {
+                enable: true,
+                chkboxType: {Y: "", N: ""}
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true,
+                dblClickExpand: false
+            },
+            callback: {
+                onCheck: onCheck,
+                onClick: onClick
+            }
+        };
+
+        function onClick (event, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var checked = treeNode.checked;
+            self._checkValue(treeNode, !checked);
+            zTree.checkNode(treeNode, !checked, true, true);
+        }
+
+        function onCheck (event, treeId, treeNode) {
+            self._selectTreeNode(treeId, treeNode);
+        }
+
+        return setting;
+    },
+
+    _selectTreeNode: function (treeId, treeNode) {
+        this._checkValue(treeNode, treeNode.checked);
+        BI.ListTreeView.superclass._selectTreeNode.apply(this, arguments);
+    },
+
+    _transArrayToMap: function (treeArrays) {
+        var self = this;
+        var map = {};
+        BI.each(treeArrays, function (idx, array) {
+            var key = array.join(self._constants.SPLIT);
+            map[key] = true;
+        });
+        return map;
+    },
+
+    _transMapToArray: function (treeMap) {
+        var self = this;
+        var array = [];
+        BI.each(treeMap, function (key) {
+            var item = key.split(self._constants.SPLIT);
+            array.push(item);
+        });
+        return array;
+    },
+
+    _checkValue: function (treeNode, checked) {
+        var key = BI.concat(this._getParentValues(treeNode), this._getNodeValue(treeNode)).join(this._constants.SPLIT);
+        if(checked) {
+            this.storeValue[key] = true;
+        } else {
+            delete this.storeValue[key];
+        }
+    },
+
+    setSelectedValue: function (value) {
+        this.options.paras.selectedValues = value || [];
+        this.storeValue = this._transArrayToMap(value);
+    },
+
+    getValue: function () {
+        return this._transMapToArray(this.storeValue);
+    }
+});
+
+BI.shortcut("bi.list_tree_view", BI.ListTreeView);/**
+ * author: windy
+ * 继承自treeView, 此树的父子节点的勾选状态互不影响, 此树不会有半选节点
+ * 返回value格式为["A", ["A", "a"]]表示勾选了A且勾选了a
+ * @class BI.ListListAsyncTree
+ * @extends BI.TreeView
+ */
+BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ListAsyncTree.superclass._defaultConfig.apply(this, arguments), {});
+    },
+    _init: function () {
+        BI.ListAsyncTree.superclass._init.apply(this, arguments);
+    },
+
+    // 配置属性
+    _configSetting: function () {
+        var paras = this.options.paras;
+        var self = this;
+        var setting = {
+            async: {
+                enable: false,  // 很明显这棵树把异步请求关掉了，所有的异步请求都是手动控制的
+                otherParam: BI.cjkEncodeDO(paras)
+            },
+            check: {
+                enable: true,
+                chkboxType: {Y: "", N: ""}
+            },
+            data: {
+                key: {
+                    title: "title",
+                    name: "text"
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                showIcon: false,
+                expandSpeed: "",
+                nameIsHTML: true,
+                dblClickExpand: false
+            },
+            callback: {
+                onCheck: onCheck,
+                beforeExpand: beforeExpand,
+                beforeCheck: beforeCheck,
+                onClick: onClick
+            }
+        };
+
+        function beforeCheck (treeId, treeNode) {
+            treeNode.half = false;
+        }
+
+        function onClick (event, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var checked = treeNode.checked;
+            self._checkValue(treeNode, !checked);
+            zTree.checkNode(treeNode, !checked, true, true);
+        }
+
+        function beforeExpand (treeId, treeNode) {
+            self._beforeExpandNode(treeId, treeNode);
+        }
+
+        function onCheck (event, treeId, treeNode) {
+            self._selectTreeNode(treeId, treeNode);
+        }
+
+        return setting;
+    },
+
+    // 展开节点
+    _beforeExpandNode: function (treeId, treeNode) {
+        var self = this, o = this.options;
+        var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
+        var op = BI.extend({}, o.paras, {
+            id: treeNode.id,
+            times: 1,
+            parentValues: parentValues.concat(this._getNodeValue(treeNode))
+        });
+        var complete = function (d) {
+            var nodes = d.items || [];
+            if (nodes.length > 0) {
+                callback(self._dealWidthNodes(nodes), !!d.hasNext);
+            }
+        };
+        var times = 1;
+
+        function callback (nodes, hasNext) {
+            self.nodes.addNodes(treeNode, nodes);
+            // 展开节点是没有分页的
+            if (hasNext === true) {
+                BI.delay(function () {
+                    times++;
+                    op.times = times;
+                    o.itemsCreator(op, complete);
+                }, 100);
+            }
+        }
+
+        if (!treeNode.children) {
+            setTimeout(function () {
+                o.itemsCreator(op, complete);
+            }, 17);
+        }
+    },
+
+    hasChecked: function () {
+        return !BI.isEmpty(this.options.paras.selectedValues) || BI.ListAsyncTree.superclass.hasChecked.apply(this, arguments);
+    },
+
+    // 生成树方法
+    stroke: function (config) {
+        delete this.options.keyword;
+        BI.extend(this.options.paras, config);
+        var setting = this._configSetting();
+        this._initTree(setting);
+    }
+});
+
+BI.shortcut("bi.list_async_tree", BI.ListAsyncTree);/**
+ * guy
+ * 局部树，两个请求树， 第一个请求构造树，第二个请求获取节点
+ * @class BI.ListPartTree
+ * @extends BI.AsyncTree
+ */
+BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
+    _defaultConfig: function () {
+        return BI.extend(BI.ListPartTree.superclass._defaultConfig.apply(this, arguments), {});
+    },
+
+    _init: function () {
+        BI.ListPartTree.superclass._init.apply(this, arguments);
+    },
+
+    _loadMore: function () {
+        var self = this, o = this.options;
+        var op = BI.extend({}, o.paras, {
+            type: BI.TreeView.REQ_TYPE_INIT_DATA,
+            times: ++this.times
+        });
+        this.tip.setLoading();
+        o.itemsCreator(op, function (d) {
+            var hasNext = !!d.hasNext, nodes = d.items || [];
+            o.paras.lastSearchValue = d.lastSearchValue;
+            if (self._stop === true) {
+                return;
+            }
+            if (!hasNext) {
+                self.tip.setEnd();
+            } else {
+                self.tip.setLoaded();
+            }
+            if (nodes.length > 0) {
+                self.nodes.addNodes(null, self._dealWidthNodes(nodes));
+            }
+        });
+    },
+
+    _initTree: function (setting, keyword) {
+        var self = this, o = this.options;
+        this.times = 1;
+        var tree = this.tree;
+        tree.empty();
+        self.tip.setVisible(false);
+        this.loading();
+        var op = BI.extend({}, o.paras, {
+            type: BI.TreeView.REQ_TYPE_INIT_DATA,
+            times: this.times
+        });
+        var complete = function (d) {
+            if (self._stop === true || keyword != o.paras.keyword) {
+                return;
+            }
+            var hasNext = !!d.hasNext, nodes = d.items || [];
+            o.paras.lastSearchValue = d.lastSearchValue;
+            // 没有请求到数据也要初始化空树, 如果不初始化, 树就是上一次构造的树, 节点信息都是过期的
+            callback(nodes.length > 0 ? self._dealWidthNodes(nodes) : []);
+            self.setTipVisible(nodes.length <= 0);
+            self.loaded();
+            if (!hasNext) {
+                self.tip.invisible();
+            } else {
+                self.tip.setLoaded();
+            }
+            self.fireEvent(BI.Events.AFTERINIT);
+        };
+
+        function callback (nodes) {
+            if (self._stop === true) {
+                return;
+            }
+            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+        }
+
+        BI.delay(function () {
+            o.itemsCreator(op, complete);
+        }, 100);
+    },
+
+    // 生成树方法
+    stroke: function (config) {
+        var o = this.options;
+        delete o.paras.keyword;
+        BI.extend(o.paras, config);
+        delete o.paras.lastSearchValue;
+        var setting = this._configSetting();
+        this._initTree(setting, o.paras.keyword);
+    }
+});
+
+BI.shortcut("bi.list_part_tree", BI.ListPartTree);BI.prepares.push(function () {
     BI.Resizers = new BI.ResizeController();
     BI.Layers = new BI.LayerController();
     BI.Maskers = new BI.MaskersController();
@@ -2967,7 +3324,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,left
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -3025,14 +3385,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -3339,6 +3698,9 @@ BI.Combo = BI.inherit(BI.Widget, {
             case "right,top":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
                 break;
+            case "right,innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
+                break;
             case "top,custom":
             case "custom,top":
                 p = BI.DOM.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
@@ -3427,7 +3789,8 @@ BI.Combo = BI.inherit(BI.Widget, {
     },
 
     showView: function (e) {
-        if (this.isEnabled() && this.combo.isEnabled()) {
+        // 减少popup 调整宽高的次数
+        if (this.isEnabled() && this.combo.isEnabled() && !this.isViewVisible()) {
             this._popupView(e);
         }
     },
@@ -6149,7 +6512,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
         var tbHeight = this.toolbar ? (this.toolbar.attr("height") || 24) : 0,
             tabHeight = this.tab ? (this.tab.attr("height") || 24) : 0,
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
-        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap  - 2;
+        var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
             this.view.element.css({"max-height": resetHeight + "px"});
     },
@@ -7154,7 +7517,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
             ghost: false, // 是否幽灵显示, 即正常状态无背景
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: props.clear ? 0 : 10,
@@ -7208,7 +7570,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 type: "bi.label",
                 textAlign: o.textAlign,
                 whiteSpace: o.whiteSpace,
-                forceCenter: o.forceCenter,
                 textWidth: o.textWidth,
                 textHeight: o.textHeight,
                 hgap: o.hgap,
@@ -7291,7 +7652,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             baseCls: (conf.baseCls || "") + " bi-text-button",
             textAlign: "center",
             whiteSpace: "nowrap",
-            forceCenter: false,
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -7312,7 +7672,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             whiteSpace: o.whiteSpace,
             textWidth: o.textWidth,
             textHeight: o.textHeight,
-            forceCenter: o.forceCenter,
             width: o.width,
             height: o.height,
             hgap: o.hgap,
@@ -8536,7 +8895,6 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                forceCenter: true,
                 height: o.height - 2 * (o.vgap + o.tgap),
                 whiteSpace: "nowrap",
                 textAlign: "left"
@@ -8670,6 +9028,9 @@ BI.Editor = BI.inherit(BI.Single, {
         this.editor.on(BI.Input.EVENT_CONFIRM, function () {
             self.fireEvent(BI.Editor.EVENT_CONFIRM, arguments);
         });
+        this.editor.on(BI.Input.EVENT_CHANGE_CONFIRM, function () {
+            self.fireEvent(BI.Editor.EVENT_CHANGE_CONFIRM, arguments);
+        });
         this.element.click(function (e) {
             e.stopPropagation();
             return false;
@@ -8723,7 +9084,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
@@ -8783,6 +9144,10 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.editor.getLastValidValue();
     },
 
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     getValue: function () {
         if (!this.isValid()) {
             return BI.trim(this.editor.getLastValidValue());
@@ -8814,6 +9179,7 @@ BI.Editor.EVENT_START = "EVENT_START";
 BI.Editor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Editor.EVENT_STOP = "EVENT_STOP";
 BI.Editor.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.Editor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Editor.EVENT_VALID = "EVENT_VALID";
 BI.Editor.EVENT_ERROR = "EVENT_ERROR";
 BI.Editor.EVENT_ENTER = "EVENT_ENTER";
@@ -8942,9 +9308,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 10,
+                left: 4,
                 right: 10,
-                top: 8,
+                top: 4,
                 bottom: 8
             }]
         });
@@ -8993,9 +9359,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark",
+                        cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 30,
+                        height: 20,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -9008,7 +9374,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 10,
+                            left: 4,
                             top: 4,
                             right: 0
                         }]
@@ -9124,10 +9490,14 @@ BI.Html = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -9339,8 +9709,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {
@@ -10067,8 +10437,10 @@ BI.Input = BI.inherit(BI.Single, {
             })
             .on("input propertychange", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
-                // 这个事件在input的属性发生改变的时候就会触发（class的变化也算）
-                if (BI.isNotNull(keyCode)) {
+                // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
+                // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
+                var originalEvent = e.originalEvent;
+                if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
                     keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
@@ -10122,9 +10494,13 @@ BI.Input = BI.inherit(BI.Single, {
             self._isEditing = false;
             self._start = false;
             if (self.isValid()) {
+                var lastValidValue = self._lastValidValue;
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
+                if(self._lastValidValue !== lastValidValue) {
+                    self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
+                }
             }
             self.fireEvent(BI.Input.EVENT_BLUR);
         }
@@ -10274,6 +10650,10 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     getLastValidValue: function () {
+        return this._lastValidValue;
+    },
+
+    getLastChangedValue: function () {
         return this._lastChangedValue;
     },
 
@@ -10310,6 +10690,7 @@ BI.Input.EVENT_BACKSPACE = "EVENT_BACKSPACE";
 BI.Input.EVENT_START = "EVENT_START";
 BI.Input.EVENT_PAUSE = "EVENT_PAUSE";
 BI.Input.EVENT_STOP = "EVENT_STOP";
+BI.Input.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.Input.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.Input.EVENT_REMOVE = "EVENT_REMOVE";
 BI.Input.EVENT_EMPTY = "EVENT_EMPTY";
@@ -10422,7 +10803,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -10462,28 +10842,22 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -10496,16 +10870,18 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 return;
             }
             if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
+                BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
+                    bgap: o.bgap
+                });
+                this.text = BI.createWidget(json);
+                BI.createWidget({
+                    type: "bi.center_adapt",
+                    scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
                 });
@@ -10515,33 +10891,37 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 this.element.css({
                     "line-height": o.height + "px"
                 });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
+            BI.extend(json, {
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -10555,41 +10935,6 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             return;
         }
         if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -10598,17 +10943,28 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                 tgap: o.tgap,
                 bgap: o.bgap
             });
+            this.text = BI.createWidget(json);
+            BI.createWidget({
+                type: "bi.center_adapt",
+                scrollable: true,
+                element: this,
+                items: [this.text]
+            });
+            return;
+        }
+        if (BI.isNumber(o.height) && o.height > 0) {
             this.element.css({
                 "line-height": o.height + "px"
             });
             this.text = BI.createWidget(BI.extend(json, {
-                element: this
+                element: this,
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -10619,52 +10975,40 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
                 BI.createWidget({
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -10679,47 +11023,28 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) {
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -10732,13 +11057,12 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -10753,66 +11077,23 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -10823,23 +11104,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: adaptLayout,
+            element: this,
+            items: [this.text]
         });
     },
 
@@ -10937,7 +11209,6 @@ BI.Label = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
-            forceCenter: false, // 是否无论如何都要居中, 不考虑超出边界的情况, 在未知宽度和高度时有效
             textWidth: null,
             textHeight: null,
             hgap: 0,
@@ -10984,29 +11255,22 @@ BI.Label = BI.inherit(BI.Single, {
         json.textAlign = "left";
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    var gap = (o.width - o.textWidth) / 2;
+                json.maxWidth = o.textWidth;
+                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: "bi.center_adapt",
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: gap + o.hgap + o.lgap,
-                                right: gap + o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                json.width = o.textWidth;
-                json.textAlign = o.textAlign;
-                BI.createWidget({
+                BI.createWidget({ // 1.2
                     type: "bi.center_adapt",
                     scrollable: o.whiteSpace === "normal",
                     element: this,
@@ -11018,7 +11282,7 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (o.whiteSpace == "normal") {
+            if (o.whiteSpace == "normal") { // 1.3
                 BI.extend(json, {
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -11036,39 +11300,42 @@ BI.Label = BI.inherit(BI.Single, {
                 });
                 return;
             }
-            if (BI.isNumber(o.height) && o.height > 0) {
+            if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                 this.element.css({
                     "line-height": o.height + "px"
                 });
                 json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
+                this.text = BI.createWidget(BI.extend(json, {
                     element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    hgap: o.hgap,
+                    vgap: o.vgap,
+                    lgap: o.lgap,
+                    rgap: o.rgap,
+                    tgap: o.tgap,
+                    bgap: o.bgap
+                }));
                 return;
             }
-            json.width = o.width - 2 * o.hgap;
-            json.textAlign = o.textAlign;
+            BI.extend(json, { // 1.5
+                hgap: o.hgap,
+                vgap: o.vgap,
+                lgap: o.lgap,
+                rgap: o.rgap,
+                tgap: o.tgap,
+                bgap: o.bgap,
+                maxWidth: "100%"
+            });
+            this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
                 element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
+                items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
+        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {  // 1.6
+            json.maxWidth = o.textWidth;
             BI.createWidget({
                 type: "bi.center_adapt",
                 scrollable: o.whiteSpace === "normal",
@@ -11081,7 +11348,7 @@ BI.Label = BI.inherit(BI.Single, {
             });
             return;
         }
-        if (o.whiteSpace == "normal") {
+        if (o.whiteSpace == "normal") { // 1.7
             BI.extend(json, {
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11093,54 +11360,26 @@ BI.Label = BI.inherit(BI.Single, {
             this.text = BI.createWidget(json);
             BI.createWidget({
                 type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
+                scrollable: true,
                 element: this,
                 items: [this.text]
             });
             return;
         }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                json.textAlign = o.textAlign;
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
-            }
-            BI.extend(json, {
+        if (BI.isNumber(o.height) && o.height > 0) { // 1.8
+            this.element.css({
+                "line-height": o.height + "px"
+            });
+            json.textAlign = o.textAlign;
+            this.text = BI.createWidget(BI.extend(json, {
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-            json.textAlign = o.textAlign;
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -11151,54 +11390,40 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        // 能走到这边,说明这个text不需要换行,并且不会做任何布局包装,那么这时候就该是什么align是什么align
-        json.textAlign = o.textAlign;
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: "bi.center_adapt",
+            element: this,
+            items: [this.text]
         });
     },
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
+                if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.adaptive",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
                             {
-                                el: (this.text = BI.createWidget(json)),
-                                left: o.hgap + o.lgap,
-                                right: o.hgap + o.rgap,
-                                top: o.vgap + o.tgap,
-                                bottom: o.vgap + o.bgap
+                                el: (this.text = BI.createWidget(json))
                             }
                         ]
                     });
-                    this.element.css({"line-height": o.height + "px"});
                     return;
                 }
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
+                BI.createWidget({ // 2.2
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -11213,47 +11438,28 @@ BI.Label = BI.inherit(BI.Single, {
                         }
                     ]
                 });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
                 return;
             }
-            if (o.whiteSpace == "normal") {
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.vertical_adapt",
-                    scrollable: o.whiteSpace === "normal",
+            if (BI.isNumber(o.height) && o.height > 0) { // 2.3
+                this.text = BI.createWidget(BI.extend(json, {
+                    element: this,
                     hgap: o.hgap,
                     vgap: o.vgap,
                     lgap: o.lgap,
                     rgap: o.rgap,
                     tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [this.text]
-                });
-                o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                BI.createWidget({
-                    type: "bi.absolute",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
+                    bgap: o.bgap
+                }));
+                if (o.whiteSpace !== "normal") {
+                    this.element.css({
+                        "line-height": o.height - (o.vgap * 2) + "px"
+                    });
+                }
                 return;
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
-                type: "bi.vertical_adapt",
+            BI.createWidget({ // 2.4
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11266,13 +11472,12 @@ BI.Label = BI.inherit(BI.Single, {
                     el: (this.text = BI.createWidget(json))
                 }]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
-            BI.createWidget({
-                type: "bi.vertical_adapt",
+            BI.createWidget({  // 2.5
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11287,66 +11492,23 @@ BI.Label = BI.inherit(BI.Single, {
                     }
                 ]
             });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [this.text]
-            });
-            // 父亲有line-height,而当前label是inline-block，那么他的行高一定是父亲的lineHeight,就算text上设置了line-height
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
             return;
         }
         if (BI.isNumber(o.height) && o.height > 0) {
-            if (BI.isNumber(o.textHeight) && o.textHeight > 0) {
+            if (o.whiteSpace !== "normal") {
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height - (o.vgap * 2) + "px"
                 });
-                BI.createWidget({
-                    type: "bi.adaptive",
-                    height: o.height,
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [{
-                        el: (this.text = BI.createWidget(json)),
-                        left: o.hgap + o.lgap,
-                        right: o.hgap + o.rgap,
-                        top: o.vgap + o.tgap,
-                        bottom: o.vgap + o.bgap
-                    }]
-                });
-                return;
             }
-            BI.extend(json, {
+            this.text = BI.createWidget(BI.extend(json, { // 2.6
+                element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
                 lgap: o.lgap,
                 rgap: o.rgap,
                 tgap: o.tgap,
                 bgap: o.bgap
-            });
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this
             }));
-            BI.createWidget({
-                type: "bi.layout",
-                element: this.text,
-                scrollable: o.whiteSpace === "normal"
-            });
             return;
         }
         BI.extend(json, {
@@ -11357,33 +11519,15 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: o.tgap,
             bgap: o.bgap
         });
-        if (o.forceCenter) {
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.vertical_adapt",
-                element: this,
-                items: [this.text]
-            });
-            o.textHeight && this.element.css({"line-height": o.textHeight + "px"});
-            return;
-        }
+
         this.text = BI.createWidget(BI.extend(json, {
-            element: this
+            maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.layout",
-            element: this.text,
-            scrollable: o.whiteSpace === "normal"
+            type: adaptLayout,
+            element: this,
+            items: [this.text]
         });
-    },
-
-    _setEnable: function (enable) {
-        BI.Label.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
     },
 
     doRedMark: function () {
@@ -11728,12 +11872,12 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.label",
+                type: "bi.text",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 16,
+                height: 16,
                 hgap: this._const.hgap
             });
         }
@@ -14067,6 +14211,8 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		makeChkClass: function(setting, node) {
 			var checkedKey = setting.data.key.checked,
 			c = consts.checkbox, r = consts.radio,
+			checkboxType = setting.check.chkboxType;
+			var notEffectByOtherNode = (checkboxType.Y === "" && checkboxType.N === "");
 			fullStyle = "";
 			if (node.chkDisabled === true) {
 				fullStyle = c.DISABLED;
@@ -14075,7 +14221,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 			} else if (setting.check.chkStyle == r.STYLE) {
 				fullStyle = (node.check_Child_State < 1)? c.FULL:c.PART;
 			} else {
-				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) ? c.FULL:c.PART) : ((node.check_Child_State < 1)? c.FULL:c.PART);
+				fullStyle = node[checkedKey] ? ((node.check_Child_State === 2 || node.check_Child_State === -1) || notEffectByOtherNode ? c.FULL:c.PART) : ((node.check_Child_State < 1 || notEffectByOtherNode)? c.FULL:c.PART);
 			}
 			var chkName = setting.check.chkStyle + "_" + (node[checkedKey] ? c.TRUE : c.FALSE) + "_" + fullStyle;
 			chkName = (node.check_Focus && node.chkDisabled !== true) ? chkName + "_" + c.FOCUS : chkName;

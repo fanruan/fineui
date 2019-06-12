@@ -353,6 +353,7 @@
         return left;
     }
 
+
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
         if (typeof text !== "string") {
@@ -411,21 +412,16 @@
     };
 
     // replace the html special tags
+    var SPECIAL_TAGS = {
+        "&": "&amp;",
+        "\"": "&quot;",
+        "<": "&lt;",
+        ">": "&gt;",
+        " ": "&nbsp;"
+    };
     BI.htmlEncode = function (text) {
         return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
-            switch (v) {
-                case "&":
-                    return "&amp;";
-                case "\"":
-                    return "&quot;";
-                case "<":
-                    return "&lt;";
-                case ">":
-                    return "&gt;";
-                case " ":
-                default:
-                    return "&nbsp;";
-            }
+            return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
     // html decode
@@ -611,6 +607,20 @@
 
             return o;
         })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
     };
 
     BI.encodeURIComponent = function (url) {
