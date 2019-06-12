@@ -130,6 +130,10 @@ Demo.CORE_CONFIG = [{
     value: "demo.combo2"
 }, {
     pId: 10201,
+    text: "bi.combo(內部位置)",
+    value: "demo.combo3"
+}, {
+    pId: 10201,
     text: "bi.expander",
     value: "demo.expander"
 }, {
