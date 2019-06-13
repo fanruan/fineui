@@ -49,6 +49,8 @@ BI.ListPane = BI.inherit(BI.Pane, {
                     calback.apply(self, arguments);
                     op.times === 1 && BI.nextTick(function () {
                         self.loaded();
+                        // loaded在callback之后, 需要check一下面板状态
+                        self.check();
                     });
                 });
             },
