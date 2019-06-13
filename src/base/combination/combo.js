@@ -9,7 +9,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
             logic: {
                 dynamic: true
             },
@@ -385,6 +385,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,innerRight":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
+                break;
+            case "right,innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
