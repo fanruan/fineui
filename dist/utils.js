@@ -11014,8 +11014,8 @@ if (!_global.BI) {
         },
 
         createItems: function (data, innerAttr, outerAttr) {
-            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr);
-            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr);
+            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr || {});
+            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr || {});
             return BI.map(data, function (i, item) {
                 if (BI.isArray(item)) {
                     return BI.createItems(item, innerAttr, outerAttr);

@@ -10480,8 +10480,8 @@ if (!_global.BI) {
         },
 
         createItems: function (data, innerAttr, outerAttr) {
-            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr);
-            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr);
+            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr || {});
+            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr || {});
             return BI.map(data, function (i, item) {
                 if (BI.isArray(item)) {
                     return BI.createItems(item, innerAttr, outerAttr);
@@ -20004,10 +20004,23 @@ BI.prepares.push(function () {
             };
         },
 
+        getInnerLeftPosition: function (combo, popup, extraWidth) {
+            return {
+                left: combo.element.offset().left + (extraWidth || 0)
+            };
+        },
+
         getRightPosition: function (combo, popup, extraWidth) {
             var el = combo.element;
             return {
                 left: el.offset().left + el.outerWidth() + (extraWidth || 0)
+            };
+        },
+
+        getInnerRightPosition: function (combo, popup, extraWidth) {
+            var el = combo.element, viewBounds = popup.element.bounds();
+            return {
+                left: el.offset().left + el.outerWidth() - viewBounds.width - (extraWidth || 0)
             };
         },
 
@@ -20028,10 +20041,19 @@ BI.prepares.push(function () {
             return BI.DOM.getLeftPosition(combo, popup, extraWidth).left >= 0;
         },
 
+        isInnerLeftSpaceEnough: function (combo, popup, extraWidth) {
+            var viewBounds = popup.element.bounds(),windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            return BI.DOM.getInnerLeftPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
+        },
+
         isRightSpaceEnough: function (combo, popup, extraWidth) {
             var viewBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             return BI.DOM.getRightPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
+        },
+
+        isInnerRightSpaceEnough: function (combo, popup, extraWidth) {
+            return BI.DOM.getInnerRightPosition(combo, popup, extraWidth).left >= 0;
         },
 
         isTopSpaceEnough: function (combo, popup, extraHeight) {
@@ -20239,7 +20261,7 @@ BI.prepares.push(function () {
             extraWidth || (extraWidth = 0);
             extraHeight || (extraHeight = 0);
             var i, direct;
-            var leftRight = [], topBottom = [];
+            var leftRight = [], topBottom = [], innerLeftRight = [];
             var isNeedAdaptHeight = false, tbFirst = false, lrFirst = false;
             var left, top, pos, firstDir = directions[0];
             for (i = 0; i < directions.length; i++) {
@@ -20256,6 +20278,12 @@ BI.prepares.push(function () {
                         break;
                     case "bottom":
                         topBottom.push(direct);
+                        break;
+                    case "innerLeft":
+                        innerLeftRight.push(direct);
+                        break;
+                    case "innerRight":
+                        innerLeftRight.push(direct);
                         break;
                 }
             }
@@ -20348,6 +20376,48 @@ BI.prepares.push(function () {
                         }
                         tbFirst = true;
                         break;
+                    case "innerLeft":
+                        if (!isNeedAdaptHeight) {
+                            var tW = tbFirst ? extraHeight : extraWidth, tH = tbFirst ? 0 : extraHeight;
+                            if (BI.DOM.isInnerLeftSpaceEnough(combo, popup, tW)) {
+                                left = BI.DOM.getInnerLeftPosition(combo, popup, tW).left;
+                                if (topBottom[0] === "bottom") {
+                                    pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerLeft,bottom";
+                                } else {
+                                    pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerLeft,top";
+                                }
+                                if (tbFirst) {
+                                    pos.change = "innerLeft";
+                                }
+                                pos.left = left;
+                                return pos;
+                            }
+                        }
+                        lrFirst = true;
+                        break;
+                    case "innerRight":
+                        if (!isNeedAdaptHeight) {
+                            var tW = tbFirst ? extraHeight : extraWidth, tH = tbFirst ? extraWidth : extraHeight;
+                            if (BI.DOM.isInnerRightSpaceEnough(combo, popup, tW)) {
+                                left = BI.DOM.getInnerRightPosition(combo, popup, tW).left;
+                                if (topBottom[0] === "bottom") {
+                                    pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerRight,bottom";
+                                } else {
+                                    pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerRight,top";
+                                }
+                                if (tbFirst) {
+                                    pos.change = "innerRight";
+                                }
+                                pos.left = left;
+                                return pos;
+                            }
+                        }
+                        break;
+
                 }
             }
 
@@ -39460,7 +39530,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -39518,14 +39591,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -39831,6 +39903,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,top":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                break;
+            case "right,innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":

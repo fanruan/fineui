@@ -3324,7 +3324,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -3382,14 +3385,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -3695,6 +3697,9 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,top":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                break;
+            case "right,innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
