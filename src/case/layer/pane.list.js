@@ -49,7 +49,7 @@ BI.ListPane = BI.inherit(BI.Pane, {
                     calback.apply(self, arguments);
                     op.times === 1 && BI.nextTick(function () {
                         self.loaded();
-                        // loaded在callback之后, 需要check一下面板状态
+                        // callback可能在loading之前执行, check保证显示正确
                         self.check();
                     });
                 });
