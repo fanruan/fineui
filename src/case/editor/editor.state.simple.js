@@ -21,7 +21,8 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 24
+            height: 24,
+            text: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
 
@@ -48,8 +49,8 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             type: "bi.text_button",
             cls: "state-editor-infinite-text",
             textAlign: "left",
+            text: o.text,
             height: o.height,
-            text: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: 4,
             handler: function () {
                 self._showInput();
@@ -218,6 +219,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (v) {
+        var o = this.options;
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
@@ -227,7 +229,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+                this.text.setText(o.text);
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
@@ -237,7 +239,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
         } else if (BI.isEmpty(v)) {
-            this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+            this.text.setText(o.text);
             this.text.element.addClass("state-editor-infinite-text");
         } else {
             this.text.setText(BI.i18nText("BI-Already_Selected"));
