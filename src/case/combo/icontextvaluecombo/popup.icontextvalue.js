@@ -39,6 +39,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             }
         });
 
+        this.check();
+
         BI.createWidget({
             type: "bi.vertical",
             element: this,
