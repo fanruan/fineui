@@ -45,6 +45,10 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
         };
     },
 
+    mounted: function() {
+        this.check();
+    },
+
     populate: function (find, match, keyword) {
         var items = BI.concat(find, match);
         BI.SearchTextValueComboPopup.superclass.populate.apply(this, items);
