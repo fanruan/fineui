@@ -28,6 +28,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
+                text: o.text,
                 height: o.height
             }
         });
