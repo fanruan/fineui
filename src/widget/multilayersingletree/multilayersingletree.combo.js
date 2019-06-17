@@ -26,11 +26,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
 
-        var isSync = o.itemsCreator === BI.emptyFn;
+        var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        var combo = isSync ? this._getSyncConfig() : this._getAsyncConfig();
-
-        return !o.allowEdit && isSync ? combo : {
+        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
             type: "bi.absolute",
             items: [{
                 el: combo,

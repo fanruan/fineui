@@ -32,7 +32,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
                     self.loading();
                 });
                 o.itemsCreator(op, function (ob) {
-                    BI.MultiLayerSelectTreePopup.superclass.populate.apply(self, [ob.items]);
+                    self._populate(ob.items);
                     callback(ob);
                     (op.times === 1 && !op.node) && BI.nextTick(function () {
                         self.loaded();
@@ -64,6 +64,10 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
         this.check();
     },
 
+    _populate: function() {
+        BI.MultiLayerSelectTreePopup.superclass.populate.apply(this, arguments);
+    },
+
     getValue: function () {
         return this.tree.getValue();
     },
@@ -74,7 +78,7 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
     },
 
     populate: function (items) {
-        BI.MultiLayerSelectTreePopup.superclass.populate.apply(this, arguments);
+        this._populate(items);
         this.tree.populate(items);
     }
 });

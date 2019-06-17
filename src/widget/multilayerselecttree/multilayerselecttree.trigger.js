@@ -93,10 +93,6 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        var o = this.options;
-        if (!BI.isKey(v)) {
-            return o.valueFormatter(BI.isFunction(o.text) ? o.text() : o.text);
-        }
         return o.valueFormatter(v);
     },
 
