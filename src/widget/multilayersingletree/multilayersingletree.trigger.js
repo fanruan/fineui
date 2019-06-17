@@ -93,7 +93,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return o.valueFormatter(v);
+        return this.options.valueFormatter(v);
     },
 
     stopEditing: function () {
