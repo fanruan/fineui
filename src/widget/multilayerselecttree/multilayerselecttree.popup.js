@@ -27,8 +27,20 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
+            itemsCreator: function (op, callback) {
+                (op.times === 1 && !op.node) && BI.nextTick(function () {
+                    self.loading();
+                });
+                o.itemsCreator(op, function (ob) {
+                    BI.MultiLayerSelectTreePopup.superclass.populate.apply(self, [ob.items]);
+                    callback(ob);
+                    (op.times === 1 && !op.node) && BI.nextTick(function () {
+                        self.loaded();
+                    });
+                });
+            },
+            keywordGetter: o.keywordGetter,
             value: o.value,
-            itemsCreator: o.itemsCreator,
             scrollable: null
         });
 

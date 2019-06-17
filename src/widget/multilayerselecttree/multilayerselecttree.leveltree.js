@@ -11,6 +11,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
+            keywordGetter: BI.emptyFn,
             value: "",
             scrollable: true
         });
@@ -23,13 +24,15 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
     },
 
     _formatItems: function (nodes, layer, pNode) {
-        var self = this;
+        var self = this, o = this.options;
+        var keyword = o.keywordGetter();
         BI.each(nodes, function (i, node) {
             var extend = {};
             node.layer = layer;
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            node.keyword = keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
@@ -68,6 +71,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
     // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
+        var hasNext = false;
         this.empty();
         this._assertId(nodes);
         this.tree = BI.createWidget({
@@ -83,15 +87,28 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
-            itemsCreator: o.itemsCreator,
+            itemsCreator: function (op, callback) {
+                o.itemsCreator(op, function (ob) {
+                    hasNext = ob.hasNext;
+                    callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
+                });
+            },
             value: o.value,
 
             el: {
-                type: "bi.button_tree",
-                chooseType: BI.Selection.Single,
-                layouts: [{
-                    type: "bi.vertical"
-                }]
+                type: "bi.loader",
+                isDefaultInit: true,
+                chooseType: o.chooseType,
+                el: {
+                    type: "bi.button_tree",
+                    behaviors: o.behaviors,
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                },
+                hasNext: function () {
+                    return hasNext;
+                }
             }
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -110,7 +127,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
     },
 
     populate: function (nodes) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
+        BI.isNull(nodes) ? this.tree.populate() : this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
     },
 
     setValue: function (v) {

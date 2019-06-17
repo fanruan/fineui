@@ -11,6 +11,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
+            keywordGetter: BI.emptyFn,
             chooseType: BI.Selection.Single,
             scrollable: true
         });
@@ -23,13 +24,15 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     },
 
     _formatItems: function (nodes, layer, pNode) {
-        var self = this;
+        var self = this, o = this.options;
+        var keyword = o.keywordGetter();
         BI.each(nodes, function (i, node) {
             var extend = {};
             node.layer = layer;
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            node.keyword = keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
@@ -48,7 +51,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             } else {
                 extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item"
+                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 }
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
@@ -68,6 +71,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
+        var hasNext = false;
         this.empty();
         this._assertId(nodes);
         this.tree = BI.createWidget({
@@ -84,17 +88,26 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             value: o.value,
             itemsCreator: function (op, callback) {
-                o.itemsCreator(op, function (items) {
-                    callback(BI.Tree.transformToTreeFormat(items), 0);
+                o.itemsCreator(op, function (ob) {
+                    hasNext = ob.hasNext;
+                    callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
                 });
             },
 
             el: {
-                type: "bi.button_tree",
+                type: "bi.loader",
+                isDefaultInit: true,
                 chooseType: o.chooseType,
-                layouts: [{
-                    type: "bi.vertical"
-                }]
+                el: {
+                    type: "bi.button_tree",
+                    behaviors: o.behaviors,
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                },
+                hasNext: function () {
+                    return hasNext;
+                }
             }
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, v) {
@@ -113,7 +126,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     },
 
     populate: function (nodes) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
+        BI.isNull(nodes) ? this.tree.populate() : this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
     },
 
     setValue: function (v) {
