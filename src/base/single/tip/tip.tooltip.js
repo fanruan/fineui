@@ -62,7 +62,8 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                textHeight: 16,
+                height: o.height,
+                textHeight: o.height - 2,
                 hgap: this._const.hgap
             });
         }
