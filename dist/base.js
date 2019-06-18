@@ -4408,7 +4408,8 @@ BI.Loader = BI.inherit(BI.Widget, {
             behaviors: {},
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
