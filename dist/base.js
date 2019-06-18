@@ -612,7 +612,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
@@ -674,7 +674,8 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);
+/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -3323,7 +3324,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -3381,14 +3385,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -3694,6 +3697,12 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,top":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                break;
+            case "right,innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
+                break;
+            case "right,innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
@@ -9078,7 +9087,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
@@ -9302,9 +9311,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 10,
+                left: 4,
                 right: 10,
-                top: 8,
+                top: 4,
                 bottom: 8
             }]
         });
@@ -9353,9 +9362,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark",
+                        cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 30,
+                        height: 20,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -9368,7 +9377,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 10,
+                            left: 4,
                             top: 4,
                             right: 0
                         }]
@@ -9484,10 +9493,14 @@ BI.Html = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -9699,8 +9712,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {
@@ -10978,13 +10991,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -10997,7 +11011,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -11033,7 +11047,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11051,7 +11065,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11098,7 +11112,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
@@ -11392,13 +11406,14 @@ BI.Label = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -11411,7 +11426,7 @@ BI.Label = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({ // 2.2
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -11447,7 +11462,7 @@ BI.Label = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({ // 2.4
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11465,7 +11480,7 @@ BI.Label = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({  // 2.5
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -11512,19 +11527,10 @@ BI.Label = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
-    },
-
-    _setEnable: function (enable) {
-        BI.Label.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
     },
 
     doRedMark: function () {
@@ -11859,11 +11865,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.text",
+                        type: "bi.label",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        height: 18
+                        textHeight: 18
                     };
                 })
             });

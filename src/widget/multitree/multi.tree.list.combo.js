@@ -38,6 +38,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
+            text: o.text,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,

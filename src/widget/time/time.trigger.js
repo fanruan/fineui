@@ -49,7 +49,7 @@
                         value: this._formatValue(o.value),
                         hgap: 4,
                         allowBlank: true,
-                        watermark: BI.i18nText("BI-Basic_Unrestricted"),
+                        watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
                         title: BI.bind(this._getTitle, this),
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",

@@ -10480,8 +10480,8 @@ if (!_global.BI) {
         },
 
         createItems: function (data, innerAttr, outerAttr) {
-            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr);
-            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr);
+            innerAttr = BI.isArray(innerAttr) ? innerAttr : BI.makeArray(BI.flatten(data).length, innerAttr || {});
+            outerAttr = BI.isArray(outerAttr) ? outerAttr : BI.makeArray(BI.flatten(data).length, outerAttr || {});
             return BI.map(data, function (i, item) {
                 if (BI.isArray(item)) {
                     return BI.createItems(item, innerAttr, outerAttr);
@@ -16106,6 +16106,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         return left;
     }
 
+
     BI.cjkEncode = function (text) {
         // alex:如果非字符串,返回其本身(cjkEncode(234) 返回 ""是不对的)
         if (typeof text !== "string") {
@@ -16359,6 +16360,20 @@ BI.ShowAction = BI.inherit(BI.Action, {
 
             return o;
         })(jo);
+    };
+
+    /**
+     * 获取编码后的url
+     * @param urlTemplate url模板
+     * @param param 参数
+     * @returns {*|String}
+     * @example
+     * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
+     */
+    BI.getEncodeURL = function (urlTemplate, param) {
+        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+            return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
+        });
     };
 
     BI.encodeURIComponent = function (url) {
@@ -19989,10 +20004,23 @@ BI.prepares.push(function () {
             };
         },
 
+        getInnerLeftPosition: function (combo, popup, extraWidth) {
+            return {
+                left: combo.element.offset().left + (extraWidth || 0)
+            };
+        },
+
         getRightPosition: function (combo, popup, extraWidth) {
             var el = combo.element;
             return {
                 left: el.offset().left + el.outerWidth() + (extraWidth || 0)
+            };
+        },
+
+        getInnerRightPosition: function (combo, popup, extraWidth) {
+            var el = combo.element, viewBounds = popup.element.bounds();
+            return {
+                left: el.offset().left + el.outerWidth() - viewBounds.width - (extraWidth || 0)
             };
         },
 
@@ -20013,10 +20041,19 @@ BI.prepares.push(function () {
             return BI.DOM.getLeftPosition(combo, popup, extraWidth).left >= 0;
         },
 
+        isInnerLeftSpaceEnough: function (combo, popup, extraWidth) {
+            var viewBounds = popup.element.bounds(),windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
+            return BI.DOM.getInnerLeftPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
+        },
+
         isRightSpaceEnough: function (combo, popup, extraWidth) {
             var viewBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             return BI.DOM.getRightPosition(combo, popup, extraWidth).left + viewBounds.width <= windowBounds.width;
+        },
+
+        isInnerRightSpaceEnough: function (combo, popup, extraWidth) {
+            return BI.DOM.getInnerRightPosition(combo, popup, extraWidth).left >= 0;
         },
 
         isTopSpaceEnough: function (combo, popup, extraHeight) {
@@ -20224,7 +20261,7 @@ BI.prepares.push(function () {
             extraWidth || (extraWidth = 0);
             extraHeight || (extraHeight = 0);
             var i, direct;
-            var leftRight = [], topBottom = [];
+            var leftRight = [], topBottom = [], innerLeftRight = [];
             var isNeedAdaptHeight = false, tbFirst = false, lrFirst = false;
             var left, top, pos, firstDir = directions[0];
             for (i = 0; i < directions.length; i++) {
@@ -20241,6 +20278,12 @@ BI.prepares.push(function () {
                         break;
                     case "bottom":
                         topBottom.push(direct);
+                        break;
+                    case "innerLeft":
+                        innerLeftRight.push(direct);
+                        break;
+                    case "innerRight":
+                        innerLeftRight.push(direct);
                         break;
                 }
             }
@@ -20333,6 +20376,48 @@ BI.prepares.push(function () {
                         }
                         tbFirst = true;
                         break;
+                    case "innerLeft":
+                        if (!isNeedAdaptHeight) {
+                            var tW = tbFirst ? extraHeight : extraWidth, tH = tbFirst ? 0 : extraHeight;
+                            if (BI.DOM.isInnerLeftSpaceEnough(combo, popup, tW)) {
+                                left = BI.DOM.getInnerLeftPosition(combo, popup, tW).left;
+                                if (topBottom[0] === "bottom") {
+                                    pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerLeft,bottom";
+                                } else {
+                                    pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerLeft,top";
+                                }
+                                if (tbFirst) {
+                                    pos.change = "innerLeft";
+                                }
+                                pos.left = left;
+                                return pos;
+                            }
+                        }
+                        lrFirst = true;
+                        break;
+                    case "innerRight":
+                        if (!isNeedAdaptHeight) {
+                            var tW = tbFirst ? extraHeight : extraWidth, tH = tbFirst ? extraWidth : extraHeight;
+                            if (BI.DOM.isInnerRightSpaceEnough(combo, popup, tW)) {
+                                left = BI.DOM.getInnerRightPosition(combo, popup, tW).left;
+                                if (topBottom[0] === "bottom") {
+                                    pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerRight,bottom";
+                                } else {
+                                    pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
+                                    pos.dir = "innerRight,top";
+                                }
+                                if (tbFirst) {
+                                    pos.change = "innerRight";
+                                }
+                                pos.left = left;
+                                return pos;
+                            }
+                        }
+                        break;
+
                 }
             }
 
@@ -36733,7 +36818,7 @@ BI.Text = BI.inherit(BI.Single, {
             this.setText(o.value);
         }
         if (BI.isKey(o.keyword)) {
-            this.text.element.__textKeywordMarked__(text, o.keyword, o.py);
+            this.doRedMark(o.keyword);
         }
         if (o.highLight) {
             this.doHighLight();
@@ -36795,7 +36880,8 @@ BI.Text = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.text", BI.Text);/**
+BI.shortcut("bi.text", BI.Text);
+/**
  * guy
  * @class BI.BasicButton
  * @extends BI.Single
@@ -39444,7 +39530,10 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            logic: {
+                dynamic: true
+            },
             container: null, // popupview放置的容器，默认为this.element
             isDefaultInit: false,
             destroyWhenHide: false,
@@ -39502,14 +39591,13 @@ BI.Combo = BI.inherit(BI.Widget, {
             }
         });
 
-        BI.createWidget({
-            type: "bi.vertical",
-            scrolly: false,
-            element: this,
+        BI.createWidget(BI.extend({
+            element: this
+        }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
             items: [
-                {el: this.combo}
+                { el: this.combo }
             ]
-        });
+        }))));
         o.isDefaultInit && (this._assertPopupView());
         BI.Resizers.add(this.getName(), BI.bind(function () {
             if (this.isViewVisible()) {
@@ -39815,6 +39903,12 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,top":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "top", "bottom"], o.offsetStyle);
+                break;
+            case "right,innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerRight", "innerLeft", "bottom", "top"], o.offsetStyle);
+                break;
+            case "right,innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
@@ -45199,7 +45293,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var o = this.options;
         var errorText = o.errorText;
         if (BI.isFunction(errorText)) {
-            errorText = errorText(this.editor.getValue());
+            errorText = errorText(BI.trim(this.editor.getValue()));
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
@@ -45423,9 +45517,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     type: "bi.adaptive",
                     items: [this.content]
                 },
-                left: 10,
+                left: 4,
                 right: 10,
-                top: 8,
+                top: 4,
                 bottom: 8
             }]
         });
@@ -45474,9 +45568,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark",
+                        cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 30,
+                        height: 20,
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -45489,7 +45583,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 10,
+                            left: 4,
                             top: 4,
                             right: 0
                         }]
@@ -45605,10 +45699,14 @@ BI.Html = BI.inherit(BI.Single, {
         if (BI.isNumber(o.lineHeight)) {
             this.element.css({lineHeight: o.lineHeight + "px"});
         }
+        if (BI.isWidthOrHeight(o.maxWidth)) {
+            this.element.css({maxWidth: o.maxWidth});
+        }
         this.element.css({
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === 'nowrap' ? "ellipsis" : "",
+            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -45820,8 +45918,8 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         handler: BI.emptyFn,
         width: 16,
         height: 16,
-        iconWidth: 14,
-        iconHeight: 14
+        iconWidth: 16,
+        iconHeight: 16
     },
 
     render: function () {
@@ -47099,13 +47197,14 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) {
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -47118,7 +47217,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -47154,7 +47253,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47172,7 +47271,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47219,7 +47318,7 @@ BI.HtmlLabel = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
@@ -47513,13 +47612,14 @@ BI.Label = BI.inherit(BI.Single, {
 
     _createNotCenterEl: function () {
         var o = this.options;
+        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
         var json = this._createJson();
         if (BI.isNumber(o.width) && o.width > 0) {
             if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
                 json.width = o.textWidth;
                 if (BI.isNumber(o.height) && o.height > 0) { // 2.1
                     BI.createWidget({
-                        type: "bi.vertical_adapt",
+                        type: adaptLayout,
                         height: o.height,
                         scrollable: o.whiteSpace === "normal",
                         element: this,
@@ -47532,7 +47632,7 @@ BI.Label = BI.inherit(BI.Single, {
                     return;
                 }
                 BI.createWidget({ // 2.2
-                    type: "bi.vertical_adapt",
+                    type: adaptLayout,
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -47568,7 +47668,7 @@ BI.Label = BI.inherit(BI.Single, {
             }
             json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
             BI.createWidget({ // 2.4
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47586,7 +47686,7 @@ BI.Label = BI.inherit(BI.Single, {
         if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
             json.width = o.textWidth;
             BI.createWidget({  // 2.5
-                type: "bi.vertical_adapt",
+                type: adaptLayout,
                 scrollable: o.whiteSpace === "normal",
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -47633,19 +47733,10 @@ BI.Label = BI.inherit(BI.Single, {
             maxWidth: "100%"
         }));
         BI.createWidget({
-            type: "bi.vertical_adapt",
+            type: adaptLayout,
             element: this,
             items: [this.text]
         });
-    },
-
-    _setEnable: function (enable) {
-        BI.Label.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
     },
 
     doRedMark: function () {
@@ -47980,11 +48071,11 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 hgap: this._const.hgap,
                 items: BI.map(texts, function (i, text) {
                     return {
-                        type: "bi.text",
+                        type: "bi.label",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: text,
-                        height: 18
+                        textHeight: 18
                     };
                 })
             });
@@ -52481,7 +52572,7 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return BI.extend(td, {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "normal",
                     once: false,
@@ -60903,7 +60994,8 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             max: this.options.max,
             year: date.year,
             month: date.month,
-            day: this.selectedTime.day
+            // BI-45616 此处为确定当前应该展示哪个年月对应的Calendar, day不是关键数据, 给1号就可
+            day: 1
         });
         return calendar;
     },
@@ -63204,6 +63296,7 @@ BI.extend(BI.DynamicDateCard, {
                             max: opts.maxDate,
                             format: opts.format,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -63795,7 +63888,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -63821,11 +63915,11 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
                 return str;
             },
@@ -64160,6 +64254,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             min: opts.minDate,
                             max: opts.maxDate,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             format: opts.format,
                             height: opts.height,
                             value: opts.value,
@@ -64862,7 +64957,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -64888,7 +64984,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
@@ -66476,7 +66572,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -75006,7 +75102,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             extraCls: "bi-number-interval",
             height: 24,
             validation: "valid",
-            closeMin: true
+            closeMin: true,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
     _init: function () {
@@ -75015,8 +75113,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
             tipType: "success",
@@ -75055,8 +75153,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
             tipType: "success",
@@ -77327,7 +77425,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-tree-combo",
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: "",
@@ -81035,6 +81133,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             el: {
                                 type: "bi.time_trigger",
                                 allowEdit: opts.allowEdit,
+                                watermark: opts.watermark,
                                 format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
@@ -81181,6 +81280,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
+    BI.TimeCombo.EVENT_ERROR = "EVENT_ERROR";
     BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
     BI.shortcut("bi.time_combo", BI.TimeCombo);
 })();!(function () {
@@ -81234,7 +81335,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         value: this._formatValue(o.value),
                         hgap: 4,
                         allowBlank: true,
-                        watermark: BI.i18nText("BI-Basic_Unrestricted"),
+                        watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
                         title: BI.bind(this._getTitle, this),
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
@@ -82681,7 +82782,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -83721,7 +83822,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         return BI.map(items, function (j, item) {
             return BI.extend(item, {
                 type: "bi.text_item",
-                cls: "bi-list-item-active",
+                cls: "bi-list-item-select",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 once: false,

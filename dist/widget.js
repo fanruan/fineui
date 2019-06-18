@@ -449,7 +449,8 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             max: this.options.max,
             year: date.year,
             month: date.month,
-            day: this.selectedTime.day
+            // BI-45616 此处为确定当前应该展示哪个年月对应的Calendar, day不是关键数据, 给1号就可
+            day: 1
         });
         return calendar;
     },
@@ -2750,6 +2751,7 @@ BI.extend(BI.DynamicDateCard, {
                             max: opts.maxDate,
                             format: opts.format,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             height: opts.height,
                             value: opts.value,
                             ref: function () {
@@ -3341,7 +3343,8 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -3367,11 +3370,11 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
-                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text"): BI.i18nText("BI-Year_Trigger_Invalid_Text");
+                    str = self.editor.isEditing() ? BI.i18nText("BI-Date_Trigger_Error_Text") : BI.i18nText("BI-Year_Trigger_Invalid_Text");
                 }
                 return str;
             },
@@ -3706,6 +3709,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             min: opts.minDate,
                             max: opts.maxDate,
                             allowEdit: opts.allowEdit,
+                            watermark: opts.watermark,
                             format: opts.format,
                             height: opts.height,
                             value: opts.value,
@@ -4408,7 +4412,8 @@ BI.extend(BI.DynamicDateTimeSelect, {
         max: "2099-12-31", // 最大日期
         height: 24,
         format: "", // 显示的日期格式化方式
-        allowEdit: true // 是否允许编辑
+        allowEdit: true, // 是否允许编辑
+        watermark: ""
     },
 
     _init: function () {
@@ -4434,7 +4439,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             hgap: c.hgap,
             vgap: c.vgap,
             allowBlank: true,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
+            watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
             errorText: function () {
                 var str = "";
                 if (!BI.isKey(o.format)) {
@@ -6022,7 +6027,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -14552,7 +14557,9 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             extraCls: "bi-number-interval",
             height: 24,
             validation: "valid",
-            closeMin: true
+            closeMin: true,
+            allowBlank: true,
+            watermark: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
     _init: function () {
@@ -14561,8 +14568,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.smallEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.min,
             level: "warning",
             tipType: "success",
@@ -14601,8 +14608,8 @@ BI.NumberInterval = BI.inherit(BI.Single, {
         this.bigEditor = BI.createWidget({
             type: "bi.number_interval_single_editor",
             height: o.height - 2,
-            watermark: BI.i18nText("BI-Basic_Unrestricted"),
-            allowBlank: true,
+            watermark: o.watermark,
+            allowBlank: o.allowBlank,
             value: o.max,
             level: "warning",
             tipType: "success",
@@ -16873,7 +16880,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-tree-combo",
-            height: 30,
+            height: 24,
             text: "",
             items: [],
             value: "",
@@ -20581,6 +20588,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             el: {
                                 type: "bi.time_trigger",
                                 allowEdit: opts.allowEdit,
+                                watermark: opts.watermark,
                                 format: opts.format,
                                 value: opts.value,
                                 ref: function (_ref) {
@@ -20727,6 +20735,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+    BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
+    BI.TimeCombo.EVENT_ERROR = "EVENT_ERROR";
     BI.TimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
     BI.shortcut("bi.time_combo", BI.TimeCombo);
 })();!(function () {
@@ -20780,7 +20790,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         value: this._formatValue(o.value),
                         hgap: 4,
                         allowBlank: true,
-                        watermark: BI.i18nText("BI-Basic_Unrestricted"),
+                        watermark: BI.isKey(o.watermark) ? o.watermark : BI.i18nText("BI-Basic_Unrestricted"),
                         title: BI.bind(this._getTitle, this),
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
@@ -22227,7 +22237,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
             return BI.map(item, function (j, td) {
                 return {
                     type: "bi.text_item",
-                    cls: "bi-list-item-active",
+                    cls: "bi-list-item-select",
                     textAlign: "center",
                     whiteSpace: "nowrap",
                     once: false,
@@ -23267,7 +23277,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
         return BI.map(items, function (j, item) {
             return BI.extend(item, {
                 type: "bi.text_item",
-                cls: "bi-list-item-active",
+                cls: "bi-list-item-select",
                 textAlign: "center",
                 whiteSpace: "nowrap",
                 once: false,
