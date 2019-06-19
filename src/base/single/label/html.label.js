@@ -5,18 +5,7 @@
 BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 
     props: {
-        baseCls: "bi-html-label",
-        textAlign: "center",
-        whiteSpace: "nowrap", // normal  or  nowrap
-        textWidth: null,
-        textHeight: null,
-        hgap: 0,
-        vgap: 0,
-        lgap: 0,
-        rgap: 0,
-        tgap: 0,
-        bgap: 0,
-        text: ""
+        baseCls: "bi-html-label"
     },
 
     _createJson: function () {

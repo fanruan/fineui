@@ -6,20 +6,8 @@ BI.Label = BI.inherit(BI.AbstractLabel, {
 
     props: {
         baseCls: "bi-label",
-        textAlign: "center",
-        whiteSpace: "nowrap", // normal  or  nowrap
-        textWidth: null,
-        textHeight: null,
-        hgap: 0,
-        vgap: 0,
-        lgap: 0,
-        rgap: 0,
-        tgap: 0,
-        bgap: 0,
-        text: "",
         py: "",
-        keyword: "",
-        highLight: false
+        keyword: ""
     },
 
     _createJson: function () {

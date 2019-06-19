@@ -16,8 +16,6 @@ BI.AbstractLabel = BI.inherit(BI.Single, {
         tgap: 0,
         bgap: 0,
         text: "",
-        py: "",
-        keyword: "",
         highLight: false
     },
 
