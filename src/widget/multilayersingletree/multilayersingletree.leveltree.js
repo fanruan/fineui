@@ -9,6 +9,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiLayerSingleLevelTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-single-level-tree",
             isDefaultInit: false,
+            async: false,
             items: [],
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
@@ -96,7 +97,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
             el: {
                 type: "bi.loader",
-                isDefaultInit: true,
+                // loader的isDefaultInit为异步加载服务，如果是同步选择不开启
+                isDefaultInit: o.async,
                 chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
