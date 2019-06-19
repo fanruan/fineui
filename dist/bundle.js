@@ -50164,12 +50164,13 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.text",
+                type: "bi.label",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                height: 16,
+                height: o.height,
+                textHeight: o.height - 2,
                 hgap: this._const.hgap
             });
         }
