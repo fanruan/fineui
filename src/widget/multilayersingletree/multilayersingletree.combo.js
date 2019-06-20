@@ -89,7 +89,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }]
                 },
                 value: o.value,
-                minHeight: 400
+                maxHeight: 400
             }
         };
     },

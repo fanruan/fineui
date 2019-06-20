@@ -96,7 +96,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 
             el: {
                 type: "bi.loader",
-                isDefaultInit: true,
+                isDefaultInit: false,
                 chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
