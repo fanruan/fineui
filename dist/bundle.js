@@ -38819,24 +38819,22 @@ BI.Single = BI.inherit(BI.Widget, {
  * @extends BI.Single
  */
 BI.Text = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Text.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: "",
-            py: "",
-            highLight: false
-        });
+
+    props: {
+        baseCls: "bi-text",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        py: "",
+        highLight: false
     },
 
     render: function () {
@@ -47736,22 +47734,21 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);/**
  * @extends BI.Single
  */
 BI.Html = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Html.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
+
+    props: {
+        baseCls: "bi-html",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        highLight: false
     },
 
     render: function () {
@@ -47807,15 +47804,14 @@ BI.Html = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
-
-    mounted: function () {
-        var o = this.options;
 
         if (BI.isKey(o.text)) {
             this.setText(o.text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
+        }
+        if (o.highLight) {
+            this.doHighLight();
         }
     },
 
@@ -49085,420 +49081,14 @@ BI.Radio = BI.inherit(BI.BasicButton, {
 BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
- * Created by GUY on 2015/6/26.
+ * Created by dailer on 2019/6/19.
  */
 
-BI.HtmlLabel = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.HtmlLabel.superclass._defaultConfig.apply(this, arguments);
+BI.AbstractLabel = BI.inherit(BI.Single, {
+
+    _defaultConfig: function (props) {
+        var conf = BI.AbstractLabel.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
-            textAlign: "center",
-            whiteSpace: "nowrap", // normal  or  nowrap
-            textWidth: null,
-            textHeight: null,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
-    },
-
-    _createJson: function () {
-        var o = this.options;
-        return {
-            type: "bi.html",
-            textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
-            lineHeight: o.textHeight,
-            text: o.text,
-            value: o.value
-        };
-    },
-
-    _init: function () {
-        BI.HtmlLabel.superclass._init.apply(this, arguments);
-
-        if (this.options.textAlign === "center") {
-            this._createCenterEl();
-        } else {
-            this._createNotCenterEl();
-        }
-    },
-
-    _createCenterEl: function () {
-        var o = this.options;
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.maxWidth = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
-                    BI.createWidget({
-                        type: "bi.center_adapt",
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({ // 1.2
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (o.whiteSpace == "normal") {
-                BI.extend(json, {
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                });
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [this.text]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                return;
-            }
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                maxWidth: "100%"
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.maxWidth = o.textWidth;
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: true,
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _createNotCenterEl: function () {
-        var o = this.options;
-        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    BI.createWidget({
-                        type: adaptLayout,
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({
-                    type: adaptLayout,
-                    scrollable: o.whiteSpace === "normal",
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                if (o.whiteSpace !== "normal") {
-                    this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
-                    });
-                }
-                return;
-            }
-            json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (o.whiteSpace !== "normal") {
-                this.element.css({
-                    "line-height": o.height - (o.vgap * 2) + "px"
-                });
-            }
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: adaptLayout,
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _setEnable: function (enable) {
-        BI.HtmlLabel.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-    },
-
-    doHighLight: function () {
-        this.text.doHighLight.apply(this.text, arguments);
-    },
-
-    unHighLight: function () {
-        this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    setText: function (v) {
-        this.options.text = v;
-        this.text.setText(v);
-    },
-
-    getText: function () {
-        return this.options.text;
-    },
-
-    setStyle: function (css) {
-        this.text.setStyle(css);
-    },
-
-    setValue: function (v) {
-        BI.HtmlLabel.superclass.setValue.apply(this, arguments);
-        if (!this.isReadOnly()) {
-            this.text.setValue(v);
-        }
-    },
-
-    populate: function () {
-        BI.HtmlLabel.superclass.populate.apply(this, arguments);
-    }
-});
-
-BI.shortcut("bi.html_label", BI.HtmlLabel);/**
- * @class BI.IconButton
- * @extends BI.BasicButton
- * 图标标签
- */
-BI.IconLabel = BI.inherit(BI.Single, {
-
-    props: {
-        baseCls: "bi-icon-label horizon-center",
-        iconWidth: null,
-        iconHeight: null
-    },
-
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            textAlign: "center"
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: o.iconWidth,
-            height: o.iconHeight
-        });
-        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
-            BI.createWidget({
-                type: "bi.default",
-                element: this,
-                items: [this.icon]
-            });
-        } else {
-            this.element.css("lineHeight", "1");
-            BI.createWidget({
-                element: this,
-                type: "bi.center_adapt",
-                items: [this.icon]
-            });
-        }
-    }
-});
-BI.shortcut("bi.icon_label", BI.IconLabel);/**
- * Created by GUY on 2015/6/26.
- */
-
-BI.Label = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Label.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
             textWidth: null,
@@ -49510,8 +49100,6 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            py: "",
-            keyword: "",
             highLight: false
         });
     },
@@ -49532,7 +49120,7 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.Label.superclass._init.apply(this, arguments);
+        BI.AbstractLabel.superclass._init.apply(this, arguments);
 
         if (this.options.textAlign === "center") {
             this._createCenterEl();
@@ -49852,14 +49440,112 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        BI.Label.superclass.setValue.apply(this, arguments);
+        BI.AbstractLabel.superclass.setValue.apply(this, arguments);
         if (!this.isReadOnly()) {
             this.text.setValue(v);
         }
     },
 
     populate: function () {
-        BI.Label.superclass.populate.apply(this, arguments);
+        BI.AbstractLabel.superclass.populate.apply(this, arguments);
+    }
+});/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-html-label"
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.html",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value
+        };
+    }
+});
+
+BI.shortcut("bi.html_label", BI.HtmlLabel);/**
+ * @class BI.IconButton
+ * @extends BI.BasicButton
+ * 图标标签
+ */
+BI.IconLabel = BI.inherit(BI.Single, {
+
+    props: {
+        baseCls: "bi-icon-label horizon-center",
+        iconWidth: null,
+        iconHeight: null
+    },
+
+    _init: function () {
+        BI.IconLabel.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.element.css({
+            textAlign: "center"
+        });
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: o.iconWidth,
+            height: o.iconHeight
+        });
+        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
+            this.element.css("lineHeight", o.height + "px");
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.icon]
+            });
+        } else {
+            this.element.css("lineHeight", "1");
+            BI.createWidget({
+                element: this,
+                type: "bi.center_adapt",
+                items: [this.icon]
+            });
+        }
+    }
+});
+BI.shortcut("bi.icon_label", BI.IconLabel);/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.Label = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-label",
+        py: "",
+        keyword: ""
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.text",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            highLight: o.highLight
+        };
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
     }
 });
 
