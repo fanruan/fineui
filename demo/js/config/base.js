@@ -16,6 +16,10 @@ Demo.BASE_CONFIG = [{
     value: "demo.icon_label"
 }, {
     pId: 2,
+    text: "bi.html",
+    value: "demo.html"
+}, {
+    pId: 2,
     text: "title提示",
     value: "demo.title"
 }, {
