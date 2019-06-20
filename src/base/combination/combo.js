@@ -9,7 +9,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
             logic: {
                 dynamic: true
             },
@@ -388,6 +388,12 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,innerLeft":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left",  "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right",  "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
