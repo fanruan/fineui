@@ -23,6 +23,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
 
+        this.storeValue = BI.isArray(o.value) ? o.value[0] : o.value;
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
         return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
@@ -139,17 +140,23 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 action: function () {
                     self.trigger.stopEditing();
                 }
+            }, {
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.populate();
+                }
             }]
         });
     },
 
     setValue: function (v) {
         v = BI.isArray(v) ? v : [v];
+        this.storeValue = v[0];
         this.combo.setValue(v);
     },
 
     getValue: function () {
-        return this.combo.getValue();
+        return [this.storeValue];
     },
 
     populate: function (items) {

@@ -25,7 +25,6 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
         this.tree = BI.createWidget({
             type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
-            async: o.itemsCreator !== BI.emptyFn,
             items: o.items,
             itemsCreator: function (op, callback) {
                 (op.times === 1 && !op.node) && BI.nextTick(function () {
