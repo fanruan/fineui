@@ -8,6 +8,9 @@
     /**
      * CryptoJS core components.
      */
+    BI.CRYPT_TYPE = BI.CRYPT_TYPE || {};
+    BI.CRYPT_TYPE.AES = "aes";
+
     var CryptoJS = CryptoJS || (function (Math, undefined) {
         /**
          * CryptoJS namespace.
