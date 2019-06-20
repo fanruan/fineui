@@ -4,19 +4,22 @@
 
 BI.AbstractLabel = BI.inherit(BI.Single, {
 
-    props: {
-        textAlign: "center",
-        whiteSpace: "nowrap", // normal  or  nowrap
-        textWidth: null,
-        textHeight: null,
-        hgap: 0,
-        vgap: 0,
-        lgap: 0,
-        rgap: 0,
-        tgap: 0,
-        bgap: 0,
-        text: "",
-        highLight: false
+    _defaultConfig: function (props) {
+        var conf = BI.AbstractLabel.superclass._defaultConfig.apply(this, arguments);
+        return BI.extend(conf, {
+            textAlign: "center",
+            whiteSpace: "nowrap", // normal  or  nowrap
+            textWidth: null,
+            textHeight: null,
+            hgap: 0,
+            vgap: 0,
+            lgap: 0,
+            rgap: 0,
+            tgap: 0,
+            bgap: 0,
+            text: "",
+            highLight: false
+        });
     },
 
     _createJson: function () {
