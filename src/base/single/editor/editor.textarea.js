@@ -11,8 +11,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -67,8 +67,6 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         if (BI.isNotNull(o.style)) {
             this.setStyle(o.style);
         }
-        // REPORT-18438 调用_setEnable的时候this.content还为创建, 所以这边需要主动调用下
-        this.setEnable(!o.disabled);
         this._checkWaterMark();
     },
 
