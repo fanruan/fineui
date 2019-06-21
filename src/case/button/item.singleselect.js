@@ -42,11 +42,14 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
 
     doClick: function () {
         BI.SingleSelectItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.MultiSelectItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     setSelected: function (v) {
         BI.SingleSelectItem.superclass.setSelected.apply(this, arguments);
     }
 });
-
+BI.SingleSelectItem.EVENT_CHANGE = "SingleSelectItem.EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
