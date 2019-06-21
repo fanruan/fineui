@@ -60,6 +60,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
         }, o.logic, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
+                cls: "bi-list-item-active",
                 height: 24,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),
