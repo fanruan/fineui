@@ -98,7 +98,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
                 });
                 o.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
-                    self._populate(ob.items);
+                    (op.times === 1 && !op.node) && self._populate(ob.items);
                     callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
                     self.setValue(self.storeValue);
                     (op.times === 1 && !op.node) && BI.nextTick(function () {

@@ -2317,7 +2317,7 @@
          *
          *     var ciphertext = BI.aesEncrypt(text, key);
          */
-        aesEncrypt: function (text, key) {
+        encrypt: function (text, key) {
             key = CryptoJS.enc.Utf8.parse(key);
             var cipher = CryptoJS.AES.encrypt(text, key, {
                 mode: CryptoJS.mode.ECB,

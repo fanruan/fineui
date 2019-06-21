@@ -65,5 +65,5 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         return this.editor.getValue();
     }
 });
-BI.CustomColorChooser.EVENT_CHANGE = "CustomColorChooser.EVENT_CHANGE";
+BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);

@@ -82,9 +82,9 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.reset();
     }
 });
-BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
-BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
-BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
-BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
-BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
+BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultifileEditor.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
+BI.MultifileEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.MultifileEditor.EVENT_PROGRESS = "EVENT_PROGRESS";
+BI.MultifileEditor.EVENT_UPLOADED = "EVENT_UPLOADED";
 BI.shortcut("bi.multifile_editor", BI.MultifileEditor);

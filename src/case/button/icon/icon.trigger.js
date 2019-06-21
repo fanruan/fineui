@@ -26,5 +26,5 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.TriggerIconButton.EVENT_CHANGE = "TriggerIconButton.EVENT_CHANGE";
+BI.TriggerIconButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);

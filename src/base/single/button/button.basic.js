@@ -409,4 +409,4 @@ BI.BasicButton = BI.inherit(BI.Single, {
         BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
-BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.BasicButton.EVENT_CHANGE = "EVENT_CHANGE";

@@ -55,6 +55,9 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectComboItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -63,5 +66,5 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
 
     }
 });
-
+BI.SingleSelectComboItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);

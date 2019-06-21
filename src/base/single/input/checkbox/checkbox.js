@@ -56,6 +56,6 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.checkbox", BI.Checkbox);

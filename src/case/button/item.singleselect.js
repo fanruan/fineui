@@ -43,7 +43,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectItem.superclass.doClick.apply(this, arguments);
         if (this.isValid()) {
-            this.fireEvent(BI.MultiSelectItem.EVENT_CHANGE, this.getValue(), this);
+            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 
@@ -51,5 +51,6 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectItem.superclass.setSelected.apply(this, arguments);
     }
 });
-BI.SingleSelectItem.EVENT_CHANGE = "SingleSelectItem.EVENT_CHANGE";
+
+BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
