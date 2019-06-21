@@ -62,11 +62,13 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
+        // REPORT-18438 调用_setEnable的时候this.content还为创建, 所以这边需要主动调用下
+        this.setEnable(!o.disabled);
         this._checkWaterMark();
     },
 
@@ -155,6 +157,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
