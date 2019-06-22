@@ -11864,112 +11864,14 @@ if (!_global.BI) {
         },
 
         /**
-         * 对字符串进行加密 {@link #decrypt}
-         * @static
-         * @param str 原始字符�?
-         * @param keyt 密钥
-         * @returns {String} 加密后的字符�?
+         * 通用加密方法
          */
-        encrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
+        encrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesEncrypt(text, key);
             }
-            str = escape(str);
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (keyt == null || keyt.length <= 0) {
-                alert("Please enter a password with which to encrypt the message.");
-                return null;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var mult = parseInt(prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4) + prand.charAt(sPos * 5));
-
-            var incr = Math.ceil(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            if (mult < 2) {
-                alert("Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.");
-                return null;
-            }
-            //        var salt = Math.round(Math.random() * 1000000000) % 100000000;
-            var salt = 101;
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10)) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i++) {
-                enc_chr = parseInt(str.charCodeAt(i) ^ Math.floor((prand / modu) * 255));
-                if (enc_chr < 16) {
-                    enc_str += "0" + enc_chr.toString(16);
-                } else {
-                    enc_str += enc_chr.toString(16);
-                }
-                prand = (mult * prand + incr) % modu;
-            }
-            salt = salt.toString(16);
-            while (salt.length < 8) {
-                salt = "0" + salt;
-            }
-            enc_str += salt;
-            return enc_str;
-        },
-
-        /**
-         * 对加密后的字符串解密 {@link #encrypt}
-         * @static
-         * @param str 加密过的字符�?
-         * @param keyt 密钥
-         * @returns {String} 解密后的字符�?
-         */
-        decrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
-            }
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (str == null || str.length < 8) {
-                return;
-            }
-            if (keyt == null || keyt.length <= 0) {
-                return;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var tempmult = prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4);
-            if (sPos * 5 < prand.length) {
-                tempmult += prand.charAt(sPos * 5);
-            }
-            var mult = parseInt(tempmult);
-            var incr = Math.round(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            var salt = parseInt(str.substring(str.length - 8, str.length), 16);
-            str = str.substring(0, str.length - 8);
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10), 10) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i += 2) {
-                enc_chr = parseInt(parseInt(str.substring(i, i + 2), 16) ^ Math.floor((prand / modu) * 255));
-                enc_str += String.fromCharCode(enc_chr);
-                prand = (mult * prand + incr) % modu;
-            }
-            return unescape(enc_str);
         },
 
         /**
@@ -13701,6 +13603,9 @@ if (!_global.BI) {
     /**
      * CryptoJS core components.
      */
+    BI.CRYPT_TYPE = BI.CRYPT_TYPE || {};
+    BI.CRYPT_TYPE.AES = "aes";
+
     var CryptoJS = CryptoJS || (function (Math, undefined) {
         /**
          * CryptoJS namespace.
