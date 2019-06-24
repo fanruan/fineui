@@ -65,5 +65,5 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
-BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
+BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);

@@ -50,5 +50,5 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "TreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);

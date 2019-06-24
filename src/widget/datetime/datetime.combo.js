@@ -130,5 +130,5 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 BI.DateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
 BI.DateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW";
+BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);

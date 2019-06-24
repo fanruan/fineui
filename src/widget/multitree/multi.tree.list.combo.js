@@ -293,6 +293,6 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeListCombo.EVENT_CONFIRM = "MultiTreeListCombo.EVENT_CONFIRM";
+BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
