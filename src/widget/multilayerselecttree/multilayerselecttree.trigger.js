@@ -32,7 +32,23 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
-                            tipText: ""
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.StateEditor.EVENT_FOCUS,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_BLUR);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING);
+                                }
+                            }]
                         },
                         popup: {
                             type: "bi.multilayer_select_tree_popup",
@@ -116,6 +132,9 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         return this.searcher.getValue();
     }
 });
+
+BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiLayerSelectTreeTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";

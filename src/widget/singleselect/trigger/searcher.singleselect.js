@@ -25,7 +25,18 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.SingleSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.SingleSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -138,6 +149,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.SingleSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.SingleSelectSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.SingleSelectSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SingleSelectSearcher.EVENT_START = "EVENT_START";

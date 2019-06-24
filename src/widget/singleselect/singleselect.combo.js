@@ -51,12 +51,20 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -84,6 +92,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -118,6 +127,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -270,6 +280,11 @@ BI.extend(BI.SingleSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);

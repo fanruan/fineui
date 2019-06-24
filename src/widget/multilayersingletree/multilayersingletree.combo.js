@@ -132,6 +132,21 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                         self.combo.hideView();
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                     }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_FOCUS);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BLUR);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
+                    }
                 }]
             },
             hideChecker: function (e) {
@@ -160,5 +175,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);

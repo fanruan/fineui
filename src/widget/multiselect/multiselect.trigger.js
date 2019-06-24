@@ -61,6 +61,12 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_BLUR);
+        });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_FOCUS);
+        });
         this.numberCounter = BI.createWidget(o.switcher, {
             type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
@@ -168,5 +174,7 @@ BI.MultiSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.MultiSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);

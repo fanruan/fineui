@@ -66,12 +66,20 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             var keyword = this.getSearcher().getKeyword();
@@ -98,6 +106,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -132,6 +141,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -273,6 +283,11 @@ BI.extend(BI.SingleSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
