@@ -15,19 +15,8 @@ BI.ImageCheckbox = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16
         });
-    },
-
-    _init: function () {
-        BI.ImageCheckbox.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.ImageCheckbox.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.Checkbox.EVENT_CHANGE);
-        }
     }
 });
-BI.ImageCheckbox.EVENT_CHANGE = "EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);

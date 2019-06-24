@@ -13,18 +13,7 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
             baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
             extraCls: "pull-down-font"
         });
-    },
-
-    _init: function () {
-        BI.TriggerIconButton.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.TriggerIconButton.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.TriggerIconButton.EVENT_CHANGE, this);
-        }
     }
 });
-BI.TriggerIconButton.EVENT_CHANGE = "EVENT_CHANGE";
+BI.TriggerIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);

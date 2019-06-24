@@ -11,10 +11,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.LastTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if (v === true) {
