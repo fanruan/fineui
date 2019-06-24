@@ -60,5 +60,5 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.AllValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);

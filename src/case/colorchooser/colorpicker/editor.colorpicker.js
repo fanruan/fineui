@@ -240,5 +240,5 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }));
     }
 });
-BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
+BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);

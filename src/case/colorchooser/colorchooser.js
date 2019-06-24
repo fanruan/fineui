@@ -104,5 +104,5 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return this.combo.getValue();
     }
 });
-BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
+BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser", BI.ColorChooser);

@@ -14,7 +14,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -35,6 +36,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: o.height,
             // adapter: this.popup,
             allowNoSelect: o.allowNoSelect,
+            allowEdit: o.allowEdit,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {

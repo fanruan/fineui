@@ -24,9 +24,12 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         Y = Y | 0;
         var start = BI.YearCalendar.getStartYear(Y);
         var items = [];
+        // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
+        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
         BI.each(BI.range(BI.YearCalendar.INTERVAL), function (i) {
             var td = {};
-            if (BI.checkDateVoid(start + i, 1, 1, o.min, o.max)[0]) {
+            if (BI.checkDateVoid(start + i, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
                 td.disabled = true;
             }
             td.text = start + i;

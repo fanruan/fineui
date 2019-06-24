@@ -28,6 +28,6 @@ BI.ImageCheckbox = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.ImageCheckbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);

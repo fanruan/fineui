@@ -342,5 +342,5 @@ BI.extend(BI.MultiSelectInsertNoBarList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "BI.MultiSelectInsertNoBarList.EVENT_CHANGE";
+BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);

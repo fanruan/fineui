@@ -52,6 +52,6 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     }
 
 });
-BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
-BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
+BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
+BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);

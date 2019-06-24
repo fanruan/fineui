@@ -35,6 +35,6 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.HalfButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
+BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.half_button", BI.HalfButton);

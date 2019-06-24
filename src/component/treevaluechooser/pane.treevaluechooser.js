@@ -49,5 +49,5 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         this.pane.populate.apply(this.pane, arguments);
     }
 });
-BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
+BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);

@@ -332,5 +332,5 @@ BI.extend(BI.MultiSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.MultiSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);

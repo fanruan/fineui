@@ -46,4 +46,4 @@ BI.ShowListener = BI.inherit(BI.OB, {
         }
     }
 });
-BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";
+BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";
