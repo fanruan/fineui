@@ -23,7 +23,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -74,6 +75,20 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
     },
 
