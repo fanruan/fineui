@@ -95,6 +95,6 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     }
 });
 
-BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
-BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);

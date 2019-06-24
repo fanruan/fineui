@@ -76,5 +76,5 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.SingleSelectEditor.EVENT_PAUSE = "SingleSelectEditor.EVENT_PAUSE";
+BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
