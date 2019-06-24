@@ -10,7 +10,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DirectionPager.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-direction-pager",
-            height: 20,
+            height: 24,
             horizontal: {
                 pages: false, // 总页数
                 curr: 1, // 初始化当前页， pages为数字时可用
@@ -44,19 +44,19 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             items: [{
                 el: this.vpager,
                 top: 0,
-                right: 74
+                right: 86
             }, {
                 el: this.vlabel,
                 top: 0,
-                right: 111
+                right: 110
             }, {
                 el: this.hpager,
                 top: 0,
-                right: -9
+                right: 0
             }, {
                 el: this.hlabel,
                 top: 0,
-                right: 28
+                right: 24
             }]
         });
     },
@@ -67,19 +67,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.vlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: v.curr,
             title: v.curr,
             invisible: true
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -95,20 +94,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Up_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev column-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Down_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next column-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -132,19 +129,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.hlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: h.curr,
             title: h.curr,
             invisible: true
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -160,20 +156,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Left_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev row-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev row-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Right_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next row-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next row-next-page-h-font"
             },
 
             hasPrev: h.hasPrev,
@@ -254,7 +248,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             vShow = true;
         }
         this.setVisible(hShow || vShow);
-        var num = [74, 111, -9, 28];
+        var num = [86, 110, 0, 24];
         var items = this.layout.attr("items");
 
         if (vShow === true && hShow === true) {

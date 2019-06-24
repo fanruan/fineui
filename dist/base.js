@@ -3322,7 +3322,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
             logic: {
                 dynamic: true
             },
@@ -3701,6 +3701,12 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,innerLeft":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left",  "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right",  "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
@@ -9291,8 +9297,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -9342,10 +9348,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -9435,6 +9441,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";

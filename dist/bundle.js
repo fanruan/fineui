@@ -11085,112 +11085,14 @@ if (!_global.BI) {
         },
 
         /**
-         * 对字符串进行加密 {@link #decrypt}
-         * @static
-         * @param str 原始字符�?
-         * @param keyt 密钥
-         * @returns {String} 加密后的字符�?
+         * 通用加密方法
          */
-        encrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
+        encrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesEncrypt(text, key);
             }
-            str = escape(str);
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (keyt == null || keyt.length <= 0) {
-                alert("Please enter a password with which to encrypt the message.");
-                return null;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var mult = parseInt(prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4) + prand.charAt(sPos * 5));
-
-            var incr = Math.ceil(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            if (mult < 2) {
-                alert("Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.");
-                return null;
-            }
-            //        var salt = Math.round(Math.random() * 1000000000) % 100000000;
-            var salt = 101;
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10)) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i++) {
-                enc_chr = parseInt(str.charCodeAt(i) ^ Math.floor((prand / modu) * 255));
-                if (enc_chr < 16) {
-                    enc_str += "0" + enc_chr.toString(16);
-                } else {
-                    enc_str += enc_chr.toString(16);
-                }
-                prand = (mult * prand + incr) % modu;
-            }
-            salt = salt.toString(16);
-            while (salt.length < 8) {
-                salt = "0" + salt;
-            }
-            enc_str += salt;
-            return enc_str;
-        },
-
-        /**
-         * 对加密后的字符串解密 {@link #encrypt}
-         * @static
-         * @param str 加密过的字符�?
-         * @param keyt 密钥
-         * @returns {String} 解密后的字符�?
-         */
-        decrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
-            }
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (str == null || str.length < 8) {
-                return;
-            }
-            if (keyt == null || keyt.length <= 0) {
-                return;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var tempmult = prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4);
-            if (sPos * 5 < prand.length) {
-                tempmult += prand.charAt(sPos * 5);
-            }
-            var mult = parseInt(tempmult);
-            var incr = Math.round(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            var salt = parseInt(str.substring(str.length - 8, str.length), 16);
-            str = str.substring(0, str.length - 8);
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10), 10) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i += 2) {
-                enc_chr = parseInt(parseInt(str.substring(i, i + 2), 16) ^ Math.floor((prand / modu) * 255));
-                enc_str += String.fromCharCode(enc_chr);
-                prand = (mult * prand + incr) % modu;
-            }
-            return unescape(enc_str);
         },
 
         /**
@@ -12335,6 +12237,9 @@ if (!_global.BI) {
     /**
      * CryptoJS core components.
      */
+    BI.CRYPT_TYPE = BI.CRYPT_TYPE || {};
+    BI.CRYPT_TYPE.AES = "aes";
+
     var CryptoJS = CryptoJS || (function (Math, undefined) {
         /**
          * CryptoJS namespace.
@@ -41642,7 +41547,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
             logic: {
                 dynamic: true
             },
@@ -42021,6 +41926,12 @@ BI.Combo = BI.inherit(BI.Widget, {
                 break;
             case "right,innerLeft":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left",  "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right",  "bottom", "top"], o.offsetStyle);
                 break;
             case "top,custom":
             case "custom,top":
@@ -47611,8 +47522,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -47662,10 +47573,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -47755,6 +47666,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -52782,13 +52698,16 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
 
     doClick: function () {
         BI.SingleSelectItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.MultiSelectItem.EVENT_CHANGE, this.getValue(), this);
+        }
     },
 
     setSelected: function (v) {
         BI.SingleSelectItem.superclass.setSelected.apply(this, arguments);
     }
 });
-
+BI.SingleSelectItem.EVENT_CHANGE = "SingleSelectItem.EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);/**
  * guy
  * 单选框item
@@ -60445,6 +60364,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
+            pagerDirection: "vertical", // 翻页按钮方向，可选值：vertical/horizontal
             height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
@@ -60453,7 +60373,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.AllCountPager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, pagerIconCls = this._getPagerIconCls();
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
             cls: "pager-editor",
@@ -60490,7 +60410,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev pull-up-font"
+                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -60499,7 +60419,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next pull-down-font"
+                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
@@ -60564,6 +60484,23 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     alwaysShowPager: true,
 
+    _getPagerIconCls: function () {
+        var o = this.options;
+        switch (o.pagerDirection) {
+            case "horizontal":
+                return {
+                    preCls: " row-pre-page-h-font ",
+                    nextCls: " row-next-page-h-font "
+                };
+            case "vertical":
+            default:
+                return {
+                    preCls: " column-pre-page-h-font ",
+                    nextCls: " column-next-page-h-font "
+                };
+        }
+    },
+
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
@@ -60619,7 +60556,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DirectionPager.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-direction-pager",
-            height: 20,
+            height: 24,
             horizontal: {
                 pages: false, // 总页数
                 curr: 1, // 初始化当前页， pages为数字时可用
@@ -60653,19 +60590,19 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             items: [{
                 el: this.vpager,
                 top: 0,
-                right: 74
+                right: 86
             }, {
                 el: this.vlabel,
                 top: 0,
-                right: 111
+                right: 110
             }, {
                 el: this.hpager,
                 top: 0,
-                right: -9
+                right: 0
             }, {
                 el: this.hlabel,
                 top: 0,
-                right: 28
+                right: 24
             }]
         });
     },
@@ -60676,19 +60613,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.vlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: v.curr,
             title: v.curr,
             invisible: true
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -60704,20 +60640,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Up_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev column-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Down_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next column-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -60741,19 +60675,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.hlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: h.curr,
             title: h.curr,
             invisible: true
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -60769,20 +60702,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Left_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev row-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev row-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Right_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next row-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next row-next-page-h-font"
             },
 
             hasPrev: h.hasPrev,
@@ -60863,7 +60794,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             vShow = true;
         }
         this.setVisible(hShow || vShow);
-        var num = [74, 111, -9, 28];
+        var num = [86, 110, 0, 24];
         var items = this.layout.attr("items");
 
         if (vShow === true && hShow === true) {
@@ -70073,7 +70004,10 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     _init: function () {
+        var o = this.options;
         BI.MultiLayerSingleLevelTree.superclass._init.apply(this, arguments);
+
+        this.storeValue = o.value;
 
         this.initTree(this.options.items);
 
@@ -70161,7 +70095,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
 
             el: {
                 type: "bi.loader",
-                isDefaultInit: false,
+                isDefaultInit: o.itemsCreator !== BI.emptyFn,
                 chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
@@ -80986,6 +80920,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
         }, o.logic, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
+                cls: "bi-list-item-active",
                 height: 24,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),

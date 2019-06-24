@@ -7715,7 +7715,10 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     _init: function () {
+        var o = this.options;
         BI.MultiLayerSingleLevelTree.superclass._init.apply(this, arguments);
+
+        this.storeValue = o.value;
 
         this.initTree(this.options.items);
 
@@ -7803,7 +7806,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
 
             el: {
                 type: "bi.loader",
-                isDefaultInit: false,
+                isDefaultInit: o.itemsCreator !== BI.emptyFn,
                 chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
@@ -18628,6 +18631,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
         }, o.logic, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
+                cls: "bi-list-item-active",
                 height: 24,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),
