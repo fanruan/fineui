@@ -115,6 +115,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -154,6 +155,13 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -166,6 +174,11 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -203,6 +216,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -293,6 +307,11 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.MultiTreeListCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeListCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeListCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeListCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeListCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);

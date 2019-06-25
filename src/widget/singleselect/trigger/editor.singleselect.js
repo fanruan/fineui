@@ -33,8 +33,11 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.SingleSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -76,5 +79,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
+
+BI.SingleSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);

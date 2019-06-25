@@ -14,19 +14,8 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
             iconHeight: 16,
             selected: false
         });
-    },
-
-    _init: function () {
-        BI.HalfIconButton.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.HalfIconButton.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.HalfIconButton.EVENT_CHANGE);
-        }
     }
 });
-BI.HalfIconButton.EVENT_CHANGE = "EVENT_CHANGE";
+BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);

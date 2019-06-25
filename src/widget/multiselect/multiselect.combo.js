@@ -61,12 +61,20 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -99,6 +107,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -111,6 +120,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
@@ -140,6 +150,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -365,6 +376,11 @@ BI.extend(BI.MultiSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);

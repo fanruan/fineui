@@ -11,10 +11,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.MidTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.MidTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v === true) {
