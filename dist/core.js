@@ -21068,7 +21068,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
         }
     }
 });
-BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
+BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";/**
  * style加载管理器
  *
  * Created by GUY on 2015/9/7.
