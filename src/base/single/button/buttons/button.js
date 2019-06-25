@@ -59,7 +59,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 height: o.height - 2
             });
             BI.createWidget({
-                type: "bi.horizontal_auto",
+                type: "bi.center_adapt",
                 cls: o.iconCls,
                 element: this,
                 hgap: o.hgap,
