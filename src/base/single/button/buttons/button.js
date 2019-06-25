@@ -59,8 +59,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 height: o.height - 2
             });
             BI.createWidget({
-                type: "bi.center_adapt",
-                cls: o.iconCls,
+                type: "bi.default",
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
@@ -69,8 +68,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 lgap: o.lgap,
                 rgap: o.rgap,
                 items: [{
-                    type: "bi.horizontal",
-                    items: [this.icon, this.text]
+                    type: "bi.center_adapt",
+                    cls: o.iconCls,
+                    items: [{
+                        type: "bi.horizontal",
+                        items: [this.icon, this.text]
+                    }]
                 }]
             });
         } else {
