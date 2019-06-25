@@ -145,6 +145,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getStandardDateStr: function (v) {
+        var c = this._const;
         var result = [];
         var hasSecond = false;
         var formatArray = this._getFormatString().match(/%./g);
@@ -169,7 +170,13 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
                     break;
             }
         });
-
+        // 这边不能直接用\d+去切日期, 因为format格式可能是20190607这样的没有分割符的 = =
+        // 先看一下是否是合法的, 如果合法就变成标准格式的走原来的流程, 不合法不关心
+        var date = BI.parseDateTime(v, this._getFormatString());
+        if(BI.print(date, this._getFormatString()) === v) {
+            v = BI.print(date, c.compareFormat);
+            result = [0, 1, 2];
+        }
         var dateArray = v.match(/\d+/g);
         var newArray = [];
         // 处理乱序的年月日
@@ -178,6 +185,10 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
         });
         // 拼接时分秒和pm
         var suffixArray = dateArray.slice(3);
+        // 时分秒补0
+        BI.each(suffixArray, function (idx, v) {
+            BI.isNumeric(v) && v.length === 1 && (suffixArray[idx] = "0" + v);
+        });
         // hh:mm
         if(suffixArray.length === 2 && !hasSecond) {
             suffixArray.push("00");
