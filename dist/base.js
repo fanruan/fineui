@@ -7411,7 +7411,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.IconButton.EVENT_CHANGE = "IconButton.EVENT_CHANGE";
+BI.IconButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_button", BI.IconButton);/**
  * 图片的button
  *
@@ -7497,7 +7497,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.ImageButton.EVENT_CHANGE = "ImageButton.EVENT_CHANGE";
+BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 /**
  * 文字类型的按钮
@@ -9279,11 +9279,11 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.reset();
     }
 });
-BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
-BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
-BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
-BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
-BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
+BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultifileEditor.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
+BI.MultifileEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.MultifileEditor.EVENT_PROGRESS = "EVENT_PROGRESS";
+BI.MultifileEditor.EVENT_UPLOADED = "EVENT_UPLOADED";
 BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
  *
  * Created by GUY on 2016/1/18.
@@ -9692,20 +9692,9 @@ BI.ImageCheckbox = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16
         });
-    },
-
-    _init: function () {
-        BI.ImageCheckbox.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.ImageCheckbox.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.Checkbox.EVENT_CHANGE);
-        }
     }
 });
-BI.ImageCheckbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);/**
  * guy
@@ -9765,7 +9754,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.checkbox", BI.Checkbox);/**
  * 文件
@@ -10386,7 +10375,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             }
         }
     });
-    BI.File.EVENT_CHANGE = "BI.File.EVENT_CHANGE";
+    BI.File.EVENT_CHANGE = "EVENT_CHANGE";
     BI.File.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
@@ -10740,7 +10729,7 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.ImageRadio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);/**
  * guy
@@ -10801,7 +10790,7 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
  * Created by dailer on 2019/6/19.

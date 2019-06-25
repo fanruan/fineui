@@ -635,7 +635,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         v = BI.parseInt(v);
-        if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
+        // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
+        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
             v = BI.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
@@ -1147,7 +1150,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 BI.DateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
 BI.DateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW";
+BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 /**
  * Created by Urthur on 2017/7/14.
@@ -2986,7 +2989,7 @@ BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
-BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_combo", BI.DynamicDateCombo);
 
@@ -3495,6 +3498,13 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     break;
             }
         });
+        // 这边不能直接用\d+去切日期, 因为format格式可能是20190607这样的没有分割符的 = =
+        // 先看一下是否是合法的, 如果合法就变成标准格式的走原来的流程, 不合法不关心
+        var date = BI.parseDateTime(v, this._getFormatString());
+        if(BI.print(date, this._getFormatString()) === v) {
+            v = BI.print(date, c.compareFormat);
+            result = [0, 1, 2];
+        }
         var dateArray = v.match(/\d+/g);
         var newArray = [];
         BI.each(dateArray, function (idx) {
@@ -4543,6 +4553,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _getStandardDateStr: function (v) {
+        var c = this._const;
         var result = [];
         var hasSecond = false;
         var formatArray = this._getFormatString().match(/%./g);
@@ -4567,7 +4578,13 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     break;
             }
         });
-
+        // 这边不能直接用\d+去切日期, 因为format格式可能是20190607这样的没有分割符的 = =
+        // 先看一下是否是合法的, 如果合法就变成标准格式的走原来的流程, 不合法不关心
+        var date = BI.parseDateTime(v, this._getFormatString());
+        if(BI.print(date, this._getFormatString()) === v) {
+            v = BI.print(date, c.compareFormat);
+            result = [0, 1, 2];
+        }
         var dateArray = v.match(/\d+/g);
         var newArray = [];
         // 处理乱序的年月日
@@ -4576,6 +4593,10 @@ BI.extend(BI.DynamicDateTimeSelect, {
         });
         // 拼接时分秒和pm
         var suffixArray = dateArray.slice(3);
+        // 时分秒补0
+        BI.each(suffixArray, function (idx, v) {
+            BI.isNumeric(v) && v.length === 1 && (suffixArray[idx] = "0" + v);
+        });
         // hh:mm
         if(suffixArray.length === 2 && !hasSecond) {
             suffixArray.push("00");
@@ -6722,6 +6743,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 },
                 items: o.items,
                 itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
                 height: o.height - 2,
                 text: o.text,
                 value: o.value,
@@ -6734,6 +6756,21 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                         self.setValue(this.getValue());
                         self.combo.hideView();
                         self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_FOCUS);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_BLUR);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING);
                     }
                 }]
             },
@@ -6763,6 +6800,9 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
  * guy
@@ -6864,7 +6904,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
                 });
                 o.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
-                    self._populate(ob.items);
+                    (op.times === 1 && !op.node) && self._populate(ob.items);
                     callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
                     self.setValue(self.storeValue);
                     (op.times === 1 && !op.node) && BI.nextTick(function () {
@@ -7040,7 +7080,23 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
-                            tipText: ""
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.StateEditor.EVENT_FOCUS,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_BLUR);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING);
+                                }
+                            }]
                         },
                         popup: {
                             type: "bi.multilayer_select_tree_popup",
@@ -7124,6 +7180,9 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         return this.searcher.getValue();
     }
 });
+
+BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiLayerSelectTreeTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";
@@ -7653,6 +7712,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 },
                 items: o.items,
                 itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
                 height: o.height - 2,
                 text: o.text,
                 value: o.value,
@@ -7665,6 +7725,21 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                         self.setValue(this.getValue());
                         self.combo.hideView();
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_FOCUS);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BLUR);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
                     }
                 }]
             },
@@ -7694,6 +7769,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
  * guy
@@ -7795,7 +7873,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
                 });
                 o.itemsCreator(op, function (ob) {
                     hasNext = ob.hasNext;
-                    self._populate(ob.items);
+                    (op.times === 1 && !op.node) && self._populate(ob.items);
                     callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
                     self.setValue(self.storeValue);
                     (op.times === 1 && !op.node) && BI.nextTick(function () {
@@ -7970,7 +8048,23 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
-                            tipText: ""
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.StateEditor.EVENT_FOCUS,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_BLUR);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING);
+                                }
+                            }]
                         },
                         popup: {
                             type: "bi.multilayer_single_tree_popup",
@@ -8054,6 +8148,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         return this.searcher.getValue();
     }
 });
+BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiLayerSingleTreeTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSingleTreeTrigger.EVENT_START = "EVENT_START";
@@ -8969,7 +9065,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -8991,6 +9088,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -9015,12 +9113,20 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -9053,6 +9159,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -9065,6 +9172,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
@@ -9094,6 +9202,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -9319,6 +9428,11 @@ BI.extend(BI.MultiSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);/**
@@ -9381,12 +9495,20 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -9415,6 +9537,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
@@ -9427,6 +9550,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
@@ -9456,6 +9580,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -9701,6 +9826,11 @@ BI.extend(BI.MultiSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);/**
@@ -10162,6 +10292,12 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_BLUR);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_FOCUS);
+        });
         this.numberCounter = BI.createWidget(o.switcher, {
             type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
@@ -10270,6 +10406,8 @@ BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiSelectInsertTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);/**
  * 多选加载数据面板
@@ -10877,6 +11015,12 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_BLUR);
+        });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_FOCUS);
+        });
         this.numberCounter = BI.createWidget(o.switcher, {
             type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
@@ -10984,6 +11128,8 @@ BI.MultiSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.MultiSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);/**
  *
@@ -11473,8 +11619,11 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -11520,7 +11669,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
+
+BI.MultiSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 /**
  * searcher
@@ -11549,7 +11701,18 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -11703,6 +11866,8 @@ BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);/**
  * searcher
  * Created by guy on 15/11/3.
@@ -11730,7 +11895,18 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -11877,6 +12053,8 @@ BI.MultiSelectSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);/**
  * 查看已选switcher
  * Created by guy on 15/11/3.
@@ -11974,8 +12152,8 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     }
 });
 
-BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
-BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -12310,7 +12488,7 @@ BI.extend(BI.MultiSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.MultiSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -12655,7 +12833,7 @@ BI.extend(BI.MultiSelectInsertNoBarList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "BI.MultiSelectInsertNoBarList.EVENT_CHANGE";
+BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -13002,7 +13180,7 @@ BI.extend(BI.MultiSelectList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
+BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
  * Created by zcf_1 on 2017/5/11.
  */
@@ -13168,7 +13346,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
         this.adapter.populate.apply(this.adapter, arguments);
     }
 });
-BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
+BI.MultiSelectTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);/**
  * Created by zcf on 2016/12/21.
  */
@@ -13223,8 +13401,8 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     }
 
 });
-BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
-BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
+BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
+BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);/**
  *
  * @class BI.MultiTreeCheckPane
@@ -13435,6 +13613,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -13474,6 +13653,13 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -13486,6 +13672,11 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -13523,6 +13714,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -13608,7 +13800,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeCombo.EVENT_CONFIRM = "MultiTreeCombo.EVENT_CONFIRM";
+BI.MultiTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);/**
  * 可以往当前选中节点下添加新值的下拉树
@@ -13718,6 +13915,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -13757,6 +13955,13 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -13769,6 +13974,11 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -13806,6 +14016,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -13896,7 +14107,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeInsertCombo.EVENT_CONFIRM = "MultiTreeInsertCombo.EVENT_CONFIRM";
+BI.MultiTreeInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);/**
  * 选中节点不影响父子节点状态的下拉树
@@ -14015,6 +14231,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -14054,6 +14271,13 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -14066,6 +14290,11 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -14103,6 +14332,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -14193,7 +14423,12 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeListCombo.EVENT_CONFIRM = "MultiTreeListCombo.EVENT_CONFIRM";
+BI.MultiTreeListCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeListCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeListCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeListCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeListCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);/**
  * 带加载的多选下拉面板
@@ -14741,7 +14976,18 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 type: "bi.simple_state_editor",
                 text: o.text,
                 height: o.height
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -14785,6 +15031,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         });
         this.searcher.on(BI.Searcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_CHANGE, arguments);
+        });
+        this.searcher.on(BI.Searcher.EVENT_SEARCHING, function () {
+            var keywords = this.getKeywords();
+            self.fireEvent(BI.MultiTreeSearcher.EVENT_SEARCHING, keywords);
         });
         if (BI.isNotNull(o.value)) {
             this.setState(o.value);
@@ -14878,6 +15128,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiTreeSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
@@ -17971,7 +18222,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -17992,6 +18244,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: o.height,
             // adapter: this.popup,
             allowNoSelect: o.allowNoSelect,
+            allowEdit: o.allowEdit,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
@@ -18006,12 +18259,20 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -18039,6 +18300,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -18073,6 +18335,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -18225,6 +18488,11 @@ BI.extend(BI.SingleSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
@@ -18244,7 +18512,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -18264,6 +18533,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             allowNoSelect: o.allowNoSelect,
+            allowEdit: o.allowEdit,
             // adapter: this.popup,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
@@ -18294,12 +18564,20 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             var keyword = this.getSearcher().getKeyword();
@@ -18326,6 +18604,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -18360,6 +18639,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -18501,6 +18781,11 @@ BI.extend(BI.SingleSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
@@ -18560,6 +18845,9 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectComboItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -18568,7 +18856,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
 
     }
 });
-
+BI.SingleSelectComboItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);/**
  * 选择列表
  *
@@ -18987,7 +19275,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -19026,6 +19315,12 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.SingleSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.SingleSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_FOCUS);
+        });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_BLUR, arguments);
+        });
 
         var wrapper = BI.createWidget({
             type: "bi.htape",
@@ -19038,6 +19333,20 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
     },
 
@@ -19074,6 +19383,8 @@ BI.SingleSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.SingleSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);/**
  * @author: Teller
@@ -19310,7 +19621,7 @@ BI.extend(BI.SingleSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SingleSelectInsertList.EVENT_CHANGE = "BI.SingleSelectInsertList.EVENT_CHANGE";
+BI.SingleSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 /**
  * 单选输入框
@@ -19347,8 +19658,11 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.SingleSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -19390,7 +19704,10 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.SingleSelectEditor.EVENT_PAUSE = "SingleSelectEditor.EVENT_PAUSE";
+
+BI.SingleSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);/**
  * searcher
  * Created by guy on 15/11/3.
@@ -19418,7 +19735,18 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.SingleSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.SingleSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -19531,6 +19859,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.SingleSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.SingleSelectSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.SingleSelectSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SingleSelectSearcher.EVENT_START = "EVENT_START";
@@ -20776,7 +21106,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.SingleTreeCombo.EVENT_CHANGE = "SingleTreeCombo.EVENT_CHANGE";
+BI.SingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);/**
  * @class BI.SingleTreePopup
@@ -24574,7 +24904,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
-BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
+BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
@@ -24637,7 +24967,7 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.AllValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
 
     props: {
@@ -24701,7 +25031,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
         };
     }
 });
-BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
@@ -25727,7 +26057,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "ListTreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
  *
@@ -25780,7 +26110,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "TreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
  *
@@ -25833,7 +26163,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.TreeValueChooserCombo.EVENT_CONFIRM = "TreeValueChooserCombo.EVENT_CONFIRM";
+BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
  *
@@ -25885,7 +26215,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         this.pane.populate.apply(this.pane, arguments);
     }
 });
-BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
+BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
@@ -26032,7 +26362,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
-BI.ValueChooserCombo.EVENT_CONFIRM = "ValueChooserCombo.EVENT_CONFIRM";
+BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
@@ -26089,5 +26419,5 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
+BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
