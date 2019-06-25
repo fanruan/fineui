@@ -28,7 +28,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
             width: 40,
-            height: 24
+            height: 24,
+            invisible: o.pages <= 1
         });
 
         this.pager = BI.createWidget({
@@ -68,7 +69,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             hasPrev: o.hasPrev,
             hasNext: o.hasNext,
             firstPage: o.firstPage,
-            lastPage: o.lastPage
+            lastPage: o.lastPage,
+            invisible: o.pages <= 1
         });
 
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
@@ -86,7 +88,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             type: "bi.label",
             title: o.pages,
             text: "/" + o.pages,
-            lgap: 5
+            lgap: 5,
+            invisible: o.pages <= 1
         });
 
         this.rowCount = BI.createWidget({
@@ -147,6 +150,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
+        this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
     },
@@ -184,6 +188,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.pager.populate();
+        this.setPagerVisible(this.options.pages > 1);
     }
 });
 BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
