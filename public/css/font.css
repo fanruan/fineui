@@ -79,7 +79,7 @@
 .search-close-h-font:hover .b-font:before,
 .search-close-h-font.hover .b-font:before {
   content: "\e6d0";
-  color: #ff4949;
+  color: #e65251;
 }
 .search-close-h-font.disabled .b-font:before {
   content: "\e6d0";

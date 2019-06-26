@@ -145,8 +145,8 @@ body .bi-button.button-warning.clear .b-font:before,
 }
 body .bi-button.button-error,
 #body .bi-button.button-error {
-  background-color: #ff4949;
-  border-color: #FF4949;
+  background-color: #e65251;
+  border-color: #e65251;
 }
 body .bi-button.button-error,
 #body .bi-button.button-error,
@@ -163,7 +163,7 @@ body .bi-button.button-error.clear,
 #body .bi-button.button-error.clear,
 body .bi-button.button-error.clear .b-font:before,
 #body .bi-button.button-error.clear .b-font:before {
-  color: #ff4949;
+  color: #e65251;
 }
 body .bi-button.button-common.disabled,
 #body .bi-button.button-common.disabled,
@@ -181,7 +181,7 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #F2F4F7 !important;
+  background: #f2f4f7 !important;
   border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,

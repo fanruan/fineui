@@ -14,10 +14,10 @@
   border-radius: 9px 9px 9px 9px;
 }
 .bi-switch.disabled {
-  background-color: #F2F4F7;
+  background-color: #f2f4f7;
 }
 .bi-switch.disabled:active {
-  background-color: #F2F4F7;
+  background-color: #f2f4f7;
 }
 .bi-theme-dark .bi-switch {
   background-color: #606479;
@@ -27,8 +27,8 @@
   background-color: #3685f2;
 }
 .bi-theme-dark .bi-switch.disabled {
-  background-color: #2F3149;
+  background-color: #292f45;
 }
 .bi-theme-dark .bi-switch.disabled:active {
-  background-color: #2F3149;
+  background-color: #292f45;
 }
