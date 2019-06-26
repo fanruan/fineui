@@ -5,7 +5,7 @@
 }
 .bi-bubble .bubble-error {
   background: #ffecec;
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-theme-dark .bi-bubble .bubble-error {
   background: #3A2940;
@@ -42,7 +42,7 @@
   background: #faaa39;
 }
 .bi-toast.toast-error {
-  background: #ff4949;
+  background: #e65251;
 }
 .bi-toast.toast-normal {
   background: #3685f2;
@@ -64,6 +64,6 @@
   border: 1px solid #647185;
 }
 .bi-tooltip.tooltip-warning {
-  background: #ff4949;
-  border: 1px solid #FF4949;
+  background: #e65251;
+  border: 1px solid #e65251;
 }

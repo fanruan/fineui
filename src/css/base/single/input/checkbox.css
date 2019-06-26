@@ -35,7 +35,7 @@
   opacity: 1;
 }
 .bi-checkbox.disabled .checkbox-content {
-  background-color: #F2F4F7;
+  background-color: #f2f4f7;
   border-color: #d0d4da;
 }
 .bi-checkbox.disabled .checkbox-content:after {
@@ -59,7 +59,7 @@
   border-color: #3685f2;
 }
 .bi-theme-dark .bi-checkbox.disabled .checkbox-content {
-  background-color: #2F3149;
+  background-color: #292f45;
 }
 .bi-theme-dark .bi-checkbox.disabled.active .checkbox-content {
   background-color: #606479;

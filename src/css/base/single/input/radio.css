@@ -34,7 +34,7 @@
   transform: translate(-50%, -50%);
 }
 .bi-radio.disabled .radio-content {
-  background-color: #F2F4F7;
+  background-color: #f2f4f7;
   border-color: #d0d4da;
 }
 .bi-radio.disabled .radio-content:after {
@@ -58,7 +58,7 @@
   border-color: #3685f2;
 }
 .bi-theme-dark .bi-radio.disabled .radio-content {
-  background-color: #2F3149;
+  background-color: #292f45;
 }
 .bi-theme-dark .bi-radio.disabled .radio-content.hover,
 .bi-theme-dark .bi-radio.disabled .radio-content:hover {

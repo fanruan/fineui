@@ -12,6 +12,7 @@
                 "%l:%M:%S %p",  // h:mm:ss a
                 "%l:%M:%S %P",  // h:mm:ss a
                 "%H:%M:%S %p",  // HH:mm:ss a
+                "%H:%M:%S %P",  // HH:mm:ss a
                 "%l:%M",  // h:mm
                 "%k:%M",  // H:mm
                 "%I:%M",  // hh:mm
