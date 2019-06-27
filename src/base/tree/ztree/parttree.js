@@ -152,9 +152,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     },
 
     getValue: function () {
-        var o = this.options;
-        var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        return result;
+        return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
     // 生成树方法

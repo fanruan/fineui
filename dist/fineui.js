@@ -40892,7 +40892,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
 
     getValue: function () {
-        return BI.deepClone(this.options.paras.selectedValues || {});
+        return this._getJoinValue();
     },
 
     // 生成树方法
@@ -41058,9 +41058,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     },
 
     getValue: function () {
-        var o = this.options;
-        var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        return result;
+        return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
     // 生成树方法
