@@ -28,7 +28,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24
+                height: 30
             });
         });
     },

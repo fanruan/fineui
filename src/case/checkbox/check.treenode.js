@@ -7,8 +7,8 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         return BI.extend( BI.TreeNodeCheckbox.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "tree-collapse-icon-type1",
-            iconWidth: 24,
-            iconHeight: 24
+            iconWidth: 30,
+            iconHeight: 30
         });
     },
 

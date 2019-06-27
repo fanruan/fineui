@@ -5,15 +5,16 @@ Demo.AbsoluteLayout = BI.inherit(BI.Widget, {
     render: function () {
         return {
             type: "bi.absolute",
+            scrollx: true,
             items: [{
                 el: {
                     type: "bi.label",
                     text: "绝对布局",
                     cls: "layout-bg1",
-                    width: 300,
+                    width: 800,
                     height: 200
                 },
-                left: 100,
+                right: 100,
                 top: 100
             }]
         };

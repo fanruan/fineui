@@ -12,7 +12,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -65,7 +65,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    
+
     setText: function (text) {
         BI.ArrowNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);

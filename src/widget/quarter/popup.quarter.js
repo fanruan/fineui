@@ -39,7 +39,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 25
+                height: 30
             });
         });
 

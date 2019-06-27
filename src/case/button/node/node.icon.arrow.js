@@ -17,7 +17,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24,
+            height: 30,
             iconHeight: 12,
             iconWidth: 12,
             iconCls: ""
