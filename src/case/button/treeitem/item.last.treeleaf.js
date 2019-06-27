@@ -42,11 +42,11 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 15,
+            width: 16,
             el: {
                 type: "bi.layout",
                 cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
-                width: 15,
+                width: 16,
                 height: o.height
             }
         }), {

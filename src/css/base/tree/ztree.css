@@ -17,7 +17,7 @@
 }
 .ztree li ul {
   margin: 0;
-  padding: 0 0 0 18px;
+  padding: 0 0 0 22px;
 }
 .ztree li a {
   padding: 1px 3px 0 0;
@@ -137,8 +137,8 @@
   background-position: -42px -56px;
 }
 .ztree li span.button.switch {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
 }
 .ztree li span.button.noline_open {
   background-position: -92px -72px;

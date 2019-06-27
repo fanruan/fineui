@@ -56,7 +56,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 15,
+                width: 16,
                 height: o.height
             });
         });
