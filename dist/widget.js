@@ -1024,7 +1024,7 @@ BI.extend(BI.DynamicDatePane, {
 BI.DateTimeCombo = BI.inherit(BI.Single, {
     constants: {
         popupHeight: 290,
-        popupWidth: 270,
+        popupWidth: 310,
         comboAdjustHeight: 1,
         border: 1
     },
@@ -1159,8 +1159,8 @@ BI.DateTimePopup = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DateTimePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-date-time-popup",
-            width: 268,
-            height: 374
+            width: 310,
+            height: 410
         });
     },
     _init: function () {
@@ -1795,7 +1795,7 @@ BI.shortcut("bi.down_list_group", BI.DownListGroup);BI.DownListItem = BI.inherit
         return BI.extend(conf, {
             baseCls: "bi-down-list-item bi-list-item-active",
             cls: "",
-            height: 24,
+            height: 30,
             logic: {
                 dynamic: true
             },
@@ -2008,7 +2008,7 @@ BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);/**
 BI.DownListPopup = BI.inherit(BI.Pane, {
     constants: {
         nextIcon: "pull-right-e-font",
-        height: 24,
+        height: 30,
         iconHeight: 12,
         iconWidth: 12,
         hgap: 0,
@@ -3122,8 +3122,8 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-dynamic-date-popup",
-        width: 248,
-        height: 344
+        width: 290,
+        height: 380
     },
 
     _init: function () {
@@ -3973,8 +3973,8 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
     props: {
         baseCls: "bi-dynamic-date-time-popup",
-        width: 248,
-        height: 385
+        width: 290,
+        height: 421
     },
 
     _init: function () {
@@ -6053,7 +6053,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: 30,
                     width: 38,
                     value: td,
                     text: td
@@ -6072,7 +6072,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 25
+                rowSize: 30
             })), {
                 type: "bi.center_adapt",
                 vgap: 1,
@@ -6305,7 +6305,7 @@ BI.shortcut("bi.multi_layer_down_list_combo", BI.DownListCombo);/**
 BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     constants: {
         nextIcon: "pull-right-e-font",
-        height: 25,
+        height: 30,
         iconHeight: 12,
         iconWidth: 12,
         hgap: 0,
@@ -7204,7 +7204,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -7245,7 +7245,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -7253,7 +7253,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -7307,7 +7307,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -7348,7 +7348,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -7356,7 +7356,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -7406,7 +7406,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -7447,7 +7447,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -7455,7 +7455,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -7505,7 +7505,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -7546,7 +7546,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -7554,7 +7554,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8170,7 +8170,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8192,7 +8192,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8200,7 +8200,7 @@ BI.MultiLayerSingleTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8273,7 +8273,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8295,7 +8295,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8303,7 +8303,7 @@ BI.MultiLayerSingleTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8375,7 +8375,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8397,7 +8397,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8405,7 +8405,7 @@ BI.MultiLayerSingleTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8475,7 +8475,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8497,7 +8497,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8578,7 +8578,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8621,7 +8621,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8629,7 +8629,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8677,7 +8677,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8719,7 +8719,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8727,7 +8727,7 @@ BI.MultiLayerSingleTreeLastTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -8775,7 +8775,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -8817,7 +8817,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 16,
                 height: o.height
             });
         });
@@ -8825,7 +8825,7 @@ BI.MultiLayerSingleTreeMidTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 12),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -10536,7 +10536,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: 30,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -16038,7 +16038,7 @@ BI.QuarterPopup = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 25
+                height: 30
             });
         });
 
@@ -16934,7 +16934,7 @@ BI.SearchMultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: 30,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -17275,7 +17275,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -17360,7 +17360,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -17445,7 +17445,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -17530,7 +17530,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -19122,7 +19122,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: 30,
             selected: false
         });
     },
@@ -21550,7 +21550,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
         _const: {
             COMPARE_FORMAT: "%H:%M:%S",
-            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S",
+            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S %P",
             FORMAT_ARRAY: [
                 "%H:%M:%S",  // HH:mm:ss
                 "%I:%M:%S",  // hh:mm:ss
@@ -21558,6 +21558,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                 "%k:%M:%S",  // H:mm:ss
                 "%l:%M:%S %p",  // h:mm:ss a
                 "%l:%M:%S %P",  // h:mm:ss a
+                "%H:%M:%S %p",  // HH:mm:ss a
+                "%H:%M:%S %P",  // HH:mm:ss a
                 "%l:%M",  // h:mm
                 "%k:%M",  // H:mm
                 "%I:%M",  // hh:mm
@@ -22591,7 +22593,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        height: 276
     },
 
     render: function () {
@@ -23048,7 +23050,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 23,
+                    height: 30,
                     width: 38,
                     value: td,
                     text: td
@@ -23092,7 +23094,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     columns: 2,
                     rows: 6,
                     columnSize: [1 / 2, 1 / 2],
-                    rowSize: 25
+                    rowSize: 30
                 })), {
                     type: "bi.center_adapt",
                     vgap: 1,
@@ -23346,7 +23348,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        height: 270
     },
 
     render: function () {
@@ -24088,7 +24090,7 @@ BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);BI.Static
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24
+                height: 30
             });
         });
     },
@@ -24346,7 +24348,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        height: 260
     },
 
     render: function () {
