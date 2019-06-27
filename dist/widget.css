@@ -199,7 +199,7 @@
   font-size: 14px;
 }
 .bi-number-interval.number-error .bi-input {
-  color: #ff4949 !important;
+  color: #e65251 !important;
 }
 .bi-quarter-trigger {
   -webkit-border-radius: 2px;
@@ -210,7 +210,7 @@
   font-size: 16px;
 }
 .bi-search-multi-text-value-combo.combo-error .bi-multi-select-searcher .tip-text-style {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-single-select-combo .single-select-trigger-icon-button {
   font-size: 16px;
@@ -279,15 +279,15 @@
   left: -8px;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button {
-  background-color: #242640;
+  background-color: #20263b;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button:hover,
 .bi-theme-dark .bi-single-slider-button .slider-button.hover {
-  background-color: #191B2B;
+  background-color: #191b2b;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button.disabled:hover,
 .bi-theme-dark .bi-single-slider-button .slider-button.disabled.hover {
-  background-color: #191B2B;
+  background-color: #191b2b;
 }
 .bi-slider-track .gray-track {
   background-color: rgba(61, 77, 102, 0.1);
@@ -325,10 +325,10 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00ffffff,endColorstr=#00ffffff);
 }
 .bi-date-interval.time-error .bi-input {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-date-interval.time-error .sign-editor-text {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-time-interval .bi-date-time-trigger {
   -webkit-border-radius: 2px;
@@ -336,10 +336,10 @@
   border-radius: 2px;
 }
 .bi-time-interval.time-error .bi-date-time-trigger .bi-input {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-time-interval.time-error .bi-date-time-trigger .sign-editor-text {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-year-popup .year-popup-navigation {
   line-height: 30px;
@@ -351,7 +351,7 @@
   border-left: none;
 }
 .bi-theme-dark .bi-year-popup .year-popup-navigation > .center-element {
-  border-left: 1px solid #3a3c53;
+  border-left: 1px solid #363e55;
 }
 .bi-theme-dark .bi-year-popup .year-popup-navigation > .first-element {
   border-left: none;
@@ -362,8 +362,8 @@
   border-radius: 2px;
 }
 .bi-year-month-interval.time-error .bi-input {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-year-month-interval.time-error .sign-editor-text {
-  color: #ff4949;
+  color: #e65251;
 }

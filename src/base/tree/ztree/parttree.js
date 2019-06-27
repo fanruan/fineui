@@ -42,11 +42,13 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
-            o.itemsCreator({
+            this.options.paras.selectedValues = this._getJoinValue();
+            // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-                selectedValues: self.options.paras.selectedValues
-            }, function (res) {
+                curSelectedValue: name,
+                parentValues: parentValues
+            }), function (res) {
                 self.options.paras.selectedValues = res;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
@@ -81,6 +83,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
+
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();

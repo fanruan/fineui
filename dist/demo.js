@@ -2711,7 +2711,8 @@ BI.shortcut("demo.lazy_loader", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                 }
             },
             items: BI.createItems(BI.deepClone(Demo.CONSTANTS.SIMPLE_ITEMS), {
-                type: "bi.multi_select_item"
+                type: "bi.multi_select_item",
+                height: 30
             })
         });
     }
@@ -4388,7 +4389,7 @@ BI.shortcut("demo.combo_group", Demo.Func);Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.button_group",
                     items: BI.createItems(BI.deepClone(this.years), {
                         type: "bi.single_select_radio_item",
-                        height: 25,
+                        height: 30,
                         handler: function (v) {
 
                         }
@@ -5848,15 +5849,16 @@ BI.shortcut("demo.virtual_list", Demo.Func);Demo.AbsoluteLayout = BI.inherit(BI.
     render: function () {
         return {
             type: "bi.absolute",
+            scrollx: true,
             items: [{
                 el: {
                     type: "bi.label",
                     text: "绝对布局",
                     cls: "layout-bg1",
-                    width: 300,
+                    width: 800,
                     height: 200
                 },
-                left: 100,
+                right: 100,
                 top: 100
             }]
         };
@@ -9216,9 +9218,11 @@ Demo.Items = BI.inherit(BI.Widget, {
                 text: "单选item"
             }, {
                 type: "bi.single_select_item",
+                height: 30,
                 text: "单选项"
             }, {
                 type: "bi.single_select_radio_item",
+                height: 30,
                 text: "单选项"
             }, {
                 type: "bi.label",
@@ -9226,6 +9230,7 @@ Demo.Items = BI.inherit(BI.Widget, {
                 text: "复选item"
             }, {
                 type: "bi.multi_select_item",
+                height: 30,
                 text: "复选项"
             }, {
                 type: "bi.switch",
