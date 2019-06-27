@@ -214,7 +214,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
 
     getValue: function () {
-        return BI.deepClone(this.options.paras.selectedValues || {});
+        return this._getJoinValue();
     },
 
     // 生成树方法
