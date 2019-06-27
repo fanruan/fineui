@@ -105,7 +105,7 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             type: this.options.allowNoSelect ? "bi.single_select_item" : "bi.single_select_combo_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: 30,
             selected: false
         });
     },

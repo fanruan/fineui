@@ -15,7 +15,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {

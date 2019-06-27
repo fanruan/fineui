@@ -7,7 +7,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         return BI.extend(BI.MultiLayerIconTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-multilayer-icon-tree-leaf-item bi-list-item-active",
             layer: 0,
-            height: 24,
+            height: 30,
             iconCls: "",
             iconHeight: 16,
             iconWidth: 16

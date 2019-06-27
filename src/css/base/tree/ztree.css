@@ -23,7 +23,7 @@
   padding: 1px 3px 0 0;
   margin: 0;
   cursor: pointer;
-  height: 24px;
+  height: 30px;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
@@ -65,7 +65,7 @@
   *border: 0px;
 }
 .ztree li span {
-  line-height: 24px;
+  line-height: 30px;
   margin-right: 2px;
 }
 .ztree li span.button {

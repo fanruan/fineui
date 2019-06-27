@@ -52,7 +52,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 300
             }
         });
         if(BI.isKey(o.value)) {

@@ -13,7 +13,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             id: "",
             pId: "",
             layer: 0,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
@@ -42,19 +42,19 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
-            width: 12,
+            width: 15,
             el: {
                 type: "bi.layout",
                 cls: (o.pNode && o.pNode.isLastNode) ? "" : "base-line-conn-background",
-                width: 12,
+                width: 15,
                 height: o.height
             }
         }), {
-            width: 24,
+            width: 30,
             el: {
                 type: "bi.layout",
                 cls: "mid-line-conn-background",
-                width: 24,
+                width: 30,
                 height: o.height
             }
         }, {

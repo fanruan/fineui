@@ -17,7 +17,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        height: 276
     },
 
     render: function () {
