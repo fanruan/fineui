@@ -34,6 +34,9 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             scrolly: o.scrolly,
             scrollable: o.scrollable,
             vgap: o.vgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            hgap: o.hgap,
             items: o.items
         };
     },
