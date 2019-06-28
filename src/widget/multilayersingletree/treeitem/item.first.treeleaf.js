@@ -14,7 +14,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             layer: 0,
             id: "",
             pId: "",
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -57,7 +57,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 16,
+                width: 12,
                 height: o.height
             });
         });
@@ -65,7 +65,7 @@ BI.MultiLayerSingleTreeFirstTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 15),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },

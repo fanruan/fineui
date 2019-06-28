@@ -152,7 +152,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                     type: "bi.button_group",
                     items: BI.createItems(BI.deepClone(this.years), {
                         type: "bi.single_select_radio_item",
-                        height: 30,
+                        height: 25,
                         handler: function (v) {
 
                         }

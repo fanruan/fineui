@@ -2193,10 +2193,10 @@ textarea {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
 }
 .ztree li ul.line {
-  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree li ul.line {
-  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
@@ -3930,13 +3930,13 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 }
 .ztree li ul {
   margin: 0;
-  padding: 0 0 0 22px;
+  padding: 0 0 0 18px;
 }
 .ztree li a {
   padding: 1px 3px 0 0;
   margin: 0;
   cursor: pointer;
-  height: 30px;
+  height: 24px;
   background-color: transparent;
   text-decoration: none;
   vertical-align: top;
@@ -3978,7 +3978,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   *border: 0px;
 }
 .ztree li span {
-  line-height: 30px;
+  line-height: 24px;
   margin-right: 2px;
 }
 .ztree li span.button {
@@ -4050,8 +4050,8 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   background-position: -42px -56px;
 }
 .ztree li span.button.switch {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
 }
 .ztree li span.button.noline_open {
   background-position: -92px -72px;
@@ -4664,10 +4664,10 @@ textarea::-webkit-scrollbar-thumb:hover {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
 }
 .ztree li ul.line {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree li ul.line {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('resources?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat center center;

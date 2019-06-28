@@ -6,7 +6,7 @@
 BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
     constants: {
         nextIcon: "pull-right-e-font",
-        height: 30,
+        height: 25,
         iconHeight: 12,
         iconWidth: 12,
         hgap: 0,

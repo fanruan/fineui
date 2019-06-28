@@ -6,8 +6,8 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
 
     props: {
         baseCls: "bi-dynamic-date-time-popup",
-        width: 290,
-        height: 421
+        width: 248,
+        height: 385
     },
 
     _init: function () {
