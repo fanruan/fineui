@@ -36,7 +36,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                     whiteSpace: "nowrap",
                     once: false,
                     forceSelected: true,
-                    height: 30,
+                    height: 23,
                     width: 38,
                     value: td,
                     text: td
@@ -55,7 +55,7 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 columns: 2,
                 rows: 6,
                 columnSize: [1 / 2, 1 / 2],
-                rowSize: 30
+                rowSize: 25
             })), {
                 type: "bi.center_adapt",
                 vgap: 1,

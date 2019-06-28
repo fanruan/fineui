@@ -52,10 +52,12 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
             if (options.keyword) {
                 keywords.push(options.keyword);
             }
+            var resultItems = [];
             BI.each(keywords, function (i, kw) {
                 var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
+                resultItems = resultItems.concat(search.match).concat(search.find);
             });
+            resultItems = BI.uniq(resultItems);
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
                 items = BI.filter(items, function (i, ob) {
