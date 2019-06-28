@@ -48,9 +48,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
-                type: "bi.icon",
+                type: "bi.icon_label",
+                cls: o.iconCls,
                 width: 18,
-                height: o.height - 2
+                height: o.height - 2,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -60,7 +63,6 @@ BI.Button = BI.inherit(BI.BasicButton, {
             });
             BI.createWidget({
                 type: "bi.center_adapt",
-                cls: o.iconCls,
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
