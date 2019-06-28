@@ -17,10 +17,10 @@
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
 }
 .ztree li ul.line {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree li ul.line {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 0 0;
+  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .ztree li span.button.chk.checkbox_false_full {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/2x/icon/check_box_normal.png') no-repeat center center;
