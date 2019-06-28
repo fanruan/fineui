@@ -110,9 +110,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.loader",
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
-                chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
+                    chooseType: o.chooseType,
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
@@ -149,8 +149,12 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
