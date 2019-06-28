@@ -35,11 +35,6 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             scrolly: o.scrolly,
             scrollable: o.scrollable,
             hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
             items: o.items
         };
     },
