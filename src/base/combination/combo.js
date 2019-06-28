@@ -505,13 +505,14 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroyed: function () {
+    destroy: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
+        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
