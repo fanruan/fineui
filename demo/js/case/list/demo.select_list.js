@@ -18,8 +18,7 @@ Demo.Func = BI.inherit(BI.Widget, {
                 }
             },
             items: BI.createItems(BI.deepClone(Demo.CONSTANTS.SIMPLE_ITEMS), {
-                type: "bi.multi_select_item",
-                height: 30
+                type: "bi.multi_select_item"
             })
         });
     }

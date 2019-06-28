@@ -6,7 +6,7 @@
 BI.DownListPopup = BI.inherit(BI.Pane, {
     constants: {
         nextIcon: "pull-right-e-font",
-        height: 30,
+        height: 24,
         iconHeight: 12,
         iconWidth: 12,
         hgap: 0,

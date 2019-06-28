@@ -12,7 +12,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -34,7 +34,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 16,
+                width: 12,
                 height: o.height
             });
         });

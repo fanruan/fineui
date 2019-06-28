@@ -39,7 +39,7 @@ BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
             return BI.extend({
                 type: "bi.single_select_item",
                 cls: "bi-list-item",
-                height: 30
+                height: 24
             }, item);
         });
     },

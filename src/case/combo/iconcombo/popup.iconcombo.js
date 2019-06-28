@@ -19,7 +19,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
             type: "bi.button_group",
             items: BI.createItems(o.items, {
                 type: "bi.single_select_icon_text_item",
-                height: 30
+                height: 24
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -47,7 +47,7 @@ BI.IconComboPopup = BI.inherit(BI.Pane, {
         BI.IconComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_icon_text_item",
-            height: 30
+            height: 24
         });
         this.popup.populate(items);
     },

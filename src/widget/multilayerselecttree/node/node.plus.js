@@ -15,7 +15,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 30
+            height: 24
         });
     },
     _init: function () {
@@ -56,7 +56,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             items.push({
                 type: "bi.layout",
                 cls: BI.contains(needBlankLayers, index) ? "" : "base-line-conn-background",
-                width: 15,
+                width: 12,
                 height: o.height
             });
         });
@@ -64,7 +64,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 15),
+            columnSize: BI.makeArray(o.layer, 12),
             items: [items]
         });
     },

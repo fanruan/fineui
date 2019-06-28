@@ -4,7 +4,7 @@ BI.DownListItem = BI.inherit(BI.BasicButton, {
         return BI.extend(conf, {
             baseCls: "bi-down-list-item bi-list-item-active",
             cls: "",
-            height: 30,
+            height: 24,
             logic: {
                 dynamic: true
             },
