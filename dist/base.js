@@ -2262,7 +2262,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 checked = false;
             }
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2292,7 +2292,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             }
             var status = treeNode.getCheckStatus();
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 treeNode.checked = false;
             }
         }
@@ -2387,6 +2387,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var map = {};
         track([], valueA, valueB);
         track([], valueB, valueA);
+
         function track (parent, node, compare) {
             BI.each(node, function (n, item) {
                 if (BI.isNull(compare[n])) {
@@ -2406,7 +2407,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
-    getValue: function () {
+    _getJoinValue: function () {
         if (!this.nodes) {
             return {};
         }
@@ -2418,6 +2419,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             return checkedValues;
         }
         return this._join(checkedValues, this.options.paras.selectedValues);
+    },
+
+    getValue: function () {
+        return this._getJoinValue();
     },
 
     // 生成树方法
@@ -2473,11 +2478,13 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
-            o.itemsCreator({
+            this.options.paras.selectedValues = this._getJoinValue();
+            // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-                selectedValues: self.options.paras.selectedValues
-            }, function (res) {
+                curSelectedValue: name,
+                parentValues: parentValues
+            }), function (res) {
                 self.options.paras.selectedValues = res;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
@@ -2512,6 +2519,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
+
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -2580,9 +2588,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     },
 
     getValue: function () {
-        var o = this.options;
-        var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        return result;
+        return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
     // 生成树方法
@@ -3818,14 +3824,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
-        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -5045,9 +5050,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Maskers.remove(this.getName());
-        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";
@@ -7559,7 +7563,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 height: o.height - 2
             });
             BI.createWidget({
-                type: "bi.horizontal_auto",
+                type: "bi.center_adapt",
                 cls: o.iconCls,
                 element: this,
                 hgap: o.hgap,

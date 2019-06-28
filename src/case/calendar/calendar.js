@@ -112,7 +112,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                     whiteSpace: "normal",
                     once: false,
                     forceSelected: true,
-                    height: 24,
+                    height: 30,
                     value: o.year + "-" + month + "-" + td.text,
                     disabled: td.lastMonth || td.nextMonth || td.disabled,
                     lgap: 5,
@@ -129,7 +129,7 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 columns: 7,
                 rows: 6,
                 columnSize: [1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7, 1 / 7],
-                rowSize: 24,
+                rowSize: 30,
                 vgap: 10
             }))]
         });

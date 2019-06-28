@@ -14,7 +14,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
             items: BI.createItems(o.items, {
                 type: "bi.single_select_item",
                 textAlign: o.textAlign,
-                height: 24
+                height: 30
             }),
             chooseType: o.chooseType,
             layouts: [{
@@ -43,7 +43,7 @@ BI.TextValueComboPopup = BI.inherit(BI.Pane, {
         BI.TextValueComboPopup.superclass.populate.apply(this, arguments);
         items = BI.createItems(items, {
             type: "bi.single_select_item",
-            height: 24
+            height: 30
         });
         this.popup.populate(items);
     },

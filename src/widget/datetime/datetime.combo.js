@@ -4,7 +4,7 @@
 BI.DateTimeCombo = BI.inherit(BI.Single, {
     constants: {
         popupHeight: 290,
-        popupWidth: 270,
+        popupWidth: 310,
         comboAdjustHeight: 1,
         border: 1
     },

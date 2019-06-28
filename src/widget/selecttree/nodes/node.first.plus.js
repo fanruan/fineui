@@ -16,7 +16,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             pId: "",
             readonly: true,
             open: false,
-            height: 24
+            height: 30
         });
     },
     _init: function () {
