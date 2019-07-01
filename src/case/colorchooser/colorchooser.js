@@ -65,9 +65,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             var color = self.colorPicker.getValue();
             self.trigger.setValue(color);
         };
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
-        });
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
