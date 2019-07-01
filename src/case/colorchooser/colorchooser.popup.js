@@ -24,43 +24,21 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
         });
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [[{
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }]],
+            items: [this._digestStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""))],
             width: 210,
             height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -73,6 +51,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -120,6 +99,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                     break;
                 case 1:
                     self.setValue(self.customColorChooser.getValue());
+                    self._dealStoreColors();
                     self.more.hideView();
                     self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                     break;
@@ -193,20 +173,36 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.mask.setVisible(!enable);
     },
 
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
-            var items = BI.map(colors, function (i, color) {
-                return {
-                    value: color
-                };
-            });
-            BI.count(colors.length, 8, function (i) {
-                items.push({
-                    value: "",
-                    disabled: true
-                });
-            });
-            this.storeColors.populate([items]);
+            this.storeColors.populate([this._digestStoreColors(colors)]);
         }
     },
 
