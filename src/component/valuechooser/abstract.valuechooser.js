@@ -58,29 +58,34 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
-            });
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: self._getItemsByTimes(items, options.times),
-                hasNext: self._hasNextByTimes(items, options.times)
+                items: self._getItemsByTimes(resultItems, options.times),
+                hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
     }
