@@ -116,7 +116,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
