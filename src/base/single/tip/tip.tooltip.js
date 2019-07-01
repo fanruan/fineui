@@ -1,5 +1,5 @@
 /**
- * toast提示
+ * title提示
  *
  * Created by GUY on 2015/9/7.
  * @class BI.Tooltip

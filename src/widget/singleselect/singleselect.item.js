@@ -1,8 +1,3 @@
-/**
- * guy
- * 单选框item
- * @type {*|void|Object}
- */
 BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {

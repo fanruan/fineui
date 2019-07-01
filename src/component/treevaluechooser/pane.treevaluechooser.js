@@ -1,5 +1,5 @@
 /**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的树面板, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.
  * @class BI.TreeValueChooserPane

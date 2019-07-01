@@ -2,7 +2,7 @@
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
- * @extends BI.Select
+ * @extends BI.Pane
  */
 BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     _defaultConfig: function () {

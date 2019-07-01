@@ -1,6 +1,3 @@
-/**
- * Created by User on 2017/11/16.
- */
 BI.SignTextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
