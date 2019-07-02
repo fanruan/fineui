@@ -1,8 +1,3 @@
-/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.LastTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
