@@ -4,7 +4,12 @@
 BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-icon-popup"
+            baseCls: "bi-icon-text-icon-popup",
+            behaviors: {
+                redmark: function () {
+                    return true;
+                }
+            }
         });
     },
 
@@ -24,11 +29,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             layouts: [{
                 type: "bi.vertical"
             }],
-            behaviors: {
-                redmark: function () {
-                    return true;
-                }
-            },
+            behaviors: o.behaviors,
             value: o.value
         });
 
