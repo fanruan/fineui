@@ -129,18 +129,12 @@
         return needPop;
     }
 
-    BI.Widget.prototype._init = function () {
-        BI.Widget.superclass._init.apply(this, arguments);
-        this._initRoot();
-        this._initElementWidth();
-        this._initElementHeight();
-        this._initVisual();
-        this._initState();
+    BI.Widget.prototype._initRender = function () {
         if (this.beforeInit) {
             this.__asking = true;
             this.beforeInit(BI.bind(function () {
                 if (this.model && this.model.$vm) {
-                    this.model.$vm.$digest()
+                    this.model.$vm.$digest();
                 }
                 this._render();
             }, this));
@@ -150,7 +144,7 @@
         } else {
             this._render();
         }
-    }
+    };
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {
