@@ -153,6 +153,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
+        this.setPagerVisible(v > 1);
     },
 
     setValue: function (v) {
