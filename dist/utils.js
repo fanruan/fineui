@@ -10945,7 +10945,7 @@ _.extend(BI, {
         };
     },
 
-    afterFunc: function (func) {
+    afterFunc: function (sFunc, func) {
         var __self = sFunc;
         return function () {
             var ret = __self.apply(sFunc, arguments);

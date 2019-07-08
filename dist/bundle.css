@@ -5083,11 +5083,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 .dot-e-font:hover .b-font:before,
 .dot-e-font.hover .b-font:before {
   content: "\e762";
-  color: rgba(54, 133, 242, 0.06);
+  color: transparent;
 }
 .dot-e-font:active .b-font:before {
   content: "\e762";
-  color: #3685f2;
+  color: transparent;
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";
