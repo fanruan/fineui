@@ -290,12 +290,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
@@ -1047,12 +1042,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
     }
 });
 BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.switch", BI.Switch);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.FirstTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-first-tree-leaf-item bi-list-item-active",
@@ -1238,12 +1228,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
     }
 });
 
-BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.LastTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-last-tree-leaf-item bi-list-item-active",
@@ -1342,12 +1327,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MidTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-mid-tree-leaf-item bi-list-item-active",
@@ -2290,16 +2270,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         var fn = function () {
             var color = self.colorPicker.getValue();
             self.trigger.setValue(color);
-            var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
-            var que = new BI.Queue(8);
-            que.fromArray(colors);
-            que.remove(color);
-            que.unshift(color);
-            BI.Cache.setItem("colors", BI.array2String(que.toArray()));
         };
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
-        });
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
@@ -2357,43 +2328,21 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
         });
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [[{
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }]],
+            items: [this._digestStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""))],
             width: 210,
             height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -2406,6 +2355,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -2453,6 +2403,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                     break;
                 case 1:
                     self.setValue(self.customColorChooser.getValue());
+                    self._dealStoreColors();
                     self.more.hideView();
                     self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                     break;
@@ -2526,20 +2477,36 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.mask.setVisible(!enable);
     },
 
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
-            var items = BI.map(colors, function (i, color) {
-                return {
-                    value: color
-                };
-            });
-            BI.count(colors.length, 8, function (i) {
-                items.push({
-                    value: "",
-                    disabled: true
-                });
-            });
-            this.storeColors.populate([items]);
+            this.storeColors.populate([this._digestStoreColors(colors)]);
         }
     },
 
@@ -4519,7 +4486,12 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-icon-popup"
+            baseCls: "bi-icon-text-icon-popup",
+            behaviors: {
+                redmark: function () {
+                    return true;
+                }
+            }
         });
     },
 
@@ -4539,11 +4511,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             layouts: [{
                 type: "bi.vertical"
             }],
-            behaviors: {
-                redmark: function () {
-                    return true;
-                }
-            },
+            behaviors: o.behaviors,
             value: o.value
         });
 
@@ -8141,6 +8109,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
+        this.setPagerVisible(v > 1);
     },
 
     setValue: function (v) {
