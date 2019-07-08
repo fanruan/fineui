@@ -2,6 +2,8 @@ import { _addI18n, _i18nText } from "./core/i18n";
 import { _OB } from "./core/ob";
 import { _pushArray, _pushDistinct, _pushDistinctArray} from "./core/func/array";
 import {_startWith, _allIndexOf, _appendQuery, _endWith, _getQuery, _perfectStart, _replaceAll} from "./core/func/string";
+import {_add, _sub, _mul, _div} from "./core/func/number";
+import {_afterFunc, _beforeFunc, _createDistinctName, _getSearchResult} from "./core/func/function";
 
 export declare module BI {
     namespace i18n {
@@ -22,4 +24,17 @@ export declare module BI {
     const replaceAll: _replaceAll;
     const perfectStart: _perfectStart;
     const allIndexOf: _allIndexOf;
+
+    const add: _add;
+    const sub: _sub;
+    const mul: _mul;
+    const div: _div;
+
+    const afterFunc: _afterFunc;
+    const beforeFunc: _beforeFunc;
+
+    namespace Func {
+        const createDistinctName: _createDistinctName;
+        const getSearchResult: _getSearchResult;
+    }
 }
