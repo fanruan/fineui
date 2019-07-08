@@ -148,6 +148,36 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
         val.value || (val.value = []);
     },
 
+    _assertMasker: function() {
+        var self = this, o = this.options;
+        if(BI.isNull(this.masker)) {
+            BI.createWidget({
+                type: "bi.absolute",
+                element: this,
+                items: [{
+                    el: {
+                        type: "bi.layout",
+                        cls: "disable-mask",
+                        invisible: !o.disabled,
+                        ref: function () {
+                            self.masker = this;
+                        }
+                    },
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
+            })
+        }
+    },
+
+    _setEnable: function (enable) {
+        BI.MultiSelectLoader.superclass._setEnable.apply(this, arguments);
+        this._assertMasker();
+        this.masker.setVisible(!enable);
+    },
+
     setStartValue: function (v) {
         this._startValue = v;
     },
