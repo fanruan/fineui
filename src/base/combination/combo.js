@@ -266,7 +266,9 @@ BI.Combo = BI.inherit(BI.Widget, {
         if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
-            if (this.options.direction.indexOf("innerLeft") > -1 || this.options.direction.indexOf("innerRight") > -1) {
+            var directions = this.options.direction.split(",");
+            if (BI.contains(directions, "innerLeft") || BI.contains(directions, "innerRight")) {
+                // popup可以出现的trigger内部的combo，滚动时不需要消失，而是调整位置
                 this.adjustWidth();
                 this.adjustHeight();
             }
