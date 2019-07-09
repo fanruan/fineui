@@ -127,7 +127,6 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             cls: "bi-list-item-active",
             height: 24,
             selected: this.isAllSelected(),
-            disabled: this.options.disabled,
             iconWrapperWidth: 36
         });
     },

@@ -10,13 +10,14 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-color-chooser-popup",
         width: 230,
-        height: 145
+        height: 145,
+        simple: false // 简单模式, popup中没有自动和透明
     },
 
     render: function () {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor",
+            type: o.simple ? "bi.simple_color_picker_editor" : "bi.color_picker_editor",
             value: o.value,
             cls: "bi-header-background bi-border-bottom",
             height: 30
@@ -31,7 +32,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [this._digestStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""))],
+            items: [this._digestStoreColors(this._getStoreColors())],
             width: 210,
             height: 24,
             value: o.value
@@ -175,7 +176,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
     _dealStoreColors: function () {
         var color = this.getValue();
-        var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+        var colors = this._getStoreColors();
         var que = new BI.Queue(8);
         que.fromArray(colors);
         que.remove(color);
@@ -198,6 +199,18 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             });
         });
         return items;
+    },
+
+    _getStoreColors: function() {
+        var self = this, o = this.options;
+        var colorsArray = BI.string2Array(BI.Cache.getItem("colors") || "");
+        return BI.filter(colorsArray, function (idx, color) {
+            return o.simple ? self._isRGBColor(color) : true;
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
     },
 
     setStoreColors: function (colors) {
