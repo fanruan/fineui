@@ -159,7 +159,6 @@ BI.SelectList = BI.inherit(BI.Widget, {
     },
 
     populate: function (items) {
-        var o = this.options;
         this.toolbar.setVisible(!BI.isEmptyArray(items));
         this.toolbar.setEnable(!BI.isEmptyArray(items));
         this.list.populate.apply(this.list, arguments);
