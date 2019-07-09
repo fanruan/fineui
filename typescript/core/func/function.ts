@@ -27,3 +27,11 @@ export declare type _beforeFunc = (sFunc: Function, func: Function) => Function;
  * @param func 方法B
  */
 export declare type _afterFunc = (sFunc: Function, func: Function) => Function;
+
+declare type _function = {
+    createDistinctName: _createDistinctName;
+    getSearchResult: _getSearchResult;
+    beforeFunc: _beforeFunc;
+    afterFunc: _afterFunc;
+}
+export default _function;
