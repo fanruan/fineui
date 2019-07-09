@@ -2880,6 +2880,12 @@ body .bi-button,
   vertical-align: middle;
   cursor: pointer;
 }
+body .bi-button.hack,
+#body .bi-button.hack {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
 body .bi-button.block,
 #body .bi-button.block {
   font-size: inherit;

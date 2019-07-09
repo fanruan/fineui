@@ -22970,7 +22970,7 @@ var
 	// List of deleted data cache ids, so we can reuse them
 	core_deletedIds = [],
 
-	core_version = "1.9.1",
+	core_version = "1.12.4",
 
 	// Save a reference to some core methods
 	core_concat = core_deletedIds.concat,
@@ -38757,7 +38757,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
             text: "",
             stopEvent: false,
@@ -54501,13 +54501,14 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-color-chooser-popup",
         width: 230,
-        height: 145
+        height: 145,
+        simple: false // 简单模式, popup中没有自动和透明
     },
 
     render: function () {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor",
+            type: o.simple ? "bi.simple_color_picker_editor" : "bi.color_picker_editor",
             value: o.value,
             cls: "bi-header-background bi-border-bottom",
             height: 30
@@ -54522,7 +54523,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [this._digestStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""))],
+            items: [this._digestStoreColors(this._getStoreColors())],
             width: 210,
             height: 24,
             value: o.value
@@ -54666,7 +54667,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
     _dealStoreColors: function () {
         var color = this.getValue();
-        var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+        var colors = this._getStoreColors();
         var que = new BI.Queue(8);
         que.fromArray(colors);
         que.remove(color);
@@ -54689,6 +54690,18 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
             });
         });
         return items;
+    },
+
+    _getStoreColors: function() {
+        var self = this, o = this.options;
+        var colorsArray = BI.string2Array(BI.Cache.getItem("colors") || "");
+        return BI.filter(colorsArray, function (idx, color) {
+            return o.simple ? self._isRGBColor(color) : true;
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
     },
 
     setStoreColors: function (colors) {
@@ -54731,9 +54744,7 @@ BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
             type: "bi.color_chooser_popup",
             value: o.value,
             element: this,
-            editor: {
-                type: "bi.simple_color_picker_editor"
-            }
+            simple: true // 是否有自动
         });
         this.popup.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
             self.fireEvent(BI.SimpleColorChooserPopup.EVENT_CHANGE, arguments);
@@ -56104,9 +56115,13 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
             buttons: [{
-                value: BI.i18nText("BI-Basic_Cancel"),
+                value: false,
+                text: BI.i18nText("BI-Basic_Cancel"),
                 ghost: true
-            }, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            }, {
+                text: BI.i18nText(BI.i18nText("BI-Basic_Sure")),
+                value: true
+            }]
         });
     },
     _init: function () {
@@ -56196,7 +56211,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 height: 24,
                 handler: function (v) {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    self.fireEvent(BI.TextBubblePopupBarView.EVENT_CHANGE, v);
                 }
             }, buttonOpt);
 
@@ -56223,7 +56238,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         this.text.setText(v || this.options.text);
     }
 });
-BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
+BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 /**
  * Created by Young's on 2016/4/28.
@@ -59576,7 +59591,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
             value: this.list.getNotSelectedValue(),
             assist: this.list.getValue()
         };
-        
+
     },
 
     empty: function () {
