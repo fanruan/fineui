@@ -38,8 +38,6 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
             items: o.items
         };
     },

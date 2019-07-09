@@ -25,7 +25,18 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -172,4 +183,6 @@ BI.MultiSelectSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);

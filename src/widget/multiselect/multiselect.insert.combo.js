@@ -58,12 +58,20 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -92,6 +100,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
@@ -104,9 +113,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -133,6 +145,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -378,6 +391,11 @@ BI.extend(BI.MultiSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);

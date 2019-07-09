@@ -150,7 +150,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             } else {
                 this.text.setValue(this.editor.getValue());
                 this.text.element.removeClass("bi-water-mark");
-                this.text.doRedMark(o.keyword);
+                BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
             }
         }, this));
     },

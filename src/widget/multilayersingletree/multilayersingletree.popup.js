@@ -5,7 +5,7 @@
  * @extends BI.Pane
  */
 
-BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
+BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
@@ -27,6 +27,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator,
+            keywordGetter: o.keywordGetter,
             value: o.value,
             scrollable: null
         });
@@ -47,8 +48,6 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
         this.tree.on(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSingleTreePopup.EVENT_CHANGE);
         });
-
-        this.check();
     },
 
     getValue: function () {
@@ -61,7 +60,6 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
     },
 
     populate: function (items) {
-        BI.MultiLayerSingleTreePopup.superclass.populate.apply(this, arguments);
         this.tree.populate(items);
     }
 });

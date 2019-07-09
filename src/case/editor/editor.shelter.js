@@ -137,7 +137,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
-        this.text.doRedMark(o.keyword);
+        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -231,9 +231,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (k) {
+        var o = this.options;
         this.editor.setValue(k);
         this._checkText();
-        this.text.doRedMark(this.options.keyword);
+        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     getValue: function () {

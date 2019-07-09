@@ -531,24 +531,22 @@ BI.Single = BI.inherit(BI.Widget, {
  * @extends BI.Single
  */
 BI.Text = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Text.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: "",
-            py: "",
-            highLight: false
-        });
+
+    props: {
+        baseCls: "bi-text",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        py: "",
+        highLight: false
     },
 
     render: function () {
@@ -2264,7 +2262,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 checked = false;
             }
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2294,7 +2292,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             }
             var status = treeNode.getCheckStatus();
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 treeNode.checked = false;
             }
         }
@@ -2389,6 +2387,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var map = {};
         track([], valueA, valueB);
         track([], valueB, valueA);
+
         function track (parent, node, compare) {
             BI.each(node, function (n, item) {
                 if (BI.isNull(compare[n])) {
@@ -2408,7 +2407,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
-    getValue: function () {
+    _getJoinValue: function () {
         if (!this.nodes) {
             return {};
         }
@@ -2420,6 +2419,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             return checkedValues;
         }
         return this._join(checkedValues, this.options.paras.selectedValues);
+    },
+
+    getValue: function () {
+        return this._getJoinValue();
     },
 
     // 生成树方法
@@ -2475,11 +2478,13 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
-            o.itemsCreator({
+            this.options.paras.selectedValues = this._getJoinValue();
+            // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-                selectedValues: self.options.paras.selectedValues
-            }, function (res) {
+                curSelectedValue: name,
+                parentValues: parentValues
+            }), function (res) {
                 self.options.paras.selectedValues = res;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
@@ -2514,6 +2519,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
+
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -2582,9 +2588,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     },
 
     getValue: function () {
-        var o = this.options;
-        var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        return result;
+        return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
     // 生成树方法
@@ -3324,7 +3328,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
             logic: {
                 dynamic: true
             },
@@ -3704,6 +3708,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             case "right,innerLeft":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                 break;
+            case "innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left",  "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right",  "bottom", "top"], o.offsetStyle);
+                break;
             case "top,custom":
             case "custom,top":
                 p = BI.DOM.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
@@ -3814,14 +3824,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
-        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -4408,7 +4417,8 @@ BI.Loader = BI.inherit(BI.Widget, {
             behaviors: {},
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -5040,9 +5050,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Maskers.remove(this.getName());
-        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";
@@ -7406,7 +7415,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.IconButton.EVENT_CHANGE = "IconButton.EVENT_CHANGE";
+BI.IconButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_button", BI.IconButton);/**
  * 图片的button
  *
@@ -7492,7 +7501,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.ImageButton.EVENT_CHANGE = "ImageButton.EVENT_CHANGE";
+BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 /**
  * 文字类型的按钮
@@ -7543,9 +7552,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
-                type: "bi.icon",
+                type: "bi.icon_label",
+                cls: o.iconCls,
                 width: 18,
-                height: o.height - 2
+                height: o.height - 2,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -7554,15 +7566,10 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 height: o.height - 2
             });
             BI.createWidget({
-                type: "bi.horizontal_auto",
-                cls: o.iconCls,
+                type: "bi.center_adapt",
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
                 items: [{
                     type: "bi.horizontal",
                     items: [this.icon, this.text]
@@ -9274,11 +9281,11 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.reset();
     }
 });
-BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
-BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
-BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
-BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
-BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
+BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultifileEditor.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
+BI.MultifileEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.MultifileEditor.EVENT_PROGRESS = "EVENT_PROGRESS";
+BI.MultifileEditor.EVENT_UPLOADED = "EVENT_UPLOADED";
 BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
  *
  * Created by GUY on 2016/1/18.
@@ -9292,8 +9299,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -9343,10 +9350,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -9436,6 +9443,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -9447,22 +9459,21 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);/**
  * @extends BI.Single
  */
 BI.Html = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Html.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
+
+    props: {
+        baseCls: "bi-html",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        highLight: false
     },
 
     render: function () {
@@ -9518,15 +9529,14 @@ BI.Html = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
-
-    mounted: function () {
-        var o = this.options;
 
         if (BI.isKey(o.text)) {
             this.setText(o.text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
+        }
+        if (o.highLight) {
+            this.doHighLight();
         }
     },
 
@@ -9684,20 +9694,9 @@ BI.ImageCheckbox = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16
         });
-    },
-
-    _init: function () {
-        BI.ImageCheckbox.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.ImageCheckbox.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.Checkbox.EVENT_CHANGE);
-        }
     }
 });
-BI.ImageCheckbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);/**
  * guy
@@ -9757,7 +9756,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.checkbox", BI.Checkbox);/**
  * 文件
@@ -9845,7 +9844,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", BI.cjkEncode(file.fileName), "\"", CRLF,
+                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", _global.encodeURIComponent(file.fileName), "\"", CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -9871,15 +9870,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                    xhr = new XMLHttpRequest,
-                    upload = xhr.upload || {
-                        addEventListener: function (event, callback) {
-                            this["on" + event] = callback;
-                        }
-                    },
-                    i = 0;
-                    i < length;
-                    i++
+                         xhr = new XMLHttpRequest,
+                         upload = xhr.upload || {
+                             addEventListener: function (event, callback) {
+                                 this["on" + event] = callback;
+                             }
+                         },
+                         i = 0;
+                     i < length;
+                     i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -9934,7 +9933,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
+                                if (rpe.total <= rpe.loaded) {
+                                    rpe.loaded = rpe.total;
+                                }
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -10000,8 +10001,12 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
-                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
+                            if (rpe.loaded < rpe.total) {
+                                ++rpe.loaded;
+                            }
+                            if (isFunction(handler.onprogress)) {
+                                handler.onprogress(rpe, {});
+                            }
                         }, 100)
                     },
                     onload = function () {
@@ -10018,7 +10023,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = BI.cjkDecode(handler.file.fileName);
+                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
@@ -10378,7 +10383,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             }
         }
     });
-    BI.File.EVENT_CHANGE = "BI.File.EVENT_CHANGE";
+    BI.File.EVENT_CHANGE = "EVENT_CHANGE";
     BI.File.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
@@ -10732,7 +10737,7 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.ImageRadio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);/**
  * guy
@@ -10793,423 +10798,17 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
- * Created by GUY on 2015/6/26.
+ * Created by dailer on 2019/6/19.
  */
 
-BI.HtmlLabel = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.HtmlLabel.superclass._defaultConfig.apply(this, arguments);
+BI.AbstractLabel = BI.inherit(BI.Single, {
+
+    _defaultConfig: function (props) {
+        var conf = BI.AbstractLabel.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
-            textAlign: "center",
-            whiteSpace: "nowrap", // normal  or  nowrap
-            textWidth: null,
-            textHeight: null,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
-    },
-
-    _createJson: function () {
-        var o = this.options;
-        return {
-            type: "bi.html",
-            textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
-            lineHeight: o.textHeight,
-            text: o.text,
-            value: o.value
-        };
-    },
-
-    _init: function () {
-        BI.HtmlLabel.superclass._init.apply(this, arguments);
-
-        if (this.options.textAlign === "center") {
-            this._createCenterEl();
-        } else {
-            this._createNotCenterEl();
-        }
-    },
-
-    _createCenterEl: function () {
-        var o = this.options;
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.maxWidth = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
-                    BI.createWidget({
-                        type: "bi.center_adapt",
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({ // 1.2
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (o.whiteSpace == "normal") {
-                BI.extend(json, {
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                });
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [this.text]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                return;
-            }
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                maxWidth: "100%"
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.maxWidth = o.textWidth;
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: true,
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _createNotCenterEl: function () {
-        var o = this.options;
-        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    BI.createWidget({
-                        type: adaptLayout,
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({
-                    type: adaptLayout,
-                    scrollable: o.whiteSpace === "normal",
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                if (o.whiteSpace !== "normal") {
-                    this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
-                    });
-                }
-                return;
-            }
-            json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (o.whiteSpace !== "normal") {
-                this.element.css({
-                    "line-height": o.height - (o.vgap * 2) + "px"
-                });
-            }
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: adaptLayout,
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _setEnable: function (enable) {
-        BI.HtmlLabel.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-    },
-
-    doHighLight: function () {
-        this.text.doHighLight.apply(this.text, arguments);
-    },
-
-    unHighLight: function () {
-        this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    setText: function (v) {
-        this.options.text = v;
-        this.text.setText(v);
-    },
-
-    getText: function () {
-        return this.options.text;
-    },
-
-    setStyle: function (css) {
-        this.text.setStyle(css);
-    },
-
-    setValue: function (v) {
-        BI.HtmlLabel.superclass.setValue.apply(this, arguments);
-        if (!this.isReadOnly()) {
-            this.text.setValue(v);
-        }
-    },
-
-    populate: function () {
-        BI.HtmlLabel.superclass.populate.apply(this, arguments);
-    }
-});
-
-BI.shortcut("bi.html_label", BI.HtmlLabel);/**
- * @class BI.IconButton
- * @extends BI.BasicButton
- * 图标标签
- */
-BI.IconLabel = BI.inherit(BI.Single, {
-
-    props: {
-        baseCls: "bi-icon-label horizon-center",
-        iconWidth: null,
-        iconHeight: null
-    },
-
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            textAlign: "center"
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: o.iconWidth,
-            height: o.iconHeight
-        });
-        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
-            BI.createWidget({
-                type: "bi.default",
-                element: this,
-                items: [this.icon]
-            });
-        } else {
-            this.element.css("lineHeight", "1");
-            BI.createWidget({
-                element: this,
-                type: "bi.center_adapt",
-                items: [this.icon]
-            });
-        }
-    }
-});
-BI.shortcut("bi.icon_label", BI.IconLabel);/**
- * Created by GUY on 2015/6/26.
- */
-
-BI.Label = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Label.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
             textWidth: null,
@@ -11221,8 +10820,6 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            py: "",
-            keyword: "",
             highLight: false
         });
     },
@@ -11243,7 +10840,7 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.Label.superclass._init.apply(this, arguments);
+        BI.AbstractLabel.superclass._init.apply(this, arguments);
 
         if (this.options.textAlign === "center") {
             this._createCenterEl();
@@ -11563,14 +11160,112 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        BI.Label.superclass.setValue.apply(this, arguments);
+        BI.AbstractLabel.superclass.setValue.apply(this, arguments);
         if (!this.isReadOnly()) {
             this.text.setValue(v);
         }
     },
 
     populate: function () {
-        BI.Label.superclass.populate.apply(this, arguments);
+        BI.AbstractLabel.superclass.populate.apply(this, arguments);
+    }
+});/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-html-label"
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.html",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value
+        };
+    }
+});
+
+BI.shortcut("bi.html_label", BI.HtmlLabel);/**
+ * @class BI.IconButton
+ * @extends BI.BasicButton
+ * 图标标签
+ */
+BI.IconLabel = BI.inherit(BI.Single, {
+
+    props: {
+        baseCls: "bi-icon-label horizon-center",
+        iconWidth: null,
+        iconHeight: null
+    },
+
+    _init: function () {
+        BI.IconLabel.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.element.css({
+            textAlign: "center"
+        });
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: o.iconWidth,
+            height: o.iconHeight
+        });
+        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
+            this.element.css("lineHeight", o.height + "px");
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.icon]
+            });
+        } else {
+            this.element.css("lineHeight", "1");
+            BI.createWidget({
+                element: this,
+                type: "bi.center_adapt",
+                items: [this.icon]
+            });
+        }
+    }
+});
+BI.shortcut("bi.icon_label", BI.IconLabel);/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.Label = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-label",
+        py: "",
+        keyword: ""
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.text",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            highLight: o.highLight
+        };
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
     }
 });
 
@@ -11817,7 +11512,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 });
 BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
- * toast提示
+ * title提示
  *
  * Created by GUY on 2015/9/7.
  * @class BI.Tooltip
@@ -11875,12 +11570,13 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.text",
+                type: "bi.label",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                height: 16,
+                height: o.height,
+                textHeight: o.height - 2,
                 hgap: this._const.hgap
             });
         }

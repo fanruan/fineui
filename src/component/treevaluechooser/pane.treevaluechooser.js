@@ -1,5 +1,5 @@
 /**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的树面板, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.
  * @class BI.TreeValueChooserPane
@@ -49,5 +49,5 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         this.pane.populate.apply(this.pane, arguments);
     }
 });
-BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
+BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);

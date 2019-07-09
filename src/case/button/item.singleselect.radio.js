@@ -56,6 +56,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -65,4 +68,5 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
+BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);

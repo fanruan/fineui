@@ -30,7 +30,18 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
                 type: "bi.simple_state_editor",
                 text: o.text,
                 height: o.height
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -74,6 +85,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         });
         this.searcher.on(BI.Searcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_CHANGE, arguments);
+        });
+        this.searcher.on(BI.Searcher.EVENT_SEARCHING, function () {
+            var keywords = this.getKeywords();
+            self.fireEvent(BI.MultiTreeSearcher.EVENT_SEARCHING, keywords);
         });
         if (BI.isNotNull(o.value)) {
             this.setState(o.value);
@@ -167,6 +182,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiTreeSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";

@@ -11,8 +11,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -62,10 +62,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -155,6 +155,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";

@@ -8,9 +8,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
             extraCls: "bi-arrow-group-node-checkbox"
         });
     },
-    _init: function () {
-        BI.ArrowTreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
-    },
+
     setSelected: function (v) {
         BI.ArrowTreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {

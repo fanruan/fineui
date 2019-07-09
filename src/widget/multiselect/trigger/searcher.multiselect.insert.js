@@ -25,7 +25,18 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -179,4 +190,6 @@ BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);

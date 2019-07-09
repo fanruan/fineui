@@ -30,8 +30,8 @@ body {
 div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(61, 77, 102, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d3d4d66,endColorstr=#0d3d4d66);
+  background-color: rgba(32, 38, 59, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d20263b,endColorstr=#0d20263b);
   width: 6px;
   height: 6px;
 }
@@ -40,13 +40,13 @@ textarea::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: rgba(61, 77, 102, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d3d4d66,endColorstr=#4d3d4d66);
+  background-color: rgba(32, 38, 59, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d20263b,endColorstr=#4d20263b);
 }
 div::-webkit-scrollbar-thumb:hover,
 textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(61, 77, 102, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b33d4d66,endColorstr=#b33d4d66);
+  background-color: rgba(32, 38, 59, 0.7);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b320263b,endColorstr=#b320263b);
 }
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
@@ -362,7 +362,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 .search-close-h-font:hover .b-font:before,
 .search-close-h-font.hover .b-font:before {
   content: "\e6d0";
-  color: #ff4949;
+  color: #e65251;
 }
 .search-close-h-font.disabled .b-font:before {
   content: "\e6d0";
@@ -507,11 +507,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 .dot-e-font:hover .b-font:before,
 .dot-e-font.hover .b-font:before {
   content: "\e762";
-  color: rgba(54, 133, 242, 0.06);
+  color: transparent;
 }
 .dot-e-font:active .b-font:before {
   content: "\e762";
-  color: #3685f2;
+  color: transparent;
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";
@@ -739,67 +739,67 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 /** dashboard组件/控件 下拉列表图标字体 ~end~**/
 .row-pre-page-h-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d9;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70d;');
 }
 .row-pre-page-h-font .b-font:before {
-  content: "\e6d9";
+  content: "\e70d";
   color: inherit;
 }
 .row-pre-page-h-font:hover .b-font:before,
 .row-pre-page-h-font.hover .b-font:before {
-  content: "\e6d9";
+  content: "\e70d";
   color: inherit;
 }
 .row-pre-page-h-font.disabled .b-font:before {
-  content: "\e6d9";
+  content: "\e70d";
   color: inherit;
 }
 .row-next-page-h-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d8;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70c;');
 }
 .row-next-page-h-font .b-font:before {
-  content: "\e6d8";
+  content: "\e70c";
   color: inherit;
 }
 .row-next-page-h-font:hover .b-font:before,
 .row-next-page-h-font.hover .b-font:before {
-  content: "\e6d8";
+  content: "\e70c";
   color: inherit;
 }
 .row-next-page-h-font.disabled .b-font:before {
-  content: "\e6d8";
+  content: "\e70c";
   color: inherit;
 }
 .column-pre-page-h-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d6;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70a;');
 }
 .column-pre-page-h-font .b-font:before {
-  content: "\e6d6";
+  content: "\e70a";
   color: inherit;
 }
 .column-pre-page-h-font:hover .b-font:before,
 .column-pre-page-h-font.hover .b-font:before {
-  content: "\e6d6";
+  content: "\e70a";
   color: inherit;
 }
 .column-pre-page-h-font.disabled .b-font:before {
-  content: "\e6d6";
+  content: "\e70a";
   color: inherit;
 }
 .column-next-page-h-font .b-font {
-  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe6d7;');
+  *zoom: expression( this.runtimeStyle['zoom'] = '1',this.innerHTML = '&#xe70b;');
 }
 .column-next-page-h-font .b-font:before {
-  content: "\e6d7";
+  content: "\e70b";
   color: inherit;
 }
 .column-next-page-h-font:hover .b-font:before,
 .column-next-page-h-font.hover .b-font:before {
-  content: "\e6d7";
+  content: "\e70b";
   color: inherit;
 }
 .column-next-page-h-font.disabled .b-font:before {
-  content: "\e6d7";
+  content: "\e70b";
   color: inherit;
 }
 .expander-right-font .b-font {

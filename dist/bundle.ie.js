@@ -22,7 +22,7 @@ if(_global.BI.prepares == null) {
 }/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -215,34 +215,34 @@ if(_global.BI.prepares == null) {
   /** Used to identify `toStringTag` values of typed arrays. */
   var typedArrayTags = {};
   typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
-  typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
-  typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
-  typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
-  typedArrayTags[uint32Tag] = true;
+      typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+          typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+              typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+                  typedArrayTags[uint32Tag] = true;
   typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
-  typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-  typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
-  typedArrayTags[errorTag] = typedArrayTags[funcTag] =
-  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
-  typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
-  typedArrayTags[setTag] = typedArrayTags[stringTag] =
-  typedArrayTags[weakMapTag] = false;
+      typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+          typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+              typedArrayTags[errorTag] = typedArrayTags[funcTag] =
+                  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+                      typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+                          typedArrayTags[setTag] = typedArrayTags[stringTag] =
+                              typedArrayTags[weakMapTag] = false;
 
   /** Used to identify `toStringTag` values supported by `_.clone`. */
   var cloneableTags = {};
   cloneableTags[argsTag] = cloneableTags[arrayTag] =
-  cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
-  cloneableTags[boolTag] = cloneableTags[dateTag] =
-  cloneableTags[float32Tag] = cloneableTags[float64Tag] =
-  cloneableTags[int8Tag] = cloneableTags[int16Tag] =
-  cloneableTags[int32Tag] = cloneableTags[mapTag] =
-  cloneableTags[numberTag] = cloneableTags[objectTag] =
-  cloneableTags[regexpTag] = cloneableTags[setTag] =
-  cloneableTags[stringTag] = cloneableTags[symbolTag] =
-  cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
-  cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+      cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+          cloneableTags[boolTag] = cloneableTags[dateTag] =
+              cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+                  cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+                      cloneableTags[int32Tag] = cloneableTags[mapTag] =
+                          cloneableTags[numberTag] = cloneableTags[objectTag] =
+                              cloneableTags[regexpTag] = cloneableTags[setTag] =
+                                  cloneableTags[stringTag] = cloneableTags[symbolTag] =
+                                      cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+                                          cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
   cloneableTags[errorTag] = cloneableTags[funcTag] =
-  cloneableTags[weakMapTag] = false;
+      cloneableTags[weakMapTag] = false;
 
   /** Used to map characters to HTML entities. */
   var htmlEscapes = {
@@ -599,8 +599,8 @@ if(_global.BI.prepares == null) {
    */
   function baseIndexOf(array, value, fromIndex) {
     return value === value
-      ? strictIndexOf(array, value, fromIndex)
-      : baseFindIndex(array, baseIsNaN, fromIndex);
+        ? strictIndexOf(array, value, fromIndex)
+        : baseFindIndex(array, baseIsNaN, fromIndex);
   }
 
   /**
@@ -656,8 +656,8 @@ if(_global.BI.prepares == null) {
   function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
     eachFunc(collection, function(value, index, collection) {
       accumulator = initAccum
-        ? (initAccum = false, value)
-        : iteratee(accumulator, value, index, collection);
+          ? (initAccum = false, value)
+          : iteratee(accumulator, value, index, collection);
     });
     return accumulator;
   }
@@ -910,8 +910,8 @@ if(_global.BI.prepares == null) {
    */
   function safeGet(object, key) {
     return key == '__proto__'
-      ? undefined
-      : object[key];
+        ? undefined
+        : object[key];
   }
 
   /**
@@ -962,8 +962,8 @@ if(_global.BI.prepares == null) {
    */
   function stringSize(string) {
     return hasUnicode(string)
-      ? unicodeSize(string)
-      : asciiSize(string);
+        ? unicodeSize(string)
+        : asciiSize(string);
   }
 
   /**
@@ -975,8 +975,8 @@ if(_global.BI.prepares == null) {
    */
   function stringToArray(string) {
     return hasUnicode(string)
-      ? unicodeToArray(string)
-      : asciiToArray(string);
+        ? unicodeToArray(string)
+        : asciiToArray(string);
   }
 
   /**
@@ -1045,8 +1045,8 @@ if(_global.BI.prepares == null) {
 
   /** Used to detect if a method is native. */
   var reIsNative = RegExp('^' +
-    funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-    .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+      funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
+          .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
   );
 
   /** Built-in value references. */
@@ -1383,30 +1383,30 @@ if(_global.BI.prepares == null) {
     var result = [];
 
     outer:
-    while (length-- && resIndex < takeCount) {
-      index += dir;
+        while (length-- && resIndex < takeCount) {
+          index += dir;
 
-      var iterIndex = -1,
-          value = array[index];
+          var iterIndex = -1,
+              value = array[index];
 
-      while (++iterIndex < iterLength) {
-        var data = iteratees[iterIndex],
-            iteratee = data.iteratee,
-            type = data.type,
-            computed = iteratee(value);
+          while (++iterIndex < iterLength) {
+            var data = iteratees[iterIndex],
+                iteratee = data.iteratee,
+                type = data.type,
+                computed = iteratee(value);
 
-        if (type == LAZY_MAP_FLAG) {
-          value = computed;
-        } else if (!computed) {
-          if (type == LAZY_FILTER_FLAG) {
-            continue outer;
-          } else {
-            break outer;
+            if (type == LAZY_MAP_FLAG) {
+              value = computed;
+            } else if (!computed) {
+              if (type == LAZY_FILTER_FLAG) {
+                continue outer;
+              } else {
+                break outer;
+              }
+            }
           }
+          result[resIndex++] = value;
         }
-      }
-      result[resIndex++] = value;
-    }
     return result;
   }
 
@@ -1914,14 +1914,14 @@ if(_global.BI.prepares == null) {
     for (var key in value) {
       if ((inherited || hasOwnProperty.call(value, key)) &&
           !(skipIndexes && (
-             // Safari 9 has enumerable `arguments.length` in strict mode.
-             key == 'length' ||
-             // Node.js 0.10 has enumerable non-index properties on buffers.
-             (isBuff && (key == 'offset' || key == 'parent')) ||
-             // PhantomJS 2 has enumerable non-index properties on typed arrays.
-             (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
-             // Skip index properties.
-             isIndex(key, length)
+              // Safari 9 has enumerable `arguments.length` in strict mode.
+              key == 'length' ||
+              // Node.js 0.10 has enumerable non-index properties on buffers.
+              (isBuff && (key == 'offset' || key == 'parent')) ||
+              // PhantomJS 2 has enumerable non-index properties on typed arrays.
+              (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+              // Skip index properties.
+              isIndex(key, length)
           ))) {
         result.push(key);
       }
@@ -2136,8 +2136,8 @@ if(_global.BI.prepares == null) {
         result = (isFlat || isFunc) ? {} : initCloneObject(value);
         if (!isDeep) {
           return isFlat
-            ? copySymbolsIn(value, baseAssignIn(result, value))
-            : copySymbols(value, baseAssign(result, value));
+              ? copySymbolsIn(value, baseAssignIn(result, value))
+              : copySymbols(value, baseAssign(result, value));
         }
       } else {
         if (!cloneableTags[tag]) {
@@ -2171,8 +2171,8 @@ if(_global.BI.prepares == null) {
     }
 
     var keysFunc = isFull
-      ? (isFlat ? getAllKeysIn : getAllKeys)
-      : (isFlat ? keysIn : keys);
+        ? (isFlat ? getAllKeysIn : getAllKeys)
+        : (isFlat ? keysIn : keys);
 
     var props = isArr ? undefined : keysFunc(value);
     arrayEach(props || value, function(subValue, key) {
@@ -2238,24 +2238,24 @@ if(_global.BI.prepares == null) {
       values = new SetCache(values);
     }
     outer:
-    while (++index < length) {
-      var value = array[index],
-          computed = iteratee == null ? value : iteratee(value);
+        while (++index < length) {
+          var value = array[index],
+              computed = iteratee == null ? value : iteratee(value);
 
-      value = (comparator || value !== 0) ? value : 0;
-      if (isCommon && computed === computed) {
-        var valuesIndex = valuesLength;
-        while (valuesIndex--) {
-          if (values[valuesIndex] === computed) {
-            continue outer;
+          value = (comparator || value !== 0) ? value : 0;
+          if (isCommon && computed === computed) {
+            var valuesIndex = valuesLength;
+            while (valuesIndex--) {
+              if (values[valuesIndex] === computed) {
+                continue outer;
+              }
+            }
+            result.push(value);
+          }
+          else if (!includes(values, computed, comparator)) {
+            result.push(value);
           }
         }
-        result.push(value);
-      }
-      else if (!includes(values, computed, comparator)) {
-        result.push(value);
-      }
-    }
     return result;
   }
 
@@ -2306,9 +2306,9 @@ if(_global.BI.prepares == null) {
           current = iteratee(value);
 
       if (current != null && (computed === undefined
-            ? (current === current && !isSymbol(current))
-            : comparator(current, computed)
-          )) {
+              ? (current === current && !isSymbol(current))
+              : comparator(current, computed)
+      )) {
         var computed = current,
             result = value;
       }
@@ -2480,8 +2480,8 @@ if(_global.BI.prepares == null) {
       return value === undefined ? undefinedTag : nullTag;
     }
     return (symToStringTag && symToStringTag in Object(value))
-      ? getRawTag(value)
-      : objectToString(value);
+        ? getRawTag(value)
+        : objectToString(value);
   }
 
   /**
@@ -2547,8 +2547,8 @@ if(_global.BI.prepares == null) {
       }
       maxLength = nativeMin(array.length, maxLength);
       caches[othIndex] = !comparator && (iteratee || (length >= 120 && array.length >= 120))
-        ? new SetCache(othIndex && array)
-        : undefined;
+          ? new SetCache(othIndex && array)
+          : undefined;
     }
     array = arrays[0];
 
@@ -2556,31 +2556,31 @@ if(_global.BI.prepares == null) {
         seen = caches[0];
 
     outer:
-    while (++index < length && result.length < maxLength) {
-      var value = array[index],
-          computed = iteratee ? iteratee(value) : value;
+        while (++index < length && result.length < maxLength) {
+          var value = array[index],
+              computed = iteratee ? iteratee(value) : value;
 
-      value = (comparator || value !== 0) ? value : 0;
-      if (!(seen
-            ? cacheHas(seen, computed)
-            : includes(result, computed, comparator)
+          value = (comparator || value !== 0) ? value : 0;
+          if (!(seen
+                  ? cacheHas(seen, computed)
+                  : includes(result, computed, comparator)
           )) {
-        othIndex = othLength;
-        while (--othIndex) {
-          var cache = caches[othIndex];
-          if (!(cache
-                ? cacheHas(cache, computed)
-                : includes(arrays[othIndex], computed, comparator))
+            othIndex = othLength;
+            while (--othIndex) {
+              var cache = caches[othIndex];
+              if (!(cache
+                  ? cacheHas(cache, computed)
+                  : includes(arrays[othIndex], computed, comparator))
               ) {
-            continue outer;
+                continue outer;
+              }
+            }
+            if (seen) {
+              seen.push(computed);
+            }
+            result.push(value);
           }
         }
-        if (seen) {
-          seen.push(computed);
-        }
-        result.push(value);
-      }
-    }
     return result;
   }
 
@@ -2702,8 +2702,8 @@ if(_global.BI.prepares == null) {
     if (isSameTag && !objIsObj) {
       stack || (stack = new Stack);
       return (objIsArr || isTypedArray(object))
-        ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
-        : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+          ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+          : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
     }
     if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
       var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
@@ -2757,9 +2757,9 @@ if(_global.BI.prepares == null) {
     while (index--) {
       var data = matchData[index];
       if ((noCustomizer && data[2])
-            ? data[1] !== object[data[0]]
-            : !(data[0] in object)
-          ) {
+          ? data[1] !== object[data[0]]
+          : !(data[0] in object)
+      ) {
         return false;
       }
     }
@@ -2779,9 +2779,9 @@ if(_global.BI.prepares == null) {
           var result = customizer(objValue, srcValue, key, object, source, stack);
         }
         if (!(result === undefined
-              ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack)
-              : result
-            )) {
+                ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack)
+                : result
+        )) {
           return false;
         }
       }
@@ -2836,7 +2836,7 @@ if(_global.BI.prepares == null) {
    */
   function baseIsTypedArray(value) {
     return isObjectLike(value) &&
-      isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+        isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
   }
 
   /**
@@ -2857,8 +2857,8 @@ if(_global.BI.prepares == null) {
     }
     if (typeof value == 'object') {
       return isArray(value)
-        ? baseMatchesProperty(value[0], value[1])
-        : baseMatches(value);
+          ? baseMatchesProperty(value[0], value[1])
+          : baseMatches(value);
     }
     return property(value);
   }
@@ -2968,8 +2968,8 @@ if(_global.BI.prepares == null) {
     return function(object) {
       var objValue = get(object, path);
       return (objValue === undefined && objValue === srcValue)
-        ? hasIn(object, path)
-        : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+          ? hasIn(object, path)
+          : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
     };
   }
 
@@ -2995,8 +2995,8 @@ if(_global.BI.prepares == null) {
       }
       else {
         var newValue = customizer
-          ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
-          : undefined;
+            ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
+            : undefined;
 
         if (newValue === undefined) {
           newValue = srcValue;
@@ -3031,8 +3031,8 @@ if(_global.BI.prepares == null) {
       return;
     }
     var newValue = customizer
-      ? customizer(objValue, srcValue, (key + ''), object, source, stack)
-      : undefined;
+        ? customizer(objValue, srcValue, (key + ''), object, source, stack)
+        : undefined;
 
     var isCommon = newValue === undefined;
 
@@ -3239,8 +3239,8 @@ if(_global.BI.prepares == null) {
         newValue = customizer ? customizer(objValue, key, nested) : undefined;
         if (newValue === undefined) {
           newValue = isObject(objValue)
-            ? objValue
-            : (isIndex(path[index + 1]) ? [] : {});
+              ? objValue
+              : (isIndex(path[index + 1]) ? [] : {});
         }
       }
       assignValue(nested, key, newValue);
@@ -3386,30 +3386,30 @@ if(_global.BI.prepares == null) {
       seen = iteratee ? [] : result;
     }
     outer:
-    while (++index < length) {
-      var value = array[index],
-          computed = iteratee ? iteratee(value) : value;
+        while (++index < length) {
+          var value = array[index],
+              computed = iteratee ? iteratee(value) : value;
 
-      value = (comparator || value !== 0) ? value : 0;
-      if (isCommon && computed === computed) {
-        var seenIndex = seen.length;
-        while (seenIndex--) {
-          if (seen[seenIndex] === computed) {
-            continue outer;
+          value = (comparator || value !== 0) ? value : 0;
+          if (isCommon && computed === computed) {
+            var seenIndex = seen.length;
+            while (seenIndex--) {
+              if (seen[seenIndex] === computed) {
+                continue outer;
+              }
+            }
+            if (iteratee) {
+              seen.push(computed);
+            }
+            result.push(value);
+          }
+          else if (!includes(seen, computed, comparator)) {
+            if (seen !== result) {
+              seen.push(computed);
+            }
+            result.push(value);
           }
         }
-        if (iteratee) {
-          seen.push(computed);
-        }
-        result.push(value);
-      }
-      else if (!includes(seen, computed, comparator)) {
-        if (seen !== result) {
-          seen.push(computed);
-        }
-        result.push(value);
-      }
-    }
     return result;
   }
 
@@ -3783,8 +3783,8 @@ if(_global.BI.prepares == null) {
       var key = props[index];
 
       var newValue = customizer
-        ? customizer(object[key], source[key], key, object, source)
-        : undefined;
+          ? customizer(object[key], source[key], key, object, source)
+          : undefined;
 
       if (newValue === undefined) {
         newValue = source[key];
@@ -3854,8 +3854,8 @@ if(_global.BI.prepares == null) {
           guard = length > 2 ? sources[2] : undefined;
 
       customizer = (assigner.length > 3 && typeof customizer == 'function')
-        ? (length--, customizer)
-        : undefined;
+          ? (length--, customizer)
+          : undefined;
 
       if (guard && isIterateeCall(sources[0], sources[1], guard)) {
         customizer = length < 3 ? undefined : customizer;
@@ -4001,14 +4001,14 @@ if(_global.BI.prepares == null) {
         args[index] = arguments[index];
       }
       var holders = (length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder)
-        ? []
-        : replaceHolders(args, placeholder);
+          ? []
+          : replaceHolders(args, placeholder);
 
       length -= holders.length;
       if (length < arity) {
         return createRecurry(
-          func, bitmask, createHybrid, wrapper.placeholder, undefined,
-          args, holders, undefined, undefined, arity - length);
+            func, bitmask, createHybrid, wrapper.placeholder, undefined,
+            args, holders, undefined, undefined, arity - length);
       }
       var fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
       return apply(fn, this, args);
@@ -4085,8 +4085,8 @@ if(_global.BI.prepares == null) {
       if (isCurried && length < arity) {
         var newHolders = replaceHolders(args, placeholder);
         return createRecurry(
-          func, bitmask, createHybrid, wrapper.placeholder, thisArg,
-          args, newHolders, argPos, ary, arity - length
+            func, bitmask, createHybrid, wrapper.placeholder, thisArg,
+            args, newHolders, argPos, ary, arity - length
         );
       }
       var thisBinding = isBind ? thisArg : this,
@@ -4298,8 +4298,8 @@ if(_global.BI.prepares == null) {
     partials = newData[3];
     holders = newData[4];
     arity = newData[9] = newData[9] === undefined
-      ? (isBindKey ? 0 : func.length)
-      : nativeMax(newData[9] - length, 0);
+        ? (isBindKey ? 0 : func.length)
+        : nativeMax(newData[9] - length, 0);
 
     if (!arity && bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG)) {
       bitmask &= ~(WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG);
@@ -4394,8 +4394,8 @@ if(_global.BI.prepares == null) {
 
       if (customizer) {
         var compared = isPartial
-          ? customizer(othValue, arrValue, index, other, array, stack)
-          : customizer(arrValue, othValue, index, array, other, stack);
+            ? customizer(othValue, arrValue, index, other, array, stack)
+            : customizer(arrValue, othValue, index, array, other, stack);
       }
       if (compared !== undefined) {
         if (compared) {
@@ -4407,18 +4407,18 @@ if(_global.BI.prepares == null) {
       // Recursively compare arrays (susceptible to call stack limits).
       if (seen) {
         if (!arraySome(other, function(othValue, othIndex) {
-              if (!cacheHas(seen, othIndex) &&
-                  (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
-                return seen.push(othIndex);
-              }
-            })) {
+          if (!cacheHas(seen, othIndex) &&
+              (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+            return seen.push(othIndex);
+          }
+        })) {
           result = false;
           break;
         }
       } else if (!(
-            arrValue === othValue ||
-              equalFunc(arrValue, othValue, bitmask, customizer, stack)
-          )) {
+          arrValue === othValue ||
+          equalFunc(arrValue, othValue, bitmask, customizer, stack)
+      )) {
         result = false;
         break;
       }
@@ -4557,14 +4557,14 @@ if(_global.BI.prepares == null) {
 
       if (customizer) {
         var compared = isPartial
-          ? customizer(othValue, objValue, key, other, object, stack)
-          : customizer(objValue, othValue, key, object, other, stack);
+            ? customizer(othValue, objValue, key, other, object, stack)
+            : customizer(objValue, othValue, key, object, other, stack);
       }
       // Recursively compare objects (susceptible to call stack limits).
       if (!(compared === undefined
-            ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
-            : compared
-          )) {
+              ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
+              : compared
+      )) {
         result = false;
         break;
       }
@@ -4578,7 +4578,7 @@ if(_global.BI.prepares == null) {
       if (objCtor != othCtor &&
           ('constructor' in object && 'constructor' in other) &&
           !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
-            typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+              typeof othCtor == 'function' && othCtor instanceof othCtor)) {
         result = false;
       }
     }
@@ -4677,8 +4677,8 @@ if(_global.BI.prepares == null) {
   function getMapData(map, key) {
     var data = map.__data__;
     return isKeyable(key)
-      ? data[typeof key == 'string' ? 'string' : 'hash']
-      : data.map;
+        ? data[typeof key == 'string' ? 'string' : 'hash']
+        : data.map;
   }
 
   /**
@@ -4875,7 +4875,7 @@ if(_global.BI.prepares == null) {
     }
     length = object == null ? 0 : object.length;
     return !!length && isLength(length) && isIndex(key, length) &&
-      (isArray(object) || isArguments(object));
+        (isArray(object) || isArguments(object));
   }
 
   /**
@@ -4906,8 +4906,8 @@ if(_global.BI.prepares == null) {
    */
   function initCloneObject(object) {
     return (typeof object.constructor == 'function' && !isPrototype(object))
-      ? baseCreate(getPrototype(object))
-      : {};
+        ? baseCreate(getPrototype(object))
+        : {};
   }
 
   /**
@@ -4986,7 +4986,7 @@ if(_global.BI.prepares == null) {
    */
   function isFlattenable(value) {
     return isArray(value) || isArguments(value) ||
-      !!(spreadableSymbol && value && value[spreadableSymbol]);
+        !!(spreadableSymbol && value && value[spreadableSymbol]);
   }
 
   /**
@@ -5002,9 +5002,9 @@ if(_global.BI.prepares == null) {
     length = length == null ? MAX_SAFE_INTEGER : length;
 
     return !!length &&
-      (type == 'number' ||
-        (type != 'symbol' && reIsUint.test(value))) &&
-          (value > -1 && value % 1 == 0 && value < length);
+        (type == 'number' ||
+            (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
   }
 
   /**
@@ -5023,9 +5023,9 @@ if(_global.BI.prepares == null) {
     }
     var type = typeof index;
     if (type == 'number'
-          ? (isArrayLike(object) && isIndex(index, object.length))
-          : (type == 'string' && index in object)
-        ) {
+        ? (isArrayLike(object) && isIndex(index, object.length))
+        : (type == 'string' && index in object)
+    ) {
       return eq(object[index], value);
     }
     return false;
@@ -5049,7 +5049,7 @@ if(_global.BI.prepares == null) {
       return true;
     }
     return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-      (object != null && value in Object(object));
+        (object != null && value in Object(object));
   }
 
   /**
@@ -5062,8 +5062,8 @@ if(_global.BI.prepares == null) {
   function isKeyable(value) {
     var type = typeof value;
     return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-      ? (value !== '__proto__')
-      : (value === null);
+        ? (value !== '__proto__')
+        : (value === null);
   }
 
   /**
@@ -5140,7 +5140,7 @@ if(_global.BI.prepares == null) {
         return false;
       }
       return object[key] === srcValue &&
-        (srcValue !== undefined || (key in Object(object)));
+          (srcValue !== undefined || (key in Object(object)));
     };
   }
 
@@ -5187,9 +5187,9 @@ if(_global.BI.prepares == null) {
         isCommon = newBitmask < (WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG | WRAP_ARY_FLAG);
 
     var isCombo =
-      ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_CURRY_FLAG)) ||
-      ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_REARG_FLAG) && (data[7].length <= source[8])) ||
-      ((srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG)) && (source[7].length <= source[8]) && (bitmask == WRAP_CURRY_FLAG));
+        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_CURRY_FLAG)) ||
+        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_REARG_FLAG) && (data[7].length <= source[8])) ||
+        ((srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG)) && (source[7].length <= source[8]) && (bitmask == WRAP_CURRY_FLAG));
 
     // Exit early if metadata can't be merged.
     if (!(isCommon || isCombo)) {
@@ -5579,8 +5579,8 @@ if(_global.BI.prepares == null) {
    */
   var difference = baseRest(function(array, values) {
     return isArrayLikeObject(array)
-      ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true))
-      : [];
+        ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true))
+        : [];
   });
 
   /**
@@ -5708,8 +5708,8 @@ if(_global.BI.prepares == null) {
     if (fromIndex !== undefined) {
       index = toInteger(fromIndex);
       index = fromIndex < 0
-        ? nativeMax(length + index, 0)
-        : nativeMin(index, length - 1);
+          ? nativeMax(length + index, 0)
+          : nativeMin(index, length - 1);
     }
     return baseFindIndex(array, baseIteratee(predicate, 3), index, true);
   }
@@ -5848,8 +5848,8 @@ if(_global.BI.prepares == null) {
   var intersection = baseRest(function(arrays) {
     var mapped = arrayMap(arrays, castArrayLikeObject);
     return (mapped.length && mapped[0] === arrays[0])
-      ? baseIntersection(mapped)
-      : [];
+        ? baseIntersection(mapped)
+        : [];
   });
 
   /**
@@ -6124,8 +6124,8 @@ if(_global.BI.prepares == null) {
    */
   var without = baseRest(function(array, values) {
     return isArrayLikeObject(array)
-      ? baseDifference(array, values)
-      : [];
+        ? baseDifference(array, values)
+        : [];
   });
 
   /**
@@ -6710,6 +6710,37 @@ if(_global.BI.prepares == null) {
   }
 
   /**
+   * Creates an object composed of keys generated from the results of running
+   * each element of `collection` thru `iteratee`. The order of grouped values
+   * is determined by the order they occur in `collection`. The corresponding
+   * value of each key is an array of elements responsible for generating the
+   * key. The iteratee is invoked with one argument: (value).
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Collection
+   * @param {Array|Object} collection The collection to iterate over.
+   * @param {Function} [iteratee=_.identity] The iteratee to transform keys.
+   * @returns {Object} Returns the composed aggregate object.
+   * @example
+   *
+   * _.groupBy([6.1, 4.2, 6.3], Math.floor);
+   * // => { '4': [4.2], '6': [6.1, 6.3] }
+   *
+   * // The `_.property` iteratee shorthand.
+   * _.groupBy(['one', 'two', 'three'], 'length');
+   * // => { '3': ['one', 'two'], '5': ['three'] }
+   */
+  var groupBy = createAggregator(function(result, value, key) {
+    if (hasOwnProperty.call(result, key)) {
+      result[key].push(value);
+    } else {
+      baseAssignValue(result, key, [value]);
+    }
+  });
+
+  /**
    * Creates an array of values by running each element in `collection` thru
    * `iteratee`. The iteratee is invoked with three arguments:
    * (value, index|key, collection).
@@ -7164,8 +7195,8 @@ if(_global.BI.prepares == null) {
           timeWaiting = wait - timeSinceLastCall;
 
       return maxing
-        ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
-        : timeWaiting;
+          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+          : timeWaiting;
     }
 
     function shouldInvoke(time) {
@@ -7176,7 +7207,7 @@ if(_global.BI.prepares == null) {
       // trailing edge, the system time has gone backwards and we're treating
       // it as the trailing edge, or we've hit the `maxWait` limit.
       return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-        (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+          (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
     }
 
     function timerExpired() {
@@ -7615,7 +7646,7 @@ if(_global.BI.prepares == null) {
    */
   var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
     return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
-      !propertyIsEnumerable.call(value, 'callee');
+        !propertyIsEnumerable.call(value, 'callee');
   };
 
   /**
@@ -7720,7 +7751,7 @@ if(_global.BI.prepares == null) {
    */
   function isBoolean(value) {
     return value === true || value === false ||
-      (isObjectLike(value) && baseGetTag(value) == boolTag);
+        (isObjectLike(value) && baseGetTag(value) == boolTag);
   }
 
   /**
@@ -7800,7 +7831,7 @@ if(_global.BI.prepares == null) {
     }
     if (isArrayLike(value) &&
         (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' ||
-          isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+            isBuffer(value) || isTypedArray(value) || isArguments(value))) {
       return !value.length;
     }
     var tag = getTag(value);
@@ -7935,7 +7966,7 @@ if(_global.BI.prepares == null) {
    */
   function isLength(value) {
     return typeof value == 'number' &&
-      value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+        value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
   }
 
   /**
@@ -8099,7 +8130,7 @@ if(_global.BI.prepares == null) {
    */
   function isNumber(value) {
     return typeof value == 'number' ||
-      (isObjectLike(value) && baseGetTag(value) == numberTag);
+        (isObjectLike(value) && baseGetTag(value) == numberTag);
   }
 
   /**
@@ -8140,7 +8171,7 @@ if(_global.BI.prepares == null) {
     }
     var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
     return typeof Ctor == 'function' && Ctor instanceof Ctor &&
-      funcToString.call(Ctor) == objectCtorString;
+        funcToString.call(Ctor) == objectCtorString;
   }
 
   /**
@@ -8200,7 +8231,7 @@ if(_global.BI.prepares == null) {
    */
   function isString(value) {
     return typeof value == 'string' ||
-      (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
+        (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
   }
 
   /**
@@ -8222,7 +8253,7 @@ if(_global.BI.prepares == null) {
    */
   function isSymbol(value) {
     return typeof value == 'symbol' ||
-      (isObjectLike(value) && baseGetTag(value) == symbolTag);
+        (isObjectLike(value) && baseGetTag(value) == symbolTag);
   }
 
   /**
@@ -8412,8 +8443,8 @@ if(_global.BI.prepares == null) {
     value = value.replace(reTrim, '');
     var isBinary = reIsBinary.test(value);
     return (isBinary || reIsOctal.test(value))
-      ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-      : (reIsBadHex.test(value) ? NAN : +value);
+        ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+        : (reIsBadHex.test(value) ? NAN : +value);
   }
 
   /**
@@ -9324,8 +9355,8 @@ if(_global.BI.prepares == null) {
   function escape(string) {
     string = toString(string);
     return (string && reHasUnescapedHtml.test(string))
-      ? string.replace(reUnescapedHtml, escapeHtmlChar)
-      : string;
+        ? string.replace(reUnescapedHtml, escapeHtmlChar)
+        : string;
   }
 
   /**
@@ -9751,8 +9782,8 @@ if(_global.BI.prepares == null) {
    */
   function max(array) {
     return (array && array.length)
-      ? baseExtremum(array, identity, baseGt)
-      : undefined;
+        ? baseExtremum(array, identity, baseGt)
+        : undefined;
   }
 
   /**
@@ -9775,8 +9806,8 @@ if(_global.BI.prepares == null) {
    */
   function min(array) {
     return (array && array.length)
-      ? baseExtremum(array, identity, baseLt)
-      : undefined;
+        ? baseExtremum(array, identity, baseLt)
+        : undefined;
   }
 
   /*------------------------------------------------------------------------*/
@@ -9800,6 +9831,7 @@ if(_global.BI.prepares == null) {
   lodash.filter = filter;
   lodash.flatten = flatten;
   lodash.flattenDeep = flattenDeep;
+  lodash.groupBy = groupBy;
   lodash.initial = initial;
   lodash.intersection = intersection;
   lodash.invert = invert;
@@ -9921,8 +9953,8 @@ if(_global.BI.prepares == null) {
       n = n === undefined ? 1 : nativeMax(toInteger(n), 0);
 
       var result = (this.__filtered__ && !index)
-        ? new LazyWrapper(this)
-        : this.clone();
+          ? new LazyWrapper(this)
+          : this.clone();
 
       if (result.__filtered__) {
         result.__takeCount__ = nativeMin(n, result.__takeCount__);
@@ -11053,112 +11085,14 @@ if (!_global.BI) {
         },
 
         /**
-         * 对字符串进行加密 {@link #decrypt}
-         * @static
-         * @param str 原始字符�?
-         * @param keyt 密钥
-         * @returns {String} 加密后的字符�?
+         * 通用加密方法
          */
-        encrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
+        encrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesEncrypt(text, key);
             }
-            str = escape(str);
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (keyt == null || keyt.length <= 0) {
-                alert("Please enter a password with which to encrypt the message.");
-                return null;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var mult = parseInt(prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4) + prand.charAt(sPos * 5));
-
-            var incr = Math.ceil(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            if (mult < 2) {
-                alert("Algorithm cannot find a suitable hash. Please choose a different password. \nPossible considerations are to choose a more complex or longer password.");
-                return null;
-            }
-            //        var salt = Math.round(Math.random() * 1000000000) % 100000000;
-            var salt = 101;
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10)) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i++) {
-                enc_chr = parseInt(str.charCodeAt(i) ^ Math.floor((prand / modu) * 255));
-                if (enc_chr < 16) {
-                    enc_str += "0" + enc_chr.toString(16);
-                } else {
-                    enc_str += enc_chr.toString(16);
-                }
-                prand = (mult * prand + incr) % modu;
-            }
-            salt = salt.toString(16);
-            while (salt.length < 8) {
-                salt = "0" + salt;
-            }
-            enc_str += salt;
-            return enc_str;
-        },
-
-        /**
-         * 对加密后的字符串解密 {@link #encrypt}
-         * @static
-         * @param str 加密过的字符�?
-         * @param keyt 密钥
-         * @returns {String} 解密后的字符�?
-         */
-        decrypt: function (str, keyt) {
-            if (str == "") {
-                return "";
-            }
-            if (!keyt || keyt == "") {
-                keyt = "655";
-            }
-            keyt = escape(keyt);
-            if (str == null || str.length < 8) {
-                return;
-            }
-            if (keyt == null || keyt.length <= 0) {
-                return;
-            }
-            var prand = "";
-            for (var i = 0; i < keyt.length; i++) {
-                prand += keyt.charCodeAt(i).toString();
-            }
-            var sPos = Math.floor(prand.length / 5);
-            var tempmult = prand.charAt(sPos) + prand.charAt(sPos * 2) + prand.charAt(sPos * 3) + prand.charAt(sPos * 4);
-            if (sPos * 5 < prand.length) {
-                tempmult += prand.charAt(sPos * 5);
-            }
-            var mult = parseInt(tempmult);
-            var incr = Math.round(keyt.length / 2);
-            var modu = Math.pow(2, 31) - 1;
-            var salt = parseInt(str.substring(str.length - 8, str.length), 16);
-            str = str.substring(0, str.length - 8);
-            prand += salt;
-            while (prand.length > 10) {
-                prand = (parseInt(prand.substring(0, 10), 10) + parseInt(prand.substring(10, prand.length), 10)).toString();
-            }
-            prand = (mult * prand + incr) % modu;
-            var enc_chr = "";
-            var enc_str = "";
-            for (var i = 0; i < str.length; i += 2) {
-                enc_chr = parseInt(parseInt(str.substring(i, i + 2), 16) ^ Math.floor((prand / modu) * 255));
-                enc_str += String.fromCharCode(enc_chr);
-                prand = (mult * prand + incr) % modu;
-            }
-            return unescape(enc_str);
         },
 
         /**
@@ -12294,6 +12228,2336 @@ if (!_global.BI) {
     };
 
 })();!(function () {
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    /**
+     * CryptoJS core components.
+     */
+    BI.CRYPT_TYPE = BI.CRYPT_TYPE || {};
+    BI.CRYPT_TYPE.AES = "aes";
+
+    var CryptoJS = CryptoJS || (function (Math, undefined) {
+        /**
+         * CryptoJS namespace.
+         */
+        var C = {};
+
+        /**
+         * Library namespace.
+         */
+        var C_lib = C.lib = {};
+
+        /**
+         * Base object for prototypal inheritance.
+         */
+        var Base = C_lib.Base = (function () {
+            function F () {
+            }
+
+            return {
+                /**
+                 * Creates a new object that inherits from this object.
+                 *
+                 * @param {Object} overrides Properties to copy into the new object.
+                 *
+                 * @return {Object} The new object.
+                 *
+                 * @static
+                 *
+                 * @example
+                 *
+                 *     var MyType = CryptoJS.lib.Base.extend({
+                 *         field: 'value',
+                 *
+                 *         method: function () {
+                 *         }
+                 *     });
+                 */
+                extend: function (overrides) {
+                    // Spawn
+                    F.prototype = this;
+                    var subtype = new F();
+
+                    // Augment
+                    if (overrides) {
+                        subtype.mixIn(overrides);
+                    }
+
+                    // Create default initializer
+                    if (!subtype.hasOwnProperty('init')) {
+                        subtype.init = function () {
+                            subtype.$super.init.apply(this, arguments);
+                        };
+                    }
+
+                    // Initializer's prototype is the subtype object
+                    subtype.init.prototype = subtype;
+
+                    // Reference supertype
+                    subtype.$super = this;
+
+                    return subtype;
+                },
+
+                /**
+                 * Extends this object and runs the init method.
+                 * Arguments to create() will be passed to init().
+                 *
+                 * @return {Object} The new object.
+                 *
+                 * @static
+                 *
+                 * @example
+                 *
+                 *     var instance = MyType.create();
+                 */
+                create: function () {
+                    var instance = this.extend();
+                    instance.init.apply(instance, arguments);
+
+                    return instance;
+                },
+
+                /**
+                 * Initializes a newly created object.
+                 * Override this method to add some logic when your objects are created.
+                 *
+                 * @example
+                 *
+                 *     var MyType = CryptoJS.lib.Base.extend({
+                 *         init: function () {
+                 *             // ...
+                 *         }
+                 *     });
+                 */
+                init: function () {
+                },
+
+                /**
+                 * Copies properties into this object.
+                 *
+                 * @param {Object} properties The properties to mix in.
+                 *
+                 * @example
+                 *
+                 *     MyType.mixIn({
+                 *         field: 'value'
+                 *     });
+                 */
+                mixIn: function (properties) {
+                    for (var propertyName in properties) {
+                        if (properties.hasOwnProperty(propertyName)) {
+                            this[propertyName] = properties[propertyName];
+                        }
+                    }
+
+                    // IE won't copy toString using the loop above
+                    if (properties.hasOwnProperty('toString')) {
+                        this.toString = properties.toString;
+                    }
+                },
+
+                /**
+                 * Creates a copy of this object.
+                 *
+                 * @return {Object} The clone.
+                 *
+                 * @example
+                 *
+                 *     var clone = instance.clone();
+                 */
+                clone: function () {
+                    return this.init.prototype.extend(this);
+                }
+            };
+        }());
+
+        /**
+         * An array of 32-bit words.
+         *
+         * @property {Array} words The array of 32-bit words.
+         * @property {number} sigBytes The number of significant bytes in this word array.
+         */
+        var WordArray = C_lib.WordArray = Base.extend({
+            /**
+             * Initializes a newly created word array.
+             *
+             * @param {Array} words (Optional) An array of 32-bit words.
+             * @param {number} sigBytes (Optional) The number of significant bytes in the words.
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.lib.WordArray.create();
+             *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607]);
+             *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607], 6);
+             */
+            init: function (words, sigBytes) {
+                words = this.words = words || [];
+
+                if (sigBytes != undefined) {
+                    this.sigBytes = sigBytes;
+                } else {
+                    this.sigBytes = words.length * 4;
+                }
+            },
+
+            /**
+             * Converts this word array to a string.
+             *
+             * @param {Encoder} encoder (Optional) The encoding strategy to use. Default: CryptoJS.enc.Hex
+             *
+             * @return {string} The stringified word array.
+             *
+             * @example
+             *
+             *     var string = wordArray + '';
+             *     var string = wordArray.toString();
+             *     var string = wordArray.toString(CryptoJS.enc.Utf8);
+             */
+            toString: function (encoder) {
+                return (encoder || Hex).stringify(this);
+            },
+
+            /**
+             * Concatenates a word array to this word array.
+             *
+             * @param {WordArray} wordArray The word array to append.
+             *
+             * @return {WordArray} This word array.
+             *
+             * @example
+             *
+             *     wordArray1.concat(wordArray2);
+             */
+            concat: function (wordArray) {
+                // Shortcuts
+                var thisWords = this.words;
+                var thatWords = wordArray.words;
+                var thisSigBytes = this.sigBytes;
+                var thatSigBytes = wordArray.sigBytes;
+
+                // Clamp excess bits
+                this.clamp();
+
+                // Concat
+                if (thisSigBytes % 4) {
+                    // Copy one byte at a time
+                    for (var i = 0; i < thatSigBytes; i++) {
+                        var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                        thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
+                    }
+                } else if (thatWords.length > 0xffff) {
+                    // Copy one word at a time
+                    for (var i = 0; i < thatSigBytes; i += 4) {
+                        thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
+                    }
+                } else {
+                    // Copy all words at once
+                    thisWords.push.apply(thisWords, thatWords);
+                }
+                this.sigBytes += thatSigBytes;
+
+                // Chainable
+                return this;
+            },
+
+            /**
+             * Removes insignificant bits.
+             *
+             * @example
+             *
+             *     wordArray.clamp();
+             */
+            clamp: function () {
+                // Shortcuts
+                var words = this.words;
+                var sigBytes = this.sigBytes;
+
+                // Clamp
+                words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
+                words.length = Math.ceil(sigBytes / 4);
+            },
+
+            /**
+             * Creates a copy of this word array.
+             *
+             * @return {WordArray} The clone.
+             *
+             * @example
+             *
+             *     var clone = wordArray.clone();
+             */
+            clone: function () {
+                var clone = Base.clone.call(this);
+                clone.words = this.words.slice(0);
+
+                return clone;
+            },
+
+            /**
+             * Creates a word array filled with random bytes.
+             *
+             * @param {number} nBytes The number of random bytes to generate.
+             *
+             * @return {WordArray} The random word array.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.lib.WordArray.random(16);
+             */
+            random: function (nBytes) {
+                var words = [];
+                for (var i = 0; i < nBytes; i += 4) {
+                    words.push((Math.random() * 0x100000000) | 0);
+                }
+
+                return new WordArray.init(words, nBytes);
+            }
+        });
+
+        /**
+         * Encoder namespace.
+         */
+        var C_enc = C.enc = {};
+
+        /**
+         * Hex encoding strategy.
+         */
+        var Hex = C_enc.Hex = {
+            /**
+             * Converts a word array to a hex string.
+             *
+             * @param {WordArray} wordArray The word array.
+             *
+             * @return {string} The hex string.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var hexString = CryptoJS.enc.Hex.stringify(wordArray);
+             */
+            stringify: function (wordArray) {
+                // Shortcuts
+                var words = wordArray.words;
+                var sigBytes = wordArray.sigBytes;
+
+                // Convert
+                var hexChars = [];
+                for (var i = 0; i < sigBytes; i++) {
+                    var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                    hexChars.push((bite >>> 4).toString(16));
+                    hexChars.push((bite & 0x0f).toString(16));
+                }
+
+                return hexChars.join('');
+            },
+
+            /**
+             * Converts a hex string to a word array.
+             *
+             * @param {string} hexStr The hex string.
+             *
+             * @return {WordArray} The word array.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.enc.Hex.parse(hexString);
+             */
+            parse: function (hexStr) {
+                // Shortcut
+                var hexStrLength = hexStr.length;
+
+                // Convert
+                var words = [];
+                for (var i = 0; i < hexStrLength; i += 2) {
+                    words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
+                }
+
+                return new WordArray.init(words, hexStrLength / 2);
+            }
+        };
+
+        /**
+         * Latin1 encoding strategy.
+         */
+        var Latin1 = C_enc.Latin1 = {
+            /**
+             * Converts a word array to a Latin1 string.
+             *
+             * @param {WordArray} wordArray The word array.
+             *
+             * @return {string} The Latin1 string.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var latin1String = CryptoJS.enc.Latin1.stringify(wordArray);
+             */
+            stringify: function (wordArray) {
+                // Shortcuts
+                var words = wordArray.words;
+                var sigBytes = wordArray.sigBytes;
+
+                // Convert
+                var latin1Chars = [];
+                for (var i = 0; i < sigBytes; i++) {
+                    var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                    latin1Chars.push(String.fromCharCode(bite));
+                }
+
+                return latin1Chars.join('');
+            },
+
+            /**
+             * Converts a Latin1 string to a word array.
+             *
+             * @param {string} latin1Str The Latin1 string.
+             *
+             * @return {WordArray} The word array.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.enc.Latin1.parse(latin1String);
+             */
+            parse: function (latin1Str) {
+                // Shortcut
+                var latin1StrLength = latin1Str.length;
+
+                // Convert
+                var words = [];
+                for (var i = 0; i < latin1StrLength; i++) {
+                    words[i >>> 2] |= (latin1Str.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+                }
+
+                return new WordArray.init(words, latin1StrLength);
+            }
+        };
+
+        /**
+         * UTF-8 encoding strategy.
+         */
+        var Utf8 = C_enc.Utf8 = {
+            /**
+             * Converts a word array to a UTF-8 string.
+             *
+             * @param {WordArray} wordArray The word array.
+             *
+             * @return {string} The UTF-8 string.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var utf8String = CryptoJS.enc.Utf8.stringify(wordArray);
+             */
+            stringify: function (wordArray) {
+                try {
+                    return decodeURIComponent(escape(Latin1.stringify(wordArray)));
+                } catch (e) {
+                    throw new Error('Malformed UTF-8 data');
+                }
+            },
+
+            /**
+             * Converts a UTF-8 string to a word array.
+             *
+             * @param {string} utf8Str The UTF-8 string.
+             *
+             * @return {WordArray} The word array.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.enc.Utf8.parse(utf8String);
+             */
+            parse: function (utf8Str) {
+                return Latin1.parse(unescape(encodeURIComponent(utf8Str)));
+            }
+        };
+
+        /**
+         * Abstract buffered block algorithm template.
+         *
+         * The property blockSize must be implemented in a concrete subtype.
+         *
+         * @property {number} _minBufferSize The number of blocks that should be kept unprocessed in the buffer. Default: 0
+         */
+        var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm = Base.extend({
+            /**
+             * Resets this block algorithm's data buffer to its initial state.
+             *
+             * @example
+             *
+             *     bufferedBlockAlgorithm.reset();
+             */
+            reset: function () {
+                // Initial values
+                this._data = new WordArray.init();
+                this._nDataBytes = 0;
+            },
+
+            /**
+             * Adds new data to this block algorithm's buffer.
+             *
+             * @param {WordArray|string} data The data to append. Strings are converted to a WordArray using UTF-8.
+             *
+             * @example
+             *
+             *     bufferedBlockAlgorithm._append('data');
+             *     bufferedBlockAlgorithm._append(wordArray);
+             */
+            _append: function (data) {
+                // Convert string to WordArray, else assume WordArray already
+                if (typeof data == 'string') {
+                    data = Utf8.parse(data);
+                }
+
+                // Append
+                this._data.concat(data);
+                this._nDataBytes += data.sigBytes;
+            },
+
+            /**
+             * Processes available data blocks.
+             *
+             * This method invokes _doProcessBlock(offset), which must be implemented by a concrete subtype.
+             *
+             * @param {boolean} doFlush Whether all blocks and partial blocks should be processed.
+             *
+             * @return {WordArray} The processed data.
+             *
+             * @example
+             *
+             *     var processedData = bufferedBlockAlgorithm._process();
+             *     var processedData = bufferedBlockAlgorithm._process(!!'flush');
+             */
+            _process: function (doFlush) {
+                // Shortcuts
+                var data = this._data;
+                var dataWords = data.words;
+                var dataSigBytes = data.sigBytes;
+                var blockSize = this.blockSize;
+                var blockSizeBytes = blockSize * 4;
+
+                // Count blocks ready
+                var nBlocksReady = dataSigBytes / blockSizeBytes;
+                if (doFlush) {
+                    // Round up to include partial blocks
+                    nBlocksReady = Math.ceil(nBlocksReady);
+                } else {
+                    // Round down to include only full blocks,
+                    // less the number of blocks that must remain in the buffer
+                    nBlocksReady = Math.max((nBlocksReady | 0) - this._minBufferSize, 0);
+                }
+
+                // Count words ready
+                var nWordsReady = nBlocksReady * blockSize;
+
+                // Count bytes ready
+                var nBytesReady = Math.min(nWordsReady * 4, dataSigBytes);
+
+                // Process blocks
+                if (nWordsReady) {
+                    for (var offset = 0; offset < nWordsReady; offset += blockSize) {
+                        // Perform concrete-algorithm logic
+                        this._doProcessBlock(dataWords, offset);
+                    }
+
+                    // Remove processed words
+                    var processedWords = dataWords.splice(0, nWordsReady);
+                    data.sigBytes -= nBytesReady;
+                }
+
+                // Return processed words
+                return new WordArray.init(processedWords, nBytesReady);
+            },
+
+            /**
+             * Creates a copy of this object.
+             *
+             * @return {Object} The clone.
+             *
+             * @example
+             *
+             *     var clone = bufferedBlockAlgorithm.clone();
+             */
+            clone: function () {
+                var clone = Base.clone.call(this);
+                clone._data = this._data.clone();
+
+                return clone;
+            },
+
+            _minBufferSize: 0
+        });
+
+        /**
+         * Abstract hasher template.
+         *
+         * @property {number} blockSize The number of 32-bit words this hasher operates on. Default: 16 (512 bits)
+         */
+        var Hasher = C_lib.Hasher = BufferedBlockAlgorithm.extend({
+            /**
+             * Configuration options.
+             */
+            cfg: Base.extend(),
+
+            /**
+             * Initializes a newly created hasher.
+             *
+             * @param {Object} cfg (Optional) The configuration options to use for this hash computation.
+             *
+             * @example
+             *
+             *     var hasher = CryptoJS.algo.SHA256.create();
+             */
+            init: function (cfg) {
+                // Apply config defaults
+                this.cfg = this.cfg.extend(cfg);
+
+                // Set initial values
+                this.reset();
+            },
+
+            /**
+             * Resets this hasher to its initial state.
+             *
+             * @example
+             *
+             *     hasher.reset();
+             */
+            reset: function () {
+                // Reset data buffer
+                BufferedBlockAlgorithm.reset.call(this);
+
+                // Perform concrete-hasher logic
+                this._doReset();
+            },
+
+            /**
+             * Updates this hasher with a message.
+             *
+             * @param {WordArray|string} messageUpdate The message to append.
+             *
+             * @return {Hasher} This hasher.
+             *
+             * @example
+             *
+             *     hasher.update('message');
+             *     hasher.update(wordArray);
+             */
+            update: function (messageUpdate) {
+                // Append
+                this._append(messageUpdate);
+
+                // Update the hash
+                this._process();
+
+                // Chainable
+                return this;
+            },
+
+            /**
+             * Finalizes the hash computation.
+             * Note that the finalize operation is effectively a destructive, read-once operation.
+             *
+             * @param {WordArray|string} messageUpdate (Optional) A final message update.
+             *
+             * @return {WordArray} The hash.
+             *
+             * @example
+             *
+             *     var hash = hasher.finalize();
+             *     var hash = hasher.finalize('message');
+             *     var hash = hasher.finalize(wordArray);
+             */
+            finalize: function (messageUpdate) {
+                // Final message update
+                if (messageUpdate) {
+                    this._append(messageUpdate);
+                }
+
+                // Perform concrete-hasher logic
+                var hash = this._doFinalize();
+
+                return hash;
+            },
+
+            blockSize: 512 / 32,
+
+            /**
+             * Creates a shortcut function to a hasher's object interface.
+             *
+             * @param {Hasher} hasher The hasher to create a helper for.
+             *
+             * @return {Function} The shortcut function.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var SHA256 = CryptoJS.lib.Hasher._createHelper(CryptoJS.algo.SHA256);
+             */
+            _createHelper: function (hasher) {
+                return function (message, cfg) {
+                    return new hasher.init(cfg).finalize(message);
+                };
+            },
+
+            /**
+             * Creates a shortcut function to the HMAC's object interface.
+             *
+             * @param {Hasher} hasher The hasher to use in this HMAC helper.
+             *
+             * @return {Function} The shortcut function.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var HmacSHA256 = CryptoJS.lib.Hasher._createHmacHelper(CryptoJS.algo.SHA256);
+             */
+            _createHmacHelper: function (hasher) {
+                return function (message, key) {
+                    return new C_algo.HMAC.init(hasher, key).finalize(message);
+                };
+            }
+        });
+
+        /**
+         * Algorithm namespace.
+         */
+        var C_algo = C.algo = {};
+
+        return C;
+    }(Math));
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    (function () {
+        // Shortcuts
+        var C = CryptoJS;
+        var C_lib = C.lib;
+        var WordArray = C_lib.WordArray;
+        var C_enc = C.enc;
+
+        /**
+         * Base64 encoding strategy.
+         */
+        var Base64 = C_enc.Base64 = {
+            /**
+             * Converts a word array to a Base64 string.
+             *
+             * @param {WordArray} wordArray The word array.
+             *
+             * @return {string} The Base64 string.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var base64String = CryptoJS.enc.Base64.stringify(wordArray);
+             */
+            stringify: function (wordArray) {
+                // Shortcuts
+                var words = wordArray.words;
+                var sigBytes = wordArray.sigBytes;
+                var map = this._map;
+
+                // Clamp excess bits
+                wordArray.clamp();
+
+                // Convert
+                var base64Chars = [];
+                for (var i = 0; i < sigBytes; i += 3) {
+                    var byte1 = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                    var byte2 = (words[(i + 1) >>> 2] >>> (24 - ((i + 1) % 4) * 8)) & 0xff;
+                    var byte3 = (words[(i + 2) >>> 2] >>> (24 - ((i + 2) % 4) * 8)) & 0xff;
+
+                    var triplet = (byte1 << 16) | (byte2 << 8) | byte3;
+
+                    for (var j = 0; (j < 4) && (i + j * 0.75 < sigBytes); j++) {
+                        base64Chars.push(map.charAt((triplet >>> (6 * (3 - j))) & 0x3f));
+                    }
+                }
+
+                // Add padding
+                var paddingChar = map.charAt(64);
+                if (paddingChar) {
+                    while (base64Chars.length % 4) {
+                        base64Chars.push(paddingChar);
+                    }
+                }
+
+                return base64Chars.join('');
+            },
+
+            /**
+             * Converts a Base64 string to a word array.
+             *
+             * @param {string} base64Str The Base64 string.
+             *
+             * @return {WordArray} The word array.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
+             */
+            parse: function (base64Str) {
+                // Shortcuts
+                var base64StrLength = base64Str.length;
+                var map = this._map;
+
+                // Ignore padding
+                var paddingChar = map.charAt(64);
+                if (paddingChar) {
+                    var paddingIndex = base64Str.indexOf(paddingChar);
+                    if (paddingIndex != -1) {
+                        base64StrLength = paddingIndex;
+                    }
+                }
+
+                // Convert
+                var words = [];
+                var nBytes = 0;
+                for (var i = 0; i < base64StrLength; i++) {
+                    if (i % 4) {
+                        var bits1 = map.indexOf(base64Str.charAt(i - 1)) << ((i % 4) * 2);
+                        var bits2 = map.indexOf(base64Str.charAt(i)) >>> (6 - (i % 4) * 2);
+                        words[nBytes >>> 2] |= (bits1 | bits2) << (24 - (nBytes % 4) * 8);
+                        nBytes++;
+                    }
+                }
+
+                return WordArray.create(words, nBytes);
+            },
+
+            _map: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+        };
+    }());
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    (function (Math) {
+        // Shortcuts
+        var C = CryptoJS;
+        var C_lib = C.lib;
+        var WordArray = C_lib.WordArray;
+        var Hasher = C_lib.Hasher;
+        var C_algo = C.algo;
+
+        // Constants table
+        var T = [];
+
+        // Compute constants
+        (function () {
+            for (var i = 0; i < 64; i++) {
+                T[i] = (Math.abs(Math.sin(i + 1)) * 0x100000000) | 0;
+            }
+        }());
+
+        /**
+         * MD5 hash algorithm.
+         */
+        var MD5 = C_algo.MD5 = Hasher.extend({
+            _doReset: function () {
+                this._hash = new WordArray.init([
+                    0x67452301, 0xefcdab89,
+                    0x98badcfe, 0x10325476
+                ]);
+            },
+
+            _doProcessBlock: function (M, offset) {
+                // Swap endian
+                for (var i = 0; i < 16; i++) {
+                    // Shortcuts
+                    var offset_i = offset + i;
+                    var M_offset_i = M[offset_i];
+
+                    M[offset_i] = (
+                        (((M_offset_i << 8) | (M_offset_i >>> 24)) & 0x00ff00ff) |
+                        (((M_offset_i << 24) | (M_offset_i >>> 8)) & 0xff00ff00)
+                    );
+                }
+
+                // Shortcuts
+                var H = this._hash.words;
+
+                var M_offset_0 = M[offset + 0];
+                var M_offset_1 = M[offset + 1];
+                var M_offset_2 = M[offset + 2];
+                var M_offset_3 = M[offset + 3];
+                var M_offset_4 = M[offset + 4];
+                var M_offset_5 = M[offset + 5];
+                var M_offset_6 = M[offset + 6];
+                var M_offset_7 = M[offset + 7];
+                var M_offset_8 = M[offset + 8];
+                var M_offset_9 = M[offset + 9];
+                var M_offset_10 = M[offset + 10];
+                var M_offset_11 = M[offset + 11];
+                var M_offset_12 = M[offset + 12];
+                var M_offset_13 = M[offset + 13];
+                var M_offset_14 = M[offset + 14];
+                var M_offset_15 = M[offset + 15];
+
+                // Working varialbes
+                var a = H[0];
+                var b = H[1];
+                var c = H[2];
+                var d = H[3];
+
+                // Computation
+                a = FF(a, b, c, d, M_offset_0, 7, T[0]);
+                d = FF(d, a, b, c, M_offset_1, 12, T[1]);
+                c = FF(c, d, a, b, M_offset_2, 17, T[2]);
+                b = FF(b, c, d, a, M_offset_3, 22, T[3]);
+                a = FF(a, b, c, d, M_offset_4, 7, T[4]);
+                d = FF(d, a, b, c, M_offset_5, 12, T[5]);
+                c = FF(c, d, a, b, M_offset_6, 17, T[6]);
+                b = FF(b, c, d, a, M_offset_7, 22, T[7]);
+                a = FF(a, b, c, d, M_offset_8, 7, T[8]);
+                d = FF(d, a, b, c, M_offset_9, 12, T[9]);
+                c = FF(c, d, a, b, M_offset_10, 17, T[10]);
+                b = FF(b, c, d, a, M_offset_11, 22, T[11]);
+                a = FF(a, b, c, d, M_offset_12, 7, T[12]);
+                d = FF(d, a, b, c, M_offset_13, 12, T[13]);
+                c = FF(c, d, a, b, M_offset_14, 17, T[14]);
+                b = FF(b, c, d, a, M_offset_15, 22, T[15]);
+
+                a = GG(a, b, c, d, M_offset_1, 5, T[16]);
+                d = GG(d, a, b, c, M_offset_6, 9, T[17]);
+                c = GG(c, d, a, b, M_offset_11, 14, T[18]);
+                b = GG(b, c, d, a, M_offset_0, 20, T[19]);
+                a = GG(a, b, c, d, M_offset_5, 5, T[20]);
+                d = GG(d, a, b, c, M_offset_10, 9, T[21]);
+                c = GG(c, d, a, b, M_offset_15, 14, T[22]);
+                b = GG(b, c, d, a, M_offset_4, 20, T[23]);
+                a = GG(a, b, c, d, M_offset_9, 5, T[24]);
+                d = GG(d, a, b, c, M_offset_14, 9, T[25]);
+                c = GG(c, d, a, b, M_offset_3, 14, T[26]);
+                b = GG(b, c, d, a, M_offset_8, 20, T[27]);
+                a = GG(a, b, c, d, M_offset_13, 5, T[28]);
+                d = GG(d, a, b, c, M_offset_2, 9, T[29]);
+                c = GG(c, d, a, b, M_offset_7, 14, T[30]);
+                b = GG(b, c, d, a, M_offset_12, 20, T[31]);
+
+                a = HH(a, b, c, d, M_offset_5, 4, T[32]);
+                d = HH(d, a, b, c, M_offset_8, 11, T[33]);
+                c = HH(c, d, a, b, M_offset_11, 16, T[34]);
+                b = HH(b, c, d, a, M_offset_14, 23, T[35]);
+                a = HH(a, b, c, d, M_offset_1, 4, T[36]);
+                d = HH(d, a, b, c, M_offset_4, 11, T[37]);
+                c = HH(c, d, a, b, M_offset_7, 16, T[38]);
+                b = HH(b, c, d, a, M_offset_10, 23, T[39]);
+                a = HH(a, b, c, d, M_offset_13, 4, T[40]);
+                d = HH(d, a, b, c, M_offset_0, 11, T[41]);
+                c = HH(c, d, a, b, M_offset_3, 16, T[42]);
+                b = HH(b, c, d, a, M_offset_6, 23, T[43]);
+                a = HH(a, b, c, d, M_offset_9, 4, T[44]);
+                d = HH(d, a, b, c, M_offset_12, 11, T[45]);
+                c = HH(c, d, a, b, M_offset_15, 16, T[46]);
+                b = HH(b, c, d, a, M_offset_2, 23, T[47]);
+
+                a = II(a, b, c, d, M_offset_0, 6, T[48]);
+                d = II(d, a, b, c, M_offset_7, 10, T[49]);
+                c = II(c, d, a, b, M_offset_14, 15, T[50]);
+                b = II(b, c, d, a, M_offset_5, 21, T[51]);
+                a = II(a, b, c, d, M_offset_12, 6, T[52]);
+                d = II(d, a, b, c, M_offset_3, 10, T[53]);
+                c = II(c, d, a, b, M_offset_10, 15, T[54]);
+                b = II(b, c, d, a, M_offset_1, 21, T[55]);
+                a = II(a, b, c, d, M_offset_8, 6, T[56]);
+                d = II(d, a, b, c, M_offset_15, 10, T[57]);
+                c = II(c, d, a, b, M_offset_6, 15, T[58]);
+                b = II(b, c, d, a, M_offset_13, 21, T[59]);
+                a = II(a, b, c, d, M_offset_4, 6, T[60]);
+                d = II(d, a, b, c, M_offset_11, 10, T[61]);
+                c = II(c, d, a, b, M_offset_2, 15, T[62]);
+                b = II(b, c, d, a, M_offset_9, 21, T[63]);
+
+                // Intermediate hash value
+                H[0] = (H[0] + a) | 0;
+                H[1] = (H[1] + b) | 0;
+                H[2] = (H[2] + c) | 0;
+                H[3] = (H[3] + d) | 0;
+            },
+
+            _doFinalize: function () {
+                // Shortcuts
+                var data = this._data;
+                var dataWords = data.words;
+
+                var nBitsTotal = this._nDataBytes * 8;
+                var nBitsLeft = data.sigBytes * 8;
+
+                // Add padding
+                dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+
+                var nBitsTotalH = Math.floor(nBitsTotal / 0x100000000);
+                var nBitsTotalL = nBitsTotal;
+                dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = (
+                    (((nBitsTotalH << 8) | (nBitsTotalH >>> 24)) & 0x00ff00ff) |
+                    (((nBitsTotalH << 24) | (nBitsTotalH >>> 8)) & 0xff00ff00)
+                );
+                dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = (
+                    (((nBitsTotalL << 8) | (nBitsTotalL >>> 24)) & 0x00ff00ff) |
+                    (((nBitsTotalL << 24) | (nBitsTotalL >>> 8)) & 0xff00ff00)
+                );
+
+                data.sigBytes = (dataWords.length + 1) * 4;
+
+                // Hash final blocks
+                this._process();
+
+                // Shortcuts
+                var hash = this._hash;
+                var H = hash.words;
+
+                // Swap endian
+                for (var i = 0; i < 4; i++) {
+                    // Shortcut
+                    var H_i = H[i];
+
+                    H[i] = (((H_i << 8) | (H_i >>> 24)) & 0x00ff00ff) |
+                        (((H_i << 24) | (H_i >>> 8)) & 0xff00ff00);
+                }
+
+                // Return final computed hash
+                return hash;
+            },
+
+            clone: function () {
+                var clone = Hasher.clone.call(this);
+                clone._hash = this._hash.clone();
+
+                return clone;
+            }
+        });
+
+        function FF (a, b, c, d, x, s, t) {
+            var n = a + ((b & c) | (~b & d)) + x + t;
+            return ((n << s) | (n >>> (32 - s))) + b;
+        }
+
+        function GG (a, b, c, d, x, s, t) {
+            var n = a + ((b & d) | (c & ~d)) + x + t;
+            return ((n << s) | (n >>> (32 - s))) + b;
+        }
+
+        function HH (a, b, c, d, x, s, t) {
+            var n = a + (b ^ c ^ d) + x + t;
+            return ((n << s) | (n >>> (32 - s))) + b;
+        }
+
+        function II (a, b, c, d, x, s, t) {
+            var n = a + (c ^ (b | ~d)) + x + t;
+            return ((n << s) | (n >>> (32 - s))) + b;
+        }
+
+        /**
+         * Shortcut function to the hasher's object interface.
+         *
+         * @param {WordArray|string} message The message to hash.
+         *
+         * @return {WordArray} The hash.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var hash = CryptoJS.MD5('message');
+         *     var hash = CryptoJS.MD5(wordArray);
+         */
+        C.MD5 = Hasher._createHelper(MD5);
+
+        /**
+         * Shortcut function to the HMAC's object interface.
+         *
+         * @param {WordArray|string} message The message to hash.
+         * @param {WordArray|string} key The secret key.
+         *
+         * @return {WordArray} The HMAC.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var hmac = CryptoJS.HmacMD5(message, key);
+         */
+        C.HmacMD5 = Hasher._createHmacHelper(MD5);
+    }(Math));
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    (function () {
+        // Shortcuts
+        var C = CryptoJS;
+        var C_lib = C.lib;
+        var Base = C_lib.Base;
+        var WordArray = C_lib.WordArray;
+        var C_algo = C.algo;
+        var MD5 = C_algo.MD5;
+
+        /**
+         * This key derivation function is meant to conform with EVP_BytesToKey.
+         * www.openssl.org/docs/crypto/EVP_BytesToKey.html
+         */
+        var EvpKDF = C_algo.EvpKDF = Base.extend({
+            /**
+             * Configuration options.
+             *
+             * @property {number} keySize The key size in words to generate. Default: 4 (128 bits)
+             * @property {Hasher} hasher The hash algorithm to use. Default: MD5
+             * @property {number} iterations The number of iterations to perform. Default: 1
+             */
+            cfg: Base.extend({
+                keySize: 128 / 32,
+                hasher: MD5,
+                iterations: 1
+            }),
+
+            /**
+             * Initializes a newly created key derivation function.
+             *
+             * @param {Object} cfg (Optional) The configuration options to use for the derivation.
+             *
+             * @example
+             *
+             *     var kdf = CryptoJS.algo.EvpKDF.create();
+             *     var kdf = CryptoJS.algo.EvpKDF.create({ keySize: 8 });
+             *     var kdf = CryptoJS.algo.EvpKDF.create({ keySize: 8, iterations: 1000 });
+             */
+            init: function (cfg) {
+                this.cfg = this.cfg.extend(cfg);
+            },
+
+            /**
+             * Derives a key from a password.
+             *
+             * @param {WordArray|string} password The password.
+             * @param {WordArray|string} salt A salt.
+             *
+             * @return {WordArray} The derived key.
+             *
+             * @example
+             *
+             *     var key = kdf.compute(password, salt);
+             */
+            compute: function (password, salt) {
+                // Shortcut
+                var cfg = this.cfg;
+
+                // Init hasher
+                var hasher = cfg.hasher.create();
+
+                // Initial values
+                var derivedKey = WordArray.create();
+
+                // Shortcuts
+                var derivedKeyWords = derivedKey.words;
+                var keySize = cfg.keySize;
+                var iterations = cfg.iterations;
+
+                // Generate key
+                while (derivedKeyWords.length < keySize) {
+                    if (block) {
+                        hasher.update(block);
+                    }
+                    var block = hasher.update(password).finalize(salt);
+                    hasher.reset();
+
+                    // Iterations
+                    for (var i = 1; i < iterations; i++) {
+                        block = hasher.finalize(block);
+                        hasher.reset();
+                    }
+
+                    derivedKey.concat(block);
+                }
+                derivedKey.sigBytes = keySize * 4;
+
+                return derivedKey;
+            }
+        });
+
+        /**
+         * Derives a key from a password.
+         *
+         * @param {WordArray|string} password The password.
+         * @param {WordArray|string} salt A salt.
+         * @param {Object} cfg (Optional) The configuration options to use for this computation.
+         *
+         * @return {WordArray} The derived key.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var key = CryptoJS.EvpKDF(password, salt);
+         *     var key = CryptoJS.EvpKDF(password, salt, { keySize: 8 });
+         *     var key = CryptoJS.EvpKDF(password, salt, { keySize: 8, iterations: 1000 });
+         */
+        C.EvpKDF = function (password, salt, cfg) {
+            return EvpKDF.create(cfg).compute(password, salt);
+        };
+    }());
+
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    /**
+     * Cipher core components.
+     */
+    CryptoJS.lib.Cipher || (function (undefined) {
+        // Shortcuts
+        var C = CryptoJS;
+        var C_lib = C.lib;
+        var Base = C_lib.Base;
+        var WordArray = C_lib.WordArray;
+        var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm;
+        var C_enc = C.enc;
+        var Utf8 = C_enc.Utf8;
+        var Base64 = C_enc.Base64;
+        var C_algo = C.algo;
+        var EvpKDF = C_algo.EvpKDF;
+
+        /**
+         * Abstract base cipher template.
+         *
+         * @property {number} keySize This cipher's key size. Default: 4 (128 bits)
+         * @property {number} ivSize This cipher's IV size. Default: 4 (128 bits)
+         * @property {number} _ENC_XFORM_MODE A constant representing encryption mode.
+         * @property {number} _DEC_XFORM_MODE A constant representing decryption mode.
+         */
+        var Cipher = C_lib.Cipher = BufferedBlockAlgorithm.extend({
+            /**
+             * Configuration options.
+             *
+             * @property {WordArray} iv The IV to use for this operation.
+             */
+            cfg: Base.extend(),
+
+            /**
+             * Creates this cipher in encryption mode.
+             *
+             * @param {WordArray} key The key.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {Cipher} A cipher instance.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var cipher = CryptoJS.algo.AES.createEncryptor(keyWordArray, { iv: ivWordArray });
+             */
+            createEncryptor: function (key, cfg) {
+                return this.create(this._ENC_XFORM_MODE, key, cfg);
+            },
+
+            /**
+             * Creates this cipher in decryption mode.
+             *
+             * @param {WordArray} key The key.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {Cipher} A cipher instance.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var cipher = CryptoJS.algo.AES.createDecryptor(keyWordArray, { iv: ivWordArray });
+             */
+            createDecryptor: function (key, cfg) {
+                return this.create(this._DEC_XFORM_MODE, key, cfg);
+            },
+
+            /**
+             * Initializes a newly created cipher.
+             *
+             * @param {number} xformMode Either the encryption or decryption transormation mode constant.
+             * @param {WordArray} key The key.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @example
+             *
+             *     var cipher = CryptoJS.algo.AES.create(CryptoJS.algo.AES._ENC_XFORM_MODE, keyWordArray, { iv: ivWordArray });
+             */
+            init: function (xformMode, key, cfg) {
+                // Apply config defaults
+                this.cfg = this.cfg.extend(cfg);
+
+                // Store transform mode and key
+                this._xformMode = xformMode;
+                this._key = key;
+
+                // Set initial values
+                this.reset();
+            },
+
+            /**
+             * Resets this cipher to its initial state.
+             *
+             * @example
+             *
+             *     cipher.reset();
+             */
+            reset: function () {
+                // Reset data buffer
+                BufferedBlockAlgorithm.reset.call(this);
+
+                // Perform concrete-cipher logic
+                this._doReset();
+            },
+
+            /**
+             * Adds data to be encrypted or decrypted.
+             *
+             * @param {WordArray|string} dataUpdate The data to encrypt or decrypt.
+             *
+             * @return {WordArray} The data after processing.
+             *
+             * @example
+             *
+             *     var encrypted = cipher.process('data');
+             *     var encrypted = cipher.process(wordArray);
+             */
+            process: function (dataUpdate) {
+                // Append
+                this._append(dataUpdate);
+
+                // Process available blocks
+                return this._process();
+            },
+
+            /**
+             * Finalizes the encryption or decryption process.
+             * Note that the finalize operation is effectively a destructive, read-once operation.
+             *
+             * @param {WordArray|string} dataUpdate The final data to encrypt or decrypt.
+             *
+             * @return {WordArray} The data after final processing.
+             *
+             * @example
+             *
+             *     var encrypted = cipher.finalize();
+             *     var encrypted = cipher.finalize('data');
+             *     var encrypted = cipher.finalize(wordArray);
+             */
+            finalize: function (dataUpdate) {
+                // Final data update
+                if (dataUpdate) {
+                    this._append(dataUpdate);
+                }
+
+                // Perform concrete-cipher logic
+                var finalProcessedData = this._doFinalize();
+
+                return finalProcessedData;
+            },
+
+            keySize: 128 / 32,
+
+            ivSize: 128 / 32,
+
+            _ENC_XFORM_MODE: 1,
+
+            _DEC_XFORM_MODE: 2,
+
+            /**
+             * Creates shortcut functions to a cipher's object interface.
+             *
+             * @param {Cipher} cipher The cipher to create a helper for.
+             *
+             * @return {Object} An object with encrypt and decrypt shortcut functions.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var AES = CryptoJS.lib.Cipher._createHelper(CryptoJS.algo.AES);
+             */
+            _createHelper: (function () {
+                function selectCipherStrategy (key) {
+                    if (typeof key == 'string') {
+                        return PasswordBasedCipher;
+                    } else {
+                        return SerializableCipher;
+                    }
+                }
+
+                return function (cipher) {
+                    return {
+                        encrypt: function (message, key, cfg) {
+                            return selectCipherStrategy(key).encrypt(cipher, message, key, cfg);
+                        },
+
+                        decrypt: function (ciphertext, key, cfg) {
+                            return selectCipherStrategy(key).decrypt(cipher, ciphertext, key, cfg);
+                        }
+                    };
+                };
+            }())
+        });
+
+        /**
+         * Abstract base stream cipher template.
+         *
+         * @property {number} blockSize The number of 32-bit words this cipher operates on. Default: 1 (32 bits)
+         */
+        var StreamCipher = C_lib.StreamCipher = Cipher.extend({
+            _doFinalize: function () {
+                // Process partial blocks
+                var finalProcessedBlocks = this._process(!!'flush');
+
+                return finalProcessedBlocks;
+            },
+
+            blockSize: 1
+        });
+
+        /**
+         * Mode namespace.
+         */
+        var C_mode = C.mode = {};
+
+        /**
+         * Abstract base block cipher mode template.
+         */
+        var BlockCipherMode = C_lib.BlockCipherMode = Base.extend({
+            /**
+             * Creates this mode for encryption.
+             *
+             * @param {Cipher} cipher A block cipher instance.
+             * @param {Array} iv The IV words.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var mode = CryptoJS.mode.CBC.createEncryptor(cipher, iv.words);
+             */
+            createEncryptor: function (cipher, iv) {
+                return this.Encryptor.create(cipher, iv);
+            },
+
+            /**
+             * Creates this mode for decryption.
+             *
+             * @param {Cipher} cipher A block cipher instance.
+             * @param {Array} iv The IV words.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var mode = CryptoJS.mode.CBC.createDecryptor(cipher, iv.words);
+             */
+            createDecryptor: function (cipher, iv) {
+                return this.Decryptor.create(cipher, iv);
+            },
+
+            /**
+             * Initializes a newly created mode.
+             *
+             * @param {Cipher} cipher A block cipher instance.
+             * @param {Array} iv The IV words.
+             *
+             * @example
+             *
+             *     var mode = CryptoJS.mode.CBC.Encryptor.create(cipher, iv.words);
+             */
+            init: function (cipher, iv) {
+                this._cipher = cipher;
+                this._iv = iv;
+            }
+        });
+
+        /**
+         * Cipher Block Chaining mode.
+         */
+        var CBC = C_mode.CBC = (function () {
+            /**
+             * Abstract base CBC mode.
+             */
+            var CBC = BlockCipherMode.extend();
+
+            /**
+             * CBC encryptor.
+             */
+            CBC.Encryptor = CBC.extend({
+                /**
+                 * Processes the data block at offset.
+                 *
+                 * @param {Array} words The data words to operate on.
+                 * @param {number} offset The offset where the block starts.
+                 *
+                 * @example
+                 *
+                 *     mode.processBlock(data.words, offset);
+                 */
+                processBlock: function (words, offset) {
+                    // Shortcuts
+                    var cipher = this._cipher;
+                    var blockSize = cipher.blockSize;
+
+                    // XOR and encrypt
+                    xorBlock.call(this, words, offset, blockSize);
+                    cipher.encryptBlock(words, offset);
+
+                    // Remember this block to use with next block
+                    this._prevBlock = words.slice(offset, offset + blockSize);
+                }
+            });
+
+            /**
+             * CBC decryptor.
+             */
+            CBC.Decryptor = CBC.extend({
+                /**
+                 * Processes the data block at offset.
+                 *
+                 * @param {Array} words The data words to operate on.
+                 * @param {number} offset The offset where the block starts.
+                 *
+                 * @example
+                 *
+                 *     mode.processBlock(data.words, offset);
+                 */
+                processBlock: function (words, offset) {
+                    // Shortcuts
+                    var cipher = this._cipher;
+                    var blockSize = cipher.blockSize;
+
+                    // Remember this block to use with next block
+                    var thisBlock = words.slice(offset, offset + blockSize);
+
+                    // Decrypt and XOR
+                    cipher.decryptBlock(words, offset);
+                    xorBlock.call(this, words, offset, blockSize);
+
+                    // This block becomes the previous block
+                    this._prevBlock = thisBlock;
+                }
+            });
+
+            function xorBlock (words, offset, blockSize) {
+                // Shortcut
+                var iv = this._iv;
+
+                // Choose mixing block
+                if (iv) {
+                    var block = iv;
+
+                    // Remove IV for subsequent blocks
+                    this._iv = undefined;
+                } else {
+                    var block = this._prevBlock;
+                }
+
+                // XOR blocks
+                for (var i = 0; i < blockSize; i++) {
+                    words[offset + i] ^= block[i];
+                }
+            }
+
+            return CBC;
+        }());
+
+        /**
+         * Padding namespace.
+         */
+        var C_pad = C.pad = {};
+
+        /**
+         * PKCS #5/7 padding strategy.
+         */
+        var Pkcs7 = C_pad.Pkcs7 = {
+            /**
+             * Pads data using the algorithm defined in PKCS #5/7.
+             *
+             * @param {WordArray} data The data to pad.
+             * @param {number} blockSize The multiple that the data should be padded to.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     CryptoJS.pad.Pkcs7.pad(wordArray, 4);
+             */
+            pad: function (data, blockSize) {
+                // Shortcut
+                var blockSizeBytes = blockSize * 4;
+
+                // Count padding bytes
+                var nPaddingBytes = blockSizeBytes - data.sigBytes % blockSizeBytes;
+
+                // Create padding word
+                var paddingWord = (nPaddingBytes << 24) | (nPaddingBytes << 16) | (nPaddingBytes << 8) | nPaddingBytes;
+
+                // Create padding
+                var paddingWords = [];
+                for (var i = 0; i < nPaddingBytes; i += 4) {
+                    paddingWords.push(paddingWord);
+                }
+                var padding = WordArray.create(paddingWords, nPaddingBytes);
+
+                // Add padding
+                data.concat(padding);
+            },
+
+            /**
+             * Unpads data that had been padded using the algorithm defined in PKCS #5/7.
+             *
+             * @param {WordArray} data The data to unpad.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     CryptoJS.pad.Pkcs7.unpad(wordArray);
+             */
+            unpad: function (data) {
+                // Get number of padding bytes from last byte
+                var nPaddingBytes = data.words[(data.sigBytes - 1) >>> 2] & 0xff;
+
+                // Remove padding
+                data.sigBytes -= nPaddingBytes;
+            }
+        };
+
+        /**
+         * Abstract base block cipher template.
+         *
+         * @property {number} blockSize The number of 32-bit words this cipher operates on. Default: 4 (128 bits)
+         */
+        var BlockCipher = C_lib.BlockCipher = Cipher.extend({
+            /**
+             * Configuration options.
+             *
+             * @property {Mode} mode The block mode to use. Default: CBC
+             * @property {Padding} padding The padding strategy to use. Default: Pkcs7
+             */
+            cfg: Cipher.cfg.extend({
+                mode: CBC,
+                padding: Pkcs7
+            }),
+
+            reset: function () {
+                // Reset cipher
+                Cipher.reset.call(this);
+
+                // Shortcuts
+                var cfg = this.cfg;
+                var iv = cfg.iv;
+                var mode = cfg.mode;
+
+                // Reset block mode
+                if (this._xformMode == this._ENC_XFORM_MODE) {
+                    var modeCreator = mode.createEncryptor;
+                } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
+                    var modeCreator = mode.createDecryptor;
+
+                    // Keep at least one block in the buffer for unpadding
+                    this._minBufferSize = 1;
+                }
+                this._mode = modeCreator.call(mode, this, iv && iv.words);
+            },
+
+            _doProcessBlock: function (words, offset) {
+                this._mode.processBlock(words, offset);
+            },
+
+            _doFinalize: function () {
+                // Shortcut
+                var padding = this.cfg.padding;
+
+                // Finalize
+                if (this._xformMode == this._ENC_XFORM_MODE) {
+                    // Pad data
+                    padding.pad(this._data, this.blockSize);
+
+                    // Process final blocks
+                    var finalProcessedBlocks = this._process(!!'flush');
+                } else /* if (this._xformMode == this._DEC_XFORM_MODE) */ {
+                    // Process final blocks
+                    var finalProcessedBlocks = this._process(!!'flush');
+
+                    // Unpad data
+                    padding.unpad(finalProcessedBlocks);
+                }
+
+                return finalProcessedBlocks;
+            },
+
+            blockSize: 128 / 32
+        });
+
+        /**
+         * A collection of cipher parameters.
+         *
+         * @property {WordArray} ciphertext The raw ciphertext.
+         * @property {WordArray} key The key to this ciphertext.
+         * @property {WordArray} iv The IV used in the ciphering operation.
+         * @property {WordArray} salt The salt used with a key derivation function.
+         * @property {Cipher} algorithm The cipher algorithm.
+         * @property {Mode} mode The block mode used in the ciphering operation.
+         * @property {Padding} padding The padding scheme used in the ciphering operation.
+         * @property {number} blockSize The block size of the cipher.
+         * @property {Format} formatter The default formatting strategy to convert this cipher params object to a string.
+         */
+        var CipherParams = C_lib.CipherParams = Base.extend({
+            /**
+             * Initializes a newly created cipher params object.
+             *
+             * @param {Object} cipherParams An object with any of the possible cipher parameters.
+             *
+             * @example
+             *
+             *     var cipherParams = CryptoJS.lib.CipherParams.create({
+             *         ciphertext: ciphertextWordArray,
+             *         key: keyWordArray,
+             *         iv: ivWordArray,
+             *         salt: saltWordArray,
+             *         algorithm: CryptoJS.algo.AES,
+             *         mode: CryptoJS.mode.CBC,
+             *         padding: CryptoJS.pad.PKCS7,
+             *         blockSize: 4,
+             *         formatter: CryptoJS.format.OpenSSL
+             *     });
+             */
+            init: function (cipherParams) {
+                this.mixIn(cipherParams);
+            },
+
+            /**
+             * Converts this cipher params object to a string.
+             *
+             * @param {Format} formatter (Optional) The formatting strategy to use.
+             *
+             * @return {string} The stringified cipher params.
+             *
+             * @throws Error If neither the formatter nor the default formatter is set.
+             *
+             * @example
+             *
+             *     var string = cipherParams + '';
+             *     var string = cipherParams.toString();
+             *     var string = cipherParams.toString(CryptoJS.format.OpenSSL);
+             */
+            toString: function (formatter) {
+                return (formatter || this.formatter).stringify(this);
+            }
+        });
+
+        /**
+         * Format namespace.
+         */
+        var C_format = C.format = {};
+
+        /**
+         * OpenSSL formatting strategy.
+         */
+        var OpenSSLFormatter = C_format.OpenSSL = {
+            /**
+             * Converts a cipher params object to an OpenSSL-compatible string.
+             *
+             * @param {CipherParams} cipherParams The cipher params object.
+             *
+             * @return {string} The OpenSSL-compatible string.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var openSSLString = CryptoJS.format.OpenSSL.stringify(cipherParams);
+             */
+            stringify: function (cipherParams) {
+                // Shortcuts
+                var ciphertext = cipherParams.ciphertext;
+                var salt = cipherParams.salt;
+
+                // Format
+                if (salt) {
+                    var wordArray = WordArray.create([0x53616c74, 0x65645f5f]).concat(salt).concat(ciphertext);
+                } else {
+                    var wordArray = ciphertext;
+                }
+
+                return wordArray.toString(Base64);
+            },
+
+            /**
+             * Converts an OpenSSL-compatible string to a cipher params object.
+             *
+             * @param {string} openSSLStr The OpenSSL-compatible string.
+             *
+             * @return {CipherParams} The cipher params object.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var cipherParams = CryptoJS.format.OpenSSL.parse(openSSLString);
+             */
+            parse: function (openSSLStr) {
+                // Parse base64
+                var ciphertext = Base64.parse(openSSLStr);
+
+                // Shortcut
+                var ciphertextWords = ciphertext.words;
+
+                // Test for salt
+                if (ciphertextWords[0] == 0x53616c74 && ciphertextWords[1] == 0x65645f5f) {
+                    // Extract salt
+                    var salt = WordArray.create(ciphertextWords.slice(2, 4));
+
+                    // Remove salt from ciphertext
+                    ciphertextWords.splice(0, 4);
+                    ciphertext.sigBytes -= 16;
+                }
+
+                return CipherParams.create({ciphertext: ciphertext, salt: salt});
+            }
+        };
+
+        /**
+         * A cipher wrapper that returns ciphertext as a serializable cipher params object.
+         */
+        var SerializableCipher = C_lib.SerializableCipher = Base.extend({
+            /**
+             * Configuration options.
+             *
+             * @property {Formatter} format The formatting strategy to convert cipher param objects to and from a string. Default: OpenSSL
+             */
+            cfg: Base.extend({
+                format: OpenSSLFormatter
+            }),
+
+            /**
+             * Encrypts a message.
+             *
+             * @param {Cipher} cipher The cipher algorithm to use.
+             * @param {WordArray|string} message The message to encrypt.
+             * @param {WordArray} key The key.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {CipherParams} A cipher params object.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key);
+             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key, { iv: iv });
+             *     var ciphertextParams = CryptoJS.lib.SerializableCipher.encrypt(CryptoJS.algo.AES, message, key, { iv: iv, format: CryptoJS.format.OpenSSL });
+             */
+            encrypt: function (cipher, message, key, cfg) {
+                // Apply config defaults
+                cfg = this.cfg.extend(cfg);
+
+                // Encrypt
+                var encryptor = cipher.createEncryptor(key, cfg);
+                var ciphertext = encryptor.finalize(message);
+
+                // Shortcut
+                var cipherCfg = encryptor.cfg;
+
+                // Create and return serializable cipher params
+                return CipherParams.create({
+                    ciphertext: ciphertext,
+                    key: key,
+                    iv: cipherCfg.iv,
+                    algorithm: cipher,
+                    mode: cipherCfg.mode,
+                    padding: cipherCfg.padding,
+                    blockSize: cipher.blockSize,
+                    formatter: cfg.format
+                });
+            },
+
+            /**
+             * Decrypts serialized ciphertext.
+             *
+             * @param {Cipher} cipher The cipher algorithm to use.
+             * @param {CipherParams|string} ciphertext The ciphertext to decrypt.
+             * @param {WordArray} key The key.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {WordArray} The plaintext.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var plaintext = CryptoJS.lib.SerializableCipher.decrypt(CryptoJS.algo.AES, formattedCiphertext, key, { iv: iv, format: CryptoJS.format.OpenSSL });
+             *     var plaintext = CryptoJS.lib.SerializableCipher.decrypt(CryptoJS.algo.AES, ciphertextParams, key, { iv: iv, format: CryptoJS.format.OpenSSL });
+             */
+            decrypt: function (cipher, ciphertext, key, cfg) {
+                // Apply config defaults
+                cfg = this.cfg.extend(cfg);
+
+                // Convert string to CipherParams
+                ciphertext = this._parse(ciphertext, cfg.format);
+
+                // Decrypt
+                var plaintext = cipher.createDecryptor(key, cfg).finalize(ciphertext.ciphertext);
+
+                return plaintext;
+            },
+
+            /**
+             * Converts serialized ciphertext to CipherParams,
+             * else assumed CipherParams already and returns ciphertext unchanged.
+             *
+             * @param {CipherParams|string} ciphertext The ciphertext.
+             * @param {Formatter} format The formatting strategy to use to parse serialized ciphertext.
+             *
+             * @return {CipherParams} The unserialized ciphertext.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var ciphertextParams = CryptoJS.lib.SerializableCipher._parse(ciphertextStringOrParams, format);
+             */
+            _parse: function (ciphertext, format) {
+                if (typeof ciphertext == 'string') {
+                    return format.parse(ciphertext, this);
+                } else {
+                    return ciphertext;
+                }
+            }
+        });
+
+        /**
+         * Key derivation function namespace.
+         */
+        var C_kdf = C.kdf = {};
+
+        /**
+         * OpenSSL key derivation function.
+         */
+        var OpenSSLKdf = C_kdf.OpenSSL = {
+            /**
+             * Derives a key and IV from a password.
+             *
+             * @param {string} password The password to derive from.
+             * @param {number} keySize The size in words of the key to generate.
+             * @param {number} ivSize The size in words of the IV to generate.
+             * @param {WordArray|string} salt (Optional) A 64-bit salt to use. If omitted, a salt will be generated randomly.
+             *
+             * @return {CipherParams} A cipher params object with the key, IV, and salt.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var derivedParams = CryptoJS.kdf.OpenSSL.execute('Password', 256/32, 128/32);
+             *     var derivedParams = CryptoJS.kdf.OpenSSL.execute('Password', 256/32, 128/32, 'saltsalt');
+             */
+            execute: function (password, keySize, ivSize, salt) {
+                // Generate random salt
+                if (!salt) {
+                    salt = WordArray.random(64 / 8);
+                }
+
+                // Derive key and IV
+                var key = EvpKDF.create({keySize: keySize + ivSize}).compute(password, salt);
+
+                // Separate key and IV
+                var iv = WordArray.create(key.words.slice(keySize), ivSize * 4);
+                key.sigBytes = keySize * 4;
+
+                // Return params
+                return CipherParams.create({key: key, iv: iv, salt: salt});
+            }
+        };
+
+        /**
+         * A serializable cipher wrapper that derives the key from a password,
+         * and returns ciphertext as a serializable cipher params object.
+         */
+        var PasswordBasedCipher = C_lib.PasswordBasedCipher = SerializableCipher.extend({
+            /**
+             * Configuration options.
+             *
+             * @property {KDF} kdf The key derivation function to use to generate a key and IV from a password. Default: OpenSSL
+             */
+            cfg: SerializableCipher.cfg.extend({
+                kdf: OpenSSLKdf
+            }),
+
+            /**
+             * Encrypts a message using a password.
+             *
+             * @param {Cipher} cipher The cipher algorithm to use.
+             * @param {WordArray|string} message The message to encrypt.
+             * @param {string} password The password.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {CipherParams} A cipher params object.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var ciphertextParams = CryptoJS.lib.PasswordBasedCipher.encrypt(CryptoJS.algo.AES, message, 'password');
+             *     var ciphertextParams = CryptoJS.lib.PasswordBasedCipher.encrypt(CryptoJS.algo.AES, message, 'password', { format: CryptoJS.format.OpenSSL });
+             */
+            encrypt: function (cipher, message, password, cfg) {
+                // Apply config defaults
+                cfg = this.cfg.extend(cfg);
+
+                // Derive key and other params
+                var derivedParams = cfg.kdf.execute(password, cipher.keySize, cipher.ivSize);
+
+                // Add IV to config
+                cfg.iv = derivedParams.iv;
+
+                // Encrypt
+                var ciphertext = SerializableCipher.encrypt.call(this, cipher, message, derivedParams.key, cfg);
+
+                // Mix in derived params
+                ciphertext.mixIn(derivedParams);
+
+                return ciphertext;
+            },
+
+            /**
+             * Decrypts serialized ciphertext using a password.
+             *
+             * @param {Cipher} cipher The cipher algorithm to use.
+             * @param {CipherParams|string} ciphertext The ciphertext to decrypt.
+             * @param {string} password The password.
+             * @param {Object} cfg (Optional) The configuration options to use for this operation.
+             *
+             * @return {WordArray} The plaintext.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var plaintext = CryptoJS.lib.PasswordBasedCipher.decrypt(CryptoJS.algo.AES, formattedCiphertext, 'password', { format: CryptoJS.format.OpenSSL });
+             *     var plaintext = CryptoJS.lib.PasswordBasedCipher.decrypt(CryptoJS.algo.AES, ciphertextParams, 'password', { format: CryptoJS.format.OpenSSL });
+             */
+            decrypt: function (cipher, ciphertext, password, cfg) {
+                // Apply config defaults
+                cfg = this.cfg.extend(cfg);
+
+                // Convert string to CipherParams
+                ciphertext = this._parse(ciphertext, cfg.format);
+
+                // Derive key and other params
+                var derivedParams = cfg.kdf.execute(password, cipher.keySize, cipher.ivSize, ciphertext.salt);
+
+                // Add IV to config
+                cfg.iv = derivedParams.iv;
+
+                // Decrypt
+                var plaintext = SerializableCipher.decrypt.call(this, cipher, ciphertext, derivedParams.key, cfg);
+
+                return plaintext;
+            }
+        });
+    }());
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    /**
+     * Electronic Codebook block mode.
+     */
+    CryptoJS.mode.ECB = (function () {
+        var ECB = CryptoJS.lib.BlockCipherMode.extend();
+
+        ECB.Encryptor = ECB.extend({
+            processBlock: function (words, offset) {
+                this._cipher.encryptBlock(words, offset);
+            }
+        });
+
+        ECB.Decryptor = ECB.extend({
+            processBlock: function (words, offset) {
+                this._cipher.decryptBlock(words, offset);
+            }
+        });
+
+        return ECB;
+    }());
+
+
+    /*
+    CryptoJS v3.1.2
+    code.google.com/p/crypto-js
+    (c) 2009-2013 by Jeff Mott. All rights reserved.
+    code.google.com/p/crypto-js/wiki/License
+    */
+    (function () {
+        // Shortcuts
+        var C = CryptoJS;
+        var C_lib = C.lib;
+        var BlockCipher = C_lib.BlockCipher;
+        var C_algo = C.algo;
+
+        // Lookup tables
+        var SBOX = [];
+        var INV_SBOX = [];
+        var SUB_MIX_0 = [];
+        var SUB_MIX_1 = [];
+        var SUB_MIX_2 = [];
+        var SUB_MIX_3 = [];
+        var INV_SUB_MIX_0 = [];
+        var INV_SUB_MIX_1 = [];
+        var INV_SUB_MIX_2 = [];
+        var INV_SUB_MIX_3 = [];
+
+        // Compute lookup tables
+        (function () {
+            // Compute double table
+            var d = [];
+            for (var i = 0; i < 256; i++) {
+                if (i < 128) {
+                    d[i] = i << 1;
+                } else {
+                    d[i] = (i << 1) ^ 0x11b;
+                }
+            }
+
+            // Walk GF(2^8)
+            var x = 0;
+            var xi = 0;
+            for (var i = 0; i < 256; i++) {
+                // Compute sbox
+                var sx = xi ^ (xi << 1) ^ (xi << 2) ^ (xi << 3) ^ (xi << 4);
+                sx = (sx >>> 8) ^ (sx & 0xff) ^ 0x63;
+                SBOX[x] = sx;
+                INV_SBOX[sx] = x;
+
+                // Compute multiplication
+                var x2 = d[x];
+                var x4 = d[x2];
+                var x8 = d[x4];
+
+                // Compute sub bytes, mix columns tables
+                var t = (d[sx] * 0x101) ^ (sx * 0x1010100);
+                SUB_MIX_0[x] = (t << 24) | (t >>> 8);
+                SUB_MIX_1[x] = (t << 16) | (t >>> 16);
+                SUB_MIX_2[x] = (t << 8) | (t >>> 24);
+                SUB_MIX_3[x] = t;
+
+                // Compute inv sub bytes, inv mix columns tables
+                var t = (x8 * 0x1010101) ^ (x4 * 0x10001) ^ (x2 * 0x101) ^ (x * 0x1010100);
+                INV_SUB_MIX_0[sx] = (t << 24) | (t >>> 8);
+                INV_SUB_MIX_1[sx] = (t << 16) | (t >>> 16);
+                INV_SUB_MIX_2[sx] = (t << 8) | (t >>> 24);
+                INV_SUB_MIX_3[sx] = t;
+
+                // Compute next counter
+                if (!x) {
+                    x = xi = 1;
+                } else {
+                    x = x2 ^ d[d[d[x8 ^ x2]]];
+                    xi ^= d[d[xi]];
+                }
+            }
+        }());
+
+        // Precomputed Rcon lookup
+        var RCON = [0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
+
+        /**
+         * AES block cipher algorithm.
+         */
+        var AES = C_algo.AES = BlockCipher.extend({
+            _doReset: function () {
+                // Shortcuts
+                var key = this._key;
+                var keyWords = key.words;
+                var keySize = key.sigBytes / 4;
+
+                // Compute number of rounds
+                var nRounds = this._nRounds = keySize + 6;
+
+                // Compute number of key schedule rows
+                var ksRows = (nRounds + 1) * 4;
+
+                // Compute key schedule
+                var keySchedule = this._keySchedule = [];
+                for (var ksRow = 0; ksRow < ksRows; ksRow++) {
+                    if (ksRow < keySize) {
+                        keySchedule[ksRow] = keyWords[ksRow];
+                    } else {
+                        var t = keySchedule[ksRow - 1];
+
+                        if (!(ksRow % keySize)) {
+                            // Rot word
+                            t = (t << 8) | (t >>> 24);
+
+                            // Sub word
+                            t = (SBOX[t >>> 24] << 24) | (SBOX[(t >>> 16) & 0xff] << 16) | (SBOX[(t >>> 8) & 0xff] << 8) | SBOX[t & 0xff];
+
+                            // Mix Rcon
+                            t ^= RCON[(ksRow / keySize) | 0] << 24;
+                        } else if (keySize > 6 && ksRow % keySize == 4) {
+                            // Sub word
+                            t = (SBOX[t >>> 24] << 24) | (SBOX[(t >>> 16) & 0xff] << 16) | (SBOX[(t >>> 8) & 0xff] << 8) | SBOX[t & 0xff];
+                        }
+
+                        keySchedule[ksRow] = keySchedule[ksRow - keySize] ^ t;
+                    }
+                }
+
+                // Compute inv key schedule
+                var invKeySchedule = this._invKeySchedule = [];
+                for (var invKsRow = 0; invKsRow < ksRows; invKsRow++) {
+                    var ksRow = ksRows - invKsRow;
+
+                    if (invKsRow % 4) {
+                        var t = keySchedule[ksRow];
+                    } else {
+                        var t = keySchedule[ksRow - 4];
+                    }
+
+                    if (invKsRow < 4 || ksRow <= 4) {
+                        invKeySchedule[invKsRow] = t;
+                    } else {
+                        invKeySchedule[invKsRow] = INV_SUB_MIX_0[SBOX[t >>> 24]] ^ INV_SUB_MIX_1[SBOX[(t >>> 16) & 0xff]] ^
+                            INV_SUB_MIX_2[SBOX[(t >>> 8) & 0xff]] ^ INV_SUB_MIX_3[SBOX[t & 0xff]];
+                    }
+                }
+            },
+
+            encryptBlock: function (M, offset) {
+                this._doCryptBlock(M, offset, this._keySchedule, SUB_MIX_0, SUB_MIX_1, SUB_MIX_2, SUB_MIX_3, SBOX);
+            },
+
+            decryptBlock: function (M, offset) {
+                // Swap 2nd and 4th rows
+                var t = M[offset + 1];
+                M[offset + 1] = M[offset + 3];
+                M[offset + 3] = t;
+
+                this._doCryptBlock(M, offset, this._invKeySchedule, INV_SUB_MIX_0, INV_SUB_MIX_1, INV_SUB_MIX_2, INV_SUB_MIX_3, INV_SBOX);
+
+                // Inv swap 2nd and 4th rows
+                var t = M[offset + 1];
+                M[offset + 1] = M[offset + 3];
+                M[offset + 3] = t;
+            },
+
+            _doCryptBlock: function (M, offset, keySchedule, SUB_MIX_0, SUB_MIX_1, SUB_MIX_2, SUB_MIX_3, SBOX) {
+                // Shortcut
+                var nRounds = this._nRounds;
+
+                // Get input, add round key
+                var s0 = M[offset] ^ keySchedule[0];
+                var s1 = M[offset + 1] ^ keySchedule[1];
+                var s2 = M[offset + 2] ^ keySchedule[2];
+                var s3 = M[offset + 3] ^ keySchedule[3];
+
+                // Key schedule row counter
+                var ksRow = 4;
+
+                // Rounds
+                for (var round = 1; round < nRounds; round++) {
+                    // Shift rows, sub bytes, mix columns, add round key
+                    var t0 = SUB_MIX_0[s0 >>> 24] ^ SUB_MIX_1[(s1 >>> 16) & 0xff] ^ SUB_MIX_2[(s2 >>> 8) & 0xff] ^ SUB_MIX_3[s3 & 0xff] ^ keySchedule[ksRow++];
+                    var t1 = SUB_MIX_0[s1 >>> 24] ^ SUB_MIX_1[(s2 >>> 16) & 0xff] ^ SUB_MIX_2[(s3 >>> 8) & 0xff] ^ SUB_MIX_3[s0 & 0xff] ^ keySchedule[ksRow++];
+                    var t2 = SUB_MIX_0[s2 >>> 24] ^ SUB_MIX_1[(s3 >>> 16) & 0xff] ^ SUB_MIX_2[(s0 >>> 8) & 0xff] ^ SUB_MIX_3[s1 & 0xff] ^ keySchedule[ksRow++];
+                    var t3 = SUB_MIX_0[s3 >>> 24] ^ SUB_MIX_1[(s0 >>> 16) & 0xff] ^ SUB_MIX_2[(s1 >>> 8) & 0xff] ^ SUB_MIX_3[s2 & 0xff] ^ keySchedule[ksRow++];
+
+                    // Update state
+                    s0 = t0;
+                    s1 = t1;
+                    s2 = t2;
+                    s3 = t3;
+                }
+
+                // Shift rows, sub bytes, add round key
+                var t0 = ((SBOX[s0 >>> 24] << 24) | (SBOX[(s1 >>> 16) & 0xff] << 16) | (SBOX[(s2 >>> 8) & 0xff] << 8) | SBOX[s3 & 0xff]) ^ keySchedule[ksRow++];
+                var t1 = ((SBOX[s1 >>> 24] << 24) | (SBOX[(s2 >>> 16) & 0xff] << 16) | (SBOX[(s3 >>> 8) & 0xff] << 8) | SBOX[s0 & 0xff]) ^ keySchedule[ksRow++];
+                var t2 = ((SBOX[s2 >>> 24] << 24) | (SBOX[(s3 >>> 16) & 0xff] << 16) | (SBOX[(s0 >>> 8) & 0xff] << 8) | SBOX[s1 & 0xff]) ^ keySchedule[ksRow++];
+                var t3 = ((SBOX[s3 >>> 24] << 24) | (SBOX[(s0 >>> 16) & 0xff] << 16) | (SBOX[(s1 >>> 8) & 0xff] << 8) | SBOX[s2 & 0xff]) ^ keySchedule[ksRow++];
+
+                // Set output
+                M[offset] = t0;
+                M[offset + 1] = t1;
+                M[offset + 2] = t2;
+                M[offset + 3] = t3;
+            },
+
+            keySize: 256 / 32
+        });
+
+        /**
+         * Shortcut functions to the cipher's object interface.
+         *
+         * @example
+         *
+         *     var ciphertext = CryptoJS.AES.encrypt(message, key, cfg);
+         *     var plaintext  = CryptoJS.AES.decrypt(ciphertext, key, cfg);
+         */
+        C.AES = BlockCipher._createHelper(AES);
+    }());
+
+
+    _.extend(BI, {
+        /**
+         * aes加密方法
+         * aes-128-ecb
+         *
+         * @example
+         *
+         *     var ciphertext = BI.aesEncrypt(text, key);
+         */
+        aesEncrypt: function (text, key) {
+            key = CryptoJS.enc.Utf8.parse(key);
+            var cipher = CryptoJS.AES.encrypt(text, key, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            var base64Cipher = cipher.ciphertext.toString(CryptoJS.enc.Base64);
+            return base64Cipher;
+        }
+    });
+}());!(function () {
     function aspect (type) {
         return function (target, methodName, advice) {
             var exist = target[methodName],
@@ -18214,7 +20478,7 @@ _.extend(BI, {
         };
     },
 
-    afterFunc: function (func) {
+    afterFunc: function (sFunc, func) {
         var __self = sFunc;
         return function () {
             var ret = __self.apply(sFunc, arguments);
@@ -18804,7 +21068,7 @@ BI.ShowListener = BI.inherit(BI.OB, {
         }
     }
 });
-BI.ShowListener.EVENT_CHANGE = "ShowListener.EVENT_CHANGE";/**
+BI.ShowListener.EVENT_CHANGE = "EVENT_CHANGE";/**
  * style加载管理器
  *
  * Created by GUY on 2015/9/7.
@@ -31468,7 +33732,9 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout"
+            baseCls: "bi-flex-center-adapt-layout",
+            hgap: 0,
+            vgap: 0
         });
     },
     render: function () {
@@ -31479,7 +33745,14 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative", "flex-shrink": "0"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -31528,8 +33801,6 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -31659,12 +33930,10 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
-            hgap: o.hgap,
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: o.hgap,
             items: o.items
         };
     },
@@ -31779,7 +34048,13 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -31839,8 +34114,6 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -31978,8 +34251,6 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
             items: o.items
         };
     },
@@ -36088,24 +38359,22 @@ BI.Single = BI.inherit(BI.Widget, {
  * @extends BI.Single
  */
 BI.Text = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Text.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: "",
-            py: "",
-            highLight: false
-        });
+
+    props: {
+        baseCls: "bi-text",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        py: "",
+        highLight: false
     },
 
     render: function () {
@@ -37821,7 +40090,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 checked = false;
             }
             zTree.checkNode(treeNode, !checked, true, true);
@@ -37851,7 +40120,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             }
             var status = treeNode.getCheckStatus();
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 treeNode.checked = false;
             }
         }
@@ -37946,6 +40215,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var map = {};
         track([], valueA, valueB);
         track([], valueB, valueA);
+
         function track (parent, node, compare) {
             BI.each(node, function (n, item) {
                 if (BI.isNull(compare[n])) {
@@ -37965,7 +40235,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
-    getValue: function () {
+    _getJoinValue: function () {
         if (!this.nodes) {
             return {};
         }
@@ -37977,6 +40247,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             return checkedValues;
         }
         return this._join(checkedValues, this.options.paras.selectedValues);
+    },
+
+    getValue: function () {
+        return this._getJoinValue();
     },
 
     // 生成树方法
@@ -38032,11 +40306,13 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
-            o.itemsCreator({
+            this.options.paras.selectedValues = this._getJoinValue();
+            // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
+            o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
-                selectedValues: self.options.paras.selectedValues
-            }, function (res) {
+                curSelectedValue: name,
+                parentValues: parentValues
+            }), function (res) {
                 self.options.paras.selectedValues = res;
                 BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
             });
@@ -38071,6 +40347,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var hashMap = {};
         var rootNoots = this.nodes.getNodes();
         track(rootNoots);
+
         function track (nodes) {
             BI.each(nodes, function (i, node) {
                 var checkState = node.getCheckStatus();
@@ -38139,9 +40416,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
     },
 
     getValue: function () {
-        var o = this.options;
-        var result = BI.PartTree.superclass.getValue.apply(this, arguments);
-        return result;
+        return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
     // 生成树方法
@@ -38881,7 +41156,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             baseCls: (conf.baseCls || "") + " bi-combo",
             trigger: "click",
             toggle: true,
-            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft
+            direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
             logic: {
                 dynamic: true
             },
@@ -39261,6 +41536,12 @@ BI.Combo = BI.inherit(BI.Widget, {
             case "right,innerLeft":
                 p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["right", "left", "innerLeft", "innerRight", "bottom", "top"], o.offsetStyle);
                 break;
+            case "innerRight":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerRight", "innerLeft", "right", "left",  "bottom", "top"], o.offsetStyle);
+                break;
+            case "innerLeft":
+                p = BI.DOM.getComboPosition(combo, this.popupView, o.adjustXOffset || o.adjustLength, o.adjustYOffset, o.isNeedAdjustHeight, ["innerLeft", "innerRight", "left", "right",  "bottom", "top"], o.offsetStyle);
+                break;
             case "top,custom":
             case "custom,top":
                 p = BI.DOM.getTopAdaptPosition(combo, this.popupView, o.adjustYOffset || o.adjustLength, o.isNeedAdjustHeight);
@@ -39371,14 +41652,13 @@ BI.Combo = BI.inherit(BI.Widget, {
         this._toggle();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
             .unbind("mousewheel." + this.getName())
             .unbind("mouseenter." + this.getName())
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
-        BI.Combo.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -39965,7 +42245,8 @@ BI.Loader = BI.inherit(BI.Widget, {
             behaviors: {},
             layouts: [{
                 type: "bi.vertical"
-            }]
+            }],
+            value: o.value
         });
         this.button_group.on(BI.Controller.EVENT_CHANGE, function (type, value, obj) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
@@ -40597,9 +42878,8 @@ BI.Searcher = BI.inherit(BI.Widget, {
         this.popupView && this.popupView.empty();
     },
 
-    destroy: function () {
+    destroyed: function () {
         BI.Maskers.remove(this.getName());
-        BI.Searcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Searcher.EVENT_CHANGE = "EVENT_CHANGE";
@@ -42963,7 +45243,7 @@ BI.IconButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.IconButton.EVENT_CHANGE = "IconButton.EVENT_CHANGE";
+BI.IconButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_button", BI.IconButton);/**
  * 图片的button
  *
@@ -43049,7 +45329,7 @@ BI.ImageButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.ImageButton.EVENT_CHANGE = "ImageButton.EVENT_CHANGE";
+BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 /**
  * 文字类型的按钮
@@ -43100,9 +45380,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
-                type: "bi.icon",
+                type: "bi.icon_label",
+                cls: o.iconCls,
                 width: 18,
-                height: o.height - 2
+                height: o.height - 2,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -43111,15 +45394,10 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 height: o.height - 2
             });
             BI.createWidget({
-                type: "bi.horizontal_auto",
-                cls: o.iconCls,
+                type: "bi.center_adapt",
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
                 items: [{
                     type: "bi.horizontal",
                     items: [this.icon, this.text]
@@ -44831,11 +47109,11 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.reset();
     }
 });
-BI.MultifileEditor.EVENT_CHANGE = "MultifileEditor.EVENT_CHANGE";
-BI.MultifileEditor.EVENT_UPLOADSTART = "MultifileEditor.EVENT_UPLOADSTART";
-BI.MultifileEditor.EVENT_ERROR = "MultifileEditor.EVENT_ERROR";
-BI.MultifileEditor.EVENT_PROGRESS = "MultifileEditor.EVENT_PROGRESS";
-BI.MultifileEditor.EVENT_UPLOADED = "MultifileEditor.EVENT_UPLOADED";
+BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultifileEditor.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
+BI.MultifileEditor.EVENT_ERROR = "EVENT_ERROR";
+BI.MultifileEditor.EVENT_PROGRESS = "EVENT_PROGRESS";
+BI.MultifileEditor.EVENT_UPLOADED = "EVENT_UPLOADED";
 BI.shortcut("bi.multifile_editor", BI.MultifileEditor);/**
  *
  * Created by GUY on 2016/1/18.
@@ -44849,8 +47127,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             value: ""
         });
     },
-    _init: function () {
-        BI.TextAreaEditor.superclass._init.apply(this, arguments);
+
+    render: function() {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -44900,10 +47178,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
-            self.setValue(o.value);
+            this.setValue(o.value);
         }
         if (BI.isNotNull(o.style)) {
-            self.setStyle(o.style);
+            this.setStyle(o.style);
         }
         this._checkWaterMark();
     },
@@ -44993,6 +47271,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
         // this.watermark && this.watermark.setValid(b);
+    },
+
+    _setEnable: function (b) {
+        BI.TextAreaEditor.superclass._setEnable.apply(this, [b]);
+        this.content && (this.content.element[0].disabled = !b);
     }
 });
 BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -45004,22 +47287,21 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);/**
  * @extends BI.Single
  */
 BI.Html = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Html.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
+
+    props: {
+        baseCls: "bi-html",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        highLight: false
     },
 
     render: function () {
@@ -45075,15 +47357,14 @@ BI.Html = BI.inherit(BI.Single, {
         } else {
             this.text = this;
         }
-    },
-
-    mounted: function () {
-        var o = this.options;
 
         if (BI.isKey(o.text)) {
             this.setText(o.text);
         } else if (BI.isKey(o.value)) {
             this.setText(o.value);
+        }
+        if (o.highLight) {
+            this.doHighLight();
         }
     },
 
@@ -45241,20 +47522,9 @@ BI.ImageCheckbox = BI.inherit(BI.IconButton, {
             iconWidth: 16,
             iconHeight: 16
         });
-    },
-
-    _init: function () {
-        BI.ImageCheckbox.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.ImageCheckbox.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.Checkbox.EVENT_CHANGE);
-        }
     }
 });
-BI.ImageCheckbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);/**
  * guy
@@ -45314,7 +47584,7 @@ BI.Checkbox = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Checkbox.EVENT_CHANGE = "Checkbox.EVENT_CHANGE";
+BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.checkbox", BI.Checkbox);/**
  * 文件
@@ -45402,7 +47672,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", BI.cjkEncode(file.fileName), "\"", CRLF,
+                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", _global.encodeURIComponent(file.fileName), "\"", CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -45428,15 +47698,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                    xhr = new XMLHttpRequest,
-                    upload = xhr.upload || {
-                        addEventListener: function (event, callback) {
-                            this["on" + event] = callback;
-                        }
-                    },
-                    i = 0;
-                    i < length;
-                    i++
+                         xhr = new XMLHttpRequest,
+                         upload = xhr.upload || {
+                             addEventListener: function (event, callback) {
+                                 this["on" + event] = callback;
+                             }
+                         },
+                         i = 0;
+                     i < length;
+                     i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -45491,7 +47761,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
+                                if (rpe.total <= rpe.loaded) {
+                                    rpe.loaded = rpe.total;
+                                }
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -45557,8 +47829,12 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
-                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
+                            if (rpe.loaded < rpe.total) {
+                                ++rpe.loaded;
+                            }
+                            if (isFunction(handler.onprogress)) {
+                                handler.onprogress(rpe, {});
+                            }
                         }, 100)
                     },
                     onload = function () {
@@ -45575,7 +47851,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = BI.cjkDecode(handler.file.fileName);
+                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
@@ -45935,7 +48211,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
             }
         }
     });
-    BI.File.EVENT_CHANGE = "BI.File.EVENT_CHANGE";
+    BI.File.EVENT_CHANGE = "EVENT_CHANGE";
     BI.File.EVENT_UPLOADSTART = "EVENT_UPLOADSTART";
     BI.File.EVENT_ERROR = "EVENT_ERROR";
     BI.File.EVENT_PROGRESS = "EVENT_PROGRESS";
@@ -46289,7 +48565,7 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.ImageRadio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);/**
  * guy
@@ -46350,423 +48626,17 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);/**
- * Created by GUY on 2015/6/26.
+ * Created by dailer on 2019/6/19.
  */
 
-BI.HtmlLabel = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.HtmlLabel.superclass._defaultConfig.apply(this, arguments);
+BI.AbstractLabel = BI.inherit(BI.Single, {
+
+    _defaultConfig: function (props) {
+        var conf = BI.AbstractLabel.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
-            textAlign: "center",
-            whiteSpace: "nowrap", // normal  or  nowrap
-            textWidth: null,
-            textHeight: null,
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: ""
-        });
-    },
-
-    _createJson: function () {
-        var o = this.options;
-        return {
-            type: "bi.html",
-            textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
-            lineHeight: o.textHeight,
-            text: o.text,
-            value: o.value
-        };
-    },
-
-    _init: function () {
-        BI.HtmlLabel.superclass._init.apply(this, arguments);
-
-        if (this.options.textAlign === "center") {
-            this._createCenterEl();
-        } else {
-            this._createNotCenterEl();
-        }
-    },
-
-    _createCenterEl: function () {
-        var o = this.options;
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.maxWidth = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) { // 1.1
-                    BI.createWidget({
-                        type: "bi.center_adapt",
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({ // 1.2
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (o.whiteSpace == "normal") {
-                BI.extend(json, {
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                });
-                this.text = BI.createWidget(json);
-                BI.createWidget({
-                    type: "bi.center_adapt",
-                    scrollable: o.whiteSpace === "normal",
-                    element: this,
-                    items: [this.text]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.element.css({
-                    "line-height": o.height + "px"
-                });
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                return;
-            }
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                maxWidth: "100%"
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.maxWidth = o.textWidth;
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: o.whiteSpace === "normal",
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (o.whiteSpace == "normal") {
-            BI.extend(json, {
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            });
-            this.text = BI.createWidget(json);
-            BI.createWidget({
-                type: "bi.center_adapt",
-                scrollable: true,
-                element: this,
-                items: [this.text]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            this.element.css({
-                "line-height": o.height + "px"
-            });
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: "bi.center_adapt",
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _createNotCenterEl: function () {
-        var o = this.options;
-        var adaptLayout = o.textAlign === "right" ? "bi.right_vertical_adapt" : "bi.vertical_adapt";
-        var json = this._createJson();
-        if (BI.isNumber(o.width) && o.width > 0) {
-            if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-                json.width = o.textWidth;
-                if (BI.isNumber(o.height) && o.height > 0) {
-                    BI.createWidget({
-                        type: adaptLayout,
-                        height: o.height,
-                        scrollable: o.whiteSpace === "normal",
-                        element: this,
-                        items: [
-                            {
-                                el: (this.text = BI.createWidget(json))
-                            }
-                        ]
-                    });
-                    return;
-                }
-                BI.createWidget({
-                    type: adaptLayout,
-                    scrollable: o.whiteSpace === "normal",
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap,
-                    element: this,
-                    items: [
-                        {
-                            el: (this.text = BI.createWidget(json))
-                        }
-                    ]
-                });
-                return;
-            }
-            if (BI.isNumber(o.height) && o.height > 0) {
-                this.text = BI.createWidget(BI.extend(json, {
-                    element: this,
-                    hgap: o.hgap,
-                    vgap: o.vgap,
-                    lgap: o.lgap,
-                    rgap: o.rgap,
-                    tgap: o.tgap,
-                    bgap: o.bgap
-                }));
-                if (o.whiteSpace !== "normal") {
-                    this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
-                    });
-                }
-                return;
-            }
-            json.width = o.width - 2 * o.hgap - o.lgap - o.rgap;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [{
-                    el: (this.text = BI.createWidget(json))
-                }]
-            });
-            return;
-        }
-        if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
-            json.width = o.textWidth;
-            BI.createWidget({
-                type: adaptLayout,
-                scrollable: o.whiteSpace === "normal",
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                element: this,
-                items: [
-                    {
-                        el: (this.text = BI.createWidget(json))
-                    }
-                ]
-            });
-            return;
-        }
-        if (BI.isNumber(o.height) && o.height > 0) {
-            if (o.whiteSpace !== "normal") {
-                this.element.css({
-                    "line-height": o.height - (o.vgap * 2) + "px"
-                });
-            }
-            this.text = BI.createWidget(BI.extend(json, {
-                element: this,
-                hgap: o.hgap,
-                vgap: o.vgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
-                tgap: o.tgap,
-                bgap: o.bgap
-            }));
-            return;
-        }
-        BI.extend(json, {
-            hgap: o.hgap,
-            vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap
-        });
-
-        this.text = BI.createWidget(BI.extend(json, {
-            maxWidth: "100%"
-        }));
-        BI.createWidget({
-            type: adaptLayout,
-            element: this,
-            items: [this.text]
-        });
-    },
-
-    _setEnable: function (enable) {
-        BI.HtmlLabel.superclass._setEnable.apply(this, arguments);
-        if (enable === true) {
-            this.element.removeClass("base-disabled disabled");
-        } else if (enable === false) {
-            this.element.addClass("base-disabled disabled");
-        }
-    },
-
-    doHighLight: function () {
-        this.text.doHighLight.apply(this.text, arguments);
-    },
-
-    unHighLight: function () {
-        this.text.unHighLight.apply(this.text, arguments);
-    },
-
-    setText: function (v) {
-        this.options.text = v;
-        this.text.setText(v);
-    },
-
-    getText: function () {
-        return this.options.text;
-    },
-
-    setStyle: function (css) {
-        this.text.setStyle(css);
-    },
-
-    setValue: function (v) {
-        BI.HtmlLabel.superclass.setValue.apply(this, arguments);
-        if (!this.isReadOnly()) {
-            this.text.setValue(v);
-        }
-    },
-
-    populate: function () {
-        BI.HtmlLabel.superclass.populate.apply(this, arguments);
-    }
-});
-
-BI.shortcut("bi.html_label", BI.HtmlLabel);/**
- * @class BI.IconButton
- * @extends BI.BasicButton
- * 图标标签
- */
-BI.IconLabel = BI.inherit(BI.Single, {
-
-    props: {
-        baseCls: "bi-icon-label horizon-center",
-        iconWidth: null,
-        iconHeight: null
-    },
-
-    _init: function () {
-        BI.IconLabel.superclass._init.apply(this, arguments);
-        var o = this.options;
-        this.element.css({
-            textAlign: "center"
-        });
-        this.icon = BI.createWidget({
-            type: "bi.icon",
-            width: o.iconWidth,
-            height: o.iconHeight
-        });
-        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
-            BI.createWidget({
-                type: "bi.default",
-                element: this,
-                items: [this.icon]
-            });
-        } else {
-            this.element.css("lineHeight", "1");
-            BI.createWidget({
-                element: this,
-                type: "bi.center_adapt",
-                items: [this.icon]
-            });
-        }
-    }
-});
-BI.shortcut("bi.icon_label", BI.IconLabel);/**
- * Created by GUY on 2015/6/26.
- */
-
-BI.Label = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Label.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-label",
             textAlign: "center",
             whiteSpace: "nowrap", // normal  or  nowrap
             textWidth: null,
@@ -46778,8 +48648,6 @@ BI.Label = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            py: "",
-            keyword: "",
             highLight: false
         });
     },
@@ -46800,7 +48668,7 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.Label.superclass._init.apply(this, arguments);
+        BI.AbstractLabel.superclass._init.apply(this, arguments);
 
         if (this.options.textAlign === "center") {
             this._createCenterEl();
@@ -47120,14 +48988,112 @@ BI.Label = BI.inherit(BI.Single, {
     },
 
     setValue: function (v) {
-        BI.Label.superclass.setValue.apply(this, arguments);
+        BI.AbstractLabel.superclass.setValue.apply(this, arguments);
         if (!this.isReadOnly()) {
             this.text.setValue(v);
         }
     },
 
     populate: function () {
-        BI.Label.superclass.populate.apply(this, arguments);
+        BI.AbstractLabel.superclass.populate.apply(this, arguments);
+    }
+});/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-html-label"
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.html",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value
+        };
+    }
+});
+
+BI.shortcut("bi.html_label", BI.HtmlLabel);/**
+ * @class BI.IconButton
+ * @extends BI.BasicButton
+ * 图标标签
+ */
+BI.IconLabel = BI.inherit(BI.Single, {
+
+    props: {
+        baseCls: "bi-icon-label horizon-center",
+        iconWidth: null,
+        iconHeight: null
+    },
+
+    _init: function () {
+        BI.IconLabel.superclass._init.apply(this, arguments);
+        var o = this.options;
+        this.element.css({
+            textAlign: "center"
+        });
+        this.icon = BI.createWidget({
+            type: "bi.icon",
+            width: o.iconWidth,
+            height: o.iconHeight
+        });
+        if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
+            this.element.css("lineHeight", o.height + "px");
+            BI.createWidget({
+                type: "bi.default",
+                element: this,
+                items: [this.icon]
+            });
+        } else {
+            this.element.css("lineHeight", "1");
+            BI.createWidget({
+                element: this,
+                type: "bi.center_adapt",
+                items: [this.icon]
+            });
+        }
+    }
+});
+BI.shortcut("bi.icon_label", BI.IconLabel);/**
+ * Created by GUY on 2015/6/26.
+ */
+
+BI.Label = BI.inherit(BI.AbstractLabel, {
+
+    props: {
+        baseCls: "bi-label",
+        py: "",
+        keyword: ""
+    },
+
+    _createJson: function () {
+        var o = this.options;
+        return {
+            type: "bi.text",
+            textAlign: o.textAlign,
+            whiteSpace: o.whiteSpace,
+            lineHeight: o.textHeight,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword,
+            highLight: o.highLight
+        };
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
     }
 });
 
@@ -47374,7 +49340,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 });
 BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
- * toast提示
+ * title提示
  *
  * Created by GUY on 2015/9/7.
  * @class BI.Tooltip
@@ -47432,12 +49398,13 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             });
         } else {
             this.text = BI.createWidget({
-                type: "bi.text",
+                type: "bi.label",
                 element: this,
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                height: 16,
+                height: o.height,
+                textHeight: o.height - 2,
                 hgap: this._const.hgap
             });
         }
@@ -50054,7 +52021,7 @@ BI.IconChangeButton = BI.inherit(BI.Single, {
         }
     }
 });
-BI.IconChangeButton.EVENT_CHANGE = "IconChangeButton.EVENT_CHANGE";
+BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);/**
  *  统一的trigger图标按钮
  *
@@ -50070,20 +52037,9 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
             baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
             extraCls: "pull-down-font"
         });
-    },
-
-    _init: function () {
-        BI.TriggerIconButton.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.TriggerIconButton.superclass.doClick.apply(this, arguments);
-        if (this.isValid()) {
-            this.fireEvent(BI.TriggerIconButton.EVENT_CHANGE, this);
-        }
     }
 });
-BI.TriggerIconButton.EVENT_CHANGE = "TriggerIconButton.EVENT_CHANGE";
+BI.TriggerIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);/**
  * guy
  * @extends BI.Single
@@ -50100,20 +52056,9 @@ BI.HalfIconButton = BI.inherit(BI.IconButton, {
             iconHeight: 16,
             selected: false
         });
-    },
-
-    _init: function () {
-        BI.HalfIconButton.superclass._init.apply(this, arguments);
-    },
-
-    doClick: function () {
-        BI.HalfIconButton.superclass.doClick.apply(this, arguments);
-        if(this.isValid()) {
-            this.fireEvent(BI.HalfIconButton.EVENT_CHANGE);
-        }
     }
 });
-BI.HalfIconButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
+BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);/**
  * guy
@@ -50152,7 +52097,7 @@ BI.HalfButton = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.HalfButton.EVENT_CHANGE = "HalfIconButton.EVENT_CHANGE";
+BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.half_button", BI.HalfButton);/**
  * guy
@@ -50287,12 +52232,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
@@ -50331,6 +52271,9 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
 
     doClick: function () {
         BI.SingleSelectItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -50338,6 +52281,7 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     }
 });
 
+BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);/**
  * guy
  * 单选框item
@@ -50396,6 +52340,9 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -50405,6 +52352,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
+BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);/**
  * Created by roy on 15/10/16.
  */
@@ -50948,6 +52896,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
+            keyword: o.keyword,
             py: o.py
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -51035,12 +52984,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
     }
 });
 BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.switch", BI.Switch);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.FirstTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-first-tree-leaf-item bi-list-item-active",
@@ -51226,12 +53170,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
     }
 });
 
-BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.LastTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-last-tree-leaf-item bi-list-item-active",
@@ -51330,12 +53269,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MidTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-mid-tree-leaf-item bi-list-item-active",
@@ -51888,9 +53822,12 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         Y = Y | 0;
         var start = BI.YearCalendar.getStartYear(Y);
         var items = [];
+        // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
+        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
         BI.each(BI.range(BI.YearCalendar.INTERVAL), function (i) {
             var td = {};
-            if (BI.checkDateVoid(start + i, 1, 1, o.min, o.max)[0]) {
+            if (BI.checkDateVoid(start + i, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
                 td.disabled = true;
             }
             td.text = start + i;
@@ -52014,9 +53951,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
             extraCls: "bi-arrow-group-node-checkbox"
         });
     },
-    _init: function () {
-        BI.ArrowTreeGroupNodeCheckbox.superclass._init.apply(this, arguments);
-    },
+
     setSelected: function (v) {
         BI.ArrowTreeGroupNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
@@ -52064,10 +53999,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.FirstTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.FirstTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v === true) {
@@ -52090,10 +54022,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.LastTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.LastTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if (v === true) {
@@ -52116,10 +54045,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.MidTreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.MidTreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v === true) {
@@ -52142,10 +54068,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
             iconHeight: 24
         });
     },
-    _init: function () {
-        BI.TreeNodeCheckbox.superclass._init.apply(this, arguments);
 
-    },
     setSelected: function (v) {
         BI.TreeNodeCheckbox.superclass.setSelected.apply(this, arguments);
         if(v) {
@@ -52222,7 +54145,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         return this.editor.getValue();
     }
 });
-BI.CustomColorChooser.EVENT_CHANGE = "CustomColorChooser.EVENT_CHANGE";
+BI.CustomColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_color_chooser", BI.CustomColorChooser);/**
  * 选色控件
  *
@@ -52289,16 +54212,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         var fn = function () {
             var color = self.colorPicker.getValue();
             self.trigger.setValue(color);
-            var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
-            var que = new BI.Queue(8);
-            que.fromArray(colors);
-            que.remove(color);
-            que.unshift(color);
-            BI.Cache.setItem("colors", BI.array2String(que.toArray()));
         };
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.colorPicker.setStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""));
-        });
 
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             self.fireEvent(BI.ColorChooser.EVENT_CHANGE, arguments);
@@ -52329,7 +54243,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return this.combo.getValue();
     }
 });
-BI.ColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
+BI.ColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser", BI.ColorChooser);/**
  * 选色控件
  *
@@ -52356,43 +54270,21 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
         });
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [[{
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }]],
+            items: [this._digestStoreColors(BI.string2Array(BI.Cache.getItem("colors") || ""))],
             width: 210,
             height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -52405,6 +54297,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -52452,6 +54345,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                     break;
                 case 1:
                     self.setValue(self.customColorChooser.getValue());
+                    self._dealStoreColors();
                     self.more.hideView();
                     self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                     break;
@@ -52525,20 +54419,36 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.mask.setVisible(!enable);
     },
 
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = BI.string2Array(BI.Cache.getItem("colors") || "");
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
-            var items = BI.map(colors, function (i, color) {
-                return {
-                    value: color
-                };
-            });
-            BI.count(colors.length, 8, function (i) {
-                items.push({
-                    value: "",
-                    disabled: true
-                });
-            });
-            this.storeColors.populate([items]);
+            this.storeColors.populate([this._digestStoreColors(colors)]);
         }
     },
 
@@ -52552,8 +54462,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         return this.colorEditor.getValue();
     }
 });
-BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
-BI.ColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
+BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.ColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);/**
  * 选色控件
  *
@@ -52600,8 +54510,8 @@ BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
         return this.popup.getValue();
     }
 });
-BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
-BI.SimpleColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
+BI.SimpleColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.SimpleColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser_popup", BI.SimpleColorChooserPopup);/**
  * 简单选色控件，没有自动和透明
  *
@@ -52658,7 +54568,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
         return this.combo.getValue();
     }
 });
-BI.SimpleColorChooser.EVENT_CHANGE = "ColorChooser.EVENT_CHANGE";
+BI.SimpleColorChooser.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_chooser", BI.SimpleColorChooser);/**
  * 选色控件
  *
@@ -52722,7 +54632,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         }
     }
 });
-BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
+BI.ColorChooserTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);/**
  * 选色控件
  *
@@ -52818,7 +54728,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         }
     }
 });
-BI.LongColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
+BI.LongColorChooserTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.long_color_chooser_trigger", BI.LongColorChooserTrigger);/**
  * 简单选色控件按钮
  *
@@ -52877,7 +54787,7 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         BI.Maskers[b ? "show" : "hide"](this.getName());
     }
 });
-BI.ColorPickerButton.EVENT_CHANGE = "ColorPickerButton.EVENT_CHANGE";
+BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);/**
  * 简单选色控件
  *
@@ -53066,7 +54976,7 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         return this.colors.getValue();
     }
 });
-BI.ColorPicker.EVENT_CHANGE = "ColorPicker.EVENT_CHANGE";
+BI.ColorPicker.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker", BI.ColorPicker);/**
  * 简单选色控件
  *
@@ -53309,7 +55219,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         }));
     }
 });
-BI.ColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
+BI.ColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_editor", BI.ColorPickerEditor);/**
  * 简单选色控件
  *
@@ -53418,7 +55328,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         }));
     }
 });
-BI.SimpleColorPickerEditor.EVENT_CHANGE = "ColorPickerEditor.EVENT_CHANGE";
+BI.SimpleColorPickerEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);BI.Farbtastic = BI.inherit(BI.BasicButton, {
 
     constants: {
@@ -53697,7 +55607,7 @@ BI.shortcut("bi.simple_color_picker_editor", BI.SimpleColorPickerEditor);BI.Farb
         return this.value;
     }
 });
-BI.Farbtastic.EVENT_CHANGE = "Farbtastic.EVENT_CHANGE";
+BI.Farbtastic.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.farbtastic", BI.Farbtastic);/**
  * Created by GUY on 2017/2/8.
  *
@@ -54518,7 +56428,12 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-icon-popup"
+            baseCls: "bi-icon-text-icon-popup",
+            behaviors: {
+                redmark: function () {
+                    return true;
+                }
+            }
         });
     },
 
@@ -54538,11 +56453,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             layouts: [{
                 type: "bi.vertical"
             }],
-            behaviors: {
-                redmark: function () {
-                    return true;
-                }
-            },
+            behaviors: o.behaviors,
             value: o.value
         });
 
@@ -54552,6 +56463,8 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
                 self.fireEvent(BI.IconTextValueComboPopup.EVENT_CHANGE, val, obj);
             }
         });
+
+        this.check();
 
         BI.createWidget({
             type: "bi.vertical",
@@ -54788,6 +56701,10 @@ BI.SearchTextValueComboPopup = BI.inherit(BI.Pane, {
                 }]
             }]
         };
+    },
+
+    mounted: function() {
+        this.check();
     },
 
     populate: function (find, match, keyword) {
@@ -55822,7 +57739,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
-        this.text.doRedMark(o.keyword);
+        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -55916,9 +57833,10 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     },
 
     setValue: function (k) {
+        var o = this.options;
         this.editor.setValue(k);
         this._checkText();
-        this.text.doRedMark(this.options.keyword);
+        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     getValue: function () {
@@ -56106,7 +58024,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             } else {
                 this.text.setValue(this.editor.getValue());
                 this.text.element.removeClass("bi-water-mark");
-                this.text.doRedMark(o.keyword);
+                BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
             }
         }, this));
     },
@@ -56539,7 +58457,8 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
-            height: 24
+            height: 24,
+            text: BI.i18nText("BI-Basic_Unrestricted")
         });
     },
 
@@ -56566,8 +58485,8 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             type: "bi.text_button",
             cls: "state-editor-infinite-text",
             textAlign: "left",
+            text: o.text,
             height: o.height,
-            text: BI.i18nText("BI-Basic_Unrestricted"),
             hgap: 4,
             handler: function () {
                 self._showInput();
@@ -56736,6 +58655,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
     },
 
     setState: function (v) {
+        var o = this.options;
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
@@ -56745,7 +58665,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("state-editor-infinite-text");
             } else {
-                this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+                this.text.setText(o.text);
                 this.text.element.addClass("state-editor-infinite-text");
             }
             return;
@@ -56755,7 +58675,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             this.text.setTitle(v);
             this.text.element.removeClass("state-editor-infinite-text");
         } else if (BI.isEmpty(v)) {
-            this.text.setText(BI.i18nText("BI-Basic_Unrestricted"));
+            this.text.setText(o.text);
             this.text.element.addClass("state-editor-infinite-text");
         } else {
             this.text.setText(BI.i18nText("BI-Already_Selected"));
@@ -56952,6 +58872,8 @@ BI.ListPane = BI.inherit(BI.Pane, {
                     calback.apply(self, arguments);
                     op.times === 1 && BI.nextTick(function () {
                         self.loaded();
+                        // callback可能在loading之前执行, check保证显示正确
+                        self.check();
                     });
                 });
             },
@@ -57151,7 +59073,7 @@ BI.Panel = BI.inherit(BI.Widget, {
         this.text.setValue(title);
     }
 });
-BI.Panel.EVENT_CHANGE = "Panel.EVENT_CHANGE";
+BI.Panel.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.panel", BI.Panel);
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -57983,6 +59905,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
+            pagerDirection: "vertical", // 翻页按钮方向，可选值：vertical/horizontal
             height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
@@ -57991,7 +59914,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.AllCountPager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, pagerIconCls = this._getPagerIconCls();
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
             cls: "pager-editor",
@@ -58003,7 +59926,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
             width: 40,
-            height: 24
+            height: 24,
+            invisible: o.pages <= 1
         });
 
         this.pager = BI.createWidget({
@@ -58028,7 +59952,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev pull-up-font"
+                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -58037,13 +59961,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next pull-down-font"
+                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
             hasNext: o.hasNext,
             firstPage: o.firstPage,
-            lastPage: o.lastPage
+            lastPage: o.lastPage,
+            invisible: o.pages <= 1
         });
 
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
@@ -58061,7 +59986,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             type: "bi.label",
             title: o.pages,
             text: "/" + o.pages,
-            lgap: 5
+            lgap: 5,
+            invisible: o.pages <= 1
         });
 
         this.rowCount = BI.createWidget({
@@ -58102,11 +60028,30 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     alwaysShowPager: true,
 
+    _getPagerIconCls: function () {
+        var o = this.options;
+        switch (o.pagerDirection) {
+            case "horizontal":
+                return {
+                    preCls: " row-pre-page-h-font ",
+                    nextCls: " row-next-page-h-font "
+                };
+            case "vertical":
+            default:
+                return {
+                    preCls: " column-pre-page-h-font ",
+                    nextCls: " column-next-page-h-font "
+                };
+        }
+    },
+
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
+        this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
+        this.setPagerVisible(v > 1);
     },
 
     setValue: function (v) {
@@ -58142,6 +60087,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.pager.populate();
+        this.setPagerVisible(this.options.pages > 1);
     }
 });
 BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
@@ -58157,7 +60103,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DirectionPager.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-direction-pager",
-            height: 20,
+            height: 24,
             horizontal: {
                 pages: false, // 总页数
                 curr: 1, // 初始化当前页， pages为数字时可用
@@ -58191,19 +60137,19 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             items: [{
                 el: this.vpager,
                 top: 0,
-                right: 74
+                right: 86
             }, {
                 el: this.vlabel,
                 top: 0,
-                right: 111
+                right: 110
             }, {
                 el: this.hpager,
                 top: 0,
-                right: -9
+                right: 0
             }, {
                 el: this.hlabel,
                 top: 0,
-                right: 28
+                right: 24
             }]
         });
     },
@@ -58214,19 +60160,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.vlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: v.curr,
             title: v.curr,
             invisible: true
         });
         this.vpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -58242,20 +60187,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Up_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev column-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Down_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next column-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -58279,19 +60222,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
         this.hlabel = BI.createWidget({
             type: "bi.label",
             width: 24,
-            height: 20,
+            height: 24,
             value: h.curr,
             title: h.curr,
             invisible: true
         });
         this.hpager = BI.createWidget({
             type: "bi.pager",
-            width: 76,
+            width: 72,
             layouts: [{
                 type: "bi.horizontal",
                 scrollx: false,
-                rgap: 24,
-                vgap: 1
+                rgap: 24
             }],
             invisible: true,
 
@@ -58307,20 +60249,18 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 value: "prev",
                 title: BI.i18nText("BI-Left_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-prev row-pre-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-prev row-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
                 value: "next",
                 title: BI.i18nText("BI-Right_Page"),
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
-                height: 20,
-                iconWidth: 16,
-                iconHeight: 16,
-                cls: "direction-pager-next row-next-page-h-font"
+                height: 22,
+                width: 22,
+                cls: "bi-border direction-pager-next row-next-page-h-font"
             },
 
             hasPrev: h.hasPrev,
@@ -58401,7 +60341,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
             vShow = true;
         }
         this.setVisible(hShow || vShow);
-        var num = [74, 111, -9, 28];
+        var num = [86, 110, 0, 24];
         var items = this.layout.attr("items");
 
         if (vShow === true && hShow === true) {
@@ -58962,7 +60902,7 @@ BI.MultiSelectBar = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.MultiSelectBar.EVENT_CHANGE = "MultiSelectBar.EVENT_CHANGE";
+BI.MultiSelectBar.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 /**
  * guy
@@ -59453,7 +61393,7 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         this.editor.setState(text);
     }
 });
-BI.EditorTrigger.EVENT_CHANGE = "BI.EditorTrigger.EVENT_CHANGE";
+BI.EditorTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 /**
  * 图标按钮trigger
@@ -60531,7 +62471,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
     setValue: function (v) {
         var o = this.options;
         v = BI.parseInt(v);
-        if (BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]) {
+        // 对于年控件来说，只要传入的minDate和maxDate的year区间包含v就是合法的
+        var startDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
             v = BI.getDate().getFullYear();
             this.selectedYear = "";
             this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
@@ -61043,7 +62986,7 @@ BI.DateTimeCombo = BI.inherit(BI.Single, {
 BI.DateTimeCombo.EVENT_CANCEL = "EVENT_CANCEL";
 BI.DateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW";
+BI.DateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 /**
  * Created by Urthur on 2017/7/14.
@@ -61809,7 +63752,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 36,
-            forceNotSelected: true,
+            disableSelected: true,
             selected: this._digest(o.value)
         });
 
@@ -62179,11 +64122,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
 BI.DownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
-BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
- * 汇总表格帮助类
- * Created by Young's on 2017/1/19.
- */
-!(function () {
+BI.shortcut("bi.down_list_popup", BI.DownListPopup);!(function () {
     BI.DynamicDateHelper = {};
     BI.extend(BI.DynamicDateHelper, {
         getCalculation: function (obj) {
@@ -62882,7 +64821,7 @@ BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
-BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_combo", BI.DynamicDateCombo);
 
@@ -63391,6 +65330,13 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
                     break;
             }
         });
+        // 这边不能直接用\d+去切日期, 因为format格式可能是20190607这样的没有分割符的 = =
+        // 先看一下是否是合法的, 如果合法就变成标准格式的走原来的流程, 不合法不关心
+        var date = BI.parseDateTime(v, this._getFormatString());
+        if(BI.print(date, this._getFormatString()) === v) {
+            v = BI.print(date, c.compareFormat);
+            result = [0, 1, 2];
+        }
         var dateArray = v.match(/\d+/g);
         var newArray = [];
         BI.each(dateArray, function (idx) {
@@ -64439,6 +66385,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
     },
 
     _getStandardDateStr: function (v) {
+        var c = this._const;
         var result = [];
         var hasSecond = false;
         var formatArray = this._getFormatString().match(/%./g);
@@ -64463,7 +66410,13 @@ BI.extend(BI.DynamicDateTimeSelect, {
                     break;
             }
         });
-
+        // 这边不能直接用\d+去切日期, 因为format格式可能是20190607这样的没有分割符的 = =
+        // 先看一下是否是合法的, 如果合法就变成标准格式的走原来的流程, 不合法不关心
+        var date = BI.parseDateTime(v, this._getFormatString());
+        if(BI.print(date, this._getFormatString()) === v) {
+            v = BI.print(date, c.compareFormat);
+            result = [0, 1, 2];
+        }
         var dateArray = v.match(/\d+/g);
         var newArray = [];
         // 处理乱序的年月日
@@ -64472,6 +66425,10 @@ BI.extend(BI.DynamicDateTimeSelect, {
         });
         // 拼接时分秒和pm
         var suffixArray = dateArray.slice(3);
+        // 时分秒补0
+        BI.each(suffixArray, function (idx, v) {
+            BI.isNumeric(v) && v.length === 1 && (suffixArray[idx] = "0" + v);
+        });
         // hh:mm
         if(suffixArray.length === 2 && !hasSecond) {
             suffixArray.push("00");
@@ -66508,106 +68465,218 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer_select_tree-combo",
+            baseCls: "bi-multilayer-select-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
+            itemsCreator: BI.emptyFn,
             items: [],
             value: "",
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: false
         });
     },
 
-    _init: function () {
-        BI.MultiLayerSelectTreeCombo.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
-        this.trigger = BI.createWidget({
+        var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
+
+        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+            type: "bi.absolute",
+            items: [{
+                el: combo,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.trigger_icon_button",
+                    cls: "trigger-icon-button",
+                    ref: function (_ref) {
+                        self.triggerBtn = _ref;
+                    },
+                    width: o.height,
+                    height: o.height,
+                    handler: function () {
+                        if (self.combo.isViewVisible()) {
+                            self.combo.hideView();
+                        } else {
+                            self.combo.showView();
+                        }
+                    }
+                },
+                right: 0,
+                bottom: 0,
+                top: 0
+            }]
+        };
+    },
+
+    _getBaseConfig: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.combo",
+            container: o.container,
+            adjustLength: 2,
+            ref: function (_ref) {
+                self.combo = _ref;
+            },
+            popup: {
+                el: {
+                    type: "bi.multilayer_select_tree_popup",
+                    isDefaultInit: o.isDefaultInit,
+                    itemsCreator: o.itemsCreator,
+                    items: o.items,
+                    ref: function (_ref) {
+                        self.trigger && self.trigger.getSearcher().setAdapter(_ref);
+                    },
+                    listeners: [{
+                        eventName: BI.MultiLayerSelectTreePopup.EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(this.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+                        }
+                    }]
+                },
+                value: o.value,
+                maxHeight: 400,
+                minHeight: 240
+            }
+        };
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        baseConfig.el = {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
             items: o.items,
             value: o.value
-        });
+        };
+        return baseConfig;
+    },
 
-        this.popup = BI.createWidget({
-            type: "bi.multilayer_select_tree_popup",
-            isDefaultInit: o.isDefaultInit,
-            items: o.items,
-            value: o.value
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: o.container,
-            element: this,
-            adjustLength: 2,
-            el: this.trigger,
-            popup: {
-                el: this.popup
-            }
-        });
-
-        this.combo.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.popup.on(BI.MultiLayerSelectTreePopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+    _getAsyncConfig: function () {
+        var self = this, o = this.options;
+        var config = this._getBaseConfig();
+        return BI.extend(config, {
+            el: {
+                type: "bi.multilayer_select_tree_trigger",
+                allowEdit: o.allowEdit,
+                cls: "multilayer-select-tree-trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                items: o.items,
+                itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
+                height: o.height - 2,
+                text: o.text,
+                value: o.value,
+                tipType: o.tipType,
+                warningTitle: o.warningTitle,
+                title: o.title,
+                listeners: [{
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE,
+                    action: function () {
+                        self.setValue(this.getValue());
+                        self.combo.hideView();
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_FOCUS);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_BLUR);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING);
+                    }
+                }]
+            },
+            hideChecker: function (e) {
+                return self.triggerBtn.element.find(e.target).length === 0;
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
+                action: function () {
+                    self.trigger.stopEditing();
+                }
+            }]
         });
     },
 
     setValue: function (v) {
         v = BI.isArray(v) ? v : [v];
-        this.trigger.setValue(v);
-        this.popup.setValue(v);
+        this.combo.setValue(v);
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        return this.combo.getValue();
     },
 
     populate: function (items) {
         this.combo.populate(items);
     }
 });
+
+BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
- * @extends BI.Select
+ * @extends BI.Pane
  */
-BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
+BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectLevelTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-select-level-tree",
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
+            keywordGetter: BI.emptyFn,
             value: "",
             scrollable: true
         });
     },
 
     _init: function () {
+        var o = this.options;
         BI.MultiLayerSelectLevelTree.superclass._init.apply(this, arguments);
 
+        this.storeValue = o.value;
+
         this.initTree(this.options.items);
+
+        this.check();
     },
 
     _formatItems: function (nodes, layer, pNode) {
-        var self = this;
+        var self = this, o = this.options;
+        var keyword = o.keywordGetter();
         BI.each(nodes, function (i, node) {
             var extend = {};
             node.layer = layer;
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            node.keyword = keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
@@ -66646,6 +68715,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
     // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
+        var hasNext = false;
         this.empty();
         this._assertId(nodes);
         this.tree = BI.createWidget({
@@ -66661,20 +68731,42 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
             },
 
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
-            itemsCreator: o.itemsCreator,
+            itemsCreator: function (op, callback) {
+                (op.times === 1 && !op.node) && BI.nextTick(function () {
+                    self.loading();
+                });
+                o.itemsCreator(op, function (ob) {
+                    hasNext = ob.hasNext;
+                    (op.times === 1 && !op.node) && self._populate(ob.items);
+                    callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
+                    self.setValue(self.storeValue);
+                    (op.times === 1 && !op.node) && BI.nextTick(function () {
+                        self.loaded();
+                    });
+                });
+            },
             value: o.value,
 
             el: {
-                type: "bi.button_tree",
-                chooseType: BI.Selection.Single,
-                layouts: [{
-                    type: "bi.vertical"
-                }]
+                type: "bi.loader",
+                isDefaultInit: o.itemsCreator !== BI.emptyFn,
+                el: {
+                    type: "bi.button_tree",
+                    chooseType: o.chooseType,
+                    behaviors: o.behaviors,
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                },
+                hasNext: function () {
+                    return hasNext;
+                }
             }
         });
-        this.tree.on(BI.Controller.EVENT_CHANGE, function (type) {
+        this.tree.on(BI.Controller.EVENT_CHANGE, function (type, value) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
+                self.setValue(value);
                 self.fireEvent(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, arguments);
             }
         });
@@ -66687,16 +68779,26 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
+    _populate: function () {
+        BI.MultiLayerSelectLevelTree.superclass.populate.apply(this, arguments);
+    },
+
     populate: function (nodes) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
+        this._populate(nodes);
+        BI.isNull(nodes) ? this.tree.populate() : this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
     },
 
     setValue: function (v) {
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
-        return BI.uniq(this.tree.getValue());
+        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -66720,7 +68822,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);/**
  * @extends BI.Pane
  */
 
-BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
+BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
@@ -66742,8 +68844,9 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            value: o.value,
             itemsCreator: o.itemsCreator,
+            keywordGetter: o.keywordGetter,
+            value: o.value,
             scrollable: null
         });
 
@@ -66763,8 +68866,6 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
         this.tree.on(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSelectTreePopup.EVENT_CHANGE);
         });
-
-        this.check();
     },
 
     getValue: function () {
@@ -66777,13 +68878,153 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
     },
 
     populate: function (items) {
-        BI.MultiLayerSelectTreePopup.superclass.populate.apply(this, arguments);
         this.tree.populate(items);
     }
 });
 
 BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);/**
+ * Created by Windy on 2018/2/2.
+ */
+BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
+
+    props: {
+        extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
+        height: 24,
+        valueFormatter: function (v) {
+            return v;
+        },
+        itemsCreator: BI.emptyFn
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        var content = {
+            type: "bi.htape",
+            items: [
+                {
+                    el: {
+                        type: "bi.searcher",
+                        ref: function () {
+                            self.searcher = this;
+                        },
+                        isAutoSearch: false,
+                        el: {
+                            type: "bi.state_editor",
+                            ref: function () {
+                                self.editor = this;
+                            },
+                            text: this._digest(o.value),
+                            value: o.value,
+                            height: o.height,
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.StateEditor.EVENT_FOCUS,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_BLUR);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING);
+                                }
+                            }]
+                        },
+                        popup: {
+                            type: "bi.multilayer_select_tree_popup",
+                            itemsCreator: function (op, callback) {
+                                op.keyword = self.editor.getValue();
+                                o.itemsCreator(op, callback);
+                            },
+                            keywordGetter: function () {
+                                return self.editor.getValue();
+                            },
+                            cls: "bi-card"
+                        },
+                        onSearch: function (obj, callback) {
+                            var keyword = obj.keyword;
+                            if(o.itemsCreator === BI.emptyFn) {
+                                var finding = BI.Func.getSearchResult(o.items, keyword);
+                                var matched = finding.match, find = finding.find;
+                                callback(find.concat(matched));
+                            } else {
+                                callback();
+                            }
+                        },
+                        listeners: [{
+                            eventName: BI.Searcher.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE);
+                            }
+                        }]
+                    }
+                }, {
+                    el: {
+                        type: "bi.layout",
+                        width: 24
+                    },
+                    width: 24
+                }
+            ]
+        };
+
+        return o.allowEdit ? content : {
+            type: "bi.absolute",
+            items: [{
+                el: content,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    _digest: function (v) {
+        return this.options.valueFormatter(v);
+    },
+
+    stopEditing: function () {
+        this.searcher.stopSearch();
+    },
+
+    getSearcher: function () {
+        return this.searcher;
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+    },
+
+    setValue: function (v) {
+        this.editor.setState(this._digest(v[0]));
+    },
+
+    getValue: function () {
+        return this.searcher.getValue();
+    }
+});
+
+BI.MultiLayerSelectTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiLayerSelectTreeTrigger.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
+BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";
+BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);/**
  * 加号表示的组节点
  *
  * Created by GUY on 2016/1/27.
@@ -67207,60 +69448,158 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             value: "",
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: false
         });
     },
 
-    _init: function () {
-        BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
 
-        this.trigger = BI.createWidget({
+        var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
+
+        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+            type: "bi.absolute",
+            items: [{
+                el: combo,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.trigger_icon_button",
+                    cls: "trigger-icon-button",
+                    ref: function (_ref) {
+                        self.triggerBtn = _ref;
+                    },
+                    width: o.height,
+                    height: o.height,
+                    handler: function () {
+                        if (self.combo.isViewVisible()) {
+                            self.combo.hideView();
+                        } else {
+                            self.combo.showView();
+                        }
+                    }
+                },
+                right: 0,
+                bottom: 0,
+                top: 0
+            }]
+        };
+    },
+
+    _getBaseConfig: function () {
+        var self = this, o = this.options;
+        return {
+            type: "bi.combo",
+            container: o.container,
+            adjustLength: 2,
+            ref: function (_ref) {
+                self.combo = _ref;
+            },
+            popup: {
+                el: {
+                    type: "bi.multilayer_single_tree_popup",
+                    isDefaultInit: o.isDefaultInit,
+                    itemsCreator: o.itemsCreator,
+                    items: o.items,
+                    ref: function (_ref) {
+                        self.trigger && self.trigger.getSearcher().setAdapter(_ref);
+                    },
+                    listeners: [{
+                        eventName: BI.MultiLayerSingleTreePopup.EVENT_CHANGE,
+                        action: function () {
+                            self.setValue(this.getValue());
+                            self.combo.hideView();
+                            self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
+                        }
+                    }]
+                },
+                value: o.value,
+                maxHeight: 400,
+                minHeight: 240
+            }
+        };
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        baseConfig.el = {
             type: "bi.single_tree_trigger",
             text: o.text,
             height: o.height,
             items: o.items,
             value: o.value
-        });
+        };
+        return baseConfig;
+    },
 
-        this.popup = BI.createWidget({
-            type: "bi.multilayer_single_tree_popup",
-            isDefaultInit: o.isDefaultInit,
-            itemsCreator: o.itemsCreator,
-            items: o.items,
-            value: o.value
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: o.container,
-            element: this,
-            adjustLength: 2,
-            el: this.trigger,
-            popup: {
-                el: this.popup
-            }
-        });
-
-        this.combo.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.popup.on(BI.MultiLayerSingleTreePopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
+    _getAsyncConfig: function () {
+        var self = this, o = this.options;
+        var config = this._getBaseConfig();
+        return BI.extend(config, {
+            el: {
+                type: "bi.multilayer_single_tree_trigger",
+                allowEdit: o.allowEdit,
+                cls: "multilayer-single-tree-trigger",
+                ref: function (_ref) {
+                    self.trigger = _ref;
+                },
+                items: o.items,
+                itemsCreator: o.itemsCreator,
+                valueFormatter: o.valueFormatter,
+                height: o.height - 2,
+                text: o.text,
+                value: o.value,
+                tipType: o.tipType,
+                warningTitle: o.warningTitle,
+                title: o.title,
+                listeners: [{
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE,
+                    action: function () {
+                        self.setValue(this.getValue());
+                        self.combo.hideView();
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_FOCUS);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_BLUR,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BLUR);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
+                    action: function () {
+                        self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
+                    }
+                }]
+            },
+            hideChecker: function (e) {
+                return self.triggerBtn.element.find(e.target).length === 0;
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
+                action: function () {
+                    self.trigger.stopEditing();
+                }
+            }]
         });
     },
 
     setValue: function (v) {
         v = BI.isArray(v) ? v : [v];
-        this.trigger.setValue(v);
-        this.popup.setValue(v);
+        this.combo.setValue(v);
     },
 
     getValue: function () {
-        return this.popup.getValue();
+        return this.combo.getValue();
     },
 
     populate: function (items) {
@@ -67268,6 +69607,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
  * guy
@@ -67275,32 +69617,40 @@ BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
  * @class BI.MultiLayerSingleLevelTree
  * @extends BI.Single
  */
-BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
+BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleLevelTree.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-single-level-tree",
             isDefaultInit: false,
             items: [],
             itemsCreator: BI.emptyFn,
+            keywordGetter: BI.emptyFn,
             chooseType: BI.Selection.Single,
             scrollable: true
         });
     },
 
     _init: function () {
+        var o = this.options;
         BI.MultiLayerSingleLevelTree.superclass._init.apply(this, arguments);
 
+        this.storeValue = o.value;
+
         this.initTree(this.options.items);
+
+        this.check();
     },
 
     _formatItems: function (nodes, layer, pNode) {
-        var self = this;
+        var self = this, o = this.options;
+        var keyword = o.keywordGetter();
         BI.each(nodes, function (i, node) {
             var extend = {};
             node.layer = layer;
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
+            node.keyword = keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
@@ -67319,7 +69669,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             } else {
                 extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
                 if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item"
+                    extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 }
                 if (i === nodes.length - 1) {
                     extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
@@ -67339,6 +69689,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
     // 构造树结构，
     initTree: function (nodes) {
         var self = this, o = this.options;
+        var hasNext = false;
         this.empty();
         this._assertId(nodes);
         this.tree = BI.createWidget({
@@ -67355,22 +69706,40 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
             items: this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0),
             value: o.value,
             itemsCreator: function (op, callback) {
-                o.itemsCreator(op, function (items) {
-                    callback(BI.Tree.transformToTreeFormat(items), 0);
+                (op.times === 1 && !op.node) && BI.nextTick(function () {
+                    self.loading();
+                });
+                o.itemsCreator(op, function (ob) {
+                    hasNext = ob.hasNext;
+                    (op.times === 1 && !op.node) && self._populate(ob.items);
+                    callback(self._formatItems(BI.Tree.transformToTreeFormat(ob.items), op.node ? op.node.layer + 1 : 0, op.node));
+                    self.setValue(self.storeValue);
+                    (op.times === 1 && !op.node) && BI.nextTick(function () {
+                        self.loaded();
+                    });
                 });
             },
 
             el: {
-                type: "bi.button_tree",
-                chooseType: o.chooseType,
-                layouts: [{
-                    type: "bi.vertical"
-                }]
+                type: "bi.loader",
+                isDefaultInit: o.itemsCreator !== BI.emptyFn,
+                el: {
+                    type: "bi.button_tree",
+                    chooseType: o.chooseType,
+                    behaviors: o.behaviors,
+                    layouts: [{
+                        type: "bi.vertical"
+                    }]
+                },
+                hasNext: function () {
+                    return hasNext;
+                }
             }
         });
         this.tree.on(BI.Controller.EVENT_CHANGE, function (type, v) {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
             if (type === BI.Events.CLICK) {
+                self.setValue(v);
                 self.fireEvent(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, v);
             }
         });
@@ -67383,19 +69752,26 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
         });
     },
 
+    _populate: function () {
+        BI.MultiLayerSelectLevelTree.superclass.populate.apply(this, arguments);
+    },
+
     populate: function (nodes) {
-        this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
+        this._populate(nodes);
+        BI.isNull(nodes) ? this.tree.populate() : this.tree.populate(this._formatItems(BI.Tree.transformToTreeFormat(nodes), 0));
     },
 
     setValue: function (v) {
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
-        return BI.filter(BI.uniq(this.tree.getValue()), function (idx, value) {
-            return BI.isNotNull(value);
-        });
-
+        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -67420,7 +69796,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
  * @extends BI.Pane
  */
 
-BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
+BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreePopup.superclass._defaultConfig.apply(this, arguments), {
@@ -67442,6 +69818,7 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator,
+            keywordGetter: o.keywordGetter,
             value: o.value,
             scrollable: null
         });
@@ -67462,8 +69839,6 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
         this.tree.on(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSingleTreePopup.EVENT_CHANGE);
         });
-
-        this.check();
     },
 
     getValue: function () {
@@ -67476,13 +69851,152 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Pane, {
     },
 
     populate: function (items) {
-        BI.MultiLayerSingleTreePopup.superclass.populate.apply(this, arguments);
         this.tree.populate(items);
     }
 });
 
 BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);/**
+ * Created by Windy on 2018/2/2.
+ */
+BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
+
+    props: {
+        extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
+        height: 24,
+        valueFormatter: function (v) {
+            return v;
+        },
+        itemsCreator: BI.emptyFn
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        var content = {
+            type: "bi.htape",
+            items: [
+                {
+                    el: {
+                        type: "bi.searcher",
+                        ref: function () {
+                            self.searcher = this;
+                        },
+                        isAutoSearch: false,
+                        el: {
+                            type: "bi.state_editor",
+                            ref: function () {
+                                self.editor = this;
+                            },
+                            text: this._digest(o.value),
+                            value: o.value,
+                            height: o.height,
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.StateEditor.EVENT_FOCUS,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_BLUR);
+                                }
+                            }, {
+                                eventName: BI.StateEditor.EVENT_CHANGE,
+                                action: function () {
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING);
+                                }
+                            }]
+                        },
+                        popup: {
+                            type: "bi.multilayer_single_tree_popup",
+                            itemsCreator: function (op, callback) {
+                                op.keyword = self.editor.getValue();
+                                o.itemsCreator(op, callback);
+                            },
+                            keywordGetter: function () {
+                                return self.editor.getValue();
+                            },
+                            cls: "bi-card"
+                        },
+                        onSearch: function (obj, callback) {
+                            var keyword = obj.keyword;
+                            if(o.itemsCreator === BI.emptyFn) {
+                                var finding = BI.Func.getSearchResult(o.items, keyword);
+                                var matched = finding.match, find = finding.find;
+                                callback(find.concat(matched));
+                            } else {
+                                callback();
+                            }
+                        },
+                        listeners: [{
+                            eventName: BI.Searcher.EVENT_CHANGE,
+                            action: function () {
+                                self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE);
+                            }
+                        }]
+                    }
+                }, {
+                    el: {
+                        type: "bi.layout",
+                        width: 24
+                    },
+                    width: 24
+                }
+            ]
+        };
+
+        return o.allowEdit ? content : {
+            type: "bi.absolute",
+            items: [{
+                el: content,
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            }, {
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
+        };
+    },
+
+    _digest: function (v) {
+        return this.options.valueFormatter(v);
+    },
+
+    stopEditing: function () {
+        this.searcher.stopSearch();
+    },
+
+    getSearcher: function () {
+        return this.searcher;
+    },
+
+    populate: function (items) {
+        this.options.items = items;
+    },
+
+    setValue: function (v) {
+        this.editor.setState(this._digest(v[0]));
+    },
+
+    getValue: function () {
+        return this.searcher.getValue();
+    }
+});
+BI.MultiLayerSingleTreeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiLayerSingleTreeTrigger.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiLayerSingleTreeTrigger.EVENT_STOP = "EVENT_STOP";
+BI.MultiLayerSingleTreeTrigger.EVENT_START = "EVENT_START";
+BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);/**
  * 加号表示的组节点
  *
  * Created by GUY on 2016/1/27.
@@ -68393,7 +70907,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -68415,6 +70930,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
             // adapter: this.popup,
@@ -68439,12 +70955,20 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -68477,6 +71001,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -68489,9 +71014,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -68518,6 +71046,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -68743,6 +71272,11 @@ BI.extend(BI.MultiSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);/**
@@ -68805,12 +71339,20 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             value: o.value
         });
 
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_START, function () {
             self._setStartValue("");
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_STOP, function () {
             self._setStartValue("");
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -68839,6 +71381,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_CHANGE, function (value, obj) {
@@ -68851,9 +71394,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -68880,6 +71426,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                         self._adjust(function () {
                             assertShowValue();
                         });
+                        self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CONFIRM,
@@ -69125,6 +71672,11 @@ BI.extend(BI.MultiSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.MultiSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);/**
@@ -69242,7 +71794,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -69586,6 +72140,12 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_BLUR);
+        });
+        this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_FOCUS);
+        });
         this.numberCounter = BI.createWidget(o.switcher, {
             type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
@@ -69694,6 +72254,8 @@ BI.MultiSelectInsertTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
 BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiSelectInsertTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);/**
  * 多选加载数据面板
@@ -70301,6 +72863,12 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_BLUR);
+        });
+        this.searcher.on(BI.MultiSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectTrigger.EVENT_FOCUS);
+        });
         this.numberCounter = BI.createWidget(o.switcher, {
             type: "bi.multi_select_check_selected_switcher",
             valueFormatter: o.valueFormatter,
@@ -70408,6 +72976,8 @@ BI.MultiSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.MultiSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);/**
  *
@@ -70897,8 +73467,11 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -70944,7 +73517,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
+
+BI.MultiSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 /**
  * searcher
@@ -70973,7 +73549,18 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectInsertSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -71127,6 +73714,8 @@ BI.MultiSelectInsertSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectInsertSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertSearcher.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiSelectInsertSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);/**
  * searcher
  * Created by guy on 15/11/3.
@@ -71154,7 +73743,18 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -71301,6 +73901,8 @@ BI.MultiSelectSearcher.EVENT_START = "EVENT_START";
 BI.MultiSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.MultiSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);/**
  * 查看已选switcher
  * Created by guy on 15/11/3.
@@ -71345,6 +73947,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 onClickContinueSelect: function () {
                     self.switcher.hideView();
                 },
+                ref: function (_ref) {
+                    self.checkPane = _ref;
+                },
                 value: o.value
             }, o.popup),
             adapter: o.adapter,
@@ -71385,6 +73990,11 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.setValue(v);
     },
 
+    // 与setValue的区别是只更新查看已选面板的的selectedValue, 不会更新按钮的计数
+    updateSelectedValue: function (v) {
+        this.checkPane.setValue(v);
+    },
+
     setButtonChecked: function (v) {
         this.button.setValue(v);
     },
@@ -71398,8 +74008,8 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     }
 });
 
-BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
-BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -71734,7 +74344,7 @@ BI.extend(BI.MultiSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertList.EVENT_CHANGE = "BI.MultiSelectInsertList.EVENT_CHANGE";
+BI.MultiSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -72079,7 +74689,7 @@ BI.extend(BI.MultiSelectInsertNoBarList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "BI.MultiSelectInsertNoBarList.EVENT_CHANGE";
+BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);/**
  * Created by zcf_1 on 2017/5/2.
  */
@@ -72426,7 +75036,7 @@ BI.extend(BI.MultiSelectList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
+BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);/**
  * Created by zcf_1 on 2017/5/11.
  */
@@ -72592,7 +75202,7 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
         this.adapter.populate.apply(this.adapter, arguments);
     }
 });
-BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
+BI.MultiSelectTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);/**
  * Created by zcf on 2016/12/21.
  */
@@ -72647,8 +75257,8 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
     }
 
 });
-BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "BI.MultiSelectTreePopup.EVENT_AFTER_INIT";
-BI.MultiSelectTreePopup.EVENT_CHANGE = "BI.MultiSelectTreePopup.EVENT_CHANGE";
+BI.MultiSelectTreePopup.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
+BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);/**
  *
  * @class BI.MultiTreeCheckPane
@@ -72859,6 +75469,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -72898,6 +75509,13 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -72910,6 +75528,11 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -72947,6 +75570,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -73032,7 +75656,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeCombo.EVENT_CONFIRM = "MultiTreeCombo.EVENT_CONFIRM";
+BI.MultiTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);/**
  * 可以往当前选中节点下添加新值的下拉树
@@ -73082,6 +75711,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             },
             searcher: {
                 type: "bi.multi_tree_searcher",
+                text: o.text,
                 itemsCreator: o.itemsCreator,
                 popup: {
                     type: "bi.multi_tree_search_insert_pane",
@@ -73141,6 +75771,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -73180,6 +75811,13 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -73192,6 +75830,11 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -73229,6 +75872,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -73319,7 +75963,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeInsertCombo.EVENT_CONFIRM = "MultiTreeInsertCombo.EVENT_CONFIRM";
+BI.MultiTreeInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);/**
  * 选中节点不影响父子节点状态的下拉树
@@ -73361,6 +76010,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
+            text: o.text,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -73437,6 +76087,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -73476,6 +76127,13 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -73488,6 +76146,11 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -73525,6 +76188,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -73615,7 +76279,12 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeListCombo.EVENT_CONFIRM = "MultiTreeListCombo.EVENT_CONFIRM";
+BI.MultiTreeListCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeListCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeListCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeListCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeListCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);/**
  * 带加载的多选下拉面板
@@ -74161,8 +76830,20 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
+                text: o.text,
                 height: o.height
-            }
+            },
+            listeners: [{
+                eventName: BI.MultiSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.MultiSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -74206,6 +76887,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         });
         this.searcher.on(BI.Searcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_CHANGE, arguments);
+        });
+        this.searcher.on(BI.Searcher.EVENT_SEARCHING, function () {
+            var keywords = this.getKeywords();
+            self.fireEvent(BI.MultiTreeSearcher.EVENT_SEARCHING, keywords);
         });
         if (BI.isNotNull(o.value)) {
             this.setState(o.value);
@@ -74299,6 +76984,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.MultiTreeSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.MultiTreeSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.MultiTreeSearcher.EVENT_START = "EVENT_START";
@@ -77392,7 +80078,8 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -77413,6 +80100,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             height: o.height,
             // adapter: this.popup,
             allowNoSelect: o.allowNoSelect,
+            allowEdit: o.allowEdit,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
                 o.itemsCreator(op, function (res) {
@@ -77427,12 +80115,20 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
             value: this.storeValue
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
@@ -77460,6 +80156,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -77494,6 +80191,7 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -77646,6 +80344,11 @@ BI.extend(BI.SingleSelectCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
@@ -77665,7 +80368,8 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             attributes: {
                 tabIndex: 0
-            }
+            },
+            allowEdit: true
         });
     },
 
@@ -77685,6 +80389,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             type: "bi.single_select_trigger",
             height: o.height,
             allowNoSelect: o.allowNoSelect,
+            allowEdit: o.allowEdit,
             // adapter: this.popup,
             valueFormatter: o.valueFormatter,
             itemsCreator: function (op, callback) {
@@ -77715,12 +80420,20 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.SingleSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.SingleSelectTrigger.EVENT_START, function () {
             self._setStartValue();
             this.getSearcher().setValue(self.storeValue);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_STOP, function () {
             self._setStartValue();
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             var keyword = this.getSearcher().getKeyword();
@@ -77747,6 +80460,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                     }
                 });
             }
+            self.fireEvent(BI.SingleSelectInsertCombo.EVENT_SEARCHING);
         });
 
         this.trigger.on(BI.SingleSelectTrigger.EVENT_CHANGE, function (value, obj) {
@@ -77781,6 +80495,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
                             assertShowValue();
                             self._defaultState();
                         });
+                        self.fireEvent(BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }],
                 itemsCreator: o.itemsCreator,
@@ -77922,14 +80637,14 @@ BI.extend(BI.SingleSelectInsertCombo, {
     REQ_GET_ALL_DATA: -1
 });
 
+BI.SingleSelectInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.SingleSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
- * guy
- * 单选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
@@ -77981,6 +80696,9 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     doClick: function () {
         BI.SingleSelectComboItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectComboItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -77989,7 +80707,7 @@ BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
 
     }
 });
-
+BI.SingleSelectComboItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);/**
  * 选择列表
  *
@@ -78052,6 +80770,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
         }, o.logic, {
             items: o.allowNoSelect ? BI.LogicFactory.createLogicItemsByDirection(o.direction, {
                 type: "bi.single_select_item",
+                cls: "bi-list-item-active",
                 height: 24,
                 forceNotSelected: true,
                 text: BI.i18nText("BI-Basic_No_Select"),
@@ -78407,7 +81126,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -78446,6 +81166,12 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.SingleSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.SingleSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_FOCUS);
+        });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_BLUR, arguments);
+        });
 
         var wrapper = BI.createWidget({
             type: "bi.htape",
@@ -78458,6 +81184,20 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
     },
 
@@ -78494,6 +81234,8 @@ BI.SingleSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.SingleSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);/**
  * @author: Teller
@@ -78730,7 +81472,7 @@ BI.extend(BI.SingleSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SingleSelectInsertList.EVENT_CHANGE = "BI.SingleSelectInsertList.EVENT_CHANGE";
+BI.SingleSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 /**
  * 单选输入框
@@ -78767,8 +81509,11 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.SingleSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -78810,7 +81555,10 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.SingleSelectEditor.EVENT_PAUSE = "SingleSelectEditor.EVENT_PAUSE";
+
+BI.SingleSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);/**
  * searcher
  * Created by guy on 15/11/3.
@@ -78838,7 +81586,18 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         this.editor = BI.createWidget(o.el, {
             type: "bi.single_select_editor",
             height: o.height,
-            text: o.text
+            text: o.text,
+            listeners: [{
+                eventName: BI.SingleSelectEditor.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.SingleSelectEditor.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.SingleSelectSearcher.EVENT_BLUR);
+                }
+            }]
         });
 
         this.searcher = BI.createWidget({
@@ -78951,6 +81710,8 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
     }
 });
 
+BI.SingleSelectSearcher.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.SingleSelectSearcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.SingleSelectSearcher.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SingleSelectSearcher.EVENT_START = "EVENT_START";
@@ -78958,9 +81719,6 @@ BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
-/**
- * Created by User on 2017/11/16.
- */
 BI.SignTextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
@@ -80196,7 +82954,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
     }
 });
 
-BI.SingleTreeCombo.EVENT_CHANGE = "SingleTreeCombo.EVENT_CHANGE";
+BI.SingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);/**
  * @class BI.SingleTreePopup
@@ -80640,7 +83398,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
         _const: {
             COMPARE_FORMAT: "%H:%M:%S",
-            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S",
+            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S %P",
             FORMAT_ARRAY: [
                 "%H:%M:%S",  // HH:mm:ss
                 "%I:%M:%S",  // hh:mm:ss
@@ -80648,6 +83406,8 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                 "%k:%M:%S",  // H:mm:ss
                 "%l:%M:%S %p",  // h:mm:ss a
                 "%l:%M:%S %P",  // h:mm:ss a
+                "%H:%M:%S %p",  // HH:mm:ss a
+                "%H:%M:%S %P",  // HH:mm:ss a
                 "%l:%M",  // h:mm
                 "%k:%M",  // H:mm
                 "%I:%M",  // hh:mm
@@ -82038,7 +84798,7 @@ BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);/**
- * 年份展示面板
+ * 年月展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -83074,7 +85834,7 @@ BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 /**
- * 年份展示面板
+ * 年季度展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -83901,28 +86661,33 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
             if (options.keyword) {
                 keywords.push(options.keyword);
             }
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
-            });
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: items,
+                items: resultItems,
                 hasNext: false
             });
         }
@@ -83994,9 +86759,9 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
-BI.AllValueChooserCombo.EVENT_CONFIRM = "AllValueChooserCombo.EVENT_CONFIRM";
+BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 简单的复选面板, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -84057,7 +86822,7 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.AllValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
 
     props: {
@@ -84121,7 +86886,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
         };
     }
 });
-BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
@@ -85147,7 +87912,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "ListTreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
  *
@@ -85200,7 +87965,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "TreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
  *
@@ -85253,9 +88018,9 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.TreeValueChooserCombo.EVENT_CONFIRM = "TreeValueChooserCombo.EVENT_CONFIRM";
+BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的树面板, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.
  * @class BI.TreeValueChooserPane
@@ -85305,7 +88070,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         this.pane.populate.apply(this.pane, arguments);
     }
 });
-BI.TreeValueChooserPane.EVENT_CHANGE = "TreeValueChooserPane.EVENT_CHANGE";
+BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
@@ -85366,29 +88131,34 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
-            });
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: self._getItemsByTimes(items, options.times),
-                hasNext: self._hasNextByTimes(items, options.times)
+                items: self._getItemsByTimes(resultItems, options.times),
+                hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
     }
@@ -85452,9 +88222,9 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
-BI.ValueChooserCombo.EVENT_CONFIRM = "ValueChooserCombo.EVENT_CONFIRM";
+BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 简单的复选面板, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -85509,7 +88279,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
+BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     function initWatch(vm, watch) {
         vm._watchers || (vm._watchers = []);
@@ -85641,18 +88411,12 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         return needPop;
     }
 
-    BI.Widget.prototype._init = function () {
-        BI.Widget.superclass._init.apply(this, arguments);
-        this._initRoot();
-        this._initElementWidth();
-        this._initElementHeight();
-        this._initVisual();
-        this._initState();
+    BI.Widget.prototype._initRender = function () {
         if (this.beforeInit) {
             this.__asking = true;
             this.beforeInit(BI.bind(function () {
                 if (this.model && this.model.$vm) {
-                    this.model.$vm.$digest()
+                    this.model.$vm.$digest();
                 }
                 this._render();
             }, this));
@@ -85662,7 +88426,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         } else {
             this._render();
         }
-    }
+    };
 
     var _init = BI.Widget.prototype._init;
     BI.Widget.prototype._init = function () {

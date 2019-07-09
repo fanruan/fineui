@@ -276,5 +276,5 @@ BI.Farbtastic = BI.inherit(BI.BasicButton, {
         return this.value;
     }
 });
-BI.Farbtastic.EVENT_CHANGE = "Farbtastic.EVENT_CHANGE";
+BI.Farbtastic.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.farbtastic", BI.Farbtastic);

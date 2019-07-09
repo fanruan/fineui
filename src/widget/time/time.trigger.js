@@ -3,7 +3,7 @@
 
         _const: {
             COMPARE_FORMAT: "%H:%M:%S",
-            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S",
+            COMPLETE_COMPARE_FORMAT: "%Y-%M-%d %H:%M:%S %P",
             FORMAT_ARRAY: [
                 "%H:%M:%S",  // HH:mm:ss
                 "%I:%M:%S",  // hh:mm:ss
@@ -11,6 +11,8 @@
                 "%k:%M:%S",  // H:mm:ss
                 "%l:%M:%S %p",  // h:mm:ss a
                 "%l:%M:%S %P",  // h:mm:ss a
+                "%H:%M:%S %p",  // HH:mm:ss a
+                "%H:%M:%S %P",  // HH:mm:ss a
                 "%l:%M",  // h:mm
                 "%k:%M",  // H:mm
                 "%I:%M",  // hh:mm

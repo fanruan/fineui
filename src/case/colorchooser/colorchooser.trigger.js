@@ -61,5 +61,5 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         }
     }
 });
-BI.ColorChooserTrigger.EVENT_CHANGE = "ColorChooserTrigger.EVENT_CHANGE";
+BI.ColorChooserTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_trigger", BI.ColorChooserTrigger);

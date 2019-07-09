@@ -1,5 +1,5 @@
 /**
- * 年份展示面板
+ * 年季度展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard

@@ -1,5 +1,5 @@
 /**
- * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 简单的复选面板, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -54,5 +54,5 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.ValueChooserPane.EVENT_CHANGE = "ValueChooserPane.EVENT_CHANGE";
+BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);

@@ -106,6 +106,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
+                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -145,6 +146,13 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             return self.combo.isViewVisible();
         };
 
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_FOCUS);
+        });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_BLUR);
+        });
+
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
@@ -157,6 +165,11 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                     self.combo.populate();
                 }
             });
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_STOP);
+        });
+
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function () {
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_SEARCHING);
         });
 
         function showCounter () {
@@ -194,6 +207,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -284,6 +298,11 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
     }
 });
 
-BI.MultiTreeInsertCombo.EVENT_CONFIRM = "MultiTreeInsertCombo.EVENT_CONFIRM";
+BI.MultiTreeInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiTreeInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiTreeInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.MultiTreeInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.MultiTreeInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);

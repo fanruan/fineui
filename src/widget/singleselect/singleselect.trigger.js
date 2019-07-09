@@ -23,7 +23,8 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             switcher: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
+            allowEdit: true
         });
     },
 
@@ -62,6 +63,12 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.SingleSelectSearcher.EVENT_CHANGE, function () {
             self.fireEvent(BI.SingleSelectTrigger.EVENT_CHANGE, arguments);
         });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_FOCUS, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_FOCUS);
+        });
+        this.searcher.on(BI.SingleSelectSearcher.EVENT_BLUR, function () {
+            self.fireEvent(BI.SingleSelectTrigger.EVENT_BLUR, arguments);
+        });
 
         var wrapper = BI.createWidget({
             type: "bi.htape",
@@ -74,6 +81,20 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
                     el: BI.createWidget(),
                     width: 24
                 }]
+        });
+
+        !o.allowEdit && BI.createWidget({
+            type: "bi.absolute",
+            element: this,
+            items: [{
+                el: {
+                    type: "bi.layout"
+                },
+                left: 0,
+                right: 24,
+                top: 0,
+                bottom: 0
+            }]
         });
     },
 
@@ -110,5 +131,7 @@ BI.SingleSelectTrigger.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectTrigger.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW = "EVENT_BEFORE_COUNTER_POPUPVIEW";
+BI.SingleSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);

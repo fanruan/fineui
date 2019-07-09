@@ -344,5 +344,5 @@ BI.extend(BI.MultiSelectList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.MultiSelectList.EVENT_CHANGE = "BI.MultiSelectList.EVENT_CHANGE";
+BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);

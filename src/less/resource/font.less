@@ -28,7 +28,7 @@
 .font(dot-font, @font-dot, @color-bi-text-black);
 .font-hover(dot-h-font, @font-dot, @color-bi-text-black);
 .font-hover-active(dot-ha-font, @font-dot, @color-bi-text, @color-bi-text-gray, @color-bi-text-black);
-.font-effect(dot-e-font, @font-dot, transparent, fade(@color-bi-text-highlight, 6), @color-bi-text-highlight, @color-bi-text-highlight);
+.font-effect(dot-e-font, @font-dot, transparent, transparent, transparent, @color-bi-text-highlight);
 
 //向右展开子菜单
 .font(pull-right-font, @font-right-triangle);
@@ -52,10 +52,10 @@
 
 
 //翻页按钮字体图标
-.font-hover(row-pre-page-h-font, @font-solid-left);
-.font-hover(row-next-page-h-font, @font-solid-right);
-.font-hover(column-pre-page-h-font, @font-solid-top);
-.font-hover(column-next-page-h-font, @font-solid-bottom);
+.font-hover(row-pre-page-h-font, @font-arrow-left);
+.font-hover(row-next-page-h-font, @font-arrow-right);
+.font-hover(column-pre-page-h-font, @font-up-triangle);
+.font-hover(column-next-page-h-font, @font-down-triangle);
 
 .font(expander-right-font, @font-solid-right);
 .font(expander-down-font, @font-solid-bottom);

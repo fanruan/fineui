@@ -35,8 +35,11 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.StateEditor.EVENT_PAUSE, function () {
             self.fireEvent(BI.MultiSelectEditor.EVENT_PAUSE);
         });
-        this.editor.on(BI.StateEditor.EVENT_CLICK_LABEL, function () {
-
+        this.editor.on(BI.StateEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_FOCUS);
+        });
+        this.editor.on(BI.StateEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.MultiSelectEditor.EVENT_BLUR);
         });
     },
 
@@ -82,5 +85,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     }
 });
-BI.MultiSelectEditor.EVENT_PAUSE = "MultiSelectEditor.EVENT_PAUSE";
+
+BI.MultiSelectEditor.EVENT_FOCUS = "EVENT_FOCUS";
+BI.MultiSelectEditor.EVENT_BLUR = "EVENT_BLUR";
+BI.MultiSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);

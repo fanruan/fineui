@@ -21,7 +21,13 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 

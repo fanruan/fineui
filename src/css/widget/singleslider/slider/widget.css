@@ -34,13 +34,13 @@
   left: -8px;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button {
-  background-color: #242640;
+  background-color: #20263b;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button:hover,
 .bi-theme-dark .bi-single-slider-button .slider-button.hover {
-  background-color: #191B2B;
+  background-color: #191b2b;
 }
 .bi-theme-dark .bi-single-slider-button .slider-button.disabled:hover,
 .bi-theme-dark .bi-single-slider-button .slider-button.disabled.hover {
-  background-color: #191B2B;
+  background-color: #191b2b;
 }

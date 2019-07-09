@@ -163,5 +163,5 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
         this.adapter.populate.apply(this.adapter, arguments);
     }
 });
-BI.MultiSelectTree.EVENT_CHANGE = "BI.MultiSelectTree.EVENT_CHANGE";
+BI.MultiSelectTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);

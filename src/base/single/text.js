@@ -4,24 +4,22 @@
  * @extends BI.Single
  */
 BI.Text = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
-        var conf = BI.Text.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-text",
-            textAlign: "left",
-            whiteSpace: "normal",
-            lineHeight: null,
-            handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
-            hgap: 0,
-            vgap: 0,
-            lgap: 0,
-            rgap: 0,
-            tgap: 0,
-            bgap: 0,
-            text: "",
-            py: "",
-            highLight: false
-        });
+
+    props: {
+        baseCls: "bi-text",
+        textAlign: "left",
+        whiteSpace: "normal",
+        lineHeight: null,
+        handler: null, // 如果传入handler,表示处理文字的点击事件，不是区域的
+        hgap: 0,
+        vgap: 0,
+        lgap: 0,
+        rgap: 0,
+        tgap: 0,
+        bgap: 0,
+        text: "",
+        py: "",
+        highLight: false
     },
 
     render: function () {

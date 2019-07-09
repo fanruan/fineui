@@ -1,7 +1,3 @@
-/**
- * 汇总表格帮助类
- * Created by Young's on 2017/1/19.
- */
 !(function () {
     BI.DynamicDateHelper = {};
     BI.extend(BI.DynamicDateHelper, {

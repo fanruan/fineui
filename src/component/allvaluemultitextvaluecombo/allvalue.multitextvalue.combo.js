@@ -61,5 +61,5 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
         };
     }
 });
-BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "AllValueMultiTextValueCombo.EVENT_CONFIRM";
+BI.AllValueMultiTextValueCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueCombo);

@@ -57,6 +57,6 @@ BI.Radio = BI.inherit(BI.BasicButton, {
         }
     }
 });
-BI.Radio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.radio", BI.Radio);

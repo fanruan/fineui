@@ -7,6 +7,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AllCountPager.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-all-count-pager",
+            pagerDirection: "vertical", // 翻页按钮方向，可选值：vertical/horizontal
             height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
@@ -15,7 +16,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
     },
     _init: function () {
         BI.AllCountPager.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
+        var self = this, o = this.options, pagerIconCls = this._getPagerIconCls();
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
             cls: "pager-editor",
@@ -27,7 +28,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             value: o.curr,
             errorText: BI.i18nText("BI-Please_Input_Positive_Integer"),
             width: 40,
-            height: 24
+            height: 24,
+            invisible: o.pages <= 1
         });
 
         this.pager = BI.createWidget({
@@ -52,7 +54,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev pull-up-font"
+                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -61,13 +63,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next pull-down-font"
+                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
             hasNext: o.hasNext,
             firstPage: o.firstPage,
-            lastPage: o.lastPage
+            lastPage: o.lastPage,
+            invisible: o.pages <= 1
         });
 
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
@@ -85,7 +88,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             type: "bi.label",
             title: o.pages,
             text: "/" + o.pages,
-            lgap: 5
+            lgap: 5,
+            invisible: o.pages <= 1
         });
 
         this.rowCount = BI.createWidget({
@@ -126,11 +130,30 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     alwaysShowPager: true,
 
+    _getPagerIconCls: function () {
+        var o = this.options;
+        switch (o.pagerDirection) {
+            case "horizontal":
+                return {
+                    preCls: " row-pre-page-h-font ",
+                    nextCls: " row-next-page-h-font "
+                };
+            case "vertical":
+            default:
+                return {
+                    preCls: " column-pre-page-h-font ",
+                    nextCls: " column-next-page-h-font "
+                };
+        }
+    },
+
     setAllPages: function (v) {
         this.allPages.setText("/" + v);
         this.allPages.setTitle(v);
+        this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
+        this.setPagerVisible(v > 1);
     },
 
     setValue: function (v) {
@@ -166,6 +189,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
 
     populate: function () {
         this.pager.populate();
+        this.setPagerVisible(this.options.pages > 1);
     }
 });
 BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";

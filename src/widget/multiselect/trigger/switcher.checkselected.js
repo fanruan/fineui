@@ -42,6 +42,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 onClickContinueSelect: function () {
                     self.switcher.hideView();
                 },
+                ref: function (_ref) {
+                    self.checkPane = _ref;
+                },
                 value: o.value
             }, o.popup),
             adapter: o.adapter,
@@ -82,6 +85,11 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.setValue(v);
     },
 
+    // 与setValue的区别是只更新查看已选面板的的selectedValue, 不会更新按钮的计数
+    updateSelectedValue: function (v) {
+        this.checkPane.setValue(v);
+    },
+
     setButtonChecked: function (v) {
         this.button.setValue(v);
     },
@@ -95,6 +103,6 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     }
 });
 
-BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE";
-BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);

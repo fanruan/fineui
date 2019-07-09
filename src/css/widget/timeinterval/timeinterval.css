@@ -4,8 +4,8 @@
   border-radius: 2px;
 }
 .bi-time-interval.time-error .bi-date-time-trigger .bi-input {
-  color: #ff4949;
+  color: #e65251;
 }
 .bi-time-interval.time-error .bi-date-time-trigger .sign-editor-text {
-  color: #ff4949;
+  color: #e65251;
 }

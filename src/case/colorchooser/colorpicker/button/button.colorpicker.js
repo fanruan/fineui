@@ -56,5 +56,5 @@ BI.ColorPickerButton = BI.inherit(BI.BasicButton, {
         BI.Maskers[b ? "show" : "hide"](this.getName());
     }
 });
-BI.ColorPickerButton.EVENT_CHANGE = "ColorPickerButton.EVENT_CHANGE";
+BI.ColorPickerButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_picker_button", BI.ColorPickerButton);

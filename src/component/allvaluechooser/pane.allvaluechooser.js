@@ -1,5 +1,5 @@
 /**
- * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 简单的复选面板, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -60,5 +60,5 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
         this.list.populate.apply(this.list, arguments);
     }
 });
-BI.AllValueChooserPane.EVENT_CHANGE = "AllValueChooserPane.EVENT_CHANGE";
+BI.AllValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);

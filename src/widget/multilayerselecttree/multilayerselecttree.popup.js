@@ -5,7 +5,7 @@
  * @extends BI.Pane
  */
 
-BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
+BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreePopup.superclass._defaultConfig.apply(this, arguments), {
@@ -27,8 +27,9 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
             type: "bi.multilayer_select_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
-            value: o.value,
             itemsCreator: o.itemsCreator,
+            keywordGetter: o.keywordGetter,
+            value: o.value,
             scrollable: null
         });
 
@@ -48,8 +49,6 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
         this.tree.on(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSelectTreePopup.EVENT_CHANGE);
         });
-
-        this.check();
     },
 
     getValue: function () {
@@ -62,7 +61,6 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Pane, {
     },
 
     populate: function (items) {
-        BI.MultiLayerSelectTreePopup.superclass.populate.apply(this, arguments);
         this.tree.populate(items);
     }
 });

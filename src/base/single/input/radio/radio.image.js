@@ -28,6 +28,6 @@ BI.ImageRadio = BI.inherit(BI.IconButton, {
         }
     }
 });
-BI.ImageRadio.EVENT_CHANGE = "Radio.EVENT_CHANGE";
+BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 
 BI.shortcut("bi.image_radio", BI.ImageRadio);

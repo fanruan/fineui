@@ -1,8 +1,3 @@
-/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MidTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {

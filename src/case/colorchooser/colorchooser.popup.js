@@ -10,13 +10,14 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-color-chooser-popup",
         width: 230,
-        height: 145
+        height: 145,
+        simple: false // 简单模式, popup中没有自动和透明
     },
 
     render: function () {
         var self = this, o = this.options;
         this.colorEditor = BI.createWidget(o.editor, {
-            type: "bi.color_picker_editor",
+            type: o.simple ? "bi.simple_color_picker_editor" : "bi.color_picker_editor",
             value: o.value,
             cls: "bi-header-background bi-border-bottom",
             height: 30
@@ -24,43 +25,21 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorEditor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_VALUE_CHANGE, arguments);
         });
 
         this.storeColors = BI.createWidget({
             type: "bi.color_picker",
             cls: "bi-border-bottom bi-border-right",
-            items: [[{
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }, {
-                value: "",
-                disabled: true
-            }]],
+            items: [this._digestStoreColors(this._getStoreColors())],
             width: 210,
             height: 24,
             value: o.value
         });
         this.storeColors.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -73,6 +52,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
 
         this.colorPicker.on(BI.ColorPicker.EVENT_CHANGE, function () {
             self.setValue(this.getValue()[0]);
+            self._dealStoreColors();
             self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
         });
 
@@ -120,6 +100,7 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
                     break;
                 case 1:
                     self.setValue(self.customColorChooser.getValue());
+                    self._dealStoreColors();
                     self.more.hideView();
                     self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                     break;
@@ -193,20 +174,48 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         this.mask.setVisible(!enable);
     },
 
+    _dealStoreColors: function () {
+        var color = this.getValue();
+        var colors = this._getStoreColors();
+        var que = new BI.Queue(8);
+        que.fromArray(colors);
+        que.remove(color);
+        que.unshift(color);
+        var array = que.toArray();
+        BI.Cache.setItem("colors", BI.array2String(array));
+        this.setStoreColors(array);
+    },
+
+    _digestStoreColors: function (colors) {
+        var items = BI.map(colors, function (i, color) {
+            return {
+                value: color
+            };
+        });
+        BI.count(colors.length, 8, function (i) {
+            items.push({
+                value: "",
+                disabled: true
+            });
+        });
+        return items;
+    },
+
+    _getStoreColors: function() {
+        var self = this, o = this.options;
+        var colorsArray = BI.string2Array(BI.Cache.getItem("colors") || "");
+        return BI.filter(colorsArray, function (idx, color) {
+            return o.simple ? self._isRGBColor(color) : true;
+        });
+    },
+
+    _isRGBColor: function (color) {
+        return BI.isNotEmptyString(color) && color !== "transparent";
+    },
+
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
-            var items = BI.map(colors, function (i, color) {
-                return {
-                    value: color
-                };
-            });
-            BI.count(colors.length, 8, function (i) {
-                items.push({
-                    value: "",
-                    disabled: true
-                });
-            });
-            this.storeColors.populate([items]);
+            this.storeColors.populate([this._digestStoreColors(colors)]);
         }
     },
 
@@ -220,6 +229,6 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
         return this.colorEditor.getValue();
     }
 });
-BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "ColorChooserPopup.EVENT_VALUE_CHANGE";
-BI.ColorChooserPopup.EVENT_CHANGE = "ColorChooserPopup.EVENT_CHANGE";
+BI.ColorChooserPopup.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
+BI.ColorChooserPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.color_chooser_popup", BI.ColorChooserPopup);

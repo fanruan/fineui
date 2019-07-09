@@ -54,7 +54,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 checked = false;
             }
             zTree.checkNode(treeNode, !checked, true, true);
@@ -84,7 +84,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             }
             var status = treeNode.getCheckStatus();
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 treeNode.checked = false;
             }
         }
@@ -179,6 +179,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var map = {};
         track([], valueA, valueB);
         track([], valueB, valueA);
+
         function track (parent, node, compare) {
             BI.each(node, function (n, item) {
                 if (BI.isNull(compare[n])) {
@@ -198,7 +199,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         return !BI.isEmpty(this.options.paras.selectedValues) || BI.AsyncTree.superclass.hasChecked.apply(this, arguments);
     },
 
-    getValue: function () {
+    _getJoinValue: function () {
         if (!this.nodes) {
             return {};
         }
@@ -210,6 +211,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             return checkedValues;
         }
         return this._join(checkedValues, this.options.paras.selectedValues);
+    },
+
+    getValue: function () {
+        return this._getJoinValue();
     },
 
     // 生成树方法

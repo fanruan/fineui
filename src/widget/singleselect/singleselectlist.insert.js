@@ -233,5 +233,5 @@ BI.extend(BI.SingleSelectInsertList, {
     REQ_GET_ALL_DATA: -1
 });
 
-BI.SingleSelectInsertList.EVENT_CHANGE = "BI.SingleSelectInsertList.EVENT_CHANGE";
+BI.SingleSelectInsertList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);

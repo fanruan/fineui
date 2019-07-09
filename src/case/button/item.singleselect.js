@@ -1,8 +1,3 @@
-/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
@@ -42,6 +37,9 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
 
     doClick: function () {
         BI.SingleSelectItem.superclass.doClick.apply(this, arguments);
+        if (this.isValid()) {
+            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+        }
     },
 
     setSelected: function (v) {
@@ -49,4 +47,5 @@ BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     }
 });
 
+BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);

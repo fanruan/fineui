@@ -50,5 +50,5 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
-BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "ListTreeValueChooserInsertCombo.EVENT_CONFIRM";
+BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);
