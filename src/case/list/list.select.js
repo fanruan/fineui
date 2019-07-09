@@ -151,7 +151,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
             value: this.list.getNotSelectedValue(),
             assist: this.list.getValue()
         };
-        
+
     },
 
     empty: function () {
