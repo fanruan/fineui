@@ -162,7 +162,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
                             _top: rowDatum.offset + verticalOffsetAdjustment
-                        }));
+                        }), this);
                         renderedCells.push({
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
