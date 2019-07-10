@@ -162,7 +162,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
                             _top: rowDatum.offset + verticalOffsetAdjustment
-                        }));
+                        }), this);
                         renderedCells.push({
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
@@ -208,7 +208,7 @@ BI.GridView = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index, key) {
                 addedItems.push(renderedCells[key[2]]);
             });
-            this.container.addItems(addedItems);
+            this.container.addItems(addedItems, this);
             // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
