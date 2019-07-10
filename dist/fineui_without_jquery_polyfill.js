@@ -27539,7 +27539,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
             text: "",
             stopEvent: false,
@@ -39124,9 +39124,13 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
             buttons: [{
-                value: BI.i18nText("BI-Basic_Cancel"),
+                value: false,
+                text: BI.i18nText("BI-Basic_Cancel"),
                 ghost: true
-            }, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            }, {
+                text: BI.i18nText(BI.i18nText("BI-Basic_Sure")),
+                value: true
+            }]
         });
     },
     _init: function () {
@@ -39216,7 +39220,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 height: 24,
                 handler: function (v) {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    self.fireEvent(BI.TextBubblePopupBarView.EVENT_CHANGE, v);
                 }
             }, buttonOpt);
 
@@ -39243,7 +39247,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         this.text.setText(v || this.options.text);
     }
 });
-BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
+BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 /**
  * Created by Young's on 2016/4/28.
@@ -42596,7 +42600,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
             value: this.list.getNotSelectedValue(),
             assist: this.list.getValue()
         };
-        
+
     },
 
     empty: function () {

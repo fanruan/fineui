@@ -54,7 +54,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             }),
             popup: {
                 el: this.popupview,
-                stopPropagation: true,
+                stopPropagation: o.stopPropagation,
                 maxHeight: 1000
             }
         });

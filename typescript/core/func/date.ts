@@ -88,7 +88,7 @@ export declare type _getWeekEndDate = (date: Date) => Date;
  */
 export declare type _print = (date: Date, str: string) => string;
 
-declare type _date = {
+export declare type _date = {
     getTimezone: _getTimezone;
     getMonthDays: _getMonthDays;
     getLastDateOfMonth: _getLastDateOfMonth;
@@ -105,4 +105,3 @@ declare type _date = {
     getWeekEndDate: _getWeekEndDate;
     print: _print;
 }
-export default _date;
