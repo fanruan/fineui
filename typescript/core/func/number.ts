@@ -30,3 +30,11 @@ export declare type _mul = (num: number, arg: number) => number;
  * @return {Number}  两个数字相除后的结果
  */
 export declare type _div = (num: number, arg: number) => number;
+
+declare type _number = {
+    add: _add;
+    sub: _sub;
+    mul: _mul;
+    div: _div;
+}
+export default _number

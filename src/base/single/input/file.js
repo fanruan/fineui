@@ -84,7 +84,7 @@
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", BI.cjkEncode(file.fileName), "\"", CRLF,
+                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", _global.encodeURIComponent(file.fileName), "\"", CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -110,15 +110,15 @@
                     return;
                 }
                 for (var
-                    xhr = new XMLHttpRequest,
-                    upload = xhr.upload || {
-                        addEventListener: function (event, callback) {
-                            this["on" + event] = callback;
-                        }
-                    },
-                    i = 0;
-                    i < length;
-                    i++
+                         xhr = new XMLHttpRequest,
+                         upload = xhr.upload || {
+                             addEventListener: function (event, callback) {
+                                 this["on" + event] = callback;
+                             }
+                         },
+                         i = 0;
+                     i < length;
+                     i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -173,7 +173,9 @@
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
+                                if (rpe.total <= rpe.loaded) {
+                                    rpe.loaded = rpe.total;
+                                }
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -239,8 +241,12 @@
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
-                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
+                            if (rpe.loaded < rpe.total) {
+                                ++rpe.loaded;
+                            }
+                            if (isFunction(handler.onprogress)) {
+                                handler.onprogress(rpe, {});
+                            }
                         }, 100)
                     },
                     onload = function () {
@@ -257,7 +263,7 @@
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = BI.cjkDecode(handler.file.fileName);
+                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {

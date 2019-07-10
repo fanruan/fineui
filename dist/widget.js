@@ -1916,7 +1916,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 36,
-            forceNotSelected: true,
+            disableSelected: true,
             selected: this._digest(o.value)
         });
 
@@ -2286,11 +2286,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
 BI.DownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
-BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
- * 汇总表格帮助类
- * Created by Young's on 2017/1/19.
- */
-!(function () {
+BI.shortcut("bi.down_list_popup", BI.DownListPopup);!(function () {
     BI.DynamicDateHelper = {};
     BI.extend(BI.DynamicDateHelper, {
         getCalculation: function (obj) {
@@ -6712,7 +6708,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     }]
                 },
                 value: o.value,
-                maxHeight: 400
+                maxHeight: 400,
+                minHeight: 240
             }
         };
     },
@@ -6808,7 +6805,7 @@ BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
- * @extends BI.Select
+ * @extends BI.Pane
  */
 BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
@@ -6917,9 +6914,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.loader",
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
-                chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
+                    chooseType: o.chooseType,
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
@@ -6956,8 +6953,12 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
@@ -7681,7 +7682,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }]
                 },
                 value: o.value,
-                maxHeight: 400
+                maxHeight: 400,
+                minHeight: 240
             }
         };
     },
@@ -7885,9 +7887,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.loader",
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
-                chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
+                    chooseType: o.chooseType,
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
@@ -7924,8 +7926,12 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
@@ -9175,7 +9181,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -9553,7 +9561,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -9948,7 +9958,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -12099,6 +12111,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 onClickContinueSelect: function () {
                     self.switcher.hideView();
                 },
+                ref: function (_ref) {
+                    self.checkPane = _ref;
+                },
                 value: o.value
             }, o.popup),
             adapter: o.adapter,
@@ -12137,6 +12152,11 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.switcher.setValue(v);
+    },
+
+    // 与setValue的区别是只更新查看已选面板的的selectedValue, 不会更新按钮的计数
+    updateSelectedValue: function (v) {
+        this.checkPane.setValue(v);
     },
 
     setButtonChecked: function (v) {
@@ -18788,12 +18808,7 @@ BI.SingleSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
- * guy
- * 单选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
@@ -19868,9 +19883,6 @@ BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
-/**
- * Created by User on 2017/11/16.
- */
 BI.SignTextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
@@ -22950,7 +22962,7 @@ BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);/**
- * 年份展示面板
+ * 年月展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -23986,7 +23998,7 @@ BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 /**
- * 年份展示面板
+ * 年季度展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -24813,30 +24825,33 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
             if (options.keyword) {
                 keywords.push(options.keyword);
             }
-            var resultItems = [];
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                resultItems = resultItems.concat(search.match).concat(search.find);
-            });
-            resultItems = BI.uniq(resultItems);
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: items,
+                items: resultItems,
                 hasNext: false
             });
         }
@@ -24910,7 +24925,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 简单的复选面板, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -26169,7 +26184,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的树面板, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.
  * @class BI.TreeValueChooserPane
@@ -26280,29 +26295,34 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
-            });
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: self._getItemsByTimes(items, options.times),
-                hasNext: self._hasNextByTimes(items, options.times)
+                items: self._getItemsByTimes(resultItems, options.times),
+                hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
     }
@@ -26368,7 +26388,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
 });
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 简单的复选面板, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.

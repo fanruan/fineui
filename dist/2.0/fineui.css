@@ -2880,6 +2880,12 @@ body .bi-button,
   vertical-align: middle;
   cursor: pointer;
 }
+body .bi-button.hack,
+#body .bi-button.hack {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
 body .bi-button.block,
 #body .bi-button.block {
   font-size: inherit;
@@ -5083,11 +5089,11 @@ textarea::-webkit-scrollbar-thumb:hover {
 .dot-e-font:hover .b-font:before,
 .dot-e-font.hover .b-font:before {
   content: "\e762";
-  color: rgba(54, 133, 242, 0.06);
+  color: transparent;
 }
 .dot-e-font:active .b-font:before {
   content: "\e762";
-  color: #3685f2;
+  color: transparent;
 }
 .dot-e-font.active .b-font:before {
   content: "\e762";

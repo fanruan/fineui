@@ -684,7 +684,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
             text: "",
             stopEvent: false,
@@ -7552,9 +7552,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
-                type: "bi.icon",
+                type: "bi.icon_label",
+                cls: o.iconCls,
                 width: 18,
-                height: o.height - 2
+                height: o.height - 2,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -7564,14 +7567,9 @@ BI.Button = BI.inherit(BI.BasicButton, {
             });
             BI.createWidget({
                 type: "bi.center_adapt",
-                cls: o.iconCls,
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
                 items: [{
                     type: "bi.horizontal",
                     items: [this.icon, this.text]
@@ -9846,7 +9844,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         var multipart = function (boundary, name, file) {
                 return "--".concat(
                     boundary, CRLF,
-                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", BI.cjkEncode(file.fileName), "\"", CRLF,
+                    "Content-Disposition: form-data; name=\"", name, "\"; filename=\"", _global.encodeURIComponent(file.fileName), "\"", CRLF,
                     "Content-Type: application/octet-stream", CRLF,
                     CRLF,
                     file.getAsBinary(), CRLF,
@@ -9872,15 +9870,15 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                     return;
                 }
                 for (var
-                    xhr = new XMLHttpRequest,
-                    upload = xhr.upload || {
-                        addEventListener: function (event, callback) {
-                            this["on" + event] = callback;
-                        }
-                    },
-                    i = 0;
-                    i < length;
-                    i++
+                         xhr = new XMLHttpRequest,
+                         upload = xhr.upload || {
+                             addEventListener: function (event, callback) {
+                                 this["on" + event] = callback;
+                             }
+                         },
+                         i = 0;
+                     i < length;
+                     i++
                 ) {
                     upload.addEventListener(
                         split[i].substring(2),
@@ -9935,7 +9933,9 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                         switch (xhr.readyState) {
                             case    2:
                             case    3:
-                                if (rpe.total <= rpe.loaded) {rpe.loaded = rpe.total;}
+                                if (rpe.total <= rpe.loaded) {
+                                    rpe.loaded = rpe.total;
+                                }
                                 upload.onprogress(rpe);
                                 break;
                             case    4:
@@ -10001,8 +10001,12 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
-                            if (rpe.loaded < rpe.total) {++rpe.loaded;}
-                            if (isFunction(handler.onprogress)) {handler.onprogress(rpe, {});}
+                            if (rpe.loaded < rpe.total) {
+                                ++rpe.loaded;
+                            }
+                            if (isFunction(handler.onprogress)) {
+                                handler.onprogress(rpe, {});
+                            }
                         }, 100)
                     },
                     onload = function () {
@@ -10019,7 +10023,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = BI.cjkDecode(handler.file.fileName);
+                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
@@ -11508,7 +11512,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 });
 BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
- * toast提示
+ * title提示
  *
  * Created by GUY on 2015/9/7.
  * @class BI.Tooltip

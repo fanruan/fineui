@@ -1,40 +1,8 @@
-import { _addI18n, _i18nText } from "./core/i18n";
+import { _i18n } from "./core/i18n";
 import { _OB } from "./core/ob";
-import { _pushArray, _pushDistinct, _pushDistinctArray} from "./core/func/array";
-import {_startWith, _allIndexOf, _appendQuery, _endWith, _getQuery, _perfectStart, _replaceAll} from "./core/func/string";
-import {_add, _sub, _mul, _div} from "./core/func/number";
-import {_afterFunc, _beforeFunc, _createDistinctName, _getSearchResult} from "./core/func/function";
+import _func from "./core/func";
 
-export declare module BI {
-    namespace i18n {
-        const addI18n: _addI18n;
-        const i18nText: _i18nText;
-    }
-
-    const OB: _OB;
-    
-    const pushArray: _pushArray;
-    const pushDistinct: _pushDistinct;
-    const pushDistinctArray: _pushDistinctArray;
-
-    const startWith: _startWith;
-    const endWith: _endWith;
-    const getQuery: _getQuery;
-    const appendQuery: _appendQuery;
-    const replaceAll: _replaceAll;
-    const perfectStart: _perfectStart;
-    const allIndexOf: _allIndexOf;
-
-    const add: _add;
-    const sub: _sub;
-    const mul: _mul;
-    const div: _div;
-
-    const afterFunc: _afterFunc;
-    const beforeFunc: _beforeFunc;
-
-    namespace Func {
-        const createDistinctName: _createDistinctName;
-        const getSearchResult: _getSearchResult;
-    }
+export interface BI extends _func {
+    i18n: _i18n;
+    OB: _OB;
 }

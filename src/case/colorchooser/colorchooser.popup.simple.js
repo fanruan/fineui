@@ -20,9 +20,7 @@ BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
             type: "bi.color_chooser_popup",
             value: o.value,
             element: this,
-            editor: {
-                type: "bi.simple_color_picker_editor"
-            }
+            simple: true // 是否有自动
         });
         this.popup.on(BI.ColorChooserPopup.EVENT_CHANGE, function () {
             self.fireEvent(BI.SimpleColorChooserPopup.EVENT_CHANGE, arguments);

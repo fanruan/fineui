@@ -20224,7 +20224,7 @@ _.extend(BI, {
         };
     },
 
-    afterFunc: function (func) {
+    afterFunc: function (sFunc, func) {
         var __self = sFunc;
         return function () {
             var ret = __self.apply(sFunc, arguments);
@@ -22556,7 +22556,9 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout"
+            baseCls: "bi-flex-center-adapt-layout",
+            hgap: 0,
+            vgap: 0
         });
     },
     render: function () {
@@ -22567,7 +22569,14 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative", "flex-shrink": "0"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -22616,8 +22625,6 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -22747,12 +22754,10 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
-            hgap: o.hgap,
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: o.hgap,
             items: o.items
         };
     },
@@ -22867,7 +22872,13 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -22927,8 +22938,6 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -23066,8 +23075,6 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
             items: o.items
         };
     },
@@ -27532,7 +27539,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.BasicButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer"),
+            _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
             text: "",
             stopEvent: false,
@@ -33142,9 +33149,12 @@ BI.Button = BI.inherit(BI.BasicButton, {
         }
         if (BI.isKey(o.iconCls)) {
             this.icon = BI.createWidget({
-                type: "bi.icon",
+                type: "bi.icon_label",
+                cls: o.iconCls,
                 width: 18,
-                height: o.height - 2
+                height: o.height - 2,
+                iconWidth: o.iconWidth,
+                iconHeight: o.iconHeight
             });
             this.text = BI.createWidget({
                 type: "bi.label",
@@ -33154,14 +33164,9 @@ BI.Button = BI.inherit(BI.BasicButton, {
             });
             BI.createWidget({
                 type: "bi.center_adapt",
-                cls: o.iconCls,
                 element: this,
                 hgap: o.hgap,
                 vgap: o.vgap,
-                tgap: o.tgap,
-                bgap: o.bgap,
-                lgap: o.lgap,
-                rgap: o.rgap,
                 items: [{
                     type: "bi.horizontal",
                     items: [this.icon, this.text]
@@ -36473,7 +36478,7 @@ BI.Toast = BI.inherit(BI.Tip, {
 });
 BI.Toast.EVENT_DESTORY = "EVENT_DESTORY";
 BI.shortcut("bi.toast", BI.Toast);/**
- * toast提示
+ * title提示
  *
  * Created by GUY on 2015/9/7.
  * @class BI.Tooltip
@@ -37022,12 +37027,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
     }
 });
 
-BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-item bi-list-item-active",
@@ -37779,12 +37779,7 @@ BI.Switch = BI.inherit(BI.BasicButton, {
     }
 });
 BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.switch", BI.Switch);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.FirstTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-first-tree-leaf-item bi-list-item-active",
@@ -37970,12 +37965,7 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
     }
 });
 
-BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.LastTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-last-tree-leaf-item bi-list-item-active",
@@ -38074,12 +38064,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);/**
- * guy
- * 复选框item
- * @type {*|void|Object}
- */
-BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.MidTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-mid-tree-leaf-item bi-list-item-active",
@@ -39139,9 +39124,13 @@ BI.BubblePopupBarView = BI.inherit(BI.BubblePopupView, {
         return BI.extend(BI.BubblePopupBarView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble-bar-popup-view",
             buttons: [{
-                value: BI.i18nText("BI-Basic_Cancel"),
+                value: false,
+                text: BI.i18nText("BI-Basic_Cancel"),
                 ghost: true
-            }, {value: BI.i18nText(BI.i18nText("BI-Basic_Sure"))}]
+            }, {
+                text: BI.i18nText(BI.i18nText("BI-Basic_Sure")),
+                value: true
+            }]
         });
     },
     _init: function () {
@@ -39231,7 +39220,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
                 type: "bi.button",
                 height: 24,
                 handler: function (v) {
-                    self.fireEvent(BI.BubblePopupBarView.EVENT_CLICK_TOOLBAR_BUTTON, v);
+                    self.fireEvent(BI.TextBubblePopupBarView.EVENT_CHANGE, v);
                 }
             }, buttonOpt);
 
@@ -39258,7 +39247,7 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         this.text.setText(v || this.options.text);
     }
 });
-BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CHANGE";
+BI.TextBubblePopupBarView.EVENT_CHANGE = "EVENT_CLICK_TOOLBAR_BUTTON";
 BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 /**
  * Created by Young's on 2016/4/28.
@@ -39708,7 +39697,12 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueComboPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-icon-popup"
+            baseCls: "bi-icon-text-icon-popup",
+            behaviors: {
+                redmark: function () {
+                    return true;
+                }
+            }
         });
     },
 
@@ -39728,11 +39722,7 @@ BI.IconTextValueComboPopup = BI.inherit(BI.Pane, {
             layouts: [{
                 type: "bi.vertical"
             }],
-            behaviors: {
-                redmark: function () {
-                    return true;
-                }
-            },
+            behaviors: o.behaviors,
             value: o.value
         });
 
@@ -42610,7 +42600,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
             value: this.list.getNotSelectedValue(),
             assist: this.list.getValue()
         };
-        
+
     },
 
     empty: function () {
@@ -43330,6 +43320,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         this.options.pages = v;
         this.pager.setAllPages(v);
         this.editor.setEnable(v >= 1);
+        this.setPagerVisible(v > 1);
     },
 
     setValue: function (v) {
@@ -46754,7 +46745,7 @@ BI.shortcut("bi.down_list_item", BI.DownListItem);BI.DownListGroupItem = BI.inhe
             type: "bi.icon_button",
             cls: o.iconCls1,
             width: 36,
-            forceNotSelected: true,
+            disableSelected: true,
             selected: this._digest(o.value)
         });
 
@@ -47124,11 +47115,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
 
 BI.DownListPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
-BI.shortcut("bi.down_list_popup", BI.DownListPopup);/**
- * 汇总表格帮助类
- * Created by Young's on 2017/1/19.
- */
-!(function () {
+BI.shortcut("bi.down_list_popup", BI.DownListPopup);!(function () {
     BI.DynamicDateHelper = {};
     BI.extend(BI.DynamicDateHelper, {
         getCalculation: function (obj) {
@@ -51550,7 +51537,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     }]
                 },
                 value: o.value,
-                maxHeight: 400
+                maxHeight: 400,
+                minHeight: 240
             }
         };
     },
@@ -51646,7 +51634,7 @@ BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
- * @extends BI.Select
+ * @extends BI.Pane
  */
 BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
@@ -51755,9 +51743,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.loader",
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
-                chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
+                    chooseType: o.chooseType,
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
@@ -51794,8 +51782,12 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
@@ -52519,7 +52511,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }]
                 },
                 value: o.value,
-                maxHeight: 400
+                maxHeight: 400,
+                minHeight: 240
             }
         };
     },
@@ -52723,9 +52716,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             el: {
                 type: "bi.loader",
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
-                chooseType: o.chooseType,
                 el: {
                     type: "bi.button_tree",
+                    chooseType: o.chooseType,
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
@@ -52762,8 +52755,12 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     setValue: function (v) {
-        this.storeValue = v;
-        this.tree.setValue(v);
+        // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
+        if(this.options.chooseType === BI.Selection.None) {
+        } else {
+            this.storeValue = v;
+            this.tree.setValue(v);
+        }
     },
 
     getValue: function () {
@@ -54013,7 +54010,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -54391,7 +54390,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -54786,7 +54787,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            this.getCounter().setValue(self.storeValue);
+            // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
+            // 只需要更新查看面板的selectedValue用以请求已选数据
+            this.getCounter().updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -56937,6 +56940,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 onClickContinueSelect: function () {
                     self.switcher.hideView();
                 },
+                ref: function (_ref) {
+                    self.checkPane = _ref;
+                },
                 value: o.value
             }, o.popup),
             adapter: o.adapter,
@@ -56975,6 +56981,11 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         this.switcher.setValue(v);
+    },
+
+    // 与setValue的区别是只更新查看已选面板的的selectedValue, 不会更新按钮的计数
+    updateSelectedValue: function (v) {
+        this.checkPane.setValue(v);
     },
 
     setButtonChecked: function (v) {
@@ -63626,12 +63637,7 @@ BI.SingleSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.SingleSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 
-BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);/**
- * guy
- * 单选框item
- * @type {*|void|Object}
- */
-BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
+BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectComboItem.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-single-select-radio-item",
@@ -64706,9 +64712,6 @@ BI.SingleSelectSearcher.EVENT_STOP = "EVENT_STOP";
 BI.SingleSelectSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.SingleSelectSearcher.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
-/**
- * Created by User on 2017/11/16.
- */
 BI.SignTextEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.SignTextEditor.superclass._defaultConfig.apply(this, arguments);
@@ -67788,7 +67791,7 @@ BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);/**
- * 年份展示面板
+ * 年月展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -68824,7 +68827,7 @@ BI.YearMonthInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.YearMonthInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 /**
- * 年份展示面板
+ * 年季度展示面板
  *
  * Created by GUY on 2015/9/2.
  * @class BI.YearCard
@@ -69651,30 +69654,33 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
             if (options.keyword) {
                 keywords.push(options.keyword);
             }
-            var resultItems = [];
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                resultItems = resultItems.concat(search.match).concat(search.find);
-            });
-            resultItems = BI.uniq(resultItems);
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: items,
+                items: resultItems,
                 hasNext: false
             });
         }
@@ -69748,7 +69754,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
+ * 简单的复选面板, 适用于数据量少的情况， 与valuechooser的区别是allvaluechooser setValue和getValue返回的是所有值
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.
@@ -71007,7 +71013,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
- * 简单的复选下拉树控件, 适用于数据量少的情况
+ * 简单的树面板, 适用于数据量少的情况
  *
  * Created by GUY on 2015/10/29.
  * @class BI.TreeValueChooserPane
@@ -71118,29 +71124,34 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
         function call (items) {
             var keywords = (options.keywords || []).slice();
-            BI.each(keywords, function (i, kw) {
-                var search = BI.Func.getSearchResult(items, kw);
-                items = search.match.concat(search.find);
-            });
+            var resultItems = items;
+            if(BI.isNotEmptyArray(keywords)) {
+                resultItems = [];
+                BI.each(keywords, function (i, kw) {
+                    var search = BI.Func.getSearchResult(items, kw);
+                    resultItems = resultItems.concat(search.match).concat(search.find);
+                });
+                resultItems = BI.uniq(resultItems);
+            }
             if (options.selectedValues) {// 过滤
                 var filter = BI.makeObject(options.selectedValues, true);
-                items = BI.filter(items, function (i, ob) {
+                resultItems = BI.filter(resultItems, function (i, ob) {
                     return !filter[ob.value];
                 });
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_ALL_DATA) {
                 callback({
-                    items: items
+                    items: resultItems
                 });
                 return;
             }
             if (options.type === BI.MultiSelectCombo.REQ_GET_DATA_LENGTH) {
-                callback({count: items.length});
+                callback({count: resultItems.length});
                 return;
             }
             callback({
-                items: self._getItemsByTimes(items, options.times),
-                hasNext: self._hasNextByTimes(items, options.times)
+                items: self._getItemsByTimes(resultItems, options.times),
+                hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
     }
@@ -71206,7 +71217,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
 });
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
- * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 简单的复选面板, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
  * Created by GUY on 2015/10/29.

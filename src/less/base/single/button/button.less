@@ -3,6 +3,9 @@
 @activeVal: transform .5s ease, opacity 1s ease;
 @activeStopVal: transform 0s;
 body .bi-button, #body .bi-button {
+  &.hack {
+    .border-radius(0px);
+  }
   .border-radius(2px);
   border: 1px solid @color-bi-border-highlight;
   background-color: @color-bi-background-highlight;

@@ -20478,7 +20478,7 @@ _.extend(BI, {
         };
     },
 
-    afterFunc: function (func) {
+    afterFunc: function (sFunc, func) {
         var __self = sFunc;
         return function () {
             var ret = __self.apply(sFunc, arguments);
@@ -22725,7 +22725,7 @@ var
 	// List of deleted data cache ids, so we can reuse them
 	core_deletedIds = [],
 
-	core_version = "1.9.1",
+	core_version = "1.12.4",
 
 	// Save a reference to some core methods
 	core_concat = core_deletedIds.concat,
@@ -33732,7 +33732,9 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);/**
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout"
+            baseCls: "bi-flex-center-adapt-layout",
+            hgap: 0,
+            vgap: 0
         });
     },
     render: function () {
@@ -33743,7 +33745,14 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative", "flex-shrink": "0"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -33792,8 +33801,6 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -33923,12 +33930,10 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
-            hgap: o.hgap,
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
+            hgap: o.hgap,
             items: o.items
         };
     },
@@ -34043,7 +34048,13 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperCenterLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "margin-left": (i === 0 ? o.hgap : 0) + "px",
+            "margin-right": o.hgap + "px",
+            "margin-top": o.vgap + "px",
+            "margin-bottom": o.vgap + "px"
+        });
         return w;
     },
 
@@ -34103,8 +34114,6 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             scrollable: o.scrollable,
             hgap: o.hgap,
             vgap: o.vgap,
-            lgap: o.lgap,
-            rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
             items: o.items
@@ -34242,8 +34251,6 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
-            tgap: o.tgap,
-            bgap: o.bgap,
             items: o.items
         };
     },
