@@ -41,7 +41,7 @@ BI.Input = BI.inherit(BI.Single, {
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
-                ctrlKey = e.ctrlKey;
+                ctrlKey = e.ctrlKey || e.metaKey; // mac的cmd支持一下
                 keyCode = e.keyCode;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })

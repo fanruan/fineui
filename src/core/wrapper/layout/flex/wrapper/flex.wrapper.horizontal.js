@@ -32,7 +32,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0"
+        });
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i]);
         }
