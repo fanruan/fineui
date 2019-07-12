@@ -1,159 +1,169 @@
 import { _OB } from "./ob";
 
+export interface WidgetConstructor {
+    new(config: any): _Widget;
+    (config: any): _Widget;
+    readonly prototype: _Widget;
+    /**
+     * 注册渲染引擎
+     * @param engine 引擎
+     */
+    registerRenderEngine: (engine: RenderEngine) => void;
+}
 
-export declare class _Widget extends _OB {
+export interface _Widget extends _OB {
     /**
      * 出现loading的锁
      */
-    protected __asking: boolean;
+    __asking: boolean;
     /**
      * 同步锁
      */
-    protected __async: boolean;
+    __async: boolean;
     /**
      * widget类标识符
      */
-    public widgetName: string | null;
+    widgetName: string | null;
     /**
      * 是否为根节点
      */
-    private _isRoot: boolean;
+    _isRoot: boolean;
     /**
      * 父节点
      */
-    private _parent: _Widget | null;
+    _parent: _Widget | null;
     // TODO: 完成jquery文件夹后把这块改了
     /**
      * 真实dom的类jQuery对象
      */
-    public element: any;
+    element: any;
     /**
      * 子元素
      */
-    public _children: {
+    _children: {
         [key: string]: _Widget;
     };
     /**
      * 是否已挂载
      */
-    private _isMounted: boolean;
+    _isMounted: boolean;
     /**
      * 手动设置enable
      */
-    private _manualSetEnable: boolean;
+    _manualSetEnable: boolean;
     /**
      * 手动设置valid
      */
-    private _manualSetValid: boolean;
+    _manualSetValid: boolean;
     /**
      * 渲染引擎
      */
-    public _renderEngine: RenderEngine;
+    _renderEngine: RenderEngine;
 
-    private _store: () => any;
+    _store: () => any;
 
-    private model: any;
+    model: any;
 
     // 生命周期函数
     /**
      * 初始化前
      */
-    public beforeInit: Function | null;
+    beforeInit: Function | null;
     
     /**
      * 创建前
      */
-    public beforeCreate: Function | null;
+    beforeCreate: Function | null;
 
     /**
      * 创建
      */
-    public created: Function | null;
+    created: Function | null;
 
     /**
      * 渲染
      */
-    public render: Function | null;
+    render: Function | null;
 
     /**
      * 挂载前
      */
-    public beforeMount: Function | null;
+    beforeMount: Function | null;
 
     /**
      * 挂载
      */
-    public mounted: Function | null;
+    mounted: Function | null;
 
     /**
      * 更新前
      */
-    public shouldUpdate: Function | null;
+    shouldUpdate: Function | null;
 
     /**
      * 更新
      */
-    public update: Function;
+    update: Function;
 
     /**
      * 销毁前
      */
-    public beforeDestroy: Function | null;
+    beforeDestroy: Function | null;
 
     /**
      * 销毁
      */
-    public destroyed: Function | null;
+    destroyed: Function | null;
 
     /**
      * 初始化render函数
      */
-    private _initRender: () => void;
+    _initRender: () => void;
 
     /**
      * 内部主render函数
      */
-    private _render: () => void;
+    _render: () => void;
 
     /**
      * 初始化根节点
      */
-    private _initRoot: () => void;
+    _initRoot: () => void;
 
     /**
      * 初始化元素宽度
      */
-    private _initElementWidth: () => void;
+    _initElementWidth: () => void;
 
     /**
      * 初始化元素高度
      */
-    private _initElementHeight: () => void;
+    _initElementHeight: () => void;
 
     /**
      * 初始化元素可见
      */
-    private _initVisual: () => void;
+    _initVisual: () => void;
 
     /**
      * 初始化元素可用不可用
      */
-    private _initEffects: () => void;
+    _initEffects: () => void;
 
     /**
      * 设置mounted锁
      */
-    private _initState: () => void;
+    _initState: () => void;
 
     /**
      * 生成真实dom
      */
-    private _initElement: () => void;
+    _initElement: () => void;
 
     /**
      * 设置父节点
      */
-    private _setParent: () => void;
+    _setParent: () => void;
 
     /**
      * @param force 是否强制挂载子节点
@@ -161,218 +171,212 @@ export declare class _Widget extends _OB {
      * @param lifeHook 生命周期钩子触不触发，默认触发
      * @param predicate 递归每个widget的回调
      */
-    public _mount: (force?: boolean, deep?: boolean, lifeHook?: boolean, predicate?: Function) => boolean;
+    _mount: (force?: boolean, deep?: boolean, lifeHook?: boolean, predicate?: Function) => boolean;
 
     /**
      * 挂载子节点
      */
-    private _mountChildren: Function | null;
+    _mountChildren: Function | null;
 
     /**
      * 是否已挂载
      */
-    public isMounted: () => boolean;
+    isMounted: () => boolean;
 
     /**
      * 设置宽度
      */
-    public setWidth: (w: number) => void;
+    setWidth: (w: number) => void;
 
     /**
      * 设置高度
      */
-    public setHeight: (h: number) => void;
+    setHeight: (h: number) => void;
 
     /**
      * 设置可用
      */
-    private _setEnable: (enable: boolean) => void;
+    _setEnable: (enable: boolean) => void;
 
     /**
      * 设置合法
      */
-    private _setValid: (valid: boolean) => void;
+    _setValid: (valid: boolean) => void;
 
     /**
      * 设置可见
      */
-    private _setVisible: (visible: boolean) => void;
+    _setVisible: (visible: boolean) => void;
 
     /**
      * 设置是否可用
      */
-    public setEnable: (enable: boolean) => void;
+    setEnable: (enable: boolean) => void;
 
     /**
      * 设置是否可见
      */
-    public setVisible: (visible: boolean) => void;
+    setVisible: (visible: boolean) => void;
 
     /**
      * 设置是否合法
      */
-    public setValid: (valid: boolean) => void;
+    setValid: (valid: boolean) => void;
 
     /**
      * 设置反馈效果
      * @param args arguments参数
      */
-    public doBehavior: (...args: any[]) => void;
+    doBehavior: (...args: any[]) => void;
 
     /**
      * 获取宽度
      */
-    public getWidth: () => number;
+    getWidth: () => number;
 
     /**
      * 获取高度
      */
-    public getHeight: () => number;
+    getHeight: () => number;
 
     /**
      * 是否合法
      */
-    public isValid: () => boolean;
+    isValid: () => boolean;
 
     /**
      * 新增子元素
      */
-    public addWidget: (_name: any, _widget: _Widget) => _Widget;
+    addWidget: (_name: any, _widget: _Widget) => _Widget;
 
     /**
      * 根据wigetname获取子元素实例
      */
-    public getWidgetByName: (_name: string) => _Widget;
+    getWidgetByName: (_name: string) => _Widget;
 
     /**
      * 移除子元素
      * @param nameOrWidget widgetName或widget实例
      */
-    public removeWidget: (nameOrWidget: string | _Widget) => void;
+    removeWidget: (nameOrWidget: string | _Widget) => void;
 
     /**
      * 是否有某个子元素
      */
-    public hasWidget: (name: string) => boolean;
+    hasWidget: (name: string) => boolean;
 
     /**
      * 获取widgetName
      */
-    public getName: () => string;
+    getName: () => string;
 
     /**
      * 设置tag
      * @param tag html tag
      */
-    public setTag: (tag: string) => void;
+    setTag: (tag: string) => void;
 
     /**
      * 获取tag
      */
-    public getTag: () => string;
+    getTag: () => string;
 
     /**
      * 设置属性
      * @param key 键
      * @param value 值
      */
-    public attr: (key: string | { [key: string]: any }, value: any) => any;
+    attr: (key: string | { [key: string]: any }, value: any) => any;
 
     /**
      * 获取text
      */
-    public getText: () => string;
+    getText: () => string;
 
     /**
      * 设置text
      */
-    public setText: () => void;
+    setText: () => void;
 
     /**
      * 获取值
      */
-    public getValue: () => any;
+    getValue: () => any;
 
     /**
      * 设置值
      */
-    public setValue: (...args: any[]) => void;
+    setValue: (...args: any[]) => void;
 
     /**
      * 获取是否enable
      */
-    public isEnabled: () => boolean;
+    isEnabled: () => boolean;
 
     /**
      * 是否可见
      */
-    public isVisible: () => boolean;
+    isVisible: () => boolean;
 
     /**
      * disable元素
      */
-    public disable: ()=> void;
+    disable: ()=> void;
 
     /**
      * enable元素
      */
-    public enable: () => void;
+    enable: () => void;
 
     /**
      * 是widget合法
      */
-    public valid: () => void;
+    valid: () => void;
 
     /**
      * 使元素不合法
      */
-    public invalid: () => void;
+    invalid: () => void;
 
     /**
      * 使不可见
      */
-    public invisible: () => void;
+    invisible: () => void;
 
     /**
      * 可见
      */
-    public visible: () => void;
+    visible: () => void;
 
     /**
      * 清除子元素
      */
-    private __d: () => void;
+    __d: () => void;
 
     /**
      * 取消挂载
      */
-    private _unMount: () => void;
+    _unMount: () => void;
 
     /**
      * hang元素
      */
-    public isolate: () => void;
+    isolate: () => void;
 
     /**
      * 请除元素
      */
-    public empty: () => void;
+    empty: () => void;
 
     /**
      * 内部destory方法
      */
-    protected _destroy: () => void;
+    _destroy: () => void;
 
     /**
      * destory元素
      */
-    public destroy: () => void;
-
-    /**
-     * 注册渲染引擎
-     * @param engine 引擎
-     */
-    static registerRenderEngine: (engine: RenderEngine) => void;
+    destroy: () => void;
 }
 
 interface RenderEngine {
