@@ -8,7 +8,7 @@ export interface WidgetConstructor {
      * 注册渲染引擎
      * @param engine 引擎
      */
-    registerRenderEngine: (engine: RenderEngine) => void;
+    registerRenderEngine(engine: RenderEngine): void;
 }
 
 export interface _Widget extends _OB {
@@ -60,7 +60,7 @@ export interface _Widget extends _OB {
      */
     _renderEngine: RenderEngine;
 
-    _store: () => any;
+    _store(): any;
 
     model: any;
 
@@ -68,52 +68,52 @@ export interface _Widget extends _OB {
     /**
      * 初始化前
      */
-    beforeInit: Function | null;
+    beforeInit?(cb: Function): void;
     
     /**
      * 创建前
      */
-    beforeCreate: Function | null;
+    beforeCreate?(): void;
 
     /**
      * 创建
      */
-    created: Function | null;
+    created?(): void;
 
     /**
      * 渲染
      */
-    render: Function | null;
+    render?(): any;
 
     /**
      * 挂载前
      */
-    beforeMount: Function | null;
+    beforeMount?(): void;
 
     /**
      * 挂载
      */
-    mounted: Function | null;
+    mounted?(): void;
 
     /**
      * 更新前
      */
-    shouldUpdate: Function | null;
+    shouldUpdate?(): void;
 
     /**
      * 更新
      */
-    update: Function;
+    update?(): void;
 
     /**
      * 销毁前
      */
-    beforeDestroy: Function | null;
+    beforeDestroy?(): void;
 
     /**
      * 销毁
      */
-    destroyed: Function | null;
+    destroyed?(): void;
 
     /**
      * 初始化render函数
@@ -171,212 +171,212 @@ export interface _Widget extends _OB {
      * @param lifeHook 生命周期钩子触不触发，默认触发
      * @param predicate 递归每个widget的回调
      */
-    _mount: (force?: boolean, deep?: boolean, lifeHook?: boolean, predicate?: Function) => boolean;
+    _mount(force?: boolean, deep?: boolean, lifeHook?: boolean, predicate?: Function): boolean;
 
     /**
      * 挂载子节点
      */
-    _mountChildren: Function | null;
+    _mountChildren?(): void;
 
     /**
      * 是否已挂载
      */
-    isMounted: () => boolean;
+    isMounted(): boolean;
 
     /**
      * 设置宽度
      */
-    setWidth: (w: number) => void;
+    setWidth(w: number): void;
 
     /**
      * 设置高度
      */
-    setHeight: (h: number) => void;
+    setHeight(h: number): void;
 
     /**
      * 设置可用
      */
-    _setEnable: (enable: boolean) => void;
+    _setEnable(enable: boolean): void;
 
     /**
      * 设置合法
      */
-    _setValid: (valid: boolean) => void;
+    _setValid(valid: boolean): void;
 
     /**
      * 设置可见
      */
-    _setVisible: (visible: boolean) => void;
+    _setVisible(visible: boolean): void;
 
     /**
      * 设置是否可用
      */
-    setEnable: (enable: boolean) => void;
+    setEnable(enable: boolean): void;
 
     /**
      * 设置是否可见
      */
-    setVisible: (visible: boolean) => void;
+    setVisible(visible: boolean): void;
 
     /**
      * 设置是否合法
      */
-    setValid: (valid: boolean) => void;
+    setValid(valid: boolean): void;
 
     /**
      * 设置反馈效果
      * @param args arguments参数
      */
-    doBehavior: (...args: any[]) => void;
+    doBehavior(...args: any[]): void;
 
     /**
      * 获取宽度
      */
-    getWidth: () => number;
+    getWidth(): number;
 
     /**
      * 获取高度
      */
-    getHeight: () => number;
+    getHeight(): number;
 
     /**
      * 是否合法
      */
-    isValid: () => boolean;
+    isValid(): boolean;
 
     /**
      * 新增子元素
      */
-    addWidget: (_name: any, _widget: _Widget) => _Widget;
+    addWidget(_name: any, _widget: _Widget): _Widget;
 
     /**
      * 根据wigetname获取子元素实例
      */
-    getWidgetByName: (_name: string) => _Widget;
+    getWidgetByName(_name: string): _Widget;
 
     /**
      * 移除子元素
      * @param nameOrWidget widgetName或widget实例
      */
-    removeWidget: (nameOrWidget: string | _Widget) => void;
+    removeWidget(nameOrWidget: string | _Widget): void;
 
     /**
      * 是否有某个子元素
      */
-    hasWidget: (name: string) => boolean;
+    hasWidget(name: string): boolean;
 
     /**
      * 获取widgetName
      */
-    getName: () => string;
+    getName(): string;
 
     /**
      * 设置tag
      * @param tag html tag
      */
-    setTag: (tag: string) => void;
+    setTag(tag: string): void;
 
     /**
      * 获取tag
      */
-    getTag: () => string;
+    getTag(): string;
 
     /**
      * 设置属性
      * @param key 键
      * @param value 值
      */
-    attr: (key: string | { [key: string]: any }, value: any) => any;
+    attr(key: string | { [key: string]: any }, value: any): any;
 
     /**
      * 获取text
      */
-    getText: () => string;
+    getText(): string;
 
     /**
      * 设置text
      */
-    setText: () => void;
+    setText(): void;
 
     /**
      * 获取值
      */
-    getValue: () => any;
+    getValue(): any;
 
     /**
      * 设置值
      */
-    setValue: (...args: any[]) => void;
+    setValue(...args: any[]): void;
 
     /**
      * 获取是否enable
      */
-    isEnabled: () => boolean;
+    isEnabled(): boolean;
 
     /**
      * 是否可见
      */
-    isVisible: () => boolean;
+    isVisible(): boolean;
 
     /**
      * disable元素
      */
-    disable: ()=> void;
+    disable(): void;
 
     /**
      * enable元素
      */
-    enable: () => void;
+    enable(): void;
 
     /**
      * 是widget合法
      */
-    valid: () => void;
+    valid(): void;
 
     /**
      * 使元素不合法
      */
-    invalid: () => void;
+    invalid(): void;
 
     /**
      * 使不可见
      */
-    invisible: () => void;
+    invisible(): void;
 
     /**
      * 可见
      */
-    visible: () => void;
+    visible(): void;
 
     /**
      * 清除子元素
      */
-    __d: () => void;
+    __d(): void;
 
     /**
      * 取消挂载
      */
-    _unMount: () => void;
+    _unMount(): void;
 
     /**
      * hang元素
      */
-    isolate: () => void;
+    isolate(): void;
 
     /**
      * 请除元素
      */
-    empty: () => void;
+    empty(): void;
 
     /**
      * 内部destory方法
      */
-    _destroy: () => void;
+    _destroy(): void;
 
     /**
      * destory元素
      */
-    destroy: () => void;
+    destroy(): void;
 }
 
 interface RenderEngine {

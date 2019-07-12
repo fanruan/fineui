@@ -13,33 +13,33 @@ export interface _OB {
         [eventName: string]: Function[];
     };
 
-    init: Function | null;
+    init?(): void;
 
-    destroyed: Function | null;
+    destroyed?(): void;
 
-    _defaultConfig: (..._args: any[]) => { [key: string]: any } | {};
+    _defaultConfig(..._args: any[]): { [key: string]: any } | {};
 
-    _init: () => void;
+    _init(): void;
 
-    _initListeners: () => void;
+    _initListeners(): void;
 
-    _getEvents: () => { [eventName: string]: Function[] };
+    _getEvents(): { [eventName: string]: Function[] };
 
-    on: (eventName: string, fn: Function) => void;
+    on(eventName: string, fn: Function): void;
 
-    once: (eventName: string, fn: Function) => void;
+    once(eventName: string, fn: Function): void;
 
-    un: (eName: string, fn: Function) => void;
+    un(eName: string, fn: Function): void;
 
-    _initRef: () => void;
+    _initRef(): void;
 
-    _purgeRef: () => void;
+    _purgeRef(): void;
 
-    purgeListeners: () => void;
+    purgeListeners(): void;
 
-    fireEvent: (eName: string, ...args: any[]) => boolean;
+    fireEvent(eName: string, ...args: any[]): boolean | null;
 
-    destroy: () => void;
+    destroy(): void;
 }
 
 interface Props {
