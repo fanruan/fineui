@@ -48753,7 +48753,7 @@ BI.Input = BI.inherit(BI.Single, {
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
-                if(self._lastValidValue !== lastValidValue) {
+                if (self._lastValidValue !== lastValidValue) {
                     self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
                 }
             }
@@ -48785,30 +48785,26 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
-        if (ctrlKey === true && keyCode === 86) {// ctrlKey+V
-            this._valueChange();
-        } else {
-            if (keyCode == BI.KeyCode.ENTER) {
-                if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
-                    this.blur();
-                    this.fireEvent(BI.Input.EVENT_ENTER);
-                } else {
-                    this.fireEvent(BI.Input.EVENT_RESTRICT);
-                }
+        if (keyCode == BI.KeyCode.ENTER) {
+            if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
+                this.blur();
+                this.fireEvent(BI.Input.EVENT_ENTER);
+            } else {
+                this.fireEvent(BI.Input.EVENT_RESTRICT);
             }
-            if (keyCode == BI.KeyCode.SPACE) {
-                this.fireEvent(BI.Input.EVENT_SPACE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
-                this.fireEvent(BI.Input.EVENT_REMOVE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
-                this.fireEvent(BI.Input.EVENT_BACKSPACE);
-            }
+        }
+        if (keyCode == BI.KeyCode.SPACE) {
+            this.fireEvent(BI.Input.EVENT_SPACE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
+            this.fireEvent(BI.Input.EVENT_REMOVE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
+            this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
-        if (BI.isEndWithBlank(this.getValue())) {
+        if (BI.isEndWithBlank(this.getValue()) && BI.trim(this.getValue()) === BI.trim(this._lastValue || "")) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);
