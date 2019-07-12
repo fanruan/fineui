@@ -15823,13 +15823,15 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     BI.PrefixIntervalTree = function (xs) {
         this._size = xs.length;
         this._half = ceilLog2(this._size);
+        // _heap是一个_size两倍以上的堆
         this._heap = new Int32Array(2 * this._half);
 
         var i;
+        // 初始化 >= _size 的堆空间, 即叶子节点
         for (i = 0; i < this._size; ++i) {
             this._heap[this._half + i] = xs[i];
         }
-
+        // 初始化 < _size 的堆空间, 即非叶子节点，根节点包含整个区间
         for (i = this._half - 1; i > 0; --i) {
             this._heap[i] = this._heap[2 * i] + this._heap[2 * i + 1];
         }
@@ -15837,6 +15839,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
     BI.PrefixIntervalTree.prototype = {
         constructor: BI.PrefixIntervalTree,
+        // 往_half之后的空间set值，需要更新其所有祖先节点的值
         set: function (index, value) {
             var node = this._half + index;
             this._heap[node] = value;
@@ -17371,7 +17374,8 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     }
 });
-BI.shortcut("bi.layout", BI.Layout);BI.Plugin = BI.Plugin || {};
+BI.shortcut("bi.layout", BI.Layout);
+BI.Plugin = BI.Plugin || {};
 !(function () {
     var _WidgetsPlugin = {};
     var _ObjectPlugin = {};
@@ -22987,7 +22991,10 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperHorizontalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0"
+        });
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i]);
         }
@@ -23122,7 +23129,10 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
-        w.element.css({position: "relative"});
+        w.element.css({
+            position: "relative",
+            "flex-shrink": "0"
+        });
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i]);
         }
@@ -29182,6 +29192,12 @@ BI.Combo = BI.inherit(BI.Widget, {
         if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+            var directions = this.options.direction.split(",");
+            if (BI.contains(directions, "innerLeft") || BI.contains(directions, "innerRight")) {
+                // popup可以出现的trigger内部的combo，滚动时不需要消失，而是调整位置
+                this.adjustWidth();
+                this.adjustHeight();
+            }
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -31500,7 +31516,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
                             _top: rowDatum.offset + verticalOffsetAdjustment
-                        }));
+                        }), this);
                         renderedCells.push({
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
@@ -31546,7 +31562,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index, key) {
                 addedItems.push(renderedCells[key[2]]);
             });
-            this.container.addItems(addedItems);
+            // 与listview一样, 给上下文
+            this.container.addItems(addedItems, this);
             // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
@@ -31714,7 +31731,8 @@ BI.GridView = BI.inherit(BI.Widget, {
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut("bi.grid_view", BI.GridView);/**
+BI.shortcut("bi.grid_view", BI.GridView);
+/**
  * Popover弹出层，
  * @class BI.Popover
  * @extends BI.Widget
@@ -32539,7 +32557,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
 
     _clearChildren: function () {
         BI.each(this.container._children, function (i, cell) {
-            cell && cell.el._destroy();
+            cell && cell._destroy();
         });
         this.container._children = {};
         this.container.attr("items", []);
@@ -32550,6 +32568,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this._clearChildren();
         this.cache = {};
         this.options.scrollTop = 0;
+        // 依赖于cache的占位元素也要初始化
+        this.topBlank.setHeight(0);
+        this.bottomBlank.setHeight(0);
     },
 
     populate: function (items) {
@@ -35196,6 +35217,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
+            name: "",
             attributes: {},
             width: "100%",
             height: "100%"
@@ -35206,6 +35228,7 @@ BI.Iframe = BI.inherit(BI.Single, {
         var o = this.options;
         o.attributes.frameborder = "0";
         o.attributes.src = o.src;
+        o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
@@ -35225,14 +35248,6 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     getName: function () {
         return this.options.name;
-    },
-
-    getWidth: function () {
-        return this.options.width;
-    },
-
-    getHeight: function () {
-        return this.options.height;
     }
 });
 
@@ -35398,7 +35413,7 @@ BI.Input = BI.inherit(BI.Single, {
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
-                ctrlKey = e.ctrlKey;
+                ctrlKey = e.ctrlKey || e.metaKey; // mac的cmd支持一下
                 keyCode = e.keyCode;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
@@ -46534,7 +46549,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             }),
             popup: {
                 el: this.popupview,
-                stopPropagation: true,
+                stopPropagation: o.stopPropagation,
                 maxHeight: 1000,
                 minWidth: 140
             }
@@ -51089,7 +51104,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             }),
             popup: {
                 el: this.popupview,
-                stopPropagation: true,
+                stopPropagation: o.stopPropagation,
                 maxHeight: 1000
             }
         });
@@ -51669,7 +51684,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
-            node.keyword = keyword;
+            node.keyword = node.keyword || keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
@@ -52432,7 +52447,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-singletree-combo",
+            baseCls: "bi-multilayer-single-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -52643,7 +52658,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
-            node.keyword = keyword;
+            node.keyword = node.keyword || keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";

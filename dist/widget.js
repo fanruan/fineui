@@ -1705,7 +1705,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             }),
             popup: {
                 el: this.popupview,
-                stopPropagation: true,
+                stopPropagation: o.stopPropagation,
                 maxHeight: 1000,
                 minWidth: 140
             }
@@ -6260,7 +6260,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             }),
             popup: {
                 el: this.popupview,
-                stopPropagation: true,
+                stopPropagation: o.stopPropagation,
                 maxHeight: 1000
             }
         });
@@ -6840,7 +6840,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
-            node.keyword = keyword;
+            node.keyword = node.keyword || keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
@@ -7603,7 +7603,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-singletree-combo",
+            baseCls: "bi-multilayer-single-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -7814,7 +7814,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
             }
-            node.keyword = keyword;
+            node.keyword = node.keyword || keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
                 extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
