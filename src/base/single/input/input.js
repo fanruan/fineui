@@ -58,10 +58,10 @@ BI.Input = BI.inherit(BI.Single, {
                 // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
                 var originalEvent = e.originalEvent;
                 if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
-                    keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(keyCode);
+                    keyCode = null;
                 }
             })
             .click(function (e) {
@@ -166,7 +166,10 @@ BI.Input = BI.inherit(BI.Single, {
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
-        if (BI.isEndWithBlank(this.getValue()) && BI.trim(this.getValue()) === BI.trim(this._lastValue || "")) {
+        if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
+            this._valueChange();
+        }
+        if (BI.isEndWithBlank(this.getValue())) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);
@@ -175,9 +178,6 @@ BI.Input = BI.inherit(BI.Single, {
             BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);
-            this._valueChange();
-        } else {
-            this._valueChange();
         }
     },
 
