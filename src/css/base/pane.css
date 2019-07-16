@@ -122,10 +122,3 @@
     transform: scaleY(1);
   }
 }
-.bi-loading-widget.hack {
-  background: url('images/1x/icon/wave_loading.gif') no-repeat center center;
-}
-.bi-loading-widget.hack .animate-rect {
-  background-color: rgba(54, 133, 242, 0);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#003685f2,endColorstr=#003685f2);
-}
