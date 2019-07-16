@@ -210,3 +210,10 @@
 .trans-color-disabled-background.hack {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/trans_disable.png') no-repeat center center;
 }
+.wave-loading {
+  background: url('resources?path=/com/fr/web/ui/images/2x/icon/wave_loading.gif') no-repeat center center;
+  background-size: contain;
+}
+.wave-loading.hack {
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/wave_loading.gif') no-repeat center center;
+}
