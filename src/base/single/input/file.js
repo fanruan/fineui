@@ -270,9 +270,13 @@
                                 handler.attach_array.push(attachO);
                             }
                         } catch (e) {
-                            if (isFunction(handler.onerror)) {handler.onerror(rpe, event || _global.event);}
+                            if (isFunction(handler.onerror)) {
+                                handler.onerror(rpe, event || _global.event);
+                            }
                         }
-                        if (isFunction(handler.onload)) {handler.onload(rpe, {responseText: responseText});}
+                        if (isFunction(handler.onload)) {
+                            handler.onload(rpe, {responseText: responseText});
+                        }
                     },
                     target = ["AjaxUpload", (new Date).getTime(), String(Math.random()).substring(2)].join("_");
                 try { // IE < 8 does not accept enctype attribute ...
@@ -483,7 +487,14 @@
                         self.fireEvent(BI.File.EVENT_ERROR);
                         return;
                     }
-                    self.fireEvent(BI.File.EVENT_UPLOADED);
+                    var error = BI.some(_wrap.attach_array, function (index, attach) {
+                        if (attach.errorCode) {
+                            BI.Msg.toast(attach.errorMsg, {level: "error"});
+                            self.fireEvent(BI.File.EVENT_ERROR, attach);
+                            return true;
+                        }
+                    });
+                    !error && self.fireEvent(BI.File.EVENT_UPLOADED);
                     // enable again the submit button/element
                 }, 1000);
             };
