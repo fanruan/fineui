@@ -166,6 +166,8 @@ BI.Input = BI.inherit(BI.Single, {
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
+        // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
+        var lastValue = this._lastValue;
         if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
             this._valueChange();
         }
@@ -175,7 +177,7 @@ BI.Input = BI.inherit(BI.Single, {
             this.fireEvent(BI.Input.EVENT_PAUSE);
             this._defaultState();
         } else if ((keyCode === BI.KeyCode.BACKSPACE || keyCode === BI.KeyCode.DELETE) &&
-            BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
+            BI.trim(this.getValue()) === "" && (lastValue !== null && BI.trim(lastValue) !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);
         }
