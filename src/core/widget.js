@@ -25,6 +25,9 @@
             });
         },
 
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructor: function () {},
+
         beforeInit: null,
 
         // 生命周期函数
