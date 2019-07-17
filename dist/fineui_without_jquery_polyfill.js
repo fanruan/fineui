@@ -27102,14 +27102,15 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        var isIE = BI.isIE();
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
-            cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            cls: "bi-loading-widget" + (isIE ? " wave-loading hack" : ""),
             height: 30,
             width: 30,
             hgap: 5,
             vgap: 2.5,
-            items: [{
+            items: isIE ? [] : [{
                 type: "bi.layout",
                 cls: "animate-rect rect1",
                 height: 25,
@@ -35430,10 +35431,10 @@ BI.Input = BI.inherit(BI.Single, {
                 // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
                 var originalEvent = e.originalEvent;
                 if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
-                    keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(keyCode);
+                    keyCode = null;
                 }
             })
             .click(function (e) {
@@ -35538,18 +35539,20 @@ BI.Input = BI.inherit(BI.Single, {
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
-        if (BI.isEndWithBlank(this.getValue()) && BI.trim(this.getValue()) === BI.trim(this._lastValue || "")) {
+        // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
+        var lastValue = this._lastValue;
+        if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
+            this._valueChange();
+        }
+        if (BI.isEndWithBlank(this.getValue())) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);
             this._defaultState();
         } else if ((keyCode === BI.KeyCode.BACKSPACE || keyCode === BI.KeyCode.DELETE) &&
-            BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
+            BI.trim(this.getValue()) === "" && (lastValue !== null && BI.trim(lastValue) !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);
-            this._valueChange();
-        } else {
-            this._valueChange();
         }
     },
 
