@@ -2261,7 +2261,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         }
                     }]
                 }, o.popup),
-                stopPropagation: true,
                 width: 230
             },
             value: o.value
@@ -6011,7 +6010,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: "left",
             height: o.height,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -6279,7 +6278,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -6573,7 +6572,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             text: o.text,
             height: o.height,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -7318,7 +7317,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
                         self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(items && items.length > 0);
+                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
                     }
                     self._checkAllSelected();
                 });
@@ -7426,7 +7425,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.toolbar.setVisible(!BI.isEmptyArray(items));
-        this.toolbar.setEnable(!BI.isEmptyArray(items));
+        this.toolbar.setEnable(this.isEnabled() && !BI.isEmptyArray(items));
         this.list.populate.apply(this.list, arguments);
         this._checkAllSelected();
     },

@@ -11480,21 +11480,29 @@ if (!_global.BI) {
      * @abstract
      */
     BI.OB = function (config) {
-        var props = this.props;
-        if (BI.isFunction(this.props)) {
-            props = this.props(config);
-        }
-        this.options = extend(this._defaultConfig(config), props, config);
-        this._init();
-        this._initRef();
+        this._constructor(config);
     };
     _.extend(BI.OB.prototype, {
         props: {},
         init: null,
         destroyed: null,
 
+        _constructor: function (config) {
+            this._initProps(config);
+            this._init();
+            this._initRef();
+        },
+
         _defaultConfig: function (config) {
             return {};
+        },
+
+        _initProps: function (config) {
+            var props = this.props;
+            if (BI.isFunction(this.props)) {
+                props = this.props(config);
+            }
+            this.options = extend(this._defaultConfig(config), props, config);
         },
 
         _init: function () {
@@ -11652,6 +11660,9 @@ if (!_global.BI) {
                 cls: ""
             });
         },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructor: function () {},
 
         beforeInit: null,
 
@@ -11813,16 +11824,17 @@ if (!_global.BI) {
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
-            var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
+            if(BI.isNotNull(this._parent)) {
+                !this._parent.isEnabled() && this._setEnable(false);
+                !this._parent.isValid() && this._setValid(false);
+            }
             BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
@@ -12170,12 +12182,15 @@ if (!_global.BI) {
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        if (config["classType"]) {
-            return new (new Function("return " + config["classType"] + ";")())(config);
-        }
-
         var cls = kv[config.type];
-        return new cls(config);
+
+        var widget = new cls();
+
+        widget._initProps(config);
+        widget._init();
+        widget._initRef();
+
+        return widget;
     };
 
     BI.createWidget = function (item, options, context) {
