@@ -11480,21 +11480,29 @@ if (!_global.BI) {
      * @abstract
      */
     BI.OB = function (config) {
-        var props = this.props;
-        if (BI.isFunction(this.props)) {
-            props = this.props(config);
-        }
-        this.options = extend(this._defaultConfig(config), props, config);
-        this._init();
-        this._initRef();
+        this._constructor(config);
     };
     _.extend(BI.OB.prototype, {
         props: {},
         init: null,
         destroyed: null,
 
+        _constructor: function (config) {
+            this._initProps(config);
+            this._init();
+            this._initRef();
+        },
+
         _defaultConfig: function (config) {
             return {};
+        },
+
+        _initProps: function (config) {
+            var props = this.props;
+            if (BI.isFunction(this.props)) {
+                props = this.props(config);
+            }
+            this.options = extend(this._defaultConfig(config), props, config);
         },
 
         _init: function () {
@@ -11652,6 +11660,9 @@ if (!_global.BI) {
                 cls: ""
             });
         },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructor: function () {},
 
         beforeInit: null,
 
@@ -11813,16 +11824,17 @@ if (!_global.BI) {
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
-            var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
+            if(BI.isNotNull(this._parent)) {
+                !this._parent.isEnabled() && this._setEnable(false);
+                !this._parent.isValid() && this._setValid(false);
+            }
             BI.each(this._children, function (i, widget) {
-                !self.isEnabled() && widget._setEnable(false);
-                !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
@@ -12170,12 +12182,15 @@ if (!_global.BI) {
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        if (config["classType"]) {
-            return new (new Function("return " + config["classType"] + ";")())(config);
-        }
-
         var cls = kv[config.type];
-        return new cls(config);
+
+        var widget = new cls();
+
+        widget._initProps(config);
+        widget._init();
+        widget._initRef();
+
+        return widget;
     };
 
     BI.createWidget = function (item, options, context) {
@@ -31944,7 +31959,7 @@ BI.shortcut("bi.popover", BI.Popover);
 BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
+            btns: [BI.i18nText("BI-Basic_Sure"), BI.i18nText("BI-Basic_Cancel")]
         });
     },
 
@@ -41208,7 +41223,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: "left",
             height: o.height,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -41476,7 +41491,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -41770,7 +41785,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             text: o.text,
             height: o.height,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -42515,7 +42530,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
                         self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(items && items.length > 0);
+                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
                     }
                     self._checkAllSelected();
                 });
@@ -42623,7 +42638,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.toolbar.setVisible(!BI.isEmptyArray(items));
-        this.toolbar.setEnable(!BI.isEmptyArray(items));
+        this.toolbar.setEnable(this.isEnabled() && !BI.isEmptyArray(items));
         this.list.populate.apply(this.list, arguments);
         this._checkAllSelected();
     },
