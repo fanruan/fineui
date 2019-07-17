@@ -50,7 +50,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
