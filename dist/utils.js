@@ -17189,13 +17189,15 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     BI.PrefixIntervalTree = function (xs) {
         this._size = xs.length;
         this._half = ceilLog2(this._size);
+        // _heap是一个_size两倍以上的堆
         this._heap = new Int32Array(2 * this._half);
 
         var i;
+        // 初始化 >= _size 的堆空间, 即叶子节点
         for (i = 0; i < this._size; ++i) {
             this._heap[this._half + i] = xs[i];
         }
-
+        // 初始化 < _size 的堆空间, 即非叶子节点，根节点包含整个区间
         for (i = this._half - 1; i > 0; --i) {
             this._heap[i] = this._heap[2 * i] + this._heap[2 * i + 1];
         }
@@ -17203,6 +17205,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
     BI.PrefixIntervalTree.prototype = {
         constructor: BI.PrefixIntervalTree,
+        // 往_half之后的空间set值，需要更新其所有祖先节点的值
         set: function (index, value) {
             var node = this._half + index;
             this._heap[node] = value;

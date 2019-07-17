@@ -500,22 +500,25 @@ textarea {
   border-left: 1px solid #292f45;
 }
 .bi-font-helvetica-neue {
-  font-family: "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
+  font-family: "Helvetica Neue", Arial, Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
+}
+.bi-font-verdana {
+  font-family: Verdana, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
 }
 .bi-font-arial {
-  font-family: Arial, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
+  font-family: Arial, "Helvetica Neue", Verdana, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
 }
 .bi-font-PingFang {
-  font-family: "PingFang SC", "Helvetica Neue", Arial, "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
+  font-family: "PingFang SC", "Helvetica Neue", Verdana, Arial, "Hiragino Sans GB", "Microsoft YaHei", Heiti, serif;
 }
 .bi-font-hiragino-sans {
-  font-family: "Hiragino Sans GB", "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", Heiti, serif;
+  font-family: "Hiragino Sans GB", "Helvetica Neue", Verdana, Arial, "PingFang SC", "Microsoft YaHei", Heiti, serif;
 }
 .bi-font-microsoft-yaHei {
-  font-family: "Microsoft YaHei", "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", Heiti, serif;
+  font-family: "Microsoft YaHei", "Helvetica Neue", Verdana, Arial, "PingFang SC", "Hiragino Sans GB", Heiti, serif;
 }
 .bi-font-heiti {
-  font-family: Heiti, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
+  font-family: Heiti, "Helvetica Neue", Verdana, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
 }
 .bi-border-radius {
   -webkit-border-radius: 2px;
@@ -4244,9 +4247,53 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-multilayer-select-tree-combo .trigger-icon-button {
+  font-size: 16px;
+}
+.bi-multilayer-select-tree-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+.bi-multilayer-select-tree-combo .bi-combo + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+
 .bi-multilayer-select-level-tree .tree-view {
   min-width: 100%;
 }
+.bi-multilayer-single-tree-combo .trigger-icon-button {
+  font-size: 16px;
+}
+.bi-multilayer-single-tree-combo .bi-combo.bi-combo-popup + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  transform: rotate(180deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+.bi-multilayer-single-tree-combo .bi-combo + .bi-trigger-icon-button .x-icon {
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  transform: rotate(0deg);
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
+}
+
 .bi-multilayer-single-level-tree .tree-view {
   min-width: 100%;
 }
@@ -4600,7 +4647,7 @@ body {
   -o-user-select: none;
   user-select: none;
   color: #3d4d66;
-  font: normal 12px "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif;
+  font: normal 12px "Helvetica Neue", Verdana, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;

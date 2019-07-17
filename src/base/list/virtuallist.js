@@ -151,7 +151,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
 
     _clearChildren: function () {
         BI.each(this.container._children, function (i, cell) {
-            cell && cell.el._destroy();
+            cell && cell._destroy();
         });
         this.container._children = {};
         this.container.attr("items", []);
@@ -162,6 +162,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this._clearChildren();
         this.cache = {};
         this.options.scrollTop = 0;
+        // 依赖于cache的占位元素也要初始化
+        this.topBlank.setHeight(0);
+        this.bottomBlank.setHeight(0);
     },
 
     populate: function (items) {

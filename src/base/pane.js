@@ -36,14 +36,15 @@ BI.Pane = BI.inherit(BI.Widget, {
 
     loading: function () {
         var self = this, o = this.options;
+        var isIE = BI.isIE();
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
-            cls: "bi-loading-widget" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
+            cls: "bi-loading-widget" + (isIE ? " wave-loading hack" : ""),
             height: 30,
             width: 30,
             hgap: 5,
             vgap: 2.5,
-            items: [{
+            items: isIE ? [] : [{
                 type: "bi.layout",
                 cls: "animate-rect rect1",
                 height: 25,

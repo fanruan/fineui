@@ -1,39 +1,45 @@
-export declare class _OB {
-    protected props: Props | (<T>(config: T) => Props & T);
+export interface OBConstructor {
+    new(config: any): _OB;
+    (config: any): _OB;
+    readonly prototype: _OB;
+}
 
-    protected options: Props;
+export interface _OB {
+    props: Props | (<T>(config: T) => Props & T);
 
-    private events?: {
+    options: Props;
+
+    events?: {
         [eventName: string]: Function[];
     };
 
-    public init: Function | null;
+    init?(): void;
 
-    public destroyed: Function | null;
+    destroyed?(): void;
 
-    protected _defaultConfig: (..._args: any[]) => { [key: string]: any } | {};
+    _defaultConfig(..._args: any[]): { [key: string]: any } | {};
 
-    protected _init: () => void;
+    _init(): void;
 
-    private _initListeners: () => void;
+    _initListeners(): void;
 
-    private _getEvents: () => { [eventName: string]: Function[] };
+    _getEvents(): { [eventName: string]: Function[] };
 
-    public on: (eventName: string, fn: Function) => void;
+    on(eventName: string, fn: Function): void;
 
-    public once: (eventName: string, fn: Function) => void;
+    once(eventName: string, fn: Function): void;
 
-    public un: (eName: string, fn: Function) => void;
+    un(eName: string, fn: Function): void;
 
-    protected _initRef: () => void;
+    _initRef(): void;
 
-    protected _purgeRef: () => void;
+    _purgeRef(): void;
 
-    public purgeListeners: () => void;
+    purgeListeners(): void;
 
-    public fireEvent: (eName: string, ...args: any[]) => boolean;
+    fireEvent(eName: string, ...args: any[]): boolean | null;
 
-    public destroy: () => void;
+    destroy(): void;
 }
 
 interface Props {

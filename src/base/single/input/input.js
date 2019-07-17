@@ -41,7 +41,7 @@ BI.Input = BI.inherit(BI.Single, {
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
-                ctrlKey = e.ctrlKey;
+                ctrlKey = e.ctrlKey || e.metaKey; // mac的cmd支持一下
                 keyCode = e.keyCode;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
@@ -58,10 +58,10 @@ BI.Input = BI.inherit(BI.Single, {
                 // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
                 var originalEvent = e.originalEvent;
                 if (BI.isNull(originalEvent.propertyName) || originalEvent.propertyName === "value") {
-                    keyCode = null;
                     inputEventValid = true;
                     self._keydown_ = true;
                     _keydown(keyCode);
+                    keyCode = null;
                 }
             })
             .click(function (e) {
@@ -115,7 +115,7 @@ BI.Input = BI.inherit(BI.Single, {
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
-                if(self._lastValidValue !== lastValidValue) {
+                if (self._lastValidValue !== lastValidValue) {
                     self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
                 }
             }
@@ -147,41 +147,39 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
-        if (ctrlKey === true && keyCode === 86) {// ctrlKey+V
-            this._valueChange();
-        } else {
-            if (keyCode == BI.KeyCode.ENTER) {
-                if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
-                    this.blur();
-                    this.fireEvent(BI.Input.EVENT_ENTER);
-                } else {
-                    this.fireEvent(BI.Input.EVENT_RESTRICT);
-                }
+        if (keyCode == BI.KeyCode.ENTER) {
+            if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
+                this.blur();
+                this.fireEvent(BI.Input.EVENT_ENTER);
+            } else {
+                this.fireEvent(BI.Input.EVENT_RESTRICT);
             }
-            if (keyCode == BI.KeyCode.SPACE) {
-                this.fireEvent(BI.Input.EVENT_SPACE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
-                this.fireEvent(BI.Input.EVENT_REMOVE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
-                this.fireEvent(BI.Input.EVENT_BACKSPACE);
-            }
+        }
+        if (keyCode == BI.KeyCode.SPACE) {
+            this.fireEvent(BI.Input.EVENT_SPACE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
+            this.fireEvent(BI.Input.EVENT_REMOVE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
+            this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
+        // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
+        var lastValue = this._lastValue;
+        if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
+            this._valueChange();
+        }
         if (BI.isEndWithBlank(this.getValue())) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);
             this._defaultState();
         } else if ((keyCode === BI.KeyCode.BACKSPACE || keyCode === BI.KeyCode.DELETE) &&
-            BI.trim(this.getValue()) === "" && (this._lastValue !== null && BI.trim(this._lastValue) !== "")) {
+            BI.trim(this.getValue()) === "" && (lastValue !== null && BI.trim(lastValue) !== "")) {
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.STOPEDIT, this.getValue(), this);
             this.fireEvent(BI.Input.EVENT_STOP);
-            this._valueChange();
-        } else {
-            this._valueChange();
         }
     },
 

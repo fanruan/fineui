@@ -1,8 +1,9 @@
 import { _i18n } from "./core/i18n";
-import { _OB } from "./core/ob";
-import _func from "./core/func";
+import { OBConstructor } from "./core/ob";
+import { _func } from "./core/func";
+import { WidgetConstructor } from "./core/widget";
 
-export interface BI extends _func {
-    i18n: _i18n;
-    OB: _OB;
+export interface _BI extends _func, _i18n {
+    OB: OBConstructor;
+    Widget: WidgetConstructor;
 }

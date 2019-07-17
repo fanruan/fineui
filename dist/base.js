@@ -3585,6 +3585,12 @@ BI.Combo = BI.inherit(BI.Widget, {
         if ((this.element.find(e.target).length > 0)
             || (this.popupView && this.popupView.element.find(e.target).length > 0)
             || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+            var directions = this.options.direction.split(",");
+            if (BI.contains(directions, "innerLeft") || BI.contains(directions, "innerRight")) {
+                // popup可以出现的trigger内部的combo，滚动时不需要消失，而是调整位置
+                this.adjustWidth();
+                this.adjustHeight();
+            }
             return;
         }
         var isHide = this.options.hideChecker.apply(this, [e]);
@@ -5903,7 +5909,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                             _columnIndex: columnIndex,
                             _left: columnDatum.offset + horizontalOffsetAdjustment,
                             _top: rowDatum.offset + verticalOffsetAdjustment
-                        }));
+                        }), this);
                         renderedCells.push({
                             el: child,
                             left: columnDatum.offset + horizontalOffsetAdjustment,
@@ -5949,7 +5955,8 @@ BI.GridView = BI.inherit(BI.Widget, {
             BI.each(addSet, function (index, key) {
                 addedItems.push(renderedCells[key[2]]);
             });
-            this.container.addItems(addedItems);
+            // 与listview一样, 给上下文
+            this.container.addItems(addedItems, this);
             // 拦截父子级关系
             this.container._children = renderedWidgets;
             this.container.attr("items", renderedCells);
@@ -6117,7 +6124,8 @@ BI.GridView = BI.inherit(BI.Widget, {
     }
 });
 BI.GridView.EVENT_SCROLL = "EVENT_SCROLL";
-BI.shortcut("bi.grid_view", BI.GridView);/**
+BI.shortcut("bi.grid_view", BI.GridView);
+/**
  * Popover弹出层，
  * @class BI.Popover
  * @extends BI.Widget
@@ -6942,7 +6950,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
 
     _clearChildren: function () {
         BI.each(this.container._children, function (i, cell) {
-            cell && cell.el._destroy();
+            cell && cell._destroy();
         });
         this.container._children = {};
         this.container.attr("items", []);
@@ -6953,6 +6961,9 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         this._clearChildren();
         this.cache = {};
         this.options.scrollTop = 0;
+        // 依赖于cache的占位元素也要初始化
+        this.topBlank.setHeight(0);
+        this.bottomBlank.setHeight(0);
     },
 
     populate: function (items) {
@@ -9599,6 +9610,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
+            name: "",
             attributes: {},
             width: "100%",
             height: "100%"
@@ -9609,6 +9621,7 @@ BI.Iframe = BI.inherit(BI.Single, {
         var o = this.options;
         o.attributes.frameborder = "0";
         o.attributes.src = o.src;
+        o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
     },
 
@@ -9628,14 +9641,6 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     getName: function () {
         return this.options.name;
-    },
-
-    getWidth: function () {
-        return this.options.width;
-    },
-
-    getHeight: function () {
-        return this.options.height;
     }
 });
 
@@ -10432,7 +10437,7 @@ BI.Input = BI.inherit(BI.Single, {
         this.element
             .keydown(function (e) {
                 inputEventValid = false;
-                ctrlKey = e.ctrlKey;
+                ctrlKey = e.ctrlKey || e.metaKey; // mac的cmd支持一下
                 keyCode = e.keyCode;
                 self.fireEvent(BI.Input.EVENT_QUICK_DOWN, arguments);
             })
@@ -10506,7 +10511,7 @@ BI.Input = BI.inherit(BI.Single, {
                 self._lastValidValue = self.getValue();
                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CONFIRM, self.getValue(), self);
                 self.fireEvent(BI.Input.EVENT_CONFIRM);
-                if(self._lastValidValue !== lastValidValue) {
+                if (self._lastValidValue !== lastValidValue) {
                     self.fireEvent(BI.Input.EVENT_CHANGE_CONFIRM);
                 }
             }
@@ -10538,30 +10543,26 @@ BI.Input = BI.inherit(BI.Single, {
                 this.fireEvent(BI.Input.EVENT_START);
             }
         }
-        if (ctrlKey === true && keyCode === 86) {// ctrlKey+V
-            this._valueChange();
-        } else {
-            if (keyCode == BI.KeyCode.ENTER) {
-                if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
-                    this.blur();
-                    this.fireEvent(BI.Input.EVENT_ENTER);
-                } else {
-                    this.fireEvent(BI.Input.EVENT_RESTRICT);
-                }
+        if (keyCode == BI.KeyCode.ENTER) {
+            if (this.isValid() || this.options.quitChecker.apply(this, [BI.trim(this.getValue())]) !== false) {
+                this.blur();
+                this.fireEvent(BI.Input.EVENT_ENTER);
+            } else {
+                this.fireEvent(BI.Input.EVENT_RESTRICT);
             }
-            if (keyCode == BI.KeyCode.SPACE) {
-                this.fireEvent(BI.Input.EVENT_SPACE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
-                this.fireEvent(BI.Input.EVENT_REMOVE);
-            }
-            if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
-                this.fireEvent(BI.Input.EVENT_BACKSPACE);
-            }
+        }
+        if (keyCode == BI.KeyCode.SPACE) {
+            this.fireEvent(BI.Input.EVENT_SPACE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE && this._lastValue == "") {
+            this.fireEvent(BI.Input.EVENT_REMOVE);
+        }
+        if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
+            this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
         this.fireEvent(BI.Input.EVENT_KEY_DOWN);
 
-        if (BI.isEndWithBlank(this.getValue())) {
+        if (BI.isEndWithBlank(this.getValue()) && BI.trim(this.getValue()) === BI.trim(this._lastValue || "")) {
             this._pause = true;
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.PAUSE, "", this);
             this.fireEvent(BI.Input.EVENT_PAUSE);

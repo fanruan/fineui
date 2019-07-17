@@ -50,6 +50,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
         });
         BI.each(Ws, function (i, w) {
             w.on(BI.TextEditor.EVENT_CHANGE, function () {
+                self._checkEditors();
                 if (self.R.isValid() && self.G.isValid() && self.B.isValid()) {
                     self.colorShow.element.css("background-color", self.getValue());
                     self.fireEvent(BI.SimpleColorPickerEditor.EVENT_CHANGE);
@@ -88,6 +89,18 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
                 width: c.REB_WIDTH
             }]
         });
+    },
+
+    _checkEditors: function () {
+        if(BI.isEmptyString(this.R.getValue())) {
+            this.R.setValue(0);
+        }
+        if(BI.isEmptyString(this.G.getValue())) {
+            this.G.setValue(0);
+        }
+        if(BI.isEmptyString(this.B.getValue())) {
+            this.B.setValue(0);
+        }
     },
 
     setValue: function (color) {
