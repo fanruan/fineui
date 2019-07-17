@@ -29,16 +29,15 @@
      * @abstract
      */
     BI.OB = function (config) {
-        this.__config = config;
-        this._constructor();
+        this._constructor(config);
     };
     _.extend(BI.OB.prototype, {
         props: {},
         init: null,
         destroyed: null,
 
-        _constructor: function () {
-            this._initProps();
+        _constructor: function (config) {
+            this._initProps(config);
             this._init();
             this._initRef();
         },
@@ -47,12 +46,12 @@
             return {};
         },
 
-        _initProps: function () {
+        _initProps: function (config) {
             var props = this.props;
             if (BI.isFunction(this.props)) {
-                props = this.props(this.__config);
+                props = this.props(config);
             }
-            this.options = extend(this._defaultConfig(this.__config), props, this.__config);
+            this.options = extend(this._defaultConfig(config), props, config);
         },
 
         _init: function () {

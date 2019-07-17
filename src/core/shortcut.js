@@ -11,9 +11,9 @@
     var createWidget = function (config) {
         var cls = kv[config.type];
 
-        var widget = new cls(config);
+        var widget = new cls();
 
-        widget._initProps();
+        widget._initProps(config);
         widget._init();
         widget._initRef();
 
