@@ -18,7 +18,7 @@ body {
   -o-user-select: none;
   user-select: none;
   color: #3d4d66;
-  font: normal 12px "Helvetica Neue", Verdana, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif;
+  font: normal 12px "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Heiti, "黑体", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
@@ -280,6 +280,13 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 .trans-color-disabled-background.hack {
   background: url('images/1x/background/trans_disable.png') no-repeat center center;
+}
+.wave-loading {
+  background: url('images/2x/icon/wave_loading.gif') no-repeat center center;
+  background-size: contain;
+}
+.wave-loading.hack {
+  background: url('images/1x/icon/wave_loading.gif') no-repeat center center;
 }
 @font-face {
   font-family: "fineui";
