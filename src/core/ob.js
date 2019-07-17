@@ -38,6 +38,7 @@
         destroyed: null,
 
         _constructor: function () {
+            this._initProps();
             this._init();
             this._initRef();
         },
@@ -46,12 +47,15 @@
             return {};
         },
 
-        _init: function () {
+        _initProps: function () {
             var props = this.props;
             if (BI.isFunction(this.props)) {
                 props = this.props(this.__config);
             }
             this.options = extend(this._defaultConfig(this.__config), props, this.__config);
+        },
+
+        _init: function () {
             this._initListeners();
             this.init && this.init();
         },

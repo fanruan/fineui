@@ -13,6 +13,7 @@
 
         var widget = new cls(config);
 
+        widget._initProps();
         widget._init();
         widget._initRef();
 
