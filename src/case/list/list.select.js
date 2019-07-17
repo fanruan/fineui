@@ -52,7 +52,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
                     callback.apply(self, arguments);
                     if (op.times === 1) {
                         self.toolbar.setVisible(items && items.length > 0);
-                        self.toolbar.setEnable(items && items.length > 0);
+                        self.toolbar.setEnable(self.isEnabled() && items && items.length > 0);
                     }
                     self._checkAllSelected();
                 });
@@ -160,7 +160,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.toolbar.setVisible(!BI.isEmptyArray(items));
-        this.toolbar.setEnable(!BI.isEmptyArray(items));
+        this.toolbar.setEnable(this.isEnabled() && !BI.isEmptyArray(items));
         this.list.populate.apply(this.list, arguments);
         this._checkAllSelected();
     },
