@@ -9,12 +9,14 @@
 
     // 根据配置属性生成widget
     var createWidget = function (config) {
-        if (config["classType"]) {
-            return new (new Function("return " + config["classType"] + ";")())(config);
-        }
-
         var cls = kv[config.type];
-        return new cls(config);
+
+        var widget = new cls(config);
+
+        widget._init();
+        widget._initRef();
+
+        return widget;
     };
 
     BI.createWidget = function (item, options, context) {
