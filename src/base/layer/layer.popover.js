@@ -209,7 +209,7 @@ BI.shortcut("bi.popover", BI.Popover);
 BI.BarPopover = BI.inherit(BI.Popover, {
     _defaultConfig: function () {
         return BI.extend(BI.BarPopover.superclass._defaultConfig.apply(this, arguments), {
-            btns: [BI.i18nText(BI.i18nText("BI-Basic_Sure")), BI.i18nText(BI.i18nText("BI-Basic_Cancel"))]
+            btns: [BI.i18nText("BI-Basic_Sure"), BI.i18nText("BI-Basic_Cancel")]
         });
     },
 

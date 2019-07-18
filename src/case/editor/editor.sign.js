@@ -51,7 +51,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: "left",
             height: o.height,
-            hgap: 4,
+            hgap: o.hgap,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
