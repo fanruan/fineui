@@ -21691,7 +21691,7 @@ BI.prepares.push(function () {
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            fn();
+            BI.defer(fn);
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
