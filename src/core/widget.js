@@ -21,12 +21,14 @@
                 invalid: false,
                 baseCls: "",
                 extraCls: "",
-                cls: ""
+                cls: "",
+                css: null
             });
         },
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
-        _constructor: function () {},
+        _constructor: function () {
+        },
 
         beforeInit: null,
 
@@ -115,6 +117,9 @@
             if (o.data) {
                 this.element.data(o.data);
             }
+            if (o.css) {
+                this.element.css(o.css);
+            }
             this._children = {};
         },
 
@@ -194,7 +199,7 @@
             lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
-            if(BI.isNotNull(this._parent)) {
+            if (BI.isNotNull(this._parent)) {
                 !this._parent.isEnabled() && this._setEnable(false);
                 !this._parent.isValid() && this._setValid(false);
             }
