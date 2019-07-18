@@ -204,6 +204,11 @@
 .bi-number-editor .pull-up-font {
   font-size: 12px;
 }
+.bi-number-interval.hack {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+}
 .bi-number-interval .number-interval-small-editor {
   -moz-border-radius-topleft: 2px;
   -webkit-border-top-left-radius: 2px;
