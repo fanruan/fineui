@@ -21576,14 +21576,20 @@ BI.prepares.push(function () {
     if (_global.document && !attachEvent) {
         var requestFrame = (function () {
             var raf = _global.requestAnimationFrame || _global.mozRequestAnimationFrame || _global.webkitRequestAnimationFrame ||
-                function (fn) { return _global.setTimeout(fn, 20); };
-            return function (fn) { return raf(fn); };
+                function (fn) {
+                    return _global.setTimeout(fn, 20);
+                };
+            return function (fn) {
+                return raf(fn);
+            };
         })();
 
         var cancelFrame = (function () {
             var cancel = _global.cancelAnimationFrame || _global.mozCancelAnimationFrame || _global.webkitCancelAnimationFrame ||
                 _global.clearTimeout;
-            return function (id) { return cancel(id); };
+            return function (id) {
+                return cancel(id);
+            };
         })();
 
         var resetTriggers = function (element) {
@@ -21656,8 +21662,8 @@ BI.prepares.push(function () {
         if (!stylesCreated) {
             // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
             var css = (animationKeyframes ? animationKeyframes : "") +
-                    ".resize-triggers { " + (animationStyle ? animationStyle : "") + "visibility: hidden; opacity: 0; } " +
-                    ".resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }",
+                ".resize-triggers { " + (animationStyle ? animationStyle : "") + "visibility: hidden; opacity: 0; } " +
+                ".resize-triggers, .resize-triggers > div, .contract-trigger:before { content: \" \"; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }",
                 head = document.head || document.getElementsByTagName("head")[0],
                 style = document.createElement("style");
 
@@ -21676,7 +21682,7 @@ BI.prepares.push(function () {
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            fn();
+            BI.defer(fn);
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
@@ -21688,11 +21694,15 @@ BI.prepares.push(function () {
                     "<div class=\"contract-trigger\"></div>";
                 element.appendChild(element.__resizeTriggers__);
                 resetTriggers(element);
+
                 element.addEventListener("scroll", scrollListener, true);
+
 
                 /* Listen for a css animation to detect element display/re-attach */
                 animationstartevent && element.__resizeTriggers__.addEventListener(animationstartevent, function (e) {
-                    if (e.animationName === animationName) {resetTriggers(element);}
+                    if (e.animationName === animationName) {
+                        resetTriggers(element);
+                    }
                 });
             }
             element.__resizeListeners__.push(fn);
