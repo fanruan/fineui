@@ -26,6 +26,24 @@ module.exports = function (config) {
             "src/core/plugin.js",
             "src/core/**/*.js",
             "src/data/**/*.js",
+            "src/data/**/*.js",
+            "src/data/**/*.js",
+            "src/third/**/*.js",
+            "src/base/pane.js",
+            "src/base/single/single.js",
+            "src/base/single/text.js",
+            "src/base/single/button/button.basic.js",
+            "src/base/single/button/button.node.js",
+            "src/base/single/tip/tip.js",
+            "src/base/combination/group.button.js",
+            "src/base/combination/tree.button.js",
+            "src/base/tree/ztree/treeview.js",
+            "src/base/tree/ztree/asynctree.js",
+            "src/base/tree/ztree/parttree.js",
+            "src/base/tree/ztree/list/listtreeview.js",
+            "src/base/tree/ztree/list/listasynctree.js",
+            "src/base/tree/ztree/list/listparttree.js",
+            "src/base/**/*.js",
             "src/**/*.test.js",
             "test/**/*.js"
         ],
@@ -36,7 +54,8 @@ module.exports = function (config) {
         preprocessors: {
             "src/core/alias.js": "coverage",
             "src/core/base.js": "coverage",
-            "src/core/func/date.js": "coverage"
+            "src/core/func/date.js": "coverage",
+            "src/base/**/*.js": "coverage"
         },
 
 
@@ -45,13 +64,18 @@ module.exports = function (config) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: ["progress", "coverage"],
 
+        browserDisconnectTolerance: 3,
+        browserDisconnectTimeout : 300000,
+        browserNoActivityTimeout : 300000,
+
         coverageReporter: {
             // specify a common output directory
             dir: "coverage/",
             reporters: [
                 // reporters not supporting the `file` property
                 { type: "html", subdir: "report-html" },
-                { type: "json-summary", subdir: "report-json-summary" }
+                { type: "json-summary", subdir: "report-json-summary" },
+                { type: "cobertura", subdir: "report-cobertura"}
             ]
         },
 
