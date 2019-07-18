@@ -17,6 +17,7 @@ describe("ButtonTest", function () {
         BI.nextTick(function () {
             button.element.click();
             expect(button.element.children(".bi-text").text()).to.equal("click");
+            button.destroy();
             done();
         });
 

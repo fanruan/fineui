@@ -12,6 +12,7 @@ describe("TextTest", function () {
         });
         text.setText("AAA");
         expect(text.element.text()).to.equal("AAA");
+        text.destroy();
     });
 
     /**
@@ -23,5 +24,6 @@ describe("TextTest", function () {
         });
         text.setStyle({"color": "red"});
         expect(text.element.getStyle("color")).to.equal("rgb(255, 0, 0)");
+        text.destroy();
     });
 });
