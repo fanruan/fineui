@@ -16,7 +16,7 @@ describe("ButtonTest", function () {
         });
         BI.nextTick(function () {
             button.element.click();
-            expect(button.element[0].querySelector(".bi-text").textContent).to.equal("click");
+            expect(button.element.children(".bi-text").text()).to.equal("click");
             done();
         });
 

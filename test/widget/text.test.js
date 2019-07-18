@@ -11,7 +11,7 @@ describe("TextTest", function () {
             type: "bi.text"
         });
         text.setText("AAA");
-        expect(text.element[0].textContent).to.equal("AAA");
+        expect(text.element.text()).to.equal("AAA");
     });
 
     /**
@@ -22,6 +22,6 @@ describe("TextTest", function () {
             type: "bi.text"
         });
         text.setStyle({"color": "red"});
-        expect(text.element[0].style.color).to.equal("red");
+        expect(text.element.getStyle("color")).to.equal("rgb(255, 0, 0)");
     });
 });
