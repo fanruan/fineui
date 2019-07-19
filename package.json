@@ -35,7 +35,8 @@
     "build": "grunt build",
     "compile": "grunt compile",
     "fake": "grunt fake-build",
-    "test": "karma start"
+    "test": "karma start",
+    "analyze": "grunt analyze"
   },
   "repository": {
     "type": "git",

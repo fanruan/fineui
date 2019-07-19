@@ -1,5 +1,14 @@
 module.exports = function (grunt) {
 
+    const filterPath = function (patterns) {
+        return grunt.file.expand({
+            filter: function (path) {
+                return !new RegExp(/__test__/g).test(path);
+            }
+        }, patterns);
+    };
+
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
@@ -36,7 +45,7 @@ module.exports = function (grunt) {
 
             // 最基础的控件
             baseJs: {
-                src: [
+                src: filterPath([
                     "src/third/**/*.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
@@ -53,7 +62,7 @@ module.exports = function (grunt) {
                     "src/base/tree/ztree/list/listasynctree.js",
                     "src/base/tree/ztree/list/listparttree.js",
                     "src/base/**/*.js"
-                ],
+                ]),
                 dest: "dist/base.js"
             },
             // 实现好的一些基础实例
@@ -334,7 +343,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/app.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less"],
+                files: ["src/**/*.js", "src/**/*.less", "demo/js/**/*.js", "demo/app.js", "demo/version.js", "demo/config.js", "demo/less/**/*.less", "!src/**/__test__/*.js"],
                 tasks: ["less", "concat"],
                 options: {
                     spanw: true,
@@ -345,7 +354,7 @@ module.exports = function (grunt) {
                 options: {
                     livereload: "<%= connect.options.livereload %>"
                 },
-                files: ["src/**/*.js", "src/**/*.less"]
+                files: ["src/**/*.js", "!src/**/__test__/*.js", "src/**/*.less"]
             }
         },
         connect: {
@@ -374,6 +383,45 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-connect");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
+
+    grunt.registerTask("analyze", "code analysis", function () {
+        const authors = ["test_author_imp", "test_author_teller", "test_author_fay", "test_author_young", "test_author_windy", "test_author_lei.wang", "test_author_Kira", "test_author_Zhenfei.Li"];
+        const info = [];
+        authors.forEach(function (auth) {
+            info.push({
+                author: auth,
+                reg: new RegExp(auth, "g"),
+                count: 0
+            });
+        });
+        const testFiles = grunt.file.expand(["src/**/*.test.js", "test/**/*.test.js"]);
+        testFiles.forEach(function (el) {
+            const fileStr = grunt.file.read(el);
+            authors.forEach(function (auth, idx) {
+                const res = fileStr.match(info[idx].reg);
+                if (res != null) {
+                    info[idx].count += res.length;
+                }
+            });
+        });
+
+        const todayStat = {};
+        info.forEach(function (inf) {
+            todayStat[inf.author] = inf.count;
+        });
+        const date = grunt.template.today("yyyy-mm-dd");
+        const dest = "test/unit.test.statistic.json";
+        let stat;
+        try {
+            stat = grunt.file.readJSON(dest);
+        } catch (e) {
+            stat = {};
+        }
+        if (!stat.date || stat.date === {}) {
+            stat[date] = todayStat;
+        }
+        grunt.file.write(dest, JSON.stringify(stat));
+    });
 
     var defaultTask = ["clean", "less", "concat", "connect", "watch"];
     grunt.registerTask("default", defaultTask);
