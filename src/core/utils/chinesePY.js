@@ -387,14 +387,14 @@
         return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
     };
 
-    var _mkPYRslt = function (arr) {
+    var _mkPYRslt = function (arr, ignoreMulti) {
         var arrRslt = [""], k, multiLen = 0;
         for (var i = 0, len = arr.length; i < len; i++) {
             var str = arr[i];
             var strlen = str.length;
             // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
             // 超过14个多音字之后，后面的都用第一个拼音
-            if (strlen == 1 || multiLen > 14) {
+            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
                 var tmpStr = str.substring(0, 1);
                 for (k = 0; k < arrRslt.length; k++) {
                     arrRslt[k] += tmpStr;
@@ -419,7 +419,8 @@
     };
 
     _.extend(BI, {
-        makeFirstPY: function (str) {
+        makeFirstPY: function (str, options) {
+            options = options || {};
             if (typeof (str) !== "string") {return "" + str;}
             var arrResult = []; // 保存中间结果的数组
             for (var i = 0, len = str.length; i < len; i++) {
@@ -429,7 +430,7 @@
                 arrResult.push(_checkPYCh(ch));
             }
             // 处理arrResult,返回所有可能的拼音首字母串数组
-            return _mkPYRslt(arrResult);
+            return _mkPYRslt(arrResult, options.ignoreMulti);
         }
     });
 })();

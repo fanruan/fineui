@@ -193,17 +193,16 @@
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
+            var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
-            if (BI.isNotNull(this._parent)) {
-                !this._parent.isEnabled() && this._setEnable(false);
-                !this._parent.isValid() && this._setValid(false);
-            }
             BI.each(this._children, function (i, widget) {
+                !self.isEnabled() && widget._setEnable(false);
+                !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
