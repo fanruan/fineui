@@ -1,9 +1,6 @@
 import { _OB } from "./ob";
 
-export interface WidgetConstructor {
-    new(config: any): _Widget;
-    (config: any): _Widget;
-    readonly prototype: _Widget;
+export interface _WidgetStatic {
     /**
      * 注册渲染引擎
      * @param engine 引擎

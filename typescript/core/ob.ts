@@ -1,9 +1,3 @@
-export interface OBConstructor {
-    new(config: any): _OB;
-    (config: any): _OB;
-    readonly prototype: _OB;
-}
-
 export interface _OB {
     props: Props | (<T>(config: T) => Props & T);
 
