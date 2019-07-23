@@ -129,6 +129,11 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this.editor.focus();
     },

@@ -114,26 +114,4 @@ describe("ButtonTest", function () {
         });
 
     });
-
-    it("LongClick触发事件", function (done) {
-        var clickNum = 0;
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            trigger: "lclick",
-            listeners: [{
-                eventName: BI.Button.EVENT_CHANGE,
-                action: function () {
-                    clickNum++;
-                }
-            }]
-        });
-        BI.nextTick(function () {
-            button.element.dblclick();
-            expect(button.element.children(".bi-text").text()).to.equal("click");
-            button.destroy();
-            done();
-        });
-
-    });
 });

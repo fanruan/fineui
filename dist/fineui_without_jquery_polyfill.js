@@ -11829,17 +11829,16 @@ if (!_global.BI) {
          * @private
          */
         _mount: function (force, deep, lifeHook, predicate) {
+            var self = this;
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
             lifeHook !== false && this.beforeMount && this.beforeMount();
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
-            if (BI.isNotNull(this._parent)) {
-                !this._parent.isEnabled() && this._setEnable(false);
-                !this._parent.isValid() && this._setValid(false);
-            }
             BI.each(this._children, function (i, widget) {
+                !self.isEnabled() && widget._setEnable(false);
+                !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
             lifeHook !== false && this.mounted && this.mounted();
@@ -15502,14 +15501,14 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         return (oMultiDiff[uni] ? oMultiDiff[uni] : (_ChineseFirstPY.charAt(uni - 19968)));
     };
 
-    var _mkPYRslt = function (arr) {
+    var _mkPYRslt = function (arr, ignoreMulti) {
         var arrRslt = [""], k, multiLen = 0;
         for (var i = 0, len = arr.length; i < len; i++) {
             var str = arr[i];
             var strlen = str.length;
             // 多音字过多的情况下，指数增长会造成浏览器卡死，超过20完全卡死，18勉强能用，考虑到不同性能最好是16或者14
             // 超过14个多音字之后，后面的都用第一个拼音
-            if (strlen == 1 || multiLen > 14) {
+            if (strlen == 1 || multiLen > 14 || ignoreMulti) {
                 var tmpStr = str.substring(0, 1);
                 for (k = 0; k < arrRslt.length; k++) {
                     arrRslt[k] += tmpStr;
@@ -15534,7 +15533,8 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
     };
 
     _.extend(BI, {
-        makeFirstPY: function (str) {
+        makeFirstPY: function (str, options) {
+            options = options || {};
             if (typeof (str) !== "string") {return "" + str;}
             var arrResult = []; // 保存中间结果的数组
             for (var i = 0, len = str.length; i < len; i++) {
@@ -15544,7 +15544,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
                 arrResult.push(_checkPYCh(ch));
             }
             // 处理arrResult,返回所有可能的拼音首字母串数组
-            return _mkPYRslt(arrResult);
+            return _mkPYRslt(arrResult, options.ignoreMulti);
         }
     });
 })();
@@ -28556,7 +28556,208 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 });
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-BI.shortcut("bi.button_tree", BI.ButtonTree);BI.prepares.push(function () {
+BI.shortcut("bi.button_tree", BI.ButtonTree);/**
+ * Created by windy on 2018/01/23.
+ */
+describe("ButtonTest", function () {
+
+    /**
+     * test_author_windy
+     */
+    it("Click点击触发事件", function (done) {
+        var button = BI.Test.createWidget({
+            type: "bi.button",
+            text: "CCC",
+            handler: function () {
+                this.setText("click");
+            }
+        });
+        BI.nextTick(function () {
+            button.element.click();
+            expect(button.element.children(".bi-text").text()).to.equal("click");
+            button.destroy();
+            done();
+        });
+
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("MouseDown触发事件", function (done) {
+        var button = BI.Test.createWidget({
+            type: "bi.button",
+            text: "CCC",
+            trigger: "mousedown",
+            handler: function () {
+                this.setText("click");
+            }
+        });
+        BI.nextTick(function () {
+            button.element.mousedown();
+            expect(button.element.children(".bi-text").text()).to.equal("click");
+            button.destroy();
+            done();
+        });
+
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("MouseUp触发事件", function (done) {
+        var button = BI.Test.createWidget({
+            type: "bi.button",
+            text: "CCC",
+            trigger: "mouseup",
+            handler: function () {
+                this.setText("click");
+            }
+        });
+        BI.nextTick(function () {
+            button.element.mousedown();
+            button.element.mouseup();
+            expect(button.element.children(".bi-text").text()).to.equal("click");
+            button.destroy();
+            done();
+        });
+
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("doubleClick触发事件", function (done) {
+        var button = BI.Test.createWidget({
+            type: "bi.button",
+            text: "CCC",
+            trigger: "dblclick",
+            handler: function () {
+                this.setText("click");
+            }
+        });
+        BI.nextTick(function () {
+            button.element.dblclick();
+            expect(button.element.children(".bi-text").text()).to.equal("click");
+            button.destroy();
+            done();
+        });
+
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("LongClick触发事件", function (done) {
+        var clickNum = 0;
+        var button = BI.Test.createWidget({
+            type: "bi.button",
+            text: "CCC",
+            trigger: "lclick",
+            listeners: [{
+                eventName: BI.Button.EVENT_CHANGE,
+                action: function () {
+                    clickNum++;
+                }
+            }]
+        });
+        BI.nextTick(function () {
+            button.element.mousedown();
+            BI.delay(function () {
+                expect(clickNum).to.equal(2);
+                button.destroy();
+                done();
+            }, 360);
+        });
+
+    });
+});
+/**
+ * Created by windy on 2018/01/23.
+ */
+describe("TextTest", function () {
+
+    /**
+     * test_author_windy
+     */
+    it("setText", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text"
+        });
+        text.setText("AAA");
+        expect(text.element.text()).to.equal("AAA");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("setStyle", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text"
+        });
+        text.setStyle({"color": "red"});
+        expect(text.element.getStyle("color")).to.equal("rgb(255, 0, 0)");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("高亮doHighlight", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "AAA",
+            highLight: true
+        });
+        expect(text.element.getStyle("color")).to.equal("rgb(54, 133, 242)");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("标红doRedMark", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是要标红的A",
+            keyword: "A"
+        });
+        expect(text.element.children(".bi-keyword-red-mark").length).to.not.equal(0);
+        text.destroy();
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("取消高亮undoHighlight", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "AAA",
+            highLight: true
+        });
+        text.unHighLight();
+        expect(text.element.getStyle("color")).to.not.equal("rgb(54, 133, 242)");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("取消标红undoRedMark", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是要标红的A",
+            keyword: "A"
+        });
+        text.unRedMark();
+        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        text.destroy();
+    });
+});
+BI.prepares.push(function () {
     BI.Resizers = new BI.ResizeController();
     BI.Layers = new BI.LayerController();
     BI.Maskers = new BI.MaskersController();
@@ -34540,32 +34741,7 @@ BI.Editor = BI.inherit(BI.Single, {
             margin: "0"
         });
         if (BI.isKey(this.options.watermark)) {
-            this.watermark = BI.createWidget({
-                type: "bi.label",
-                cls: "bi-water-mark",
-                text: this.options.watermark,
-                height: o.height - 2 * (o.vgap + o.tgap),
-                whiteSpace: "nowrap",
-                textAlign: "left"
-            });
-            this.watermark.element.bind({
-                mousedown: function (e) {
-                    if (self.isEnabled()) {
-                        self.editor.isEditing() || self.editor.focus();
-                    } else {
-                        self.editor.isEditing() && self.editor.blur();
-                    }
-                    e.stopEvent();
-                }
-            });
-            this.watermark.element.bind("click", function (e) {
-                if (self.isEnabled()) {
-                    self.editor.isEditing() || self.editor.focus();
-                } else {
-                    self.editor.isEditing() && self.editor.blur();
-                }
-                e.stopEvent();
-            });
+            this._assertWaterMark();
         }
 
         var _items = [];
@@ -34589,6 +34765,9 @@ BI.Editor = BI.inherit(BI.Single, {
         var items = [{
             el: {
                 type: "bi.absolute",
+                ref: function(_ref) {
+                    self.contentWrapper = _ref;
+                },
                 items: _items
             },
             left: o.hgap + o.lgap,
@@ -34707,6 +34886,38 @@ BI.Editor = BI.inherit(BI.Single, {
         }
     },
 
+    _assertWaterMark: function() {
+        var self = this, o = this.options;
+        if(BI.isNull(this.watermark)) {
+            this.watermark = BI.createWidget({
+                type: "bi.label",
+                cls: "bi-water-mark",
+                text: this.options.watermark,
+                height: o.height - 2 * (o.vgap + o.tgap),
+                whiteSpace: "nowrap",
+                textAlign: "left"
+            });
+            this.watermark.element.bind({
+                mousedown: function (e) {
+                    if (self.isEnabled()) {
+                        self.editor.isEditing() || self.editor.focus();
+                    } else {
+                        self.editor.isEditing() && self.editor.blur();
+                    }
+                    e.stopEvent();
+                }
+            });
+            this.watermark.element.bind("click", function (e) {
+                if (self.isEnabled()) {
+                    self.editor.isEditing() || self.editor.focus();
+                } else {
+                    self.editor.isEditing() && self.editor.blur();
+                }
+                e.stopEvent();
+            });
+        }
+    },
+
     _checkError: function () {
         this._setErrorVisible(this.isEnabled() && !this.isValid());
         this._checkToolTip();
@@ -34727,6 +34938,25 @@ BI.Editor = BI.inherit(BI.Single, {
 
     getErrorText: function () {
         return this.options.errorText;
+    },
+
+    setWaterMark: function(v) {
+        this.options.watermark = v;
+        if(BI.isNull(this.watermark)) {
+            this._assertWaterMark();
+            BI.createWidget({
+                type: "bi.absolute",
+                element: this.contentWrapper,
+                items: [{
+                    el: this.watermark,
+                    left: 3,
+                    right: 3,
+                    top: 0,
+                    bottom: 0
+                }]
+            })
+        }
+        BI.isKey(v) && this.watermark.setText(v);
     },
 
     _setErrorVisible: function (b) {
@@ -40857,6 +41087,11 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this.editor.focus();
     },
@@ -41064,6 +41299,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     _showHint: function () {
         this.editor.invisible();
         this.text.visible();
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     setTitle: function (title) {
@@ -41350,6 +41590,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         this.text.setWarningTitle(title);
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();
@@ -41595,6 +41840,11 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.text)) {
             this.setState(o.text);
         }
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     doRedMark: function () {
@@ -41877,6 +42127,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         if(BI.isNotNull(o.text)){
             this.setState(o.text);
         }
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     doRedMark: function () {
@@ -49760,6 +50015,11 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this.editor.focus();
     },
@@ -49964,6 +50224,11 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [this.editor]
         });
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     focus: function () {

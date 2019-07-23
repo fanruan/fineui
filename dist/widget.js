@@ -4897,6 +4897,11 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this.editor.focus();
     },
@@ -5101,6 +5106,11 @@ BI.TextEditor = BI.inherit(BI.Widget, {
             element: this,
             items: [this.editor]
         });
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     focus: function () {

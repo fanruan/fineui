@@ -8913,32 +8913,7 @@ BI.Editor = BI.inherit(BI.Single, {
             margin: "0"
         });
         if (BI.isKey(this.options.watermark)) {
-            this.watermark = BI.createWidget({
-                type: "bi.label",
-                cls: "bi-water-mark",
-                text: this.options.watermark,
-                height: o.height - 2 * (o.vgap + o.tgap),
-                whiteSpace: "nowrap",
-                textAlign: "left"
-            });
-            this.watermark.element.bind({
-                mousedown: function (e) {
-                    if (self.isEnabled()) {
-                        self.editor.isEditing() || self.editor.focus();
-                    } else {
-                        self.editor.isEditing() && self.editor.blur();
-                    }
-                    e.stopEvent();
-                }
-            });
-            this.watermark.element.bind("click", function (e) {
-                if (self.isEnabled()) {
-                    self.editor.isEditing() || self.editor.focus();
-                } else {
-                    self.editor.isEditing() && self.editor.blur();
-                }
-                e.stopEvent();
-            });
+            this._assertWaterMark();
         }
 
         var _items = [];
@@ -8962,6 +8937,9 @@ BI.Editor = BI.inherit(BI.Single, {
         var items = [{
             el: {
                 type: "bi.absolute",
+                ref: function(_ref) {
+                    self.contentWrapper = _ref;
+                },
                 items: _items
             },
             left: o.hgap + o.lgap,
@@ -9080,6 +9058,38 @@ BI.Editor = BI.inherit(BI.Single, {
         }
     },
 
+    _assertWaterMark: function() {
+        var self = this, o = this.options;
+        if(BI.isNull(this.watermark)) {
+            this.watermark = BI.createWidget({
+                type: "bi.label",
+                cls: "bi-water-mark",
+                text: this.options.watermark,
+                height: o.height - 2 * (o.vgap + o.tgap),
+                whiteSpace: "nowrap",
+                textAlign: "left"
+            });
+            this.watermark.element.bind({
+                mousedown: function (e) {
+                    if (self.isEnabled()) {
+                        self.editor.isEditing() || self.editor.focus();
+                    } else {
+                        self.editor.isEditing() && self.editor.blur();
+                    }
+                    e.stopEvent();
+                }
+            });
+            this.watermark.element.bind("click", function (e) {
+                if (self.isEnabled()) {
+                    self.editor.isEditing() || self.editor.focus();
+                } else {
+                    self.editor.isEditing() && self.editor.blur();
+                }
+                e.stopEvent();
+            });
+        }
+    },
+
     _checkError: function () {
         this._setErrorVisible(this.isEnabled() && !this.isValid());
         this._checkToolTip();
@@ -9100,6 +9110,25 @@ BI.Editor = BI.inherit(BI.Single, {
 
     getErrorText: function () {
         return this.options.errorText;
+    },
+
+    setWaterMark: function(v) {
+        this.options.watermark = v;
+        if(BI.isNull(this.watermark)) {
+            this._assertWaterMark();
+            BI.createWidget({
+                type: "bi.absolute",
+                element: this.contentWrapper,
+                items: [{
+                    el: this.watermark,
+                    left: 3,
+                    right: 3,
+                    top: 0,
+                    bottom: 0
+                }]
+            })
+        }
+        BI.isKey(v) && this.watermark.setText(v);
     },
 
     _setErrorVisible: function (b) {
