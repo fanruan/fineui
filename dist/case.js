@@ -5639,6 +5639,11 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this.editor.focus();
     },
@@ -5846,6 +5851,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
     _showHint: function () {
         this.editor.invisible();
         this.text.visible();
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     setTitle: function (title) {
@@ -6132,6 +6142,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         this.text.setWarningTitle(title);
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();
@@ -6377,6 +6392,11 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         if (BI.isNotNull(o.text)) {
             this.setState(o.text);
         }
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     doRedMark: function () {
@@ -6659,6 +6679,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         if(BI.isNotNull(o.text)){
             this.setState(o.text);
         }
+    },
+
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
     },
 
     doRedMark: function () {

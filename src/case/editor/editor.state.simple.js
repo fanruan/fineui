@@ -140,6 +140,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         }
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     doRedMark: function () {
         if (this.editor.getValue() === "" && BI.isKey(this.options.watermark)) {
             return;

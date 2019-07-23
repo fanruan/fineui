@@ -173,6 +173,11 @@ BI.SignEditor = BI.inherit(BI.Widget, {
         this.text.setWarningTitle(title);
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     focus: function () {
         this._showInput();
         this.editor.focus();

@@ -161,6 +161,11 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         this.text.visible();
     },
 
+    setWaterMark: function (v) {
+        this.options.watermark = v;
+        this.editor.setWaterMark(v);
+    },
+
     setTitle: function (title) {
         this.text.setTitle(title);
     },
