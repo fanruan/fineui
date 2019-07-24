@@ -58,7 +58,7 @@ module.exports = function (config) {
             "src/core/alias.js": "coverage",
             "src/core/base.js": "coverage",
             "src/core/func/date.js": "coverage",
-            "src/base/**/*.js": "coverage"
+            "src/base/**/!(*.test).js": "coverage"
         },
 
 

@@ -84,7 +84,9 @@ if (jQuery) {
                 py = BI.toUpperCase(py);
             }
             this.empty();
-            while (true) {
+            // BI-48487 性能: makeFirstPY出来的py中包含多音字是必要的，但虽然此方法中做了限制。但是对于一个长度为60,包含14个多音字的字符串
+            // 获取的的py长度将达到1966080, 远超过text的长度，到后面都是在做"".substring的无用功，所以此循环应保证py和textLeft长度不为0
+            while (py.length > 0 && textLeft.length > 0) {
                 var tidx = BI.toUpperCase(textLeft).indexOf(keyword);
                 var pidx = null;
                 if (py != null) {
