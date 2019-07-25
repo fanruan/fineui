@@ -17,7 +17,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var obj = this._digest(o.text, o.items);
+        var obj = this._digest(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
