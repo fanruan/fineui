@@ -94,6 +94,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
     setTextCls: function(cls) {
         var o = this.options;
         this.text.element.removeClass(o.textCls).addClass(cls);
+        o.textCls = cls;
     },
 
     setText: function (text) {
