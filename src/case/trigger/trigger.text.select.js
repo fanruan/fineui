@@ -18,12 +18,14 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.text, o.items);
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
             height: o.height,
             readonly: o.readonly,
-            text: this._digest(o.value, o.items),
+            text: obj.text,
+            textCls: obj.textCls,
             tipType: o.tipType,
             warningTitle: o.warningTitle
         });
@@ -41,14 +43,22 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (result.length > 0) {
-            return result.join(",");
+            return {
+                textCls: "",
+                text: result.join(",")
+            }
         } else {
-            return BI.isFunction(o.text) ? o.text() : o.text;
+            return {
+                textCls: "bi-water-mark",
+                text: BI.isFunction(o.text) ? o.text() : o.text
+            }
         }
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        var formatValue = this._digest(vals, this.options.items);
+        this.trigger.setTextCls(formatValue.textCls);
+        this.trigger.setText(formatValue.text);
     },
 
     setTipType: function (v) {

@@ -46,7 +46,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text tip-text-style",
+            cls: "bi-water-mark tip-text-style",
             textAlign: "left",
             height: o.height,
             text: o.text,
@@ -243,31 +243,31 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else {
                 this.text.setText(o.text);
-                this.text.element.addClass("state-editor-infinite-text");
+                this.text.element.addClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            this.text.element.removeClass("state-editor-infinite-text");
+            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
                 this.text.setText(o.text);
-                this.text.element.addClass("state-editor-infinite-text");
+                this.text.element.addClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             }
         }
     },
