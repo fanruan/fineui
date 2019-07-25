@@ -6,6 +6,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
     },
 
     _createMonths: function () {
+        var self = this;
         // 纵向排列月
         var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
@@ -27,7 +28,10 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td
+                    text: td,
+                    ref: function (_ref) {
+                        self.monthMap[j === 0 ? i : i + 6] = _ref;
+                    }
                 };
             });
         });
@@ -35,10 +39,13 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this, o = this.options;
+        this.monthMap = {};
         return {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                min: o.min,
+                max: o.max,
                 ref: function () {
                     self.yearPicker = this;
                 },
@@ -48,6 +55,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     eventName: BI.YearPicker.EVENT_CHANGE,
                     action: function () {
                         var value = this.getValue();
+                        self._checkMonthStatus(value);
                         self.setValue({
                             year: value,
                             month: self.selectedMonth
@@ -87,6 +95,23 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
+    mounted: function() {
+        this._checkMonthStatus(this.selectedYear);
+    },
+
+    _checkMonthStatus: function (year) {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d"), maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        var minYear = minDate.getFullYear(), maxYear = maxDate.getFullYear();
+        var minMonth = 0; var maxMonth = 11;
+        minYear === year && (minMonth = minDate.getMonth());
+        maxYear === year && (maxMonth = maxDate.getMonth());
+        var yearInvalid = year < minYear || year > maxYear;
+        BI.each(this.monthMap, function (month, obj) {
+            var monthInvalid = month < minMonth || month > maxMonth;
+            obj.setEnable(!yearInvalid && !monthInvalid);
+        });
+    },
 
     getValue: function () {
         return {

@@ -3,8 +3,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
     props: {
         baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
         height: 22
     },
 
@@ -15,8 +15,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_month_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -100,8 +100,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
