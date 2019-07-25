@@ -23054,6 +23054,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
     },
 
     _createMonths: function () {
+        var self = this;
         // 纵向排列月
         var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
@@ -23075,7 +23076,10 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td
+                    text: td,
+                    ref: function (_ref) {
+                        self.monthMap[j === 0 ? i : i + 6] = _ref;
+                    }
                 };
             });
         });
@@ -23083,10 +23087,13 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
 
     render: function () {
         var self = this, o = this.options;
+        this.monthMap = {};
         return {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                min: o.min,
+                max: o.max,
                 ref: function () {
                     self.yearPicker = this;
                 },
@@ -23096,6 +23103,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     eventName: BI.YearPicker.EVENT_CHANGE,
                     action: function () {
                         var value = this.getValue();
+                        self._checkMonthStatus(value);
                         self.setValue({
                             year: value,
                             month: self.selectedMonth
@@ -23135,6 +23143,23 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         };
     },
 
+    mounted: function() {
+        this._checkMonthStatus(this.selectedYear);
+    },
+
+    _checkMonthStatus: function (year) {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d"), maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        var minYear = minDate.getFullYear(), maxYear = maxDate.getFullYear();
+        var minMonth = 0; var maxMonth = 11;
+        minYear === year && (minMonth = minDate.getMonth());
+        maxYear === year && (maxMonth = maxDate.getMonth());
+        var yearInvalid = year < minYear || year > maxYear;
+        BI.each(this.monthMap, function (month, obj) {
+            var monthInvalid = month < minMonth || month > maxMonth;
+            obj.setEnable(!yearInvalid && !monthInvalid);
+        });
+    },
 
     getValue: function () {
         return {
@@ -23169,8 +23194,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
     props: {
         baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
         height: 22
     },
 
@@ -23181,8 +23206,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_month_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -23266,8 +23291,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
@@ -23621,12 +23646,13 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, v === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
                 return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },

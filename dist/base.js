@@ -9412,7 +9412,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         type: "bi.text_button",
                         cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 20,
+                        whiteSpace: "normal",
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
