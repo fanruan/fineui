@@ -108,11 +108,11 @@ export interface _base {
     int2Abc: (num: number) => string;
 
     // 数组相关的方法
-    first: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any;
+    first: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
     initial: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any[];
 
-    last: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any;
+    last: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
     rest: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any[];
 
@@ -156,7 +156,7 @@ export interface _base {
 
     makeArrayByArray: (array: any[], value: any) => any[];
 
-    uniq: (array: any[], isSorted?: boolean, iteratee?: any, context?: any) => any[];
+    uniq: <T>(array: T[], isSorted?: boolean, iteratee?: any, context?: any) => T[];
 
     // 对象相关方法
     keys: (object: object) => string[];
@@ -349,7 +349,7 @@ export interface _base {
 
     isNotEmptyString: (string: string) => boolean;
 
-    isEmptyString: (string: string) => boolean;
+    isEmptyString: (string: any) => boolean;
 
     encrypt: (type: string, text: string, key: string) => string;
 
