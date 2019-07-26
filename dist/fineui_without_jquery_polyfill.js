@@ -28559,6 +28559,36 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);/**
  * Created by windy on 2018/01/23.
  */
+describe("ALinkTest", function () {
+
+    /**
+     * test_author_windy
+     */
+    it("A初始化测试", function () {
+        var a = BI.Test.createWidget({
+            type: "bi.a",
+            text: "CCC"
+        });
+        expect(a.element.is('a')).to.equal(true);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("A的el测试", function () {
+        var a = BI.Test.createWidget({
+            type: "bi.a",
+            text: "DDD",
+            el: {
+                type: "bi.label"
+            }
+        });
+        expect(a.element.is('a') && a.element.hasClass("bi-label")).to.equal(true);
+    });
+});
+/**
+ * Created by windy on 2018/01/23.
+ */
 describe("ButtonTest", function () {
 
     /**
@@ -28763,11 +28793,10 @@ describe("TextTest", function () {
     it("setValue", function () {
         var text = BI.Test.createWidget({
             type: "bi.text",
-            text: "我是要标红的A",
-            keyword: "A"
+            value: "AAA",
         });
-        text.unRedMark();
-        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        text.setValue("value");
+        expect(text.element.text()).to.equal("value");
         text.destroy();
     });
 
@@ -28778,10 +28807,10 @@ describe("TextTest", function () {
         var text = BI.Test.createWidget({
             type: "bi.text",
             text: "我是要标红的A",
-            keyword: "A"
+            vgap: 10,
+            hgap: 10
         });
-        text.unRedMark();
-        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        expect(text.element.css("padding")).to.equal("10px");
         text.destroy();
     });
 
@@ -28792,11 +28821,43 @@ describe("TextTest", function () {
         var text = BI.Test.createWidget({
             type: "bi.text",
             text: "我是要标红的 A",
-            keyword: "A"
         });
-        text.unRedMark();
-        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        expect(text.element.text()).to.equal("我是要标红的 A");
         text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("lineHeight和height", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是A",
+            lineHeight: 12,
+            height: 24
+        });
+        expect(text.element.css("height")).to.equal("24px");
+        expect(text.element.css("line-height")).to.equal("12px");
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("handler", function (done) {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是A",
+            handler: function () {
+                text.setText("handler");
+            }
+        });
+        BI.nextTick(function () {
+            text.text.element.click();
+            expect(text.text.element.text()).to.equal("handler");
+            text.destroy();
+            done();
+        });
     });
 });
 BI.prepares.push(function () {
@@ -44775,8 +44836,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setTextCls: function(cls) {
         var o = this.options;
-        this.text.element.removeClass(o.textCls).addClass(cls);
+        var oldCls = o.textCls;
         o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {
@@ -44916,8 +44978,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setTextCls: function(cls) {
         var o = this.options;
-        this.text.element.removeClass(o.textCls).addClass(cls);
+        var oldCls = o.textCls;
         o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {
@@ -66485,7 +66548,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
             border: 1
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius",
+            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
             width: 78,
             height: 22,
             format: "",
