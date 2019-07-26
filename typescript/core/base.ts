@@ -361,7 +361,7 @@ export interface _base {
 
     isLeapYear: (year: number) => boolean;
 
-    checkDateVoid: (YY: string, MM: string, DD: string, minDate: string, maxDate: string) => (number|string)[];
+    checkDateVoid: (YY: string | number, MM: string | number, DD: string | number, minDate: string, maxDate: string) => (number|string)[];
 
     checkDateLegal: (str: string) => boolean;
 
