@@ -349,7 +349,7 @@ export interface _base {
 
     isNotEmptyString: (string: string) => boolean;
 
-    isEmptyString: (string: string) => boolean;
+    isEmptyString: (string: any) => boolean;
 
     encrypt: (type: string, text: string, key: string) => string;
 
