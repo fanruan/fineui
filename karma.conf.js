@@ -17,6 +17,7 @@ module.exports = function (config) {
             "src/css/core/**/*.css",
             "src/css/theme/**/*.css",
             "src/css/base/**/*.css",
+            "src/css/widget/**/*.css",
             "src/core/foundation.js",
             "src/core/lodash.js",
             "src/core/base.js",
@@ -47,6 +48,9 @@ module.exports = function (config) {
             "src/base/tree/ztree/list/listasynctree.js",
             "src/base/tree/ztree/list/listparttree.js",
             "src/base/**/*.js",
+            "src/case/**/*.js",
+            "src/widget/**/*.js",
+            "src/component/**/*.js",
             "src/**/*.test.js",
             "test/**/*.js"
         ],
@@ -58,7 +62,10 @@ module.exports = function (config) {
             "src/core/alias.js": "coverage",
             "src/core/base.js": "coverage",
             "src/core/func/date.js": "coverage",
-            "src/base/**/!(*.test).js": "coverage"
+            "src/base/**/!(*.test).js": "coverage",
+            "src/case/**/!(*.test).js": "coverage",
+            "src/widget/**/!(*.test).js": "coverage",
+            "src/component/**/!(*.test).js": "coverage"
         },
 
 
