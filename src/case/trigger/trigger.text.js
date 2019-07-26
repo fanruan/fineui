@@ -57,8 +57,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setTextCls: function(cls) {
         var o = this.options;
-        this.text.element.removeClass(o.textCls).addClass(cls);
+        var oldCls = o.textCls;
         o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {
