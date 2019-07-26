@@ -283,7 +283,7 @@ export interface _Widget extends _OB {
      * @param key 键
      * @param value 值
      */
-    attr(key: string | { [key: string]: any }, value: any): any;
+    attr(key: string | { [key: string]: any }, value?: any): any;
 
     /**
      * 获取text
