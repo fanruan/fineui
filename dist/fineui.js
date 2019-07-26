@@ -62230,8 +62230,9 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 
     setTextCls: function(cls) {
         var o = this.options;
-        this.text.element.removeClass(o.textCls).addClass(cls);
+        var oldCls = o.textCls;
         o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {
@@ -62371,8 +62372,9 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
 
     setTextCls: function(cls) {
         var o = this.options;
-        this.text.element.removeClass(o.textCls).addClass(cls);
+        var oldCls = o.textCls;
         o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {
@@ -83940,7 +83942,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
             border: 1
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius",
+            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
             width: 78,
             height: 22,
             format: "",

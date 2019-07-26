@@ -21363,7 +21363,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
             border: 1
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius",
+            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
             width: 78,
             height: 22,
             format: "",
