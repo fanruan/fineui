@@ -14,7 +14,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 24
+            height: 24,
+            textCls: ""
         });
     },
 
@@ -23,7 +24,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
-            cls: "select-text-label",
+            cls: "select-text-label" + (BI.isKey(o.textCls) ? (" " + o.textCls) : ""),
             textAlign: "left",
             height: o.height,
             text: o.text,
@@ -52,6 +53,13 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+    },
+
+    setTextCls: function(cls) {
+        var o = this.options;
+        var oldCls = o.textCls;
+        o.textCls = cls;
+        this.text.element.removeClass(oldCls).addClass(cls);
     },
 
     setText: function (text) {

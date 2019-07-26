@@ -22,6 +22,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.icon_text_trigger",
             element: this,
             text: obj.text,
+            textCls: obj.textCls,
             iconCls: obj.iconCls,
             height: o.height,
             iconHeight: o.iconHeight,
@@ -48,11 +49,13 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         if (BI.isNotNull(result)) {
             return {
                 text: result.text,
+                textCls: "",
                 iconCls: result.iconCls
             };
         } else {
             return {
                 text: o.text,
+                textCls: "bi-water-mark",
                 iconCls: o.iconCls
             };
         }
@@ -62,6 +65,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         var obj = this._digist(vals, this.options.items);
         this.trigger.setText(obj.text);
         this.trigger.setIcon(obj.iconCls);
+        this.trigger.setTextCls(obj.textCls);
     },
 
     populate: function (items) {

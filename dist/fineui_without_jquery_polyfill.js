@@ -28756,6 +28756,48 @@ describe("TextTest", function () {
         expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
         text.destroy();
     });
+
+    /**
+     * test_author_windy
+     */
+    it("setValue", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是要标红的A",
+            keyword: "A"
+        });
+        text.unRedMark();
+        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("gap测试", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是要标红的A",
+            keyword: "A"
+        });
+        text.unRedMark();
+        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        text.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("空格测试", function () {
+        var text = BI.Test.createWidget({
+            type: "bi.text",
+            text: "我是要标红的 A",
+            keyword: "A"
+        });
+        text.unRedMark();
+        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
+        text.destroy();
+    });
 });
 BI.prepares.push(function () {
     BI.Resizers = new BI.ResizeController();
@@ -35240,7 +35282,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         type: "bi.text_button",
                         cls: "bi-water-mark cursor-default",
                         textAlign: "left",
-                        height: 20,
+                        whiteSpace: "normal",
                         text: o.watermark,
                         invalid: o.invalid,
                         disabled: o.disabled
@@ -40452,73 +40494,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);/**
- * @class BI.SmallTextValueCheckCombo
- * @extend BI.Widget
- * combo : text + icon, popup : check + text
- */
-BI.SmallTextValueCheckCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.SmallTextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            width: 100,
-            height: 24,
-            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            text: ""
-        });
-    },
-
-    _init: function () {
-        BI.SmallTextValueCheckCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.trigger = BI.createWidget({
-            type: "bi.small_select_text_trigger",
-            items: o.items,
-            height: o.height,
-            text: o.text,
-            value: o.value
-        });
-        this.popup = BI.createWidget({
-            type: "bi.text_value_check_combo_popup",
-            chooseType: o.chooseType,
-            items: o.items,
-            value: o.value
-        });
-        this.popup.on(BI.TextValueCheckComboPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.SmallTextIconCheckCombo.hideView();
-            self.fireEvent(BI.SmallTextValueCheckCombo.EVENT_CHANGE);
-        });
-        this.popup.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-        this.SmallTextIconCheckCombo = BI.createWidget({
-            type: "bi.combo",
-            container: o.container,
-            element: this,
-            adjustLength: 2,
-            el: this.trigger,
-            popup: {
-                el: this.popup,
-                maxHeight: 300
-            }
-        });
-    },
-
-    setValue: function (v) {
-        this.SmallTextIconCheckCombo.setValue(v);
-    },
-
-    getValue: function () {
-        return this.popup.getValue();
-    },
-
-    populate: function (items) {
-        this.options.items = items;
-        this.SmallTextIconCheckCombo.populate(items);
-    }
-});
-BI.SmallTextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.small_text_value_check_combo", BI.SmallTextValueCheckCombo);BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
+BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckComboPopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-text-icon-popup",
@@ -41737,7 +41713,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text tip-text-style",
+            cls: "bi-water-mark tip-text-style",
             textAlign: "left",
             height: o.height,
             text: o.text,
@@ -41934,31 +41910,31 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Select_All"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else {
                 this.text.setText(o.text);
-                this.text.element.addClass("state-editor-infinite-text");
+                this.text.element.addClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            this.text.element.removeClass("state-editor-infinite-text");
+            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
                 this.text.setText(o.text);
-                this.text.element.addClass("state-editor-infinite-text");
+                this.text.element.addClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             }
         }
     },
@@ -42036,7 +42012,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         });
         this.text = BI.createWidget({
             type: "bi.text_button",
-            cls: "state-editor-infinite-text",
+            cls: "bi-water-mark",
             textAlign: "left",
             text: o.text,
             height: o.height,
@@ -42218,26 +42194,26 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
                 this.text.setText(BI.i18nText("BI-Already_Selected"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
                 this.text.setText(BI.i18nText("BI-Already_Selected"));
-                this.text.element.removeClass("state-editor-infinite-text");
+                this.text.element.removeClass("bi-water-mark");
             } else {
                 this.text.setText(o.text);
-                this.text.element.addClass("state-editor-infinite-text");
+                this.text.element.addClass("bi-water-mark");
             }
             return;
         }
         if (!BI.isArray(v) || v.length === 1) {
             this.text.setText(v);
             this.text.setTitle(v);
-            this.text.element.removeClass("state-editor-infinite-text");
+            this.text.element.removeClass("bi-water-mark");
         } else if (BI.isEmpty(v)) {
             this.text.setText(o.text);
-            this.text.element.addClass("state-editor-infinite-text");
+            this.text.element.addClass("bi-water-mark");
         } else {
             this.text.setText(BI.i18nText("BI-Already_Selected"));
-            this.text.element.removeClass("state-editor-infinite-text");
+            this.text.element.removeClass("bi-water-mark");
         }
     }
 });
@@ -44722,7 +44698,8 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
             height: 24,
             iconHeight: null,
-            iconWidth: null
+            iconWidth: null,
+            textCls: ""
         });
     },
 
@@ -44731,7 +44708,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
-            cls: "select-text-label",
+            cls: "select-text-label" + (BI.isKey(o.textCls) ? (" " + o.textCls) : ""),
             textAlign: "left",
             height: o.height,
             text: o.text
@@ -44796,6 +44773,12 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setTextCls: function(cls) {
+        var o = this.options;
+        this.text.element.removeClass(o.textCls).addClass(cls);
+        o.textCls = cls;
+    },
+
     setText: function (text) {
         this.text.setText(text);
     }
@@ -44824,6 +44807,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             type: "bi.icon_text_trigger",
             element: this,
             text: obj.text,
+            textCls: obj.textCls,
             iconCls: obj.iconCls,
             height: o.height,
             iconHeight: o.iconHeight,
@@ -44850,11 +44834,13 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         if (BI.isNotNull(result)) {
             return {
                 text: result.text,
+                textCls: "",
                 iconCls: result.iconCls
             };
         } else {
             return {
                 text: o.text,
+                textCls: "bi-water-mark",
                 iconCls: o.iconCls
             };
         }
@@ -44864,6 +44850,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
         var obj = this._digist(vals, this.options.items);
         this.trigger.setText(obj.text);
         this.trigger.setIcon(obj.iconCls);
+        this.trigger.setTextCls(obj.textCls);
     },
 
     populate: function (items) {
@@ -44886,7 +44873,8 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.TextTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-text-trigger",
-            height: 24
+            height: 24,
+            textCls: ""
         });
     },
 
@@ -44895,7 +44883,7 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options, c = this._const;
         this.text = BI.createWidget({
             type: "bi.label",
-            cls: "select-text-label",
+            cls: "select-text-label" + (BI.isKey(o.textCls) ? (" " + o.textCls) : ""),
             textAlign: "left",
             height: o.height,
             text: o.text,
@@ -44924,6 +44912,12 @@ BI.TextTrigger = BI.inherit(BI.Trigger, {
                 }
             ]
         });
+    },
+
+    setTextCls: function(cls) {
+        var o = this.options;
+        this.text.element.removeClass(o.textCls).addClass(cls);
+        o.textCls = cls;
     },
 
     setText: function (text) {
@@ -44955,12 +44949,14 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        var obj = this._digest(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.text_trigger",
             element: this,
             height: o.height,
             readonly: o.readonly,
-            text: this._digest(o.value, o.items),
+            text: obj.text,
+            textCls: obj.textCls,
             tipType: o.tipType,
             warningTitle: o.warningTitle
         });
@@ -44978,14 +44974,22 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
         });
 
         if (result.length > 0) {
-            return result.join(",");
+            return {
+                textCls: "",
+                text: result.join(",")
+            }
         } else {
-            return BI.isFunction(o.text) ? o.text() : o.text;
+            return {
+                textCls: "bi-water-mark",
+                text: BI.isFunction(o.text) ? o.text() : o.text
+            }
         }
     },
 
     setValue: function (vals) {
-        this.trigger.setText(this._digest(vals, this.options.items));
+        var formatValue = this._digest(vals, this.options.items);
+        this.trigger.setTextCls(formatValue.textCls);
+        this.trigger.setText(formatValue.text);
     },
 
     setTipType: function (v) {
@@ -45016,7 +45020,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
         this.options.height -= 2;
         BI.SmallSelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        var obj = this._digest(o.text, o.items);
+        var obj = this._digest(o.value, o.items);
         this.trigger = BI.createWidget({
             type: "bi.small_text_trigger",
             element: this,
@@ -68172,6 +68176,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
     },
 
     _createMonths: function () {
+        var self = this;
         // 纵向排列月
         var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
         var items = [];
@@ -68193,7 +68198,10 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     height: 23,
                     width: 38,
                     value: td,
-                    text: td
+                    text: td,
+                    ref: function (_ref) {
+                        self.monthMap[j === 0 ? i : i + 6] = _ref;
+                    }
                 };
             });
         });
@@ -68201,10 +68209,13 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
 
     render: function () {
         var self = this, o = this.options;
+        this.monthMap = {};
         return {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                min: o.min,
+                max: o.max,
                 ref: function () {
                     self.yearPicker = this;
                 },
@@ -68214,6 +68225,7 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
                     eventName: BI.YearPicker.EVENT_CHANGE,
                     action: function () {
                         var value = this.getValue();
+                        self._checkMonthStatus(value);
                         self.setValue({
                             year: value,
                             month: self.selectedMonth
@@ -68253,6 +68265,23 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         };
     },
 
+    mounted: function() {
+        this._checkMonthStatus(this.selectedYear);
+    },
+
+    _checkMonthStatus: function (year) {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d"), maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        var minYear = minDate.getFullYear(), maxYear = maxDate.getFullYear();
+        var minMonth = 0; var maxMonth = 11;
+        minYear === year && (minMonth = minDate.getMonth());
+        maxYear === year && (maxMonth = maxDate.getMonth());
+        var yearInvalid = year < minYear || year > maxYear;
+        BI.each(this.monthMap, function (month, obj) {
+            var monthInvalid = month < minMonth || month > maxMonth;
+            obj.setEnable(!yearInvalid && !monthInvalid);
+        });
+    },
 
     getValue: function () {
         return {
@@ -68287,8 +68316,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
     props: {
         baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
         height: 22
     },
 
@@ -68299,8 +68328,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         this.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_month_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -68384,8 +68413,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
@@ -68739,12 +68768,13 @@ BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);BI.DynamicY
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, v === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
                 return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
             },
