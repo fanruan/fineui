@@ -156,7 +156,7 @@ export interface _base {
 
     makeArrayByArray: (array: any[], value: any) => any[];
 
-    uniq: (array: any[], isSorted: boolean, iteratee?: any, context?: any) => any[];
+    uniq: (array: any[], isSorted?: boolean, iteratee?: any, context?: any) => any[];
 
     // 对象相关方法
     keys: (object: object) => string[];
