@@ -53246,7 +53246,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: this._digest(o.value),
+                            text: o.text,
                             value: o.value,
                             height: o.height,
                             tipText: "",
@@ -53323,6 +53323,13 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if(BI.isKey(o.value)) {
+            this.setValue([o.value]);
+        }
     },
 
     _digest: function (v) {
