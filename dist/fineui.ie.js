@@ -89443,7 +89443,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
+            try {
+                var res = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             this.store && popTarget();
             return res;
         });
