@@ -9,7 +9,7 @@ export interface _base {
 
     createWidgets: (items: any, options: any, context: any) => any;
 
-    createItems: (data: any[], innerAttr: any[], outerAttr: any[]) => any;
+    createItems: (data: any[], innerAttr?: any[], outerAttr?: any[]) => any;
 
     packageItems: (items: any[], layouts: any[]) => any[];
 
