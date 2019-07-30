@@ -367,7 +367,7 @@ export interface _base {
 
     parseDateTime: (str: string, fmt: string) => Date;
 
-    getDate: (...args: number[]) => Date;
+    getDate: (...args: (number | string)[]) => Date;
 
     getTime: (...args: any[]) => number;
 }
