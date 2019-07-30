@@ -100,8 +100,8 @@ BI.ListLoader = BI.inherit(BI.Widget, {
     addItems: function (items) {
         this.count += items.length;
         if (BI.isObject(this.next)) {
+            this.options.items = this.options.items.concat(items);
             if (this.hasNext()) {
-                this.options.items = this.options.items.concat(items);
                 this.next.setLoaded();
             } else {
                 this.next.setEnd();
