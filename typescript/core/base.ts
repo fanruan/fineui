@@ -95,7 +95,7 @@ export interface _base {
 
     backFind: (obj: any, predicate: Function, context?: any) => any;
 
-    remove: (obj: any, predicate: Function, context?: any) => void;
+    remove: (obj: any, predicate: any, context?: any) => void;
 
     removeAt: (obj: any, index: number|number[]) => void;
 
@@ -367,7 +367,7 @@ export interface _base {
 
     parseDateTime: (str: string, fmt: string) => Date;
 
-    getDate: (...args: number[]) => Date;
+    getDate: (...args: (number | string)[]) => Date;
 
     getTime: (...args: any[]) => number;
 }

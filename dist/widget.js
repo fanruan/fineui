@@ -2762,6 +2762,7 @@ BI.extend(BI.DynamicDateCard, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_STOP,
@@ -2980,6 +2981,7 @@ BI.extend(BI.DynamicDateCard, {
     }
 });
 
+BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -3380,7 +3382,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -3728,6 +3730,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
@@ -3949,6 +3952,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -4456,7 +4460,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -8061,7 +8065,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: this._digest(o.value),
+                            text: o.text,
                             value: o.value,
                             height: o.height,
                             tipText: "",
@@ -8138,6 +8142,13 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if(BI.isKey(o.value)) {
+            this.setValue([o.value]);
+        }
     },
 
     _digest: function (v) {
@@ -21428,6 +21439,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",
@@ -21561,6 +21573,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
+    BI.TimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
@@ -21625,7 +21638,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",

@@ -10601,7 +10601,7 @@ BI.Input = BI.inherit(BI.Single, {
         if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
             this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
-        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
+        this.fireEvent(BI.Input.EVENT_KEY_DOWN, arguments);
 
         // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
         var lastValue = this._lastValue;

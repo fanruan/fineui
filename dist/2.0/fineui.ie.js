@@ -48463,7 +48463,7 @@ BI.Input = BI.inherit(BI.Single, {
         if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
             this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
-        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
+        this.fireEvent(BI.Input.EVENT_KEY_DOWN, arguments);
 
         // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
         var lastValue = this._lastValue;
@@ -59661,8 +59661,8 @@ BI.ListLoader = BI.inherit(BI.Widget, {
     addItems: function (items) {
         this.count += items.length;
         if (BI.isObject(this.next)) {
+            this.options.items = this.options.items.concat(items);
             if (this.hasNext()) {
-                this.options.items = this.options.items.concat(items);
                 this.next.setLoaded();
             } else {
                 this.next.setEnd();
@@ -64692,6 +64692,7 @@ BI.extend(BI.DynamicDateCard, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_STOP,
@@ -64910,6 +64911,7 @@ BI.extend(BI.DynamicDateCard, {
     }
 });
 
+BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -65310,7 +65312,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -65658,6 +65660,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
@@ -65879,6 +65882,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -66386,7 +66390,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -69991,7 +69995,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: this._digest(o.value),
+                            text: o.text,
                             value: o.value,
                             height: o.height,
                             tipText: "",
@@ -70068,6 +70072,13 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    mounted: function () {
+        var o = this.options;
+        if(BI.isKey(o.value)) {
+            this.setValue([o.value]);
+        }
     },
 
     _digest: function (v) {
@@ -83358,6 +83369,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",
@@ -83491,6 +83503,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
+    BI.TimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
@@ -83555,7 +83568,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",
@@ -89315,7 +89328,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 }());BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Multi_Date_YMD": "年月日",
     "BI-Custom_Color": "自定义颜色",
     "BI-Numerical_Interval_Input_Data": "请输入数值",
     "BI-Please_Input_Natural_Number": "请输入非负整数",
