@@ -21941,7 +21941,7 @@ BI.prepares.push(function () {
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            BI.defer(fn);
+            fn();
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
@@ -89657,7 +89657,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
     // Create the default BI.history.
     BI.history = new History;
 }());;(function () {
-    function initWatch(vm, watch) {
+    function initWatch (vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -89671,7 +89671,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler) {
+    function createWatcher (vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
             store: vm.store
         });
@@ -89680,24 +89680,24 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
     var target = null;
     var targetStack = [];
 
-    function pushTarget(_target) {
+    function pushTarget (_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
-    function popTarget() {
+    function popTarget () {
         Fix.Model.target = target = targetStack.pop();
     }
 
     var context = null;
     var contextStack = [];
 
-    function pushContext(_context) {
+    function pushContext (_context) {
         if (context) contextStack.push(context);
         Fix.Model.context = context = _context;
     }
 
-    function popContext() {
+    function popContext () {
         Fix.Model.context = context = contextStack.pop();
     }
 
@@ -89718,7 +89718,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         }, options);
     };
 
-    function findStore(widget) {
+    function findStore (widget) {
         if (target != null) {
             return target;
         }
@@ -89764,7 +89764,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         };
     });
 
-    function createStore() {
+    function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
@@ -89830,7 +89830,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
+            try {
+                var res = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             this.store && popTarget();
             return res;
         });
