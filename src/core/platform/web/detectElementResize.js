@@ -114,7 +114,7 @@
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            BI.defer(fn);
+            fn();
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
