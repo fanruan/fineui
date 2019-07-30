@@ -78,7 +78,7 @@
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
-                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN);
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",

@@ -52,7 +52,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();

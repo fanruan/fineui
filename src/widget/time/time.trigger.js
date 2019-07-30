@@ -56,7 +56,7 @@
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",

@@ -64,7 +64,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
-                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN);
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,

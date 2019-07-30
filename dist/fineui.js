@@ -60310,8 +60310,8 @@ BI.ListLoader = BI.inherit(BI.Widget, {
     addItems: function (items) {
         this.count += items.length;
         if (BI.isObject(this.next)) {
+            this.options.items = this.options.items.concat(items);
             if (this.hasNext()) {
-                this.options.items = this.options.items.concat(items);
                 this.next.setLoaded();
             } else {
                 this.next.setEnd();
@@ -65341,6 +65341,7 @@ BI.extend(BI.DynamicDateCard, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_STOP,
@@ -65559,6 +65560,7 @@ BI.extend(BI.DynamicDateCard, {
     }
 });
 
+BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -65959,7 +65961,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -66307,6 +66309,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
@@ -66528,6 +66531,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -67035,7 +67039,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -84014,6 +84018,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",
@@ -84147,6 +84152,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
+    BI.TimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
@@ -84211,7 +84217,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",
