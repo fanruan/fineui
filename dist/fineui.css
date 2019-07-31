@@ -4664,44 +4664,64 @@ body {
 div::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
   -webkit-appearance: none;
-  background-color: rgba(32, 38, 59, 0.05);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d20263b,endColorstr=#0d20263b);
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
+}
+div::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track {
+  width: 10px;
+  height: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: rgba(35, 46, 64, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d232e40,endColorstr=#0d232e40);
+}
+div::-webkit-scrollbar-track:hover,
+textarea::-webkit-scrollbar-track:hover {
+  background-color: rgba(35, 46, 64, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0d232e40,endColorstr=#0d232e40);
 }
 div::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  background-color: rgba(32, 38, 59, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d20263b,endColorstr=#4d20263b);
+  width: 6px;
+  height: 6px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background-color: rgba(35, 46, 64, 0.1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1a232e40,endColorstr=#1a232e40);
 }
 div::-webkit-scrollbar-thumb:hover,
 textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(32, 38, 59, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b320263b,endColorstr=#b320263b);
+  background-color: rgba(35, 46, 64, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d232e40,endColorstr=#4d232e40);
 }
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
+}
+.bi-theme-dark div::-webkit-scrollbar-track,
+.bi-theme-dark textarea::-webkit-scrollbar-track {
   background-color: rgba(255, 255, 255, 0.05);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dffffff,endColorstr=#0dffffff);
-  width: 6px;
-  height: 6px;
+}
+.bi-theme-dark div::-webkit-scrollbar-track:hover,
+.bi-theme-dark textarea::-webkit-scrollbar-track:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0dffffff,endColorstr=#0dffffff);
 }
 .bi-theme-dark div::-webkit-scrollbar-thumb,
 .bi-theme-dark textarea::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  background-color: rgba(255, 255, 255, 0.3);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dffffff,endColorstr=#4dffffff);
+  background-color: rgba(255, 255, 255, 0.1);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#1affffff,endColorstr=#1affffff);
 }
 .bi-theme-dark div::-webkit-scrollbar-thumb:hover,
 .bi-theme-dark textarea::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.7);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#b3ffffff,endColorstr=#b3ffffff);
+  background-color: rgba(255, 255, 255, 0.3);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4dffffff,endColorstr=#4dffffff);
 }
 .bi-farbtastic .wheel {
   background: url('resources?path=/com/fr/web/ui/images/1x/background/wheel.png') no-repeat center center;
