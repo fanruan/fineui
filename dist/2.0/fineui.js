@@ -82629,7 +82629,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         }, function () {
             if (startDrag === true) {
