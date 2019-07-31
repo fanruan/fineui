@@ -88614,7 +88614,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
+            try {
+                var res = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             this.store && popTarget();
             return res;
         });
@@ -88741,7 +88745,8 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         }
     }
     BI.watch = Fix.watch;
-}());(function () {
+}());
+(function () {
     var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
