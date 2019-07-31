@@ -4686,7 +4686,7 @@ div::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb {
   width: 6px;
   height: 6px;
-  border: 2px solid rgba(0, 0, 0, 0);
+  border: 2px solid transparent;
   background-clip: padding-box;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
