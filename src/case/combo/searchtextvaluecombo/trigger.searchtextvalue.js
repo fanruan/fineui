@@ -25,10 +25,16 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: this._digest(o.value, o.items),
+                            text: this._getText(),
                             value: o.value,
                             height: o.height,
-                            tipText: ""
+                            tipText: "",
+                            listeners: [{
+                                eventName: BI.Events.MOUNT,
+                                action: function () {
+                                    self.editor.setState(self._digest(o.value, o.items));
+                                }
+                            }]
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",
@@ -61,6 +67,11 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     _setState: function (v) {
         this.editor.setState(v);
+    },
+
+    _getText: function () {
+        var o = this.options;
+        return (BI.isKey(o.value) && o.text === this._digest(o.value, o.items)) ? "" : o.text;
     },
 
     _digest: function(vals, items){
