@@ -21941,7 +21941,7 @@ BI.prepares.push(function () {
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            BI.defer(fn);
+            fn();
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
@@ -34755,53 +34755,53 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                "margin-left": item.left
+                left: item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                "margin-right": item.right
+                right: item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                "margin-top": item.top
+                top: item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                "margin-bottom": item.bottom
+                bottom: item.bottom
             });
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({left: left});
+            w.element.css({"margin-left": left});
             right += o.hgap;
-            w.element.css({right: right});
+            w.element.css({"margin-right": right});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({top: top});
+            w.element.css({"margin-top": top});
             bottom += o.vgap;
-            w.element.css({bottom: bottom});
+            w.element.css({"margin-bottom": bottom});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({left: left});
+            w.element.css({"margin-left": left});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({right: right});
+            w.element.css({"margin-right": right});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({top: top});
+            w.element.css({"margin-top": top});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({bottom: bottom});
+            w.element.css({"margin-bottom": bottom});
         }
 
         if (BI.isNotNull(item.width)) {
@@ -82470,7 +82470,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         }, function () {
             if (startDrag === true) {
@@ -89443,7 +89442,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
+            try {
+                var res = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             this.store && popTarget();
             return res;
         });
