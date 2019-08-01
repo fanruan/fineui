@@ -7092,6 +7092,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
@@ -7172,7 +7173,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -8065,7 +8067,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: o.text,
+                            defaultText: o.text,
+                            text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
@@ -8144,15 +8147,9 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
-    mounted: function () {
-        var o = this.options;
-        if(BI.isKey(o.value)) {
-            this.setValue([o.value]);
-        }
-    },
-
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -11640,6 +11637,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
+            defaultText: o.text,
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
@@ -19670,7 +19668,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
-            el: {}
+            el: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -19684,7 +19683,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            defaultText: o.text,
+            text: o.text,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

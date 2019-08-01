@@ -9,7 +9,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
-            el: {}
+            el: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -23,7 +24,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            defaultText: o.text,
+            text: o.text,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {

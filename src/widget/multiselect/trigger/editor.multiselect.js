@@ -23,6 +23,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
+            defaultText: o.text,
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
