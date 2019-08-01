@@ -4839,16 +4839,11 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: this._getText(),
+                            defaultText: o.text,
+                            text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
-                            tipText: "",
-                            listeners: [{
-                                eventName: BI.Events.MOUNT,
-                                action: function () {
-                                    self.editor.setState(self._digest(o.value, o.items));
-                                }
-                            }]
+                            tipText: ""
                         },
                         popup: {
                             type: "bi.search_text_value_combo_popup",
@@ -4881,11 +4876,6 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
     _setState: function (v) {
         this.editor.setState(v);
-    },
-
-    _getText: function () {
-        var o = this.options;
-        return (BI.isKey(o.value) && o.text === this._digest(o.value, o.items)) ? "" : o.text;
     },
 
     _digest: function(vals, items){
@@ -6209,7 +6199,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24,
-            text: BI.i18nText("BI-Basic_Unrestricted")
+            defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
+            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
         });
     },
 
@@ -6436,20 +6427,21 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+            // 配置了defaultText才判断标灰，其他情况不标灰
+            (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
