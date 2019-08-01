@@ -4669,8 +4669,6 @@ textarea::-webkit-scrollbar {
 }
 div::-webkit-scrollbar-track,
 textarea::-webkit-scrollbar-track {
-  width: 10px;
-  height: 10px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -4684,8 +4682,6 @@ textarea::-webkit-scrollbar-track:hover {
 }
 div::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb {
-  width: 6px;
-  height: 6px;
   border: 2px solid transparent;
   background-clip: padding-box;
   -webkit-border-radius: 10px;
