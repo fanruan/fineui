@@ -1,4 +1,4 @@
-export declare type _addI18n = (v: string) => string;
+export declare type _addI18n = (v: string | object) => string;
 
 export declare type _i18nText = (key: string, ..._args: any[]) => string;
 

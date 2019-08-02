@@ -235,7 +235,7 @@ export interface _base {
 
     init: () => void;
 
-    has: (obj: object, keys: string[]) => boolean;
+    has: (obj: object, keys: string|string[]) => boolean;
 
     freeze: <T>(value: T) => T;
 
@@ -261,7 +261,7 @@ export interface _base {
 
     isDeepMatch: (object: any, attrs: any) => boolean;
 
-    contains: (obj: any[], target: any, fromIndex: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => number;
 
     deepContains: (obj: any[], copy: any) => number;
 
