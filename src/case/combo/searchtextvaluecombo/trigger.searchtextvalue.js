@@ -25,6 +25,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,

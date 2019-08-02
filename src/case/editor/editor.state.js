@@ -21,7 +21,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24,
-            text: BI.i18nText("BI-Basic_Unrestricted")
+            defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
+            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
         });
     },
 
@@ -248,20 +249,21 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+            // 配置了defaultText才判断标灰，其他情况不标灰
+            (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");

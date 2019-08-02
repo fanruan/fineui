@@ -40390,6 +40390,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -41749,7 +41750,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24,
-            text: BI.i18nText("BI-Basic_Unrestricted")
+            defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
+            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
         });
     },
 
@@ -41976,20 +41978,21 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+            // 配置了defaultText才判断标灰，其他情况不标灰
+            (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
@@ -52277,6 +52280,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
@@ -52357,7 +52361,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -53250,7 +53255,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
-                            text: o.text,
+                            defaultText: o.text,
+                            text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
@@ -53329,15 +53335,9 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
-    mounted: function () {
-        var o = this.options;
-        if(BI.isKey(o.value)) {
-            this.setValue([o.value]);
-        }
-    },
-
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -56825,6 +56825,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
+            defaultText: o.text,
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
@@ -64855,7 +64856,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
-            el: {}
+            el: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -64869,7 +64871,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            defaultText: o.text,
+            text: o.text,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -65480,7 +65483,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         }, function () {
             if (startDrag === true) {

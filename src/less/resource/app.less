@@ -29,15 +29,23 @@ body {
 div, textarea {
   &::-webkit-scrollbar {
     -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    .border-radius(5px);
     .background-color(@scroll-color, 5%);
-    width: 6px;
-    height: 6px;
+    &:hover {
+      .background-color(@scroll-color, 5%);
+    }
   }
   &::-webkit-scrollbar-thumb {
-    .border-radius(0);
-    .background-color(@scroll-color, 30%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    .border-radius(10px);
+    .background-color(@scroll-color, 10%);
     &:hover {
-      .background-color(@scroll-color, 70%);
+      .background-color(@scroll-color, 30%);
     }
   }
 }
@@ -46,15 +54,17 @@ div, textarea {
   div, textarea {
     &::-webkit-scrollbar {
       -webkit-appearance: none;
+    }
+    &::-webkit-scrollbar-track {
       .background-color(@scroll-color-theme-dark, 5%);
-      width: 6px;
-      height: 6px;
+      &:hover {
+        .background-color(@scroll-color-theme-dark, 5%);
+      }
     }
     &::-webkit-scrollbar-thumb {
-      .border-radius(0);
-      .background-color(@scroll-color-theme-dark, 30%);
+      .background-color(@scroll-color-theme-dark, 10%);
       &:hover {
-        .background-color(@scroll-color-theme-dark, 70%);
+        .background-color(@scroll-color-theme-dark, 30%);
       }
     }
   }
