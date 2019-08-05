@@ -11391,7 +11391,7 @@ if (!_global.BI) {
             if (BI.isNotNull(BI.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
                 var localTime = dt.getTime();
                 // BI-33791 1901年以前的东8区标准是GMT+0805, 统一无论是什么时间，都以整的0800这样的为基准
-                var localOffset = new Date().getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
                 var utc = localTime + localOffset; // utc即GMT时间标准时区
                 return new Date(utc + BI.timeZone);// + Pool.timeZone.offset);
             }
@@ -69313,7 +69313,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+            this.storeValue : BI.isNull(this.storeValue) ?
+                [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -69434,6 +69436,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -70288,7 +70291,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+                    this.storeValue : BI.isNull(this.storeValue) ?
+                        [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -70409,6 +70414,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
