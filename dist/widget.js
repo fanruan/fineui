@@ -7097,6 +7097,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -8072,6 +8073,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
