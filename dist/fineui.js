@@ -69558,7 +69558,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+            this.storeValue : BI.isNull(this.storeValue) ?
+                [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -70534,7 +70536,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+                    this.storeValue : BI.isNull(this.storeValue) ?
+                        [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
