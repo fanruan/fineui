@@ -457,17 +457,32 @@ textarea {
 .bi-theme-dark .bi-border {
   border: 1px solid #363e55;
 }
+.bi-theme-dark .bi-border.disabled {
+  border-color: #606479 !important;
+}
 .bi-theme-dark .bi-border-top {
   border-top: 1px solid #363e55;
+}
+.bi-theme-dark .bi-border-top.disabled {
+  border-color: #606479 !important;
 }
 .bi-theme-dark .bi-border-right {
   border-right: 1px solid #363e55;
 }
+.bi-theme-dark .bi-border-right.disabled {
+  border-color: #606479 !important;
+}
 .bi-theme-dark .bi-border-bottom {
   border-bottom: 1px solid #363e55;
 }
+.bi-theme-dark .bi-border-bottom.disabled {
+  border-color: #606479 !important;
+}
 .bi-theme-dark .bi-border-left {
   border-left: 1px solid #363e55;
+}
+.bi-theme-dark .bi-border-left.disabled {
+  border-color: #606479 !important;
 }
 .bi-split {
   border: 1px solid #f2f4f7;
