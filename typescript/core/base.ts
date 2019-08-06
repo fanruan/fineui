@@ -44,7 +44,7 @@ export interface _base {
 
     reduceRight: (collection: any[]|object|string, callback?: Function, accumulator?: any, thisArg?: any) => any;
 
-    find: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any;
+    find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
 
     filter: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any[];
 
@@ -56,7 +56,7 @@ export interface _base {
 
     some: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
 
-    any: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
+    any: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
     max: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any;
 
