@@ -12170,7 +12170,7 @@ if (!_global.BI) {
             if (BI.isNotNull(BI.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
                 var localTime = dt.getTime();
                 // BI-33791 1901年以前的东8区标准是GMT+0805, 统一无论是什么时间，都以整的0800这样的为基准
-                var localOffset = new Date().getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
                 var utc = localTime + localOffset; // utc即GMT时间标准时区
                 return new Date(utc + BI.timeZone);// + Pool.timeZone.offset);
             }
@@ -18109,7 +18109,7 @@ BI.Region.prototype = {
 };BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Multi_Date_YMD": "年月日",
     "BI-Custom_Color": "自定义颜色",
     "BI-Numerical_Interval_Input_Data": "请输入数值",
     "BI-Please_Input_Natural_Number": "请输入非负整数",

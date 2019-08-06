@@ -9,13 +9,13 @@ export interface _base {
 
     createWidgets: (items: any, options: any, context: any) => any;
 
-    createItems: (data: any[], innerAttr: any[], outerAttr: any[]) => any;
+    createItems: <T, U, K>(data: T[], innerAttr?: U[], outerAttr?: K[]) => (U & T & K)[];
 
     packageItems: (items: any[], layouts: any[]) => any[];
 
-    formatEL: (obj: any) => {el: any}
+    formatEL: <T>(obj: T) => {el: T} | T
 
-    stripEL: (obj: any) => any;
+    stripEL: <T>(obj: {el: T} | T) => T;
 
     trans2Element: (widgets: any[]) => any[];
 
@@ -56,7 +56,7 @@ export interface _base {
 
     some: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
 
-    _any: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
+    any: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
 
     max: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any;
 
@@ -110,11 +110,11 @@ export interface _base {
     // 数组相关的方法
     first: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
-    initial: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any[];
+    initial: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T[];
 
     last: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
-    rest: (array: any[], callback?: Function|object|number|string, thisArg?: any) => any[];
+    rest: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T[];
 
     compact: (array: any[]) => any[];
 
@@ -132,7 +132,7 @@ export interface _base {
 
     unzip: (...array: any[]) => any[];
 
-    _object: (keys: string[], values?: any[]) => any[];
+    object: (keys: string[], values?: any[]) => any[];
 
     indexOf: (array: any[], value: any, fromIndex?: number) => number;
 
@@ -142,19 +142,19 @@ export interface _base {
 
     range: (start: number, end: number, step: number) => number[];
 
-    take: (array: any[], n: number) => any[];
+    take: <T>(array: T[], n: number) => T[];
 
-    takeRight: (array: any[], n: number) => any[];
+    takeRight: <T>(array: T[], n: number) => T[];
 
     findIndex: (array: any[], value: any, callback?: Function|object|string, thisArg?: any) => number;
 
     findLastIndex: (array: any[], value: any, callback?: Function|object|string, thisArg?: any) => number;
 
-    makeArray: (length: number, value: any) => any[];
+    makeArray: <T>(length: number, value?: T) => number[] | T[];
 
     makeObject: (array: any[], value: any) => any;
 
-    makeArrayByArray: (array: any[], value: any) => any[];
+    makeArrayByArray: <T>(array: any[], value: T) => T[];
 
     uniq: <T>(array: T[], isSorted?: boolean, iteratee?: any, context?: any) => T[];
 
@@ -177,7 +177,7 @@ export interface _base {
 
     defaults: (object: object, ...sources: any[]) => object;
 
-    clone: (object: object) => object;
+    clone: <T>(object: T) => T;
 
     property: (path: any[]|string) => Function;
 
@@ -235,9 +235,9 @@ export interface _base {
 
     init: () => void;
 
-    has: (obj: object, keys: string[]) => boolean;
+    has: (obj: object, keys: string|string[]) => boolean;
 
-    freeze: (value: object) => object;
+    freeze: <T>(value: T) => T;
 
     isKey: (key: any) => boolean;
 
@@ -261,7 +261,7 @@ export interface _base {
 
     isDeepMatch: (object: any, attrs: any) => boolean;
 
-    contains: (obj: any[], target: any, fromIndex: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => number;
 
     deepContains: (obj: any[], copy: any) => number;
 

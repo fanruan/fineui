@@ -2,7 +2,7 @@
 BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Multi_Date_YMD": "年月日",
     "BI-Custom_Color": "自定义颜色",
     "BI-Numerical_Interval_Input_Data": "请输入数值",
     "BI-Please_Input_Natural_Number": "请输入非负整数",

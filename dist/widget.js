@@ -2762,6 +2762,7 @@ BI.extend(BI.DynamicDateCard, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_STOP,
@@ -2980,6 +2981,7 @@ BI.extend(BI.DynamicDateCard, {
     }
 });
 
+BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -3380,7 +3382,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -3728,6 +3730,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
@@ -3949,6 +3952,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -4456,7 +4460,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -6972,7 +6976,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+            this.storeValue : BI.isNull(this.storeValue) ?
+                [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -7088,10 +7094,12 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -7168,7 +7176,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -7945,7 +7954,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+                    this.storeValue : BI.isNull(this.storeValue) ?
+                        [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -8061,10 +8072,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -8141,7 +8154,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -11629,6 +11643,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
+            defaultText: o.text,
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
@@ -13945,7 +13960,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
-                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
+                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -14046,7 +14061,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -14261,7 +14276,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
-                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
+                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -14362,7 +14377,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -19659,7 +19674,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
-            el: {}
+            el: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -19673,7 +19689,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            defaultText: o.text,
+            text: o.text,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -20284,7 +20301,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         }, function () {
             if (startDrag === true) {
@@ -21428,6 +21444,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",
@@ -21561,6 +21578,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
+    BI.TimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
@@ -21625,7 +21643,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",

@@ -11391,7 +11391,7 @@ if (!_global.BI) {
             if (BI.isNotNull(BI.timeZone) && (arguments.length === 0 || (arguments.length === 1 && BI.isNumber(arguments[0])))) {
                 var localTime = dt.getTime();
                 // BI-33791 1901年以前的东8区标准是GMT+0805, 统一无论是什么时间，都以整的0800这样的为基准
-                var localOffset = new Date().getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
+                var localOffset = dt.getTimezoneOffset() * 60000; // 获得当地时间偏移的毫秒数
                 var utc = localTime + localOffset; // utc即GMT时间标准时区
                 return new Date(utc + BI.timeZone);// + Pool.timeZone.offset);
             }
@@ -21696,7 +21696,7 @@ BI.prepares.push(function () {
     var addResizeListener = function (element, fn) {
         if (attachEvent) {
             element.attachEvent("onresize", fn);
-            BI.defer(fn);
+            BI.nextTick(fn);
         } else {
             if (!element.__resizeTriggers__) {
                 if (getComputedStyle(element).position === "static") element.style.position = "relative";
@@ -34510,53 +34510,53 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);BI.AdaptiveLayout = BI.inherit(BI.
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                "margin-left": item.left
+                left: item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                "margin-right": item.right
+                right: item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                "margin-top": item.top
+                top: item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                "margin-bottom": item.bottom
+                bottom: item.bottom
             });
         }
 
         if (BI.isNotNull(o.hgap)) {
             left += o.hgap;
-            w.element.css({left: left});
+            w.element.css({"margin-left": left});
             right += o.hgap;
-            w.element.css({right: right});
+            w.element.css({"margin-right": right});
         }
         if (BI.isNotNull(o.vgap)) {
             top += o.vgap;
-            w.element.css({top: top});
+            w.element.css({"margin-top": top});
             bottom += o.vgap;
-            w.element.css({bottom: bottom});
+            w.element.css({"margin-bottom": bottom});
         }
 
         if (BI.isNotNull(o.lgap)) {
             left += o.lgap;
-            w.element.css({left: left});
+            w.element.css({"margin-left": left});
         }
         if (BI.isNotNull(o.rgap)) {
             right += o.rgap;
-            w.element.css({right: right});
+            w.element.css({"margin-right": right});
         }
         if (BI.isNotNull(o.tgap)) {
             top += o.tgap;
-            w.element.css({top: top});
+            w.element.css({"margin-top": top});
         }
         if (BI.isNotNull(o.bgap)) {
             bottom += o.bgap;
-            w.element.css({bottom: bottom});
+            w.element.css({"margin-bottom": bottom});
         }
 
         if (BI.isNotNull(item.width)) {
@@ -48867,7 +48867,7 @@ BI.Input = BI.inherit(BI.Single, {
         if (keyCode == BI.KeyCode.BACKSPACE || keyCode == BI.KeyCode.DELETE) {
             this.fireEvent(BI.Input.EVENT_BACKSPACE);
         }
-        this.fireEvent(BI.Input.EVENT_KEY_DOWN);
+        this.fireEvent(BI.Input.EVENT_KEY_DOWN, arguments);
 
         // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
         var lastValue = this._lastValue;
@@ -57263,6 +57263,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value, o.items),
                             value: o.value,
                             height: o.height,
@@ -58622,7 +58623,8 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             watermark: "",
             errorText: "",
             height: 24,
-            text: BI.i18nText("BI-Basic_Unrestricted")
+            defaultText: "", // 默认显示值，默认显示值与显示值的区别是默认显示值标记灰色
+            text: BI.i18nText("BI-Basic_Unrestricted") // 显示值
         });
     },
 
@@ -58849,20 +58851,21 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this.text.setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this.text.setText(v);
-            v === o.text ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+            // 配置了defaultText才判断标灰，其他情况不标灰
+            (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(o.text);
-                this.text.element.addClass("bi-water-mark");
+                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
                 this.text.setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
@@ -60065,8 +60068,8 @@ BI.ListLoader = BI.inherit(BI.Widget, {
     addItems: function (items) {
         this.count += items.length;
         if (BI.isObject(this.next)) {
+            this.options.items = this.options.items.concat(items);
             if (this.hasNext()) {
-                this.options.items = this.options.items.concat(items);
                 this.next.setLoaded();
             } else {
                 this.next.setEnd();
@@ -65096,6 +65099,7 @@ BI.extend(BI.DynamicDateCard, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_STOP,
@@ -65314,6 +65318,7 @@ BI.extend(BI.DynamicDateCard, {
     }
 });
 
+BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -65714,7 +65719,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -66062,6 +66067,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                     if (self.combo.isViewVisible()) {
                                         self.combo.hideView();
                                     }
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_KEY_DOWN, arguments);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_STOP,
@@ -66283,6 +66289,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     }
 });
 
+BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
@@ -66790,7 +66797,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             title: BI.bind(this._getTitle, this)
         });
         this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
-            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN);
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN, arguments);
         });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.getKey();
@@ -69306,7 +69313,9 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+            this.storeValue : BI.isNull(this.storeValue) ?
+                [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -69422,10 +69431,12 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -69502,7 +69513,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -70279,7 +70291,9 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
     },
 
     getValue: function () {
-        return BI.isArray(this.storeValue) ? this.storeValue : [this.storeValue];
+        return BI.isArray(this.storeValue) ?
+                    this.storeValue : BI.isNull(this.storeValue) ?
+                        [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
@@ -70395,10 +70409,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -70475,7 +70491,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
@@ -73963,6 +73980,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
+            defaultText: o.text,
             text: o.text,
             tipType: o.tipType,
             warningTitle: o.warningTitle,
@@ -76279,7 +76297,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
-                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
+                        self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -76380,7 +76398,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -76595,7 +76613,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.trigger.getCounter().setButtonChecked(val);
-                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
+                        self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -76696,7 +76714,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -81993,7 +82011,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-single-select-editor",
-            el: {}
+            el: {},
+            text: BI.i18nText("BI-Basic_Please_Select")
         });
     },
 
@@ -82007,7 +82026,8 @@ BI.SingleSelectEditor = BI.inherit(BI.Widget, {
             watermark: BI.i18nText("BI-Basic_Search"),
             allowBlank: true,
             value: o.value,
-            text: o.text
+            defaultText: o.text,
+            text: o.text,
         });
 
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
@@ -82618,7 +82638,6 @@ BI.SingleSlider = BI.inherit(BI.Widget, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         }, function () {
             if (startDrag === true) {
@@ -83762,6 +83781,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                         if (self.combo.isViewVisible()) {
                                             self.combo.hideView();
                                         }
+                                        self.fireEvent(BI.TimeCombo.EVENT_KEY_DOWN, arguments);
                                     }
                                 }, {
                                     eventName: "EVENT_STOP",
@@ -83895,6 +83915,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
         }
     });
 
+    BI.TimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
     BI.TimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
     BI.TimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
     BI.TimeCombo.EVENT_VALID = "EVENT_VALID";
@@ -83959,7 +83980,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                         listeners: [{
                             eventName: "EVENT_KEY_DOWN",
                             action: function () {
-                                self.fireEvent("EVENT_KEY_DOWN");
+                                self.fireEvent("EVENT_KEY_DOWN", arguments);
                             }
                         }, {
                             eventName: "EVENT_FOCUS",
@@ -88815,7 +88836,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 });
 BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
-    function initWatch(vm, watch) {
+    function initWatch (vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -88829,7 +88850,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler) {
+    function createWatcher (vm, keyOrFn, handler) {
         return Fix.watch(vm.model, keyOrFn, _.bind(handler, vm), {
             store: vm.store
         });
@@ -88838,24 +88859,24 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     var target = null;
     var targetStack = [];
 
-    function pushTarget(_target) {
+    function pushTarget (_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
-    function popTarget() {
+    function popTarget () {
         Fix.Model.target = target = targetStack.pop();
     }
 
     var context = null;
     var contextStack = [];
 
-    function pushContext(_context) {
+    function pushContext (_context) {
         if (context) contextStack.push(context);
         Fix.Model.context = context = _context;
     }
 
-    function popContext() {
+    function popContext () {
         Fix.Model.context = context = contextStack.pop();
     }
 
@@ -88876,7 +88897,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         }, options);
     };
 
-    function findStore(widget) {
+    function findStore (widget) {
         if (target != null) {
             return target;
         }
@@ -88922,7 +88943,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         };
     });
 
-    function createStore() {
+    function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
@@ -88988,7 +89009,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         var old = BI.Widget.prototype[name];
         old && (BI.Widget.prototype[name] = function () {
             this.store && pushTarget(this.store);
-            var res = old.apply(this, arguments);
+            try {
+                var res = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             this.store && popTarget();
             return res;
         });
@@ -89062,7 +89087,8 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
         };
     }
     BI.watch = Fix.watch;
-}());(function () {
+}());
+(function () {
     var Events = {
 
         // Bind an event to a `callback` function. Passing `"all"` will bind
@@ -89649,7 +89675,7 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
 }());BI.i18n = {
     "BI-Multi_Date_Quarter_End": "季度末",
     "BI-Multi_Date_Month_Begin": "月初",
-    "BI-Multi_Date_YMD": "年/月/日",
+    "BI-Multi_Date_YMD": "年月日",
     "BI-Custom_Color": "自定义颜色",
     "BI-Numerical_Interval_Input_Data": "请输入数值",
     "BI-Please_Input_Natural_Number": "请输入非负整数",

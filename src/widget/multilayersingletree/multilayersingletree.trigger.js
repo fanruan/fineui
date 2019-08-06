@@ -29,10 +29,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            defaultText: o.text,
                             text: this._digest(o.value),
                             value: o.value,
                             height: o.height,
                             tipText: "",
+                            watermark: BI.i18nText("BI-Basic_Search"),
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -109,7 +111,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _digest: function (v) {
-        return this.options.valueFormatter(v);
+        var o = this.options;
+        return o.valueFormatter(v) || o.text;
     },
 
     stopEditing: function () {
