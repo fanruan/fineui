@@ -1333,9 +1333,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var Model = function () {
-        function Model(model) {
+        function Model() {
             _classCallCheck(this, Model);
+        }
 
+        Model.prototype._constructor = function _constructor(model) {
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
@@ -1366,7 +1368,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (this.$$model) {
                 return this.model;
             }
-        }
+        };
 
         Model.prototype._init = function _init() {};
 
