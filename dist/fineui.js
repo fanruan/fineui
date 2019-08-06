@@ -21222,6 +21222,7 @@ _.extend(BI, {
     BI.Models = {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
+            inst._constructor && inst._constructor(config);
             callPoint(inst, type);
             return inst;
         }
@@ -21234,9 +21235,10 @@ _.extend(BI, {
             if (stores[type]) {
                 return stores[type];
             }
-            stores[type] = new storeInjection[type](config);
-            callPoint(stores[type], type);
-            return stores[type];
+            var inst = stores[type] = new storeInjection[type](config);
+            inst._constructor && inst._constructor(config);
+            callPoint(inst, type);
+            return inst;
         }
     };
 
@@ -38404,9 +38406,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var Model = function () {
-        function Model(model) {
+        function Model() {
             _classCallCheck(this, Model);
+        }
 
+        Model.prototype._constructor = function _constructor(model) {
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
@@ -38437,7 +38441,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (this.$$model) {
                 return this.model;
             }
-        }
+        };
 
         Model.prototype._init = function _init() {};
 
@@ -82711,11 +82715,8 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             },
             items: [{
                 el: {
-                    type: "bi.text_button",
-                    width: 16,
-                    height: 16,
-                    forceNotSelected: true,
-                    cls: "slider-button bi-list-item-select3 bi-high-light-border",
+                    type: "bi.text",
+                    cls: "slider-button bi-high-light-border",
                     ref: function () {
                         self.slider = this;
                     }

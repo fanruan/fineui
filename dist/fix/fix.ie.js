@@ -920,9 +920,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var Model = function () {
-        function Model(model) {
+        function Model() {
             _classCallCheck(this, Model);
+        }
 
+        Model.prototype._constructor = function _constructor(model) {
             this.alive = true;
             this.options = model || {};
             this.model = {
@@ -954,7 +956,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             initMethods(this, actions);
             this.created && this.created();
             allModelInstances[this._modelHashId] = this;
-        }
+        };
 
         Model.prototype._init = function _init() {};
 

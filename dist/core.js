@@ -20977,6 +20977,7 @@ _.extend(BI, {
     BI.Models = {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
+            inst._constructor && inst._constructor(config);
             callPoint(inst, type);
             return inst;
         }
@@ -20989,9 +20990,10 @@ _.extend(BI, {
             if (stores[type]) {
                 return stores[type];
             }
-            stores[type] = new storeInjection[type](config);
-            callPoint(stores[type], type);
-            return stores[type];
+            var inst = stores[type] = new storeInjection[type](config);
+            inst._constructor && inst._constructor(config);
+            callPoint(inst, type);
+            return inst;
         }
     };
 
