@@ -293,7 +293,7 @@ export interface _Widget extends _OB {
     /**
      * 设置text
      */
-    setText(): void;
+    setText(text: string): void;
 
     /**
      * 获取值
