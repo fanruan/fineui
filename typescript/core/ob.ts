@@ -1,7 +1,7 @@
 export interface _OB {
     props: Props | (<T>(config: T) => Props & T);
 
-    options: Props;
+    options: this["props"];
 
     events?: {
         [eventName: string]: Function[];
