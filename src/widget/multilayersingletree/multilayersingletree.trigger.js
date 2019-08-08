@@ -14,6 +14,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     render: function () {
         var self = this, o = this.options;
+        if(o.itemsCreator === BI.emptyFn) {
+            this.tree = new BI.Tree();
+            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+        }
         var content = {
             type: "bi.htape",
             items: [
@@ -68,7 +72,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             if(o.itemsCreator === BI.emptyFn) {
                                 var finding = BI.Func.getSearchResult(o.items, keyword);
                                 var matched = finding.match, find = finding.find;
-                                callback(find.concat(matched));
+                                callback(self._fillTreeStructure4Search(find.concat(matched)));
                             } else {
                                 callback();
                             }
@@ -108,6 +112,29 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    // 将搜索到的节点进行补充，构造成一棵完整的树
+    _fillTreeStructure4Search: function (leaves) {
+        var result = BI.map(leaves, "id");
+        var queue = leaves.reverse() || [];
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.pop();
+            var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
+            if (pNode != null) {
+                queue.push(pNode);
+                result.push(pNode.id);
+            }
+        }
+        var nodes = [];
+        BI.each(this.options.items, function (idx, item) {
+            if(BI.contains(result, item.id)) {
+               nodes.push(BI.extend({}, item, {
+                   open: true
+               }))
+            }
+        });
+        return nodes;
     },
 
     _digest: function (v) {
