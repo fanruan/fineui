@@ -57,9 +57,7 @@ export interface _Widget extends _OB {
      */
     _renderEngine: RenderEngine;
 
-    _store(): any;
-
-    model: any;
+    _store(): void;
 
     // 生命周期函数
     /**
