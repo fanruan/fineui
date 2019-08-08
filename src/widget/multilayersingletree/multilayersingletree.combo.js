@@ -94,23 +94,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    _getSyncConfig: function () {
-        var o = this.options;
-        var baseConfig = this._getBaseConfig();
-        baseConfig.el = {
-            type: "bi.single_tree_trigger",
-            text: o.text,
-            height: o.height,
-            items: o.items,
-            value: o.value
-        };
-        return baseConfig;
-    },
-
-    _getAsyncConfig: function () {
+    _getSearchConfig: function() {
         var self = this, o = this.options;
-        var config = this._getBaseConfig();
-        return BI.extend(config, {
+        return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
                 allowEdit: o.allowEdit,
@@ -160,7 +146,26 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     self.trigger.stopEditing();
                 }
             }]
+        }
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
+            el: {
+                type: "bi.single_tree_trigger",
+                text: o.text,
+                height: o.height,
+                items: o.items,
+                value: o.value
+            }
         });
+    },
+
+    _getAsyncConfig: function () {
+        var config = this._getBaseConfig();
+        return BI.extend(config, this._getSearchConfig());
     },
 
     setValue: function (v) {
