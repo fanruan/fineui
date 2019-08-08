@@ -12272,6 +12272,10 @@ if (!_global.BI) {
             return this.options[key];
         },
 
+        css: function (name, value) {
+            return this.element.css(name, value);
+        },
+
         getText: function () {
 
         },
