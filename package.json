@@ -3,7 +3,13 @@
   "version": "1.1.2",
   "description": "fineui",
   "main": "typescript/index.ts",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.0.1",
+    "express": "^4.15.2",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",
@@ -13,14 +19,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-uglify": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^1.11.0",
-    "@typescript-eslint/parser": "^1.11.0",
-    "chai": "^4.2.0",
-    "eslint": "^6.0.1",
-    "express": "^4.15.2",
+    "grunt-contrib-watch": "^1.0.0",
     "karma": "^3.1.4",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -37,8 +36,7 @@
     "compile": "grunt compile",
     "fake": "grunt fake-build",
     "test": "karma start",
-    "analyze": "grunt analyze",
-    "postinstall": "npm run build"
+    "analyze": "grunt analyze"
   },
   "repository": {
     "type": "git",
