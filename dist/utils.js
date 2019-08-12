@@ -11430,7 +11430,7 @@ if (!_global.BI) {
 
         freeze: function (value) {
             // 在ES5中，如果这个方法的参数不是一个对象（一个原始值），那么它会导致 TypeError
-            // 在ES2015中，非对象参数将被视为要被冻结的普通对象，并被简单地返回。
+            // 在ES2015中，非对象参数将被视为要被冻结的普通对象，并被简单地返回
             if (Object.freeze && BI.isObject(value)) {
                 return Object.freeze(value);
             }
