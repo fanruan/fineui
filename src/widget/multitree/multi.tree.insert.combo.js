@@ -47,6 +47,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 type: "bi.multi_tree_searcher",
                 text: o.text,
+                watermark: o.watermark,
                 itemsCreator: o.itemsCreator,
                 popup: {
                     type: "bi.multi_tree_search_insert_pane",

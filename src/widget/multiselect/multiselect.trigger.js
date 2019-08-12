@@ -41,6 +41,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
             masker: o.masker,

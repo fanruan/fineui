@@ -69083,6 +69083,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
+                watermark: o.watermark,
                 height: o.height - 2,
                 text: o.text,
                 value: o.value,
@@ -69421,7 +69422,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         valueFormatter: function (v) {
             return v;
         },
-        itemsCreator: BI.emptyFn
+        itemsCreator: BI.emptyFn,
+        watermark: BI.i18nText("BI-Basic_Search")
     },
 
     render: function () {
@@ -69450,7 +69452,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
-                            watermark: BI.i18nText("BI-Basic_Search"),
+                            watermark: o.watermark,
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -70091,6 +70093,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
+                watermark: o.watermark,
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
@@ -70431,7 +70434,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         valueFormatter: function (v) {
             return v;
         },
-        itemsCreator: BI.emptyFn
+        itemsCreator: BI.emptyFn,
+        watermark: BI.i18nText("BI-Basic_Search")
     },
 
     render: function () {
@@ -70460,7 +70464,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
-                            watermark: BI.i18nText("BI-Basic_Search"),
+                            watermark: o.watermark,
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -71911,6 +71915,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
+            watermark: o.watermark,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -72711,6 +72716,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
             masker: o.masker,
@@ -73437,6 +73443,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
             masker: o.masker,
@@ -74035,7 +74042,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-editor",
-            el: {}
+            el: {},
+            watermark: BI.i18nText("BI-Basic_Search")
         });
     },
 
@@ -74046,7 +74054,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             type: "bi.state_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
+            watermark: o.watermark,
             allowBlank: true,
             value: o.value,
             defaultText: o.text,
@@ -74143,6 +74151,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
+            watermark: o.watermark,
             height: o.height,
             text: o.text,
             listeners: [{
@@ -76307,6 +76316,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 type: "bi.multi_tree_searcher",
                 text: o.text,
+                watermark: o.watermark,
                 itemsCreator: o.itemsCreator,
                 popup: {
                     type: "bi.multi_tree_search_insert_pane",
@@ -77413,7 +77423,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
         });
     },
 
@@ -77422,6 +77432,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.multi_select_editor",
+            watermark: o.watermark,
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",
