@@ -104,6 +104,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
+                watermark: o.watermark,
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,

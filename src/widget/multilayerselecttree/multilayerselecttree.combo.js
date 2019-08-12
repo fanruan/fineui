@@ -104,6 +104,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
+                watermark: o.watermark,
                 height: o.height - 2,
                 text: o.text,
                 value: o.value,

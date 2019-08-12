@@ -9,7 +9,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         valueFormatter: function (v) {
             return v;
         },
-        itemsCreator: BI.emptyFn
+        itemsCreator: BI.emptyFn,
+        watermark: BI.i18nText("BI-Basic_Search")
     },
 
     render: function () {
@@ -38,7 +39,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
-                            watermark: BI.i18nText("BI-Basic_Search"),
+                            watermark: o.watermark,
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {

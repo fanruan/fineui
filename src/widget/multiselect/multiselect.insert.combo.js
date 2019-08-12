@@ -36,6 +36,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
+            watermark: o.watermark,
             // adapter: this.popup,
             masker: {
                 offset: {
