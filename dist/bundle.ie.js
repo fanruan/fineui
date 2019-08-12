@@ -19537,8 +19537,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
-            stopEvent: true,
-            height: this._const.height
+            stopEvent: true
         });
     },
 
@@ -38455,7 +38454,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
-            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
+            overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -49444,8 +49443,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             text: "",
             level: "success", // success或warning
             stopEvent: false,
-            stopPropagation: false,
-            height: 18
+            stopPropagation: false
         });
     },
     _init: function () {
@@ -49489,8 +49487,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                height: o.height,
-                textHeight: o.height - 2,
+                textHeight: 18,
                 hgap: this._const.hgap
             });
         }
@@ -68669,23 +68666,9 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    _getSyncConfig: function () {
-        var o = this.options;
-        var baseConfig = this._getBaseConfig();
-        baseConfig.el = {
-            type: "bi.single_tree_trigger",
-            text: o.text,
-            height: o.height,
-            items: o.items,
-            value: o.value
-        };
-        return baseConfig;
-    },
-
-    _getAsyncConfig: function () {
+    _getSearchConfig: function() {
         var self = this, o = this.options;
-        var config = this._getBaseConfig();
-        return BI.extend(config, {
+        return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
                 allowEdit: o.allowEdit,
@@ -68735,7 +68718,26 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     self.trigger.stopEditing();
                 }
             }]
+        }
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
+            el: {
+                type: "bi.single_tree_trigger",
+                text: o.text,
+                height: o.height,
+                items: o.items,
+                value: o.value
+            }
         });
+    },
+
+    _getAsyncConfig: function () {
+        var config = this._getBaseConfig();
+        return BI.extend(config, this._getSearchConfig());
     },
 
     setValue: function (v) {
@@ -69020,6 +69022,10 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     render: function () {
         var self = this, o = this.options;
+        if(o.itemsCreator === BI.emptyFn) {
+            this.tree = new BI.Tree();
+            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+        }
         var content = {
             type: "bi.htape",
             items: [
@@ -69074,7 +69080,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             if(o.itemsCreator === BI.emptyFn) {
                                 var finding = BI.Func.getSearchResult(o.items, keyword);
                                 var matched = finding.match, find = finding.find;
-                                callback(find.concat(matched));
+                                callback(self._fillTreeStructure4Search(find.concat(matched)));
                             } else {
                                 callback();
                             }
@@ -69114,6 +69120,29 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    // 将搜索到的节点进行补充，构造成一棵完整的树
+    _fillTreeStructure4Search: function (leaves) {
+        var result = BI.map(leaves, "id");
+        var queue = leaves.reverse() || [];
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.pop();
+            var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
+            if (pNode != null) {
+                queue.push(pNode);
+                result.push(pNode.id);
+            }
+        }
+        var nodes = [];
+        BI.each(this.options.items, function (idx, item) {
+            if(BI.contains(result, item.id)) {
+                nodes.push(BI.extend({}, item, {
+                    open: true
+                }))
+            }
+        });
+        return nodes;
     },
 
     _digest: function (v) {
@@ -69648,23 +69677,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    _getSyncConfig: function () {
-        var o = this.options;
-        var baseConfig = this._getBaseConfig();
-        baseConfig.el = {
-            type: "bi.single_tree_trigger",
-            text: o.text,
-            height: o.height,
-            items: o.items,
-            value: o.value
-        };
-        return baseConfig;
-    },
-
-    _getAsyncConfig: function () {
+    _getSearchConfig: function() {
         var self = this, o = this.options;
-        var config = this._getBaseConfig();
-        return BI.extend(config, {
+        return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
                 allowEdit: o.allowEdit,
@@ -69714,7 +69729,26 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     self.trigger.stopEditing();
                 }
             }]
+        }
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
+            el: {
+                type: "bi.single_tree_trigger",
+                text: o.text,
+                height: o.height,
+                items: o.items,
+                value: o.value
+            }
         });
+    },
+
+    _getAsyncConfig: function () {
+        var config = this._getBaseConfig();
+        return BI.extend(config, this._getSearchConfig());
     },
 
     setValue: function (v) {
@@ -69998,6 +70032,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     render: function () {
         var self = this, o = this.options;
+        if(o.itemsCreator === BI.emptyFn) {
+            this.tree = new BI.Tree();
+            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+        }
         var content = {
             type: "bi.htape",
             items: [
@@ -70052,7 +70090,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             if(o.itemsCreator === BI.emptyFn) {
                                 var finding = BI.Func.getSearchResult(o.items, keyword);
                                 var matched = finding.match, find = finding.find;
-                                callback(find.concat(matched));
+                                callback(self._fillTreeStructure4Search(find.concat(matched)));
                             } else {
                                 callback();
                             }
@@ -70092,6 +70130,29 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    // 将搜索到的节点进行补充，构造成一棵完整的树
+    _fillTreeStructure4Search: function (leaves) {
+        var result = BI.map(leaves, "id");
+        var queue = leaves.reverse() || [];
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.pop();
+            var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
+            if (pNode != null) {
+                queue.push(pNode);
+                result.push(pNode.id);
+            }
+        }
+        var nodes = [];
+        BI.each(this.options.items, function (idx, item) {
+            if(BI.contains(result, item.id)) {
+               nodes.push(BI.extend({}, item, {
+                   open: true
+               }))
+            }
+        });
+        return nodes;
     },
 
     _digest: function (v) {
