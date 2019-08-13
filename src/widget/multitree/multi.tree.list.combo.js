@@ -299,7 +299,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue.value;
+        return BI.deepClone(this.storeValue.value);
     },
 
     populate: function () {
