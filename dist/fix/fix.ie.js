@@ -256,9 +256,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* eslint no-use-before-define: ["off"] */
     var deepEq = function deepEq(a, b, aStack, bStack) {
         // Unwrap any wrapped objects.
-        // 先注释，没走过
-        // if (a instanceof _) a = a._wrapped;
-        // if (b instanceof _) b = b._wrapped;
+        if (a instanceof _) a = a._wrapped;
+        if (b instanceof _) b = b._wrapped;
         // Compare `[[Class]]` names.
         var className = toString.call(a);
         if (className !== toString.call(b)) return false;
