@@ -10620,7 +10620,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -10650,14 +10650,12 @@ if (!_global.BI) {
         },
 
         freeze: function (value) {
-            if (Object.freeze) {
+            // 在ES5中，如果这个方法的参数不是一个对象（一个原始值），那么它会导致 TypeError
+            // 在ES2015中，非对象参数将被视为要被冻结的普通对象，并被简单地返回
+            if (Object.freeze && BI.isObject(value)) {
                 return Object.freeze(value);
-            } else {
-                if (!BI.isObject(value)) {
-                    throw new TypeError('Object.freeze can only be called on Objects.');
-                }
-                return value;
             }
+            return value;
         },
 
         // 数字和字符串可以作为key
@@ -10856,7 +10854,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler() {
+            function nextTickHandler () {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -10889,7 +10887,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick(cb) {
+            return function queueNextTick (cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
@@ -19537,8 +19535,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
-            stopEvent: true,
-            height: this._const.height
+            stopEvent: true
         });
     },
 

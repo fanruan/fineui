@@ -10620,7 +10620,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-            }, spp = sp.prototype;
+                }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -10650,14 +10650,12 @@ if (!_global.BI) {
         },
 
         freeze: function (value) {
-            if (Object.freeze) {
+            // 在ES5中，如果这个方法的参数不是一个对象（一个原始值），那么它会导致 TypeError
+            // 在ES2015中，非对象参数将被视为要被冻结的普通对象，并被简单地返回
+            if (Object.freeze && BI.isObject(value)) {
                 return Object.freeze(value);
-            } else {
-                if (!BI.isObject(value)) {
-                    throw new TypeError('Object.freeze can only be called on Objects.');
-                }
-                return value;
             }
+            return value;
         },
 
         // 数字和字符串可以作为key
@@ -10856,7 +10854,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler() {
+            function nextTickHandler () {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -10889,7 +10887,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick(cb) {
+            return function queueNextTick (cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
@@ -19283,8 +19281,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             type: "bi.tooltip",
             text: text,
             level: level,
-            stopEvent: true,
-            height: this._const.height
+            stopEvent: true
         });
     },
 
@@ -27478,7 +27475,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
-            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
+            overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
         if (o.handler) {
             this.text = BI.createWidget({
@@ -36871,8 +36868,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
             text: "",
             level: "success", // success或warning
             stopEvent: false,
-            stopPropagation: false,
-            height: 18
+            stopPropagation: false
         });
     },
     _init: function () {
@@ -36916,8 +36912,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
                 textAlign: "left",
                 whiteSpace: "normal",
                 text: o.text,
-                height: o.height,
-                textHeight: o.height - 2,
+                textHeight: 18,
                 hgap: this._const.hgap
             });
         }
@@ -51924,23 +51919,9 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    _getSyncConfig: function () {
-        var o = this.options;
-        var baseConfig = this._getBaseConfig();
-        baseConfig.el = {
-            type: "bi.single_tree_trigger",
-            text: o.text,
-            height: o.height,
-            items: o.items,
-            value: o.value
-        };
-        return baseConfig;
-    },
-
-    _getAsyncConfig: function () {
+    _getSearchConfig: function() {
         var self = this, o = this.options;
-        var config = this._getBaseConfig();
-        return BI.extend(config, {
+        return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
                 allowEdit: o.allowEdit,
@@ -51951,6 +51932,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
+                watermark: o.watermark,
                 height: o.height - 2,
                 text: o.text,
                 value: o.value,
@@ -51990,7 +51972,26 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     self.trigger.stopEditing();
                 }
             }]
+        }
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
+            el: {
+                type: "bi.single_tree_trigger",
+                text: o.text,
+                height: o.height,
+                items: o.items,
+                value: o.value
+            }
         });
+    },
+
+    _getAsyncConfig: function () {
+        var config = this._getBaseConfig();
+        return BI.extend(config, this._getSearchConfig());
     },
 
     setValue: function (v) {
@@ -52270,11 +52271,16 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         valueFormatter: function (v) {
             return v;
         },
-        itemsCreator: BI.emptyFn
+        itemsCreator: BI.emptyFn,
+        watermark: BI.i18nText("BI-Basic_Search")
     },
 
     render: function () {
         var self = this, o = this.options;
+        if(o.itemsCreator === BI.emptyFn) {
+            this.tree = new BI.Tree();
+            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+        }
         var content = {
             type: "bi.htape",
             items: [
@@ -52295,7 +52301,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
-                            watermark: BI.i18nText("BI-Basic_Search"),
+                            watermark: o.watermark,
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -52329,7 +52335,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             if(o.itemsCreator === BI.emptyFn) {
                                 var finding = BI.Func.getSearchResult(o.items, keyword);
                                 var matched = finding.match, find = finding.find;
-                                callback(find.concat(matched));
+                                callback(self._fillTreeStructure4Search(find.concat(matched)));
                             } else {
                                 callback();
                             }
@@ -52369,6 +52375,29 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    // 将搜索到的节点进行补充，构造成一棵完整的树
+    _fillTreeStructure4Search: function (leaves) {
+        var result = BI.map(leaves, "id");
+        var queue = leaves.reverse() || [];
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.pop();
+            var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
+            if (pNode != null) {
+                queue.push(pNode);
+                result.push(pNode.id);
+            }
+        }
+        var nodes = [];
+        BI.each(this.options.items, function (idx, item) {
+            if(BI.contains(result, item.id)) {
+                nodes.push(BI.extend({}, item, {
+                    open: true
+                }))
+            }
+        });
+        return nodes;
     },
 
     _digest: function (v) {
@@ -52903,23 +52932,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
-    _getSyncConfig: function () {
-        var o = this.options;
-        var baseConfig = this._getBaseConfig();
-        baseConfig.el = {
-            type: "bi.single_tree_trigger",
-            text: o.text,
-            height: o.height,
-            items: o.items,
-            value: o.value
-        };
-        return baseConfig;
-    },
-
-    _getAsyncConfig: function () {
+    _getSearchConfig: function() {
         var self = this, o = this.options;
-        var config = this._getBaseConfig();
-        return BI.extend(config, {
+        return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
                 allowEdit: o.allowEdit,
@@ -52927,6 +52942,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
+                watermark: o.watermark,
                 items: o.items,
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
@@ -52969,7 +52985,26 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     self.trigger.stopEditing();
                 }
             }]
+        }
+    },
+
+    _getSyncConfig: function () {
+        var o = this.options;
+        var baseConfig = this._getBaseConfig();
+        return BI.extend(baseConfig, o.allowEdit ? this._getSearchConfig() : {
+            el: {
+                type: "bi.single_tree_trigger",
+                text: o.text,
+                height: o.height,
+                items: o.items,
+                value: o.value
+            }
         });
+    },
+
+    _getAsyncConfig: function () {
+        var config = this._getBaseConfig();
+        return BI.extend(config, this._getSearchConfig());
     },
 
     setValue: function (v) {
@@ -53248,11 +53283,16 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         valueFormatter: function (v) {
             return v;
         },
-        itemsCreator: BI.emptyFn
+        itemsCreator: BI.emptyFn,
+        watermark: BI.i18nText("BI-Basic_Search")
     },
 
     render: function () {
         var self = this, o = this.options;
+        if(o.itemsCreator === BI.emptyFn) {
+            this.tree = new BI.Tree();
+            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+        }
         var content = {
             type: "bi.htape",
             items: [
@@ -53273,7 +53313,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             value: o.value,
                             height: o.height,
                             tipText: "",
-                            watermark: BI.i18nText("BI-Basic_Search"),
+                            watermark: o.watermark,
                             listeners: [{
                                 eventName: BI.StateEditor.EVENT_FOCUS,
                                 action: function () {
@@ -53307,7 +53347,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             if(o.itemsCreator === BI.emptyFn) {
                                 var finding = BI.Func.getSearchResult(o.items, keyword);
                                 var matched = finding.match, find = finding.find;
-                                callback(find.concat(matched));
+                                callback(self._fillTreeStructure4Search(find.concat(matched)));
                             } else {
                                 callback();
                             }
@@ -53347,6 +53387,29 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         };
+    },
+
+    // 将搜索到的节点进行补充，构造成一棵完整的树
+    _fillTreeStructure4Search: function (leaves) {
+        var result = BI.map(leaves, "id");
+        var queue = leaves.reverse() || [];
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.pop();
+            var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
+            if (pNode != null) {
+                queue.push(pNode);
+                result.push(pNode.id);
+            }
+        }
+        var nodes = [];
+        BI.each(this.options.items, function (idx, item) {
+            if(BI.contains(result, item.id)) {
+               nodes.push(BI.extend({}, item, {
+                   open: true
+               }))
+            }
+        });
+        return nodes;
     },
 
     _digest: function (v) {
@@ -54701,6 +54764,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             height: o.height,
             text: o.text,
+            watermark: o.watermark,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -55501,6 +55565,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
             masker: o.masker,
@@ -56227,6 +56292,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
             masker: o.masker,
@@ -56825,7 +56891,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-editor",
-            el: {}
+            el: {},
+            watermark: BI.i18nText("BI-Basic_Search")
         });
     },
 
@@ -56836,7 +56903,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             type: "bi.state_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
+            watermark: o.watermark,
             allowBlank: true,
             value: o.value,
             defaultText: o.text,
@@ -56933,6 +57000,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
+            watermark: o.watermark,
             height: o.height,
             text: o.text,
             listeners: [{
@@ -59097,6 +59165,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             searcher: {
                 type: "bi.multi_tree_searcher",
                 text: o.text,
+                watermark: o.watermark,
                 itemsCreator: o.itemsCreator,
                 popup: {
                     type: "bi.multi_tree_search_insert_pane",
@@ -60203,7 +60272,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             popup: {},
 
             adapter: null,
-            masker: {}
+            masker: {},
         });
     },
 
@@ -60212,6 +60281,7 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget({
             type: "bi.multi_select_editor",
+            watermark: o.watermark,
             height: o.height,
             el: {
                 type: "bi.simple_state_editor",

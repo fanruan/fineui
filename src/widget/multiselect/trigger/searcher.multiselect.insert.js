@@ -24,6 +24,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.el, {
             type: "bi.multi_select_editor",
+            watermark: o.watermark,
             height: o.height,
             text: o.text,
             listeners: [{

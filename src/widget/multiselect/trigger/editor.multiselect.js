@@ -9,7 +9,8 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectEditor.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-editor",
-            el: {}
+            el: {},
+            watermark: BI.i18nText("BI-Basic_Search")
         });
     },
 
@@ -20,7 +21,7 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
             type: "bi.state_editor",
             element: this,
             height: o.height,
-            watermark: BI.i18nText("BI-Basic_Search"),
+            watermark: o.watermark,
             allowBlank: true,
             value: o.value,
             defaultText: o.text,

@@ -57,7 +57,7 @@ BI.Text = BI.inherit(BI.Single, {
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
-            overflow: o.whiteSpace === "nowrap" ? "" : "auto"
+            overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
         if (o.handler) {
             this.text = BI.createWidget({
