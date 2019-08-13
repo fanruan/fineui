@@ -13910,7 +13910,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue.value;
+        return BI.deepClone(this.storeValue.value);
     },
 
     populate: function () {
@@ -14218,7 +14218,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue.value;
+        return BI.deepClone(this.storeValue.value);
     },
 
     populate: function () {
@@ -14534,7 +14534,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
     },
 
     getValue: function () {
-        return this.storeValue.value;
+        return BI.deepClone(this.storeValue.value);
     },
 
     populate: function () {
