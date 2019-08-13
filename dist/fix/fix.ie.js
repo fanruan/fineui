@@ -15,6 +15,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $vm: falsy
     };
 
+    var $$skips = ['$accessors', '$vbthis', '$vbsetter', '$vm'];
+
     var originalMethods = [];
     _$1.each(['slice', 'splice'], function (method) {
         originalMethods[method] = Array.prototype[method];
@@ -128,7 +130,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else if (model && isPlainObject(model)) {
             result = {};
             for (var key in model) {
-                if (!_$1.has($$skipArray, key)) {
+                if ($$skips.indexOf(key) === -1) {
                     result[key] = toJSON(model[key]);
                 }
             }
@@ -148,15 +150,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         return toJSON(obj);
-
-        // const type = typeof obj;
-        //
-        // switch (type) {
-        //     case 'object':
-        //         return _.extend({}, obj);
-        //     default:
-        //         return obj;
-        // }
     }
 
     var nextTick = function () {
@@ -263,8 +256,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* eslint no-use-before-define: ["off"] */
     var deepEq = function deepEq(a, b, aStack, bStack) {
         // Unwrap any wrapped objects.
-        if (a instanceof _$1) a = a._wrapped;
-        if (b instanceof _$1) b = b._wrapped;
+        if (a instanceof _) a = a._wrapped;
+        if (b instanceof _) b = b._wrapped;
         // Compare `[[Class]]` names.
         var className = toString.call(a);
         if (className !== toString.call(b)) return false;
@@ -343,7 +336,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             while (length--) {
                 // Deep compare each member
                 key = keys[length];
-                if (!(_$1.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+                if ($$skips.indexOf(key) !== -1) {
+                    return true;
+                }
+
+                if (!(Object.keys(b).indexOf(key) !== -1 && eq(a[key], b[key], aStack, bStack))) return false;
             }
         }
         // Remove the first object from the stack of traversed objects.
@@ -371,37 +368,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return deepEq(a, b, aStack, bStack);
     };
 
-    var shadowEq = function shadowEq(a, b, aStack, bStack) {
-        // Identical objects are equal. `0 === -0`, but they aren't identical.
-        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-        if (a === b) return a !== 0 || 1 / a === 1 / b;
-        // `null` or `undefined` only equal to itself (strict comparison).
-        if (a == null || b == null) return false;
-        // `NaN`s are equivalent, but non-reflexive.
-        if (a !== a) return b !== b;
-        // Exhaust primitive checks
-        var type = typeof a;
-        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
-
-        // skip function
-        if (type === 'function') return true;
-
-        if (Array.isArray(a) && Array.isArray(b) && (a.__ref__ || b.__ref__)) {
-            if (a.length !== b.length) return false;
-            // for (let i = 0; i < a.length; i++) {
-            //     if (a[i] !== b[i]) {
-            //         return false;
-            //     }
-            // }
-
-            return a.__ref__ === b.__ref__;
-        }
-
-        return deepEq(a, b, aStack, bStack);
-    };
+    // export function isShadowEqual(a, b) {
+    //     return shadowEq(a, b);
+    // }
 
     function isShadowEqual(a, b) {
-        return shadowEq(a, b);
+        if (a === b) return true;
+
+        if (a && b && typeof a == 'object' && typeof b == 'object') {
+            if (a.constructor !== b.constructor) return false;
+
+            var length, i, key, keys;
+            if (Array.isArray(a)) {
+                length = a.length;
+                if (length != b.length) return false;
+                for (i = length; i-- !== 0;) {
+                    if (!isShadowEqual(a[i], b[i])) return false;
+                }return true;
+            }
+
+            if (a.constructor === RegExp) return true;
+            if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+            if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+            keys = Object.keys(a);
+            length = keys.length;
+            if (length !== Object.keys(b).length) return false;
+
+            for (i = length; i-- !== 0;) {
+                if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+            }for (i = length; i-- !== 0;) {
+                key = keys[i];
+                if ($$skips.indexOf(key) !== -1) continue;
+                if (!isShadowEqual(a[key], b[key])) return false;
+            }
+
+            return true;
+        }
+
+        // true if both NaN, false otherwise
+        return a !== a && b !== b;
     }
 
     var mixinInjection = {};
@@ -765,21 +771,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
     }
 
-    function addToListenerQueue(vm, watcher, cur, last) {
-        var listener = {
-            id: watcher.id,
-            cb: _$1.bind(watcher.listener, vm, cur, last, vm)
-        };
-        watcher.sync === true ? vm.syncListeners.push(listener) : vm.asyncListeners.push(listener);
-    }
-
     function digestState(vm) {
         var dirty = false;
         _$1.each(vm._stateWatchers, function (watcher, key) {
             var cur = watcher.get();
             var last = watcher.last;
             if (!isShadowEqual(cur, last)) {
-                addToListenerQueue(vm, watcher, cur, last);
+                // addToListenerQueue(vm, watcher, cur, last);
                 vm.model[key] = cur;
                 dirty = true;
                 watcher.last = cloneShadow(cur);
@@ -801,7 +799,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var cur = watcher.get();
                 var last = watcher.last;
                 if (!isShadowEqual(cur, last)) {
-                    addToListenerQueue(vm, watcher, cur, last);
+                    // addToListenerQueue(vm, watcher, cur, last);
                     vm.model[key] = cur;
                     dirty = true;
                     dirtyQueue.push(key);
@@ -902,15 +900,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.each(syncListeners, function (listener) {
             listener.cb();
         });
-
-        nextTick(function () {
-            _$1.each(contextListeners, function (listener) {
-                listener.cb();
+        if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
+            nextTick(function () {
+                _$1.each(contextListeners, function (listener) {
+                    listener.cb();
+                });
+                _$1.each(asyncListeners, function (listener) {
+                    listener.cb();
+                });
             });
-            _$1.each(asyncListeners, function (listener) {
-                listener.cb();
-            });
-        });
+        }
     }
 
     function refreshAllDefineModel() {
