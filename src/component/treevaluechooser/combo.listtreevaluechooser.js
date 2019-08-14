@@ -29,11 +29,38 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeListCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -50,5 +77,11 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ListTreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);
