@@ -133,7 +133,11 @@
     BI.Widget.prototype._init = function () {
         var self = this;
         var needPop = createStore.call(this);
-        _init.apply(this, arguments);
+        try {
+            _init.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         needPop && popTarget();
     };
 
@@ -145,13 +149,21 @@
             pushTarget(this.store);
             initWatch(this, this.watch);
         }
-        _render.apply(this, arguments);
+        try {
+            _render.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
-        unMount.apply(this, arguments);
+        try {
+            unMount.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
         BI.each(this._watchers, function (i, unwatches) {
             unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
