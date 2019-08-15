@@ -1012,10 +1012,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return model;
             }
         });
-        var ob = new OB({
+        var ob = new OB();
+        ob._constructor({
             define: true
         });
-        ob._constructor();
         allDefineModelInstances[ob.getModelID()] = ob;
 
         return ob.model;
