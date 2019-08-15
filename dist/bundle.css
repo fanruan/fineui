@@ -4531,8 +4531,8 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 8px;
   border-radius: 8px;
   background-color: #ffffff;
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   top: 6px;
   left: -8px;
 }
@@ -4542,8 +4542,8 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 10px;
   border-radius: 10px;
   background-color: #f7f8fa;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   top: 4px;
   left: -10px;
 }
@@ -4553,8 +4553,8 @@ ul.ztree.zTreeDragUL {
 .bi-single-slider-button .slider-button.disabled:hover,
 .bi-single-slider-button .slider-button.disabled.hover {
   background-color: #f7f8fa;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   top: 6px;
   left: -8px;
 }

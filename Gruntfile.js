@@ -150,7 +150,7 @@ module.exports = function (grunt) {
             },
 
             fineuiWithoutJqueryAndPolyfillJs: {
-                src: ["src/core/foundation.js",
+                src: filterPath(["src/core/foundation.js",
                     "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
@@ -188,7 +188,7 @@ module.exports = function (grunt) {
                     "!src/case/colorchooser/**/*.js",
                     "!src/case/tree/ztree/**/*.js",
 
-                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
+                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"]),
                 dest: "dist/fineui_without_jquery_polyfill.js"
             },
 

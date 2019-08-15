@@ -36844,6 +36844,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         $vm: falsy
     };
 
+    var $$skips = ['$accessors', '$vbthis', '$vbsetter', '$vm'];
+
     var originalMethods = [];
     _$1.each(['slice', 'splice'], function (method) {
         originalMethods[method] = Array.prototype[method];
@@ -36957,7 +36959,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else if (model && isPlainObject(model)) {
             result = {};
             for (var key in model) {
-                if (!_$1.has($$skipArray, key)) {
+                if ($$skips.indexOf(key) === -1) {
                     result[key] = toJSON(model[key]);
                 }
             }
@@ -36977,15 +36979,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         return toJSON(obj);
-
-        // const type = typeof obj;
-        //
-        // switch (type) {
-        //     case 'object':
-        //         return _.extend({}, obj);
-        //     default:
-        //         return obj;
-        // }
     }
 
     var nextTick = function () {
@@ -37172,7 +37165,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             while (length--) {
                 // Deep compare each member
                 key = keys[length];
-                if (!(_$1.has(b, key) && eq(a[key], b[key], aStack, bStack))) return false;
+                if ($$skips.indexOf(key) !== -1) {
+                    return true;
+                }
+
+                if (!(Object.keys(b).indexOf(key) !== -1 && eq(a[key], b[key], aStack, bStack))) return false;
             }
         }
         // Remove the first object from the stack of traversed objects.
@@ -37200,37 +37197,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return deepEq(a, b, aStack, bStack);
     };
 
-    var shadowEq = function shadowEq(a, b, aStack, bStack) {
-        // Identical objects are equal. `0 === -0`, but they aren't identical.
-        // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-        if (a === b) return a !== 0 || 1 / a === 1 / b;
-        // `null` or `undefined` only equal to itself (strict comparison).
-        if (a == null || b == null) return false;
-        // `NaN`s are equivalent, but non-reflexive.
-        if (a !== a) return b !== b;
-        // Exhaust primitive checks
-        var type = typeof a;
-        if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
-
-        // skip function
-        if (type === 'function') return true;
-
-        if (Array.isArray(a) && Array.isArray(b) && (a.__ref__ || b.__ref__)) {
-            if (a.length !== b.length) return false;
-            // for (let i = 0; i < a.length; i++) {
-            //     if (a[i] !== b[i]) {
-            //         return false;
-            //     }
-            // }
-
-            return a.__ref__ === b.__ref__;
-        }
-
-        return deepEq(a, b, aStack, bStack);
-    };
+    // export function isShadowEqual(a, b) {
+    //     return shadowEq(a, b);
+    // }
 
     function isShadowEqual(a, b) {
-        return shadowEq(a, b);
+        if (a === b) return true;
+
+        if (a && b && typeof a == 'object' && typeof b == 'object') {
+            if (a.constructor !== b.constructor) return false;
+
+            var length, i, key, keys;
+            if (Array.isArray(a)) {
+                length = a.length;
+                if (length != b.length) return false;
+                for (i = length; i-- !== 0;) {
+                    if (!isShadowEqual(a[i], b[i])) return false;
+                }return true;
+            }
+
+            if (a.constructor === RegExp) return true;
+            if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+            if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+
+            keys = Object.keys(a);
+            length = keys.length;
+            if (length !== Object.keys(b).length) return false;
+
+            for (i = length; i-- !== 0;) {
+                if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+            }for (i = length; i-- !== 0;) {
+                key = keys[i];
+                if ($$skips.indexOf(key) !== -1) continue;
+                if (!isShadowEqual(a[key], b[key])) return false;
+            }
+
+            return true;
+        }
+
+        // true if both NaN, false otherwise
+        return a !== a && b !== b;
     }
 
     var mixinInjection = {};
@@ -37731,15 +37737,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.each(syncListeners, function (listener) {
             listener.cb();
         });
-
-        nextTick(function () {
-            _$1.each(contextListeners, function (listener) {
-                listener.cb();
+        if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
+            nextTick(function () {
+                _$1.each(contextListeners, function (listener) {
+                    listener.cb();
+                });
+                _$1.each(asyncListeners, function (listener) {
+                    listener.cb();
+                });
             });
-            _$1.each(asyncListeners, function (listener) {
-                listener.cb();
-            });
-        });
+        }
     }
 
     function refreshAllDefineModel() {
@@ -52422,7 +52429,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
         if (this.isValid()) {
-            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+            this.fireEvent(BI.SingleSelectRadioItem.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 
@@ -52433,7 +52440,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SingleSelectRadioItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);/**
  * Created by roy on 15/10/16.
  */
@@ -60259,7 +60266,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev column-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
@@ -60268,7 +60275,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next column-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -82140,7 +82147,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             },
             items: [{
                 el: {
-                    type: "bi.text",
+                    type: "bi.text_button",
                     cls: "slider-button bi-high-light-border",
                     ref: function () {
                         self.slider = this;
@@ -88117,11 +88124,38 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeListCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -88138,6 +88172,12 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ListTreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
@@ -88170,11 +88210,38 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeInsertCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeInsertCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -88191,6 +88258,12 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.TreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
@@ -88223,11 +88296,38 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -88244,7 +88344,13 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TreeValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
  * 简单的树面板, 适用于数据量少的情况
  *
@@ -88422,11 +88528,38 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -88448,6 +88581,12 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
+
+BI.ValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
  * 简单的复选面板, 适用于数据量少的情况

@@ -399,7 +399,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
         if (this.isValid()) {
-            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+            this.fireEvent(BI.SingleSelectRadioItem.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 
@@ -410,7 +410,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SingleSelectRadioItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);/**
  * Created by roy on 15/10/16.
  */
@@ -8236,7 +8236,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev column-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
@@ -8245,7 +8245,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next column-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
