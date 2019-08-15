@@ -256,8 +256,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* eslint no-use-before-define: ["off"] */
     var deepEq = function deepEq(a, b, aStack, bStack) {
         // Unwrap any wrapped objects.
-        if (a instanceof _) a = a._wrapped;
-        if (b instanceof _) b = b._wrapped;
+        if (a instanceof _$1) a = a._wrapped;
+        if (b instanceof _$1) b = b._wrapped;
         // Compare `[[Class]]` names.
         var className = toString.call(a);
         if (className !== toString.call(b)) return false;
@@ -771,13 +771,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
     }
 
+    function addToListenerQueue(vm, watcher, cur, last) {
+        var listener = {
+            id: watcher.id,
+            cb: _$1.bind(watcher.listener, vm, cur, last, vm)
+        };
+        watcher.sync === true ? vm.syncListeners.push(listener) : vm.asyncListeners.push(listener);
+    }
+
     function digestState(vm) {
         var dirty = false;
         _$1.each(vm._stateWatchers, function (watcher, key) {
             var cur = watcher.get();
             var last = watcher.last;
             if (!isShadowEqual(cur, last)) {
-                // addToListenerQueue(vm, watcher, cur, last);
+                addToListenerQueue(vm, watcher, cur, last);
                 vm.model[key] = cur;
                 dirty = true;
                 watcher.last = cloneShadow(cur);
@@ -799,7 +807,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var cur = watcher.get();
                 var last = watcher.last;
                 if (!isShadowEqual(cur, last)) {
-                    // addToListenerQueue(vm, watcher, cur, last);
+                    addToListenerQueue(vm, watcher, cur, last);
                     vm.model[key] = cur;
                     dirty = true;
                     dirtyQueue.push(key);
