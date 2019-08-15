@@ -23,7 +23,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             },
             items: [{
                 el: {
-                    type: "bi.text",
+                    type: "bi.text_button",
                     cls: "slider-button bi-high-light-border",
                     ref: function () {
                         self.slider = this;
