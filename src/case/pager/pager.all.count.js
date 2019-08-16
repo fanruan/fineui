@@ -54,7 +54,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2" + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -63,7 +63,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2" + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
