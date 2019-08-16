@@ -135,14 +135,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         switch (o.pagerDirection) {
             case "horizontal":
                 return {
-                    preCls: " row-pre-page-h-font ",
-                    nextCls: " row-next-page-h-font "
+                    preCls: "row-pre-page-h-font ",
+                    nextCls: "row-next-page-h-font "
                 };
             case "vertical":
             default:
                 return {
-                    preCls: " column-pre-page-h-font ",
-                    nextCls: " column-next-page-h-font "
+                    preCls: "column-pre-page-h-font ",
+                    nextCls: "column-next-page-h-font "
                 };
         }
     },
