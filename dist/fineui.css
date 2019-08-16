@@ -278,6 +278,54 @@ i {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/** 循环旋转动画 **/
+.anim-rotate {
+  -webkit-animation: rotate 1s infinite linear both;
+  -moz-animation: rotate 1s infinite linear both;
+  -ms-animation: rotate 1s infinite linear both;
+  -o-animation: rotate 1s infinite linear both;
+  animation: rotate 1s infinite linear both;
+}
+@-webkit-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 input,
 textarea {
   border: 1px solid #e8eaed;
@@ -3062,7 +3110,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #f2f4f7 !important;
+  background-color: rgba(158, 166, 178, 0.2) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#339ea6b2,endColorstr=#339ea6b2);
   border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,
@@ -3353,6 +3402,25 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark body .bi-button.button-common.disabled.ghost .b-font:before,
 .bi-theme-dark #body .bi-button.button-common.disabled.ghost .b-font:before {
   color: #ffffff !important;
+}
+.bi-theme-dark body .bi-button.button-success.disabled,
+.bi-theme-dark #body .bi-button.button-success.disabled,
+.bi-theme-dark body .bi-button.button-error.disabled,
+.bi-theme-dark #body .bi-button.button-error.disabled,
+.bi-theme-dark body .bi-button.button-warning.disabled,
+.bi-theme-dark #body .bi-button.button-warning.disabled,
+.bi-theme-dark body .bi-button.button-ignore.disabled,
+.bi-theme-dark #body .bi-button.button-ignore.disabled,
+.bi-theme-dark body .bi-button.button-success.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-success.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-error.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-error.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-warning.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-warning.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-ignore.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-ignore.disabled.base-disabled {
+  background-color: rgba(135, 141, 159, 0.2) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33878d9f,endColorstr=#33878d9f);
 }
 .bi-single-select-icon-text-item:active .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {

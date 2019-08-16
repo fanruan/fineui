@@ -37600,21 +37600,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
     }
 
-    function addToListenerQueue(vm, watcher, cur, last) {
-        var listener = {
-            id: watcher.id,
-            cb: _$1.bind(watcher.listener, vm, cur, last, vm)
-        };
-        watcher.sync === true ? vm.syncListeners.push(listener) : vm.asyncListeners.push(listener);
-    }
-
     function digestState(vm) {
         var dirty = false;
         _$1.each(vm._stateWatchers, function (watcher, key) {
             var cur = watcher.get();
             var last = watcher.last;
             if (!isShadowEqual(cur, last)) {
-                addToListenerQueue(vm, watcher, cur, last);
+                // addToListenerQueue(vm, watcher, cur, last);
                 vm.model[key] = cur;
                 dirty = true;
                 watcher.last = cloneShadow(cur);
@@ -37636,7 +37628,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var cur = watcher.get();
                 var last = watcher.last;
                 if (!isShadowEqual(cur, last)) {
-                    addToListenerQueue(vm, watcher, cur, last);
+                    // addToListenerQueue(vm, watcher, cur, last);
                     vm.model[key] = cur;
                     dirty = true;
                     dirtyQueue.push(key);
@@ -37849,7 +37841,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return model;
             }
         });
-        var ob = new OB({
+        var ob = new OB();
+        ob._constructor({
             define: true
         });
         allDefineModelInstances[ob.getModelID()] = ob;
