@@ -10587,7 +10587,7 @@ Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     self.tree = _ref;
                 },
                 text: "默认值",
-                items: [],
+                items: items,
                 width: 300
             }, {
                 type: "bi.button",
@@ -10669,7 +10669,6 @@ Demo.Slider = BI.inherit(BI.Widget, {
             type: "bi.single_slider",
             digit: 0,
             width: o.width,
-            disabled: true,
             height: o.height,
             cls: "layout-bg-white"
         });
