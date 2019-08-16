@@ -125,7 +125,9 @@ body .bi-button, #body .bi-button {
       &, & .b-font:before {
         color: @color-bi-text-disabled !important;
       }
-      background: @color-bi-background-disabled !important;
+      background-color: fade(@color-bi-background-light-disabled, 20%) !important;
+      @ieColor: argb(fade(@color-bi-background-light-disabled, 20%));
+      filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
       border-color: @color-bi-border-disabled !important;
     }
     &:after {
@@ -268,6 +270,16 @@ body .bi-button, #body .bi-button {
         background: transparent !important;
         border-color: @color-bi-border-default !important;
         .opacity(0.5);
+      }
+    }
+    &.button-success.disabled,
+    &.button-error.disabled,
+    &.button-warning.disabled,
+    &.button-ignore.disabled {
+      &, &.base-disabled {
+        background-color: fade(@color-bi-background-light-disabled-theme-dark, 20%) !important;
+        @ieColor: argb(fade(@color-bi-background-light-disabled-theme-dark, 20%));
+        filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieColor},endColorstr=@{ieColor})";
       }
     }
   }
