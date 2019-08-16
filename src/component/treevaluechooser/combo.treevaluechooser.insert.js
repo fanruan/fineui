@@ -29,11 +29,38 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeInsertCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeInsertCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -50,5 +77,11 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.TreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);

@@ -20204,7 +20204,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             },
             items: [{
                 el: {
-                    type: "bi.text",
+                    type: "bi.text_button",
                     cls: "slider-button bi-high-light-border",
                     ref: function () {
                         self.slider = this;
@@ -26181,11 +26181,38 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeListCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -26202,6 +26229,12 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ListTreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
@@ -26234,11 +26267,38 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeInsertCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeInsertCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -26255,6 +26315,12 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.TreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
@@ -26287,11 +26353,38 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -26308,7 +26401,13 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TreeValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
  * 简单的树面板, 适用于数据量少的情况
  *
@@ -26486,11 +26585,38 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -26512,6 +26638,12 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
+
+BI.ValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
  * 简单的复选面板, 适用于数据量少的情况

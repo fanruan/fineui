@@ -32,11 +32,38 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -58,5 +85,11 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
+
+BI.ValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
