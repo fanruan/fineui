@@ -37,11 +37,6 @@ BI.Single = BI.inherit(BI.Widget, {
         }
     },
 
-    _getShowTitle: function() {
-        var type = this.getTipType() || (this.isEnabled() ? "success" : "warning");
-        return type === "success" ? this.getTitle() : (this.getWarningTitle() || this.getTitle());
-    },
-
     _hideTooltip: function () {
         var self = this;
         var tooltip = BI.Tooltips.get(this.getName());
@@ -94,8 +89,6 @@ BI.Single = BI.inherit(BI.Widget, {
                         }
                     }, 500);
                 }
-                // 如果当前控件设置了title, 那么最终显示的是当前title，而不应该是祖先的title
-                BI.isKey(self._getShowTitle()) && e.stopPropagation();
             });
             this.element.on("mousemove.title" + this.getName(), function (e) {
                 self._e = e;
@@ -121,8 +114,6 @@ BI.Single = BI.inherit(BI.Widget, {
                         self._showToolTip(self._e || e, opt);
                     }
                 }, 500);
-                // 如果当前控件设置了title, 那么最终显示的是当前title，而不应该是祖先的title
-                BI.isKey(self._getShowTitle()) && e.stopPropagation();
 
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
