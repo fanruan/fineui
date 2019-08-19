@@ -200,12 +200,12 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
     },
 
     _reqTreeNode: function (op, callback) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
         var times = op.times;
         var parentValues = op.parentValues || [];
         var selectedValues = op.selectedValues || [];
-        var valueMap = dealWidthSelectedValue(selectedValues);
+        var valueMap = dealWithSelectedValue(selectedValues);
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var checked = BI.has(valueMap, nodes[i].value);
@@ -217,7 +217,30 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                 times: 1,
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: checked,
-                halfCheck: false
+                halfCheck: false,
+                open: o.open
+            });
+        }
+        // 如果指定节点全部打开
+        if (o.open) {
+            var allNodes = [];
+            // 获取所有节点
+            BI.each(nodes, function (idx, node) {
+                allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
+            });
+            BI.each(allNodes, function (idx, node) {
+                var checked = BI.has(valueMap, node.value);
+                result.push({
+                    id: node.id,
+                    pId: node.pId,
+                    value: node.value,
+                    text: node.text,
+                    times: 1,
+                    isParent: node.getChildrenLength() > 0,
+                    checked: checked,
+                    halfCheck: false,
+                    open: o.open
+                });
             });
         }
         // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
@@ -231,7 +254,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
             });
         });
 
-        function dealWidthSelectedValue(selectedValues) {
+        function dealWithSelectedValue(selectedValues) {
             var valueMap = {};
             BI.each(selectedValues, function (idx, v) {
                 valueMap[BI.last(v)] = [2, 0];
