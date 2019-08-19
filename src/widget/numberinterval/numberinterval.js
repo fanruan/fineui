@@ -23,7 +23,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-number-interval" + (BI.isIE() && BI.getIEVersion() < 10) ? " hack" : "",
+            extraCls: "bi-number-interval" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 24,
             validation: "valid",
             closeMin: true,
