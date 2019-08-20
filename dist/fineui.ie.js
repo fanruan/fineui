@@ -76012,7 +76012,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -76315,7 +76315,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -76631,7 +76631,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -76744,7 +76744,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.MultiTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-popup",
             maxWidth: "auto",
-            minWidth: 100,
+            minWidth: 140,
             maxHeight: 400,
             onLoaded: BI.emptyFn,
             el: {
@@ -76894,7 +76894,13 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
     setValue: function (v) {
         v || (v = {});
-        this.setVisible(BI.size(v.value) > 0);
+        var show = BI.size(v.value) > 0;
+        this.setVisible(show);
+        if(show) {
+            this.indicator.setVisible(true);
+            this.checkSelected.setVisible(false);
+        }
+
     }
 });
 
