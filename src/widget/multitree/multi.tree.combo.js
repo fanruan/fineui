@@ -187,7 +187,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
