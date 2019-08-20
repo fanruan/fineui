@@ -38715,7 +38715,6 @@ BI.Single = BI.inherit(BI.Widget, {
                     }
                 }, 500);
 
-
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
@@ -60426,7 +60425,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2 " + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -60435,7 +60434,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
+                cls: "bi-border bi-border-radius all-pager-next bi-list-item-select2 " + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
@@ -60507,14 +60506,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         switch (o.pagerDirection) {
             case "horizontal":
                 return {
-                    preCls: " row-pre-page-h-font ",
-                    nextCls: " row-next-page-h-font "
+                    preCls: "row-pre-page-h-font ",
+                    nextCls: "row-next-page-h-font "
                 };
             case "vertical":
             default:
                 return {
-                    preCls: " column-pre-page-h-font ",
-                    nextCls: " column-next-page-h-font "
+                    preCls: "column-pre-page-h-font ",
+                    nextCls: "column-next-page-h-font "
                 };
         }
     },
@@ -69414,14 +69413,16 @@ BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);/**
  */
 BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
-        height: 24,
-        valueFormatter: function (v) {
-            return v;
-        },
-        itemsCreator: BI.emptyFn,
-        watermark: BI.i18nText("BI-Basic_Search")
+    props: function() {
+        return {
+            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
+            height: 24,
+            valueFormatter: function (v) {
+                return v;
+            },
+            itemsCreator: BI.emptyFn,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -70426,14 +70427,16 @@ BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);/**
  */
 BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
-        height: 24,
-        valueFormatter: function (v) {
-            return v;
-        },
-        itemsCreator: BI.emptyFn,
-        watermark: BI.i18nText("BI-Basic_Search")
+    props: function() {
+        return {
+            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
+            height: 24,
+            valueFormatter: function (v) {
+                return v;
+            },
+            itemsCreator: BI.emptyFn,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -77740,7 +77743,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-number-interval" + (BI.isIE() && BI.getIEVersion() < 10) ? " hack" : "",
+            extraCls: "bi-number-interval" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 24,
             validation: "valid",
             closeMin: true,
@@ -87527,7 +87530,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AbstractTreeValueChooser.superclass._defaultConfig.apply(this, arguments), {
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            open: false
         });
     },
 
@@ -88035,7 +88039,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _reqTreeNode: function (op, callback) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
         var times = op.times;
         var checkState = op.checkState || {};
@@ -88043,7 +88047,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var selectedValues = op.selectedValues || {};
         var valueMap = {};
         // if (judgeState(parentValues, selectedValues, checkState)) {
-        valueMap = dealWidthSelectedValue(parentValues, selectedValues);
+        valueMap = dealWithSelectedValue(parentValues, selectedValues);
         // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
@@ -88056,7 +88060,31 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 times: 1,
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
-                halfCheck: state[1]
+                halfCheck: state[1],
+                open: o.open
+            });
+        }
+        // 如果指定节点全部打开
+        if (o.open) {
+            var allNodes = [];
+            // 获取所有节点
+            BI.each(nodes, function (idx, node) {
+                allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
+            });
+            BI.each(allNodes, function (idx, node) {
+                var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
+                var state = getCheckState(node.value, node.parentValues, valueMap, checkState);
+                result.push({
+                    id: node.id,
+                    pId: node.pId,
+                    value: node.value,
+                    text: node.text,
+                    times: 1,
+                    isParent: node.getChildrenLength() > 0,
+                    checked: state[0],
+                    halfCheck: state[1],
+                    open: self.options.open
+                });
             });
         }
         // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
@@ -88078,7 +88106,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return (parentValues.length === 0 || (checked && half) && !BI.isEmpty(selected_value));
         }
 
-        function dealWidthSelectedValue(parentValues, selectedValues) {
+        function dealWithSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
                 selectedValues = selectedValues[v] || {};
@@ -88098,12 +88126,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         nextNames[t] = true;
                     }
                 });
+                // valueMap的数组第一个参数为不选: 0, 半选: 1, 全选：2， 第二个参数为改节点下选中的子节点个数(子节点全选或者不存在)
                 valueMap[value] = [1, BI.size(nextNames)];
             });
             return valueMap;
         }
 
         function getCheckState(current, parentValues, valueMap, checkState) {
+            // 节点本身的checked和half优先级最高
             var checked = checkState.checked, half = checkState.half;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
@@ -88121,8 +88151,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             var check;
             if (!checked && !halfCheck && !tempCheck) {
+                // 当节点自身是不选的，且通过selectedValues没有得到全选, 则check状态取决于valueMap
                 check = BI.has(valueMap, current);
             } else {
+                // 不是上面那种情况就先看在节点没有带有明确半选的时候，通过节点自身的checked和valueMap的状态能都得到选中信息
                 check = ((tempCheck || checked) && !half) || BI.has(valueMap, current);
             }
             return [check, halfCheck];
@@ -88225,6 +88257,31 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var parent = this.tree.getRoot();
         }
         return parent.getChildren();
+    },
+
+    _getAllChildren: function(parentValues) {
+        var children = this._getChildren(parentValues);
+        var nodes = [].concat(children);
+        BI.each(nodes, function (idx, node) {
+            node.parentValues = parentValues;
+        });
+        var queue = BI.map(children, function (idx, node) {
+            return {
+                parentValues: parentValues,
+                value: node.value
+            };
+        });
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.shift();
+            var pValues = (node.parentValues).concat(node.value);
+            var childNodes = this._getChildren(pValues);
+            BI.each(childNodes, function (idx, node) {
+                node.parentValues = pValues;
+            });
+            queue = queue.concat(childNodes);
+            nodes = nodes.concat(childNodes);
+        }
+        return nodes;
     },
 
     _getChildCount: function (parentValues) {
@@ -88432,12 +88489,12 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _reqTreeNode: function (op, callback) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
         var times = op.times;
         var parentValues = op.parentValues || [];
         var selectedValues = op.selectedValues || [];
-        var valueMap = dealWidthSelectedValue(selectedValues);
+        var valueMap = dealWithSelectedValue(selectedValues);
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var checked = BI.has(valueMap, nodes[i].value);
@@ -88449,7 +88506,30 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 times: 1,
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: checked,
-                halfCheck: false
+                halfCheck: false,
+                open: o.open
+            });
+        }
+        // 如果指定节点全部打开
+        if (o.open) {
+            var allNodes = [];
+            // 获取所有节点
+            BI.each(nodes, function (idx, node) {
+                allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
+            });
+            BI.each(allNodes, function (idx, node) {
+                var checked = BI.has(valueMap, node.value);
+                result.push({
+                    id: node.id,
+                    pId: node.pId,
+                    value: node.value,
+                    text: node.text,
+                    times: 1,
+                    isParent: node.getChildrenLength() > 0,
+                    checked: checked,
+                    halfCheck: false,
+                    open: o.open
+                });
             });
         }
         // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
@@ -88463,7 +88543,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         });
 
-        function dealWidthSelectedValue(selectedValues) {
+        function dealWithSelectedValue(selectedValues) {
             var valueMap = {};
             BI.each(selectedValues, function (idx, v) {
                 valueMap[BI.last(v)] = [2, 0];
