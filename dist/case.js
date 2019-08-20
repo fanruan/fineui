@@ -7999,7 +7999,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2 " + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -8008,7 +8008,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
+                cls: "bi-border bi-border-radius all-pager-next bi-list-item-select2 " + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
@@ -8080,14 +8080,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         switch (o.pagerDirection) {
             case "horizontal":
                 return {
-                    preCls: " row-pre-page-h-font ",
-                    nextCls: " row-next-page-h-font "
+                    preCls: "row-pre-page-h-font ",
+                    nextCls: "row-next-page-h-font "
                 };
             case "vertical":
             default:
                 return {
-                    preCls: " column-pre-page-h-font ",
-                    nextCls: " column-next-page-h-font "
+                    preCls: "column-pre-page-h-font ",
+                    nextCls: "column-next-page-h-font "
                 };
         }
     },
