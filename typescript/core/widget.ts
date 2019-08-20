@@ -336,12 +336,12 @@ export interface _Widget extends _OB {
     /**
      * 使不可见
      */
-    invisible(): void;
+    invisible(..._args: any[]): void;
 
     /**
      * 可见
      */
-    visible(): void;
+    visible(..._args: any[]): void;
 
     /**
      * 清除子元素
