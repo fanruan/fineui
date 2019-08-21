@@ -62,16 +62,17 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, {
-            width: 24,
+            width: 16,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
+            items: items,
+            rgap: 5
         }))));
     },
 
