@@ -27334,7 +27334,6 @@ BI.Single = BI.inherit(BI.Widget, {
                     }
                 }, 500);
 
-
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;
@@ -28561,311 +28560,7 @@ BI.ButtonTree = BI.inherit(BI.ButtonGroup, {
 });
 BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 
-BI.shortcut("bi.button_tree", BI.ButtonTree);/**
- * Created by windy on 2018/01/23.
- */
-describe("ALinkTest", function () {
-
-    /**
-     * test_author_windy
-     */
-    it("A初始化测试", function () {
-        var a = BI.Test.createWidget({
-            type: "bi.a",
-            text: "CCC"
-        });
-        expect(a.element.is('a')).to.equal(true);
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("A的el测试", function () {
-        var a = BI.Test.createWidget({
-            type: "bi.a",
-            text: "DDD",
-            el: {
-                type: "bi.label"
-            }
-        });
-        expect(a.element.is('a') && a.element.hasClass("bi-label")).to.equal(true);
-    });
-});
-/**
- * Created by windy on 2018/01/23.
- */
-describe("ButtonTest", function () {
-
-    /**
-     * test_author_windy
-     */
-    it("Click点击触发事件", function (done) {
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            handler: function () {
-                this.setText("click");
-            }
-        });
-        BI.nextTick(function () {
-            button.element.click();
-            expect(button.element.children(".bi-text").text()).to.equal("click");
-            button.destroy();
-            done();
-        });
-
-    });
-
-
-    /**
-     * test_author_windy
-     */
-    it("MouseDown触发事件", function (done) {
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            trigger: "mousedown",
-            handler: function () {
-                this.setText("click");
-            }
-        });
-        BI.nextTick(function () {
-            button.element.mousedown();
-            expect(button.element.children(".bi-text").text()).to.equal("click");
-            button.destroy();
-            done();
-        });
-
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("MouseUp触发事件", function (done) {
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            trigger: "mouseup",
-            handler: function () {
-                this.setText("click");
-            }
-        });
-        BI.nextTick(function () {
-            button.element.mousedown();
-            button.element.mouseup();
-            expect(button.element.children(".bi-text").text()).to.equal("click");
-            button.destroy();
-            done();
-        });
-
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("doubleClick触发事件", function (done) {
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            trigger: "dblclick",
-            handler: function () {
-                this.setText("click");
-            }
-        });
-        BI.nextTick(function () {
-            button.element.dblclick();
-            expect(button.element.children(".bi-text").text()).to.equal("click");
-            button.destroy();
-            done();
-        });
-
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("LongClick触发事件", function (done) {
-        var clickNum = 0;
-        var button = BI.Test.createWidget({
-            type: "bi.button",
-            text: "CCC",
-            trigger: "lclick",
-            listeners: [{
-                eventName: BI.Button.EVENT_CHANGE,
-                action: function () {
-                    clickNum++;
-                }
-            }]
-        });
-        BI.nextTick(function () {
-            button.element.mousedown();
-            BI.delay(function () {
-                expect(clickNum).to.equal(2);
-                button.destroy();
-                done();
-            }, 360);
-        });
-
-    });
-});
-/**
- * Created by windy on 2018/01/23.
- */
-describe("TextTest", function () {
-
-    /**
-     * test_author_windy
-     */
-    it("setText", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text"
-        });
-        text.setText("AAA");
-        expect(text.element.text()).to.equal("AAA");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("setStyle", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text"
-        });
-        text.setStyle({"color": "red"});
-        expect(text.element.getStyle("color")).to.equal("rgb(255, 0, 0)");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("高亮doHighlight", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "AAA",
-            highLight: true
-        });
-        expect(text.element.getStyle("color")).to.equal("rgb(54, 133, 242)");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("标红doRedMark", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是要标红的A",
-            keyword: "A"
-        });
-        expect(text.element.children(".bi-keyword-red-mark").length).to.not.equal(0);
-        text.destroy();
-    });
-
-
-    /**
-     * test_author_windy
-     */
-    it("取消高亮undoHighlight", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "AAA",
-            highLight: true
-        });
-        text.unHighLight();
-        expect(text.element.getStyle("color")).to.not.equal("rgb(54, 133, 242)");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("取消标红undoRedMark", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是要标红的A",
-            keyword: "A"
-        });
-        text.unRedMark();
-        expect(text.element.children(".bi-keyword-red-mark").length).to.equal(0);
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("setValue", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            value: "AAA",
-        });
-        text.setValue("value");
-        expect(text.element.text()).to.equal("value");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("gap测试", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是要标红的A",
-            vgap: 10,
-            hgap: 10
-        });
-        expect(text.element.css("padding")).to.equal("10px");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("空格测试", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是要标红的 A",
-        });
-        expect(text.element.text()).to.equal("我是要标红的 A");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("lineHeight和height", function () {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是A",
-            lineHeight: 12,
-            height: 24
-        });
-        expect(text.element.css("height")).to.equal("24px");
-        expect(text.element.css("line-height")).to.equal("12px");
-        text.destroy();
-    });
-
-    /**
-     * test_author_windy
-     */
-    it("handler", function (done) {
-        var text = BI.Test.createWidget({
-            type: "bi.text",
-            text: "我是A",
-            handler: function () {
-                text.setText("handler");
-            }
-        });
-        BI.nextTick(function () {
-            text.text.element.click();
-            expect(text.text.element.text()).to.equal("handler");
-            text.destroy();
-            done();
-        });
-    });
-});
-BI.prepares.push(function () {
+BI.shortcut("bi.button_tree", BI.ButtonTree);BI.prepares.push(function () {
     BI.Resizers = new BI.ResizeController();
     BI.Layers = new BI.LayerController();
     BI.Maskers = new BI.MaskersController();
@@ -37506,7 +37201,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
         if (this.isValid()) {
-            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+            this.fireEvent(BI.SingleSelectRadioItem.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 
@@ -37517,7 +37212,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SingleSelectRadioItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);/**
  * Created by roy on 15/10/16.
  */
@@ -43553,7 +43248,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2 " + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -43562,7 +43257,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
+                cls: "bi-border bi-border-radius all-pager-next bi-list-item-select2 " + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
@@ -43634,14 +43329,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         switch (o.pagerDirection) {
             case "horizontal":
                 return {
-                    preCls: " row-pre-page-h-font ",
-                    nextCls: " row-next-page-h-font "
+                    preCls: "row-pre-page-h-font ",
+                    nextCls: "row-next-page-h-font "
                 };
             case "vertical":
             default:
                 return {
-                    preCls: " column-pre-page-h-font ",
-                    nextCls: " column-next-page-h-font "
+                    preCls: "column-pre-page-h-font ",
+                    nextCls: "column-next-page-h-font "
                 };
         }
     },
@@ -43790,7 +43485,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev column-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
@@ -43799,7 +43494,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next column-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -52265,14 +51960,16 @@ BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);/**
  */
 BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
-        height: 24,
-        valueFormatter: function (v) {
-            return v;
-        },
-        itemsCreator: BI.emptyFn,
-        watermark: BI.i18nText("BI-Basic_Search")
+    props: function() {
+        return {
+            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
+            height: 24,
+            valueFormatter: function (v) {
+                return v;
+            },
+            itemsCreator: BI.emptyFn,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -53277,14 +52974,16 @@ BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);/**
  */
 BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
-        height: 24,
-        valueFormatter: function (v) {
-            return v;
-        },
-        itemsCreator: BI.emptyFn,
-        watermark: BI.i18nText("BI-Basic_Search")
+    props: function() {
+        return {
+            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
+            height: 24,
+            valueFormatter: function (v) {
+                return v;
+            },
+            itemsCreator: BI.emptyFn,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -53333,7 +53032,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                         },
                         popup: {
                             type: "bi.multilayer_single_tree_popup",
-                            itemsCreator: function (op, callback) {
+                            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
                             },
@@ -53414,7 +53113,14 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     _digest: function (v) {
         var o = this.options;
-        return o.valueFormatter(v) || o.text;
+        if(o.itemsCreator === BI.emptyFn) {
+            var result = BI.find(o.items, function (i, item) {
+                return item.value === v;
+            });
+            return BI.isNotNull(result) ? result.text : o.text;
+        }
+        return o.valueFormatter(v);
+
     },
 
     stopEditing: function () {
@@ -59019,7 +58725,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -59322,7 +59028,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -59638,7 +59344,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? {1: 1} : {}
+                value: checked ? this.getValue() : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
@@ -59751,7 +59457,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
         return BI.extend(BI.MultiTreePopup.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-tree-popup",
             maxWidth: "auto",
-            minWidth: 100,
+            minWidth: 140,
             maxHeight: 400,
             onLoaded: BI.emptyFn,
             el: {
@@ -59901,7 +59607,13 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
     setValue: function (v) {
         v || (v = {});
-        this.setVisible(BI.size(v.value) > 0);
+        var show = BI.size(v.value) > 0;
+        this.setVisible(show);
+        if(show) {
+            this.indicator.setVisible(true);
+            this.checkSelected.setVisible(false);
+        }
+
     }
 });
 
@@ -60591,7 +60303,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.NumberInterval.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            extraCls: "bi-number-interval" + (BI.isIE() && BI.getIEVersion() < 10) ? " hack" : "",
+            extraCls: "bi-number-interval" + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             height: 24,
             validation: "valid",
             closeMin: true,
@@ -65395,7 +65107,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
             },
             items: [{
                 el: {
-                    type: "bi.text",
+                    type: "bi.text_button",
                     cls: "slider-button bi-high-light-border",
                     ref: function () {
                         self.slider = this;
@@ -70378,7 +70090,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.AbstractTreeValueChooser.superclass._defaultConfig.apply(this, arguments), {
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            open: false
         });
     },
 
@@ -70886,7 +70599,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _reqTreeNode: function (op, callback) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
         var times = op.times;
         var checkState = op.checkState || {};
@@ -70894,7 +70607,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var selectedValues = op.selectedValues || {};
         var valueMap = {};
         // if (judgeState(parentValues, selectedValues, checkState)) {
-        valueMap = dealWidthSelectedValue(parentValues, selectedValues);
+        valueMap = dealWithSelectedValue(parentValues, selectedValues);
         // }
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
@@ -70907,7 +70620,31 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 times: 1,
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: state[0],
-                halfCheck: state[1]
+                halfCheck: state[1],
+                open: o.open
+            });
+        }
+        // 如果指定节点全部打开
+        if (o.open) {
+            var allNodes = [];
+            // 获取所有节点
+            BI.each(nodes, function (idx, node) {
+                allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
+            });
+            BI.each(allNodes, function (idx, node) {
+                var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
+                var state = getCheckState(node.value, node.parentValues, valueMap, checkState);
+                result.push({
+                    id: node.id,
+                    pId: node.pId,
+                    value: node.value,
+                    text: node.text,
+                    times: 1,
+                    isParent: node.getChildrenLength() > 0,
+                    checked: state[0],
+                    halfCheck: state[1],
+                    open: self.options.open
+                });
             });
         }
         // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
@@ -70929,7 +70666,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             return (parentValues.length === 0 || (checked && half) && !BI.isEmpty(selected_value));
         }
 
-        function dealWidthSelectedValue(parentValues, selectedValues) {
+        function dealWithSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(parentValues, function (i, v) {
                 selectedValues = selectedValues[v] || {};
@@ -70949,12 +70686,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         nextNames[t] = true;
                     }
                 });
+                // valueMap的数组第一个参数为不选: 0, 半选: 1, 全选：2， 第二个参数为改节点下选中的子节点个数(子节点全选或者不存在)
                 valueMap[value] = [1, BI.size(nextNames)];
             });
             return valueMap;
         }
 
         function getCheckState(current, parentValues, valueMap, checkState) {
+            // 节点本身的checked和half优先级最高
             var checked = checkState.checked, half = checkState.half;
             var tempCheck = false, halfCheck = false;
             if (BI.has(valueMap, current)) {
@@ -70972,8 +70711,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             }
             var check;
             if (!checked && !halfCheck && !tempCheck) {
+                // 当节点自身是不选的，且通过selectedValues没有得到全选, 则check状态取决于valueMap
                 check = BI.has(valueMap, current);
             } else {
+                // 不是上面那种情况就先看在节点没有带有明确半选的时候，通过节点自身的checked和valueMap的状态能都得到选中信息
                 check = ((tempCheck || checked) && !half) || BI.has(valueMap, current);
             }
             return [check, halfCheck];
@@ -71076,6 +70817,31 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var parent = this.tree.getRoot();
         }
         return parent.getChildren();
+    },
+
+    _getAllChildren: function(parentValues) {
+        var children = this._getChildren(parentValues);
+        var nodes = [].concat(children);
+        BI.each(nodes, function (idx, node) {
+            node.parentValues = parentValues;
+        });
+        var queue = BI.map(children, function (idx, node) {
+            return {
+                parentValues: parentValues,
+                value: node.value
+            };
+        });
+        while (BI.isNotEmptyArray(queue)) {
+            var node = queue.shift();
+            var pValues = (node.parentValues).concat(node.value);
+            var childNodes = this._getChildren(pValues);
+            BI.each(childNodes, function (idx, node) {
+                node.parentValues = pValues;
+            });
+            queue = queue.concat(childNodes);
+            nodes = nodes.concat(childNodes);
+        }
+        return nodes;
     },
 
     _getChildCount: function (parentValues) {
@@ -71283,12 +71049,12 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _reqTreeNode: function (op, callback) {
-        var self = this;
+        var self = this, o = this.options;
         var result = [];
         var times = op.times;
         var parentValues = op.parentValues || [];
         var selectedValues = op.selectedValues || [];
-        var valueMap = dealWidthSelectedValue(selectedValues);
+        var valueMap = dealWithSelectedValue(selectedValues);
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var checked = BI.has(valueMap, nodes[i].value);
@@ -71300,7 +71066,30 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 times: 1,
                 isParent: nodes[i].getChildrenLength() > 0,
                 checked: checked,
-                halfCheck: false
+                halfCheck: false,
+                open: o.open
+            });
+        }
+        // 如果指定节点全部打开
+        if (o.open) {
+            var allNodes = [];
+            // 获取所有节点
+            BI.each(nodes, function (idx, node) {
+                allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
+            });
+            BI.each(allNodes, function (idx, node) {
+                var checked = BI.has(valueMap, node.value);
+                result.push({
+                    id: node.id,
+                    pId: node.pId,
+                    value: node.value,
+                    text: node.text,
+                    times: 1,
+                    isParent: node.getChildrenLength() > 0,
+                    checked: checked,
+                    halfCheck: false,
+                    open: o.open
+                });
             });
         }
         // 深层嵌套的比较麻烦，这边先实现的是在根节点添加
@@ -71314,7 +71103,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         });
 
-        function dealWidthSelectedValue(selectedValues) {
+        function dealWithSelectedValue(selectedValues) {
             var valueMap = {};
             BI.each(selectedValues, function (idx, v) {
                 valueMap[BI.last(v)] = [2, 0];
@@ -71372,11 +71161,38 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeListCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeListCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeListCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -71393,6 +71209,12 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.ListTreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ListTreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
@@ -71425,11 +71247,38 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeInsertCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeInsertCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeInsertCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -71446,6 +71295,12 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
+BI.TreeValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
@@ -71478,11 +71333,38 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiTreeCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiTreeCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -71499,7 +71381,13 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo.populate.apply(this.combo, arguments);
     }
 });
+
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TreeValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.TreeValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.TreeValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.TreeValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.TreeValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);/**
  * 简单的树面板, 适用于数据量少的情况
  *
@@ -71677,11 +71565,38 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
-            height: o.height
-        });
-
-        this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
-            self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserCombo.EVENT_CONFIRM);
+                }
+            }]
         });
     },
 
@@ -71703,6 +71618,12 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         this.combo.populate.apply(this, arguments);
     }
 });
+
+BI.ValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);/**
  * 简单的复选面板, 适用于数据量少的情况
@@ -71896,7 +71817,11 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     BI.Widget.prototype._init = function () {
         var self = this;
         var needPop = createStore.call(this);
-        _init.apply(this, arguments);
+        try {
+            _init.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         needPop && popTarget();
     };
 
@@ -71908,13 +71833,21 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
             pushTarget(this.store);
             initWatch(this, this.watch);
         }
-        _render.apply(this, arguments);
+        try {
+            _render.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         needPop && popTarget();
     };
 
     var unMount = BI.Widget.prototype.__d;
     BI.Widget.prototype.__d = function () {
-        unMount.apply(this, arguments);
+        try {
+            unMount.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
         BI.each(this._watchers, function (i, unwatches) {
             unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];

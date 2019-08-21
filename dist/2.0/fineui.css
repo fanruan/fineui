@@ -278,6 +278,54 @@ i {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/** 循环旋转动画 **/
+.anim-rotate {
+  -webkit-animation: rotate 1s infinite linear both;
+  -moz-animation: rotate 1s infinite linear both;
+  -ms-animation: rotate 1s infinite linear both;
+  -o-animation: rotate 1s infinite linear both;
+  animation: rotate 1s infinite linear both;
+}
+@-webkit-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 input,
 textarea {
   border: 1px solid #e8eaed;
@@ -675,8 +723,8 @@ textarea {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80232e40,endColorstr=#80232e40);
 }
 .bi-theme-dark .bi-z-index-mask {
-  background-color: rgba(25, 27, 43, 0.8);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#cc191b2b,endColorstr=#cc191b2b);
+  background-color: rgba(96, 100, 121, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80606479,endColorstr=#80606479);
 }
 .bi-list-item:hover,
 .bi-list-item.hover {
@@ -3062,7 +3110,8 @@ body .bi-button.button-error.disabled.base-disabled,
 #body .bi-button.button-error.disabled.base-disabled,
 body .bi-button.button-warning.disabled.base-disabled,
 #body .bi-button.button-warning.disabled.base-disabled {
-  background: #f2f4f7 !important;
+  background-color: rgba(158, 166, 178, 0.2) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#339ea6b2,endColorstr=#339ea6b2);
   border-color: #d0d4da !important;
 }
 body .bi-button.button-common.disabled,
@@ -3353,6 +3402,25 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
 .bi-theme-dark body .bi-button.button-common.disabled.ghost .b-font:before,
 .bi-theme-dark #body .bi-button.button-common.disabled.ghost .b-font:before {
   color: #ffffff !important;
+}
+.bi-theme-dark body .bi-button.button-success.disabled,
+.bi-theme-dark #body .bi-button.button-success.disabled,
+.bi-theme-dark body .bi-button.button-error.disabled,
+.bi-theme-dark #body .bi-button.button-error.disabled,
+.bi-theme-dark body .bi-button.button-warning.disabled,
+.bi-theme-dark #body .bi-button.button-warning.disabled,
+.bi-theme-dark body .bi-button.button-ignore.disabled,
+.bi-theme-dark #body .bi-button.button-ignore.disabled,
+.bi-theme-dark body .bi-button.button-success.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-success.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-error.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-error.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-warning.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-warning.disabled.base-disabled,
+.bi-theme-dark body .bi-button.button-ignore.disabled.base-disabled,
+.bi-theme-dark #body .bi-button.button-ignore.disabled.base-disabled {
+  background-color: rgba(135, 141, 159, 0.2) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33878d9f,endColorstr=#33878d9f);
 }
 .bi-single-select-icon-text-item:active .b-font:before,
 .bi-single-select-icon-text-item.active .b-font:before {
@@ -4531,8 +4599,8 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 8px;
   border-radius: 8px;
   background-color: #ffffff;
-  height: 16px;
-  width: 16px;
+  height: 12px;
+  width: 12px;
   top: 6px;
   left: -8px;
 }
@@ -4542,8 +4610,8 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 10px;
   border-radius: 10px;
   background-color: #f7f8fa;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   top: 4px;
   left: -10px;
 }
@@ -4553,8 +4621,8 @@ ul.ztree.zTreeDragUL {
 .bi-single-slider-button .slider-button.disabled:hover,
 .bi-single-slider-button .slider-button.disabled.hover {
   background-color: #f7f8fa;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   top: 6px;
   left: -8px;
 }
