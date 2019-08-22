@@ -8,8 +8,6 @@ For more details, see the website [http://www.fanruan.com](http://www.fanruan.co
 Documentation
 =============
 
-### 教程与Demo
-
 http://fanruan.design/doc/index.html?post=0169cf558d
 
 License
