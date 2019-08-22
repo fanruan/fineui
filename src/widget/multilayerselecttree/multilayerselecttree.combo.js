@@ -16,7 +16,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false
         });
     },
 
@@ -96,6 +97,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-select-tree-trigger",
                 ref: function (_ref) {

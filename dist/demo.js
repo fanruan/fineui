@@ -3308,8 +3308,9 @@ BI.shortcut("demo.center", Demo.Center);Demo.TreeValueChooser = BI.inherit(BI.Wi
     render: function () {
 
         var widget = BI.createWidget({
-            type: "bi.list_tree_value_chooser_insert_combo",
+            type: "bi.tree_value_chooser_combo",
             width: 300,
+            allowSearchValue: true,
             // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {
                 callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
@@ -10404,6 +10405,7 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                allowEdit: true,
                 text: "默认值",
                 items: items,
                 width: 300,
@@ -10586,6 +10588,7 @@ Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                allowEdit: true,
                 text: "默认值",
                 items: items,
                 width: 300

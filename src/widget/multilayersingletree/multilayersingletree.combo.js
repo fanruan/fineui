@@ -99,6 +99,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-single-tree-trigger",
                 ref: function (_ref) {

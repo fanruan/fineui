@@ -694,11 +694,17 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _isMatch: function (parentValues, value, keyword) {
+        var o = this.options;
         var node = this._getTreeNode(parentValues, value);
         if (!node) {
             return false;
         }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+        if(o.allowSearchValue && node.value) {
+            var valueFind = BI.Func.getSearchResult([node.value], keyword);
+            return valueFind.find.length > 0 || valueFind.match.length > 0 ||
+                find.find.length > 0 || find.match.length > 0;
+        }
         return find.find.length > 0 || find.match.length > 0;
     },
 
