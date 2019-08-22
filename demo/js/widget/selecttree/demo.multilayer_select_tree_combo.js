@@ -16,7 +16,6 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
-                allowEdit: true,
                 text: "默认值",
                 items: items,
                 width: 300,

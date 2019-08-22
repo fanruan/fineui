@@ -7,7 +7,6 @@ Demo.TreeValueChooser = BI.inherit(BI.Widget, {
         var widget = BI.createWidget({
             type: "bi.tree_value_chooser_combo",
             width: 300,
-            allowSearchValue: true,
             // items: BI.deepClone(Demo.CONSTANTS.TREEITEMS),
             itemsCreator: function (op, callback) {
                 callback(BI.deepClone(Demo.CONSTANTS.TREEITEMS));
