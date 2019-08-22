@@ -69312,7 +69312,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                         },
                         popup: {
                             type: "bi.multilayer_select_tree_popup",
-                            itemsCreator: function (op, callback) {
+                            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
                             },
@@ -69393,7 +69393,13 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _digest: function (v) {
         var o = this.options;
-        return o.valueFormatter(v) || o.text;
+        if(o.itemsCreator === BI.emptyFn) {
+            var result = BI.find(o.items, function (i, item) {
+                return item.value === v;
+            });
+            return BI.isNotNull(result) ? result.text : o.text;
+        }
+        return o.valueFormatter(v);
     },
 
     stopEditing: function () {
