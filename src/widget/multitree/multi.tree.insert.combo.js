@@ -206,7 +206,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
