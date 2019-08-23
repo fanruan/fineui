@@ -48,7 +48,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
-                extraCls: o.iconCls ? o.iconCls : "",
+                extraCls: o.iconCls,
                 width: o.width,
                 height: o.height
             }),
