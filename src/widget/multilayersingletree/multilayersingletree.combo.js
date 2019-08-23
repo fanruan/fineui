@@ -19,7 +19,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false,
+            allowInsertValue: false
         });
     },
 
@@ -99,6 +101,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-single-tree-trigger",
@@ -136,6 +139,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
                     action: function () {
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM,
+                    action: function () {
+                        var value = self.trigger.getSearcher().getKeyword();
+                        self.combo.setValue(value);
+                        self.combo.hideView();
                     }
                 }]
             },

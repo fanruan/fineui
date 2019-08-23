@@ -9453,7 +9453,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-icon-trigger",
+            baseCls: "bi-icon-trigger",
+            extraCls: "pull-down-font",
             el: {},
             height: 24
         });
@@ -9465,7 +9466,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
             type: "bi.trigger_icon_button",
             element: this,
             width: o.width,
-            height: o.height
+            height: o.height,
+            extraCls: o.extraCls
         });
     }
 });

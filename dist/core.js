@@ -21871,14 +21871,16 @@ BI.prepares.push(function () {
             var canvas = document.createElement("canvas");
             var ratio = 2;
             BI.Widget._renderEngine.createElement("body").append(canvas);
-            var w = BI.DOM.getTextSizeWidth(param, 12) + 4;
+
+            var ctx = canvas.getContext("2d");
+            ctx.font = "12px Georgia";
+            var w = ctx.measureText(param).width + 4;
             canvas.width = w * ratio;
             canvas.height = 16 * ratio;
-            var ctx = canvas.getContext("2d");
-            // ctx.fillStyle = "#EAF2FD";
             ctx.font = 12 * ratio + "px Georgia";
             ctx.fillStyle = fillStyle || "#3685f2";
             ctx.textBaseline = "middle";
+            // ctx.fillStyle = "#EAF2FD";
             ctx.fillText(param, 2 * ratio, 9 * ratio);
             BI.Widget._renderEngine.createElement(canvas).destroy();
             var backColor = backgroundColor || "rgba(54, 133, 242, 0.1)";

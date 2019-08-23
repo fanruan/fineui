@@ -60,7 +60,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_select_tree_popup",
+                            type: o.allowInsertValue ? "bi.multilayer_select_tree_insert_search_pane" : "bi.multilayer_select_tree_popup",
                             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
@@ -68,12 +68,23 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
                                 callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -208,4 +219,5 @@ BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
