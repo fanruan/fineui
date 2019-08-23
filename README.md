@@ -8,7 +8,7 @@ For more details, see the website [http://www.fanruan.com](http://www.fanruan.co
 Documentation
 =============
 
-http://fanruan.design/doc/index.html?post=0169cf558d
+http://fanruan.design/doc.html?post=0169cf558d
 
 License
 ============
