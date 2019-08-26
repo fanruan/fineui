@@ -89542,10 +89542,6 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
- *
- * Created by GUY on 2015/10/29.
- * @class BI.ValueChooserInsertCombo
- * @extends BI.Widget
  */
 BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
 
