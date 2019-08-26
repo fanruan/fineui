@@ -37258,7 +37258,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -37437,16 +37437,17 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, {
-            width: 24,
+            width: 16,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
+            items: items,
+            rgap: 5
         }))));
     },
 
@@ -37675,7 +37676,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 24,
+                width: 15,
                 height: o.height
             });
         });
@@ -37683,7 +37684,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 24),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -63039,6 +63040,10 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
+    },
+
+    getAllLeaves: function () {
+        return this.expander.getAllLeaves();
     },
 
     setValue: function (v) {
