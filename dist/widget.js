@@ -18153,6 +18153,10 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
         });
     },
 
+    getAllLeaves: function () {
+        return this.expander.getAllLeaves();
+    },
+
     setValue: function (v) {
         if (BI.contains(v, this.trigger.getValue())) {
             this.trigger.setSelected(true);
