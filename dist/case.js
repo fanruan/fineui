@@ -399,7 +399,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass.doClick.apply(this, arguments);
         this.radio.setSelected(this.isSelected());
         if (this.isValid()) {
-            this.fireEvent(BI.SingleSelectItem.EVENT_CHANGE, this.isSelected(), this);
+            this.fireEvent(BI.SingleSelectRadioItem.EVENT_CHANGE, this.isSelected(), this);
         }
     },
 
@@ -410,7 +410,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
     }
 });
 
-BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
+BI.SingleSelectRadioItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);/**
  * Created by roy on 15/10/16.
  */
@@ -456,7 +456,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -635,16 +635,17 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, {
-            width: 24,
+            width: 16,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
+            items: items,
+            rgap: 5
         }))));
     },
 
@@ -873,7 +874,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 24,
+                width: 15,
                 height: o.height
             });
         });
@@ -881,7 +882,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 24),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -7999,7 +8000,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-prev" + pagerIconCls.preCls
+                cls: "bi-border bi-border-radius all-pager-prev bi-list-item-select2 " + pagerIconCls.preCls
             },
             next: {
                 type: "bi.icon_button",
@@ -8008,7 +8009,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border all-pager-next" + pagerIconCls.nextCls
+                cls: "bi-border bi-border-radius all-pager-next bi-list-item-select2 " + pagerIconCls.nextCls
             },
 
             hasPrev: o.hasPrev,
@@ -8080,14 +8081,14 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         switch (o.pagerDirection) {
             case "horizontal":
                 return {
-                    preCls: " row-pre-page-h-font ",
-                    nextCls: " row-next-page-h-font "
+                    preCls: "row-pre-page-h-font ",
+                    nextCls: "row-next-page-h-font "
                 };
             case "vertical":
             default:
                 return {
-                    preCls: " column-pre-page-h-font ",
-                    nextCls: " column-next-page-h-font "
+                    preCls: "column-pre-page-h-font ",
+                    nextCls: "column-next-page-h-font "
                 };
         }
     },
@@ -8236,7 +8237,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev column-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font"
             },
             next: {
                 type: "bi.icon_button",
@@ -8245,7 +8246,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next column-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font"
             },
 
             hasPrev: v.hasPrev,
@@ -9453,7 +9454,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-icon-trigger",
+            baseCls: "bi-icon-trigger",
+            extraCls: "pull-down-font",
             el: {},
             height: 24
         });
@@ -9465,7 +9467,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
             type: "bi.trigger_icon_button",
             element: this,
             width: o.width,
-            height: o.height
+            height: o.height,
+            extraCls: o.extraCls
         });
     }
 });

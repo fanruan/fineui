@@ -8,14 +8,7 @@ For more details, see the website [http://www.fanruan.com](http://www.fanruan.co
 Documentation
 =============
 
-### 教程
-
-http://fanruan.design/fineui-doc/index.html
-
-### Demo
-
-在线Demo地址: [http://fanruan.design/fineui-demo/index.html](http://fanruan.design/fineui-demo/index.html)
-
+http://fanruan.design/doc.html?post=0169cf558d
 
 License
 ============

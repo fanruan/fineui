@@ -1,3 +1,51 @@
+/** 循环旋转动画 **/
+.anim-rotate {
+  -webkit-animation: rotate 1s infinite linear both;
+  -moz-animation: rotate 1s infinite linear both;
+  -ms-animation: rotate 1s infinite linear both;
+  -o-animation: rotate 1s infinite linear both;
+  animation: rotate 1s infinite linear both;
+}
+@-webkit-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 input,
 textarea {
   border: 1px solid #e8eaed;
@@ -395,8 +443,8 @@ textarea {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80232e40,endColorstr=#80232e40);
 }
 .bi-theme-dark .bi-z-index-mask {
-  background-color: rgba(25, 27, 43, 0.8);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#cc191b2b,endColorstr=#cc191b2b);
+  background-color: rgba(96, 100, 121, 0.5);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#80606479,endColorstr=#80606479);
 }
 .bi-list-item:hover,
 .bi-list-item.hover {

@@ -444,7 +444,6 @@ BI.Single = BI.inherit(BI.Widget, {
                     }
                 }, 500);
 
-
             });
             this.element.on("mouseleave.title" + this.getName(), function (e) {
                 self._e = null;

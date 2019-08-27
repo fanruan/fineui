@@ -40,7 +40,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 24,
+                width: 15,
                 height: o.height
             });
         });
@@ -48,7 +48,7 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 24),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
