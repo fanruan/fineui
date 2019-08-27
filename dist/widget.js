@@ -15599,11 +15599,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
-            this.setValue(BI.parseFloat(this.getValue()));
+            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -21176,7 +21175,7 @@ BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);/**
  * normal single slider
  * Created by Young on 2017/6/21.
  */
-BI.SingleSliderNormal = BI.inherit(BI.Widget, {
+BI.SingleSliderNormal = BI.inherit(BI.Single, {
 
     _constant: {
         HEIGHT: 28,
