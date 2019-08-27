@@ -20532,7 +20532,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);/**
  * Created by zcf on 2016/9/22.
  */
-BI.SingleSlider = BI.inherit(BI.Widget, {
+BI.SingleSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 30,
@@ -20866,7 +20866,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);/**
  * Created by Urthur on 2017/9/12.
  */
-BI.SingleSliderLabel = BI.inherit(BI.Widget, {
+BI.SingleSliderLabel = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 20,
