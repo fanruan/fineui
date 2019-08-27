@@ -2,7 +2,7 @@
  * normal single slider
  * Created by Young on 2017/6/21.
  */
-BI.SingleSliderNormal = BI.inherit(BI.Widget, {
+BI.SingleSliderNormal = BI.inherit(BI.Single, {
 
     _constant: {
         HEIGHT: 28,

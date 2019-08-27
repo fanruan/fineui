@@ -77539,11 +77539,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
-            this.setValue(BI.parseFloat(this.getValue()));
+            o.value = BI.parseFloat(this.getValue());
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -82473,7 +82472,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);/**
  * Created by zcf on 2016/9/22.
  */
-BI.SingleSlider = BI.inherit(BI.Widget, {
+BI.SingleSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 30,
@@ -82807,7 +82806,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);/**
  * Created by Urthur on 2017/9/12.
  */
-BI.SingleSliderLabel = BI.inherit(BI.Widget, {
+BI.SingleSliderLabel = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 20,
@@ -83116,7 +83115,7 @@ BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);/**
  * normal single slider
  * Created by Young on 2017/6/21.
  */
-BI.SingleSliderNormal = BI.inherit(BI.Widget, {
+BI.SingleSliderNormal = BI.inherit(BI.Single, {
 
     _constant: {
         HEIGHT: 28,

@@ -1,7 +1,7 @@
 /**
  * Created by zcf on 2016/9/22.
  */
-BI.SingleSlider = BI.inherit(BI.Widget, {
+BI.SingleSlider = BI.inherit(BI.Single, {
     _constant: {
         EDITOR_WIDTH: 90,
         EDITOR_HEIGHT: 30,
