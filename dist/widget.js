@@ -1699,7 +1699,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
-                extraCls: o.iconCls ? o.iconCls : "",
+                extraCls: o.iconCls,
                 width: o.width,
                 height: o.height
             }),
@@ -6653,7 +6653,9 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false,
+            allowInsertValue: false
         });
     },
 
@@ -6733,6 +6735,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
+                allowInsertValue: o.allowInsertValue,
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-select-tree-trigger",
                 ref: function (_ref) {
@@ -6769,6 +6773,13 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING,
                     action: function () {
                         self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM,
+                    action: function () {
+                        var value = self.trigger.getSearcher().getKeyword();
+                        self.combo.setValue(value);
+                        self.combo.hideView();
                     }
                 }]
             },
@@ -6822,6 +6833,97 @@ BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
+ * Created by GUY on 2016/1/26.
+ *
+ * @class BI.MultiLayerSelectTreeInsertSearchPane
+ * @extends BI.Pane
+ */
+
+BI.MultiLayerSelectTreeInsertSearchPane = BI.inherit(BI.Widget, {
+
+    props: function() {
+        return {
+            baseCls: "bi-multilayer-select-tree-popup",
+            tipText: BI.i18nText("BI-No_Selected_Item"),
+            isDefaultInit: false,
+            itemsCreator: BI.emptyFn,
+            items: [],
+            value: ""
+        };
+    },
+
+    render: function() {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget({
+            type: "bi.multilayer_select_level_tree",
+            isDefaultInit: o.isDefaultInit,
+            items: o.items,
+            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    callback(res);
+                    self.setKeyword(o.keywordGetter());
+                });
+            },
+            keywordGetter: o.keywordGetter,
+            value: o.value,
+            scrollable: null,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.MultiLayerSelectLevelTree.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE);
+                }
+            }]
+        });
+        return {
+            type: "bi.vertical",
+            scrolly: false,
+            scrollable: true,
+            vgap: 5,
+            items: [{
+                type: "bi.text_button",
+                invisible: true,
+                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                height: 24,
+                cls: "bi-high-light",
+                hgap: 5,
+                ref: function (_ref) {
+                    self.addNotMatchTip = _ref;
+                },
+                handler: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
+                }
+            }, this.tree]
+        };
+    },
+
+    setKeyword: function (keyword) {
+        var showTip = BI.isEmptyArray(this.tree.getAllLeaves());
+        this.addNotMatchTip.setVisible(showTip);
+        showTip && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    getValue: function () {
+        return this.tree.getValue();
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        this.tree.setValue(v);
+    },
+
+    populate: function (items) {
+        this.tree.populate(items);
+    }
+});
+
+BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
@@ -7090,7 +7192,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+            this.tree.initTree(BI.Tree.treeFormat(o.items));
         }
         var content = {
             type: "bi.htape",
@@ -7131,22 +7233,31 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_select_tree_popup",
-                            itemsCreator: function (op, callback) {
+                            type: o.allowInsertValue ? "bi.multilayer_select_tree_insert_search_pane" : "bi.multilayer_select_tree_popup",
+                            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
                             },
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
-                                var finding = BI.Func.getSearchResult(o.items, keyword);
-                                var matched = finding.match, find = finding.find;
-                                callback(self._fillTreeStructure4Search(find.concat(matched)));
+                                callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -7188,32 +7299,70 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _getSearchItems: function(keyword) {
+        var o = this.options;
+        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var textItems = findingText.find.concat(findingText.match);
+        var valueItems = findingValue.find.concat(findingValue.match);
+        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+    },
+
+    _createJson: function(node, open) {
+        return {
+            id: node.id,
+            pId: node.pId,
+            text: node.text,
+            value: node.value,
+            isParent: BI.isNotEmptyArray(node.children),
+            open: open
+        }
+    },
+
+    _getChildren: function(node) {
+        var self = this;
+        node.children = node.children || [];
+        var nodes = [];
+        BI.each(node.children, function (idx, child) {
+            var children = self._getChildren(child);
+            nodes = nodes.concat(children);
+        });
+        return node.children.concat(nodes);
+    },
+
     // 将搜索到的节点进行补充，构造成一棵完整的树
     _fillTreeStructure4Search: function (leaves) {
-        var result = BI.map(leaves, "id");
-        var queue = leaves.reverse() || [];
+        var self = this;
+        var result = [];
+        var queue = [];
+        BI.each(leaves, function (idx, node) {
+            queue.push({pId: node.pId});
+            result.push(node);
+            result = result.concat(self._getChildren(node));
+        });
         while (BI.isNotEmptyArray(queue)) {
             var node = queue.pop();
             var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
             if (pNode != null) {
-                queue.push(pNode);
-                result.push(pNode.id);
+                pNode.open = true;
+                queue.push({pId: pNode.pId});
+                result.push(pNode);
             }
         }
-        var nodes = [];
-        BI.each(this.options.items, function (idx, item) {
-            if(BI.contains(result, item.id)) {
-                nodes.push(BI.extend({}, item, {
-                    open: true
-                }))
-            }
-        });
-        return nodes;
+        return BI.uniqBy(BI.map(result, function (idx, node) {
+            return self._createJson(node, node.open);
+        }), "id");
     },
 
     _digest: function (v) {
         var o = this.options;
-        return o.valueFormatter(v) || o.text;
+        if(o.itemsCreator === BI.emptyFn) {
+            var result = BI.find(o.items, function (i, item) {
+                return item.value === v;
+            });
+            return BI.isNotNull(result) ? result.text : o.text;
+        }
+        return o.valueFormatter(v);
     },
 
     stopEditing: function () {
@@ -7243,6 +7392,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);/**
  * 加号表示的组节点
  *
@@ -7668,7 +7818,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false,
+            allowInsertValue: false
         });
     },
 
@@ -7748,6 +7900,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                allowInsertValue: o.allowInsertValue,
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-single-tree-trigger",
                 ref: function (_ref) {
@@ -7784,6 +7938,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
                     action: function () {
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM,
+                    action: function () {
+                        var value = self.trigger.getSearcher().getKeyword();
+                        self.combo.setValue(value);
+                        self.combo.hideView();
                     }
                 }]
             },
@@ -7837,6 +7998,97 @@ BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
+ * Created by GUY on 2016/1/26.
+ *
+ * @class BI.MultiLayerSingleTreeInsertSearchPane
+ * @extends BI.Pane
+ */
+
+BI.MultiLayerSingleTreeInsertSearchPane = BI.inherit(BI.Widget, {
+
+    props: function() {
+        return {
+            baseCls: "bi-multilayer-single-tree-popup",
+            tipText: BI.i18nText("BI-No_Selected_Item"),
+            isDefaultInit: false,
+            itemsCreator: BI.emptyFn,
+            items: [],
+            value: ""
+        };
+    },
+
+    render: function() {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget({
+            type: "bi.multilayer_select_level_tree",
+            isDefaultInit: o.isDefaultInit,
+            items: o.items,
+            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    callback(res);
+                    self.setKeyword(o.keywordGetter());
+                });
+            },
+            keywordGetter: o.keywordGetter,
+            value: o.value,
+            scrollable: null,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.MultiLayerSelectLevelTree.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE);
+                }
+            }]
+        });
+        return {
+            type: "bi.vertical",
+            scrolly: false,
+            scrollable: true,
+            vgap: 5,
+            items: [{
+                type: "bi.text_button",
+                invisible: true,
+                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                height: 24,
+                cls: "bi-high-light",
+                hgap: 5,
+                ref: function (_ref) {
+                    self.addNotMatchTip = _ref;
+                },
+                handler: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
+                }
+            }, this.tree]
+        };
+    },
+
+    setKeyword: function (keyword) {
+        var showTip = BI.isEmptyArray(this.tree.getAllLeaves());
+        this.addNotMatchTip.setVisible(showTip);
+        showTip && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    getValue: function () {
+        return this.tree.getValue();
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        this.tree.setValue(v);
+    },
+
+    populate: function (items) {
+        this.tree.populate(items);
+    }
+});
+
+BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSingleLevelTree
@@ -8096,7 +8348,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 return v;
             },
             itemsCreator: BI.emptyFn,
-            watermark: BI.i18nText("BI-Basic_Search")
+            watermark: BI.i18nText("BI-Basic_Search"),
+            allowSearchValue: false
         };
     },
 
@@ -8104,7 +8357,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+            this.tree.initTree(BI.Tree.treeFormat(o.items));
         }
         var content = {
             type: "bi.htape",
@@ -8145,7 +8398,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_single_tree_popup",
+                            type: o.allowInsertValue ? "bi.multilayer_single_tree_insert_search_pane" : "bi.multilayer_single_tree_popup",
                             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
@@ -8153,14 +8406,23 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
-                                var finding = BI.Func.getSearchResult(o.items, keyword);
-                                var matched = finding.match, find = finding.find;
-                                callback(self._fillTreeStructure4Search(find.concat(matched)));
+                                callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -8202,27 +8464,59 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _getSearchItems: function(keyword) {
+        var o = this.options;
+        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var textItems = findingText.find.concat(findingText.match);
+        var valueItems = findingValue.find.concat(findingValue.match);
+        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+    },
+
+    _createJson: function(node, open) {
+        return {
+            id: node.id,
+            pId: node.pId,
+            text: node.text,
+            value: node.value,
+            isParent: BI.isNotEmptyArray(node.children),
+            open: open
+        }
+    },
+
+    _getChildren: function(node) {
+        var self = this;
+        node.children = node.children || [];
+        var nodes = [];
+        BI.each(node.children, function (idx, child) {
+            var children = self._getChildren(child);
+            nodes = nodes.concat(children);
+        });
+        return node.children.concat(nodes);
+    },
+
     // 将搜索到的节点进行补充，构造成一棵完整的树
     _fillTreeStructure4Search: function (leaves) {
-        var result = BI.map(leaves, "id");
-        var queue = leaves.reverse() || [];
+        var self = this;
+        var result = [];
+        var queue = [];
+        BI.each(leaves, function (idx, node) {
+            queue.push({pId: node.pId});
+            result.push(node);
+            result = result.concat(self._getChildren(node));
+        });
         while (BI.isNotEmptyArray(queue)) {
             var node = queue.pop();
             var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
             if (pNode != null) {
-                queue.push(pNode);
-                result.push(pNode.id);
+                pNode.open = true;
+                queue.push({pId: pNode.pId});
+                result.push(pNode);
             }
         }
-        var nodes = [];
-        BI.each(this.options.items, function (idx, item) {
-            if(BI.contains(result, item.id)) {
-               nodes.push(BI.extend({}, item, {
-                   open: true
-               }))
-            }
-        });
-        return nodes;
+        return BI.uniqBy(BI.map(result, function (idx, node) {
+            return self._createJson(node, node.open);
+        }), "id");
     },
 
     _digest: function (v) {
@@ -8263,6 +8557,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSingleTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);/**
  * 加号表示的组节点
  *
@@ -13841,7 +14136,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
@@ -14144,7 +14439,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
@@ -14460,7 +14755,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
@@ -17856,6 +18151,10 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
+    },
+
+    getAllLeaves: function () {
+        return this.expander.getAllLeaves();
     },
 
     setValue: function (v) {
@@ -25891,11 +26190,17 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _isMatch: function (parentValues, value, keyword) {
+        var o = this.options;
         var node = this._getTreeNode(parentValues, value);
         if (!node) {
             return false;
         }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+        if(o.allowSearchValue && node.value) {
+            var valueFind = BI.Func.getSearchResult([node.value], keyword);
+            return valueFind.find.length > 0 || valueFind.match.length > 0 ||
+                find.find.length > 0 || find.match.length > 0;
+        }
         return find.find.length > 0 || find.match.length > 0;
     },
 
@@ -26646,6 +26951,96 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
     }
 });/**
+ * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 封装了字段处理逻辑
+ */
+BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ValueChooserInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-value-chooser-insert-combo",
+            width: 200,
+            height: 24,
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.ValueChooserInsertCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+        this.combo = BI.createWidget({
+            type: "bi.multi_select_insert_combo",
+            element: this,
+            text: o.text,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
+        });
+    },
+
+    setValue: function (v) {
+        this.combo.setValue(v);
+    },
+
+    getValue: function () {
+        var val = this.combo.getValue() || {};
+        return {
+            type: val.type,
+            value: val.value
+        };
+    },
+
+    populate: function (items) {
+        // 直接用combo的populate不会作用到AbstractValueChooser上
+        this.items = items;
+        this.combo.populate.apply(this, arguments);
+    }
+});
+
+BI.ValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *

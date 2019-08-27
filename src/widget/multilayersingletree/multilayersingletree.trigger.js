@@ -11,7 +11,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 return v;
             },
             itemsCreator: BI.emptyFn,
-            watermark: BI.i18nText("BI-Basic_Search")
+            watermark: BI.i18nText("BI-Basic_Search"),
+            allowSearchValue: false
         };
     },
 
@@ -19,7 +20,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+            this.tree.initTree(BI.Tree.treeFormat(o.items));
         }
         var content = {
             type: "bi.htape",
@@ -60,7 +61,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_single_tree_popup",
+                            type: o.allowInsertValue ? "bi.multilayer_single_tree_insert_search_pane" : "bi.multilayer_single_tree_popup",
                             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
@@ -68,14 +69,23 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
-                                var finding = BI.Func.getSearchResult(o.items, keyword);
-                                var matched = finding.match, find = finding.find;
-                                callback(self._fillTreeStructure4Search(find.concat(matched)));
+                                callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -117,27 +127,59 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _getSearchItems: function(keyword) {
+        var o = this.options;
+        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var textItems = findingText.find.concat(findingText.match);
+        var valueItems = findingValue.find.concat(findingValue.match);
+        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+    },
+
+    _createJson: function(node, open) {
+        return {
+            id: node.id,
+            pId: node.pId,
+            text: node.text,
+            value: node.value,
+            isParent: BI.isNotEmptyArray(node.children),
+            open: open
+        }
+    },
+
+    _getChildren: function(node) {
+        var self = this;
+        node.children = node.children || [];
+        var nodes = [];
+        BI.each(node.children, function (idx, child) {
+            var children = self._getChildren(child);
+            nodes = nodes.concat(children);
+        });
+        return node.children.concat(nodes);
+    },
+
     // 将搜索到的节点进行补充，构造成一棵完整的树
     _fillTreeStructure4Search: function (leaves) {
-        var result = BI.map(leaves, "id");
-        var queue = leaves.reverse() || [];
+        var self = this;
+        var result = [];
+        var queue = [];
+        BI.each(leaves, function (idx, node) {
+            queue.push({pId: node.pId});
+            result.push(node);
+            result = result.concat(self._getChildren(node));
+        });
         while (BI.isNotEmptyArray(queue)) {
             var node = queue.pop();
             var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
             if (pNode != null) {
-                queue.push(pNode);
-                result.push(pNode.id);
+                pNode.open = true;
+                queue.push({pId: pNode.pId});
+                result.push(pNode);
             }
         }
-        var nodes = [];
-        BI.each(this.options.items, function (idx, item) {
-            if(BI.contains(result, item.id)) {
-               nodes.push(BI.extend({}, item, {
-                   open: true
-               }))
-            }
-        });
-        return nodes;
+        return BI.uniqBy(BI.map(result, function (idx, node) {
+            return self._createJson(node, node.open);
+        }), "id");
     },
 
     _digest: function (v) {
@@ -178,4 +220,5 @@ BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSingleTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);

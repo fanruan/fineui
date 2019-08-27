@@ -22,7 +22,7 @@ if(_global.BI.prepares == null) {
 }/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy"`
+ * Build: `lodash core plus="debounce,throttle,get,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy,uniqBy"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -215,34 +215,34 @@ if(_global.BI.prepares == null) {
   /** Used to identify `toStringTag` values of typed arrays. */
   var typedArrayTags = {};
   typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
-      typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
-          typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
-              typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
-                  typedArrayTags[uint32Tag] = true;
+  typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+  typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+  typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+  typedArrayTags[uint32Tag] = true;
   typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
-      typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
-          typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
-              typedArrayTags[errorTag] = typedArrayTags[funcTag] =
-                  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
-                      typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
-                          typedArrayTags[setTag] = typedArrayTags[stringTag] =
-                              typedArrayTags[weakMapTag] = false;
+  typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+  typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+  typedArrayTags[errorTag] = typedArrayTags[funcTag] =
+  typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+  typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+  typedArrayTags[setTag] = typedArrayTags[stringTag] =
+  typedArrayTags[weakMapTag] = false;
 
   /** Used to identify `toStringTag` values supported by `_.clone`. */
   var cloneableTags = {};
   cloneableTags[argsTag] = cloneableTags[arrayTag] =
-      cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
-          cloneableTags[boolTag] = cloneableTags[dateTag] =
-              cloneableTags[float32Tag] = cloneableTags[float64Tag] =
-                  cloneableTags[int8Tag] = cloneableTags[int16Tag] =
-                      cloneableTags[int32Tag] = cloneableTags[mapTag] =
-                          cloneableTags[numberTag] = cloneableTags[objectTag] =
-                              cloneableTags[regexpTag] = cloneableTags[setTag] =
-                                  cloneableTags[stringTag] = cloneableTags[symbolTag] =
-                                      cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
-                                          cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+  cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+  cloneableTags[boolTag] = cloneableTags[dateTag] =
+  cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+  cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+  cloneableTags[int32Tag] = cloneableTags[mapTag] =
+  cloneableTags[numberTag] = cloneableTags[objectTag] =
+  cloneableTags[regexpTag] = cloneableTags[setTag] =
+  cloneableTags[stringTag] = cloneableTags[symbolTag] =
+  cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+  cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
   cloneableTags[errorTag] = cloneableTags[funcTag] =
-      cloneableTags[weakMapTag] = false;
+  cloneableTags[weakMapTag] = false;
 
   /** Used to map characters to HTML entities. */
   var htmlEscapes = {
@@ -599,8 +599,8 @@ if(_global.BI.prepares == null) {
    */
   function baseIndexOf(array, value, fromIndex) {
     return value === value
-        ? strictIndexOf(array, value, fromIndex)
-        : baseFindIndex(array, baseIsNaN, fromIndex);
+      ? strictIndexOf(array, value, fromIndex)
+      : baseFindIndex(array, baseIsNaN, fromIndex);
   }
 
   /**
@@ -656,8 +656,8 @@ if(_global.BI.prepares == null) {
   function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
     eachFunc(collection, function(value, index, collection) {
       accumulator = initAccum
-          ? (initAccum = false, value)
-          : iteratee(accumulator, value, index, collection);
+        ? (initAccum = false, value)
+        : iteratee(accumulator, value, index, collection);
     });
     return accumulator;
   }
@@ -910,8 +910,8 @@ if(_global.BI.prepares == null) {
    */
   function safeGet(object, key) {
     return key == '__proto__'
-        ? undefined
-        : object[key];
+      ? undefined
+      : object[key];
   }
 
   /**
@@ -962,8 +962,8 @@ if(_global.BI.prepares == null) {
    */
   function stringSize(string) {
     return hasUnicode(string)
-        ? unicodeSize(string)
-        : asciiSize(string);
+      ? unicodeSize(string)
+      : asciiSize(string);
   }
 
   /**
@@ -975,8 +975,8 @@ if(_global.BI.prepares == null) {
    */
   function stringToArray(string) {
     return hasUnicode(string)
-        ? unicodeToArray(string)
-        : asciiToArray(string);
+      ? unicodeToArray(string)
+      : asciiToArray(string);
   }
 
   /**
@@ -1045,8 +1045,8 @@ if(_global.BI.prepares == null) {
 
   /** Used to detect if a method is native. */
   var reIsNative = RegExp('^' +
-      funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
-          .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+    funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
+    .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
   );
 
   /** Built-in value references. */
@@ -1383,30 +1383,30 @@ if(_global.BI.prepares == null) {
     var result = [];
 
     outer:
-        while (length-- && resIndex < takeCount) {
-          index += dir;
+    while (length-- && resIndex < takeCount) {
+      index += dir;
 
-          var iterIndex = -1,
-              value = array[index];
+      var iterIndex = -1,
+          value = array[index];
 
-          while (++iterIndex < iterLength) {
-            var data = iteratees[iterIndex],
-                iteratee = data.iteratee,
-                type = data.type,
-                computed = iteratee(value);
+      while (++iterIndex < iterLength) {
+        var data = iteratees[iterIndex],
+            iteratee = data.iteratee,
+            type = data.type,
+            computed = iteratee(value);
 
-            if (type == LAZY_MAP_FLAG) {
-              value = computed;
-            } else if (!computed) {
-              if (type == LAZY_FILTER_FLAG) {
-                continue outer;
-              } else {
-                break outer;
-              }
-            }
+        if (type == LAZY_MAP_FLAG) {
+          value = computed;
+        } else if (!computed) {
+          if (type == LAZY_FILTER_FLAG) {
+            continue outer;
+          } else {
+            break outer;
           }
-          result[resIndex++] = value;
         }
+      }
+      result[resIndex++] = value;
+    }
     return result;
   }
 
@@ -1914,14 +1914,14 @@ if(_global.BI.prepares == null) {
     for (var key in value) {
       if ((inherited || hasOwnProperty.call(value, key)) &&
           !(skipIndexes && (
-              // Safari 9 has enumerable `arguments.length` in strict mode.
-              key == 'length' ||
-              // Node.js 0.10 has enumerable non-index properties on buffers.
-              (isBuff && (key == 'offset' || key == 'parent')) ||
-              // PhantomJS 2 has enumerable non-index properties on typed arrays.
-              (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
-              // Skip index properties.
-              isIndex(key, length)
+             // Safari 9 has enumerable `arguments.length` in strict mode.
+             key == 'length' ||
+             // Node.js 0.10 has enumerable non-index properties on buffers.
+             (isBuff && (key == 'offset' || key == 'parent')) ||
+             // PhantomJS 2 has enumerable non-index properties on typed arrays.
+             (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+             // Skip index properties.
+             isIndex(key, length)
           ))) {
         result.push(key);
       }
@@ -2136,8 +2136,8 @@ if(_global.BI.prepares == null) {
         result = (isFlat || isFunc) ? {} : initCloneObject(value);
         if (!isDeep) {
           return isFlat
-              ? copySymbolsIn(value, baseAssignIn(result, value))
-              : copySymbols(value, baseAssign(result, value));
+            ? copySymbolsIn(value, baseAssignIn(result, value))
+            : copySymbols(value, baseAssign(result, value));
         }
       } else {
         if (!cloneableTags[tag]) {
@@ -2171,8 +2171,8 @@ if(_global.BI.prepares == null) {
     }
 
     var keysFunc = isFull
-        ? (isFlat ? getAllKeysIn : getAllKeys)
-        : (isFlat ? keysIn : keys);
+      ? (isFlat ? getAllKeysIn : getAllKeys)
+      : (isFlat ? keysIn : keys);
 
     var props = isArr ? undefined : keysFunc(value);
     arrayEach(props || value, function(subValue, key) {
@@ -2238,24 +2238,24 @@ if(_global.BI.prepares == null) {
       values = new SetCache(values);
     }
     outer:
-        while (++index < length) {
-          var value = array[index],
-              computed = iteratee == null ? value : iteratee(value);
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee == null ? value : iteratee(value);
 
-          value = (comparator || value !== 0) ? value : 0;
-          if (isCommon && computed === computed) {
-            var valuesIndex = valuesLength;
-            while (valuesIndex--) {
-              if (values[valuesIndex] === computed) {
-                continue outer;
-              }
-            }
-            result.push(value);
-          }
-          else if (!includes(values, computed, comparator)) {
-            result.push(value);
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var valuesIndex = valuesLength;
+        while (valuesIndex--) {
+          if (values[valuesIndex] === computed) {
+            continue outer;
           }
         }
+        result.push(value);
+      }
+      else if (!includes(values, computed, comparator)) {
+        result.push(value);
+      }
+    }
     return result;
   }
 
@@ -2306,9 +2306,9 @@ if(_global.BI.prepares == null) {
           current = iteratee(value);
 
       if (current != null && (computed === undefined
-              ? (current === current && !isSymbol(current))
-              : comparator(current, computed)
-      )) {
+            ? (current === current && !isSymbol(current))
+            : comparator(current, computed)
+          )) {
         var computed = current,
             result = value;
       }
@@ -2480,8 +2480,8 @@ if(_global.BI.prepares == null) {
       return value === undefined ? undefinedTag : nullTag;
     }
     return (symToStringTag && symToStringTag in Object(value))
-        ? getRawTag(value)
-        : objectToString(value);
+      ? getRawTag(value)
+      : objectToString(value);
   }
 
   /**
@@ -2547,8 +2547,8 @@ if(_global.BI.prepares == null) {
       }
       maxLength = nativeMin(array.length, maxLength);
       caches[othIndex] = !comparator && (iteratee || (length >= 120 && array.length >= 120))
-          ? new SetCache(othIndex && array)
-          : undefined;
+        ? new SetCache(othIndex && array)
+        : undefined;
     }
     array = arrays[0];
 
@@ -2556,31 +2556,31 @@ if(_global.BI.prepares == null) {
         seen = caches[0];
 
     outer:
-        while (++index < length && result.length < maxLength) {
-          var value = array[index],
-              computed = iteratee ? iteratee(value) : value;
+    while (++index < length && result.length < maxLength) {
+      var value = array[index],
+          computed = iteratee ? iteratee(value) : value;
 
-          value = (comparator || value !== 0) ? value : 0;
-          if (!(seen
-                  ? cacheHas(seen, computed)
-                  : includes(result, computed, comparator)
+      value = (comparator || value !== 0) ? value : 0;
+      if (!(seen
+            ? cacheHas(seen, computed)
+            : includes(result, computed, comparator)
           )) {
-            othIndex = othLength;
-            while (--othIndex) {
-              var cache = caches[othIndex];
-              if (!(cache
-                  ? cacheHas(cache, computed)
-                  : includes(arrays[othIndex], computed, comparator))
+        othIndex = othLength;
+        while (--othIndex) {
+          var cache = caches[othIndex];
+          if (!(cache
+                ? cacheHas(cache, computed)
+                : includes(arrays[othIndex], computed, comparator))
               ) {
-                continue outer;
-              }
-            }
-            if (seen) {
-              seen.push(computed);
-            }
-            result.push(value);
+            continue outer;
           }
         }
+        if (seen) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
     return result;
   }
 
@@ -2702,8 +2702,8 @@ if(_global.BI.prepares == null) {
     if (isSameTag && !objIsObj) {
       stack || (stack = new Stack);
       return (objIsArr || isTypedArray(object))
-          ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
-          : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+        ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+        : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
     }
     if (!(bitmask & COMPARE_PARTIAL_FLAG)) {
       var objIsWrapped = objIsObj && hasOwnProperty.call(object, '__wrapped__'),
@@ -2757,9 +2757,9 @@ if(_global.BI.prepares == null) {
     while (index--) {
       var data = matchData[index];
       if ((noCustomizer && data[2])
-          ? data[1] !== object[data[0]]
-          : !(data[0] in object)
-      ) {
+            ? data[1] !== object[data[0]]
+            : !(data[0] in object)
+          ) {
         return false;
       }
     }
@@ -2779,9 +2779,9 @@ if(_global.BI.prepares == null) {
           var result = customizer(objValue, srcValue, key, object, source, stack);
         }
         if (!(result === undefined
-                ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack)
-                : result
-        )) {
+              ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG, customizer, stack)
+              : result
+            )) {
           return false;
         }
       }
@@ -2836,7 +2836,7 @@ if(_global.BI.prepares == null) {
    */
   function baseIsTypedArray(value) {
     return isObjectLike(value) &&
-        isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+      isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
   }
 
   /**
@@ -2857,8 +2857,8 @@ if(_global.BI.prepares == null) {
     }
     if (typeof value == 'object') {
       return isArray(value)
-          ? baseMatchesProperty(value[0], value[1])
-          : baseMatches(value);
+        ? baseMatchesProperty(value[0], value[1])
+        : baseMatches(value);
     }
     return property(value);
   }
@@ -2968,8 +2968,8 @@ if(_global.BI.prepares == null) {
     return function(object) {
       var objValue = get(object, path);
       return (objValue === undefined && objValue === srcValue)
-          ? hasIn(object, path)
-          : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+        ? hasIn(object, path)
+        : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
     };
   }
 
@@ -2995,8 +2995,8 @@ if(_global.BI.prepares == null) {
       }
       else {
         var newValue = customizer
-            ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
-            : undefined;
+          ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
+          : undefined;
 
         if (newValue === undefined) {
           newValue = srcValue;
@@ -3031,8 +3031,8 @@ if(_global.BI.prepares == null) {
       return;
     }
     var newValue = customizer
-        ? customizer(objValue, srcValue, (key + ''), object, source, stack)
-        : undefined;
+      ? customizer(objValue, srcValue, (key + ''), object, source, stack)
+      : undefined;
 
     var isCommon = newValue === undefined;
 
@@ -3239,8 +3239,8 @@ if(_global.BI.prepares == null) {
         newValue = customizer ? customizer(objValue, key, nested) : undefined;
         if (newValue === undefined) {
           newValue = isObject(objValue)
-              ? objValue
-              : (isIndex(path[index + 1]) ? [] : {});
+            ? objValue
+            : (isIndex(path[index + 1]) ? [] : {});
         }
       }
       assignValue(nested, key, newValue);
@@ -3386,30 +3386,30 @@ if(_global.BI.prepares == null) {
       seen = iteratee ? [] : result;
     }
     outer:
-        while (++index < length) {
-          var value = array[index],
-              computed = iteratee ? iteratee(value) : value;
+    while (++index < length) {
+      var value = array[index],
+          computed = iteratee ? iteratee(value) : value;
 
-          value = (comparator || value !== 0) ? value : 0;
-          if (isCommon && computed === computed) {
-            var seenIndex = seen.length;
-            while (seenIndex--) {
-              if (seen[seenIndex] === computed) {
-                continue outer;
-              }
-            }
-            if (iteratee) {
-              seen.push(computed);
-            }
-            result.push(value);
-          }
-          else if (!includes(seen, computed, comparator)) {
-            if (seen !== result) {
-              seen.push(computed);
-            }
-            result.push(value);
+      value = (comparator || value !== 0) ? value : 0;
+      if (isCommon && computed === computed) {
+        var seenIndex = seen.length;
+        while (seenIndex--) {
+          if (seen[seenIndex] === computed) {
+            continue outer;
           }
         }
+        if (iteratee) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+      else if (!includes(seen, computed, comparator)) {
+        if (seen !== result) {
+          seen.push(computed);
+        }
+        result.push(value);
+      }
+    }
     return result;
   }
 
@@ -3783,8 +3783,8 @@ if(_global.BI.prepares == null) {
       var key = props[index];
 
       var newValue = customizer
-          ? customizer(object[key], source[key], key, object, source)
-          : undefined;
+        ? customizer(object[key], source[key], key, object, source)
+        : undefined;
 
       if (newValue === undefined) {
         newValue = source[key];
@@ -3854,8 +3854,8 @@ if(_global.BI.prepares == null) {
           guard = length > 2 ? sources[2] : undefined;
 
       customizer = (assigner.length > 3 && typeof customizer == 'function')
-          ? (length--, customizer)
-          : undefined;
+        ? (length--, customizer)
+        : undefined;
 
       if (guard && isIterateeCall(sources[0], sources[1], guard)) {
         customizer = length < 3 ? undefined : customizer;
@@ -4001,14 +4001,14 @@ if(_global.BI.prepares == null) {
         args[index] = arguments[index];
       }
       var holders = (length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder)
-          ? []
-          : replaceHolders(args, placeholder);
+        ? []
+        : replaceHolders(args, placeholder);
 
       length -= holders.length;
       if (length < arity) {
         return createRecurry(
-            func, bitmask, createHybrid, wrapper.placeholder, undefined,
-            args, holders, undefined, undefined, arity - length);
+          func, bitmask, createHybrid, wrapper.placeholder, undefined,
+          args, holders, undefined, undefined, arity - length);
       }
       var fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
       return apply(fn, this, args);
@@ -4085,8 +4085,8 @@ if(_global.BI.prepares == null) {
       if (isCurried && length < arity) {
         var newHolders = replaceHolders(args, placeholder);
         return createRecurry(
-            func, bitmask, createHybrid, wrapper.placeholder, thisArg,
-            args, newHolders, argPos, ary, arity - length
+          func, bitmask, createHybrid, wrapper.placeholder, thisArg,
+          args, newHolders, argPos, ary, arity - length
         );
       }
       var thisBinding = isBind ? thisArg : this,
@@ -4298,8 +4298,8 @@ if(_global.BI.prepares == null) {
     partials = newData[3];
     holders = newData[4];
     arity = newData[9] = newData[9] === undefined
-        ? (isBindKey ? 0 : func.length)
-        : nativeMax(newData[9] - length, 0);
+      ? (isBindKey ? 0 : func.length)
+      : nativeMax(newData[9] - length, 0);
 
     if (!arity && bitmask & (WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG)) {
       bitmask &= ~(WRAP_CURRY_FLAG | WRAP_CURRY_RIGHT_FLAG);
@@ -4394,8 +4394,8 @@ if(_global.BI.prepares == null) {
 
       if (customizer) {
         var compared = isPartial
-            ? customizer(othValue, arrValue, index, other, array, stack)
-            : customizer(arrValue, othValue, index, array, other, stack);
+          ? customizer(othValue, arrValue, index, other, array, stack)
+          : customizer(arrValue, othValue, index, array, other, stack);
       }
       if (compared !== undefined) {
         if (compared) {
@@ -4407,18 +4407,18 @@ if(_global.BI.prepares == null) {
       // Recursively compare arrays (susceptible to call stack limits).
       if (seen) {
         if (!arraySome(other, function(othValue, othIndex) {
-          if (!cacheHas(seen, othIndex) &&
-              (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
-            return seen.push(othIndex);
-          }
-        })) {
+              if (!cacheHas(seen, othIndex) &&
+                  (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+                return seen.push(othIndex);
+              }
+            })) {
           result = false;
           break;
         }
       } else if (!(
-          arrValue === othValue ||
-          equalFunc(arrValue, othValue, bitmask, customizer, stack)
-      )) {
+            arrValue === othValue ||
+              equalFunc(arrValue, othValue, bitmask, customizer, stack)
+          )) {
         result = false;
         break;
       }
@@ -4557,14 +4557,14 @@ if(_global.BI.prepares == null) {
 
       if (customizer) {
         var compared = isPartial
-            ? customizer(othValue, objValue, key, other, object, stack)
-            : customizer(objValue, othValue, key, object, other, stack);
+          ? customizer(othValue, objValue, key, other, object, stack)
+          : customizer(objValue, othValue, key, object, other, stack);
       }
       // Recursively compare objects (susceptible to call stack limits).
       if (!(compared === undefined
-              ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
-              : compared
-      )) {
+            ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
+            : compared
+          )) {
         result = false;
         break;
       }
@@ -4578,7 +4578,7 @@ if(_global.BI.prepares == null) {
       if (objCtor != othCtor &&
           ('constructor' in object && 'constructor' in other) &&
           !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
-              typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+            typeof othCtor == 'function' && othCtor instanceof othCtor)) {
         result = false;
       }
     }
@@ -4677,8 +4677,8 @@ if(_global.BI.prepares == null) {
   function getMapData(map, key) {
     var data = map.__data__;
     return isKeyable(key)
-        ? data[typeof key == 'string' ? 'string' : 'hash']
-        : data.map;
+      ? data[typeof key == 'string' ? 'string' : 'hash']
+      : data.map;
   }
 
   /**
@@ -4875,7 +4875,7 @@ if(_global.BI.prepares == null) {
     }
     length = object == null ? 0 : object.length;
     return !!length && isLength(length) && isIndex(key, length) &&
-        (isArray(object) || isArguments(object));
+      (isArray(object) || isArguments(object));
   }
 
   /**
@@ -4906,8 +4906,8 @@ if(_global.BI.prepares == null) {
    */
   function initCloneObject(object) {
     return (typeof object.constructor == 'function' && !isPrototype(object))
-        ? baseCreate(getPrototype(object))
-        : {};
+      ? baseCreate(getPrototype(object))
+      : {};
   }
 
   /**
@@ -4986,7 +4986,7 @@ if(_global.BI.prepares == null) {
    */
   function isFlattenable(value) {
     return isArray(value) || isArguments(value) ||
-        !!(spreadableSymbol && value && value[spreadableSymbol]);
+      !!(spreadableSymbol && value && value[spreadableSymbol]);
   }
 
   /**
@@ -5002,9 +5002,9 @@ if(_global.BI.prepares == null) {
     length = length == null ? MAX_SAFE_INTEGER : length;
 
     return !!length &&
-        (type == 'number' ||
-            (type != 'symbol' && reIsUint.test(value))) &&
-        (value > -1 && value % 1 == 0 && value < length);
+      (type == 'number' ||
+        (type != 'symbol' && reIsUint.test(value))) &&
+          (value > -1 && value % 1 == 0 && value < length);
   }
 
   /**
@@ -5023,9 +5023,9 @@ if(_global.BI.prepares == null) {
     }
     var type = typeof index;
     if (type == 'number'
-        ? (isArrayLike(object) && isIndex(index, object.length))
-        : (type == 'string' && index in object)
-    ) {
+          ? (isArrayLike(object) && isIndex(index, object.length))
+          : (type == 'string' && index in object)
+        ) {
       return eq(object[index], value);
     }
     return false;
@@ -5049,7 +5049,7 @@ if(_global.BI.prepares == null) {
       return true;
     }
     return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-        (object != null && value in Object(object));
+      (object != null && value in Object(object));
   }
 
   /**
@@ -5062,8 +5062,8 @@ if(_global.BI.prepares == null) {
   function isKeyable(value) {
     var type = typeof value;
     return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
-        ? (value !== '__proto__')
-        : (value === null);
+      ? (value !== '__proto__')
+      : (value === null);
   }
 
   /**
@@ -5140,7 +5140,7 @@ if(_global.BI.prepares == null) {
         return false;
       }
       return object[key] === srcValue &&
-          (srcValue !== undefined || (key in Object(object)));
+        (srcValue !== undefined || (key in Object(object)));
     };
   }
 
@@ -5187,9 +5187,9 @@ if(_global.BI.prepares == null) {
         isCommon = newBitmask < (WRAP_BIND_FLAG | WRAP_BIND_KEY_FLAG | WRAP_ARY_FLAG);
 
     var isCombo =
-        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_CURRY_FLAG)) ||
-        ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_REARG_FLAG) && (data[7].length <= source[8])) ||
-        ((srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG)) && (source[7].length <= source[8]) && (bitmask == WRAP_CURRY_FLAG));
+      ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_CURRY_FLAG)) ||
+      ((srcBitmask == WRAP_ARY_FLAG) && (bitmask == WRAP_REARG_FLAG) && (data[7].length <= source[8])) ||
+      ((srcBitmask == (WRAP_ARY_FLAG | WRAP_REARG_FLAG)) && (source[7].length <= source[8]) && (bitmask == WRAP_CURRY_FLAG));
 
     // Exit early if metadata can't be merged.
     if (!(isCommon || isCombo)) {
@@ -5579,8 +5579,8 @@ if(_global.BI.prepares == null) {
    */
   var difference = baseRest(function(array, values) {
     return isArrayLikeObject(array)
-        ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true))
-        : [];
+      ? baseDifference(array, baseFlatten(values, 1, isArrayLikeObject, true))
+      : [];
   });
 
   /**
@@ -5708,8 +5708,8 @@ if(_global.BI.prepares == null) {
     if (fromIndex !== undefined) {
       index = toInteger(fromIndex);
       index = fromIndex < 0
-          ? nativeMax(length + index, 0)
-          : nativeMin(index, length - 1);
+        ? nativeMax(length + index, 0)
+        : nativeMin(index, length - 1);
     }
     return baseFindIndex(array, baseIteratee(predicate, 3), index, true);
   }
@@ -5848,8 +5848,8 @@ if(_global.BI.prepares == null) {
   var intersection = baseRest(function(arrays) {
     var mapped = arrayMap(arrays, castArrayLikeObject);
     return (mapped.length && mapped[0] === arrays[0])
-        ? baseIntersection(mapped)
-        : [];
+      ? baseIntersection(mapped)
+      : [];
   });
 
   /**
@@ -6124,8 +6124,8 @@ if(_global.BI.prepares == null) {
    */
   var without = baseRest(function(array, values) {
     return isArrayLikeObject(array)
-        ? baseDifference(array, values)
-        : [];
+      ? baseDifference(array, values)
+      : [];
   });
 
   /**
@@ -7195,8 +7195,8 @@ if(_global.BI.prepares == null) {
           timeWaiting = wait - timeSinceLastCall;
 
       return maxing
-          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
-          : timeWaiting;
+        ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+        : timeWaiting;
     }
 
     function shouldInvoke(time) {
@@ -7207,7 +7207,7 @@ if(_global.BI.prepares == null) {
       // trailing edge, the system time has gone backwards and we're treating
       // it as the trailing edge, or we've hit the `maxWait` limit.
       return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
-          (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+        (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
     }
 
     function timerExpired() {
@@ -7646,7 +7646,7 @@ if(_global.BI.prepares == null) {
    */
   var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
     return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
-        !propertyIsEnumerable.call(value, 'callee');
+      !propertyIsEnumerable.call(value, 'callee');
   };
 
   /**
@@ -7751,7 +7751,7 @@ if(_global.BI.prepares == null) {
    */
   function isBoolean(value) {
     return value === true || value === false ||
-        (isObjectLike(value) && baseGetTag(value) == boolTag);
+      (isObjectLike(value) && baseGetTag(value) == boolTag);
   }
 
   /**
@@ -7831,7 +7831,7 @@ if(_global.BI.prepares == null) {
     }
     if (isArrayLike(value) &&
         (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' ||
-            isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+          isBuffer(value) || isTypedArray(value) || isArguments(value))) {
       return !value.length;
     }
     var tag = getTag(value);
@@ -7966,7 +7966,7 @@ if(_global.BI.prepares == null) {
    */
   function isLength(value) {
     return typeof value == 'number' &&
-        value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+      value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
   }
 
   /**
@@ -8130,7 +8130,7 @@ if(_global.BI.prepares == null) {
    */
   function isNumber(value) {
     return typeof value == 'number' ||
-        (isObjectLike(value) && baseGetTag(value) == numberTag);
+      (isObjectLike(value) && baseGetTag(value) == numberTag);
   }
 
   /**
@@ -8171,7 +8171,7 @@ if(_global.BI.prepares == null) {
     }
     var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
     return typeof Ctor == 'function' && Ctor instanceof Ctor &&
-        funcToString.call(Ctor) == objectCtorString;
+      funcToString.call(Ctor) == objectCtorString;
   }
 
   /**
@@ -8231,7 +8231,7 @@ if(_global.BI.prepares == null) {
    */
   function isString(value) {
     return typeof value == 'string' ||
-        (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
+      (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
   }
 
   /**
@@ -8253,7 +8253,7 @@ if(_global.BI.prepares == null) {
    */
   function isSymbol(value) {
     return typeof value == 'symbol' ||
-        (isObjectLike(value) && baseGetTag(value) == symbolTag);
+      (isObjectLike(value) && baseGetTag(value) == symbolTag);
   }
 
   /**
@@ -8443,8 +8443,8 @@ if(_global.BI.prepares == null) {
     value = value.replace(reTrim, '');
     var isBinary = reIsBinary.test(value);
     return (isBinary || reIsOctal.test(value))
-        ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
-        : (reIsBadHex.test(value) ? NAN : +value);
+      ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+      : (reIsBadHex.test(value) ? NAN : +value);
   }
 
   /**
@@ -9355,8 +9355,8 @@ if(_global.BI.prepares == null) {
   function escape(string) {
     string = toString(string);
     return (string && reHasUnescapedHtml.test(string))
-        ? string.replace(reUnescapedHtml, escapeHtmlChar)
-        : string;
+      ? string.replace(reUnescapedHtml, escapeHtmlChar)
+      : string;
   }
 
   /**
@@ -9782,8 +9782,8 @@ if(_global.BI.prepares == null) {
    */
   function max(array) {
     return (array && array.length)
-        ? baseExtremum(array, identity, baseGt)
-        : undefined;
+      ? baseExtremum(array, identity, baseGt)
+      : undefined;
   }
 
   /**
@@ -9806,8 +9806,8 @@ if(_global.BI.prepares == null) {
    */
   function min(array) {
     return (array && array.length)
-        ? baseExtremum(array, identity, baseLt)
-        : undefined;
+      ? baseExtremum(array, identity, baseLt)
+      : undefined;
   }
 
   /*------------------------------------------------------------------------*/
@@ -9953,8 +9953,8 @@ if(_global.BI.prepares == null) {
       n = n === undefined ? 1 : nativeMax(toInteger(n), 0);
 
       var result = (this.__filtered__ && !index)
-          ? new LazyWrapper(this)
-          : this.clone();
+        ? new LazyWrapper(this)
+        : this.clone();
 
       if (result.__filtered__) {
         result.__takeCount__ = nativeMin(n, result.__takeCount__);
@@ -10538,7 +10538,7 @@ if (!_global.BI) {
 
     // 数组相关的方法
     _.each(["first", "initial", "last", "rest", "compact", "flatten", "without", "union", "intersection",
-        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight"], function (name) {
+        "difference", "zip", "unzip", "object", "indexOf", "lastIndexOf", "sortedIndex", "range", "take", "takeRight", "uniqBy"], function (name) {
         BI[name] = _apply(name);
     });
     _.each(["findIndex", "findLastIndex"], function (name) {
@@ -37258,7 +37258,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -37437,16 +37437,17 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 24,
+            width: 16,
             el: this.checkbox
         }, {
-            width: 24,
+            width: 16,
             el: icon
         }, this.text);
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items
+            items: items,
+            rgap: 5
         }))));
     },
 
@@ -37675,7 +37676,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 24,
+                width: 15,
                 height: o.height
             });
         });
@@ -37683,7 +37684,7 @@ BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);BI.MultiLayerIconArro
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 24),
+            columnSize: BI.makeArray(o.layer, 15),
             items: [items]
         });
     },
@@ -44426,7 +44427,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.IconTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-icon-trigger",
+            baseCls: "bi-icon-trigger",
+            extraCls: "pull-down-font",
             el: {},
             height: 24
         });
@@ -44438,7 +44440,8 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
             type: "bi.trigger_icon_button",
             element: this,
             width: o.width,
-            height: o.height
+            height: o.height,
+            extraCls: o.extraCls
         });
     }
 });
@@ -46585,7 +46588,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
-                extraCls: o.iconCls ? o.iconCls : "",
+                extraCls: o.iconCls,
                 width: o.width,
                 height: o.height
             }),
@@ -51539,7 +51542,9 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false,
+            allowInsertValue: false
         });
     },
 
@@ -51619,6 +51624,8 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
+                allowInsertValue: o.allowInsertValue,
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-select-tree-trigger",
                 ref: function (_ref) {
@@ -51655,6 +51662,13 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING,
                     action: function () {
                         self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM,
+                    action: function () {
+                        var value = self.trigger.getSearcher().getKeyword();
+                        self.combo.setValue(value);
+                        self.combo.hideView();
                     }
                 }]
             },
@@ -51708,6 +51722,97 @@ BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
+ * Created by GUY on 2016/1/26.
+ *
+ * @class BI.MultiLayerSelectTreeInsertSearchPane
+ * @extends BI.Pane
+ */
+
+BI.MultiLayerSelectTreeInsertSearchPane = BI.inherit(BI.Widget, {
+
+    props: function() {
+        return {
+            baseCls: "bi-multilayer-select-tree-popup",
+            tipText: BI.i18nText("BI-No_Selected_Item"),
+            isDefaultInit: false,
+            itemsCreator: BI.emptyFn,
+            items: [],
+            value: ""
+        };
+    },
+
+    render: function() {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget({
+            type: "bi.multilayer_select_level_tree",
+            isDefaultInit: o.isDefaultInit,
+            items: o.items,
+            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    callback(res);
+                    self.setKeyword(o.keywordGetter());
+                });
+            },
+            keywordGetter: o.keywordGetter,
+            value: o.value,
+            scrollable: null,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.MultiLayerSelectLevelTree.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE);
+                }
+            }]
+        });
+        return {
+            type: "bi.vertical",
+            scrolly: false,
+            scrollable: true,
+            vgap: 5,
+            items: [{
+                type: "bi.text_button",
+                invisible: true,
+                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                height: 24,
+                cls: "bi-high-light",
+                hgap: 5,
+                ref: function (_ref) {
+                    self.addNotMatchTip = _ref;
+                },
+                handler: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
+                }
+            }, this.tree]
+        };
+    },
+
+    setKeyword: function (keyword) {
+        var showTip = BI.isEmptyArray(this.tree.getAllLeaves());
+        this.addNotMatchTip.setVisible(showTip);
+        showTip && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    getValue: function () {
+        return this.tree.getValue();
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        this.tree.setValue(v);
+    },
+
+    populate: function (items) {
+        this.tree.populate(items);
+    }
+});
+
+BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSelectLevelTree
@@ -51976,7 +52081,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+            this.tree.initTree(BI.Tree.treeFormat(o.items));
         }
         var content = {
             type: "bi.htape",
@@ -52017,22 +52122,31 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_select_tree_popup",
-                            itemsCreator: function (op, callback) {
+                            type: o.allowInsertValue ? "bi.multilayer_select_tree_insert_search_pane" : "bi.multilayer_select_tree_popup",
+                            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
                             },
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSelectTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
-                                var finding = BI.Func.getSearchResult(o.items, keyword);
-                                var matched = finding.match, find = finding.find;
-                                callback(self._fillTreeStructure4Search(find.concat(matched)));
+                                callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -52074,32 +52188,70 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _getSearchItems: function(keyword) {
+        var o = this.options;
+        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var textItems = findingText.find.concat(findingText.match);
+        var valueItems = findingValue.find.concat(findingValue.match);
+        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+    },
+
+    _createJson: function(node, open) {
+        return {
+            id: node.id,
+            pId: node.pId,
+            text: node.text,
+            value: node.value,
+            isParent: BI.isNotEmptyArray(node.children),
+            open: open
+        }
+    },
+
+    _getChildren: function(node) {
+        var self = this;
+        node.children = node.children || [];
+        var nodes = [];
+        BI.each(node.children, function (idx, child) {
+            var children = self._getChildren(child);
+            nodes = nodes.concat(children);
+        });
+        return node.children.concat(nodes);
+    },
+
     // 将搜索到的节点进行补充，构造成一棵完整的树
     _fillTreeStructure4Search: function (leaves) {
-        var result = BI.map(leaves, "id");
-        var queue = leaves.reverse() || [];
+        var self = this;
+        var result = [];
+        var queue = [];
+        BI.each(leaves, function (idx, node) {
+            queue.push({pId: node.pId});
+            result.push(node);
+            result = result.concat(self._getChildren(node));
+        });
         while (BI.isNotEmptyArray(queue)) {
             var node = queue.pop();
             var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
             if (pNode != null) {
-                queue.push(pNode);
-                result.push(pNode.id);
+                pNode.open = true;
+                queue.push({pId: pNode.pId});
+                result.push(pNode);
             }
         }
-        var nodes = [];
-        BI.each(this.options.items, function (idx, item) {
-            if(BI.contains(result, item.id)) {
-                nodes.push(BI.extend({}, item, {
-                    open: true
-                }))
-            }
-        });
-        return nodes;
+        return BI.uniqBy(BI.map(result, function (idx, node) {
+            return self._createJson(node, node.open);
+        }), "id");
     },
 
     _digest: function (v) {
         var o = this.options;
-        return o.valueFormatter(v) || o.text;
+        if(o.itemsCreator === BI.emptyFn) {
+            var result = BI.find(o.items, function (i, item) {
+                return item.value === v;
+            });
+            return BI.isNotNull(result) ? result.text : o.text;
+        }
+        return o.valueFormatter(v);
     },
 
     stopEditing: function () {
@@ -52129,6 +52281,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSelectTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSelectTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);/**
  * 加号表示的组节点
  *
@@ -52554,7 +52707,9 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: false
+            allowEdit: false,
+            allowSearchValue: false,
+            allowInsertValue: false
         });
     },
 
@@ -52634,6 +52789,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                allowInsertValue: o.allowInsertValue,
+                allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
                 cls: "multilayer-single-tree-trigger",
                 ref: function (_ref) {
@@ -52670,6 +52827,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING,
                     action: function () {
                         self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING);
+                    }
+                }, {
+                    eventName: BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM,
+                    action: function () {
+                        var value = self.trigger.getSearcher().getKeyword();
+                        self.combo.setValue(value);
+                        self.combo.hideView();
                     }
                 }]
             },
@@ -52723,6 +52887,97 @@ BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
+ * Created by GUY on 2016/1/26.
+ *
+ * @class BI.MultiLayerSingleTreeInsertSearchPane
+ * @extends BI.Pane
+ */
+
+BI.MultiLayerSingleTreeInsertSearchPane = BI.inherit(BI.Widget, {
+
+    props: function() {
+        return {
+            baseCls: "bi-multilayer-single-tree-popup",
+            tipText: BI.i18nText("BI-No_Selected_Item"),
+            isDefaultInit: false,
+            itemsCreator: BI.emptyFn,
+            items: [],
+            value: ""
+        };
+    },
+
+    render: function() {
+        var self = this, o = this.options;
+        this.tree = BI.createWidget({
+            type: "bi.multilayer_select_level_tree",
+            isDefaultInit: o.isDefaultInit,
+            items: o.items,
+            itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
+                o.itemsCreator(op, function (res) {
+                    callback(res);
+                    self.setKeyword(o.keywordGetter());
+                });
+            },
+            keywordGetter: o.keywordGetter,
+            value: o.value,
+            scrollable: null,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.MultiLayerSelectLevelTree.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE);
+                }
+            }]
+        });
+        return {
+            type: "bi.vertical",
+            scrolly: false,
+            scrollable: true,
+            vgap: 5,
+            items: [{
+                type: "bi.text_button",
+                invisible: true,
+                text: BI.i18nText("BI-Basic_Click_To_Add_Text", ""),
+                height: 24,
+                cls: "bi-high-light",
+                hgap: 5,
+                ref: function (_ref) {
+                    self.addNotMatchTip = _ref;
+                },
+                handler: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM, o.keywordGetter());
+                }
+            }, this.tree]
+        };
+    },
+
+    setKeyword: function (keyword) {
+        var showTip = BI.isEmptyArray(this.tree.getAllLeaves());
+        this.addNotMatchTip.setVisible(showTip);
+        showTip && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
+    },
+
+    getValue: function () {
+        return this.tree.getValue();
+    },
+
+    setValue: function (v) {
+        v = BI.isArray(v) ? v : [v];
+        this.tree.setValue(v);
+    },
+
+    populate: function (items) {
+        this.tree.populate(items);
+    }
+});
+
+BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
+BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);/**
  * guy
  * 二级树
  * @class BI.MultiLayerSingleLevelTree
@@ -52982,7 +53237,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                 return v;
             },
             itemsCreator: BI.emptyFn,
-            watermark: BI.i18nText("BI-Basic_Search")
+            watermark: BI.i18nText("BI-Basic_Search"),
+            allowSearchValue: false
         };
     },
 
@@ -52990,7 +53246,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.deepClone(BI.Tree.treeFormat(BI.deepClone(o.items))));
+            this.tree.initTree(BI.Tree.treeFormat(o.items));
         }
         var content = {
             type: "bi.htape",
@@ -53031,7 +53287,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             }]
                         },
                         popup: {
-                            type: "bi.multilayer_single_tree_popup",
+                            type: o.allowInsertValue ? "bi.multilayer_single_tree_insert_search_pane" : "bi.multilayer_single_tree_popup",
                             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
                                 op.keyword = self.editor.getValue();
                                 o.itemsCreator(op, callback);
@@ -53039,14 +53295,23 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                             keywordGetter: function () {
                                 return self.editor.getValue();
                             },
-                            cls: "bi-card"
+                            cls: "bi-card",
+                            listeners: [{
+                                eventName: BI.MultiLayerSingleTreeInsertSearchPane.EVENT_ADD_ITEM,
+                                action: function () {
+                                    self.options.text = self.getSearcher().getKeyword();
+                                    self.fireEvent(BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM);
+                                }
+                            }],
+                            ref: function (_ref) {
+                                self.popup = _ref;
+                            }
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
                             if(o.itemsCreator === BI.emptyFn) {
-                                var finding = BI.Func.getSearchResult(o.items, keyword);
-                                var matched = finding.match, find = finding.find;
-                                callback(self._fillTreeStructure4Search(find.concat(matched)));
+                                callback(self._getSearchItems(keyword));
+                                o.allowInsertValue && self.popup.setKeyword(keyword);
                             } else {
                                 callback();
                             }
@@ -53088,27 +53353,59 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _getSearchItems: function(keyword) {
+        var o = this.options;
+        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var textItems = findingText.find.concat(findingText.match);
+        var valueItems = findingValue.find.concat(findingValue.match);
+        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+    },
+
+    _createJson: function(node, open) {
+        return {
+            id: node.id,
+            pId: node.pId,
+            text: node.text,
+            value: node.value,
+            isParent: BI.isNotEmptyArray(node.children),
+            open: open
+        }
+    },
+
+    _getChildren: function(node) {
+        var self = this;
+        node.children = node.children || [];
+        var nodes = [];
+        BI.each(node.children, function (idx, child) {
+            var children = self._getChildren(child);
+            nodes = nodes.concat(children);
+        });
+        return node.children.concat(nodes);
+    },
+
     // 将搜索到的节点进行补充，构造成一棵完整的树
     _fillTreeStructure4Search: function (leaves) {
-        var result = BI.map(leaves, "id");
-        var queue = leaves.reverse() || [];
+        var self = this;
+        var result = [];
+        var queue = [];
+        BI.each(leaves, function (idx, node) {
+            queue.push({pId: node.pId});
+            result.push(node);
+            result = result.concat(self._getChildren(node));
+        });
         while (BI.isNotEmptyArray(queue)) {
             var node = queue.pop();
             var pNode = this.tree.search(this.tree.getRoot(), node.pId, "id");
             if (pNode != null) {
-                queue.push(pNode);
-                result.push(pNode.id);
+                pNode.open = true;
+                queue.push({pId: pNode.pId});
+                result.push(pNode);
             }
         }
-        var nodes = [];
-        BI.each(this.options.items, function (idx, item) {
-            if(BI.contains(result, item.id)) {
-               nodes.push(BI.extend({}, item, {
-                   open: true
-               }))
-            }
-        });
-        return nodes;
+        return BI.uniqBy(BI.map(result, function (idx, node) {
+            return self._createJson(node, node.open);
+        }), "id");
     },
 
     _digest: function (v) {
@@ -53149,6 +53446,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeTrigger.EVENT_STOP = "EVENT_STOP";
 BI.MultiLayerSingleTreeTrigger.EVENT_START = "EVENT_START";
 BI.MultiLayerSingleTreeTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);/**
  * 加号表示的组节点
  *
@@ -58727,7 +59025,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
@@ -59030,7 +59328,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
@@ -59346,7 +59644,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                 type: BI.Selection.Multi,
                 value: checked ? this.getValue() : {}
             };
-            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
+            this.getSearcher().setState(val);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
@@ -62742,6 +63040,10 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
             }
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
+    },
+
+    getAllLeaves: function () {
+        return this.expander.getAllLeaves();
     },
 
     setValue: function (v) {
@@ -70777,11 +71079,17 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
     },
 
     _isMatch: function (parentValues, value, keyword) {
+        var o = this.options;
         var node = this._getTreeNode(parentValues, value);
         if (!node) {
             return false;
         }
         var find = BI.Func.getSearchResult([node.text || node.value], keyword);
+        if(o.allowSearchValue && node.value) {
+            var valueFind = BI.Func.getSearchResult([node.value], keyword);
+            return valueFind.find.length > 0 || valueFind.match.length > 0 ||
+                find.find.length > 0 || find.match.length > 0;
+        }
         return find.find.length > 0 || find.match.length > 0;
     },
 
@@ -71532,6 +71840,96 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         }
     }
 });/**
+ * 简单的复选下拉框控件, 适用于数据量少的情况
+ * 封装了字段处理逻辑
+ */
+BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.ValueChooserInsertCombo.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-value-chooser-insert-combo",
+            width: 200,
+            height: 24,
+            items: null,
+            itemsCreator: BI.emptyFn,
+            cache: true
+        });
+    },
+
+    _init: function () {
+        BI.ValueChooserInsertCombo.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+        this.combo = BI.createWidget({
+            type: "bi.multi_select_insert_combo",
+            element: this,
+            text: o.text,
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height,
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }]
+        });
+    },
+
+    setValue: function (v) {
+        this.combo.setValue(v);
+    },
+
+    getValue: function () {
+        var val = this.combo.getValue() || {};
+        return {
+            type: val.type,
+            value: val.value
+        };
+    },
+
+    populate: function (items) {
+        // 直接用combo的populate不会作用到AbstractValueChooser上
+        this.items = items;
+        this.combo.populate.apply(this, arguments);
+    }
+});
+
+BI.ValueChooserInsertCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserInsertCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);/**
  * 简单的复选下拉框控件, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
