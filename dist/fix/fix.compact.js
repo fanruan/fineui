@@ -54,7 +54,11 @@
         }
         return oldWatch.call(this, model, expOrFn, function () {
             options && options.store && pushTarget(options.store);
-            var res = cb.apply(this, arguments);
+            try {
+                var res = cb.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             options && options.store && popTarget();
             return res;
         }, options);
@@ -91,7 +95,11 @@
             pushContext(context);
             pushed = true;
         }
-        var result = _create.apply(this, arguments);
+        try {
+            var result = _create.apply(this, arguments);
+        } catch (e) {
+            console.error(e);
+        }
         pushed && popContext();
         return result;
     };
@@ -100,7 +108,11 @@
         var old = BI.Loader.prototype[name];
         BI.Loader.prototype[name] = function () {
             pushContext(this);
-            var result = old.apply(this, arguments);
+            try {
+                var result = old.apply(this, arguments);
+            } catch (e) {
+                console.error(e);
+            }
             popContext();
             return result;
         };
