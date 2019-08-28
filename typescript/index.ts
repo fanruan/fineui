@@ -5,6 +5,7 @@ import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Single } from "./base/single/single";
 import { _base } from "./core/base";
 import { _BasicButton } from "./base/single/button/button.basic";
+import { _Trigger } from "./base/single/trigger/trigger";
 
 type Constructor<T extends {}> = T & {
     new(config: any): T;
@@ -17,4 +18,5 @@ export interface _BI extends _func, _i18n, _base {
     Widget: Constructor<_Widget> & _WidgetStatic;
     Single: Constructor<_Single>;
     BasicButton: Constructor<_BasicButton>;
+    Trigger: Constructor<_Trigger>;
 }
