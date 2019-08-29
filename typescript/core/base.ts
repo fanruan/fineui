@@ -305,7 +305,7 @@ export interface _base {
 
     random: (min?: number, max?: number, floating?: boolean) => number;
 
-    parseInt: (s: string) => number;
+    parseInt: (s: string | number) => number;
 
     parseSafeInt: (s: string) => number;
 
