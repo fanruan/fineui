@@ -40,9 +40,9 @@ export interface _base {
 
     map: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any[];
 
-    reduce: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any;
+    reduce: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
-    reduceRight: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any;
+    reduceRight: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
     find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
 
@@ -62,7 +62,7 @@ export interface _base {
 
     min: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any;
 
-    sortBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any[];
+    sortBy: <T>(collection: any[]|object|string, callback?: ((firstEl:T, secondEl:T) => number)|object|string, thisArg?: any) => any[];
 
     groupBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => object;
 
