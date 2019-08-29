@@ -7184,7 +7184,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                 return v;
             },
             itemsCreator: BI.emptyFn,
-            watermark: BI.i18nText("BI-Basic_Search")
+            watermark: BI.i18nText("BI-Basic_Search"),
+            allowSearchValue: false
         };
     },
 
@@ -7192,7 +7193,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.Tree.treeFormat(o.items));
+            this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
+            this.tree.initTree(this.nodes);
         }
         var content = {
             type: "bi.htape",
@@ -7301,8 +7303,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
         var textItems = findingText.find.concat(findingText.match);
         var valueItems = findingValue.find.concat(findingValue.match);
         return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
@@ -7375,6 +7377,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     populate: function (items) {
         this.options.items = items;
+        this.nodes = BI.Tree.treeFormat(BI.deepClone(items));
     },
 
     setValue: function (v) {
@@ -7425,6 +7428,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             },
             id: o.id,
             pId: o.pId,
+            keyword: o.keyword,
             open: o.open,
             height: o.height,
             hgap: o.hgap,
@@ -7528,6 +7532,7 @@ BI.MultiLayerSelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
             },
             id: o.id,
             pId: o.pId,
+            keyword: o.keyword,
             open: o.open,
             height: o.height,
             hgap: o.hgap,
@@ -7627,6 +7632,7 @@ BI.MultiLayerSelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
             },
             id: o.id,
             pId: o.pId,
+            keyword: o.keyword,
             open: o.open,
             height: o.height,
             hgap: o.hgap,
@@ -7726,6 +7732,7 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
             },
             id: o.id,
             pId: o.pId,
+            keyword: o.keyword,
             open: o.open,
             height: o.height,
             hgap: o.hgap,
@@ -8357,7 +8364,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.Tree.treeFormat(o.items));
+            this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
+            this.tree.initTree(this.nodes);
         }
         var content = {
             type: "bi.htape",
@@ -8466,8 +8474,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
         var textItems = findingText.find.concat(findingText.match);
         var valueItems = findingValue.find.concat(findingValue.match);
         return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
@@ -8541,6 +8549,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     populate: function (items) {
         this.options.items = items;
+        this.nodes = BI.Tree.treeFormat(BI.deepClone(items));
     },
 
     setValue: function (v) {
@@ -14134,9 +14143,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? this.getValue() : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
@@ -14437,9 +14446,9 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? this.getValue() : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
@@ -14753,9 +14762,9 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             var checked = this.getSearcher().hasChecked();
             var val = {
                 type: BI.Selection.Multi,
-                value: checked ? this.getValue() : {}
+                value: checked ? {1: 1} : {}
             };
-            this.getSearcher().setState(val);
+            this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             this.getCounter().setButtonChecked(val);
             self.fireEvent(BI.MultiTreeListCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
