@@ -36,7 +36,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                         }, {
                             eventName: BI.SignEditor.EVENT_CHANGE,
                             action: function () {
-                                var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.HOUR);
+                                var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.HOUR);
                                 this.setValue(value);
                             }
                         }],
@@ -72,7 +72,7 @@ BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
                     }, {
                         eventName: BI.SignEditor.EVENT_CHANGE,
                         action: function () {
-                            var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.MINUTE);
                             this.setValue(value);
                         }
                     }],

@@ -38,6 +38,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             type: "bi.multi_select_trigger",
             height: o.height,
             valueFormatter: o.valueFormatter,
+            text: o.text,
+            watermark: o.watermark,
             // adapter: this.popup,
             masker: {
                 offset: this.constants.offset
