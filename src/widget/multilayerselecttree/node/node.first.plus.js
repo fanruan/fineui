@@ -30,6 +30,7 @@ BI.MultiLayerSelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
             },
             id: o.id,
             pId: o.pId,
+            keyword: o.keyword,
             open: o.open,
             height: o.height,
             hgap: o.hgap,

@@ -11,7 +11,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                 return v;
             },
             itemsCreator: BI.emptyFn,
-            watermark: BI.i18nText("BI-Basic_Search")
+            watermark: BI.i18nText("BI-Basic_Search"),
+            allowSearchValue: false
         };
     },
 
@@ -19,7 +20,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
             this.tree = new BI.Tree();
-            this.tree.initTree(BI.Tree.treeFormat(o.items));
+            this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
+            this.tree.initTree(this.nodes);
         }
         var content = {
             type: "bi.htape",
@@ -128,8 +130,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(o.items, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(o.items, keyword, "value") : {find: [], match: []};
+        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
+        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
         var textItems = findingText.find.concat(findingText.match);
         var valueItems = findingValue.find.concat(findingValue.match);
         return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
@@ -202,6 +204,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     populate: function (items) {
         this.options.items = items;
+        this.nodes = BI.Tree.treeFormat(BI.deepClone(items));
     },
 
     setValue: function (v) {
