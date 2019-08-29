@@ -36,39 +36,39 @@ export interface _base {
 
     size: (collection: any[]|object|string) => number;
 
-    each: (collection: any[]|object|string, callback?: Function, thisArg?: any) => any;
+    each: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => void)|object|string, thisArg?: any) => any;
 
-    map: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any[];
+    map: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any[];
 
-    reduce: (collection: any[]|object|string, callback?: Function, accumulator?: any, thisArg?: any) => any;
+    reduce: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
-    reduceRight: (collection: any[]|object|string, callback?: Function, accumulator?: any, thisArg?: any) => any;
+    reduceRight: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
     find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
 
-    filter: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any[];
+    filter: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
 
-    reject: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any[];
+    reject: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
 
-    every: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
+    every: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    all: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
+    all: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    some: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => boolean;
+    some: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
     any: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    max: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any;
+    max: <T>(collection: T[]) => T;
 
-    min: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any;
+    min: <T>(collection: T[]) => T;
 
-    sortBy: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => any[];
+    sortBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => number)|object|string, thisArg?: any) => any[];
 
-    groupBy: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => object;
+    groupBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => object;
 
-    indexBy: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => object;
+    indexBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => object;
 
-    countBy: (collection: any[]|object|string, callback?: Function|object|string, thisArg?: any) => object;
+    countBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => object;
 
 
     count: (from: number, to: number, predicate: Function) => number;
