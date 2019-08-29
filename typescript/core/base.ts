@@ -58,9 +58,9 @@ export interface _base {
 
     any: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    max: (collection: any[]) => any;
+    max: <T>(collection: T[]) => T;
 
-    min: (collection: any[]) => any;
+    min: <T>(collection: T[]) => T;
 
     sortBy: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => number)|object|string, thisArg?: any) => any[];
 
