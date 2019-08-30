@@ -66418,7 +66418,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         }, {
                             eventName: BI.SignEditor.EVENT_CHANGE,
                             action: function () {
-                                var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.HOUR);
+                                var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.HOUR);
                                 this.setValue(value);
                             }
                         }],
@@ -66454,7 +66454,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     }, {
                         eventName: BI.SignEditor.EVENT_CHANGE,
                         action: function () {
-                            var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.MINUTE);
                             this.setValue(value);
                         }
                     }],
@@ -76179,6 +76179,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             type: "bi.multi_select_trigger",
             height: o.height,
             valueFormatter: o.valueFormatter,
+            text: o.text,
+            watermark: o.watermark,
             // adapter: this.popup,
             masker: {
                 offset: this.constants.offset
@@ -76774,6 +76776,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
             text: o.text,
+            watermark: o.watermark,
             height: o.height,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
@@ -77865,6 +77868,14 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
 
     setDownEnable: function (v) {
         this.bottomBtn.setEnable(!!v);
+    },
+
+    getLastValidValue: function () {
+        return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
     },
 
     getValue: function () {
@@ -88770,6 +88781,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo = BI.createWidget({
             type: "bi.multi_tree_list_combo",
             element: this,
+            text: o.text,
+            watermark: o.watermark,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -88855,6 +88868,8 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_insert_combo",
+            text: o.text,
+            watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -88941,6 +88956,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
+            text: o.text,
+            watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),

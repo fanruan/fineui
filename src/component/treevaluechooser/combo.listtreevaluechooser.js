@@ -26,6 +26,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         this.combo = BI.createWidget({
             type: "bi.multi_tree_list_combo",
             element: this,
+            text: o.text,
+            watermark: o.watermark,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,

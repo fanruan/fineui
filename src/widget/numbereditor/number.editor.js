@@ -105,6 +105,14 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.bottomBtn.setEnable(!!v);
     },
 
+    getLastValidValue: function () {
+        return this.editor.getLastValidValue();
+    },
+
+    getLastChangedValue: function () {
+        return this.editor.getLastChangedValue();
+    },
+
     getValue: function () {
         return this.options.value;
     },
