@@ -26,6 +26,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                 ref: function (_ref) {
                     self.changeIcon = _ref;
                 },
+                disableSelected: true,
                 iconCls: "auto-color-icon",
                 width: 24,
                 iconWidth: 16,
