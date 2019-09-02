@@ -47632,7 +47632,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     items: [this.content]
                 },
                 left: 4,
-                right: 10,
+                right: 4,
                 top: 4,
                 bottom: 8
             }]
