@@ -74,10 +74,10 @@ module.exports = function (grunt) {
                 dest: "dist/case.js"
             },
             widgetJs: {
-                src: [
+                src: filterPath([
                     "src/widget/**/*.js",
                     "src/component/**/*.js"
-                ],
+                ]),
                 dest: "dist/widget.js"
             },
             routerJs: {

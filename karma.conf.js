@@ -21,6 +21,7 @@ module.exports = function (config) {
             "src/core/foundation.js",
             "src/core/lodash.js",
             "src/core/base.js",
+            "i18n/i18n.cn.js",
             "src/core/ob.js",
             "src/core/widget.js",
             "src/core/shortcut.js",
