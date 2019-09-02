@@ -23,6 +23,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this)
         });

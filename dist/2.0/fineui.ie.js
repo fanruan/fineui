@@ -54754,6 +54754,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                 ref: function (_ref) {
                     self.changeIcon = _ref;
                 },
+                disableSelected: true,
                 iconCls: "auto-color-icon",
                 width: 24,
                 iconWidth: 16,
@@ -88537,6 +88538,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             type: "bi.multi_tree_list_combo",
             element: this,
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -88624,6 +88626,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_tree_insert_combo",
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
@@ -88712,6 +88715,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
@@ -88942,6 +88946,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
             type: "bi.multi_select_insert_combo",
             element: this,
             text: o.text,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -89036,6 +89041,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             type: "bi.multi_select_combo",
             element: this,
             text: o.text,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -89124,6 +89130,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this)
         });

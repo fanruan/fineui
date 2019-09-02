@@ -25,6 +25,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
             type: "bi.multi_select_insert_combo",
             element: this,
             text: o.text,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
