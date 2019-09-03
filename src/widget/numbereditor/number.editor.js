@@ -31,11 +31,11 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE, self.getLastChangedValue());
         });
         this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             o.value = BI.parseFloat(this.getValue());
-            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM, self.getLastChangedValue());
         });
         this.topBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -45,8 +45,8 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
-            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE, o.value);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM, o.value);
         });
         this.bottomBtn = BI.createWidget({
             type: "bi.icon_button",
@@ -56,8 +56,8 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
-            self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
-            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
+            self.fireEvent(BI.NumberEditor.EVENT_CHANGE, o.value);
+            self.fireEvent(BI.NumberEditor.EVENT_CONFIRM, o.value);
         });
         BI.createWidget({
             type: "bi.htape",
