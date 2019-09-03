@@ -102,14 +102,14 @@ describe("DateTimePane", function () {
             datePane.element.find(".bi-month-combo .bi-list-item-select").get(2).click();
             BI.nextTick(function () {
                 datePane.element.find(".bi-calendar:visible .bi-list-item-select :contains(27)").parent().click();
-                datePane.element.find(".bi-date-time-select .bi-number-editor .top-button").click();
+                datePane.element.find(".bi-date-time-select .bi-number-editor .top-button").get(0).click();
                 expect(datePane.getValue()).to.deep.equal({
                     type: 1,
                     value: {
                         year: 2019,
                         month: 2,
                         day: 27,
-                        hour: 0,
+                        hour: 1,
                         minute: 0,
                         second: 0
                     }
