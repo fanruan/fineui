@@ -69893,11 +69893,16 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
-        var textItems = findingText.find.concat(findingText.match);
-        var valueItems = findingValue.find.concat(findingValue.match);
-        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+        // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
+        var items = [];
+        this.tree.traverse(function (node) {
+            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            if(find.find.length > 0 || find.match.length > 0) {
+                items.push(node);
+                return true;
+            }
+        });
+        return this._fillTreeStructure4Search(items, "id");
     },
 
     _createJson: function(node, open) {
@@ -71064,11 +71069,16 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
-        var textItems = findingText.find.concat(findingText.match);
-        var valueItems = findingValue.find.concat(findingValue.match);
-        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+        // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
+        var items = [];
+        this.tree.traverse(function (node) {
+            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            if(find.find.length > 0 || find.match.length > 0) {
+                items.push(node);
+                return true;
+            }
+        });
+        return this._fillTreeStructure4Search(items, "id");
     },
 
     _createJson: function(node, open) {
