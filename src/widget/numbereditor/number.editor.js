@@ -33,8 +33,13 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
+        this.editor.on(BI.TextEditor.EVENT_ERROR, function () {
+            o.value = BI.parseFloat(this.getLastValidValue());
+        });
+        this.editor.on(BI.TextEditor.EVENT_VALID, function () {
             o.value = BI.parseFloat(this.getValue());
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({

@@ -47632,7 +47632,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                     items: [this.content]
                 },
                 left: 4,
-                right: 10,
+                right: 4,
                 top: 4,
                 bottom: 8
             }]
@@ -55159,6 +55159,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
                 ref: function (_ref) {
                     self.changeIcon = _ref;
                 },
+                disableSelected: true,
                 iconCls: "auto-color-icon",
                 width: 24,
                 iconWidth: 16,
@@ -66578,7 +66579,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                         }, {
                             eventName: BI.SignEditor.EVENT_CHANGE,
                             action: function () {
-                                var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.HOUR);
+                                var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.HOUR);
                                 this.setValue(value);
                             }
                         }],
@@ -69648,11 +69649,16 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
-        var textItems = findingText.find.concat(findingText.match);
-        var valueItems = findingValue.find.concat(findingValue.match);
-        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+        // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
+        var items = [];
+        this.tree.traverse(function (node) {
+            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            if(find.find.length > 0 || find.match.length > 0) {
+                items.push(node);
+                return true;
+            }
+        });
+        return this._fillTreeStructure4Search(items, "id");
     },
 
     _createJson: function(node, open) {
@@ -70819,11 +70825,16 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     _getSearchItems: function(keyword) {
         var o = this.options;
-        var findingText = BI.Func.getSearchResult(this.nodes, keyword, "text");
-        var findingValue = o.allowSearchValue ? BI.Func.getSearchResult(this.nodes, keyword, "value") : {find: [], match: []};
-        var textItems = findingText.find.concat(findingText.match);
-        var valueItems = findingValue.find.concat(findingValue.match);
-        return this._fillTreeStructure4Search(BI.uniqBy(textItems.concat(valueItems), "id"));
+        // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
+        var items = [];
+        this.tree.traverse(function (node) {
+            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            if(find.find.length > 0 || find.match.length > 0) {
+                items.push(node);
+                return true;
+            }
+        });
+        return this._fillTreeStructure4Search(items, "id");
     },
 
     _createJson: function(node, open) {
@@ -77958,8 +77969,13 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
-        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
+        this.editor.on(BI.TextEditor.EVENT_ERROR, function () {
+            o.value = BI.parseFloat(this.getLastValidValue());
+        });
+        this.editor.on(BI.TextEditor.EVENT_VALID, function () {
             o.value = BI.parseFloat(this.getValue());
+        });
+        this.editor.on(BI.TextEditor.EVENT_CONFIRM, function () {
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
         this.topBtn = BI.createWidget({
@@ -88942,6 +88958,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             type: "bi.multi_tree_list_combo",
             element: this,
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
@@ -89029,6 +89046,7 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_tree_insert_combo",
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
@@ -89117,6 +89135,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         this.combo = BI.createWidget({
             type: "bi.multi_tree_combo",
             text: o.text,
+            value: o.value,
             watermark: o.watermark,
             element: this,
             itemsCreator: BI.bind(this._itemsCreator, this),
@@ -89347,6 +89366,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
             type: "bi.multi_select_insert_combo",
             element: this,
             text: o.text,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -89441,6 +89461,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             type: "bi.multi_select_combo",
             element: this,
             text: o.text,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -89529,6 +89550,7 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
+            value: o.value,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this)
         });
