@@ -28,7 +28,7 @@ export type _beforeFunc = (sFunc: Function, func: Function) => Function;
  */
 export type _afterFunc = (sFunc: Function, func: Function) => Function;
 
-declare type _function = {
+type _function = {
     createDistinctName: _createDistinctName;
     getSearchResult: _getSearchResult;
     beforeFunc: _beforeFunc;

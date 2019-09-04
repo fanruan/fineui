@@ -54,8 +54,7 @@ export type _perfectStart = (str: string, start: string) => string;
  * @return {Number[]} 子字符串在父字符串中出现的所有位置组成的数组
  */
 export type _allIndexOf = (str: string, sub: string) => number[];
-
-declare type _string = {
+type _string = {
     startWith: _startWith;
     endWith: _endWith;
     getQuery: _getQuery;

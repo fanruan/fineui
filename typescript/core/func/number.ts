@@ -31,7 +31,7 @@ export type _mul = (num: number, arg: number) => number;
  */
 export type _div = (num: number, arg: number) => number;
 
-declare type _number = {
+type _number = {
     add: _add;
     sub: _sub;
     mul: _mul;
