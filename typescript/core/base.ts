@@ -1,3 +1,5 @@
+import { _Widget } from "./widget";
+
 export interface _base {
     assert: (v: any, is: Function) => Boolean
 
@@ -5,7 +7,7 @@ export interface _base {
 
     UUID: () => string;
 
-    isWidget: (widget: any) => Boolean;
+    isWidget: (widget: any) => widget is _Widget;
 
     createWidgets: (items: any, options: any, context: any) => any;
 
@@ -187,37 +189,37 @@ export interface _base {
 
     isMatch: (object: object, source: object, customizer?: Function, thisArg?: any) => boolean;
 
-    isEmpty: (value: any[]|object|string) => boolean;
+    isEmpty: (value: any[]|object|string|null|undefined) => boolean;
 
     isElement: (value: any) => boolean;
 
-    isNumber: (value: any) => boolean;
+    isNumber: (value: any) => value is number;
 
-    isString: (value: any) => boolean;
+    isString: (value: any) => value is string;
 
-    isArray: (value: any) => boolean;
+    isArray: <T>(value: T[] | any) => value is T[];
 
-    isObject: (value: any) => boolean;
+    isObject: (value: any) => value is object;
 
-    isPlainObject: (value: any) => boolean;
+    isPlainObject: (value: any) => value is object;
 
     isArguments: (value: any) => boolean;
 
-    isFunction: (value: any) => boolean;
+    isFunction: (value: any) => value is Function;
 
-    isFinite: (value: any) => boolean;
+    isFinite: (value: any) => value is number;
 
-    isBoolean: (value: any) => boolean;
+    isBoolean: (value: any) => value is boolean;
 
-    isDate: (value: any) => boolean;
+    isDate: (value: any) => value is Date;
 
-    isRegExp: (value: any) => boolean;
+    isRegExp: (value: any) => value is RegExp;
 
-    isError: (value: any) => boolean;
+    isError: (value: any) => value is Error;
 
-    isNaN: (value: any) => boolean;
+    isNaN: (value: any) => value is number;
 
-    isUndefined: (value: any) => boolean;
+    isUndefined: (value: any) => value is undefined;
 
     zipObject: (props: any[], values?: any[]) => object;
 
@@ -239,25 +241,25 @@ export interface _base {
 
     freeze: <T>(value: T) => T;
 
-    isKey: (key: any) => boolean;
+    isKey: (key: any) => key is (number | string);
 
     isCapitalEqual: (a: string|null|undefined, b: string|null|undefined) => boolean;
 
     isWidthOrHeight: (w: number|string) => boolean;
 
-    isNotNull: (obj: any) => boolean;
+    isNotNull: <T>(obj: T) => obj is NonNullable<T>;
 
-    isNull: (obj: any) => boolean;
+    isNull: (obj: any) => obj is (undefined | null);
 
     isEmptyArray: (arr: any[]) => boolean;
 
     isNotEmptyArray: (arr: any[]) => boolean;
 
-    isEmptyObject: (obj: any) => boolean;
+    isEmptyObject: (obj: any) => obj is object;
 
-    isNotEmptyObject: (obj: any) => boolean;
+    isNotEmptyObject: (obj: any) => obj is object;
 
-    isWindow: (obj: any) => boolean;
+    isWindow: (obj: any) => obj is Window;
 
     isDeepMatch: (object: any, attrs: any) => boolean;
 
@@ -349,7 +351,7 @@ export interface _base {
 
     isNotEmptyString: (string: string) => boolean;
 
-    isEmptyString: (string: any) => boolean;
+    isEmptyString: (str: any) => str is "";
 
     encrypt: (type: string, text: string, key: string) => string;
 
