@@ -82,6 +82,29 @@ describe("DateCombo", function () {
 
     });
 
+    /**
+     * test_author_windy
+     */
+    it("下拉后直接点击外部的触发的confirm", function (done) {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30
+        });
+        // 点击日期，是否收起下拉
+        dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
+        BI.nextTick(function () {
+            BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-trigger .bi-input"), null, BI.KeyCode.ENTER, function () {
+                BI.delay(function () {
+                    expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").css("display")).to.equal("none");
+                    dateCombo.destroy();
+                    done();
+                }, 300);
+            });
+        })
+
+    });
+
 
     /**
      * test_author_windy
