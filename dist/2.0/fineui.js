@@ -66610,7 +66610,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     }, {
                         eventName: BI.SignEditor.EVENT_CHANGE,
                         action: function () {
-                            var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.MINUTE);
                             this.setValue(value);
                         }
                     }],
@@ -69533,9 +69533,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     render: function () {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
-            this.tree = new BI.Tree();
-            this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
-            this.tree.initTree(this.nodes);
+            this._initData();
         }
         var content = {
             type: "bi.htape",
@@ -69642,6 +69640,13 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _initData: function() {
+        var o = this.options;
+        this.tree = new BI.Tree();
+        this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
+        this.tree.initTree(this.nodes);
+    },
+
     _getSearchItems: function(keyword) {
         var o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
@@ -69723,7 +69728,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     populate: function (items) {
         this.options.items = items;
-        this.nodes = BI.Tree.treeFormat(BI.deepClone(items));
+        this._initData(items);
     },
 
     setValue: function (v) {
@@ -70709,9 +70714,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     render: function () {
         var self = this, o = this.options;
         if(o.itemsCreator === BI.emptyFn) {
-            this.tree = new BI.Tree();
-            this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
-            this.tree.initTree(this.nodes);
+            this._initData();
         }
         var content = {
             type: "bi.htape",
@@ -70818,6 +70821,13 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         };
     },
 
+    _initData: function() {
+        var o = this.options;
+        this.tree = new BI.Tree();
+        this.nodes = BI.Tree.treeFormat(BI.deepClone(o.items));
+        this.tree.initTree(this.nodes);
+    },
+
     _getSearchItems: function(keyword) {
         var o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
@@ -70900,7 +70910,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     populate: function (items) {
         this.options.items = items;
-        this.nodes = BI.Tree.treeFormat(BI.deepClone(items));
+        this._initData();
     },
 
     setValue: function (v) {

@@ -82,6 +82,126 @@ describe("DateCombo", function () {
 
     });
 
+    /**
+     * test_author_windy
+     */
+    it("下拉后直接点击外部的触发的confirm", function (done) {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+        });
+        // 点击日期，是否收起下拉
+        BI.nextTick(function () {
+            dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
+            BI.nextTick(function () {
+                var input = dateCombo.element.find(".bi-date-trigger .bi-input");
+                BI.Test.triggerKeyDown(input, null, BI.KeyCode.ENTER, function () {
+                    BI.delay(function () {
+                        expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").css("display")).to.equal("none");
+                        dateCombo.destroy();
+                        done();
+                    }, 300);
+                });
+            })
+        });
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("点击清空", function (done) {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+            value: {
+                type: 1,
+                value: {
+                    year: 2018,
+                    month: 2,
+                    day: 23
+                }
+            }
+        });
+        dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
+        BI.nextTick(function () {
+            dateCombo.element.find(".bi-dynamic-date-popup .bi-text:contains(清除)").parent().click();
+            expect(BI.isNull(dateCombo.getValue())).to.equal(true);
+            dateCombo.destroy();
+            done();
+        })
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("点击今天", function (done) {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+            value: {
+                type: 1,
+                value: {
+                    year: 2018,
+                    month: 2,
+                    day: 23
+                }
+            }
+        });
+        dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
+        BI.nextTick(function () {
+            dateCombo.element.find(".bi-dynamic-date-popup .bi-text:contains(今天)").parent().click();
+            var date = BI.getDate();
+            expect(dateCombo.getValue()).to.deep.equal({
+                type: 1,
+                value: {
+                    year: date.getFullYear(),
+                    month: date.getMonth() + 1,
+                    day: date.getDate()
+                }
+            });
+            dateCombo.destroy();
+            done();
+        })
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("点击确定", function (done) {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+            value: {
+                type: 1,
+                value: {
+                    year: 2018,
+                    month: 2,
+                    day: 23
+                }
+            }
+        });
+        dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
+        BI.nextTick(function () {
+            dateCombo.element.find(".bi-dynamic-date-popup .bi-text:contains(确定)").parent().click();
+            expect(dateCombo.getValue()).to.deep.equal({
+                type: 1,
+                value: {
+                    year: 2018,
+                    month: 2,
+                    day: 23
+                }
+            });
+            dateCombo.destroy();
+            done();
+        })
+    });
+
 
     /**
      * test_author_windy
