@@ -155,7 +155,7 @@ describe("DateCombo", function () {
         BI.nextTick(function () {
             dateCombo.element.find(".bi-dynamic-date-popup .bi-text:contains(今天)").parent().click();
             var date = BI.getDate();
-            expect(dateCombo.getValue()).to.equal({
+            expect(dateCombo.getValue()).to.deep.equal({
                 type: 1,
                 value: {
                     year: date.getFullYear(),
