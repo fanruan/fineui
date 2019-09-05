@@ -49055,7 +49055,7 @@ BI.Input = BI.inherit(BI.Single, {
             blur();
         }
 
-        function blur () {
+        function blur() {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
                 self._checkValidationOnValueChange();
@@ -49122,7 +49122,7 @@ BI.Input = BI.inherit(BI.Single, {
 
         // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
         var lastValue = this._lastValue;
-        if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
+        if (BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")) {
             this._valueChange();
         }
         if (BI.isEndWithBlank(this.getValue())) {
@@ -49164,10 +49164,9 @@ BI.Input = BI.inherit(BI.Single, {
         var o = this.options;
         var v = this.getValue();
         this.setValid(
-            (o.allowBlank === true && BI.trim(v) == "") ||
-            (BI.isNotEmptyString(BI.trim(v))
-                && (v === this._lastChangedValue ||
-                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+            (o.allowBlank === true && BI.trim(v) == "") || (
+                BI.isNotEmptyString(BI.trim(v)) && o.validationChecker.apply(this, [BI.trim(v)]) !== false
+            )
         );
     },
 
