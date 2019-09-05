@@ -21,7 +21,7 @@ module.exports = function (grunt) {
                 dest: "dist/polyfill.js"
             },
             coreJs: {
-                src: [
+                src: filterPath([
                     "src/core/foundation.js",
                     "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
 
                     "src/data/data.js",
                     "src/data/**/*.js"
-                ],
+                ]),
                 dest: "dist/core.js"
             },
 
@@ -67,10 +67,10 @@ module.exports = function (grunt) {
             },
             // 实现好的一些基础实例
             caseJs: {
-                src: [
+                src: filterPath([
                     "src/case/combo/popup.bubble.js",
                     "src/case/**/*.js"
-                ],
+                ]),
                 dest: "dist/case.js"
             },
             widgetJs: {
