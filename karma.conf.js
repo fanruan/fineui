@@ -18,6 +18,7 @@ module.exports = function (config) {
             "src/css/theme/**/*.css",
             "src/css/base/**/*.css",
             "src/css/widget/**/*.css",
+            "public/css/app.css",
             "src/core/foundation.js",
             "src/core/lodash.js",
             "src/core/base.js",

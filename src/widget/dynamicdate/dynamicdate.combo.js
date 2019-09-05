@@ -74,11 +74,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                     }
                                 }
                             }, {
-                                eventName: BI.DynamicDateTrigger.EVENT_TRIGGER_CLICK,
-                                action: function () {
-                                    self.combo.toggle();
-                                }
-                            }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_FOCUS,
                                 action: function () {
                                     self.storeTriggerValue = self.trigger.getKey();
