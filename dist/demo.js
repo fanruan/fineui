@@ -10586,8 +10586,16 @@ Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.tree = _ref;
                 },
+                allowEdit: true,
                 text: "默认值",
-                items: items,
+                itemsCreator: function() {
+                    return {
+                        items: [{
+                            value: 1
+                        }],
+                        hasNext: false
+                    }
+                },
                 width: 300
             }, {
                 type: "bi.button",

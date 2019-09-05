@@ -66855,7 +66855,7 @@ BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);BI.DynamicDat
                     }, {
                         eventName: BI.SignEditor.EVENT_CHANGE,
                         action: function () {
-                            var value = self._autoSwitch(this.getLastChangedValue(), BI.DynamicDateTimeSelect.MINUTE);
+                            var value = self._autoSwitch(this.getValue(), BI.DynamicDateTimeSelect.MINUTE);
                             this.setValue(value);
                         }
                     }],
