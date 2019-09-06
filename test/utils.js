@@ -32,6 +32,16 @@
                 element.trigger(e2);
                 callback();
             }, 300);
+        },
+
+        /**
+         * 模拟一次鼠标hover
+         */
+        triggerMouseover: function (element, callback) {
+            // keydown
+            var e = $.Event("mouseover");
+            element.trigger(e);
+            callback && callback();
         }
     })
 })();

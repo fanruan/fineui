@@ -7,7 +7,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -86,6 +86,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                         self.combo.showView();
                                     }
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BLUR);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_ERROR,
@@ -289,6 +294,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateTimeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimeCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTimeCombo.EVENT_ERROR = "EVENT_ERROR";

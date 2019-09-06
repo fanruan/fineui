@@ -83,6 +83,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_FOCUS);
                                 }
                             }, {
+                                eventName: BI.DynamicDateTrigger.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_BLUR);
+                                }
+                            }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_ERROR,
                                 action: function () {
                                     self.storeValue = {
@@ -281,6 +286,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
 BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
