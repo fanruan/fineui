@@ -65,6 +65,11 @@
                                 self.fireEvent("EVENT_FOCUS");
                             }
                         }, {
+                            eventName: "EVENT_BLUR",
+                            action: function () {
+                                self.fireEvent("EVENT_BLUR");
+                            }
+                        }, {
                             eventName: "EVENT_STOP",
                             action: function () {
                                 self.fireEvent("EVENT_STOP");

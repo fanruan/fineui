@@ -6,6 +6,13 @@
 
 describe("DateCombo", function () {
 
+    before(function () {
+        BI.holidays = {
+            "2010-02-28": true,
+            "2010-02-27": true
+        };
+    });
+
     /**
      * test_author_windy
      */
@@ -200,6 +207,64 @@ describe("DateCombo", function () {
             dateCombo.destroy();
             done();
         })
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("测试动态默认值", function () {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+            value: {
+                type: 2,
+                value: {
+                    year: -1,
+                    month: 1,
+                    quarter: -1,
+                    week: 1,
+                    day: -1,
+                    position: 2
+                }
+            }
+        });
+        expect(dateCombo.getValue()).to.deep.equal({
+            type: 2,
+            value: {
+                year: -1,
+                month: 1,
+                quarter: -1,
+                week: 1,
+                day: -1,
+                position: 2
+            }
+        });
+        dateCombo.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("测试工作日动态默认值", function () {
+        var dateCombo = BI.Test.createWidget({
+            type: "bi.dynamic_date_combo",
+            width: 220,
+            height: 30,
+            value: {
+                type: 2,
+                value: {
+                    workDay: -1
+                }
+            }
+        });
+        expect(dateCombo.getValue()).to.deep.equal({
+            type: 2,
+            value: {
+                workDay: -1
+            }
+        });
+        dateCombo.destroy();
     });
 
 

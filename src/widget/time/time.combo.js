@@ -65,6 +65,7 @@
                             isNeedAdjustWidth: false,
                             el: {
                                 type: "bi.time_trigger",
+                                height: opts.height,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,
@@ -95,6 +96,11 @@
                                             self.combo.showView();
                                         }
                                         self.fireEvent("EVENT_FOCUS");
+                                    }
+                                }, {
+                                    eventName: "EVENT_BLUR",
+                                    action: function () {
+                                        self.fireEvent("EVENT_BLUR");
                                     }
                                 }, {
                                     eventName: "EVENT_ERROR",

@@ -58,6 +58,9 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_BLUR);
+        });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_STOP);
         });
@@ -177,7 +180,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
             v = BI.print(date, c.compareFormat);
             result = [0, 1, 2];
         }
-        var dateArray = v.match(/\d+/g);
+        var dateArray = v.match(/\d+/g) || [];
         var newArray = [];
         // 处理乱序的年月日
         BI.each(dateArray.slice(0, 3), function (idx) {
@@ -349,6 +352,7 @@ BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
 
 });
 
+BI.DynamicDateTimeTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTimeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeTrigger.EVENT_START = "EVENT_START";
 BI.DynamicDateTimeTrigger.EVENT_STOP = "EVENT_STOP";

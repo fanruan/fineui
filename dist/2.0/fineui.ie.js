@@ -48406,7 +48406,7 @@ BI.Input = BI.inherit(BI.Single, {
             blur();
         }
 
-        function blur() {
+        function blur () {
             if (!self.isValid() && self.options.quitChecker.apply(self, [BI.trim(self.getValue())]) !== false) {
                 self.element.val(self._lastValidValue ? self._lastValidValue : "");
                 self._checkValidationOnValueChange();
@@ -48473,7 +48473,7 @@ BI.Input = BI.inherit(BI.Single, {
 
         // _valueChange中会更新_lastValue, 这边缓存用以后续STOP事件服务
         var lastValue = this._lastValue;
-        if (BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")) {
+        if(BI.trim(this.getValue()) !== BI.trim(this._lastValue || "")){
             this._valueChange();
         }
         if (BI.isEndWithBlank(this.getValue())) {
@@ -64722,6 +64722,11 @@ BI.extend(BI.DynamicDateCard, {
                                     self.fireEvent(BI.DynamicDateCombo.EVENT_FOCUS);
                                 }
                             }, {
+                                eventName: BI.DynamicDateTrigger.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateCombo.EVENT_BLUR);
+                                }
+                            }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_ERROR,
                                 action: function () {
                                     self.storeValue = {
@@ -64920,6 +64925,7 @@ BI.extend(BI.DynamicDateCard, {
 BI.DynamicDateCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
@@ -65324,6 +65330,9 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
             self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_BLUR);
+        });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
             self.fireEvent(BI.DynamicDateTrigger.EVENT_STOP);
         });
@@ -65590,6 +65599,7 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
 
 });
 
+BI.DynamicDateTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTrigger.EVENT_START = "EVENT_START";
 BI.DynamicDateTrigger.EVENT_STOP = "EVENT_STOP";
@@ -65609,7 +65619,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow",
+        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
         height: 22,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -65688,6 +65698,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                         self.combo.showView();
                                     }
                                     self.fireEvent(BI.DynamicDateTimeCombo.EVENT_FOCUS);
+                                }
+                            }, {
+                                eventName: BI.DynamicDateTimeTrigger.EVENT_BLUR,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BLUR);
                                 }
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_ERROR,
@@ -65891,6 +65906,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
 BI.DynamicDateTimeCombo.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicDateTimeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicDateTimeCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.DynamicDateTimeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimeCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTimeCombo.EVENT_ERROR = "EVENT_ERROR";
@@ -66402,6 +66418,9 @@ BI.extend(BI.DynamicDateTimeSelect, {
             self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_BLUR);
+        });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
             self.fireEvent(BI.DynamicDateTimeTrigger.EVENT_STOP);
         });
@@ -66521,7 +66540,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
             v = BI.print(date, c.compareFormat);
             result = [0, 1, 2];
         }
-        var dateArray = v.match(/\d+/g);
+        var dateArray = v.match(/\d+/g) || [];
         var newArray = [];
         // 处理乱序的年月日
         BI.each(dateArray.slice(0, 3), function (idx) {
@@ -66693,6 +66712,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 
 });
 
+BI.DynamicDateTimeTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTimeTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTimeTrigger.EVENT_START = "EVENT_START";
 BI.DynamicDateTimeTrigger.EVENT_STOP = "EVENT_STOP";
@@ -83799,6 +83819,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             isNeedAdjustWidth: false,
                             el: {
                                 type: "bi.time_trigger",
+                                height: opts.height,
                                 allowEdit: opts.allowEdit,
                                 watermark: opts.watermark,
                                 format: opts.format,
@@ -83829,6 +83850,11 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                                             self.combo.showView();
                                         }
                                         self.fireEvent("EVENT_FOCUS");
+                                    }
+                                }, {
+                                    eventName: "EVENT_BLUR",
+                                    action: function () {
+                                        self.fireEvent("EVENT_BLUR");
                                     }
                                 }, {
                                     eventName: "EVENT_ERROR",
@@ -84018,6 +84044,11 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
                             action: function () {
                                 self.storeTriggerValue = self.getKey();
                                 self.fireEvent("EVENT_FOCUS");
+                            }
+                        }, {
+                            eventName: "EVENT_BLUR",
+                            action: function () {
+                                self.fireEvent("EVENT_BLUR");
                             }
                         }, {
                             eventName: "EVENT_STOP",
