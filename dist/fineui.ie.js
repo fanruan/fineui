@@ -45271,7 +45271,7 @@ BI.Pager = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             element: this,
             items: BI.createItems(view, {
-                cls: "bi-list-item-select",
+                cls: "bi-list-item-select bi-border-radius",
                 height: 23,
                 hgap: 10
             }),
@@ -60235,7 +60235,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         var self = this, o = this.options, pagerIconCls = this._getPagerIconCls();
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
-            cls: "pager-editor",
+            cls: "pager-editor bi-border-radius",
             validationChecker: function (v) {
                 return (self.rowCount.getValue() === 0 && v === "0") || BI.isPositiveInteger(v);
             },
@@ -60569,7 +60569,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev row-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev row-pre-page-h-font bi-list-item-select2"
             },
             next: {
                 type: "bi.icon_button",
@@ -60578,7 +60578,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next row-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next row-next-page-h-font bi-list-item-select2"
             },
 
             hasPrev: h.hasPrev,
