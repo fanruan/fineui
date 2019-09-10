@@ -25,7 +25,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             hgap: 1,
             errorText: o.errorText,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
+            quitChecker: o.quitChecker,
+            value: o.value
         });
         this.clear = BI.createWidget({
             type: "bi.icon_button",

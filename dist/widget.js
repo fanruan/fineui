@@ -4808,7 +4808,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             hgap: 1,
             errorText: o.errorText,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
+            quitChecker: o.quitChecker,
+            value: o.value
         });
         this.clear = BI.createWidget({
             type: "bi.icon_button",
@@ -7322,11 +7323,11 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getSearchItems: function(keyword) {
-        var o = this.options;
+        var self = this, o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
         var items = [];
         this.tree.traverse(function (node) {
-            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            var find = BI.Func.getSearchResult(self.tree.isRoot(node) ? [] : BI.concat([node.text], (o.allowSearchValue ? [node.value] : [])), keyword);
             if(find.find.length > 0 || find.match.length > 0) {
                 items.push(node);
                 return true;
@@ -8503,11 +8504,11 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getSearchItems: function(keyword) {
-        var o = this.options;
+        var self = this, o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
         var items = [];
         this.tree.traverse(function (node) {
-            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            var find = BI.Func.getSearchResult(self.tree.isRoot(node) ? [] : BI.concat([node.text], (o.allowSearchValue ? [node.value] : [])), keyword);
             if(find.find.length > 0 || find.match.length > 0) {
                 items.push(node);
                 return true;

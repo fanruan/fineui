@@ -134,11 +134,11 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getSearchItems: function(keyword) {
-        var o = this.options;
+        var self = this, o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
         var items = [];
         this.tree.traverse(function (node) {
-            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            var find = BI.Func.getSearchResult(self.tree.isRoot(node) ? [] : BI.concat([node.text], (o.allowSearchValue ? [node.value] : [])), keyword);
             if(find.find.length > 0 || find.match.length > 0) {
                 items.push(node);
                 return true;

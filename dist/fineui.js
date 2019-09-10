@@ -49006,7 +49006,7 @@ BI.Input = BI.inherit(BI.Single, {
                     _keydown(e.keyCode);
                 }
             })
-            .on("input propertychange", function (e) {
+            .on("input", function (e) {
                 // 输入内容全选并直接删光，如果按键没放开就失去焦点不会触发keyup，被focusout覆盖了
                 // 其中propertychange在元素属性发生改变的时候就会触发 是为了兼容IE8
                 // 通过keyCode判断会漏掉输入法点击输入(右键粘贴暂缓)
@@ -49089,6 +49089,7 @@ BI.Input = BI.inherit(BI.Single, {
     },
 
     onKeyDown: function (keyCode, ctrlKey) {
+        console.log(123);
         if (!this.isValid() || BI.trim(this._lastChangedValue) !== BI.trim(this.getValue())) {
             this._checkValidationOnValueChange();
         }
@@ -67398,7 +67399,8 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
             hgap: 1,
             errorText: o.errorText,
             validationChecker: o.validationChecker,
-            quitChecker: o.quitChecker
+            quitChecker: o.quitChecker,
+            value: o.value
         });
         this.clear = BI.createWidget({
             type: "bi.icon_button",
@@ -69912,11 +69914,11 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getSearchItems: function(keyword) {
-        var o = this.options;
+        var self = this, o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
         var items = [];
         this.tree.traverse(function (node) {
-            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            var find = BI.Func.getSearchResult(self.tree.isRoot(node) ? [] : BI.concat([node.text], (o.allowSearchValue ? [node.value] : [])), keyword);
             if(find.find.length > 0 || find.match.length > 0) {
                 items.push(node);
                 return true;
@@ -71093,11 +71095,11 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
     },
 
     _getSearchItems: function(keyword) {
-        var o = this.options;
+        var self = this, o = this.options;
         // 把数组搜索换成用BI.tree搜索节点, 搜到了就不再往下搜索
         var items = [];
         this.tree.traverse(function (node) {
-            var find = BI.Func.getSearchResult([node.text || (o.allowSearchValue && node.value) || ""], keyword);
+            var find = BI.Func.getSearchResult(self.tree.isRoot(node) ? [] : BI.concat([node.text], (o.allowSearchValue ? [node.value] : [])), keyword);
             if(find.find.length > 0 || find.match.length > 0) {
                 items.push(node);
                 return true;

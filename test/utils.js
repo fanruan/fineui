@@ -26,10 +26,10 @@
             element.trigger(e1);
 
             // keyup 至少等300ms后触发
+            var e2 = $.Event("keyup");
+            e2.keyCode = keyCode;
+            element.trigger(e2);
             BI.delay(function () {
-                var e2 = jQuery.Event("keyup");
-                e2.keyCode = keyCode;
-                element.trigger(e2);
                 callback();
             }, 300);
         },
