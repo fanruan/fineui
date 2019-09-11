@@ -176,7 +176,7 @@ BI.Pager = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             element: this,
             items: BI.createItems(view, {
-                cls: "bi-list-item-select",
+                cls: "bi-list-item-select bi-border-radius",
                 height: 23,
                 hgap: 10
             }),
