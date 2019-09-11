@@ -72885,7 +72885,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border",
+            baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -73612,7 +73612,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-trigger bi-border",
+            baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcher: {},
@@ -81944,7 +81944,7 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleSelectTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-select-trigger bi-border",
+            baseCls: "bi-single-select-trigger bi-border bi-border-radius",
             allowNoSelect: false,
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,

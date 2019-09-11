@@ -4429,11 +4429,6 @@ ul.ztree.zTreeDragUL {
 }
 
 
-.bi-multi-select-trigger {
-  -webkit-border-radius: 2px 2px 2px 2px;
-  -moz-border-radius: 2px 2px 2px 2px;
-  border-radius: 2px 2px 2px 2px;
-}
 .bi-multi-select-search-pane .multi-select-toolbar {
   color: #faaa39;
 }
