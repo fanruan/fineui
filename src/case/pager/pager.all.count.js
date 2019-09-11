@@ -19,7 +19,7 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
         var self = this, o = this.options, pagerIconCls = this._getPagerIconCls();
         this.editor = BI.createWidget({
             type: "bi.small_text_editor",
-            cls: "pager-editor",
+            cls: "pager-editor bi-border-radius",
             validationChecker: function (v) {
                 return (self.rowCount.getValue() === 0 && v === "0") || BI.isPositiveInteger(v);
             },
