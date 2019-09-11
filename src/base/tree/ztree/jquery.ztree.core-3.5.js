@@ -603,7 +603,7 @@
 
 			if (tools.isArray(sNodes)) {
 				var r = [];
-				var tmpMap = [];
+				var tmpMap = {};
 				for (i=0, l=sNodes.length; i<l; i++) {
 					tmpMap[sNodes[i][key]] = sNodes[i];
 				}
