@@ -38,13 +38,13 @@ export interface _base {
 
     size: (collection: any[]|object|string) => number;
 
-    each: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => void)|object|string, thisArg?: any) => any;
+    each: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => void)|object|string, thisArg?: any) => any;
 
-    map: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any[];
+    map: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => any)|object|string, thisArg?: any) => any[];
 
-    reduce: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
+    reduce: <T>(collection: T[]|object|string, callback?: ((total: T, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
-    reduceRight: <T>(collection: any[]|object|string, callback?: ((total: any, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
+    reduceRight: <T>(collection: T[]|object|string, callback?: ((total: T, currentValue: T, currentIndex: number) => any)|object|string, thisArg?: any) => any;
 
     find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
 
