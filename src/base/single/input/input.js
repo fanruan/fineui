@@ -210,10 +210,9 @@ BI.Input = BI.inherit(BI.Single, {
         var o = this.options;
         var v = this.getValue();
         this.setValid(
-            (o.allowBlank === true && BI.trim(v) == "") ||
-            (BI.isNotEmptyString(BI.trim(v))
-                && (v === this._lastChangedValue ||
-                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+            (o.allowBlank === true && BI.trim(v) == "") || (
+                BI.isNotEmptyString(BI.trim(v)) && o.validationChecker.apply(this, [BI.trim(v)]) !== false
+            )
         );
     },
 

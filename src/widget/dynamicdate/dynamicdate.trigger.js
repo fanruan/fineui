@@ -58,6 +58,9 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
             self.storeTriggerValue = self.getKey();
             self.fireEvent(BI.DynamicDateTrigger.EVENT_FOCUS);
         });
+        this.editor.on(BI.SignEditor.EVENT_BLUR, function () {
+            self.fireEvent(BI.DynamicDateTrigger.EVENT_BLUR);
+        });
         this.editor.on(BI.SignEditor.EVENT_STOP, function () {
             self.fireEvent(BI.DynamicDateTrigger.EVENT_STOP);
         });
@@ -324,6 +327,7 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
 
 });
 
+BI.DynamicDateTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.DynamicDateTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicDateTrigger.EVENT_START = "EVENT_START";
 BI.DynamicDateTrigger.EVENT_STOP = "EVENT_STOP";

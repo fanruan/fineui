@@ -26,12 +26,22 @@
             element.trigger(e1);
 
             // keyup 至少等300ms后触发
+            var e2 = $.Event("keyup");
+            e2.keyCode = keyCode;
+            element.trigger(e2);
             BI.delay(function () {
-                var e2 = jQuery.Event("keyup");
-                e2.keyCode = keyCode;
-                element.trigger(e2);
                 callback();
             }, 300);
+        },
+
+        /**
+         * 模拟一次鼠标hover
+         */
+        triggerMouseover: function (element, callback) {
+            // keydown
+            var e = $.Event("mouseover");
+            element.trigger(e);
+            callback && callback();
         }
     })
 })();

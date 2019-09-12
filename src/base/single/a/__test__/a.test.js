@@ -12,6 +12,7 @@ describe("ALinkTest", function () {
             text: "CCC"
         });
         expect(a.element.is('a')).to.equal(true);
+        a.destroy();
     });
 
     /**
@@ -26,5 +27,6 @@ describe("ALinkTest", function () {
             }
         });
         expect(a.element.is('a') && a.element.hasClass("bi-label")).to.equal(true);
+        a.destroy();
     });
 });

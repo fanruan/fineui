@@ -96,7 +96,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev column-pre-page-h-font bi-list-item-select2"
             },
             next: {
                 type: "bi.icon_button",
@@ -105,7 +105,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next column-next-page-h-font bi-list-item-select2"
             },
 
             hasPrev: v.hasPrev,
@@ -158,7 +158,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_First_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-prev row-pre-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-prev row-pre-page-h-font bi-list-item-select2"
             },
             next: {
                 type: "bi.icon_button",
@@ -167,7 +167,7 @@ BI.DirectionPager = BI.inherit(BI.Widget, {
                 warningTitle: BI.i18nText("BI-Current_Is_Last_Page"),
                 height: 22,
                 width: 22,
-                cls: "bi-border direction-pager-next row-next-page-h-font"
+                cls: "bi-border bi-border-radius direction-pager-next row-next-page-h-font bi-list-item-select2"
             },
 
             hasPrev: h.hasPrev,

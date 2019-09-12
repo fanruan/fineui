@@ -7157,7 +7157,7 @@ BI.Pager = BI.inherit(BI.Widget, {
             type: "bi.button_group",
             element: this,
             items: BI.createItems(view, {
-                cls: "bi-list-item-select",
+                cls: "bi-list-item-select bi-border-radius",
                 height: 23,
                 hgap: 10
             }),
@@ -10646,10 +10646,9 @@ BI.Input = BI.inherit(BI.Single, {
         var o = this.options;
         var v = this.getValue();
         this.setValid(
-            (o.allowBlank === true && BI.trim(v) == "") ||
-            (BI.isNotEmptyString(BI.trim(v))
-                && (v === this._lastChangedValue ||
-                    o.validationChecker.apply(this, [BI.trim(v)]) !== false))
+            (o.allowBlank === true && BI.trim(v) == "") || (
+                BI.isNotEmptyString(BI.trim(v)) && o.validationChecker.apply(this, [BI.trim(v)]) !== false
+            )
         );
     },
 
@@ -12415,7 +12414,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 
 			if (tools.isArray(sNodes)) {
 				var r = [];
-				var tmpMap = [];
+				var tmpMap = {};
 				for (i=0, l=sNodes.length; i<l; i++) {
 					tmpMap[sNodes[i][key]] = sNodes[i];
 				}
