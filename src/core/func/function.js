@@ -23,6 +23,18 @@ _.extend(BI.Func, {
         }
         return name;
     },
+
+    /**
+     * 获取字符宽度
+     * @param str
+     * @return {number}
+     */
+    getGBWidth: function (str) {
+        str = str + "";
+        str = str.replace(/[^\x00-\xff]/g, "xx");
+        return Math.ceil(str.length / 2);
+    },
+
     /**
      * 获取搜索结果
      * @param items
