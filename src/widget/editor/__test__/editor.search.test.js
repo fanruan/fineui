@@ -95,6 +95,22 @@ describe("searchEditor", function () {
         editor.destroy();
     });
 
+    /**
+     * test_author_windy
+     */
+    it("getKeywords", function (done) {
+        var editor = BI.Test.createWidget({
+            type: "bi.search_editor",
+            width: 300
+        });
+        editor.focus();
+        BI.Test.triggerKeyDown(editor.element.find(".bi-input"), "8 8", 56, function () {
+            expect(editor.getKeywords()).to.deep.equal(["8", "8"]);
+            editor.destroy();
+            done();
+        })
+    });
+
 
     /**
      * test_author_windy
@@ -177,6 +193,22 @@ describe("searchEditor", function () {
         });
         expect(editor.getValue()).to.equal("12346");
         editor.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("getKeywords1", function (done) {
+        var editor = BI.Test.createWidget({
+            type: "bi.search_editor",
+            width: 300
+        });
+        editor.focus();
+        BI.Test.triggerKeyDown(editor.element.find(".bi-input"), "8 8", 56, function () {
+            expect(editor.getKeywords()).to.deep.equal(["8", "8"]);
+            editor.destroy();
+            done();
+        })
     });
 
 });
