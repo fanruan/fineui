@@ -9634,7 +9634,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             };
         } else {
             return {
-                text: o.text,
+                text: BI.isFunction(o.text) ? o.text() : o.text,
                 textCls: "bi-water-mark",
                 iconCls: o.iconCls
             };
