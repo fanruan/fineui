@@ -1022,18 +1022,12 @@ textarea {
       & .bi-textarea {
         color: @color-bi-text;
       }
+    }
+
+    &.active {
       background-color: @color-bi-background-default-theme-dark;
     }
-    &.active, &:active {
-      color: @color-bi-text-highlight;
-      & .bi-input {
-        color: @color-bi-text-highlight;
-      }
-      & .bi-textarea {
-        color: @color-bi-text-highlight;
-      }
-      background-color: @color-bi-background-default-theme-dark;
-    }
+    
     &.disabled {
       &, &:hover, &:active {
         background-color: transparent !important;

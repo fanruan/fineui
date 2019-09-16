@@ -991,7 +991,6 @@ textarea {
 .bi-theme-dark .bi-list-item-select2:hover,
 .bi-theme-dark .bi-list-item-select2.hover {
   color: #ffffff;
-  background-color: #20263b;
 }
 .bi-theme-dark .bi-list-item-select2:hover .bi-input,
 .bi-theme-dark .bi-list-item-select2.hover .bi-input {
@@ -1001,18 +1000,8 @@ textarea {
 .bi-theme-dark .bi-list-item-select2.hover .bi-textarea {
   color: #ffffff;
 }
-.bi-theme-dark .bi-list-item-select2.active,
-.bi-theme-dark .bi-list-item-select2:active {
-  color: #3685f2;
+.bi-theme-dark .bi-list-item-select2.active {
   background-color: #20263b;
-}
-.bi-theme-dark .bi-list-item-select2.active .bi-input,
-.bi-theme-dark .bi-list-item-select2:active .bi-input {
-  color: #3685f2;
-}
-.bi-theme-dark .bi-list-item-select2.active .bi-textarea,
-.bi-theme-dark .bi-list-item-select2:active .bi-textarea {
-  color: #3685f2;
 }
 .bi-theme-dark .bi-list-item-select2.disabled,
 .bi-theme-dark .bi-list-item-select2.disabled:hover,
