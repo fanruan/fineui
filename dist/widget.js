@@ -22193,7 +22193,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);!(function () {
 
         _formatValue: function (v) {
             var now = BI.getDate();
-            return BI.isNotEmptyObject(v) ? BI.print(BI.getDate(now.getFullYear(), now.getMonth(), now.getDay(), v.hour, v.minute, v.second), this._getFormatString()) : BI.i18nText("BI-Basic_Unrestricted");
+            return BI.isNotEmptyObject(v) ? BI.print(BI.getDate(now.getFullYear(), now.getMonth(), now.getDay(), v.hour, v.minute, v.second), this._getFormatString()) : "";
         },
 
         getKey: function () {
