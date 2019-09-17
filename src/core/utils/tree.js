@@ -446,7 +446,7 @@
 
             if (BI.isArray(sNodes)) {
                 var r = [];
-                var tmpMap = [];
+                var tmpMap = {};
                 for (i = 0, l = sNodes.length; i < l; i++) {
                     if (BI.isNull(sNodes[i].id)) {
                         return sNodes;
@@ -478,7 +478,7 @@
 
             if (BI.isArray(sNodes)) {
                 var r = [];
-                var tmpMap = [];
+                var tmpMap = {};
                 for (i = 0, l = sNodes.length; i < l; i++) {
                     if (BI.isNull(sNodes[i].id)) {
                         return sNodes;

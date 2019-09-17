@@ -17122,7 +17122,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
             if (BI.isArray(sNodes)) {
                 var r = [];
-                var tmpMap = [];
+                var tmpMap = {};
                 for (i = 0, l = sNodes.length; i < l; i++) {
                     if (BI.isNull(sNodes[i].id)) {
                         return sNodes;
@@ -17154,7 +17154,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
 
             if (BI.isArray(sNodes)) {
                 var r = [];
-                var tmpMap = [];
+                var tmpMap = {};
                 for (i = 0, l = sNodes.length; i < l; i++) {
                     if (BI.isNull(sNodes[i].id)) {
                         return sNodes;
@@ -20684,6 +20684,18 @@ _.extend(BI.Func, {
         }
         return name;
     },
+
+    /**
+     * 获取字符宽度
+     * @param str
+     * @return {number}
+     */
+    getGBWidth: function (str) {
+        str = str + "";
+        str = str.replace(/[^\x00-\xff]/g, "xx");
+        return Math.ceil(str.length / 2);
+    },
+
     /**
      * 获取搜索结果
      * @param items
@@ -62306,7 +62318,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
             };
         } else {
             return {
-                text: o.text,
+                text: BI.isFunction(o.text) ? o.text() : o.text,
                 textCls: "bi-water-mark",
                 iconCls: o.iconCls
             };
