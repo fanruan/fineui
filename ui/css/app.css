@@ -61,6 +61,10 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-color: rgba(35, 46, 64, 0.3);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#4d232e40,endColorstr=#4d232e40);
 }
+div::-webkit-scrollbar-corner,
+textarea::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
 .bi-theme-dark div::-webkit-scrollbar,
 .bi-theme-dark textarea::-webkit-scrollbar {
   -webkit-appearance: none;
