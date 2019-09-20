@@ -13583,6 +13583,24 @@ if (!_global.BI) {
             });
         }
     };
+
+    BI.getContext = function (type, config) {
+        if (constantInjection[type]) {
+            return BI.Constants.getConstant(type);
+        }
+        if (modelInjection[type]) {
+            return BI.Models.getModel(type, config);
+        }
+        if (storeInjection[type]) {
+            return BI.Stores.getStore(type, config);
+        }
+        if (serviceInjection[type]) {
+            return BI.Services.getService(type, config);
+        }
+        if (providerInjection[type]) {
+            return BI.Providers.getProvider(type, config);
+        }
+    };
 })();
 !(function () {
     var i18nStore = {};
