@@ -21303,6 +21303,24 @@ _.extend(BI, {
             });
         }
     };
+
+    BI.getContext = function (type, config) {
+        if (constantInjection[type]) {
+            return BI.Constants.getConstant(type);
+        }
+        if (modelInjection[type]) {
+            return BI.Models.getModel(type, config);
+        }
+        if (storeInjection[type]) {
+            return BI.Stores.getStore(type, config);
+        }
+        if (serviceInjection[type]) {
+            return BI.Services.getService(type, config);
+        }
+        if (providerInjection[type]) {
+            return BI.Providers.getProvider(type, config);
+        }
+    };
 })();
 /**
  * guy
@@ -63141,6 +63159,90 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
 });
 BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);/**
+ * 月份展示面板
+ *
+ * Created by GUY on 2015/9/2.
+ * @class BI.MonthPopup
+ * @extends BI.Trigger
+ */
+BI.MonthPopup = BI.inherit(BI.Widget, {
+
+    _defaultConfig: function () {
+        return BI.extend(BI.MonthPopup.superclass._defaultConfig.apply(this, arguments), {
+            baseCls: "bi-month-popup",
+            behaviors: {}
+        });
+    },
+
+    _init: function () {
+        BI.MonthPopup.superclass._init.apply(this, arguments);
+        var self = this, o = this.options;
+
+        // 纵向排列月
+        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
+        var items = [];
+        items.push(month.slice(0, 2));
+        items.push(month.slice(2, 4));
+        items.push(month.slice(4, 6));
+        items.push(month.slice(6, 8));
+        items.push(month.slice(8, 10));
+        items.push(month.slice(10, 12));
+        items = BI.map(items, function (i, item) {
+            return BI.map(item, function (j, td) {
+                return {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
+                    once: false,
+                    forceSelected: true,
+                    height: 23,
+                    width: 38,
+                    value: td,
+                    text: td
+                };
+            });
+        });
+
+        this.month = BI.createWidget({
+            type: "bi.button_group",
+            element: this,
+            behaviors: o.behaviors,
+            items: BI.createItems(items, {}),
+            layouts: [BI.LogicFactory.createLogic("table", BI.extend({
+                dynamic: true
+            }, {
+                columns: 2,
+                rows: 6,
+                columnSize: [1 / 2, 1 / 2],
+                rowSize: 25
+            })), {
+                type: "bi.center_adapt",
+                vgap: 1,
+                hgap: 2
+            }],
+            value: o.value
+        });
+
+        this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+            if (type === BI.Events.CLICK) {
+                self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
+            }
+        });
+    },
+
+    getValue: function () {
+        return this.month.getValue()[0];
+    },
+
+    setValue: function (v) {
+        v = BI.parseInt(v);
+        this.month.setValue([v]);
+    }
+});
+BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.shortcut("bi.month_popup", BI.MonthPopup);/**
  * 年份展示面板
  *
  * Created by GUY on 2015/9/2.
@@ -68553,290 +68655,6 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
         return -this._accurateDivisionTenExponent(-num1, n);
     }
 });/**
- * 月份下拉框
- *
- * Created by GUY on 2015/8/28.
- * @class BI.MonthCombo
- * @extends BI.Trigger
- */
-BI.MonthCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.MonthCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-month-combo",
-            behaviors: {},
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.MonthCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        this.trigger = BI.createWidget({
-            type: "bi.month_trigger",
-            value: o.value
-        });
-
-        this.trigger.on(BI.MonthTrigger.EVENT_CONFIRM, function (v) {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
-            if (this.getKey() && this.getKey() !== self.storeValue) {
-                self.setValue(this.getValue());
-            } else if (!this.getKey()) {
-                self.setValue();
-            }
-            self.fireEvent(BI.MonthCombo.EVENT_CONFIRM);
-        });
-        this.trigger.on(BI.MonthTrigger.EVENT_FOCUS, function () {
-            self.storeValue = this.getKey();
-        });
-        this.trigger.on(BI.MonthTrigger.EVENT_START, function () {
-            self.combo.hideView();
-        });
-        this.trigger.on(BI.MonthTrigger.EVENT_STOP, function () {
-            if (!self.combo.isViewVisible()) {
-                self.combo.showView();
-            }
-        });
-
-        this.popup = BI.createWidget({
-            type: "bi.month_popup",
-            behaviors: o.behaviors,
-            value: o.value
-        });
-        this.popup.on(BI.MonthPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.MonthCombo.EVENT_CONFIRM);
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: o.container,
-            element: this,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
-            el: this.trigger,
-            popup: {
-                minWidth: 85,
-                el: this.popup
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.MonthCombo.EVENT_BEFORE_POPUPVIEW);
-        });
-    },
-
-    setValue: function (v) {
-        this.trigger.setValue(v);
-        this.popup.setValue(v);
-    },
-
-    getValue: function () {
-        if (BI.isNull(this.popup)) {
-            return this.options.value || "";
-        } else {
-            return this.popup.getValue() || "";
-        }
-    }
-});
-
-BI.MonthCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MonthCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.month_combo", BI.MonthCombo);/**
- * 月份展示面板
- *
- * Created by GUY on 2015/9/2.
- * @class BI.MonthPopup
- * @extends BI.Trigger
- */
-BI.MonthPopup = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.MonthPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-month-popup",
-            behaviors: {}
-        });
-    },
-
-    _init: function () {
-        BI.MonthPopup.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        // 纵向排列月
-        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
-        var items = [];
-        items.push(month.slice(0, 2));
-        items.push(month.slice(2, 4));
-        items.push(month.slice(4, 6));
-        items.push(month.slice(6, 8));
-        items.push(month.slice(8, 10));
-        items.push(month.slice(10, 12));
-        items = BI.map(items, function (i, item) {
-            return BI.map(item, function (j, td) {
-                return {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
-                    textAlign: "center",
-                    whiteSpace: "nowrap",
-                    once: false,
-                    forceSelected: true,
-                    height: 23,
-                    width: 38,
-                    value: td,
-                    text: td
-                };
-            });
-        });
-
-        this.month = BI.createWidget({
-            type: "bi.button_group",
-            element: this,
-            behaviors: o.behaviors,
-            items: BI.createItems(items, {}),
-            layouts: [BI.LogicFactory.createLogic("table", BI.extend({
-                dynamic: true
-            }, {
-                columns: 2,
-                rows: 6,
-                columnSize: [1 / 2, 1 / 2],
-                rowSize: 25
-            })), {
-                type: "bi.center_adapt",
-                vgap: 1,
-                hgap: 2
-            }],
-            value: o.value
-        });
-
-        this.month.on(BI.Controller.EVENT_CHANGE, function (type) {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            if (type === BI.Events.CLICK) {
-                self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
-            }
-        });
-    },
-
-    getValue: function () {
-        return this.month.getValue()[0];
-    },
-
-    setValue: function (v) {
-        v = BI.parseInt(v);
-        this.month.setValue([v]);
-    }
-});
-BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.month_popup", BI.MonthPopup);/**
- * 月份trigger
- *
- * Created by GUY on 2015/8/21.
- * @class BI.MonthTrigger
- * @extends BI.Trigger
- */
-BI.MonthTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4,
-        vgap: 2
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.MonthTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-month-trigger bi-border",
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.MonthTrigger.superclass._init.apply(this, arguments);
-        var self = this, o = this.options, c = this._const;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            height: o.height,
-            validationChecker: function (v) {
-                return v === "" || (BI.isPositiveInteger(v) && v >= 1 && v <= 12);
-            },
-            quitChecker: function (v) {
-                return false;
-            },
-            hgap: c.hgap,
-            vgap: c.vgap,
-            allowBlank: true,
-            errorText: BI.i18nText("BI-Month_Trigger_Error_Text")
-        });
-        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.MonthTrigger.EVENT_FOCUS);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MonthTrigger.EVENT_CHANGE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = self.editor.getValue();
-            if (BI.isNotNull(value)) {
-                self.editor.setValue(value);
-                self.editor.setTitle(value);
-            }
-            self.fireEvent(BI.MonthTrigger.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
-            if (self.editor.isValid()) {
-                self.editor.blur();
-            }
-        });
-        this.editor.on(BI.SignEditor.EVENT_START, function () {
-            self.fireEvent(BI.MonthTrigger.EVENT_START);
-        });
-        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
-            self.fireEvent(BI.MonthTrigger.EVENT_STOP);
-        });
-        BI.createWidget({
-            element: this,
-            type: "bi.htape",
-            items: [
-                {
-                    el: this.editor
-                }, {
-                    el: {
-                        type: "bi.text_button",
-                        text: BI.i18nText("BI-Multi_Date_Month"),
-                        baseCls: "bi-trigger-month-text",
-                        width: o.height
-                    },
-                    width: o.height
-                }, {
-                    el: {
-                        type: "bi.trigger_icon_button",
-                        width: o.height
-                    },
-                    width: o.height
-                }
-            ]
-        });
-        this.setValue(o.value);
-    },
-    setValue: function (v) {
-        if(BI.isNotNull(v)) {
-            this.editor.setState(v + 1);
-            this.editor.setValue(v + 1);
-            this.editor.setTitle(v + 1);
-            return;
-        }
-        this.editor.setState("");
-        this.editor.setValue("");
-        this.editor.setTitle("");
-    },
-    getKey: function () {
-        return this.editor.getValue() | 0;
-    },
-    getValue: function () {
-        return this.editor.getValue() - 1;
-    }
-});
-BI.MonthTrigger.EVENT_FOCUS = "EVENT_FOCUS";
-BI.MonthTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.MonthTrigger.EVENT_START = "EVENT_START";
-BI.MonthTrigger.EVENT_STOP = "EVENT_STOP";
-BI.MonthTrigger.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.month_trigger", BI.MonthTrigger);/**
  * Created by roy on 15/8/14.
  */
 BI.DownListCombo = BI.inherit(BI.Widget, {
@@ -79001,275 +78819,6 @@ BI.NumberIntervalSingleEidtor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.NumberIntervalSingleEidtor.EVENT_CHANGE_CONFIRM = "EVENT_CHANGE_CONFIRM";
 BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);/**
- * 季度下拉框
- *
- * Created by GUY on 2015/8/28.
- * @class BI.QuarterCombo
- * @extends BI.Widget
- */
-BI.QuarterCombo = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        return BI.extend(BI.QuarterCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-quarter-combo",
-            behaviors: {},
-            height: 25
-        });
-    },
-    _init: function () {
-        BI.QuarterCombo.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.storeValue = "";
-        this.trigger = BI.createWidget({
-            type: "bi.quarter_trigger",
-            value: o.value
-        });
-
-        this.trigger.on(BI.QuarterTrigger.EVENT_FOCUS, function () {
-            self.storeValue = this.getKey();
-        });
-        this.trigger.on(BI.QuarterTrigger.EVENT_START, function () {
-            self.combo.isViewVisible() && self.combo.hideView();
-        });
-        this.trigger.on(BI.QuarterTrigger.EVENT_STOP, function () {
-            if (!self.combo.isViewVisible()) {
-                self.combo.showView();
-            }
-        });
-        this.trigger.on(BI.QuarterTrigger.EVENT_CONFIRM, function () {
-            if (self.combo.isViewVisible()) {
-                return;
-            }
-            if (this.getKey() && this.getKey() !== self.storeValue) {
-                self.setValue(this.getKey());
-            } else if (!this.getKey()) {
-                self.setValue();
-            }
-            self.fireEvent(BI.QuarterCombo.EVENT_CONFIRM);
-        });
-        this.popup = BI.createWidget({
-            type: "bi.quarter_popup",
-            behaviors: o.behaviors,
-            value: o.value
-        });
-
-        this.popup.on(BI.QuarterPopup.EVENT_CHANGE, function () {
-            self.setValue(self.popup.getValue());
-            self.combo.hideView();
-            self.fireEvent(BI.QuarterCombo.EVENT_CONFIRM);
-        });
-
-        this.combo = BI.createWidget({
-            type: "bi.combo",
-            container: o.container,
-            element: this,
-            isNeedAdjustHeight: false,
-            isNeedAdjustWidth: false,
-            el: this.trigger,
-            popup: {
-                minWidth: 85,
-                el: this.popup
-            }
-        });
-        this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW);
-        });
-    },
-
-    setValue: function (v) {
-        this.trigger.setValue(v);
-        this.popup.setValue(v);
-    },
-
-    getValue: function () {
-        if (BI.isNull(this.popup)) {
-            return this.options.value || "";
-        } else {
-            return this.popup.getValue() || "";
-        }
-    }
-});
-
-BI.QuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.QuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
-BI.shortcut("bi.quarter_combo", BI.QuarterCombo);/**
- * 季度展示面板
- *
- * Created by GUY on 2015/9/2.
- * @class BI.QuarterPopup
- * @extends BI.Trigger
- */
-BI.QuarterPopup = BI.inherit(BI.Widget, {
-
-    _defaultConfig: function () {
-        return BI.extend(BI.QuarterPopup.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-quarter-popup",
-            behaviors: {}
-        });
-    },
-
-    _init: function () {
-        BI.QuarterPopup.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-
-        var items = [{
-            text: BI.Date._QN[1],
-            value: 1
-        }, {
-            text: BI.Date._QN[2],
-            value: 2
-        }, {
-            text: BI.Date._QN[3],
-            value: 3
-        }, {
-            text: BI.Date._QN[4],
-            value: 4
-        }];
-        items = BI.map(items, function (j, item) {
-            return BI.extend(item, {
-                type: "bi.text_item",
-                cls: "bi-list-item-active",
-                textAlign: "left",
-                whiteSpace: "nowrap",
-                once: false,
-                forceSelected: true,
-                height: 25
-            });
-        });
-
-        this.quarter = BI.createWidget({
-            type: "bi.button_group",
-            element: this,
-            behaviors: o.behaviors,
-            items: BI.createItems(items, {}),
-            layouts: [{
-                type: "bi.vertical"
-            }],
-            value: o.value
-        });
-
-        this.quarter.on(BI.Controller.EVENT_CHANGE, function (type) {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-            if (type === BI.Events.CLICK) {
-                self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
-            }
-        });
-    },
-
-    getValue: function () {
-        return this.quarter.getValue()[0];
-    },
-
-    setValue: function (v) {
-        this.quarter.setValue([v]);
-    }
-});
-BI.QuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
-BI.shortcut("bi.quarter_popup", BI.QuarterPopup);/**
- * 季度trigger
- *
- * Created by GUY on 2015/8/21.
- * @class BI.QuarterTrigger
- * @extends BI.Trigger
- */
-BI.QuarterTrigger = BI.inherit(BI.Trigger, {
-    _const: {
-        hgap: 4,
-        vgap: 2,
-        textWidth: 40
-    },
-
-    _defaultConfig: function () {
-        return BI.extend(BI.QuarterTrigger.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-quarter-trigger bi-border",
-            height: 24
-        });
-    },
-    _init: function () {
-        BI.QuarterTrigger.superclass._init.apply(this, arguments);
-        var self = this, o = this.options, c = this._const;
-        this.editor = BI.createWidget({
-            type: "bi.sign_editor",
-            height: o.height,
-            validationChecker: function (v) {
-                return v === "" || (BI.isPositiveInteger(v) && v >= 1 && v <= 4);
-            },
-            quitChecker: function (v) {
-                return false;
-            },
-            hgap: c.hgap,
-            vgap: c.vgap,
-            allowBlank: true,
-            errorText: BI.i18nText("BI-Quarter_Trigger_Error_Text")
-        });
-        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
-            self.fireEvent(BI.QuarterTrigger.EVENT_FOCUS);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
-            self.fireEvent(BI.QuarterTrigger.EVENT_CHANGE);
-        });
-        this.editor.on(BI.SignEditor.EVENT_CONFIRM, function () {
-            var value = self.editor.getValue();
-            if (BI.isNotNull(value)) {
-                self.editor.setValue(value);
-                self.editor.setTitle(value);
-            }
-            self.fireEvent(BI.QuarterTrigger.EVENT_CONFIRM);
-        });
-        this.editor.on(BI.SignEditor.EVENT_SPACE, function () {
-            if (self.editor.isValid()) {
-                self.editor.blur();
-            }
-        });
-        this.editor.on(BI.SignEditor.EVENT_START, function () {
-            self.fireEvent(BI.QuarterTrigger.EVENT_START);
-        });
-        this.editor.on(BI.SignEditor.EVENT_STOP, function () {
-            self.fireEvent(BI.QuarterTrigger.EVENT_STOP);
-        });
-
-        BI.createWidget({
-            element: this,
-            type: "bi.htape",
-            items: [
-                {
-                    el: this.editor
-                }, {
-                    el: {
-                        type: "bi.text_button",
-                        baseCls: "bi-trigger-quarter-text",
-                        text: BI.i18nText("BI-Multi_Date_Quarter"),
-                        width: c.textWidth
-                    },
-                    width: c.textWidth
-                }, {
-                    el: {
-                        type: "bi.trigger_icon_button",
-                        width: o.height
-                    },
-                    width: o.height
-                }
-            ]
-        });
-        this.setValue(o.value);
-    },
-
-    setValue: function (v) {
-        v = v || "";
-        this.editor.setState(v);
-        this.editor.setValue(v);
-        this.editor.setTitle(v);
-    },
-
-    getKey: function () {
-        return this.editor.getValue();
-    }
-});
-BI.QuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";
-BI.QuarterTrigger.EVENT_CHANGE = "EVENT_CHANGE";
-BI.QuarterTrigger.EVENT_START = "EVENT_START";
-BI.QuarterTrigger.EVENT_STOP = "EVENT_STOP";
-BI.QuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
-BI.shortcut("bi.quarter_trigger", BI.QuarterTrigger);/**
  *
  * @class BI.SearchMultiTextValueCombo
  * @extends BI.Single
