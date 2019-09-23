@@ -51513,7 +51513,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM,
                     action: function () {
                         var value = self.trigger.getSearcher().getKeyword();
-                        self.combo.setValue(value);
+                        self.combo.setValue([value]);
                         self.combo.hideView();
                     }
                 }]
@@ -52695,7 +52695,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM,
                     action: function () {
                         var value = self.trigger.getSearcher().getKeyword();
-                        self.combo.setValue(value);
+                        self.combo.setValue([value]);
                         self.combo.hideView();
                     }
                 }]
@@ -57554,16 +57554,14 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -57664,8 +57662,6 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -57897,16 +57893,14 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -58009,8 +58003,6 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -58216,16 +58208,14 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -58356,8 +58346,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -59328,7 +59316,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            allowInsertValue: true
         });
     },
 
@@ -59357,7 +59346,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                 type: "bi.multi_list_tree_searcher",
                 itemsCreator: o.itemsCreator,
                 popup: {
-                    type: "bi.multi_tree_search_insert_pane",
+                    type: o.allowInsertValue ? "bi.multi_tree_search_insert_pane" : "bi.multi_tree_search_pane",
                     el: {
                         type: "bi.list_part_tree"
                     },
@@ -71101,6 +71090,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             text: o.text,
             value: o.value,
             watermark: o.watermark,
+            allowInsertValue: o.allowInsertValue,
+            allowEdit: o.allowEdit,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
