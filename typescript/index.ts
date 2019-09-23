@@ -11,6 +11,8 @@ import { _ShowAction } from "./core/action/action.show";
 import { _Behavior, _BehaviorFactory } from "./core/behavior/behavior";
 import { _HighlightBehavior } from "./core/behavior/behavior.highlight";
 import { _RedMarkBehavior } from "./core/behavior/behavior.redmark";
+import { _Pane, _PaneStatic } from "./base/pane";
+import { _LoadingPane } from "./case/loading/loading_pane";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -32,4 +34,6 @@ export interface _BI extends _func, _i18n, _base {
     BehaviorFactory: ClassConstructor<_BehaviorFactory>;
     HighlightBehavior: ClassConstructor<_HighlightBehavior>;
     RedMarkBehavior: ClassConstructor<_RedMarkBehavior>;
+    Pane: ClassConstructor<_Pane> & _PaneStatic;
+    LoadingPane: ClassConstructor<_LoadingPane>;
 }
