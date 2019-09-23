@@ -14397,7 +14397,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            allowInsertValue: true
         });
     },
 
@@ -14426,7 +14427,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                 type: "bi.multi_list_tree_searcher",
                 itemsCreator: o.itemsCreator,
                 popup: {
-                    type: "bi.multi_tree_search_insert_pane",
+                    type: o.allowInsertValue ? "bi.multi_tree_search_insert_pane" : "bi.multi_tree_search_pane",
                     el: {
                         type: "bi.list_part_tree"
                     },
@@ -26170,6 +26171,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             text: o.text,
             value: o.value,
             watermark: o.watermark,
+            allowInsertValue: o.allowInsertValue,
+            allowEdit: o.allowEdit,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
