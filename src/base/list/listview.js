@@ -45,8 +45,16 @@ BI.ListView = BI.inherit(BI.Widget, {
             o.scrollTop = self.element.scrollTop();
             self._calculateBlocksToRender();
         });
+        var lastWidth = this.element.width(),
+            lastHeight = this.element.height();
         BI.ResizeDetector.addResizeListener(this, function () {
-            self._calculateBlocksToRender();
+            var width = self.element.width(),
+                height = self.element.height();
+            if (width !== lastWidth || height !== lastHeight) {
+                self._calculateBlocksToRender();
+                lastWidth = width;
+                lastHeight = height;
+            }
         });
     },
 
