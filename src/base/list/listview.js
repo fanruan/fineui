@@ -51,9 +51,9 @@ BI.ListView = BI.inherit(BI.Widget, {
             var width = self.element.width(),
                 height = self.element.height();
             if (width !== lastWidth || height !== lastHeight) {
-                self._calculateBlocksToRender();
                 lastWidth = width;
                 lastHeight = height;
+                self._calculateBlocksToRender();
             }
         });
     },
