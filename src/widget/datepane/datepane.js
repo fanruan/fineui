@@ -44,6 +44,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
+                            self.fireEvent("EVENT_CHANGE");
                         }
                     }],
                     ref: function () {
