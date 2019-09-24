@@ -10,7 +10,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
-            value: ""
+            value: "",
+            height: 24
         });
     },
 
