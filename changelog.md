@@ -1,4 +1,8 @@
 # 更新日志
+2.0(2019-09)
+- button的bubble创建的popup在收起的时候会destroy
+- 修复了dynamic_date_pane在切换静态时间和动态时间的时候不会发事件的问题
+
 2.0(2019-08)
 - 修复valueChooser系列不支持value属性的问题
 - 更新了若干icon-font的样式
