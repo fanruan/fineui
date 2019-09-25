@@ -142,7 +142,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
                     }
                 }

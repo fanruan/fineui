@@ -120,7 +120,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     }
                 }
