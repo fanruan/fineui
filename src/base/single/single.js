@@ -111,7 +111,11 @@ BI.Single = BI.inherit(BI.Widget, {
                             clearTimeout(self.hideTimeout);
                             self.hideTimeout = null;
                         }
-                        self._showToolTip(self._e || e, opt);
+                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
+                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
+                        if (self.element.__isMouseInBounds__(self._e || e)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }
                 }, 500);
 
