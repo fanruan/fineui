@@ -137,6 +137,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
                 }

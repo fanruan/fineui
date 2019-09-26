@@ -110,9 +110,11 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 level: "ignore",
                 value: false,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Cancel")
             }, {
                 value: true,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Sure")
             }]
         };
