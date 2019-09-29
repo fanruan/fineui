@@ -2,17 +2,17 @@ _.extend(BI, {
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady (src, must) {
-            var $scripts = $("head script, body script");
-            $.each($scripts, function (i, item) {
+            var $scripts = BI.$("head script, body script");
+            BI.$.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;
                 }
             });
-            var $links = $("head link");
-            $.each($links, function (i, item) {
+            var $links = BI.$("head link");
+            BI.$.each($links, function (i, item) {
                 if (item.href.indexOf(src) != -1 && must) {
                     _LOADED[src] = false;
-                    $(item).remove();
+                    BI.$(item).remove();
                 }
             });
         }
@@ -34,7 +34,7 @@ _.extend(BI, {
                 _LOADED[src] = true;
             } else {
                 // alex:这里用同步调用的方式,必须等待ajax完成
-                $.ajax({
+                BI.$.ajax({
                     url: src,
                     dataType: "script", // alex:指定dataType为script,jquery会帮忙做globalEval的事情
                     async: false,

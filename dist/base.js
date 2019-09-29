@@ -15,7 +15,7 @@
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(BI.jQuery);
     }
 }(function ($) {
 
@@ -1869,7 +1869,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 track(treeNode.children);
                 var treeObj = self.nodes;
                 var nodes = treeObj.getSelectedNodes();
-                $.each(nodes, function (index, node) {
+                BI.$.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
             }
@@ -2006,7 +2006,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.isParent = n.isParent || n.parent;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+                n.text = BI.$("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
                 n.text = BI.htmlEncode(n.text + "");
             }
@@ -2050,7 +2050,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
             times: 1
@@ -2100,7 +2100,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             },
             callback: {}
         };
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     start: function () {
@@ -2258,7 +2258,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
@@ -2284,7 +2284,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
                 track(treeNode.children);
 
-                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var treeObj = BI.$.fn.zTree.getZTreeObj(treeId);
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
@@ -2579,7 +2579,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -2658,7 +2658,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2771,7 +2771,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
         }
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2909,7 +2909,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -13523,7 +13523,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 	var zt = $.fn.zTree,
 	$$ = tools.$,
 	consts = zt.consts;
-})(jQuery);/*
+})(BI.jQuery);/*
  * JQuery zTree excheck v3.5.18
  * http://zTree.me/
  *
@@ -14152,4 +14152,4 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		}
 		return html;
 	}
-})(jQuery);
+})(BI.jQuery);
