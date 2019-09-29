@@ -23,7 +23,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 
     _resize: function (ev) {
         BI.each(this.resizerManger, function (key, resizer) {
-            if (resizer instanceof $) {
+            if (resizer instanceof BI.$) {
                 if (resizer.is(":visible")) {
                     resizer.trigger("__resize__");
                 }

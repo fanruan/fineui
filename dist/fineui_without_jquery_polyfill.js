@@ -19210,7 +19210,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 
     _resize: function (ev) {
         BI.each(this.resizerManger, function (key, resizer) {
-            if (resizer instanceof $) {
+            if (resizer instanceof BI.$) {
                 if (resizer.is(":visible")) {
                     resizer.trigger("__resize__");
                 }
@@ -27360,7 +27360,11 @@ BI.Single = BI.inherit(BI.Widget, {
                             clearTimeout(self.hideTimeout);
                             self.hideTimeout = null;
                         }
-                        self._showToolTip(self._e || e, opt);
+                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
+                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
+                        if (self.element.__isMouseInBounds__(self._e || e)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }
                 }, 500);
 
@@ -27824,6 +27828,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
+                                // bubble的提示不需要一直存在在界面上
+                                destroyWhenHide: true,
                                 ref: function () {
                                     self.combo = this;
                                 },
@@ -31804,7 +31810,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-popover bi-card",
+            baseCls: "bi-popover bi-card bi-border-radius",
             // width: 600,
             // height: 500,
             size: "normal", // small, normal, big
@@ -31852,6 +31858,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             cls: "bi-font-bold",
                             height: this._constant.HEADER_HEIGHT,
                             text: o.header,
+                            title: o.header,
                             textAlign: "left"
                         },
                         left: 20,
@@ -32396,8 +32403,16 @@ BI.ListView = BI.inherit(BI.Widget, {
             o.scrollTop = self.element.scrollTop();
             self._calculateBlocksToRender();
         });
+        var lastWidth = this.element.width(),
+            lastHeight = this.element.height();
         BI.ResizeDetector.addResizeListener(this, function () {
-            self._calculateBlocksToRender();
+            var width = self.element.width(),
+                height = self.element.height();
+            if (width !== lastWidth || height !== lastHeight) {
+                lastWidth = width;
+                lastHeight = height;
+                self._calculateBlocksToRender();
+            }
         });
     },
 
@@ -39298,9 +39313,11 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 level: "ignore",
                 value: false,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Cancel")
             }, {
                 value: true,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Sure")
             }]
         };
@@ -45915,6 +45932,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                                 default:
                                     break;
                             }
+                            self.fireEvent("EVENT_CHANGE");
                         }
                     }],
                     ref: function () {
@@ -57481,6 +57499,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -57817,6 +57836,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -58136,6 +58156,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -70226,7 +70247,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         path.push(split);
                         childrenCount.push(expanded.length);
                         // 如果只有一个值且取消的就是这个值
-                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
+                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0].value === notSelectedValue) {
                             for (var j = childrenCount.length - 1; j >= 0; j--) {
                                 if (childrenCount[j] === 1) {
                                     self._deleteNode(selectedValues, path[j]);
