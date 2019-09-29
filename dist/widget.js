@@ -996,6 +996,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                                 default:
                                     break;
                             }
+                            self.fireEvent("EVENT_CHANGE");
                         }
                     }],
                     ref: function () {
@@ -12562,6 +12563,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -12898,6 +12900,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -13217,6 +13220,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -25307,7 +25311,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         path.push(split);
                         childrenCount.push(expanded.length);
                         // 如果只有一个值且取消的就是这个值
-                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
+                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0].value === notSelectedValue) {
                             for (var j = childrenCount.length - 1; j >= 0; j--) {
                                 if (childrenCount[j] === 1) {
                                     self._deleteNode(selectedValues, path[j]);
