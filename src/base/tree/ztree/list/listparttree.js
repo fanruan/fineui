@@ -70,7 +70,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {

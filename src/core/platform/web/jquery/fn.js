@@ -1,4 +1,4 @@
-if (jQuery) {
+if (BI.jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -54,9 +54,9 @@ if (jQuery) {
 
             };
         }
-    })(jQuery);
+    })(BI.jQuery);
 
-    BI.extend(jQuery.fn, {
+    BI.extend(BI.jQuery.fn, {
 
         destroy: function () {
             this.remove();
@@ -99,7 +99,7 @@ if (jQuery) {
                 if (tidx >= 0) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
@@ -109,7 +109,7 @@ if (jQuery) {
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
                         py = py.substr(pidx + keyword.length);
@@ -126,8 +126,8 @@ if (jQuery) {
         },
 
         getDomHeight: function (parent) {
-            var clone = $(this).clone();
-            clone.appendTo($(parent || "body"));
+            var clone = BI.$(this).clone();
+            clone.appendTo(BI.$(parent || "body"));
             var height = clone.height();
             clone.remove();
             return height;

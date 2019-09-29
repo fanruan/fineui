@@ -54,7 +54,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
         }
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);

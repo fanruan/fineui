@@ -12376,11 +12376,11 @@ if (!_global.BI) {
             if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
-                    return $(o.element);
+                    return BI.$(o.element);
                 }
-                return $(document.createElement(o.tagName));
+                return BI.$(document.createElement(o.tagName));
             }
-            return $(widget);
+            return BI.$(widget);
         },
         createFragment: function () {
             return document.createDocumentFragment();
@@ -18605,7 +18605,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = _global.$ ? _global.$.parseJSON(text) : _global.JSON.parse(text);
+            var jo = BI.$ ? BI.$.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -32581,7 +32581,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 
 // })();
 // Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
+BI.jQuery = BI.$ = jQuery;
 
 // Expose jQuery as an AMD module, but only for AMD loaders that
 // understand the issues with loading multiple versions of jQuery
@@ -32602,13 +32602,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/*
  * 给jQuery.Event对象添加的工具方法
  */
-$.extend($.Event.prototype, {
+BI.$.extend(BI.$.Event.prototype, {
     // event.stopEvent
     stopEvent: function () {
         this.stopPropagation();
         this.preventDefault();
     }
-});if (jQuery) {
+});if (BI.jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -32664,9 +32664,9 @@ $.extend($.Event.prototype, {
 
             };
         }
-    })(jQuery);
+    })(BI.jQuery);
 
-    BI.extend(jQuery.fn, {
+    BI.extend(BI.jQuery.fn, {
 
         destroy: function () {
             this.remove();
@@ -32709,7 +32709,7 @@ $.extend($.Event.prototype, {
                 if (tidx >= 0) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
@@ -32719,7 +32719,7 @@ $.extend($.Event.prototype, {
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
                         py = py.substr(pidx + keyword.length);
@@ -32736,8 +32736,8 @@ $.extend($.Event.prototype, {
         },
 
         getDomHeight: function (parent) {
-            var clone = $(this).clone();
-            clone.appendTo($(parent || "body"));
+            var clone = BI.$(this).clone();
+            clone.appendTo(BI.$(parent || "body"));
             var height = clone.height();
             clone.remove();
             return height;
@@ -32842,17 +32842,17 @@ _.extend(BI, {
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady (src, must) {
-            var $scripts = $("head script, body script");
-            $.each($scripts, function (i, item) {
+            var $scripts = BI.$("head script, body script");
+            BI.$.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;
                 }
             });
-            var $links = $("head link");
-            $.each($links, function (i, item) {
+            var $links = BI.$("head link");
+            BI.$.each($links, function (i, item) {
                 if (item.href.indexOf(src) != -1 && must) {
                     _LOADED[src] = false;
-                    $(item).remove();
+                    BI.$(item).remove();
                 }
             });
         }
@@ -32874,7 +32874,7 @@ _.extend(BI, {
                 _LOADED[src] = true;
             } else {
                 // alex:这里用同步调用的方式,必须等待ajax完成
-                $.ajax({
+                BI.$.ajax({
                     url: src,
                     dataType: "script", // alex:指定dataType为script,jquery会帮忙做globalEval的事情
                     async: false,
@@ -38563,7 +38563,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(BI.jQuery);
     }
 }(function ($) {
 
@@ -40417,7 +40417,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 track(treeNode.children);
                 var treeObj = self.nodes;
                 var nodes = treeObj.getSelectedNodes();
-                $.each(nodes, function (index, node) {
+                BI.$.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
             }
@@ -40554,7 +40554,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.isParent = n.isParent || n.parent;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+                n.text = BI.$("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
                 n.text = BI.htmlEncode(n.text + "");
             }
@@ -40598,7 +40598,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
             times: 1
@@ -40648,7 +40648,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             },
             callback: {}
         };
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     start: function () {
@@ -40806,7 +40806,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
@@ -40832,7 +40832,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
                 track(treeNode.children);
 
-                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var treeObj = BI.$.fn.zTree.getZTreeObj(treeId);
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
@@ -41127,7 +41127,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -41206,7 +41206,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -41319,7 +41319,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
         }
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -41457,7 +41457,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -52071,7 +52071,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 	var zt = $.fn.zTree,
 	$$ = tools.$,
 	consts = zt.consts;
-})(jQuery);/*
+})(BI.jQuery);/*
  * JQuery zTree excheck v3.5.18
  * http://zTree.me/
  *
@@ -52700,7 +52700,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		}
 		return html;
 	}
-})(jQuery);/**
+})(BI.jQuery);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -61854,7 +61854,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {
@@ -61931,7 +61931,7 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {
