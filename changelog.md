@@ -1,4 +1,11 @@
 # 更新日志
+2.0(2019-09)
+- [视觉]popover弹出框增加圆角
+- 文本列表通过复制粘贴的形式选中值的时候发送事件
+- 修复tree_value_chooser选中节点的唯一子节点后搜索该子节点，无法取消选中的问题
+- button的bubble创建的popup在收起的时候会destroy
+- 修复了dynamic_date_pane在切换静态时间和动态时间的时候不会发事件的问题
+
 2.0(2019-08)
 - 修复valueChooser系列不支持value属性的问题
 - 更新了若干icon-font的样式

@@ -15,7 +15,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-popover bi-card",
+            baseCls: "bi-popover bi-card bi-border-radius",
             // width: 600,
             // height: 500,
             size: "normal", // small, normal, big
@@ -63,6 +63,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             cls: "bi-font-bold",
                             height: this._constant.HEADER_HEIGHT,
                             text: o.header,
+                            title: o.header,
                             textAlign: "left"
                         },
                         left: 20,

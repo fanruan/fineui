@@ -229,6 +229,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
+                                // bubble的提示不需要一直存在在界面上
+                                destroyWhenHide: true,
                                 ref: function () {
                                     self.combo = this;
                                 },

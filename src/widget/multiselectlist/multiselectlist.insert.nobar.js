@@ -142,6 +142,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -218,16 +219,14 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -330,8 +329,6 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
