@@ -14,7 +14,7 @@
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = jQuery._data(fromElement[0]);
+            var elemData = BI.jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
@@ -26,7 +26,7 @@
                 throw new Error("不匹配");
             }
             BI.each(fromChildren, function (i, child) {
-                BI.DOM.patchProps(jQuery(child), jQuery(toChildren[i]));
+                BI.DOM.patchProps(BI.jQuery(child), BI.jQuery(toChildren[i]));
             });
             BI.each(fromElement.data("__widgets"), function (i, widget) {
                 widget.element = toElement;
@@ -43,7 +43,7 @@
             var frag = BI.Widget._renderEngine.createFragment();
             BI.each(doms, function (i, dom) {
                 dom instanceof BI.Widget && (dom = dom.element);
-                dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
+                dom instanceof BI.$ && dom[0] && frag.appendChild(dom[0]);
             });
             return frag;
         },

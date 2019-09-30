@@ -141,7 +141,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM,
                     action: function () {
                         var value = self.trigger.getSearcher().getKeyword();
-                        self.combo.setValue(value);
+                        self.combo.setValue([value]);
                         self.combo.hideView();
                     }
                 }]

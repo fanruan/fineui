@@ -1,7 +1,7 @@
 Demo = {
     version: 1.0
 };
-$(function () {
+BI.$(function () {
     var ref;
 
     BI.each(Demo.CONFIG, function (index, item) {
@@ -8962,13 +8962,13 @@ BI.shortcut("demo.main", Demo.Main);!(function () {
                         type: "bi.text_button",
                         text: "星空蓝",
                         handler: function () {
-                            $("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
+                            BI.$("html").removeClass("bi-theme-default").addClass("bi-theme-dark");
                         }
                     }, {
                         type: "bi.text_button",
                         text: "典雅白",
                         handler: function () {
-                            $("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
+                            BI.$("html").removeClass("bi-theme-dark").addClass("bi-theme-default");
                         }
                     }]
                 }

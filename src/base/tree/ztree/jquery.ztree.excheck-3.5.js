@@ -627,4 +627,4 @@
 		}
 		return html;
 	}
-})(jQuery);
+})(BI.jQuery);

@@ -15,7 +15,7 @@
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(BI.jQuery);
     }
 }(function ($) {
 

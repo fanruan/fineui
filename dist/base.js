@@ -15,7 +15,7 @@
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(BI.jQuery);
     }
 }(function ($) {
 
@@ -440,7 +440,11 @@ BI.Single = BI.inherit(BI.Widget, {
                             clearTimeout(self.hideTimeout);
                             self.hideTimeout = null;
                         }
-                        self._showToolTip(self._e || e, opt);
+                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
+                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
+                        if (self.element.__isMouseInBounds__(self._e || e)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }
                 }, 500);
 
@@ -904,6 +908,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
+                                // bubble的提示不需要一直存在在界面上
+                                destroyWhenHide: true,
                                 ref: function () {
                                     self.combo = this;
                                 },
@@ -1869,7 +1875,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 track(treeNode.children);
                 var treeObj = self.nodes;
                 var nodes = treeObj.getSelectedNodes();
-                $.each(nodes, function (index, node) {
+                BI.$.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
             }
@@ -2006,7 +2012,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.isParent = n.isParent || n.parent;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+                n.text = BI.$("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
                 n.text = BI.htmlEncode(n.text + "");
             }
@@ -2050,7 +2056,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
             times: 1
@@ -2100,7 +2106,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             },
             callback: {}
         };
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     start: function () {
@@ -2258,7 +2264,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
@@ -2284,7 +2290,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
                 track(treeNode.children);
 
-                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var treeObj = BI.$.fn.zTree.getZTreeObj(treeId);
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
@@ -2579,7 +2585,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -2658,7 +2664,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2771,7 +2777,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
         }
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -2909,7 +2915,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -6142,7 +6148,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-popover bi-card",
+            baseCls: "bi-popover bi-card bi-border-radius",
             // width: 600,
             // height: 500,
             size: "normal", // small, normal, big
@@ -6190,6 +6196,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             cls: "bi-font-bold",
                             height: this._constant.HEADER_HEIGHT,
                             text: o.header,
+                            title: o.header,
                             textAlign: "left"
                         },
                         left: 20,
@@ -6734,8 +6741,16 @@ BI.ListView = BI.inherit(BI.Widget, {
             o.scrollTop = self.element.scrollTop();
             self._calculateBlocksToRender();
         });
+        var lastWidth = this.element.width(),
+            lastHeight = this.element.height();
         BI.ResizeDetector.addResizeListener(this, function () {
-            self._calculateBlocksToRender();
+            var width = self.element.width(),
+                height = self.element.height();
+            if (width !== lastWidth || height !== lastHeight) {
+                lastWidth = width;
+                lastHeight = height;
+                self._calculateBlocksToRender();
+            }
         });
     },
 
@@ -13523,7 +13538,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 	var zt = $.fn.zTree,
 	$$ = tools.$,
 	consts = zt.consts;
-})(jQuery);/*
+})(BI.jQuery);/*
  * JQuery zTree excheck v3.5.18
  * http://zTree.me/
  *
@@ -14152,4 +14167,4 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		}
 		return html;
 	}
-})(jQuery);
+})(BI.jQuery);

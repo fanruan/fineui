@@ -12131,11 +12131,11 @@ if (!_global.BI) {
             if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
-                    return $(o.element);
+                    return BI.$(o.element);
                 }
-                return $(document.createElement(o.tagName));
+                return BI.$(document.createElement(o.tagName));
             }
-            return $(widget);
+            return BI.$(widget);
         },
         createFragment: function () {
             return document.createDocumentFragment();
@@ -18360,7 +18360,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = _global.$ ? _global.$.parseJSON(text) : _global.JSON.parse(text);
+            var jo = BI.$ ? BI.$.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -19464,7 +19464,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 
     _resize: function (ev) {
         BI.each(this.resizerManger, function (key, resizer) {
-            if (resizer instanceof $) {
+            if (resizer instanceof BI.$) {
                 if (resizer.is(":visible")) {
                     resizer.trigger("__resize__");
                 }
@@ -21790,7 +21790,7 @@ BI.prepares.push(function () {
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = jQuery._data(fromElement[0]);
+            var elemData = BI.jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
@@ -21802,7 +21802,7 @@ BI.prepares.push(function () {
                 throw new Error("不匹配");
             }
             BI.each(fromChildren, function (i, child) {
-                BI.DOM.patchProps(jQuery(child), jQuery(toChildren[i]));
+                BI.DOM.patchProps(BI.jQuery(child), BI.jQuery(toChildren[i]));
             });
             BI.each(fromElement.data("__widgets"), function (i, widget) {
                 widget.element = toElement;
@@ -21819,7 +21819,7 @@ BI.prepares.push(function () {
             var frag = BI.Widget._renderEngine.createFragment();
             BI.each(doms, function (i, dom) {
                 dom instanceof BI.Widget && (dom = dom.element);
-                dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
+                dom instanceof BI.$ && dom[0] && frag.appendChild(dom[0]);
             });
             return frag;
         },
@@ -32336,7 +32336,9 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 
 // })();
 // Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
+BI.jQuery = BI.$ = jQuery;
+window.$ = window.$ || jQuery;
+window.jQuery = window.jQuery || jQuery;
 
 // Expose jQuery as an AMD module, but only for AMD loaders that
 // understand the issues with loading multiple versions of jQuery
@@ -32357,13 +32359,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/*
  * 给jQuery.Event对象添加的工具方法
  */
-$.extend($.Event.prototype, {
+BI.$.extend(BI.$.Event.prototype, {
     // event.stopEvent
     stopEvent: function () {
         this.stopPropagation();
         this.preventDefault();
     }
-});if (jQuery) {
+});if (BI.jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -32419,9 +32421,9 @@ $.extend($.Event.prototype, {
 
             };
         }
-    })(jQuery);
+    })(BI.jQuery);
 
-    BI.extend(jQuery.fn, {
+    BI.extend(BI.jQuery.fn, {
 
         destroy: function () {
             this.remove();
@@ -32464,7 +32466,7 @@ $.extend($.Event.prototype, {
                 if (tidx >= 0) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
@@ -32474,7 +32476,7 @@ $.extend($.Event.prototype, {
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
                         py = py.substr(pidx + keyword.length);
@@ -32491,8 +32493,8 @@ $.extend($.Event.prototype, {
         },
 
         getDomHeight: function (parent) {
-            var clone = $(this).clone();
-            clone.appendTo($(parent || "body"));
+            var clone = BI.$(this).clone();
+            clone.appendTo(BI.$(parent || "body"));
             var height = clone.height();
             clone.remove();
             return height;
@@ -32597,17 +32599,17 @@ _.extend(BI, {
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady (src, must) {
-            var $scripts = $("head script, body script");
-            $.each($scripts, function (i, item) {
+            var $scripts = BI.$("head script, body script");
+            BI.$.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;
                 }
             });
-            var $links = $("head link");
-            $.each($links, function (i, item) {
+            var $links = BI.$("head link");
+            BI.$.each($links, function (i, item) {
                 if (item.href.indexOf(src) != -1 && must) {
                     _LOADED[src] = false;
-                    $(item).remove();
+                    BI.$(item).remove();
                 }
             });
         }
@@ -32629,7 +32631,7 @@ _.extend(BI, {
                 _LOADED[src] = true;
             } else {
                 // alex:这里用同步调用的方式,必须等待ajax完成
-                $.ajax({
+                BI.$.ajax({
                     url: src,
                     dataType: "script", // alex:指定dataType为script,jquery会帮忙做globalEval的事情
                     async: false,
@@ -37914,7 +37916,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         module.exports = factory;
     } else {
         // Browser globals
-        factory(jQuery);
+        factory(BI.jQuery);
     }
 }(function ($) {
 
@@ -38339,7 +38341,11 @@ BI.Single = BI.inherit(BI.Widget, {
                             clearTimeout(self.hideTimeout);
                             self.hideTimeout = null;
                         }
-                        self._showToolTip(self._e || e, opt);
+                        // CHART-10611 在拖拽的情况下, 鼠标拖拽着元素离开了拖拽元素的容器，但是子元素在dom结构上仍然属于容器
+                        // 这样会认为鼠标仍然在容器中, 500ms内放开的话，会在容器之外显示鼠标停留处显示容器的title
+                        if (self.element.__isMouseInBounds__(self._e || e)) {
+                            self._showToolTip(self._e || e, opt);
+                        }
                     }
                 }, 500);
 
@@ -38803,6 +38809,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                             el: {
                                 type: "bi.bubble_combo",
                                 trigger: "",
+                                // bubble的提示不需要一直存在在界面上
+                                destroyWhenHide: true,
                                 ref: function () {
                                     self.combo = this;
                                 },
@@ -39768,7 +39776,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 track(treeNode.children);
                 var treeObj = self.nodes;
                 var nodes = treeObj.getSelectedNodes();
-                $.each(nodes, function (index, node) {
+                BI.$.each(nodes, function (index, node) {
                     node.halfCheck = false;
                 });
             }
@@ -39905,7 +39913,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             n.isParent = n.isParent || n.parent;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
-                n.text = $("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+                n.text = BI.$("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
             } else {
                 n.text = BI.htmlEncode(n.text + "");
             }
@@ -39949,7 +39957,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         };
         var op = BI.extend({}, o.paras, {
             times: 1
@@ -39999,7 +40007,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             },
             callback: {}
         };
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     start: function () {
@@ -40157,7 +40165,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
@@ -40183,7 +40191,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
                 track(treeNode.children);
 
-                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var treeObj = BI.$.fn.zTree.getZTreeObj(treeId);
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;
@@ -40478,7 +40486,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -40557,7 +40565,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -40670,7 +40678,7 @@ BI.ListAsyncTree = BI.inherit(BI.ListTreeView, {
         }
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             var checked = treeNode.checked;
             self._checkValue(treeNode, !checked);
             zTree.checkNode(treeNode, !checked, true, true);
@@ -40808,7 +40816,7 @@ BI.ListPartTree = BI.inherit(BI.ListAsyncTree, {
             if (self._stop === true) {
                 return;
             }
-            self.nodes = $.fn.zTree.init(tree.element, setting, nodes);
+            self.nodes = BI.$.fn.zTree.init(tree.element, setting, nodes);
         }
 
         BI.delay(function () {
@@ -44041,7 +44049,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.Popover.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-popover bi-card",
+            baseCls: "bi-popover bi-card bi-border-radius",
             // width: 600,
             // height: 500,
             size: "normal", // small, normal, big
@@ -44089,6 +44097,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                             cls: "bi-font-bold",
                             height: this._constant.HEADER_HEIGHT,
                             text: o.header,
+                            title: o.header,
                             textAlign: "left"
                         },
                         left: 20,
@@ -44633,8 +44642,16 @@ BI.ListView = BI.inherit(BI.Widget, {
             o.scrollTop = self.element.scrollTop();
             self._calculateBlocksToRender();
         });
+        var lastWidth = this.element.width(),
+            lastHeight = this.element.height();
         BI.ResizeDetector.addResizeListener(this, function () {
-            self._calculateBlocksToRender();
+            var width = self.element.width(),
+                height = self.element.height();
+            if (width !== lastWidth || height !== lastHeight) {
+                lastWidth = width;
+                lastHeight = height;
+                self._calculateBlocksToRender();
+            }
         });
     },
 
@@ -51422,7 +51439,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 	var zt = $.fn.zTree,
 	$$ = tools.$,
 	consts = zt.consts;
-})(jQuery);/*
+})(BI.jQuery);/*
  * JQuery zTree excheck v3.5.18
  * http://zTree.me/
  *
@@ -52051,7 +52068,7 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		}
 		return html;
 	}
-})(jQuery);/**
+})(BI.jQuery);/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -54271,7 +54288,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
-            value: ""
+            value: "",
+            height: 24
         });
     },
 
@@ -54291,8 +54309,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width,
-                height: o.height
+                width: o.width - 2,
+                height: o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -54705,7 +54723,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 24
+            height: 22
         });
     },
 
@@ -54769,7 +54787,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 24
+            height: 22
         });
     },
 
@@ -56074,9 +56092,11 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 level: "ignore",
                 value: false,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Cancel")
             }, {
                 value: true,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Sure")
             }]
         };
@@ -61205,7 +61225,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {
@@ -61282,7 +61302,7 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {
@@ -62967,6 +62987,7 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);BI.DynamicDatePan
                                 default:
                                     break;
                             }
+                            self.fireEvent("EVENT_CHANGE");
                         }
                     }],
                     ref: function () {
@@ -68565,7 +68586,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM,
                     action: function () {
                         var value = self.trigger.getSearcher().getKeyword();
-                        self.combo.setValue(value);
+                        self.combo.setValue([value]);
                         self.combo.hideView();
                     }
                 }]
@@ -69747,7 +69768,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     eventName: BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM,
                     action: function () {
                         var value = self.trigger.getSearcher().getKeyword();
-                        self.combo.setValue(value);
+                        self.combo.setValue([value]);
                         self.combo.hideView();
                     }
                 }]
@@ -74533,6 +74554,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -74606,16 +74628,14 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectInsertList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -74716,8 +74736,6 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -74873,6 +74891,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectInsertNoBarList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -74949,16 +74968,14 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectInsertNoBarList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -75061,8 +75078,6 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -75196,6 +75211,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                                 self.adapter.setValue(self.storeValue);
                                 assertShowValue();
                             }
+                            self.fireEvent(BI.MultiSelectList.EVENT_CHANGE);
                         });
                     }
                 }
@@ -75268,16 +75284,14 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     _joinKeywords: function (keywords, callback) {
         var self = this, o = this.options;
         this._assertValue(this.storeValue);
-        if (!this._allData) {
-            o.itemsCreator({
-                type: BI.MultiSelectList.REQ_GET_ALL_DATA
-            }, function (ob) {
-                self._allData = BI.map(ob.items, "value");
-                digest(self._allData);
-            });
-        } else {
-            digest(this._allData);
-        }
+        // 和复选下拉框同步，allData做缓存是会爆炸的
+        o.itemsCreator({
+            type: BI.MultiSelectList.REQ_GET_ALL_DATA,
+            keywords: keywords
+        }, function (ob) {
+            var values = BI.map(ob.items, "value");
+            digest(values);
+        });
 
         function digest (items) {
             var selectedMap = self._makeMap(items);
@@ -75408,8 +75422,6 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
     },
 
     populate: function () {
-        this._count = null;
-        this._allData = null;
         this.adapter.populate.apply(this.adapter, arguments);
         this.trigger.populate.apply(this.trigger, arguments);
     }
@@ -76380,7 +76392,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            allowEdit: true
+            allowEdit: true,
+            allowInsertValue: true
         });
     },
 
@@ -76409,7 +76422,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                 type: "bi.multi_list_tree_searcher",
                 itemsCreator: o.itemsCreator,
                 popup: {
-                    type: "bi.multi_tree_search_insert_pane",
+                    type: o.allowInsertValue ? "bi.multi_tree_search_insert_pane" : "bi.multi_tree_search_pane",
                     el: {
                         type: "bi.list_part_tree"
                     },
@@ -87289,7 +87302,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                         path.push(split);
                         childrenCount.push(expanded.length);
                         // 如果只有一个值且取消的就是这个值
-                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0] === notSelectedValue) {
+                        if (i === parents.length - 1 && expanded.length === 1 && expanded[0].value === notSelectedValue) {
                             for (var j = childrenCount.length - 1; j >= 0; j--) {
                                 if (childrenCount[j] === 1) {
                                     self._deleteNode(selectedValues, path[j]);
@@ -88153,6 +88166,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             text: o.text,
             value: o.value,
             watermark: o.watermark,
+            allowInsertValue: o.allowInsertValue,
+            allowEdit: o.allowEdit,
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,

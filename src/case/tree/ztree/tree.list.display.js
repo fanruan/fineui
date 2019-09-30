@@ -66,7 +66,7 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {

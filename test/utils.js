@@ -14,19 +14,19 @@
          */
         triggerKeyDown: function (element, value, keyCode, callback) {
             // keydown
-            var e = $.Event("keydown");
+            var e = BI.$.Event("keydown");
             e.keyCode = keyCode;
             element.trigger(e);
 
             // input
             BI.isNotNull(value) && element.val(value);
-            var e1 = $.Event("input");
+            var e1 = BI.$.Event("input");
             e1.originalEvent = {};
             e1.keyCode = keyCode;
             element.trigger(e1);
 
             // keyup 至少等300ms后触发
-            var e2 = $.Event("keyup");
+            var e2 = BI.$.Event("keyup");
             e2.keyCode = keyCode;
             element.trigger(e2);
             BI.delay(function () {
@@ -39,7 +39,7 @@
          */
         triggerMouseover: function (element, callback) {
             // keydown
-            var e = $.Event("mouseover");
+            var e = BI.$.Event("mouseover");
             element.trigger(e);
             callback && callback();
         }

@@ -4244,6 +4244,9 @@ ul.ztree.zTreeDragUL {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.bi-popover {
+  border: 1px solid transparent;
+}
 /**********BI.BIListView*************/
 .bi-popup-view {
   position: fixed !important;

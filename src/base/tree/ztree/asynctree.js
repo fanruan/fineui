@@ -50,7 +50,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function onClick (event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj(treeId);
+            var zTree = BI.$.fn.zTree.getZTreeObj(treeId);
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
@@ -76,7 +76,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
                 track(treeNode.children);
 
-                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var treeObj = BI.$.fn.zTree.getZTreeObj(treeId);
                 var nodes = treeObj.getSelectedNodes();
                 BI.each(nodes, function (index, node) {
                     node.halfCheck = false;

@@ -12131,11 +12131,11 @@ if (!_global.BI) {
             if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
-                    return $(o.element);
+                    return BI.$(o.element);
                 }
-                return $(document.createElement(o.tagName));
+                return BI.$(document.createElement(o.tagName));
             }
-            return $(widget);
+            return BI.$(widget);
         },
         createFragment: function () {
             return document.createDocumentFragment();
@@ -18360,7 +18360,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         try {
             // 注意0啊
             // var jo = $.parseJSON(text) || {};
-            var jo = _global.$ ? _global.$.parseJSON(text) : _global.JSON.parse(text);
+            var jo = BI.$ ? BI.$.parseJSON(text) : _global.JSON.parse(text);
             if (jo == null) {
                 jo = {};
             }
@@ -19464,7 +19464,7 @@ BI.ResizeController = BI.inherit(BI.Controller, {
 
     _resize: function (ev) {
         BI.each(this.resizerManger, function (key, resizer) {
-            if (resizer instanceof $) {
+            if (resizer instanceof BI.$) {
                 if (resizer.is(":visible")) {
                     resizer.trigger("__resize__");
                 }
@@ -21790,7 +21790,7 @@ BI.prepares.push(function () {
     BI.extend(BI.DOM, {
 
         patchProps: function (fromElement, toElement) {
-            var elemData = jQuery._data(fromElement[0]);
+            var elemData = BI.jQuery._data(fromElement[0]);
             var events = elemData.events;
             BI.each(events, function (eventKey, event) {
                 BI.each(event, function (i, handler) {
@@ -21802,7 +21802,7 @@ BI.prepares.push(function () {
                 throw new Error("不匹配");
             }
             BI.each(fromChildren, function (i, child) {
-                BI.DOM.patchProps(jQuery(child), jQuery(toChildren[i]));
+                BI.DOM.patchProps(BI.jQuery(child), BI.jQuery(toChildren[i]));
             });
             BI.each(fromElement.data("__widgets"), function (i, widget) {
                 widget.element = toElement;
@@ -21819,7 +21819,7 @@ BI.prepares.push(function () {
             var frag = BI.Widget._renderEngine.createFragment();
             BI.each(doms, function (i, dom) {
                 dom instanceof BI.Widget && (dom = dom.element);
-                dom instanceof $ && dom[0] && frag.appendChild(dom[0]);
+                dom instanceof BI.$ && dom[0] && frag.appendChild(dom[0]);
             });
             return frag;
         },
@@ -32336,7 +32336,9 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 
 // })();
 // Expose jQuery to the global object
-window.jQuery = window.$ = jQuery;
+BI.jQuery = BI.$ = jQuery;
+window.$ = window.$ || jQuery;
+window.jQuery = window.jQuery || jQuery;
 
 // Expose jQuery as an AMD module, but only for AMD loaders that
 // understand the issues with loading multiple versions of jQuery
@@ -32357,13 +32359,13 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 })( window );/*
  * 给jQuery.Event对象添加的工具方法
  */
-$.extend($.Event.prototype, {
+BI.$.extend(BI.$.Event.prototype, {
     // event.stopEvent
     stopEvent: function () {
         this.stopPropagation();
         this.preventDefault();
     }
-});if (jQuery) {
+});if (BI.jQuery) {
     (function ($) {
         // richer:容器在其各个边缘留出的空间
         if (!$.fn.insets) {
@@ -32419,9 +32421,9 @@ $.extend($.Event.prototype, {
 
             };
         }
-    })(jQuery);
+    })(BI.jQuery);
 
-    BI.extend(jQuery.fn, {
+    BI.extend(BI.jQuery.fn, {
 
         destroy: function () {
             this.remove();
@@ -32464,7 +32466,7 @@ $.extend($.Event.prototype, {
                 if (tidx >= 0) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
@@ -32474,7 +32476,7 @@ $.extend($.Event.prototype, {
                 } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
-                    this.append($("<span>").addClass("bi-keyword-red-mark")
+                    this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
                         py = py.substr(pidx + keyword.length);
@@ -32491,8 +32493,8 @@ $.extend($.Event.prototype, {
         },
 
         getDomHeight: function (parent) {
-            var clone = $(this).clone();
-            clone.appendTo($(parent || "body"));
+            var clone = BI.$(this).clone();
+            clone.appendTo(BI.$(parent || "body"));
             var height = clone.height();
             clone.remove();
             return height;
@@ -32597,17 +32599,17 @@ _.extend(BI, {
     $import: function () {
         var _LOADED = {}; // alex:保存加载过的
         function loadReady (src, must) {
-            var $scripts = $("head script, body script");
-            $.each($scripts, function (i, item) {
+            var $scripts = BI.$("head script, body script");
+            BI.$.each($scripts, function (i, item) {
                 if (item.src.indexOf(src) != -1) {
                     _LOADED[src] = true;
                 }
             });
-            var $links = $("head link");
-            $.each($links, function (i, item) {
+            var $links = BI.$("head link");
+            BI.$.each($links, function (i, item) {
                 if (item.href.indexOf(src) != -1 && must) {
                     _LOADED[src] = false;
-                    $(item).remove();
+                    BI.$(item).remove();
                 }
             });
         }
@@ -32629,7 +32631,7 @@ _.extend(BI, {
                 _LOADED[src] = true;
             } else {
                 // alex:这里用同步调用的方式,必须等待ajax完成
-                $.ajax({
+                BI.$.ajax({
                     url: src,
                     dataType: "script", // alex:指定dataType为script,jquery会帮忙做globalEval的事情
                     async: false,

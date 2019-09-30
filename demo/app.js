@@ -1,7 +1,7 @@
 Demo = {
     version: 1.0
 };
-$(function () {
+BI.$(function () {
     var ref;
 
     BI.each(Demo.CONFIG, function (index, item) {

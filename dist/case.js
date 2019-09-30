@@ -2218,7 +2218,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
-            value: ""
+            value: "",
+            height: 24
         });
     },
 
@@ -2238,8 +2239,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.width,
-                height: o.height
+                width: o.width - 2,
+                height: o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
@@ -2652,7 +2653,7 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.ColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 24
+            height: 22
         });
     },
 
@@ -2716,7 +2717,7 @@ BI.LongColorChooserTrigger = BI.inherit(BI.Trigger, {
         var conf = BI.LongColorChooserTrigger.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             baseCls: (conf.baseCls || "") + " bi-color-chooser-trigger bi-border",
-            height: 24
+            height: 22
         });
     },
 
@@ -4021,9 +4022,11 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
             buttons: [{
                 level: "ignore",
                 value: false,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Cancel")
             }, {
                 value: true,
+                stopPropagation: true,
                 text: BI.i18nText("BI-Basic_Sure")
             }]
         };
@@ -9152,7 +9155,7 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {
@@ -9229,7 +9232,7 @@ BI.ListDisplayTree = BI.inherit(BI.ListTreeView, {
 
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
-        this.nodes = $.fn.zTree.init(this.tree.element, setting, nodes);
+        this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
     },
 
     destroy: function () {

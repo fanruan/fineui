@@ -497,11 +497,11 @@
             if (BI.isWidget(widget)) {
                 var o = widget.options;
                 if (o.element) {
-                    return $(o.element);
+                    return BI.$(o.element);
                 }
-                return $(document.createElement(o.tagName));
+                return BI.$(document.createElement(o.tagName));
             }
-            return $(widget);
+            return BI.$(widget);
         },
         createFragment: function () {
             return document.createDocumentFragment();
