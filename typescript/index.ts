@@ -42,4 +42,4 @@ export interface _BI extends _func, _i18n, _base {
 
 BI = BI.extend(BI, {
     Decorators: decorator,
-});
+}) as any;
