@@ -3,6 +3,7 @@
   cursor: pointer;
   font-size: 100px;
   z-index: 2;
+  margin-left: -5px;
 }
 
 .bi-textarea-editor {
