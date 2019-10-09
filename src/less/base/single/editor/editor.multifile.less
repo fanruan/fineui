@@ -6,5 +6,7 @@
     cursor: pointer;
     font-size: 100px;
     z-index: 2;
+    // BI-52961 IE11出现光标的兼容: 通过布局的overflow: hidden创建BFC, 此时设置负margin隐藏光标不会影响其他元素
+    margin-left: -5px;
   }
 }
