@@ -71,30 +71,12 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
         this.searcher.on(BI.MultiSelectInsertSearcher.EVENT_FOCUS, function () {
             self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_FOCUS);
         });
-        this.numberCounter = BI.createWidget(o.switcher, {
-            type: "bi.multi_select_check_selected_switcher",
-            valueFormatter: o.valueFormatter,
-            itemsCreator: o.itemsCreator,
-            adapter: o.adapter,
-            masker: o.masker,
-            value: o.value
-        });
-        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
-            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK);
-        });
-        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW);
+
+        this.wrapNumberCounter = BI.createWidget({
+            type: "bi.layout"
         });
 
-        var wrapNumberCounter = BI.createWidget({
-            type: "bi.right_vertical_adapt",
-            hgap: 4,
-            items: [{
-                el: this.numberCounter
-            }]
-        });
-
-        var wrapper = BI.createWidget({
+        this.wrapper = BI.createWidget({
             type: "bi.htape",
             element: this,
             items: [
@@ -102,7 +84,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
                     el: this.searcher,
                     width: "fill"
                 }, {
-                    el: wrapNumberCounter,
+                    el: this.wrapNumberCounter,
                     width: 0
                 }, {
                     el: BI.createWidget(),
@@ -123,23 +105,14 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
                 bottom: 0
             }]
         });
-
-        this.numberCounter.on(BI.Events.VIEW, function (b) {
-            BI.nextTick(function () {// 自动调整宽度
-                wrapper.attr("items")[1].width = (b === true ? self.numberCounter.element.outerWidth() + 8 : 0);
-                wrapper.resize();
-            });
-        });
-
-        this.element.click(function (e) {
-            if (self.element.find(e.target).length > 0) {
-                self.numberCounter.hideView();
-            }
-        });
     },
 
-    getCounter: function () {
-        return this.numberCounter;
+    /**
+     * 重新调整numberCounter的空白占位符
+     */
+    refreshPlaceHolderWidth: function(width) {
+        this.wrapper.attr("items")[1].width = width;
+        this.wrapper.resize();
     },
 
     getSearcher: function () {
@@ -148,17 +121,14 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
 
     stopEditing: function () {
         this.searcher.stopSearch();
-        this.numberCounter.hideView();
     },
 
     setAdapter: function (adapter) {
         this.searcher.setAdapter(adapter);
-        this.numberCounter.setAdapter(adapter);
     },
 
     setValue: function (ob) {
         this.searcher.setValue(ob);
-        this.numberCounter.setValue(ob);
     },
 
     getKey: function () {
