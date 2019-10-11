@@ -62,10 +62,6 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
                 me.populate();
             });
         });
-
-        this.switcher.element.click(function (e) {
-            e.stopPropagation();
-        });
     },
 
     adjustView: function () {
