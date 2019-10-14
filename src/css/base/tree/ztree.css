@@ -68,6 +68,9 @@
   line-height: 24px;
   margin-right: 2px;
 }
+.ztree li span.bi-keyword-red-mark {
+  margin-right: 0px;
+}
 .ztree li span.button {
   line-height: 0;
   margin: 0;

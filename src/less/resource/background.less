@@ -16,24 +16,54 @@
 
 .bi-display-tree {
   & .ztree li span.button.switch.center_open {
-    .imagePath(@icon-tree-vertical-line-3);
+    .image2xPath(@icon-tree-vertical-line-3);
   }
 
   & .ztree li span.button.switch.roots_open {
-    .imagePath(@icon-tree-vertical-line-2);
+    .image2xPath(@icon-tree-vertical-line-2);
   }
 
   & .ztree li span.button.switch.bottom_open {
+    .image2xPath(@icon-tree-vertical-line-4);
+  }
+
+  & .ztree.hack li span.button.switch.center_open {
+    .imagePath(@icon-tree-vertical-line-3);
+  }
+
+  & .ztree.hack li span.button.switch.roots_open {
+    .imagePath(@icon-tree-vertical-line-2);
+  }
+
+  & .ztree.hack li span.button.switch.bottom_open {
     .imagePath(@icon-tree-vertical-line-4);
   }
 }
 
+// 此处不用2倍图，改用css画虚线
+// z-tree的line是一整块子节点区域，所以不能使用background-size: contain
+// 使用1倍图太模糊，这边就使用css自己画了，calc属性支持IE9, IE8反正会走hack, 不影响
 .ztree li ul.line {
+  position: relative;
+  &:before {
+    position: absolute;
+    content: '';
+    border-left: 1px dashed #D0D4DA;
+    height: calc(~"100% - 3px");
+    left: 12px;
+    margin-top: 1px;
+  }
+}
+
+.ztree.hack li ul.line {
   .imagePath(@icon-tree-vertical-line-1, 0, 1px, repeat-y);
 }
 
 .bi-theme-dark {
   .ztree li ul.line {
+    .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 1px, repeat-y);
+  }
+  .ztree.hack li ul.line {
     .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 1px, repeat-y);
   }
 }
@@ -103,115 +133,197 @@
 }
 
 .ztree li span.button.root_open {
+  .image2xPath(@icon-tree-expand-type1);
+}
+
+.ztree.hack li span.button.root_open {
   .imagePath(@icon-tree-expand-type1);
 }
 
 .bi-theme-dark {
   .ztree li span.button.root_open {
+    .image2xPath(@icon-tree-expand-type1-theme-dark);
+  }
+  .ztree.hack li span.button.root_open {
     .imagePath(@icon-tree-expand-type1-theme-dark);
   }
 }
 
 .ztree li span.button.root_close {
+  .image2xPath(@icon-tree-collapse-type1);
+}
+
+.ztree.hack li span.button.root_close {
   .imagePath(@icon-tree-collapse-type1);
 }
 
 .bi-theme-dark {
   .ztree li span.button.root_close {
+    .image2xPath(@icon-tree-collapse-type1-theme-dark);
+  }
+  .ztree.hack li span.button.root_close {
     .imagePath(@icon-tree-collapse-type1-theme-dark);
   }
 }
 
 .ztree li span.button.roots_open {
+  .image2xPath(@icon-tree-expand-type2);
+}
+
+.ztree.hack li span.button.roots_open {
   .imagePath(@icon-tree-expand-type2);
 }
 
 .bi-theme-dark {
   .ztree li span.button.roots_open {
+    .image2xPath(@icon-tree-expand-type2-theme-dark);
+  }
+  .ztree.hack li span.button.roots_open {
     .imagePath(@icon-tree-expand-type2-theme-dark);
   }
 }
 
 .ztree li span.button.roots_close {
+  .image2xPath(@icon-tree-collapse-type2);
+}
+
+.ztree.hack li span.button.roots_close {
   .imagePath(@icon-tree-collapse-type2);
 }
 
 .bi-theme-dark {
   .ztree li span.button.roots_close {
+    .image2xPath(@icon-tree-collapse-type2-theme-dark);
+  }
+  .ztree.hack li span.button.roots_close {
     .imagePath(@icon-tree-collapse-type2-theme-dark);
   }
 }
 
 .ztree li span.button.center_open {
+  .image2xPath(@icon-tree-expand-type3);
+}
+
+.ztree.hack li span.button.center_open {
   .imagePath(@icon-tree-expand-type3);
 }
 
 .bi-theme-dark {
   .ztree li span.button.center_open {
+    .image2xPath(@icon-tree-expand-type3-theme-dark);
+  }
+  .ztree.hack li span.button.center_open {
     .imagePath(@icon-tree-expand-type3-theme-dark);
   }
 }
 
 .ztree li span.button.center_close {
+  .image2xPath(@icon-tree-collapse-type3);
+}
+
+.ztree.hack li span.button.center_close {
   .imagePath(@icon-tree-collapse-type3);
 }
 
 .bi-theme-dark {
   .ztree li span.button.center_close {
+    .image2xPath(@icon-tree-collapse-type3-theme-dark);
+  }
+  .ztree.hack li span.button.center_close {
     .imagePath(@icon-tree-collapse-type3-theme-dark);
   }
 }
 
 .ztree li span.button.bottom_open {
+  .image2xPath(@icon-tree-expand-type4);
+}
+
+.ztree.hack li span.button.bottom_open {
   .imagePath(@icon-tree-expand-type4);
 }
 
 .bi-theme-dark {
   .ztree li span.button.bottom_open {
+    .image2xPath(@icon-tree-expand-type4-theme-dark);
+  }
+  .ztree.hack li span.button.bottom_open {
     .imagePath(@icon-tree-expand-type4-theme-dark);
   }
 }
 
 .ztree li span.button.bottom_close {
+  .image2xPath(@icon-tree-collapse-type4);
+}
+
+.ztree.hack li span.button.bottom_close {
   .imagePath(@icon-tree-collapse-type4);
 }
 
 .bi-theme-dark {
   .ztree li span.button.bottom_close {
+    .image2xPath(@icon-tree-collapse-type4-theme-dark);
+  }
+  .ztree.hack li span.button.bottom_close {
     .imagePath(@icon-tree-collapse-type4-theme-dark);
   }
 }
 
 .ztree li span.button.roots_docu {
+  .image2xPath(@icon-tree-vertical-line-2);
+}
+
+.ztree.hack li span.button.roots_docu {
   .imagePath(@icon-tree-vertical-line-2);
 }
 
 .bi-theme-dark {
   .ztree li span.button.roots_docu {
+    .image2xPath(@icon-tree-vertical-line-2-theme-dark);
+  }
+  .ztree.hack li span.button.roots_docu {
     .imagePath(@icon-tree-vertical-line-2-theme-dark);
   }
 }
 
 .ztree li span.button.center_docu {
+  .image2xPath(@icon-tree-vertical-line-3);
+}
+
+.ztree.hack li span.button.center_docu {
   .imagePath(@icon-tree-vertical-line-3);
 }
 
 .bi-theme-dark {
   .ztree li span.button.center_docu {
+    .image2xPath(@icon-tree-vertical-line-3-theme-dark);
+  }
+  .ztree.hack li span.button.center_docu {
     .imagePath(@icon-tree-vertical-line-3-theme-dark);
   }
 }
 
 .ztree li span.button.bottom_docu {
+  .image2xPath(@icon-tree-vertical-line-4);
+}
+
+.ztree.hack li span.button.bottom_docu {
   .imagePath(@icon-tree-vertical-line-4);
 }
 
 .bi-theme-dark {
   .ztree li span.button.bottom_docu {
+    .image2xPath(@icon-tree-vertical-line-4-theme-dark);
+  }
+  .ztree.hack li span.button.bottom_docu {
     .imagePath(@icon-tree-vertical-line-4-theme-dark);
   }
 }
+
 .ztree li span.button.ico_loading {
+  .image2xPath(@icon-loading);
+}
+
+.ztree.hack li span.button.ico_loading {
   .imagePath(@icon-loading);
 }
 
