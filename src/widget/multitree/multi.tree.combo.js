@@ -41,6 +41,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
+            masker: {
+                offset: this.constants.offset
+            },
             searcher: {
                 type: "bi.multi_tree_searcher",
                 itemsCreator: o.itemsCreator
