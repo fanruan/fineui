@@ -22722,6 +22722,10 @@ _.extend(BI, {
             humpString = [],
             htmlStyle = document.documentElement.style,
             _toHumb = function (string) {
+                if (!BI.isString(string)) {
+                    return "";
+                }
+
                 return string.replace(/-(\w)/g, function ($0, $1) {
                     return $1.toUpperCase();
                 });
@@ -56541,7 +56545,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
         if (BI.isKey(o.value)) {
@@ -56731,7 +56736,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             }]
                         },
                         value: o.value,
-                        maxHeight: 252
+                        maxHeight: 252,
+                        minHeight: 25
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -57197,7 +57203,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
         if(BI.isKey(o.value)) {
@@ -57286,7 +57293,8 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
     },
