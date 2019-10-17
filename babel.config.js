@@ -25,7 +25,6 @@ module.exports = function (api) {
             loose: true,
         }],
         "@babel/plugin-transform-proto-to-assign",
-        // "@babel/plugin-transform-modules-commonjs",
     ];
 
     return {
