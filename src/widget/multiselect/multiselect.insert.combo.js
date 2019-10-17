@@ -25,7 +25,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
             self.trigger.getSearcher().setState(self.storeValue);
-            self.trigger.getCounter().setButtonChecked(self.storeValue);
+            self.numberCounter.setButtonChecked(self.storeValue);
         };
         this.storeValue = o.value || {};
         // 标记正在请求数据
@@ -47,15 +47,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 }
             },
             valueFormatter: o.valueFormatter,
-            itemsCreator: function (op, callback) {
-                o.itemsCreator(op, function (res) {
-                    if (op.times === 1 && BI.isNotNull(op.keywords)) {
-                        // 预防trigger内部把当前的storeValue改掉
-                        self.trigger.setValue(BI.deepClone(self.getValue()));
-                    }
-                    callback.apply(self, arguments);
-                });
-            },
+            itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
             value: o.value
         });
 
@@ -82,7 +74,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
             if (!this.getSearcher().hasMatched()) {
                 self._addItem(assertShowValue);
-                self.trigger.stopEditing();
+                self._stopEditing();
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
@@ -119,7 +111,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
             // 只需要更新查看面板的selectedValue用以请求已选数据
-            this.getCounter().updateSelectedValue(self.storeValue);
+            self.numberCounter.updateSelectedValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_COUNTER_CLICK, function () {
             if (!self.combo.isViewVisible()) {
@@ -138,6 +130,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
+                    self.numberCounter.setAdapter(this);
                 },
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
@@ -166,14 +159,15 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     BI.nextTick(function () {
                         self.combo.adjustWidth();
                         self.combo.adjustHeight();
-                        self.trigger.getCounter().adjustView();
+                        self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
                 }
             },
             value: o.value,
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 &&
+                    self.numberCounter.element.find(e.target).length === 0;
             }
         });
 
@@ -187,7 +181,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.wants2Quit = false;
         this.combo.on(BI.Combo.EVENT_AFTER_HIDEVIEW, function () {
             // important:关闭弹出时又可能没有退出编辑状态
-            self.trigger.stopEditing();
+            self._stopEditing();
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
@@ -202,13 +196,51 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             cls: "multi-select-trigger-icon-button"
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
-            self.trigger.getCounter().hideView();
+            self.numberCounter.hideView();
             if (self.combo.isViewVisible()) {
                 self.combo.hideView();
             } else {
                 self.combo.showView();
             }
         });
+
+
+        this.numberCounter = BI.createWidget({
+            type: "bi.multi_select_check_selected_switcher",
+            masker: {
+                offset: {
+                    left: 0,
+                    top: 0,
+                    right: 0,
+                    bottom: 25
+                }
+            },
+            valueFormatter: o.valueFormatter,
+            itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            value: o.value
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW, function () {
+            this.updateSelectedValue(self.storeValue);
+        });
+
+        this.numberCounter.on(BI.Events.VIEW, function (b) {
+            BI.nextTick(function () {// 自动调整宽度
+                self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.trigger.element.click(function (e) {
+            if (self.trigger.element.find(e.target).length > 0) {
+                self.numberCounter.hideView();
+            }
+        });
+
+
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -223,7 +255,26 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 right: 0,
                 top: 0,
                 bottom: 0
+            }, {
+                el: {
+                    type: "bi.vertical_adapt",
+                    items: [this.numberCounter]
+                },
+                right: o.height,
+                top: 0,
+                height: o.height,
             }]
+        });
+    },
+
+    _itemsCreator4Trigger: function(op, callback) {
+        var self = this, o = this.options;
+        o.itemsCreator(op, function (res) {
+            if (op.times === 1 && BI.isNotNull(op.keywords)) {
+                // 预防trigger内部把当前的storeValue改掉
+                self.trigger.setValue(BI.deepClone(self.getValue()));
+            }
+            callback.apply(self, arguments);
         });
     },
 
@@ -246,8 +297,13 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _defaultState: function () {
+    _stopEditing: function() {
         this.trigger.stopEditing();
+        this.numberCounter.hideView();
+    },
+
+    _defaultState: function () {
+        this._stopEditing();
         this.combo.hideView();
     },
 
@@ -376,6 +432,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
         this.combo.setValue(this.storeValue);
+        this.numberCounter.setValue(this.storeValue);
     },
 
     getValue: function () {

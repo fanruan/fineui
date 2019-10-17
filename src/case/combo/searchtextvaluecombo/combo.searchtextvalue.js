@@ -70,7 +70,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             }]
                         },
                         value: o.value,
-                        maxHeight: 252
+                        maxHeight: 252,
+                        minHeight: 25
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,

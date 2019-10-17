@@ -12,6 +12,9 @@ BI.SingleSelectLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: true
             },
+            el: {
+                height: 400
+            },
             allowNoSelect: false,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,

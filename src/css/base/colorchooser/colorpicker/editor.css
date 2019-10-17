@@ -8,18 +8,44 @@
   background: url('images/1x/background/marker.png') no-repeat center center;
 }
 .bi-display-tree .ztree li span.button.switch.center_open {
-  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background: url('images/2x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.roots_open {
-  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background: url('images/2x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
 }
 .bi-display-tree .ztree li span.button.switch.bottom_open {
+  background: url('images/2x/icon/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-display-tree .ztree.hack li span.button.switch.center_open {
+  background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
+}
+.bi-display-tree .ztree.hack li span.button.switch.roots_open {
+  background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
+}
+.bi-display-tree .ztree.hack li span.button.switch.bottom_open {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
 }
 .ztree li ul.line {
+  position: relative;
+}
+.ztree li ul.line:before {
+  position: absolute;
+  content: '';
+  border-left: 1px dashed #D0D4DA;
+  height: calc(100% - 3px);
+  left: 12px;
+  margin-top: 1px;
+}
+.ztree.hack li ul.line {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree li ul.line {
+  background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
+}
+.bi-theme-dark .ztree.hack li ul.line {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .ztree li span.button.chk.checkbox_false_full {
@@ -79,72 +105,164 @@
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
 }
 .ztree li span.button.root_open {
+  background: url('images/2x/icon/tree_expand_1.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.root_open {
   background: url('images/1x/icon/tree_expand_1.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.root_open {
+  background: url('images/2x/icon/dark/tree_expand_1.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.root_open {
   background: url('images/1x/icon/dark/tree_expand_1.png') no-repeat center center;
 }
 .ztree li span.button.root_close {
+  background: url('images/2x/icon/tree_collapse_1.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.root_close {
   background: url('images/1x/icon/tree_collapse_1.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.root_close {
+  background: url('images/2x/icon/dark/tree_collapse_1.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.root_close {
   background: url('images/1x/icon/dark/tree_collapse_1.png') no-repeat center center;
 }
 .ztree li span.button.roots_open {
+  background: url('images/2x/icon/tree_expand_2.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.roots_open {
   background: url('images/1x/icon/tree_expand_2.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.roots_open {
+  background: url('images/2x/icon/dark/tree_expand_2.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.roots_open {
   background: url('images/1x/icon/dark/tree_expand_2.png') no-repeat center center;
 }
 .ztree li span.button.roots_close {
+  background: url('images/2x/icon/tree_collapse_2.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.roots_close {
   background: url('images/1x/icon/tree_collapse_2.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.roots_close {
+  background: url('images/2x/icon/dark/tree_collapse_2.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.roots_close {
   background: url('images/1x/icon/dark/tree_collapse_2.png') no-repeat center center;
 }
 .ztree li span.button.center_open {
+  background: url('images/2x/icon/tree_expand_3.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.center_open {
   background: url('images/1x/icon/tree_expand_3.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.center_open {
+  background: url('images/2x/icon/dark/tree_expand_3.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.center_open {
   background: url('images/1x/icon/dark/tree_expand_3.png') no-repeat center center;
 }
 .ztree li span.button.center_close {
+  background: url('images/2x/icon/tree_collapse_3.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.center_close {
   background: url('images/1x/icon/tree_collapse_3.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.center_close {
+  background: url('images/2x/icon/dark/tree_collapse_3.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.center_close {
   background: url('images/1x/icon/dark/tree_collapse_3.png') no-repeat center center;
 }
 .ztree li span.button.bottom_open {
+  background: url('images/2x/icon/tree_expand_4.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.bottom_open {
   background: url('images/1x/icon/tree_expand_4.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.bottom_open {
+  background: url('images/2x/icon/dark/tree_expand_4.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.bottom_open {
   background: url('images/1x/icon/dark/tree_expand_4.png') no-repeat center center;
 }
 .ztree li span.button.bottom_close {
+  background: url('images/2x/icon/tree_collapse_4.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.bottom_close {
   background: url('images/1x/icon/tree_collapse_4.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.bottom_close {
+  background: url('images/2x/icon/dark/tree_collapse_4.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.bottom_close {
   background: url('images/1x/icon/dark/tree_collapse_4.png') no-repeat center center;
 }
 .ztree li span.button.roots_docu {
+  background: url('images/2x/icon/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.roots_docu {
   background: url('images/1x/icon/tree_vertical_line_2.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.roots_docu {
+  background: url('images/2x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.roots_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_2.png') no-repeat center center;
 }
 .ztree li span.button.center_docu {
+  background: url('images/2x/icon/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.center_docu {
   background: url('images/1x/icon/tree_vertical_line_3.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.center_docu {
+  background: url('images/2x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.center_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_3.png') no-repeat center center;
 }
 .ztree li span.button.bottom_docu {
+  background: url('images/2x/icon/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.bottom_docu {
   background: url('images/1x/icon/tree_vertical_line_4.png') no-repeat center center;
 }
 .bi-theme-dark .ztree li span.button.bottom_docu {
+  background: url('images/2x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
+  background-size: contain;
+}
+.bi-theme-dark .ztree.hack li span.button.bottom_docu {
   background: url('images/1x/icon/dark/tree_vertical_line_4.png') no-repeat center center;
 }
 .ztree li span.button.ico_loading {
+  background: url('images/2x/icon/loading.gif') no-repeat center center;
+  background-size: contain;
+}
+.ztree.hack li span.button.ico_loading {
   background: url('images/1x/icon/loading.gif') no-repeat center center;
 }
 .base-line-conn-background {

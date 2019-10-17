@@ -48,17 +48,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 type: "bi.multi_tree_searcher",
                 itemsCreator: o.itemsCreator
             },
-            switcher: {
-                el: {
-                    type: "bi.multi_tree_check_selected_button"
-                },
-                popup: {
-                    type: "bi.multi_tree_check_pane",
-                    itemsCreator: o.itemsCreator
-                }
-            },
             value: {value: o.value || {}}
-
         });
 
         this.combo = BI.createWidget({
@@ -72,11 +62,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 ref: function () {
                     self.popup = this;
                     self.trigger.setAdapter(this);
+                    self.numberCounter.setAdapter(this);
                 },
                 listeners: [{
                     eventName: BI.MultiTreePopup.EVENT_AFTERINIT,
                     action: function () {
-                        self.trigger.getCounter().adjustView();
+                        self.numberCounter.adjustView();
                         isInit = true;
                         if (want2showCounter === true) {
                             showCounter();
@@ -91,7 +82,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                             value: this.hasChecked() ? this.getValue() : {}
                         };
                         self.trigger.getSearcher().setState(val);
-                        self.trigger.getCounter().setButtonChecked(val);
+                        self.numberCounter.setButtonChecked(val);
                         self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
                     }
                 }, {
@@ -110,14 +101,15 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 itemsCreator: o.itemsCreator,
                 onLoaded: function () {
                     BI.nextTick(function () {
-                        self.trigger.getCounter().adjustView();
+                        self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
                 }
             },
             value: {value: o.value || {}},
             hideChecker: function (e) {
-                return triggerBtn.element.find(e.target).length === 0;
+                return triggerBtn.element.find(e.target).length === 0 &&
+                    self.numberCounter.element.find(e.target).length === 0;
             }
         });
 
@@ -142,10 +134,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectTrigger.EVENT_START, function () {
             self.storeValue = {value: self.combo.getValue()};
             this.setValue(self.storeValue);
+            self.numberCounter.setValue(self.storeValue);
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_STOP, function () {
             self.storeValue = {value: this.getValue()};
             self.combo.setValue(self.storeValue);
+            self.numberCounter.setValue(self.storeValue);
             BI.nextTick(function () {
                 if (isPopupView()) {
                     self.combo.populate();
@@ -165,17 +159,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 self.storeValue = {value: self.combo.getValue()};
             }
             self.trigger.setValue(self.storeValue);
+            self.numberCounter.setValue(self.storeValue);
         }
 
-        this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
-            if (want2showCounter === false) {
-                want2showCounter = true;
-            }
-            if (isInit === true) {
-                want2showCounter = null;
-                showCounter();
-            }
-        });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_TRIGGER_CLICK, function () {
             self.combo.toggle();
         });
@@ -192,7 +178,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 value: checked ? {1: 1} : {}
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
-            this.getCounter().setButtonChecked(val);
+            self.numberCounter.setButtonChecked(val);
             self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
         });
 
@@ -205,16 +191,17 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 change = false;
             }
             self.combo.setValue(self.storeValue);
+            self.numberCounter.setValue(self.storeValue);
             self.populate();
 
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             if (isSearching()) {
-                self.trigger.stopEditing();
+                self._stopEditing();
                 self.fireEvent(BI.MultiTreeCombo.EVENT_CONFIRM);
             } else {
                 if (isPopupView()) {
-                    self.trigger.stopEditing();
+                    self._stopEditing();
                     self.storeValue = {value: self.combo.getValue()};
                     if (clear === true) {
                         self.storeValue = {value: {}};
@@ -233,13 +220,56 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             cls: "multi-select-trigger-icon-button"
         });
         triggerBtn.on(BI.TriggerIconButton.EVENT_CHANGE, function () {
-            self.trigger.getCounter().hideView();
+            self.numberCounter.hideView();
             if (self.combo.isViewVisible()) {
                 self.combo.hideView();
             } else {
                 self.combo.showView();
             }
         });
+
+        this.numberCounter = BI.createWidget({
+            type: "bi.multi_select_check_selected_switcher",
+            el: {
+                type: "bi.multi_tree_check_selected_button"
+            },
+            popup: {
+                type: "bi.multi_tree_check_pane"
+            },
+            masker: {
+                offset: this.constants.offset
+            },
+            itemsCreator: o.itemsCreator,
+            valueFormatter: o.valueFormatter,
+            value: {value: o.value || {}}
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE, function () {
+            if (!self.combo.isViewVisible()) {
+                self.combo.showView();
+            }
+        });
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW, function () {
+            if (want2showCounter === false) {
+                want2showCounter = true;
+            }
+            if (isInit === true) {
+                want2showCounter = null;
+                showCounter();
+            }
+        });
+
+        this.numberCounter.on(BI.Events.VIEW, function (b) {
+            BI.nextTick(function () {// 自动调整宽度
+                self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.trigger.element.click(function (e) {
+            if (self.trigger.element.find(e.target).length > 0) {
+                self.numberCounter.hideView();
+            }
+        });
+
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -254,18 +284,34 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                 right: 0,
                 top: 0,
                 bottom: 0
+            }, {
+                el: {
+                    type: "bi.vertical_adapt",
+                    items: [this.numberCounter]
+                },
+                right: o.height,
+                top: 0,
+                height: o.height,
             }]
         });
     },
 
-    _defaultState: function () {
+    _stopEditing: function() {
         this.trigger.stopEditing();
+        this.numberCounter.hideView();
+    },
+
+    _defaultState: function () {
+        this._stopEditing();
         this.combo.hideView();
     },
 
     setValue: function (v) {
         this.storeValue.value = v || {};
         this.combo.setValue({
+            value: v || {}
+        });
+        this.numberCounter.setValue({
             value: v || {}
         });
     },
