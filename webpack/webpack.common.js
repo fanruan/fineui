@@ -3,9 +3,19 @@ const autoprefixer = require("autoprefixer");
 
 const dirs = require("./dirs");
 
+const isBuilt4IE8 = process.env.BROWSER_VERSION === "ie8";
+
 module.exports = {
     entry: {
         fineui: [
+            ...isBuilt4IE8
+                ? [
+                    "core-js",
+                ]
+                : [
+                    "@babel/polyfill",
+                    "es6-promise/auto",
+                ],
             "./typescript/index.ts",
         ],
     },
@@ -21,7 +31,7 @@ module.exports = {
                 use: [{
                     loader: "babel-loader",
                     options: {
-                        configFile: dirs.BABEL_CONFIG,
+                        configFile: isBuilt4IE8 ? dirs.IE8_BABEL_CONFIG : dirs.BABEL_CONFIG,
                     },
                 }, {
                     loader: "source-map-loader",

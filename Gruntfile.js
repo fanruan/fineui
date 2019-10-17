@@ -106,7 +106,7 @@ module.exports = function (grunt) {
             },
 
             bundleJs: {
-                src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"],
+                src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js", "dist/fineui.typescript.js"],
                 dest: "dist/bundle.js"
             },
 
@@ -116,7 +116,7 @@ module.exports = function (grunt) {
             },
 
             bundleIEJs: {
-                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"],
+                src: ["dist/core.js", "dist/fix/fix.ie.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.ie.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js", "dist/fineui.typescript.ie8.js"],
                 dest: "dist/bundle.ie.js"
             },
 
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
             },
 
             bundleCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css", "fineui.typescript.css"],
                 dest: "dist/bundle.css"
             },
 
@@ -137,13 +137,13 @@ module.exports = function (grunt) {
 
             fineuiJs: {
                 src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
-                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
+                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.js", "ui/js/**/*.js", "dist/fineui.typescript.js"],
                 dest: "dist/fineui.js"
             },
 
             fineuiIEJs: {
                 src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.ie.js", "dist/base.js",
-                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.ie.js", "ui/js/**/*.js"],
+                    "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.ie.js", "ui/js/**/*.js", "dist/fineui.typescript.ie.js"],
                 dest: "dist/fineui.ie.js"
             },
 
@@ -191,7 +191,7 @@ module.exports = function (grunt) {
             },
 
             fineuiCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css", "fineui.typescript.css"],
                 dest: "dist/fineui.css"
             },
 

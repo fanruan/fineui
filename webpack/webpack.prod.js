@@ -5,6 +5,8 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
+const isBuilt4IE8 = process.env.BROWSER_VERSION === "ie8";
+
 const dirs = require("./dirs");
 
 const common = require("./webpack.common.js");
@@ -16,19 +18,20 @@ module.exports = merge.smart(common, {
 
     output: {
         path: dirs.DEST,
-        filename: "webpack",
+        filename: isBuilt4IE8 ? "fineui.typescript.ie.js" : "fineui.typescript.js",
     },
 
     plugins: [
         new MiniCssExtractPlugin({
             path: dirs.DEST,
-            filename: "plugin.jsondata.es5.css",
+            filename: "fineui.typescript.css",
         }),
         new UglifyJsPlugin({
             test: /\.js(\?.*)?$/i,
             parallel: 16,
             sourceMap: true,
             uglifyOptions: {
+                ie8: true,
                 output: {
                     comments: false,
                 },
