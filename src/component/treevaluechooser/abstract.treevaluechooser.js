@@ -16,7 +16,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value + "" === v) {
+                if (item.value === v || item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
