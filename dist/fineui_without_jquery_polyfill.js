@@ -39762,7 +39762,8 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
         if (BI.isKey(o.value)) {
@@ -39952,7 +39953,8 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
                             }]
                         },
                         value: o.value,
-                        maxHeight: 252
+                        maxHeight: 252,
+                        minHeight: 25
                     },
                     listeners: [{
                         eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -40418,7 +40420,8 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
         if(BI.isKey(o.value)) {
@@ -40507,7 +40510,8 @@ BI.SmallTextValueCombo = BI.inherit(BI.Widget, {
             el: this.trigger,
             popup: {
                 el: this.popup,
-                maxHeight: 240
+                maxHeight: 240,
+                minHeight: 25
             }
         });
     },
@@ -70294,7 +70298,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value + "" === v) {
+                if (item.value === v || item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
@@ -71679,7 +71683,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 // 把value都换成字符串
-                if (item.value + "" === v) {
+                if (item.value === v || item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
