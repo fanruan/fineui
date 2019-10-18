@@ -42,8 +42,8 @@
 .ztree.hack li ul.line {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
-.bi-theme-dark .ztree li ul.line {
-  background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
+.bi-theme-dark .ztree li ul.line:before {
+  border-left: 1px dashed #606479;
 }
 .bi-theme-dark .ztree.hack li ul.line {
   background: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
