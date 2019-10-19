@@ -69,4 +69,9 @@
         throw new Error("无法根据item创建组件");
     };
 
+    BI.createElement = function () {
+        var widget = BI.createWidget.apply(this, arguments);
+        return widget.element;
+    };
+
 })();
