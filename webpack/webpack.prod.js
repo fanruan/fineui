@@ -32,13 +32,13 @@ module.exports = merge.smart(common, {
 
     output: {
         path: dirs.DEST,
-        filename: isBuilt4IE8 ? "fineui.typescript.ie.js" : "fineui.typescript.js",
+        filename: isBuilt4IE8 ? "ie.fineui.js" : "es5.fineui.js",
     },
 
     plugins: [
         new MiniCssExtractPlugin({
             path: dirs.DEST,
-            filename: "fineui.typescript.css",
+            filename: "es5.fineui.css",
         }),
         new webpack.BannerPlugin({
             banner: `time: ${new Date().toLocaleString()}`,
