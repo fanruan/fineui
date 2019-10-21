@@ -2273,7 +2273,10 @@ textarea {
 .ztree.hack li ul.line {
   background: url('images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
-.bi-theme-dark .ztree li ul.line {
+.bi-theme-dark .ztree li ul.line:before {
+  border-left: 1px dashed #606479;
+}
+.bi-theme-dark .ztree.hack li ul.line {
   background: url('images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree.hack li ul.line {
@@ -4959,7 +4962,10 @@ textarea::-webkit-scrollbar-corner {
 .ztree.hack li ul.line {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/tree_vertical_line_1.png') repeat-y 1px 0;
 }
-.bi-theme-dark .ztree li ul.line {
+.bi-theme-dark .ztree li ul.line:before {
+  border-left: 1px dashed #606479;
+}
+.bi-theme-dark .ztree.hack li ul.line {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/dark/tree_vertical_line_1.png') repeat-y 1px 0;
 }
 .bi-theme-dark .ztree.hack li ul.line {

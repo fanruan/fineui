@@ -12248,6 +12248,11 @@ if (!_global.BI) {
         throw new Error("无法根据item创建组件");
     };
 
+    BI.createElement = function () {
+        var widget = BI.createWidget.apply(this, arguments);
+        return widget.element;
+    };
+
 })();!(function () {
     /*
     CryptoJS v3.1.2
@@ -70298,7 +70303,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var text = v;
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
-                if (item.value + "" === v) {
+                if (item.value === v || item.value + "" === v) {
                     text = item.text;
                     return true;
                 }
@@ -71683,7 +71688,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
         if (BI.isNotNull(this.items)) {
             BI.some(this.items, function (i, item) {
                 // 把value都换成字符串
-                if (item.value + "" === v) {
+                if (item.value === v || item.value + "" === v) {
                     text = item.text;
                     return true;
                 }

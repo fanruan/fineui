@@ -61,7 +61,9 @@
 
 .bi-theme-dark {
   .ztree li ul.line {
-    .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 1px, repeat-y);
+    &:before {
+      border-left: 1px dashed #606479;
+    }
   }
   .ztree.hack li ul.line {
     .imagePath(@icon-tree-vertical-line-1-theme-dark, 0, 1px, repeat-y);
