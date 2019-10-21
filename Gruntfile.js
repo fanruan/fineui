@@ -107,7 +107,7 @@ module.exports = function (grunt) {
 
             bundleJs: {
                 src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js", "dist/fineui.typescript.js"],
-                dest: "dist/bundle.js"
+                dest: "dist/bundle.js",
             },
 
             versionFineuiJs: {
@@ -271,7 +271,12 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
-                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n"
+                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n",
+                mangle: false,
+                sourceMap: true,
+                compress: {
+                    unused: false,
+                },
             },
             dist: {
                 files: {

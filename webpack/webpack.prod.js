@@ -28,7 +28,7 @@ module.exports = merge.smart(common, {
         }),
         new UglifyJsPlugin({
             test: /\.js(\?.*)?$/i,
-            parallel: 16,
+            parallel: true,
             sourceMap: true,
             uglifyOptions: {
                 ie8: true,
