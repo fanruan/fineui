@@ -13,6 +13,20 @@ const common = require("./webpack.common.js");
 
 module.exports = merge.smart(common, {
     mode: "production",
+    optimization: {
+        minimizer: [
+          new UglifyJsPlugin({
+            parallel: true,
+            sourceMap: true,
+            uglifyOptions: {
+              ie8: true,
+                output: {
+                    comments: false,
+                },
+            }
+          })
+        ]
+      },
 
     devtool: "hidden-source-map",
 
@@ -25,17 +39,6 @@ module.exports = merge.smart(common, {
         new MiniCssExtractPlugin({
             path: dirs.DEST,
             filename: "fineui.typescript.css",
-        }),
-        new UglifyJsPlugin({
-            test: /\.js(\?.*)?$/i,
-            parallel: true,
-            sourceMap: true,
-            uglifyOptions: {
-                ie8: true,
-                output: {
-                    comments: false,
-                },
-            },
         }),
         new webpack.BannerPlugin({
             banner: `time: ${new Date().toLocaleString()}`,
