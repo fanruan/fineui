@@ -82,13 +82,15 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            var keyword = this.getSearcher().getKeyword();
-            self.storeValue = keyword;
-            self.combo.setValue(self.storeValue);
-            self._setStartValue(keyword);
-            assertShowValue();
-            self.populate();
-            self._setStartValue();
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self.storeValue = keyword;
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue();
+            }
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
