@@ -22972,6 +22972,10 @@ _.extend(BI, {
             humpString = [],
             htmlStyle = document.documentElement.style,
             _toHumb = function (string) {
+                if (!BI.isString(string)) {
+                    return "";
+                }
+
                 return string.replace(/-(\w)/g, function ($0, $1) {
                     return $1.toUpperCase();
                 });

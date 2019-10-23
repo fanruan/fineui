@@ -55,7 +55,7 @@
     // 函数
     "no-dupe-args": "error",
     // 禁止在 function 定义中出现重复的参数
-    "space-before-function-paren": "error",
+    "space-before-function-paren": ["error", {"anonymous": "always", "named": "never", "asyncArrow": "always"}],
     // 函数括号前必须要有空格
 
     // 变量
@@ -123,10 +123,7 @@
     // 逗号
     "comma-style": "error",
     // 逗号必须放在行末
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
+    "comma-dangle": ["error", "always-multiline"], // 多行对象字面量中要求拖尾逗号,
     // 多行对象字面量中要求不要拖尾逗号
     "comma-spacing": [
       "error",
