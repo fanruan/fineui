@@ -763,8 +763,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return vm.model[key];
                 },
                 last: vm.model[key],
-                listener: _$1.bind(function () {
-                    context.p.model[key] = vm.model[key];
+                listener: _$1.bind(function (c) {
+                    context.p.model[key] = c;
+                    // context.p.model[key] = vm.model[key];
                     context.p.$digest();
                 }, context.p)
             });
@@ -902,7 +903,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
             nextTick(function () {
-                _$1.each(contextListeners, function (listener) {
+                _$1.each(BI.uniqBy(contextListeners.reverse(), "id").reverse(), function (listener) {
                     listener.cb();
                 });
                 _$1.each(asyncListeners, function (listener) {
