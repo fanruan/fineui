@@ -1,3 +1,5 @@
+import * as decorator from "./core/decorator/decorator";
+
 import { _i18n } from "./core/i18n";
 import { _OB } from "./core/ob";
 import { _func } from "./core/func";
@@ -13,7 +15,6 @@ import { _HighlightBehavior } from "./core/behavior/behavior.highlight";
 import { _RedMarkBehavior } from "./core/behavior/behavior.redmark";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _LoadingPane } from "./case/loading/loading_pane";
-
 
 type ClassConstructor<T extends {}> = T & {
     new(config: any): T;
@@ -36,4 +37,9 @@ export interface _BI extends _func, _i18n, _base {
     RedMarkBehavior: ClassConstructor<_RedMarkBehavior>;
     Pane: ClassConstructor<_Pane> & _PaneStatic;
     LoadingPane: ClassConstructor<_LoadingPane>;
+    Decorators: typeof decorator;
 }
+
+BI = BI.extend(BI, {
+    Decorators: decorator,
+}) as any;

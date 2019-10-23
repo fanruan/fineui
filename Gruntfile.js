@@ -1,13 +1,11 @@
 module.exports = function (grunt) {
-
-    const filterPath = function (patterns) {
-        return grunt.file.expand({
+    function sync(patterns) {
+        return [...new Set(grunt.file.expand({
             filter: function (path) {
                 return !new RegExp(/__test__/g).test(path);
-            }
-        }, patterns);
-    };
-
+            },
+        }, patterns))];
+    }
 
     // Project configuration.
     grunt.initConfig({
@@ -21,7 +19,7 @@ module.exports = function (grunt) {
                 dest: "dist/polyfill.js"
             },
             coreJs: {
-                src: filterPath([
+                src: sync([
                     "src/core/foundation.js",
                     "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
@@ -45,7 +43,7 @@ module.exports = function (grunt) {
 
             // 最基础的控件
             baseJs: {
-                src: filterPath([
+                src: sync([
                     "src/third/**/*.js",
                     "src/base/pane.js",
                     "src/base/single/single.js",
@@ -67,14 +65,14 @@ module.exports = function (grunt) {
             },
             // 实现好的一些基础实例
             caseJs: {
-                src: filterPath([
+                src: sync([
                     "src/case/combo/popup.bubble.js",
                     "src/case/**/*.js"
                 ]),
                 dest: "dist/case.js"
             },
             widgetJs: {
-                src: filterPath([
+                src: sync([
                     "src/widget/**/*.js",
                     "src/component/**/*.js"
                 ]),
@@ -109,7 +107,7 @@ module.exports = function (grunt) {
 
             bundleJs: {
                 src: ["dist/core.js", "dist/fix/fix.js", "dist/base.js", "dist/case.js", "dist/widget.js", "dist/fix/fix.compact.js", "dist/router.js", "public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"],
-                dest: "dist/bundle.js"
+                dest: "dist/bundle.js",
             },
 
             versionFineuiJs: {
@@ -128,7 +126,7 @@ module.exports = function (grunt) {
             },
 
             bundleCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css"],
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css", "fineui.typescript.css"],
                 dest: "dist/bundle.css"
             },
 
@@ -150,7 +148,7 @@ module.exports = function (grunt) {
             },
 
             fineuiWithoutJqueryAndPolyfillJs: {
-                src: filterPath(["src/core/foundation.js",
+                src: sync(["src/core/foundation.js",
                     "src/core/lodash.js",
                     // 'src/core/mvc/**/*.js',
                     "src/core/base.js",
@@ -193,7 +191,7 @@ module.exports = function (grunt) {
             },
 
             fineuiCss: {
-                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css"],
+                src: ["dist/core.css", "dist/base.css", "dist/widget.css", "ui/css/app.css", "ui/css/**/*.css", "fineui.typescript.css"],
                 dest: "dist/fineui.css"
             },
 
@@ -234,7 +232,6 @@ module.exports = function (grunt) {
             }
         },
 
-
         less: {
             demo: {
                 expand: true,
@@ -274,7 +271,13 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
-                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n"
+                banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd HH:MM:ss\") %> */\n",
+                mangle: false,
+                sourceMap: true,
+                sourceMapIncludeSources: true,
+                compress: {
+                    unused: false,
+                },
             },
             dist: {
                 files: {
@@ -423,7 +426,7 @@ module.exports = function (grunt) {
         grunt.file.write(dest, JSON.stringify(stat));
     });
 
-    var defaultTask = ["clean", "less", "concat", "connect", "watch"];
+    var defaultTask = ["clean", "less", "concat", "watch"];
     grunt.registerTask("default", defaultTask);
     grunt.registerTask("compile", function () {
         grunt.config.set("connect.options.open", false);
