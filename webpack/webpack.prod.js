@@ -32,7 +32,7 @@ module.exports = merge.smart(common, {
 
     output: {
         path: dirs.DEST,
-        filename: isBuilt4IE8 ? "ie.fineui.js" : "es5.fineui.js",
+        filename: isBuilt4IE8 ? "ie.[name].js" : "es5.[name].js",
     },
 
     plugins: [

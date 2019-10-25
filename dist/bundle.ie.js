@@ -37635,8 +37635,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return vm.model[key];
                 },
                 last: vm.model[key],
-                listener: _$1.bind(function () {
-                    context.p.model[key] = vm.model[key];
+                listener: _$1.bind(function (c) {
+                    context.p.model[key] = c;
+                    // context.p.model[key] = vm.model[key];
                     context.p.$digest();
                 }, context.p)
             });
@@ -37774,7 +37775,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
             nextTick(function () {
-                _$1.each(contextListeners, function (listener) {
+                _$1.each(BI.uniqBy(contextListeners.reverse(), "id").reverse(), function (listener) {
                     listener.cb();
                 });
                 _$1.each(asyncListeners, function (listener) {
@@ -56128,6 +56129,9 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         });
         return {
             type: "bi.bubble_bar_popup_view",
+            minWidth: o.minWidth,
+            maxWidth: o.maxWidth,
+            minHeight: o.minHeight,
             ref: function () {
                 self.popup = this;
             },
@@ -80699,13 +80703,15 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.SingleSelectInsertCombo.EVENT_STOP);
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
-            var keyword = this.getSearcher().getKeyword();
-            self.storeValue = keyword;
-            self.combo.setValue(self.storeValue);
-            self._setStartValue(keyword);
-            assertShowValue();
-            self.populate();
-            self._setStartValue();
+            if (this.getSearcher().hasMatched()) {
+                var keyword = this.getSearcher().getKeyword();
+                self.storeValue = keyword;
+                self.combo.setValue(self.storeValue);
+                self._setStartValue(keyword);
+                assertShowValue();
+                self.populate();
+                self._setStartValue();
+            }
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -82226,7 +82232,9 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
-        TRACK_HEIGHT: 24
+        TRACK_HEIGHT: 24,
+        TRACK_GAP_HALF: 7,
+        TRACK_GAP: 14
     },
 
     props: {
@@ -82270,15 +82278,15 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
-                var trackLength = self.track.element[0].scrollWidth;
+                var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
                 if (offset < 0) {
                     percent = 0;
                 }
-                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                if (offset > 0 && offset < trackLength) {
                     percent = offset * 100 / self._getGrayTrackLength();
                 }
-                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                if (offset >= trackLength) {
                     percent = 100;
                 }
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
@@ -82329,7 +82337,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
                             height: c.TRACK_HEIGHT
                         }]
                     }],
-                    hgap: 7,
+                    hgap: c.TRACK_GAP_HALF,
                     height: c.TRACK_HEIGHT
                 },
                 top: 23,
@@ -82561,7 +82569,9 @@ BI.SingleSliderLabel = BI.inherit(BI.Single, {
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
-        TRACK_HEIGHT: 24
+        TRACK_HEIGHT: 24,
+        TRACK_GAP_HALF: 7,
+        TRACK_GAP: 14
     },
     _defaultConfig: function () {
         return BI.extend(BI.SingleSliderLabel.superclass._defaultConfig.apply(this, arguments), {
@@ -82606,15 +82616,15 @@ BI.SingleSliderLabel = BI.inherit(BI.Single, {
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
-                var trackLength = self.track.element[0].scrollWidth;
+                var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
                 if (offset < 0) {
                     percent = 0;
                 }
-                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                if (offset > 0 && offset < trackLength) {
                     percent = offset * 100 / self._getGrayTrackLength();
                 }
-                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                if (offset >= trackLength) {
                     percent = 100;
                 }
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
@@ -82647,7 +82657,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Single, {
                             height: c.TRACK_HEIGHT
                         }]
                     }],
-                    hgap: 7,
+                    hgap: c.TRACK_GAP_HALF,
                     height: c.TRACK_HEIGHT
                 },
                 top: 13,
@@ -82869,7 +82879,9 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
-        TRACK_HEIGHT: 24
+        TRACK_HEIGHT: 24,
+        TRACK_GAP_HALF: 7,
+        TRACK_GAP: 14
     },
 
     props: {
@@ -82902,15 +82914,15 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
-                var trackLength = self.track.element[0].scrollWidth;
+                var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
                 if (offset < 0) {
                     percent = 0;
                 }
-                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                if (offset > 0 && offset < trackLength) {
                     percent = offset * 100 / self._getGrayTrackLength();
                 }
-                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                if (offset >= trackLength) {
                     percent = 100;
                 }
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
@@ -82935,7 +82947,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
                             height: c.TRACK_HEIGHT
                         }]
                     }],
-                    hgap: 7,
+                    hgap: c.TRACK_GAP_HALF,
                     height: c.TRACK_HEIGHT
                 },
                 top: 3,

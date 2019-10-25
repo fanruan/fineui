@@ -4049,6 +4049,9 @@ BI.TextBubblePopupBarView = BI.inherit(BI.Widget, {
         });
         return {
             type: "bi.bubble_bar_popup_view",
+            minWidth: o.minWidth,
+            maxWidth: o.maxWidth,
+            minHeight: o.minHeight,
             ref: function () {
                 self.popup = this;
             },

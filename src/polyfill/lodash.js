@@ -38,11 +38,7 @@ if (typeof Object.getPrototypeOf !== "function") {
         }
         : function (object) {
             // May break if the constructor has been tampered with
-            try {
-                return object.constructor.prototype;
-            } catch (e) {
-                return {};
-            }
+            return object.constructor.prototype;
         };
 }
 
