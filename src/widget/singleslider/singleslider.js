@@ -8,7 +8,9 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         SLIDER_WIDTH_HALF: 15,
         SLIDER_WIDTH: 30,
         SLIDER_HEIGHT: 30,
-        TRACK_HEIGHT: 24
+        TRACK_HEIGHT: 24,
+        TRACK_GAP_HALF: 7,
+        TRACK_GAP: 14
     },
 
     props: {
@@ -52,15 +54,15 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         sliderVertical.element.click(function (e) {
             if (self.enable && self.isEnabled()) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
-                var trackLength = self.track.element[0].scrollWidth;
+                var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
                 if (offset < 0) {
                     percent = 0;
                 }
-                if (offset > 0 && offset < (trackLength - c.SLIDER_WIDTH)) {
+                if (offset > 0 && offset < trackLength) {
                     percent = offset * 100 / self._getGrayTrackLength();
                 }
-                if (offset > (trackLength - c.SLIDER_WIDTH)) {
+                if (offset >= trackLength) {
                     percent = 100;
                 }
                 var significantPercent = BI.parseFloat(percent.toFixed(1));
@@ -111,7 +113,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
                             height: c.TRACK_HEIGHT
                         }]
                     }],
-                    hgap: 7,
+                    hgap: c.TRACK_GAP_HALF,
                     height: c.TRACK_HEIGHT
                 },
                 top: 23,
