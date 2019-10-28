@@ -72289,3 +72289,5 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     }
     BI.watch = Fix.watch;
 }());
+
+//# sourceMappingURL=fineui_without_jquery_polyfill.js.map

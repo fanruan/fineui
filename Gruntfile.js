@@ -1,9 +1,7 @@
 module.exports = function (grunt) {
     function sync(patterns) {
         return [...new Set(grunt.file.expand({
-            filter: function (path) {
-                return !new RegExp(/__test__/g).test(path);
-            },
+            filter: path => !new RegExp(/__test__/g).test(path),
         }, patterns))];
     }
 
@@ -12,7 +10,9 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON("package.json"),
         concat: {
             options: {
-                separator: ""
+                separator: "",
+                sourceMap: true,
+                sourceMapStyle: "link",
             },
             polyfillJs: {
                 src: ["src/core/foundation.js", "src/polyfill/**/*.js"],
