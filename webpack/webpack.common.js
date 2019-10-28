@@ -13,6 +13,7 @@ module.exports = {
                 "core-js/features/object/create",
                 "core-js/features/object/assign",
                 "core-js/features/object/get-own-property-symbols",
+                "core-js/features/object/get-prototype-of",
                 "core-js/features/array/for-each",
                 "core-js/features/array/index-of",
                 "core-js/features/function/bind",
