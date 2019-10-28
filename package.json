@@ -64,7 +64,7 @@
   },
   "scripts": {
     "grunt": "grunt",
-    "webpack:dev": "webpack-dev-server -p --progress --config=webpack/webpack.dev.js --mode development",
+    "webpack:dev": "webpack-dev-server -p --progress --host 0.0.0.0 --config=webpack/webpack.dev.js --mode development",
     "webpack:prod": "webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "webpack:prod:ie8": "cross-env BROWSER_VERSION=ie8 webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "start": "node server.js",
