@@ -9774,3 +9774,4 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
+//# sourceMappingURL=case.js.map

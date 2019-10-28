@@ -27213,3 +27213,4 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 });
 BI.ValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
+//# sourceMappingURL=widget.js.map

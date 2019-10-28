@@ -14168,3 +14168,4 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		return html;
 	}
 })(BI.jQuery);
+//# sourceMappingURL=base.js.map

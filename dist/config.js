@@ -190,3 +190,4 @@ BI.i18n = {
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻"
 };
+//# sourceMappingURL=config.js.map

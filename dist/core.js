@@ -36870,3 +36870,5 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);/**
 })();BI.Req = {
 
 };
+
+//# sourceMappingURL=core.js.map

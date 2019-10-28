@@ -583,3 +583,4 @@
     // Create the default BI.history.
     BI.history = new History;
 }());
+//# sourceMappingURL=router.js.map
