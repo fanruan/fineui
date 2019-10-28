@@ -30,6 +30,7 @@ if (!Array.isArray) {
     };
 }
 
+/* 统一采用core-js的polyfill，此块暂去
 // https://stackoverflow.com/questions/10919915/ie8-getprototypeof-method
 if (typeof Object.getPrototypeOf !== "function") {
     Object.getPrototypeOf = "".__proto__ === String.prototype
@@ -38,13 +39,10 @@ if (typeof Object.getPrototypeOf !== "function") {
         }
         : function (object) {
             // May break if the constructor has been tampered with
-            try {
-                return object.constructor.prototype;
-            } catch (e) {
-                return {};
-            }
+            return object.constructor.prototype;
         };
 }
+ */
 
 if(!Date.now) {
     Date.now = function () {

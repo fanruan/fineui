@@ -27,7 +27,7 @@ module.exports = merge(common, {
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, "../index.html"),
-            chunks: ["fineui"],
+            chunks: ["polyfill", "fineui"],
             chunksSortMode: "manual",
         }),
         new ForkTsCheckerWebpackPlugin({

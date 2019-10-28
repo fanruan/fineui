@@ -136,13 +136,13 @@ module.exports = function (grunt) {
             },
 
             fineuiJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
+                src: ["dist/es5.polyfill.js","dist/polyfill.js", "dist/core.js", "dist/fix/fix.js", "dist/base.js",
                     "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"],
                 dest: "dist/fineui.js"
             },
 
             fineuiIEJs: {
-                src: ["dist/polyfill.js", "dist/core.js", "dist/fix/fix.ie.js", "dist/base.js",
+                src: ["dist/ie.polyfill.js", "dist/polyfill.js", "dist/core.js", "dist/fix/fix.ie.js", "dist/base.js",
                     "dist/case.js", "dist/widget.js", "dist/router.js", "dist/fix/fix.compact.ie.js", "ui/js/**/*.js"],
                 dest: "dist/fineui.ie.js"
             },

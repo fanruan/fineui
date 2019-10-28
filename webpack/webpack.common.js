@@ -7,24 +7,25 @@ const isBuilt4IE8 = process.env.BROWSER_VERSION === "ie8";
 
 module.exports = {
     entry: {
+        polyfill: isBuilt4IE8
+            ? [
+                "core-js/features/object/define-property",
+                "core-js/features/object/create",
+                "core-js/features/object/assign",
+                "core-js/features/object/get-own-property-symbols",
+                "core-js/features/object/get-prototype-of",
+                "core-js/features/array/for-each",
+                "core-js/features/array/index-of",
+                "core-js/features/function/bind",
+                "core-js/features/promise",
+                "core-js/features/string/replace",
+                // "core-js",
+            ]
+            : [
+                "@babel/polyfill",
+                "es6-promise/auto",
+            ],
         fineui: [
-            ...isBuilt4IE8
-                ? [
-                    "core-js/features/object/define-property",
-                    "core-js/features/object/create",
-                    "core-js/features/object/assign",
-                    "core-js/features/array/for-each",
-                    "core-js/features/array/index-of",
-                    "core-js/features/function/bind",
-                    "core-js/features/promise",
-                    "core-js/features/object/get-own-property-symbols",
-                    "core-js/features/string/replace",
-                    // "core-js",
-                ]
-                : [
-                    "@babel/polyfill",
-                    "es6-promise/auto",
-                ],
             "./typescript/index.ts",
         ],
     },
@@ -37,6 +38,7 @@ module.exports = {
             {
                 test: /\.(js|ts)$/,
                 include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT],
+                exclude: /node_modules\/core-js/,
                 use: [{
                     loader: "babel-loader",
                     options: {
