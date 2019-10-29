@@ -5,3 +5,4 @@ node_modules/
 .DS_Store
 coverage
 unit.test.statistic.json
+package-lock.json
