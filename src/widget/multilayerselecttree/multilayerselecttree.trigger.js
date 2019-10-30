@@ -5,7 +5,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
+            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
             height: 24,
             valueFormatter: function (v) {
                 return v;
