@@ -42,7 +42,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.count(0, o.layer, function () {
             items.push({
                 type: "bi.layout",
-                width: 15,
+                width: 24,
                 height: o.height
             });
         });
@@ -50,7 +50,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget({
             type: "bi.td",
             element: this,
-            columnSize: BI.makeArray(o.layer, 15),
+            columnSize: BI.makeArray(o.layer, 24),
             items: [items]
         });
     },

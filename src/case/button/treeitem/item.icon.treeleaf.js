@@ -40,7 +40,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 16,
+            width: 24,
             el: icon
         }, {
             el: this.text
@@ -48,8 +48,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
         BI.createWidget(BI.extend({
             element: this
         }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
-            items: items,
-            hgap: 5
+            items: items
         }))));
     },
 
