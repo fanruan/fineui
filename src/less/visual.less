@@ -325,3 +325,14 @@
     }
   }
 }
+
+.hover-hidden(@cls) {
+  & .@{cls} {
+    visibility: visible;
+  }
+  &:hover {
+    & .@{cls} {
+      visibility: hidden;
+    }
+  }
+}
