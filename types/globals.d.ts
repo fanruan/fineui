@@ -2,7 +2,7 @@ interface Obj {
     [key: string]: any;
 }
 
-declare let BI: Obj & import("../typescript/index")._BI;
+declare let BI: Obj & import("../typescript/index").BI;
 
 // declare let BI: Obj;
 
