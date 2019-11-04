@@ -22,7 +22,7 @@ type ClassConstructor<T extends {}> = T & {
     readonly prototype: T;
 }
 
-export interface _BI extends _func, _i18n, _base {
+export interface BI extends _func, _i18n, _base {
     OB: ClassConstructor<_OB>;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
@@ -40,6 +40,6 @@ export interface _BI extends _func, _i18n, _base {
     Decorators: typeof decorator;
 }
 
-BI = BI.extend(BI, {
+export default {
     Decorators: decorator,
-}) as any;
+};

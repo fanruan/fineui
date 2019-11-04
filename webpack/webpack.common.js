@@ -26,7 +26,7 @@ module.exports = {
                 "es6-promise/auto",
             ],
         fineui: [
-            "./typescript/index.ts",
+            "./typescript/bundle.ts",
         ],
     },
     resolve: {
