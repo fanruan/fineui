@@ -27452,6 +27452,10 @@ BI.Single = BI.inherit(BI.Widget, {
 
     _unMount: function () {
         BI.Single.superclass._unMount.apply(this, arguments);
+        if(BI.isNotNull(this.showTimeout)) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
         BI.Tooltips.remove(this.getName());
     }
 });/**
@@ -51790,7 +51794,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow",
+            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
             height: 24,
             valueFormatter: function (v) {
                 return v;
@@ -52971,7 +52975,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow",
+            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow bi-border-radius",
             height: 24,
             valueFormatter: function (v) {
                 return v;

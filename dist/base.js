@@ -527,6 +527,10 @@ BI.Single = BI.inherit(BI.Widget, {
 
     _unMount: function () {
         BI.Single.superclass._unMount.apply(this, arguments);
+        if(BI.isNotNull(this.showTimeout)) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
         BI.Tooltips.remove(this.getName());
     }
 });/**
