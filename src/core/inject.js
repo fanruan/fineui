@@ -47,17 +47,53 @@
         providerInjection[xtype] = cls;
     };
 
-    BI.config = function (type, configFn) {
-        if (constantInjection[type]) {
-            return constantInjection[type] = configFn(constantInjection[type]);
-        }
-        if (providerInjection[type]) {
-            if (!providers[type]) {
-                providers[type] = new providerInjection[type]();
+    var configFunctions = {};
+    BI.config = function (type, configFn, options) {
+        if (BI.initialize) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
             }
-            return configFn(providers[type]);
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn);
         }
-        BI.Plugin.configWidget(type, configFn);
+        if (!configFunctions[type]) {
+            configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var stack = [], head;
+                for (var len = configFunctions[type].length, i = len - 1; i >= 0; i--) {
+                    head = configFunctions[type][i];
+                    stack.push(i);
+                    if (head.options && head.options.prevent) {
+                        break;
+                    }
+                }
+                for (var len = stack.length, i = len - 1; i >= 0; i--) {
+                    head = configFunctions[type][stack[i]];
+                    if (constantInjection[type]) {
+                        constantInjection[type] = head.fn(constantInjection[type]);
+                        continue;
+                    }
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
+                        }
+                        head.fn(providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, head.fn);
+                }
+                configFunctions[type] = null;
+            });
+        }
+        configFunctions[type].push({
+            fn: configFn,
+            options: options
+        })
     };
 
     var actions = {};
@@ -189,7 +225,8 @@
         }
     };
 
-    var providers = {}, providerInstance = {};
+    var providers = {},
+        providerInstance = {};
 
     BI.Providers = {
         getProvider: function (type, config) {

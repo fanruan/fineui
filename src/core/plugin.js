@@ -10,13 +10,16 @@ BI.Plugin = BI.Plugin || {};
             if (_GlobalWidgetConfigFn) {
                 _GlobalWidgetConfigFn(type, options);
             }
+            var res;
             if (_ConfigPlugin[type]) {
                 for (var i = _ConfigPlugin[type].length - 1; i >= 0; i--) {
-                    _ConfigPlugin[type][i](options);
+                    if (res = _ConfigPlugin[type][i](options)) {
+                        options = res;
+                    }
                 }
             }
+            // Deprecated
             if (_WidgetsPlugin[type]) {
-                var res;
                 for (var i = _WidgetsPlugin[type].length - 1; i >= 0; i--) {
                     if (res = _WidgetsPlugin[type][i](options)) {
                         return res;
@@ -59,7 +62,9 @@ BI.Plugin = BI.Plugin || {};
             if (_ObjectPlugin[type]) {
                 var res;
                 for (var i = 0, len = _ObjectPlugin[type].length; i < len; i++) {
-                    res = _ObjectPlugin[type][i](object);
+                    if (res = _ObjectPlugin[type][i](object)) {
+                        object = res;
+                    };
                 }
             }
             return res || object;
