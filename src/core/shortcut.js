@@ -22,10 +22,7 @@
 
     BI.createWidget = function (item, options, context) {
         // 先把准备环境准备好
-        while (BI.prepares && BI.prepares.length > 0) {
-            BI.prepares.shift()();
-        }
-        BI.initialized = true;
+        BI.init();
         var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {

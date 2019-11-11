@@ -48,7 +48,7 @@
     };
 
     var configFunctions = {};
-    BI.config = function (type, configFn, options) {
+    BI.config = function (type, configFn) {
         if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
@@ -64,36 +64,25 @@
         if (!configFunctions[type]) {
             configFunctions[type] = [];
             BI.prepares.push(function () {
-                var stack = [], head, count, index;
-                for (count = configFunctions[type].length, index = count - 1; index >= 0; index--) {
-                    head = configFunctions[type][index];
-                    stack.push(index);
-                    if (head.options && head.options.prevent) {
-                        break;
-                    }
-                }
-                for (count = stack.length, index = count - 1; index >= 0; index--) {
-                    head = configFunctions[type][stack[index]];
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
                     if (constantInjection[type]) {
-                        constantInjection[type] = head.fn(constantInjection[type]);
+                        constantInjection[type] = queue[i](constantInjection[type]);
                         continue;
                     }
                     if (providerInjection[type]) {
                         if (!providers[type]) {
                             providers[type] = new providerInjection[type]();
                         }
-                        head.fn(providers[type]);
+                        queue[i](providers[type]);
                         continue;
                     }
-                    BI.Plugin.configWidget(type, head.fn);
+                    BI.Plugin.configWidget(type, queue[i]);
                 }
                 configFunctions[type] = null;
             });
         }
-        configFunctions[type].push({
-            fn: configFn,
-            options: options
-        })
+        configFunctions[type].push(configFn);
     };
 
     var actions = {};

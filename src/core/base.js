@@ -456,6 +456,7 @@ if (!_global.BI) {
             while (BI.prepares && BI.prepares.length > 0) {
                 BI.prepares.shift()();
             }
+            BI.initialized = true;
         },
 
         has: function (obj, keys) {
