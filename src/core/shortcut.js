@@ -25,7 +25,7 @@
         while (BI.prepares && BI.prepares.length > 0) {
             BI.prepares.shift()();
         }
-        BI.initialize = true;
+        BI.initialized = true;
         var el, w;
         item || (item = {});
         if (BI.isWidget(options)) {

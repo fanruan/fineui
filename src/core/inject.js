@@ -49,7 +49,7 @@
 
     var configFunctions = {};
     BI.config = function (type, configFn, options) {
-        if (BI.initialize) {
+        if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
             }
@@ -64,16 +64,16 @@
         if (!configFunctions[type]) {
             configFunctions[type] = [];
             BI.prepares.push(function () {
-                var stack = [], head;
-                for (var len = configFunctions[type].length, i = len - 1; i >= 0; i--) {
-                    head = configFunctions[type][i];
-                    stack.push(i);
+                var stack = [], head, count, index;
+                for (count = configFunctions[type].length, index = count - 1; index >= 0; index--) {
+                    head = configFunctions[type][index];
+                    stack.push(index);
                     if (head.options && head.options.prevent) {
                         break;
                     }
                 }
-                for (var len = stack.length, i = len - 1; i >= 0; i--) {
-                    head = configFunctions[type][stack[i]];
+                for (count = stack.length, index = count - 1; index >= 0; index--) {
+                    head = configFunctions[type][stack[index]];
                     if (constantInjection[type]) {
                         constantInjection[type] = head.fn(constantInjection[type]);
                         continue;
