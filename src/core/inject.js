@@ -47,17 +47,42 @@
         providerInjection[xtype] = cls;
     };
 
+    var configFunctions = {};
     BI.config = function (type, configFn) {
-        if (constantInjection[type]) {
-            return constantInjection[type] = configFn(constantInjection[type]);
-        }
-        if (providerInjection[type]) {
-            if (!providers[type]) {
-                providers[type] = new providerInjection[type]();
+        if (BI.initialized) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
             }
-            return configFn(providers[type]);
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn);
         }
-        BI.Plugin.configWidget(type, configFn);
+        if (!configFunctions[type]) {
+            configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
+                    if (constantInjection[type]) {
+                        constantInjection[type] = queue[i](constantInjection[type]);
+                        continue;
+                    }
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
+                        }
+                        queue[i](providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, queue[i]);
+                }
+                configFunctions[type] = null;
+            });
+        }
+        configFunctions[type].push(configFn);
     };
 
     var actions = {};
@@ -189,7 +214,8 @@
         }
     };
 
-    var providers = {}, providerInstance = {};
+    var providers = {},
+        providerInstance = {};
 
     BI.Providers = {
         getProvider: function (type, config) {
