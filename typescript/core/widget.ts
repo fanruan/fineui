@@ -98,7 +98,7 @@ export interface _Widget extends _OB {
     /**
      * 更新
      */
-    update?(): void;
+    update?(...args: any[]): void;
 
     /**
      * 销毁前
