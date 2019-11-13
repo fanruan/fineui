@@ -40,7 +40,7 @@ export interface _base {
 
     each: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => void)|object|string, thisArg?: any) => any;
 
-    map: <T, U>(collection: T[]|object|string, callback?: ((index: number, value: T) => U)|object|string, thisArg?: any) => U[];
+    map: <T, U>(collection: T[]|object|string|null|undefined, callback?: ((index: number, value: T) => U)|object|string, thisArg?: any) => U[];
 
     reduce: <T, U>(collection: T[]|object|string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T)|object|string, initialValue?: U|T) => U extends T ? U : T;
 
