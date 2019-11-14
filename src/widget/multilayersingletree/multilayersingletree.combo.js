@@ -87,7 +87,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                             self.combo.hideView();
                             self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                         }
-                    }]
+                    }],
+                    onLoaded: function () {
+                        BI.nextTick(function () {
+                            self.combo.adjustWidth();
+                            self.combo.adjustHeight();
+                        });
+                    }
                 },
                 value: o.value,
                 maxHeight: 400,
