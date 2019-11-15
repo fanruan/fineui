@@ -63,11 +63,11 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         }, {
             value: "#c3d825"
         }, {
-            value: "#bce2e8"
+            value: "#bbe2e7"
         }, {
             value: "#85d3cd"
         }, {
-            value: "#bce2e8"
+            value: "#bde1e6"
         }, {
             value: "#a0d8ef"
         }, {
