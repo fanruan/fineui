@@ -13,7 +13,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            onLoaded: BI.emptyFn
         });
     },
 
@@ -30,7 +31,10 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
             keywordGetter: o.keywordGetter,
             value: o.value,
             scrollable: null,
-            onLoaded: o.onLoaded
+            onLoaded: function () {
+                self.tree.check();
+                o.onLoaded();
+            }
         });
 
         BI.createWidget({

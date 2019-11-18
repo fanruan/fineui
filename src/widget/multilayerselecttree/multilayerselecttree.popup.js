@@ -14,7 +14,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            onLoaded: BI.emptyFn
         });
     },
 
@@ -31,7 +32,10 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             keywordGetter: o.keywordGetter,
             value: o.value,
             scrollable: null,
-            onLoaded: o.onLoaded
+            onLoaded: function () {
+                self.tree.check();
+                o.onLoaded();
+            }
         });
 
         BI.createWidget({
