@@ -11508,7 +11508,7 @@ if (!_global.BI) {
         },
 
         isNull: function (obj) {
-            return typeof obj === "undefined" || obj === null;
+            return typeof  obj === "undefined" || obj === null;
         },
 
         isEmptyArray: function (arr) {
@@ -11679,7 +11679,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler() {
+            function nextTickHandler () {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -11712,7 +11712,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick(cb) {
+            return function queueNextTick (cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
