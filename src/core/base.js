@@ -162,7 +162,7 @@ if (!_global.BI) {
     _.each(["where", "findWhere", "invoke", "pluck", "shuffle", "sample", "toArray", "size"], function (name) {
         BI[name] = _apply(name);
     });
-    _.each(["get", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
+    _.each(["get", "set", "each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition", "clamp"], function (name) {
         if (name === "any") {
             BI[name] = _applyFunc("some");
@@ -441,7 +441,7 @@ if (!_global.BI) {
                 };
             }
             var F = function () {
-                }, spp = sp.prototype;
+            }, spp = sp.prototype;
             F.prototype = spp;
             sb.prototype = new F();
             sb.superclass = spp;
@@ -505,7 +505,7 @@ if (!_global.BI) {
         },
 
         isNull: function (obj) {
-            return typeof  obj === "undefined" || obj === null;
+            return typeof obj === "undefined" || obj === null;
         },
 
         isEmptyArray: function (arr) {
@@ -676,7 +676,7 @@ if (!_global.BI) {
             var pending = false;
             var timerFunc;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
                 callbacks = [];
@@ -709,7 +709,7 @@ if (!_global.BI) {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
+            return function queueNextTick(cb) {
                 var _resolve;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {

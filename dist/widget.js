@@ -6538,7 +6538,13 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                             self.combo.hideView();
                             self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_CHANGE);
                         }
-                    }]
+                    }],
+                    onLoaded: function () {
+                        BI.nextTick(function () {
+                            self.combo.adjustWidth();
+                            self.combo.adjustHeight();
+                        });
+                    }
                 },
                 value: o.value,
                 maxHeight: 400,
@@ -6936,7 +6942,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
             items: [],
-            value: ""
+            value: "",
+            onLoaded: BI.emptyFn
         });
     },
 
@@ -6952,7 +6959,11 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             itemsCreator: o.itemsCreator,
             keywordGetter: o.keywordGetter,
             value: o.value,
-            scrollable: null
+            scrollable: null,
+            onLoaded: function () {
+                self.tree.check();
+                o.onLoaded();
+            }
         });
 
         BI.createWidget({
@@ -7720,7 +7731,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                             self.combo.hideView();
                             self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_CHANGE);
                         }
-                    }]
+                    }],
+                    onLoaded: function () {
+                        BI.nextTick(function () {
+                            self.combo.adjustWidth();
+                            self.combo.adjustHeight();
+                        });
+                    }
                 },
                 value: o.value,
                 maxHeight: 400,
@@ -8117,7 +8134,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
             tipText: BI.i18nText("BI-No_Selected_Item"),
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
-            items: []
+            items: [],
+            onLoaded: BI.emptyFn
         });
     },
 
@@ -8133,7 +8151,11 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
             itemsCreator: o.itemsCreator,
             keywordGetter: o.keywordGetter,
             value: o.value,
-            scrollable: null
+            scrollable: null,
+            onLoaded: function () {
+                self.tree.check();
+                o.onLoaded();
+            }
         });
 
         BI.createWidget({

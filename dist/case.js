@@ -2925,11 +2925,11 @@ BI.ColorPicker = BI.inherit(BI.Widget, {
         }, {
             value: "#c3d825"
         }, {
-            value: "#bce2e8"
+            value: "#bbe2e7"
         }, {
             value: "#85d3cd"
         }, {
-            value: "#bce2e8"
+            value: "#bde1e6"
         }, {
             value: "#a0d8ef"
         }, {
@@ -5624,7 +5624,6 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         });
         this._showHint();
         self._checkText();
-        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     _checkText: function () {
@@ -5636,6 +5635,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             this.text.setValue(this.editor.getValue());
             this.text.element.removeClass("bi-water-mark");
         }
+        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     _showInput: function () {
@@ -5726,7 +5726,6 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
         var o = this.options;
         this.editor.setValue(k);
         this._checkText();
-        BI.isKey(o.keyword) && this.text.doRedMark(o.keyword);
     },
 
     getValue: function () {
