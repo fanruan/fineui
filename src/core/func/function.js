@@ -55,6 +55,10 @@ _.extend(BI.Func, {
         keyword = BI.toUpperCase(keyword);
         var matched = isArray ? [] : {}, find = isArray ? [] : {};
         BI.each(items, function (i, item) {
+            // 兼容item为null的处理
+            if (BI.isNull(item)) {
+                return;
+            }
             item = BI.deepClone(item);
             t = BI.stripEL(item);
             text = BI.find([t[param], t.text, t.value, t.name, t], function (index, val) {
