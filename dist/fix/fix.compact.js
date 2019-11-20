@@ -100,11 +100,12 @@
             pushContext(context);
             pushed = true;
         }
-        try {
-            var result = _create.apply(this, arguments);
-        } catch (e) {
-            console.error(e);
-        }
+        var result = _create.apply(this, arguments);
+        // try {
+        //     var result = _create.apply(this, arguments);
+        // } catch (e) {
+        //     console.error(e);
+        // }
         pushed && popContext();
         return result;
     };
@@ -166,11 +167,12 @@
             pushTarget(this.store);
             initWatch(this, this.watch);
         }
-        try {
-            _render.apply(this, arguments);
-        } catch (e) {
-            console.error(e);
-        }
+        _render.apply(this, arguments);
+        // try {
+        //     _render.apply(this, arguments);
+        // } catch (e) {
+        //     console.error(e);
+        // }
         needPop && popTarget();
     };
 

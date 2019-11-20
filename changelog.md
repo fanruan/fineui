@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2019-11)
+-新增BI.set(object, path, value)方法
 - getSearchResult兼容了对null值的处理
 - 增加了异步单选下拉树请求完数据后加载完节点后会自动调整宽高的逻辑
 

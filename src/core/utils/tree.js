@@ -1,4 +1,3 @@
-
 (function () {
     BI.Tree = function () {
         this.root = new BI.Node(BI.UUID());
@@ -506,7 +505,7 @@
                 return;
             }
             var self = this;
-            BI.any(array, function (i, item) {
+            BI.some(array, function (i, item) {
                 if (callback(i, item) === false) {
                     return true;
                 }
