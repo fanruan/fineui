@@ -67,7 +67,9 @@ _.extend(BI.Func, {
 
             if (BI.isNull(text) || BI.isObject(text)) return;
 
-            py = BI.makeFirstPY(text);
+            py = BI.makeFirstPY(text, {
+                splitChar: "\u200b"
+            });
             text = BI.toUpperCase(text);
             py = BI.toUpperCase(py);
             var pidx;
@@ -77,7 +79,8 @@ _.extend(BI.Func, {
                 } else {
                     isArray ? find.push(item) : (find[i] = item);
                 }
-            } else if (pidx = py.indexOf(keyword), (pidx > -1 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length))) {
+                // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
+            } else if (pidx = py.indexOf(keyword), (pidx > -1)) {
                 if (text === keyword || keyword.length === text.length) {
                     isArray ? matched.push(item) : (matched[i] = item);
                 } else {

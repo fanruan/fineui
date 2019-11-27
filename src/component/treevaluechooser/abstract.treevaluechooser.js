@@ -550,7 +550,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
             BI.each(allNodes, function (idx, node) {
                 var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
-                var state = getCheckState(node.value, node.parentValues, valueMap, checkState);
+                // REPORT-24409 fix: 设置节点全部展开，添加的节点没有给状态
+                var parentCheckState = {};
+                var find = BI.find(result, function (idx, pNode) {
+                    return pNode.id === node.pId;
+                });
+                if (find) {
+                    parentCheckState.checked = find.halfCheck ? false : find.checked;
+                    parentCheckState.half = find.halfCheck;
+                }
+                var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
                 result.push({
                     id: node.id,
                     pId: node.pId,
