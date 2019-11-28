@@ -178,6 +178,20 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
     },
 
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.ymd.setMinDate(minDate);
+        }
+        this.options.min = minDate;
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.ymd.setMaxDate(maxDate);
+        }
+        this.options.max = maxDate;
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         var self = this;

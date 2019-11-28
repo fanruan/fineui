@@ -318,6 +318,18 @@ BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     getKey: function () {
         return this.editor.getValue();
     },

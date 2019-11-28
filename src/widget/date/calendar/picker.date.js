@@ -141,7 +141,13 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    setMinDate: function (minDate) {
+        this.year.setMinDate(minDate);
+    },
 
+    setMaxDate: function (maxDate) {
+        this.year.setMaxDate(maxDate);
+    },
 
     setValue: function (ob) {
         this._year = BI.parseInt(ob.year);
