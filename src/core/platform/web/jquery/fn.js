@@ -79,7 +79,9 @@ if (BI.jQuery) {
             keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
             var textLeft = (text || "") + "";
-            py = (py || BI.makeFirstPY(text)) + "";
+            py = (py || BI.makeFirstPY(text, {
+                splitChar: "\u200b"
+            })) + "";
             if (py != null) {
                 py = BI.toUpperCase(py);
             }
@@ -92,7 +94,7 @@ if (BI.jQuery) {
                 if (py != null) {
                     pidx = py.indexOf(keyword);
                     if (pidx >= 0) {
-                        pidx = pidx % text.length;
+                        pidx = (pidx - Math.floor(pidx / (textLeft.length + 1))) % textLeft.length;
                     }
                 }
 
@@ -106,13 +108,17 @@ if (BI.jQuery) {
                     if (py != null) {
                         py = py.substr(tidx + keyword.length);
                     }
-                } else if (pidx != null && pidx >= 0 && Math.floor(pidx / text.length) === Math.floor((pidx + keyword.length - 1) / text.length)) {
+                } else if (pidx != null && pidx >= 0) {
+                    // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
                     if (py != null) {
-                        py = py.substr(pidx + keyword.length);
+                        // 每一组拼音都应该前进，而不是只是当前的
+                        py = BI.map(py.split("\u200b"), function (idx, ps) {
+                            return ps.slice(pidx + keyword.length);
+                        }).join("\u200b");
                     }
                     textLeft = textLeft.substr(pidx + keyword.length);
                 } else {
