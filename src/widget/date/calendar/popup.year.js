@@ -39,7 +39,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         this.selectedYear = this._year = BI.getDate().getFullYear();
 
-        var backBtn = BI.createWidget({
+        this.backBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
             width: 24,
@@ -47,7 +47,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             value: -1
         });
 
-        var preBtn = BI.createWidget({
+        this.preBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
             width: 24,
@@ -65,15 +65,15 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             tab: {
                 cls: "year-popup-navigation bi-high-light bi-split-top",
                 height: 24,
-                items: [backBtn, preBtn]
+                items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
 
             afterCardShow: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
-                backBtn.setEnable(!calendar.isFrontYear());
-                preBtn.setEnable(!calendar.isFinalYear());
+                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
+                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -85,6 +85,38 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         if(BI.isKey(o.value)){
             this.setValue(o.value);
+        }
+    },
+
+    _checkMin: function () {
+        var calendar = this.navigation.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMinDate(this.options.min);
+            this.backBtn.setEnable(!calendar.isFrontYear());
+            this.preBtn.setEnable(!calendar.isFinalYear());
+        }
+    },
+
+    _checkMax: function () {
+        var calendar = this.navigation.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMaxDate(this.options.max);
+            this.backBtn.setEnable(!calendar.isFrontYear());
+            this.preBtn.setEnable(!calendar.isFinalYear());
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkMax();
         }
     },
 

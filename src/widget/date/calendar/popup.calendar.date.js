@@ -102,6 +102,36 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         });
     },
 
+    _checkMin: function () {
+        var calendar = this.calendar.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMinDate(this.options.min);
+        }
+    },
+
+    _checkMax: function () {
+        var calendar = this.calendar.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMaxDate(this.options.max);
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         this.datePicker.setValue(timeOb);
         this.calendar.setSelect(BI.Calendar.getPageByDateJSON(timeOb));

@@ -61,6 +61,14 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         });
     },
 
+    setMinDate: function (minDate) {
+        this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        this.popup.setMaxDate(maxDate);
+    },
+
     setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);

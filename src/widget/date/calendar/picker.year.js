@@ -104,6 +104,19 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    setMinDate: function (minDate) {
+        this.options.min = minDate;
+        this.year.setMinDate(minDate);
+        this._checkLeftValid();
+        this._checkRightValid();
+    },
+
+    setMaxDate: function (maxDate) {
+        this.options.max = maxDate;
+        this.year.setMaxDate(maxDate);
+        this._checkLeftValid();
+        this._checkRightValid();
+    },
 
 
     setValue: function (v) {

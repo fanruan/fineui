@@ -94,37 +94,10 @@ BI.Calendar = BI.inherit(BI.Widget, {
                 vgap: 10
             }]
         });
-        var days = this._dateCreator(o.year, o.month - 1, o.day);
-        items = [];
-        items.push(days.slice(0, 7));
-        items.push(days.slice(7, 14));
-        items.push(days.slice(14, 21));
-        items.push(days.slice(21, 28));
-        items.push(days.slice(28, 35));
-        items.push(days.slice(35, 42));
-
-        items = BI.map(items, function (i, item) {
-            return BI.map(item, function (j, td) {
-                var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
-                return BI.extend(td, {
-                    type: "bi.calendar_date_item",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    once: false,
-                    forceSelected: true,
-                    height: 24,
-                    value: o.year + "-" + month + "-" + td.text,
-                    disabled: td.lastMonth || td.nextMonth || td.disabled,
-                    lgap: 5,
-                    rgap: 5
-                    // selected: td.currentDay
-                });
-            });
-        });
 
         this.days = BI.createWidget({
             type: "bi.button_group",
-            items: BI.createItems(items, {}),
+            items: BI.createItems(this._getItems(), {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 7,
                 rows: 6,
@@ -166,6 +139,57 @@ BI.Calendar = BI.inherit(BI.Widget, {
         De.setFullYear(Y, M, 1);
         var newDate = BI.getOffsetDate(De, 42 - day);
         return !!BI.checkDateVoid(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), o.min, o.max)[0];
+    },
+
+    _getItems: function () {
+        var o = this.options;
+        var days = this._dateCreator(o.year, o.month - 1, o.day);
+        var items = [];
+        items.push(days.slice(0, 7));
+        items.push(days.slice(7, 14));
+        items.push(days.slice(14, 21));
+        items.push(days.slice(21, 28));
+        items.push(days.slice(28, 35));
+        items.push(days.slice(35, 42));
+
+        return BI.map(items, function (i, item) {
+            return BI.map(item, function (j, td) {
+                var month = td.lastMonth ? o.month - 1 : (td.nextMonth ? o.month + 1 : o.month);
+                return BI.extend(td, {
+                    type: "bi.calendar_date_item",
+                    textAlign: "center",
+                    whiteSpace: "normal",
+                    once: false,
+                    forceSelected: true,
+                    height: 24,
+                    value: o.year + "-" + month + "-" + td.text,
+                    disabled: td.lastMonth || td.nextMonth || td.disabled,
+                    lgap: 5,
+                    rgap: 5
+                    // selected: td.currentDay
+                });
+            });
+        });
+    },
+
+    _populate: function() {
+        this.days.populate(this._getItems());
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        if (BI.isNotEmptyString(o.min)) {
+            o.min = minDate;
+            this._populate();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        if (BI.isNotEmptyString(o.max)) {
+            o.max = maxDate;
+            this._populate();
+        }
     },
 
     setValue: function (ob) {

@@ -42,43 +42,11 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         BI.YearCalendar.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.currentYear = BI.getDate().getFullYear();
-        var years = this._yearCreator(o.year || this.currentYear);
-
-        // 纵向排列年
-        var len = years.length, tyears = BI.makeArray(len, "");
-        var map = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
-        BI.each(years, function (i, y) {
-            tyears[i] = years[map[i]];
-        });
-        var items = [];
-        items.push(tyears.slice(0, 2));
-        items.push(tyears.slice(2, 4));
-        items.push(tyears.slice(4, 6));
-        items.push(tyears.slice(6, 8));
-        items.push(tyears.slice(8, 10));
-        items.push(tyears.slice(10, 12));
-
-        items = BI.map(items, function (i, item) {
-            return BI.map(item, function (j, td) {
-                return BI.extend(td, {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
-                    textAlign: "center",
-                    whiteSpace: "normal",
-                    once: false,
-                    forceSelected: true,
-                    height: 24,
-                    width: 45,
-                    value: td.text,
-                    disabled: td.disabled
-                });
-            });
-        });
 
         this.years = BI.createWidget({
             type: "bi.button_group",
             behaviors: o.behaviors,
-            items: BI.createItems(items, {}),
+            items: BI.createItems(this._getItems(), {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({}, o.logic, {
                 columns: 2,
                 rows: 6,
@@ -112,6 +80,63 @@ BI.YearCalendar = BI.inherit(BI.Widget, {
         var Y = o.year;
         Y = Y | 0;
         return !!BI.checkDateVoid(BI.YearCalendar.getEndYear(Y) + 1, 1, 1, o.min, o.max)[0];
+    },
+
+    _getItems: function () {
+        var o = this.options;
+        var years = this._yearCreator(o.year || this.currentYear);
+
+        // 纵向排列年
+        var len = years.length, tyears = BI.makeArray(len, "");
+        var map = [0, 6, 1, 7, 2, 8, 3, 9, 4, 10, 5, 11];
+        BI.each(years, function (i, y) {
+            tyears[i] = years[map[i]];
+        });
+
+        var items = [];
+        items.push(tyears.slice(0, 2));
+        items.push(tyears.slice(2, 4));
+        items.push(tyears.slice(4, 6));
+        items.push(tyears.slice(6, 8));
+        items.push(tyears.slice(8, 10));
+        items.push(tyears.slice(10, 12));
+
+        return BI.map(items, function (i, item) {
+            return BI.map(item, function (j, td) {
+                return BI.extend(td, {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "normal",
+                    once: false,
+                    forceSelected: true,
+                    height: 24,
+                    width: 45,
+                    value: td.text,
+                    disabled: td.disabled
+                });
+            });
+        });
+    },
+
+    _populate: function () {
+        this.years.populate(this._getItems());
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        if (BI.isNotEmptyString(o.min)) {
+            o.min = minDate;
+            this._populate();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        if (BI.isNotEmptyString(this.options.max)) {
+            o.max = maxDate;
+            this._populate();
+        }
     },
 
     setValue: function (val) {
