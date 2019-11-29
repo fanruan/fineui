@@ -128,6 +128,14 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         });
     },
 
+    setMinDate: function (minDate) {
+        this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        this.popup.setMaxDate(maxDate);
+    },
+
     setValue: function (v) {
         this.trigger.setValue(v);
         this.popup.setValue(v);
@@ -282,7 +290,13 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    setMinDate: function (minDate) {
+        this.year.setMinDate(minDate);
+    },
 
+    setMaxDate: function (maxDate) {
+        this.year.setMaxDate(maxDate);
+    },
 
     setValue: function (ob) {
         this._year = BI.parseInt(ob.year);
@@ -407,6 +421,19 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    setMinDate: function (minDate) {
+        this.options.min = minDate;
+        this.year.setMinDate(minDate);
+        this._checkLeftValid();
+        this._checkRightValid();
+    },
+
+    setMaxDate: function (maxDate) {
+        this.options.max = maxDate;
+        this.year.setMaxDate(maxDate);
+        this._checkLeftValid();
+        this._checkRightValid();
+    },
 
 
     setValue: function (v) {
@@ -524,6 +551,36 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
                 right: 0
             }]
         });
+    },
+
+    _checkMin: function () {
+        var calendar = this.calendar.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMinDate(this.options.min);
+        }
+    },
+
+    _checkMax: function () {
+        var calendar = this.calendar.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMaxDate(this.options.max);
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
     },
 
     setValue: function (timeOb) {
@@ -663,7 +720,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         this.selectedYear = this._year = BI.getDate().getFullYear();
 
-        var backBtn = BI.createWidget({
+        this.backBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "pre-page-h-font",
             width: 24,
@@ -671,7 +728,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             value: -1
         });
 
-        var preBtn = BI.createWidget({
+        this.preBtn = BI.createWidget({
             type: "bi.icon_button",
             cls: "next-page-h-font",
             width: 24,
@@ -689,15 +746,15 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             tab: {
                 cls: "year-popup-navigation bi-high-light bi-split-top",
                 height: 24,
-                items: [backBtn, preBtn]
+                items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
 
             afterCardShow: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
-                backBtn.setEnable(!calendar.isFrontYear());
-                preBtn.setEnable(!calendar.isFinalYear());
+                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
+                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -709,6 +766,38 @@ BI.YearPopup = BI.inherit(BI.Widget, {
 
         if(BI.isKey(o.value)){
             this.setValue(o.value);
+        }
+    },
+
+    _checkMin: function () {
+        var calendar = this.navigation.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMinDate(this.options.min);
+            this.backBtn.setEnable(!calendar.isFrontYear());
+            this.preBtn.setEnable(!calendar.isFinalYear());
+        }
+    },
+
+    _checkMax: function () {
+        var calendar = this.navigation.getSelectedCard();
+        if (BI.isNotNull(calendar)) {
+            calendar.setMaxDate(this.options.max);
+            this.backBtn.setEnable(!calendar.isFrontYear());
+            this.preBtn.setEnable(!calendar.isFinalYear());
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkMax();
         }
     },
 
@@ -2973,6 +3062,8 @@ BI.extend(BI.DynamicDateCard, {
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
+                                self.popup.setMinDate(opts.minDate);
+                                self.popup.setMaxDate(opts.maxDate);
                                 self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW);
                             }
@@ -3048,6 +3139,18 @@ BI.extend(BI.DynamicDateCard, {
 
     _defaultState: function () {
 
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
@@ -3369,6 +3472,20 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.ymd.setMinDate(minDate);
+        }
+        this.options.min = minDate;
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.ymd.setMaxDate(maxDate);
+        }
+        this.options.max = maxDate;
     },
 
     setValue: function (v) {
@@ -3734,6 +3851,18 @@ BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);BI.DynamicDateTrigger 
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     getKey: function () {
         return this.editor.getValue();
     },
@@ -4027,6 +4156,18 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         }
     },
 
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -4239,6 +4380,20 @@ BI.extend(BI.DynamicDateTimeCombo, {
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.ymd.setMinDate(minDate);
+        }
+        this.options.min = minDate;
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.ymd.setMaxDate(maxDate);
+        }
+        this.options.max = maxDate;
     },
 
     setValue: function (v) {
@@ -4811,6 +4966,18 @@ BI.extend(BI.DynamicDateTimeSelect, {
                 default:
                     return BI.i18nText("BI-Basic_Current_Day");
             }
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
         }
     },
 
@@ -23596,6 +23763,22 @@ BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);BI.StaticYear
         });
     },
 
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.yearPicker.setMinDate(minDate);
+            this._checkMonthStatus(this.selectedYear);
+        }
+        this.options.min = minDate;
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.yearPicker.setMaxDate(maxDate);
+            this._checkMonthStatus(this.selectedYear);
+        }
+        this.options.max = maxDate;
+    },
+
     getValue: function () {
         return {
             year: this.selectedYear,
@@ -23981,6 +24164,20 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                 }
             }]
         };
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.year.setMinDate(minDate);
+        }
+        this.options.min = minDate;
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.year.setMaxDate(maxDate);
+        }
+        this.options.max = maxDate;
     },
 
     setValue: function (v) {
@@ -26075,7 +26272,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
             BI.each(allNodes, function (idx, node) {
                 var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
-                var state = getCheckState(node.value, node.parentValues, valueMap, checkState);
+                // REPORT-24409 fix: 设置节点全部展开，添加的节点没有给状态
+                var parentCheckState = {};
+                var find = BI.find(result, function (idx, pNode) {
+                    return pNode.id === node.pId;
+                });
+                if (find) {
+                    parentCheckState.checked = find.halfCheck ? false : find.checked;
+                    parentCheckState.half = find.halfCheck;
+                }
+                var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
                 result.push({
                     id: node.id,
                     pId: node.pId,
