@@ -273,12 +273,14 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         var o = this.options;
         o.minDate = minDate;
         this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
     },
 
     setMaxDate: function (maxDate) {
         var o = this.options;
         o.maxDate = maxDate;
         this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
