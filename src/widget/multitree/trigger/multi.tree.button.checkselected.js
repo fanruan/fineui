@@ -61,11 +61,6 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         v || (v = {});
         var show = BI.size(v.value) > 0;
         this.setVisible(show);
-        if(show) {
-            this.indicator.setVisible(true);
-            this.checkSelected.setVisible(false);
-        }
-
     }
 });
 
