@@ -48064,12 +48064,14 @@ BI.extend(BI.DynamicDateCard, {
         var o = this.options;
         o.minDate = minDate;
         this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
     },
 
     setMaxDate: function (maxDate) {
         var o = this.options;
         o.maxDate = maxDate;
         this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
@@ -49079,12 +49081,14 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         var o = this.options;
         o.minDate = minDate;
         this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
     },
 
     setMaxDate: function (maxDate) {
         var o = this.options;
         o.maxDate = maxDate;
         this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
@@ -60215,11 +60219,6 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
         v || (v = {});
         var show = BI.size(v.value) > 0;
         this.setVisible(show);
-        if(show) {
-            this.indicator.setVisible(true);
-            this.checkSelected.setVisible(false);
-        }
-
     }
 });
 
