@@ -20,7 +20,8 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-tree-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            height: 24
+            height: 24,
+            allowEdit: true
         });
     },
 
@@ -36,6 +37,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
+            allowEdit: o.allowEdit,
             height: o.height,
             valueFormatter: o.valueFormatter,
             text: o.text,
@@ -53,7 +55,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            toggle: false,
+            toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
             adjustLength: 1,

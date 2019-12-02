@@ -86,7 +86,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
-            toggle: false,
+            toggle: !o.allowEdit,
             container: o.container,
             el: this.trigger,
             adjustLength: 1,
