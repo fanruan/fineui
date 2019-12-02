@@ -106,7 +106,10 @@ if (BI.jQuery) {
 
                     textLeft = textLeft.substr(tidx + keyword.length);
                     if (py != null) {
-                        py = py.substr(tidx + keyword.length);
+                        // 每一组拼音都应该前进，而不是只是当前的
+                        py = BI.map(py.split("\u200b"), function (idx, ps) {
+                            return ps.slice(tidx + keyword.length);
+                        }).join("\u200b");
                     }
                 } else if (pidx != null && pidx >= 0) {
                     // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
