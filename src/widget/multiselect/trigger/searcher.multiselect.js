@@ -26,6 +26,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             type: "bi.multi_select_editor",
             height: o.height,
             text: o.text,
+            watermark: o.watermark,
             listeners: [{
                 eventName: BI.MultiSelectEditor.EVENT_FOCUS,
                 action: function () {
