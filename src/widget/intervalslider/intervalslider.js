@@ -334,9 +334,13 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         valueTwo = BI.parseFloat(valueTwo);
         if((oldValueOne <= oldValueTwo && valueOne > valueTwo) || (oldValueOne >= oldValueTwo && valueOne < valueTwo)) {
             var isSliderOneLeft = BI.parseFloat(this.sliderOne.element[0].style.left) < BI.parseFloat(this.sliderTwo.element[0].style.left);
-            this.labelOne.element.css({left: isSliderOneLeft ? "0%" : "100%"});
-            this.labelTwo.element.css({left: isSliderOneLeft ? "100%" : "0%"});
+            this._resetLabelPosition(!isSliderOneLeft);
         }
+    },
+
+    _resetLabelPosition: function(needReverse) {
+        this.labelOne.element.css({left: needReverse ? "100%" : "0%"});
+        this.labelTwo.element.css({left: needReverse ? "0%" : "100%"});
     },
 
     _setSliderOnePosition: function (percent) {
@@ -481,8 +485,8 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         var o = this.options;
         var valueOne = BI.parseFloat(v.min);
         var valueTwo = BI.parseFloat(v.max);
-        valueOne = o.digit === false ? valueOne : valueOne.toFixed(o.digit);
-        valueTwo = o.digit === false ? valueTwo : valueTwo.toFixed(o.digit);
+        valueOne = o.digit === false ? valueOne : BI.parseFloat(valueOne.toFixed(o.digit));
+        valueTwo = o.digit === false ? valueTwo : BI.parseFloat(valueTwo.toFixed(o.digit));
         if (!isNaN(valueOne) && !isNaN(valueTwo)) {
             if (this._checkValidation(valueOne)) {
                 this.valueOne = (this.valueOne <= this.valueTwo ? valueOne : valueTwo);
@@ -523,6 +527,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
                 this.labelTwo.setValue(this.max);
                 this._setAllPosition(0, 100);
             }
+            this._resetLabelPosition();
         }
     }
 });
