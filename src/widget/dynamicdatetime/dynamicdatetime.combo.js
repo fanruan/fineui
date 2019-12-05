@@ -195,6 +195,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
                                 self.popup.setValue(self.storeValue);
+                                self.popup.setMinDate(opts.minDate);
+                                self.popup.setMaxDate(opts.maxDate);
                                 self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
                             }
                         }],
