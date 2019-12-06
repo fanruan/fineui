@@ -46,6 +46,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         toggle: false,
                         isNeedAdjustHeight: false,
                         isNeedAdjustWidth: false,
+                        destroyWhenHide: true,
                         el: {
                             type: "bi.dynamic_date_trigger",
                             min: opts.minDate,
