@@ -98,7 +98,8 @@ if (BI.jQuery) {
                     }
                 }
 
-                if (tidx >= 0) {
+                // BI-56945 场景: 对'啊a'标红, a为keyword, 此时tidx为1, pidx为0, 此时使用tidx显然'啊'就无法标红了
+                if (tidx >= 0 && pidx > tidx) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
