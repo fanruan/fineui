@@ -110,11 +110,11 @@ export interface _base {
     int2Abc: (num: number) => string;
 
     // 数组相关的方法
-    first: <T>(array: T[] | any, callback?: Function|object|number|string, thisArg?: any) => T;
+    first: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
     initial: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T[];
 
-    last: <T>(array: T[] | any, callback?: Function|object|number|string, thisArg?: any) => T;
+    last: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T;
 
     rest: <T>(array: T[], callback?: Function|object|number|string, thisArg?: any) => T[];
 
