@@ -172,16 +172,16 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
 
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
+            this.options.min = minDate;
             this.year.setMinDate(minDate);
         }
-        this.options.min = minDate;
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
             this.year.setMaxDate(maxDate);
         }
-        this.options.max = maxDate;
     },
 
     setValue: function (v) {

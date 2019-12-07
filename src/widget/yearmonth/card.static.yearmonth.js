@@ -115,18 +115,18 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
 
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
+            this.options.min = minDate;
             this.yearPicker.setMinDate(minDate);
             this._checkMonthStatus(this.selectedYear);
         }
-        this.options.min = minDate;
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
             this.yearPicker.setMaxDate(maxDate);
             this._checkMonthStatus(this.selectedYear);
         }
-        this.options.max = maxDate;
     },
 
     getValue: function () {
