@@ -247,7 +247,7 @@ export interface _Widget extends _OB {
     /**
      * 根据wigetname获取子元素实例
      */
-    getWidgetByName(_name: string): _Widget;
+    getWidgetByName(_name: string): _Widget | undefined;
 
     /**
      * 移除子元素
