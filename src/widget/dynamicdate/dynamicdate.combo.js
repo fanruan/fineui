@@ -137,7 +137,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
-                                value: opts.value,
                                 ref: function () {
                                     self.popup = this;
                                 },
