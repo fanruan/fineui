@@ -109,10 +109,10 @@ BI.DateInterval = BI.inherit(BI.Single, {
             }
         });
 
-        combo.on(BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hidePopupView();
-            self.right.hidePopupView();
-        });
+        // combo.on(BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+        //     self.left.hidePopupView();
+        //     self.right.hidePopupView();
+        // });
 
         combo.on(BI.DynamicDateCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
