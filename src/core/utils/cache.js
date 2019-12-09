@@ -53,7 +53,7 @@ BI.Cache = {
             var date = new Date();
             // expires是标准GMT格式时间，应该使用时间戳作为起始时间
             date.setTime(date.getTime() + expiresHours * 3600 * 1000);
-            cookieString = cookieString + "; expires=" + date.toGMTString();
+            cookieString = cookieString + "; expires=" + date.toUTCString();
         }
         if (path) {
             cookieString = cookieString + "; path=" + path;
@@ -68,7 +68,7 @@ BI.Cache = {
     deleteCookie: function (name, path) {
         var date = new Date();
         date.setTime(date.getTime() - 10000);
-        var cookieString = name + "=v; expires=" + date.toGMTString();
+        var cookieString = name + "=v; expires=" + date.toUTCString();
         if (path) {
             cookieString = cookieString + "; path=" + path;
         }
