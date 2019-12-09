@@ -14859,7 +14859,8 @@ BI.Cache = {
         // 判断是否设置过期时间
         if (expiresHours && expiresHours > 0) {
             var date = new Date();
-            date.setTime(BI.getTime() + expiresHours * 3600 * 1000);
+            // expires是标准GMT格式时间，应该使用时间戳作为起始时间
+            date.setTime(date.getTime() + expiresHours * 3600 * 1000);
             cookieString = cookieString + "; expires=" + date.toGMTString();
         }
         if (path) {
@@ -14874,7 +14875,7 @@ BI.Cache = {
     },
     deleteCookie: function (name, path) {
         var date = new Date();
-        date.setTime(BI.getTime() - 10000);
+        date.setTime(date.getTime() - 10000);
         var cookieString = name + "=v; expires=" + date.toGMTString();
         if (path) {
             cookieString = cookieString + "; path=" + path;
@@ -32554,7 +32555,10 @@ BI.$.extend(BI.$.Event.prototype, {
 
                     textLeft = textLeft.substr(tidx + keyword.length);
                     if (py != null) {
-                        py = py.substr(tidx + keyword.length);
+                        // 每一组拼音都应该前进，而不是只是当前的
+                        py = BI.map(py.split("\u200b"), function (idx, ps) {
+                            return ps.slice(tidx + keyword.length);
+                        }).join("\u200b");
                     }
                 } else if (pidx != null && pidx >= 0) {
                     // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
