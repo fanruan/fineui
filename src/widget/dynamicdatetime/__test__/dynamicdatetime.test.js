@@ -63,7 +63,7 @@ describe("DateTimeCombo", function () {
             // 输入8, 检查popup是否收起
             BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-time-trigger .bi-input"), "8", 56, function () {
                 BI.nextTick(function () {
-                    expect(dateCombo.element.find(".bi-date-time-trigger + .bi-popup-view").css("display")).to.equal("none");
+                    expect(dateCombo.element.find(".bi-date-time-trigger + .bi-popup-view").length).to.equal(0);
                     // 清空输入, 检查popup是否弹出
                     BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-time-trigger .bi-input"), "", BI.KeyCode.BACKSPACE, function () {
                         BI.nextTick(function () {
@@ -115,7 +115,7 @@ describe("DateTimeCombo", function () {
                 var input = dateCombo.element.find(".bi-date-time-trigger .bi-input");
                 BI.Test.triggerKeyDown(input, null, BI.KeyCode.ENTER, function () {
                     BI.delay(function () {
-                        expect(dateCombo.element.find(".bi-date-time-trigger + .bi-popup-view").css("display")).to.equal("none");
+                        expect(dateCombo.element.find(".bi-date-time-trigger + .bi-popup-view").length).to.equal(0);
                         dateCombo.destroy();
                         done();
                     }, 300);
