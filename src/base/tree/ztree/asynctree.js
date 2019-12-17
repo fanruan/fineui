@@ -115,6 +115,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var name = this._getNodeValue(treeNode);
         //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
+            this._addTreeNode(this.options.paras.selectedValues, parentValues, name, {});
         } else {
             var tNode = treeNode;
             var pNode = this._getTree(this.options.paras.selectedValues, parentValues);
@@ -185,7 +186,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 if (BI.isNull(compare[n])) {
                     self._addTreeNode(map, parent, n, item);
                 } else if (BI.isEmpty(compare[n])) {
-                    self._addTreeNode(map, parent, n, {});
+                    self._addTreeNode(map, parent, n, item);
                 } else {
                     track(parent.concat([n]), node[n], compare[n]);
                 }

@@ -61,4 +61,16 @@ describe("标红test", function () {
         expect(a.element.html()).to.equal("<span class=\"bi-keyword-red-mark\">a</span><span class=\"bi-keyword-red-mark\">啊</span>");
         a.destroy();
     });
+
+    /**
+     * test_author_windy
+     */
+    it("中文拼音", function () {
+        var a = BI.Test.createWidget({
+            type: "bi.layout",
+        });
+        a.element.__textKeywordMarked__("日期", "日期");
+        expect(a.element.html()).to.equal("<span class=\"bi-keyword-red-mark\">日期</span>");
+        a.destroy();
+    });
 });

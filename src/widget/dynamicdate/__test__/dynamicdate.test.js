@@ -54,7 +54,7 @@ describe("DateCombo", function () {
             // 输入8, 检查popup是否收起
             BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-trigger .bi-input"), "8", 56, function () {
                 BI.nextTick(function () {
-                    expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").css("display")).to.equal("none");
+                    expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").length).to.equal(0);
                     // 清空输入, 检查popup是否弹出
                     BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-trigger .bi-input"), "", BI.KeyCode.BACKSPACE, function () {
                         BI.nextTick(function () {
@@ -82,7 +82,7 @@ describe("DateCombo", function () {
         dateCombo.element.find(".bi-date-trigger .bi-basic-button").click();
         BI.nextTick(function () {
             dateCombo.element.find(".bi-calendar:visible .bi-list-item-select :contains(5)").parent().click();
-            expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").css("display")).to.equal("none");
+            expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").length).to.equal(0);
             dateCombo.destroy();
             done();
         })
@@ -105,7 +105,7 @@ describe("DateCombo", function () {
                 var input = dateCombo.element.find(".bi-date-trigger .bi-input");
                 BI.Test.triggerKeyDown(input, null, BI.KeyCode.ENTER, function () {
                     BI.delay(function () {
-                        expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").css("display")).to.equal("none");
+                        expect(dateCombo.element.find(".bi-date-trigger + .bi-popup-view").length).to.equal(0);
                         dateCombo.destroy();
                         done();
                     }, 300);
