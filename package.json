@@ -87,10 +87,5 @@
     "finebi"
   ],
   "author": "fanruan",
-  "license": "MIT",
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run test"
-    }
-  }
+  "license": "MIT"
 }
