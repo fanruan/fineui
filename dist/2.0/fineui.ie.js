@@ -32517,9 +32517,13 @@ BI.$.extend(BI.$.Event.prototype, {
          * 高亮显示
          * @param text 必需
          * @param keyword
-         * @param py 必需
+         * @param py
          * @returns {*}
          * @private
+         * 原理:
+         * 1、得到text的拼音py, 分别看是否匹配关键字keyword, 得到匹配索引tidx和pidx
+         * 2、比较tidx和pidx, 取大于-1且较小的索引，标红[索引，索引 + keyword.length - 1]的文本
+         * 3、text和py各自取tidx/pidx + keyword.length索引开始的子串作为新的text和py, 重复1, 直到text和py有一个为""
          */
         __textKeywordMarked__: function (text, keyword, py) {
             if (!BI.isKey(keyword) || (text + "").length > 100) {
@@ -32531,42 +32535,38 @@ BI.$.extend(BI.$.Event.prototype, {
             py = (py || BI.makeFirstPY(text, {
                 splitChar: "\u200b"
             })) + "";
-            if (py != null) {
-                py = BI.toUpperCase(py);
-            }
+            py = BI.toUpperCase(py);
             this.empty();
             // BI-48487 性能: makeFirstPY出来的py中包含多音字是必要的，但虽然此方法中做了限制。但是对于一个长度为60,包含14个多音字的字符串
             // 获取的的py长度将达到1966080, 远超过text的长度，到后面都是在做"".substring的无用功，所以此循环应保证py和textLeft长度不为0
             while (py.length > 0 && textLeft.length > 0) {
                 var tidx = BI.toUpperCase(textLeft).indexOf(keyword);
-                var pidx = null;
-                if (py != null) {
-                    pidx = py.indexOf(keyword);
-                    if (pidx >= 0) {
-                        pidx = (pidx - Math.floor(pidx / (textLeft.length + 1))) % textLeft.length;
-                    }
+                var pidx = py.indexOf(keyword);
+                if (pidx >= 0) {
+                    pidx = (pidx - Math.floor(pidx / (textLeft.length + 1))) % textLeft.length;
                 }
 
-                if (tidx >= 0) {
+                // BI-56945 场景: 对'啊a'标红, a为keyword, 此时tidx为1, pidx为0, 此时使用tidx显然'啊'就无法标红了
+                if (tidx >= 0 && (pidx > tidx || pidx === -1)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
-                    if (py != null) {
+                    if (BI.isNotEmptyString(py)) {
                         // 每一组拼音都应该前进，而不是只是当前的
                         py = BI.map(py.split("\u200b"), function (idx, ps) {
                             return ps.slice(tidx + keyword.length);
                         }).join("\u200b");
                     }
-                } else if (pidx != null && pidx >= 0) {
+                } else if (pidx >= 0) {
                     // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
-                    if (py != null) {
+                    if (BI.isNotEmptyString(py)) {
                         // 每一组拼音都应该前进，而不是只是当前的
                         py = BI.map(py.split("\u200b"), function (idx, ps) {
                             return ps.slice(pidx + keyword.length);
@@ -38670,6 +38670,7 @@ BI.Text = BI.inherit(BI.Single, {
             //  textContent性能更好,并且原生防xss
             this.text.element[0].textContent = this._getShowText();
         }
+        BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
     }
 });
 
@@ -40326,6 +40327,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         var name = this._getNodeValue(treeNode);
         //        var values = parentValues.concat([name]);
         if (treeNode.checked === true) {
+            this._addTreeNode(this.options.paras.selectedValues, parentValues, name, {});
         } else {
             var tNode = treeNode;
             var pNode = this._getTree(this.options.paras.selectedValues, parentValues);
@@ -40396,7 +40398,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 if (BI.isNull(compare[n])) {
                     self._addTreeNode(map, parent, n, item);
                 } else if (BI.isEmpty(compare[n])) {
-                    self._addTreeNode(map, parent, n, {});
+                    self._addTreeNode(map, parent, n, item);
                 } else {
                     track(parent.concat([n]), node[n], compare[n]);
                 }
@@ -64998,7 +65000,6 @@ BI.extend(BI.DynamicDateCard, {
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
-                                value: opts.value,
                                 ref: function () {
                                     self.popup = this;
                                 },
@@ -66019,7 +66020,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
-                                value: opts.value,
                                 ref: function () {
                                     self.popup = this;
                                 },
@@ -90546,4 +90546,4 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_Now": "此刻"
 };
 
-!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return i=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function c(e){if(e&&e.__esModule)return e;var t=i();if(t&&t.has(e))return t.get(e);var r={};if(null!=e){var n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});
+!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(e){return(i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function c(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return c=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function f(e){if(e&&e.__esModule)return e;if(null===e||"object"!==i(e)&&"function"!=typeof e)return{"default":e};var t=c();if(t&&t.has(e))return t.get(e);var r={},n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});

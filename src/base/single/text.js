@@ -142,6 +142,7 @@ BI.Text = BI.inherit(BI.Single, {
             //  textContent性能更好,并且原生防xss
             this.text.element[0].textContent = this._getShowText();
         }
+        BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
     }
 });
 

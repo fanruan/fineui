@@ -32517,9 +32517,13 @@ BI.$.extend(BI.$.Event.prototype, {
          * 高亮显示
          * @param text 必需
          * @param keyword
-         * @param py 必需
+         * @param py
          * @returns {*}
          * @private
+         * 原理:
+         * 1、得到text的拼音py, 分别看是否匹配关键字keyword, 得到匹配索引tidx和pidx
+         * 2、比较tidx和pidx, 取大于-1且较小的索引，标红[索引，索引 + keyword.length - 1]的文本
+         * 3、text和py各自取tidx/pidx + keyword.length索引开始的子串作为新的text和py, 重复1, 直到text和py有一个为""
          */
         __textKeywordMarked__: function (text, keyword, py) {
             if (!BI.isKey(keyword) || (text + "").length > 100) {
@@ -32531,42 +32535,38 @@ BI.$.extend(BI.$.Event.prototype, {
             py = (py || BI.makeFirstPY(text, {
                 splitChar: "\u200b"
             })) + "";
-            if (py != null) {
-                py = BI.toUpperCase(py);
-            }
+            py = BI.toUpperCase(py);
             this.empty();
             // BI-48487 性能: makeFirstPY出来的py中包含多音字是必要的，但虽然此方法中做了限制。但是对于一个长度为60,包含14个多音字的字符串
             // 获取的的py长度将达到1966080, 远超过text的长度，到后面都是在做"".substring的无用功，所以此循环应保证py和textLeft长度不为0
             while (py.length > 0 && textLeft.length > 0) {
                 var tidx = BI.toUpperCase(textLeft).indexOf(keyword);
-                var pidx = null;
-                if (py != null) {
-                    pidx = py.indexOf(keyword);
-                    if (pidx >= 0) {
-                        pidx = (pidx - Math.floor(pidx / (textLeft.length + 1))) % textLeft.length;
-                    }
+                var pidx = py.indexOf(keyword);
+                if (pidx >= 0) {
+                    pidx = (pidx - Math.floor(pidx / (textLeft.length + 1))) % textLeft.length;
                 }
 
-                if (tidx >= 0) {
+                // BI-56945 场景: 对'啊a'标红, a为keyword, 此时tidx为1, pidx为0, 此时使用tidx显然'啊'就无法标红了
+                if (tidx >= 0 && (pidx > tidx || pidx === -1)) {
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, tidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(tidx, keyword.length))));
 
                     textLeft = textLeft.substr(tidx + keyword.length);
-                    if (py != null) {
+                    if (BI.isNotEmptyString(py)) {
                         // 每一组拼音都应该前进，而不是只是当前的
                         py = BI.map(py.split("\u200b"), function (idx, ps) {
                             return ps.slice(tidx + keyword.length);
                         }).join("\u200b");
                     }
-                } else if (pidx != null && pidx >= 0) {
+                } else if (pidx >= 0) {
                     // BI-56386 这边两个pid / text.length是为了防止截取的首字符串不是完整的，但光这样做还不够，即时错位了，也不能说明就不符合条件
                     // 标红的text未encode
                     this.append(BI.htmlEncode(textLeft.substr(0, pidx)));
                     this.append(BI.$("<span>").addClass("bi-keyword-red-mark")
                         .html(BI.htmlEncode(textLeft.substr(pidx, keyword.length))));
-                    if (py != null) {
+                    if (BI.isNotEmptyString(py)) {
                         // 每一组拼音都应该前进，而不是只是当前的
                         py = BI.map(py.split("\u200b"), function (idx, ps) {
                             return ps.slice(pidx + keyword.length);
