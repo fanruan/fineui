@@ -7,7 +7,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectInsertNoBarCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-select-insert-combo",
+            baseCls: "bi-multi-select-insert-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
@@ -258,7 +258,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                height: o.height
             }]
         });
     },
