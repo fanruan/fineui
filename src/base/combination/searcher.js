@@ -164,7 +164,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     _search: function () {
-        var self = this, o = this.options, keyword = this.getLastSearchKeyword();
+        var self = this, o = this.options, keyword = this._getLastSearchKeyword();
         if (keyword === "" || this._stop) {
             return;
         }
@@ -197,7 +197,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
         });
     },
 
-    getLastSearchKeyword: function () {
+    _getLastSearchKeyword: function () {
         if (this.isValid()) {
             var res = this.editor.getValue().match(/[\S]+/g);
             return BI.isNull(res) ? "" : res[res.length - 1];
@@ -265,7 +265,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.getLastSearchKeyword();
+        return this._getLastSearchKeyword();
     },
 
     getKeywords: function () {
