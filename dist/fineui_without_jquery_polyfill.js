@@ -55132,7 +55132,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
                 // 预防trigger内部把当前的storeValue改掉
-                self.trigger.setValue(BI.deepClone(self.getValue()));
+                self.trigger.setValue(BI.deepClone(self.storeValue));
             }
             callback.apply(self, arguments);
         });
@@ -56027,7 +56027,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
                 // 预防trigger内部把当前的storeValue改掉
-                self.trigger.setValue(BI.deepClone(self.getValue()));
+                self.trigger.setValue(BI.deepClone(self.storeValue));
             }
             callback.apply(self, arguments);
         });
