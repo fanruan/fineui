@@ -164,7 +164,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     _search: function () {
-        var self = this, o = this.options, keyword = this.editor.getValue();
+        var self = this, o = this.options, keyword = this._getLastSearchKeyword();
         if (keyword === "" || this._stop) {
             return;
         }
@@ -195,6 +195,13 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.Searcher.EVENT_SEARCHING);
             }
         });
+    },
+
+    _getLastSearchKeyword: function () {
+        if (this.isValid()) {
+            var res = this.editor.getValue().match(/[\S]+/g);
+            return BI.isNull(res) ? "" : res[res.length - 1];
+        }
     },
 
     setAdapter: function (adapter) {
@@ -258,7 +265,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     getKeyword: function () {
-        return this.editor.getValue();
+        return this._getLastSearchKeyword();
     },
 
     getKeywords: function () {
