@@ -360,7 +360,8 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.radio = BI.createWidget({
-            type: "bi.radio"
+            type: "bi.radio",
+            once: o.once
         });
         this.text = BI.createWidget({
             type: "bi.label",
