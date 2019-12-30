@@ -11,7 +11,7 @@ export interface _base {
 
     createWidgets: (items: any, options: any, context: any) => any;
 
-    createItems: <T, U, K>(data: T[], innerAttr?: U[], outerAttr?: K[]) => (U & T & K)[];
+    createItems: <T, U, K>(data: T[], innerAttr?: [], outerAttr?: []) => (U & T & K)[];
 
     packageItems: (items: any[], layouts: any[]) => any[];
 
