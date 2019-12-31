@@ -36999,7 +36999,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             args[_key] = arguments[_key];
         }
 
-        return originalMethods["splice"].apply(this, args);
+        return originalMethods.splice.apply(this, args);
     };
 
     function noop(a, b, c) {}
@@ -37091,6 +37091,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else {
             result = model;
         }
+
         return result;
     }
 
@@ -37100,6 +37101,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (Array.isArray(obj)) {
             var result = [].concat(obj);
             if (obj.__ref__ !== undefined) result.__ref__ = obj.__ref__;
+
             return result;
         }
 
@@ -37134,8 +37136,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-        // PhantomJS
-        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            // PhantomJS
+            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -37183,7 +37185,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     function inherit(sb, sp, overrides) {
-        if (typeof sp === "object") {
+        if (typeof sp === 'object') {
             overrides = sp;
             sp = sb;
             sb = function temp() {
@@ -37198,6 +37200,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.extend(sb.prototype, overrides, {
             superclass: sp
         });
+
         return sb;
     }
 
@@ -37332,13 +37335,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (a && b && typeof a == 'object' && typeof b == 'object') {
             if (a.constructor !== b.constructor) return false;
 
-            var length, i, key, keys;
+            var length = void 0,
+                i = void 0,
+                key = void 0,
+                keys = void 0;
             if (Array.isArray(a)) {
                 length = a.length;
-                if (length != b.length) return false;
+                if (length !== b.length) return false;
                 for (i = length; i-- !== 0;) {
                     if (!isShadowEqual(a[i], b[i])) return false;
-                }return true;
+                }
+
+                return true;
             }
 
             if (a.constructor === RegExp) return true;
@@ -37351,7 +37359,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             for (i = length; i-- !== 0;) {
                 if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
-            }for (i = length; i-- !== 0;) {
+            }
+
+            for (i = length; i-- !== 0;) {
                 key = keys[i];
                 if ($$skips.indexOf(key) !== -1) continue;
                 if (!isShadowEqual(a[key], b[key])) return false;
@@ -37359,6 +37369,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             return true;
         }
+
+        // skip function
+        if (typeof a === 'function') return true;
 
         // true if both NaN, false otherwise
         return a !== a && b !== b;
@@ -37857,7 +37870,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
             nextTick(function () {
-                _$1.each(BI.uniqBy(contextListeners.reverse(), "id").reverse(), function (listener) {
+                _$1.each(BI.uniqBy(contextListeners.reverse(), 'id').reverse(), function (listener) {
                     listener.cb();
                 });
                 _$1.each(asyncListeners, function (listener) {
