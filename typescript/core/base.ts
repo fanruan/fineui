@@ -189,7 +189,7 @@ export interface _base {
 
     isMatch: (object: object, source: object, customizer?: Function, thisArg?: any) => boolean;
 
-    isEmpty: (value: any[]|object|string|null|undefined) => boolean;
+    isEmpty: (value: any[]|object|string|null|undefined|number) => boolean;
 
     isElement: (value: any) => boolean;
 
