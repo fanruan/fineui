@@ -30,6 +30,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                         ref: function () {
                             self.searcher = this;
                         },
+                        masker: BI.isNotNull(o.container) ? {
+                            offset: {},
+                            container: o.container
+                        } : {
+                            offset: {}
+                        },
                         isAutoSearch: false,
                         el: {
                             type: "bi.state_editor",

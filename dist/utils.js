@@ -12362,6 +12362,7 @@ if (!_global.BI) {
         _purgeRef: function () {
             if (this.options.ref) {
                 this.options.ref.call(null);
+                this.options.ref = null;
             }
         },
 

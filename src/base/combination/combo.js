@@ -518,6 +518,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
+        this.popupView && this.popupView._destroy();
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
