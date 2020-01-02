@@ -67,6 +67,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.combo",
             container: o.container,
+            destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
             ref: function (_ref) {
                 self.combo = _ref;
@@ -107,6 +108,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                container: o.container,
                 allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
@@ -155,8 +157,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }
                 }]
             },
+            toggle: !o.allowEdit,
             hideChecker: function (e) {
-                return self.triggerBtn.element.find(e.target).length === 0;
+                // 新增传配置container后对应hideChecker的修改
+                // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
+                // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
+                // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
+                return (o.container && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,

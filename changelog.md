@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2019-12)
+- 修复多层级单选下拉树主动设置container后搜索面板弹出问题
 - bi.search_editor支持搜索中间含有空格的字符串
 - 修复了监听日期下拉框before_popup_view事件，调用setMinDate无效的问题
 - 修复了数值滑块逆向排列滑块后populate显示效果不对的问题
