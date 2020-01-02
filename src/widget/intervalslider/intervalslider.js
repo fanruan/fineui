@@ -527,7 +527,7 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
                 this.labelTwo.setValue(this.max);
                 this._setAllPosition(0, 100);
             }
-            this._resetLabelPosition();
+            this._resetLabelPosition(this.valueOne > this.valueTwo);
         }
     }
 });
