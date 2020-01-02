@@ -445,6 +445,7 @@
 
         __d: function () {
             this.beforeDestroy && this.beforeDestroy();
+            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
@@ -452,6 +453,7 @@
             this._parent = null;
             this._isMounted = false;
             this.destroyed && this.destroyed();
+            this.destroyed = null;
         },
 
         _unMount: function () {

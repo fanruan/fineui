@@ -81,6 +81,7 @@
         _purgeRef: function () {
             if (this.options.ref) {
                 this.options.ref.call(null);
+                this.options.ref = null;
             }
         },
 
