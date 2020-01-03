@@ -163,7 +163,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
                 // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
                 // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
-                return (o.container && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0
+                return (o.container && self.trigger.getSearcher().isSearching() && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
