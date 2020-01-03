@@ -71,7 +71,6 @@ BI.SingleSlider = BI.inherit(BI.Single, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
-                console.log("click");
                 self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         });
@@ -174,7 +173,6 @@ BI.SingleSlider = BI.inherit(BI.Single, {
             }
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
-            console.log("drag");
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         }, window);
         widget.element.on("mousedown", function (event) {
