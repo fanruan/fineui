@@ -36,8 +36,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = BI.extend(self.selectedTime, {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             });
             day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));

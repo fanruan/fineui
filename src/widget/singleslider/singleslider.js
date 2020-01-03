@@ -52,7 +52,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         });
         // 这边其实是有问题的，拖拽区域是个圆，在圆的边缘拖拽后放开，这边计算出来的蓝条宽度实际上会比放开时长一点或者短一点
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -71,6 +71,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
                 v = o.digit === false ? v : v.toFixed(o.digit);
                 self.label.setValue(v);
                 self.value = v;
+                console.log("click");
                 self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
             }
         });
@@ -173,6 +174,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
             }
             widget.element.removeClass("dragging");
             mouseMoveTracker.releaseMouseMoves();
+            console.log("drag");
             self.fireEvent(BI.SingleSlider.EVENT_CHANGE);
         }, window);
         widget.element.on("mousedown", function (event) {

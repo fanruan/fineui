@@ -42,7 +42,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
             height: c.SLIDER_HEIGHT
         });
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
