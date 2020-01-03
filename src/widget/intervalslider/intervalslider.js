@@ -514,13 +514,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this.enable = true;
             this._setVisible(true);
             this._setErrorText();
             if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
-                this.labelOne.setValue(this.valueOne);
-                this.labelTwo.setValue(this.valueTwo);
+                this.labelOne.setValue(o.digit === false ? this.valueOne : BI.parseFloat(this.valueOne).toFixed(o.digit));
+                this.labelTwo.setValue(o.digit === false ? this.valueTwo : BI.parseFloat(this.valueTwo).toFixed(o.digit));
                 this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
             } else {
                 this.labelOne.setValue(this.min);
