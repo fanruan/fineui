@@ -441,6 +441,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
