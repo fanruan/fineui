@@ -45,11 +45,8 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
         }
     },
 
-    setValue: function (ob) {
+    _populate: function (ob) {
         var self = this, o = this.options;
-        ob || (ob = {});
-        ob.type || (ob.type = BI.Selection.Multi);
-        ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
             o.itemsCreator({
                 type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
@@ -66,6 +63,23 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             self.numberCounter.setText(ob.value.length);
             self.setVisible(ob.value.length > 0);
         });
+    },
+
+    _assertValue: function (ob) {
+        ob || (ob = {});
+        ob.type || (ob.type = BI.Selection.Multi);
+        ob.value || (ob.value = []);
+        return ob;
+    },
+
+    setValue: function (ob) {
+        ob = this._assertValue(ob);
+        this.options.value = ob;
+        this._populate(ob);
+    },
+
+    populate: function () {
+        this._populate(this._assertValue(this.options.value));
     },
 
     getValue: function () {
