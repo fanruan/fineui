@@ -79,7 +79,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this._populate(this.options.value);
+        this._populate(this._assertValue(this.options.value));
     },
 
     getValue: function () {
