@@ -1,5 +1,11 @@
 *
-!src/*.less
-!src/**/*.less
-demo/less/*.less
-!dist/*
+!src/less/*.less
+!src/less/lib/*.less
+!dist/lib/*.d.ts
+!dist/lib/**/*.d.ts
+!dist/fineui.css
+!dist/fineui.min.js
+!dist/fineui.ie.min.js
+!dist/fineui.min.css
+!dist/fineui.js
+!dist/fineui.css
