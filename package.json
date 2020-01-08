@@ -69,7 +69,7 @@
     "webpack:prod": "webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "webpack:prod:ie8": "cross-env BROWSER_VERSION=ie8 webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "start": "node server.js",
-    "build": "npm run webpack:prod && npm run webpack:prod:ie8 && grunt build",
+    "build": "npm run webpack:prod && npm run webpack:prod:ie8 && grunt build && tsc",
     "postbuild": "node ./lib/postbuild/postbuild.js",
     "compile": "grunt compile",
     "fake": "grunt fake-build",
