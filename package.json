@@ -3,6 +3,7 @@
   "version": "1.1.2",
   "description": "fineui",
   "main": "typescript/index.ts",
+  "types": "dist/lib/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.4.5",
