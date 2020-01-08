@@ -1,0 +1,5 @@
+*
+!src/*.less
+!src/**/*.less
+demo/less/*.less
+!dist/*

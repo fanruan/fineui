@@ -7,3 +7,4 @@ coverage
 unit.test.statistic.json
 package-lock.json
 dist/lib
+*.tgz
