@@ -77,7 +77,7 @@
     "test": "karma start",
     "analyze": "grunt analyze",
     "dev": "npm-run-all --parallel grunt webpack:dev",
-    "prepublish": "npm run build && node ./lib/prepublish/prepublish.js"
+    "prepublish": "node ./lib/prepublish/prepublish.js"
   },
   "repository": {
     "type": "git",
