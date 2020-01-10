@@ -1,5 +1,5 @@
 {
-  "name": "@fui/fineui",
+  "name": "fineui",
   "version": "2.0.0",
   "description": "fineui",
   "main": "dist/fineui.min.js",
