@@ -1,5 +1,5 @@
 {
-  "name": "@fui/fineui",
+  "name": "fineui",
   "version": "2.0.0",
   "description": "fineui",
   "main": "dist/fineui.min.js",
@@ -89,7 +89,7 @@
     "finebi"
   ],
   "publishConfig": {
-    "registry": "http://106.14.96.249:4873/"
+    "registry": "https://registry.npmjs.org"
   },
   "author": "fanruan",
   "license": "MIT"
