@@ -88,9 +88,6 @@
     "fineui",
     "finebi"
   ],
-  "publishConfig": {
-    "registry": "http://106.14.96.249:4873/"
-  },
   "author": "fanruan",
   "license": "MIT"
 }
