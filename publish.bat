@@ -1,1 +1,1 @@
-npm publish --registry=http://106.14.96.249:4873/
+npm publish
