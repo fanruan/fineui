@@ -2,8 +2,7 @@
   "name": "fineui",
   "version": "2.0.0",
   "description": "fineui",
-  "main": "dist/fineui.min.js",
-  "types": "dist/lib/index.d.ts",
+  "main": "typescript/index.ts",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.4.5",
