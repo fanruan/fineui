@@ -1,8 +1,9 @@
 {
   "name": "fineui",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "fineui",
-  "main": "typescript/index.ts",
+  "main": "dist/fineui.min.js",
+  "types": "dist/lib/index.d.ts",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "7.4.5",
@@ -69,13 +70,14 @@
     "webpack:prod": "webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "webpack:prod:ie8": "cross-env BROWSER_VERSION=ie8 webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "start": "node server.js",
-    "build": "npm run webpack:prod && npm run webpack:prod:ie8 && grunt build",
+    "build": "npm run webpack:prod && npm run webpack:prod:ie8 && grunt build && tsc",
     "postbuild": "node ./lib/postbuild/postbuild.js",
     "compile": "grunt compile",
     "fake": "grunt fake-build",
     "test": "karma start",
     "analyze": "grunt analyze",
-    "dev": "npm-run-all --parallel grunt webpack:dev"
+    "dev": "npm-run-all --parallel grunt webpack:dev",
+    "prepublish": "node ./lib/prepublish/prepublish.js"
   },
   "repository": {
     "type": "git",
@@ -86,6 +88,9 @@
     "fineui",
     "finebi"
   ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "author": "fanruan",
   "license": "MIT"
 }

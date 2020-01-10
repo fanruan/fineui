@@ -10,7 +10,7 @@
       ],
       "declaration": true,
       "experimentalDecorators": true,
-      "outDir": "./bin",
+      "outDir": "./dist/lib",
       "baseUrl": ".",
       // "strict": true,
       "strictNullChecks": true,
@@ -19,7 +19,8 @@
       "noUnusedLocals": true,
       "noUnusedParameters": true,
       "noImplicitReturns": true,
-      "noFallthroughCasesInSwitch": true
+      "noFallthroughCasesInSwitch": true,
+      "emitDeclarationOnly": true
   },
   "include": [
       "typescript/*.ts",
