@@ -11564,6 +11564,7 @@ if (!_global.BI) {
         _purgeRef: function () {
             if (this.options.ref) {
                 this.options.ref.call(null);
+                this.options.ref = null;
             }
         },
 
@@ -12113,6 +12114,7 @@ if (!_global.BI) {
 
         __d: function () {
             this.beforeDestroy && this.beforeDestroy();
+            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
@@ -12120,6 +12122,7 @@ if (!_global.BI) {
             this._parent = null;
             this._isMounted = false;
             this.destroyed && this.destroyed();
+            this.destroyed = null;
         },
 
         _unMount: function () {

@@ -11811,6 +11811,7 @@ if (!_global.BI) {
         _purgeRef: function () {
             if (this.options.ref) {
                 this.options.ref.call(null);
+                this.options.ref = null;
             }
         },
 
@@ -12360,6 +12361,7 @@ if (!_global.BI) {
 
         __d: function () {
             this.beforeDestroy && this.beforeDestroy();
+            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
@@ -12367,6 +12369,7 @@ if (!_global.BI) {
             this._parent = null;
             this._isMounted = false;
             this.destroyed && this.destroyed();
+            this.destroyed = null;
         },
 
         _unMount: function () {
@@ -42102,6 +42105,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
+        this.popupView && this.popupView._destroy();
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -43612,10 +43616,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.popupView && this.popupView.empty();
-    },
-
-    destroy: function () {
-        BI.Switcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";
@@ -43849,6 +43849,7 @@ BI.Msg = function () {
             context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
+            var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
                 type: "bi.toast",
                 cls: "bi-message-animate bi-message-leave",
@@ -43864,6 +43865,7 @@ BI.Msg = function () {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
                         });
+                        callback();
                     }
                 }]
             });
@@ -63798,8 +63800,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = BI.extend(self.selectedTime, {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             });
             day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
@@ -68232,20 +68233,21 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this.enable = true;
             this._setVisible(true);
             this._setErrorText();
             if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
-                this.labelOne.setValue(this.valueOne);
-                this.labelTwo.setValue(this.valueTwo);
+                this.labelOne.setValue(o.digit === false ? this.valueOne : BI.parseFloat(this.valueOne).toFixed(o.digit));
+                this.labelTwo.setValue(o.digit === false ? this.valueTwo : BI.parseFloat(this.valueTwo).toFixed(o.digit));
                 this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
             } else {
                 this.labelOne.setValue(this.min);
                 this.labelTwo.setValue(this.max);
                 this._setAllPosition(0, 100);
             }
-            this._resetLabelPosition();
+            this._resetLabelPosition(this.valueOne > this.valueTwo);
         }
     }
 });
@@ -68954,6 +68956,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.combo",
             container: o.container,
+            destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
             ref: function (_ref) {
                 self.combo = _ref;
@@ -68994,6 +68997,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
+                container: o.container,
                 allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
@@ -69042,8 +69046,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     }
                 }]
             },
+            toggle: !o.allowEdit,
             hideChecker: function (e) {
-                return self.triggerBtn.element.find(e.target).length === 0;
+                // 新增传配置container后对应hideChecker的修改
+                // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
+                // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
+                // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
+                return (o.container && self.trigger.getSearcher().isSearching() && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0;
+
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -69466,6 +69476,12 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.searcher",
                         ref: function () {
                             self.searcher = this;
+                        },
+                        masker: BI.isNotNull(o.container) ? {
+                            offset: {},
+                            container: o.container
+                        } : {
+                            offset: {}
                         },
                         isAutoSearch: false,
                         el: {
@@ -70147,6 +70163,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.combo",
             container: o.container,
+            destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
             ref: function (_ref) {
                 self.combo = _ref;
@@ -70187,6 +70204,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                container: o.container,
                 allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
@@ -70235,8 +70253,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }
                 }]
             },
+            toggle: !o.allowEdit,
             hideChecker: function (e) {
-                return self.triggerBtn.element.find(e.target).length === 0;
+                // 新增传配置container后对应hideChecker的修改
+                // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
+                // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
+                // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
+                return (o.container && self.trigger.getSearcher().isSearching() && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -70658,6 +70681,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.searcher",
                         ref: function () {
                             self.searcher = this;
+                        },
+                        masker: BI.isNotNull(o.container) ? {
+                            offset: {},
+                            container: o.container
+                        } : {
+                            offset: {}
                         },
                         isAutoSearch: false,
                         el: {
@@ -72184,6 +72213,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -72621,6 +72651,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73079,6 +73110,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73534,6 +73566,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -74813,11 +74846,8 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
         }
     },
 
-    setValue: function (ob) {
+    _populate: function (ob) {
         var self = this, o = this.options;
-        ob || (ob = {});
-        ob.type || (ob.type = BI.Selection.Multi);
-        ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
             o.itemsCreator({
                 type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
@@ -74834,6 +74864,23 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             self.numberCounter.setText(ob.value.length);
             self.setVisible(ob.value.length > 0);
         });
+    },
+
+    _assertValue: function (ob) {
+        ob || (ob = {});
+        ob.type || (ob.type = BI.Selection.Multi);
+        ob.value || (ob.value = []);
+        return ob;
+    },
+
+    setValue: function (ob) {
+        ob = this._assertValue(ob);
+        this.options.value = ob;
+        this._populate(ob);
+    },
+
+    populate: function () {
+        this._populate(this._assertValue(this.options.value));
     },
 
     getValue: function () {
@@ -83316,7 +83363,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         });
         // 这边其实是有问题的，拖拽区域是个圆，在圆的边缘拖拽后放开，这边计算出来的蓝条宽度实际上会比放开时长一点或者短一点
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -83654,7 +83701,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Single, {
             height: c.SLIDER_HEIGHT
         });
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -83952,7 +83999,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
             height: c.SLIDER_HEIGHT
         });
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -91060,4 +91107,4 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);(function () {
 }());
 
 
-!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(e){return(i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function c(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return c=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function f(e){if(e&&e.__esModule)return e;if(null===e||"object"!==i(e)&&"function"!=typeof e)return{"default":e};var t=c();if(t&&t.has(e))return t.get(e);var r={},n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});
+!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return i=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function c(e){if(e&&e.__esModule)return e;var t=i();if(t&&t.has(e))return t.get(e);var r={};if(null!=e){var n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});
