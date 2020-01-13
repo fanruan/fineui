@@ -24,6 +24,7 @@ BI.Msg = function () {
             context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
+            var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
                 type: "bi.toast",
                 cls: "bi-message-animate bi-message-leave",
@@ -39,6 +40,7 @@ BI.Msg = function () {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
                         });
+                        callback();
                     }
                 }]
             });

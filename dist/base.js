@@ -3849,6 +3849,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
+        this.popupView && this.popupView._destroy();
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -5359,10 +5360,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.popupView && this.popupView.empty();
-    },
-
-    destroy: function () {
-        BI.Switcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";
@@ -5596,6 +5593,7 @@ BI.Msg = function () {
             context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
+            var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
                 type: "bi.toast",
                 cls: "bi-message-animate bi-message-leave",
@@ -5611,6 +5609,7 @@ BI.Msg = function () {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
                         });
+                        callback();
                     }
                 }]
             });

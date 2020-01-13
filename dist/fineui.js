@@ -11811,6 +11811,7 @@ if (!_global.BI) {
         _purgeRef: function () {
             if (this.options.ref) {
                 this.options.ref.call(null);
+                this.options.ref = null;
             }
         },
 
@@ -12360,6 +12361,7 @@ if (!_global.BI) {
 
         __d: function () {
             this.beforeDestroy && this.beforeDestroy();
+            this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
             });
@@ -12367,6 +12369,7 @@ if (!_global.BI) {
             this._parent = null;
             this._isMounted = false;
             this.destroyed && this.destroyed();
+            this.destroyed = null;
         },
 
         _unMount: function () {
@@ -42492,6 +42495,7 @@ BI.Combo = BI.inherit(BI.Widget, {
             .unbind("mousemove." + this.getName())
             .unbind("mouseleave." + this.getName());
         BI.Resizers.remove(this.getName());
+        this.popupView && this.popupView._destroy();
     }
 });
 BI.Combo.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
@@ -44002,10 +44006,6 @@ BI.Switcher = BI.inherit(BI.Widget, {
 
     empty: function () {
         this.popupView && this.popupView.empty();
-    },
-
-    destroy: function () {
-        BI.Switcher.superclass.destroy.apply(this, arguments);
     }
 });
 BI.Switcher.EVENT_EXPAND = "EVENT_EXPAND";
@@ -44239,6 +44239,7 @@ BI.Msg = function () {
             context = context || BI.Widget._renderEngine.createElement("body");
             var level = options.level || "normal";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
+            var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
                 type: "bi.toast",
                 cls: "bi-message-animate bi-message-leave",
@@ -44254,6 +44255,7 @@ BI.Msg = function () {
                             element.css({"top": _height});
                             _height += element.outerHeight() + 10;
                         });
+                        callback();
                     }
                 }]
             });
@@ -64188,8 +64190,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             }
             self.selectedTime = BI.extend(self.selectedTime, {
                 year: value.year,
-                month: value.month,
-                day: day
+                month: value.month
             });
             day !== 0 && (self.selectedTime.day = day);
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
@@ -68622,20 +68623,21 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this.enable = true;
             this._setVisible(true);
             this._setErrorText();
             if ((BI.isNumeric(this.valueOne) || BI.isNotEmptyString(this.valueOne)) && (BI.isNumeric(this.valueTwo) || BI.isNotEmptyString(this.valueTwo))) {
-                this.labelOne.setValue(this.valueOne);
-                this.labelTwo.setValue(this.valueTwo);
+                this.labelOne.setValue(o.digit === false ? this.valueOne : BI.parseFloat(this.valueOne).toFixed(o.digit));
+                this.labelTwo.setValue(o.digit === false ? this.valueTwo : BI.parseFloat(this.valueTwo).toFixed(o.digit));
                 this._setAllPosition(this._getPercentByValue(this.valueOne), this._getPercentByValue(this.valueTwo));
             } else {
                 this.labelOne.setValue(this.min);
                 this.labelTwo.setValue(this.max);
                 this._setAllPosition(0, 100);
             }
-            this._resetLabelPosition();
+            this._resetLabelPosition(this.valueOne > this.valueTwo);
         }
     }
 });
@@ -69344,6 +69346,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.combo",
             container: o.container,
+            destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
             ref: function (_ref) {
                 self.combo = _ref;
@@ -69384,6 +69387,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_select_tree_trigger",
+                container: o.container,
                 allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
@@ -69432,8 +69436,14 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                     }
                 }]
             },
+            toggle: !o.allowEdit,
             hideChecker: function (e) {
-                return self.triggerBtn.element.find(e.target).length === 0;
+                // 新增传配置container后对应hideChecker的修改
+                // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
+                // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
+                // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
+                return (o.container && self.trigger.getSearcher().isSearching() && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0;
+
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -69856,6 +69866,12 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.searcher",
                         ref: function () {
                             self.searcher = this;
+                        },
+                        masker: BI.isNotNull(o.container) ? {
+                            offset: {},
+                            container: o.container
+                        } : {
+                            offset: {}
                         },
                         isAutoSearch: false,
                         el: {
@@ -70537,6 +70553,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             type: "bi.combo",
             container: o.container,
+            destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
             ref: function (_ref) {
                 self.combo = _ref;
@@ -70577,6 +70594,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         return {
             el: {
                 type: "bi.multilayer_single_tree_trigger",
+                container: o.container,
                 allowInsertValue: o.allowInsertValue,
                 allowSearchValue: o.allowSearchValue,
                 allowEdit: o.allowEdit,
@@ -70625,8 +70643,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                     }
                 }]
             },
+            toggle: !o.allowEdit,
             hideChecker: function (e) {
-                return self.triggerBtn.element.find(e.target).length === 0;
+                // 新增传配置container后对应hideChecker的修改
+                // IE11下，popover(position: fixed)下放置下拉控件(position: fixed), 滚动的时候会异常卡顿
+                // 通过container参数将popup放置于popover之外解决此问题, 其他下拉控件由于元素少或者有分页，所以
+                // 卡顿不明显, 先在此做尝试, 并在FineUI特殊处理待解决文档中标记跟踪
+                return (o.container && self.trigger.getSearcher().isSearching() && self.trigger.getSearcher().getView().element.find(e.target).length > 0) ? false : self.triggerBtn.element.find(e.target).length === 0
             },
             listeners: [{
                 eventName: BI.Combo.EVENT_AFTER_HIDEVIEW,
@@ -71048,6 +71071,12 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
                         type: "bi.searcher",
                         ref: function () {
                             self.searcher = this;
+                        },
+                        masker: BI.isNotNull(o.container) ? {
+                            offset: {},
+                            container: o.container
+                        } : {
+                            offset: {}
                         },
                         isAutoSearch: false,
                         el: {
@@ -72574,6 +72603,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73011,6 +73041,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73469,6 +73500,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73924,6 +73956,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
+        this.numberCounter.populate.apply(this.numberCounter, arguments);
     }
 });
 
@@ -75203,11 +75236,8 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
         }
     },
 
-    setValue: function (ob) {
+    _populate: function (ob) {
         var self = this, o = this.options;
-        ob || (ob = {});
-        ob.type || (ob.type = BI.Selection.Multi);
-        ob.value || (ob.value = []);
         if (ob.type === BI.Selection.All) {
             o.itemsCreator({
                 type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
@@ -75224,6 +75254,23 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             self.numberCounter.setText(ob.value.length);
             self.setVisible(ob.value.length > 0);
         });
+    },
+
+    _assertValue: function (ob) {
+        ob || (ob = {});
+        ob.type || (ob.type = BI.Selection.Multi);
+        ob.value || (ob.value = []);
+        return ob;
+    },
+
+    setValue: function (ob) {
+        ob = this._assertValue(ob);
+        this.options.value = ob;
+        this._populate(ob);
+    },
+
+    populate: function () {
+        this._populate(this._assertValue(this.options.value));
     },
 
     getValue: function () {
@@ -83706,7 +83753,7 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         });
         // 这边其实是有问题的，拖拽区域是个圆，在圆的边缘拖拽后放开，这边计算出来的蓝条宽度实际上会比放开时长一点或者短一点
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -84044,7 +84091,7 @@ BI.SingleSliderLabel = BI.inherit(BI.Single, {
             height: c.SLIDER_HEIGHT
         });
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
@@ -84342,7 +84389,7 @@ BI.SingleSliderNormal = BI.inherit(BI.Single, {
             height: c.SLIDER_HEIGHT
         });
         sliderVertical.element.click(function (e) {
-            if (self.enable && self.isEnabled()) {
+            if (self.enable && self.isEnabled() && sliderVertical.element[0] === e.originalEvent.target) {
                 var offset = e.clientX - self.element.offset().left - c.SLIDER_WIDTH_HALF;
                 var trackLength = self.track.element[0].scrollWidth - c.TRACK_GAP;
                 var percent = 0;
