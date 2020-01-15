@@ -14,4 +14,6 @@
 !dist/fineui.min.css
 !dist/fineui.js
 !dist/fineui.css
+!dist/font
+!dist/images
 !.eslintrc
