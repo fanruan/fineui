@@ -298,7 +298,9 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         if (BI.isEmptyString(dotText)) {
         }else{
             if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-                if(o.digit === false) {
+                // 虽然规定了所填写的小数位数，但是我们认为所有的整数都是满足设置的小数位数的
+                // 100等价于100.0 100.00 100.000
+                if(o.digit === false || BI.isInteger(v)) {
                     valid = true;
                 }else{
                     dotText = dotText || "";
