@@ -97,14 +97,12 @@ describe("YearMonthCombo", function () {
         BI.nextTick(function () {
             dateCombo.element.find(".bi-year-month-trigger .bi-basic-button").click();
             BI.nextTick(function () {
-                var input = dateCombo.element.find(".bi-year-month-trigger .bi-input");
-                BI.Test.triggerKeyDown(input, null, BI.KeyCode.ENTER, function () {
-                    BI.delay(function () {
-                        expect(dateCombo.element.find(".bi-year-month-trigger + .bi-popup-view").css("display")).to.equal("none");
-                        dateCombo.destroy();
-                        done();
-                    }, 300);
-                });
+                $("body").mousedown();
+                BI.delay(function () {
+                    expect(dateCombo.element.find(".bi-year-month-trigger + .bi-popup-view").css("display")).to.equal("none");
+                    dateCombo.destroy();
+                    done();
+                }, 300);
             })
         });
     });

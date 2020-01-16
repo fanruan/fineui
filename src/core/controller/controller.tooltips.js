@@ -65,7 +65,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         });
         this.showingTips = {};
         if (!this.has(name)) {
-            this.create(name, text, level, opt.container || context);
+            this.create(name, text, level, opt.container || "body");
         }
         if (!opt.belowMouse) {
             var offset = context.element.offset();
