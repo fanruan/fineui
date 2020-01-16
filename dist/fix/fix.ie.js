@@ -45,7 +45,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             args[_key] = arguments[_key];
         }
 
-        return originalMethods.splice.apply(this, args);
+        return originalMethods["splice"].apply(this, args);
     };
 
     function noop(a, b, c) {}
@@ -137,7 +137,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else {
             result = model;
         }
-
         return result;
     }
 
@@ -147,7 +146,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (Array.isArray(obj)) {
             var result = [].concat(obj);
             if (obj.__ref__ !== undefined) result.__ref__ = obj.__ref__;
-
             return result;
         }
 
@@ -168,37 +166,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        // An asynchronous deferring mechanism.
-        // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
-        // but microtasks actually has too high a priority and fires in between
-        // supposedly sequential events (e.g. #4521, #6690) or even between
-        // bubbling of the same event (#6566). Technically setImmediate should be
-        // the ideal choice, but it's not available everywhere; and the only polyfill
-        // that consistently queues the callback after all DOM events triggered in the
-        // same loop is by using MessageChannel.
-        /* istanbul ignore if */
-        if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-            timerFunc = function timerFunc() {
-                setImmediate(nextTickHandler);
-            };
-        } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-            // PhantomJS
-            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
-            var channel = new MessageChannel();
-            var port = channel.port2;
-            channel.port1.onmessage = nextTickHandler;
-            timerFunc = function timerFunc() {
-                port.postMessage(1);
-            };
-            /* istanbul ignore next */
-        } else if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
+        // Here we have async deferring wrappers using microtasks.
+        // In 2.5 we used (macro) tasks (in combination with microtasks).
+        // However, it has subtle problems when state is changed right before repaint
+        // (e.g. #6813, out-in transitions).
+        // Also, using (macro) tasks in event handler would cause some weird behaviors
+        // that cannot be circumvented (e.g. #7109, #7153, #7546, #7834, #8109).
+        // So we now use microtasks everywhere, again.
+        // A major drawback of this tradeoff is that there are some scenarios
+        // where microtasks have too high a priority and fire in between supposedly
+        // sequential events (e.g. #4521, #6690, which have workarounds)
+        // or even between bubbling of the same event (#6566).
+
+        // The nextTick behavior leverages the microtask queue, which can be accessed
+        // via either native Promise.then or MutationObserver.
+        // MutationObserver has wider support, however it is seriously bugged in
+        // UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
+        // completely stops working after triggering a few times... so, if native
+        // Promise is available, we will use it:
+        /* istanbul ignore next, $flow-disable-line */
+        if (typeof Promise !== 'undefined' && isNative(Promise)) {
             var p = Promise.resolve();
             timerFunc = function timerFunc() {
                 p.then(nextTickHandler);
             };
+        } else if (!isIE && typeof MutationObserver !== 'undefined' && (isNative(MutationObserver) ||
+        // PhantomJS and iOS 7.x
+        MutationObserver.toString() === '[object MutationObserverConstructor]')) {
+            // Use MutationObserver where native Promise is not available,
+            // e.g. PhantomJS, iOS7, Android 4.4
+            // (#6466 MutationObserver is unreliable in IE11)
+            var counter = 1;
+            var observer = new MutationObserver(nextTickHandler);
+            var textNode = document.createTextNode(String(counter));
+            observer.observe(textNode, {
+                characterData: true
+            });
+            timerFunc = function timerFunc() {
+                counter = (counter + 1) % 2;
+                textNode.data = String(counter);
+            };
+        } else if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+            // Fallback to setImmediate.
+            // Technically it leverages the (macro) task queue,
+            // but it is still a better choice than setTimeout.
+            timerFunc = function timerFunc() {
+                setImmediate(nextTickHandler);
+            };
         } else {
-            // fallback to setTimeout
+            // Fallback to setTimeout.
             timerFunc = function timerFunc() {
                 setTimeout(nextTickHandler, 0);
             };
@@ -231,7 +247,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     function inherit(sb, sp, overrides) {
-        if (typeof sp === 'object') {
+        if (typeof sp === "object") {
             overrides = sp;
             sp = sb;
             sb = function temp() {
@@ -246,7 +262,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.extend(sb.prototype, overrides, {
             superclass: sp
         });
-
         return sb;
     }
 
@@ -916,7 +931,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
             nextTick(function () {
-                _$1.each(BI.uniqBy(contextListeners.reverse(), 'id').reverse(), function (listener) {
+                _$1.each(BI.uniqBy(contextListeners.reverse(), "id").reverse(), function (listener) {
                     listener.cb();
                 });
                 _$1.each(asyncListeners, function (listener) {
