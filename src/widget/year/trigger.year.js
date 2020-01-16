@@ -39,6 +39,9 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);
+        });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_FOCUS);
         });
@@ -162,6 +165,7 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         return this.editor.getValue() | 0;
     }
 });
+BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicYearTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";

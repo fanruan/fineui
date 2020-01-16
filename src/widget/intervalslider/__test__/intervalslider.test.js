@@ -33,4 +33,32 @@ describe("intervalSlider", function () {
         });
     });
 
+
+    /**
+     * test_author_windy
+     */
+    it("reset", function () {
+        var intervalSliderLabel = BI.Test.createWidget({
+            type: "bi.interval_slider",
+            width: 300,
+            unit: "px",
+            cls: "layout-bg-white"
+        });
+        intervalSliderLabel.setMinAndMax({
+            min: 0,
+            max: 120
+        });
+        intervalSliderLabel.setValue({
+            min: 10,
+            max: 120
+        });
+        intervalSliderLabel.reset();
+        intervalSliderLabel.populate();
+        expect(intervalSliderLabel.getValue()).eql({
+            min: "",
+            max: ""
+        });
+        intervalSliderLabel.destroy();
+    });
+
 });

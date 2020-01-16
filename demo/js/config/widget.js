@@ -144,14 +144,6 @@ Demo.WIDGET_CONFIG = [{
     value: "demo.year"
 }, {
     pId: 412,
-    text: "bi.month_combo",
-    value: "demo.month"
-}, {
-    pId: 412,
-    text: "bi.quarter_combo",
-    value: "demo.quarter"
-}, {
-    pId: 412,
     text: "bi.year_month_combo",
     value: "demo.year_month_combo"
 }, {

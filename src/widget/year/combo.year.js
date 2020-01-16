@@ -19,6 +19,11 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             height: o.height,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            }
+        });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
         });
