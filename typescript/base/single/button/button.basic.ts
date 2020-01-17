@@ -31,3 +31,7 @@ export interface _BasicButton extends _Single {
 
     isDisableSelected(): boolean;
 }
+
+export interface _BasicButtonStatic {
+    EVENT_CHANGE: "BasicButton.EVENT_CHANGE";
+}
