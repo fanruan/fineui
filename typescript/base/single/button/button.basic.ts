@@ -33,5 +33,5 @@ export interface _BasicButton extends _Single {
 }
 
 export interface _BasicButtonStatic {
-    EVENT_CHANGE: "BasicButton.EVENT_CHANGE";
+    EVENT_CHANGE: string;
 }
