@@ -8,5 +8,5 @@ export interface _Pane extends _Widget {
 }
 
 export interface _PaneStatic {
-    EVENT_LOADED: "EVENT_LOADED";
+    EVENT_LOADED: string;
 }

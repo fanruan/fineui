@@ -6,7 +6,7 @@ import { _func } from "./core/func";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Single } from "./base/single/single";
 import { _base } from "./core/base";
-import { _BasicButton } from "./base/single/button/button.basic";
+import { _BasicButton, _BasicButtonStatic } from "./base/single/button/button.basic";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { _Action, _ActionFactory } from "./core/action/action";
 import { _ShowAction } from "./core/action/action.show";
@@ -26,7 +26,7 @@ export interface BI extends _func, _i18n, _base {
     OB: ClassConstructor<_OB>;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
-    BasicButton: ClassConstructor<_BasicButton>;
+    BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
     Trigger: ClassConstructor<_Trigger>;
     Action: ClassConstructor<_Action>;
     ActionFactory: ClassConstructor<_ActionFactory>;
