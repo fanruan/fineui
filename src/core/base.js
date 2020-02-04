@@ -712,17 +712,18 @@ if (!_global.BI) {
                 };
             }
 
-            return function queueNextTick(cb, ctx) {
+            return function queueNextTick(cb) {
                 var _resolve = void 0;
+                var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
                     if (cb) {
                         try {
-                            cb.call(ctx);
+                            cb.apply(null, args);
                         } catch (e) {
                             console.error(e);
                         }
                     } else if (_resolve) {
-                        _resolve(ctx);
+                        _resolve.apply(null, args);
                     }
                 });
                 if (!pending) {
