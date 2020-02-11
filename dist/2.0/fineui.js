@@ -10886,12 +10886,12 @@ if (!_global.BI) {
         nextTick: (function () {
             var callbacks = [];
             var pending = false;
-            var timerFunc;
+            var timerFunc = void 0;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
-                callbacks = [];
+                callbacks.length = 0;
                 for (var i = 0; i < copies.length; i++) {
                     copies[i]();
                 }
@@ -10899,36 +10899,42 @@ if (!_global.BI) {
 
             if (typeof Promise !== "undefined") {
                 var p = Promise.resolve();
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else
-
-            /* istanbul ignore if */
-            if (typeof MutationObserver !== "undefined") {
+            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter + "");
+                var textNode = document.createTextNode(String(counter));
                 observer.observe(textNode, {
                     characterData: true
                 });
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter + "";
+                    textNode.data = String(counter);
+                };
+            } else if (typeof setImmediate !== "undefined") {
+                timerFunc = function timerFunc() {
+                    setImmediate(nextTickHandler);
                 };
             } else {
-                timerFunc = function () {
+                // Fallback to setTimeout.
+                timerFunc = function timerFunc() {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
-                var _resolve;
+
+            return function queueNextTick(cb) {
+                var _resolve = void 0;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
                     if (cb) {
-                        cb.apply(null, args);
-                    }
-                    if (_resolve) {
+                        try {
+                            cb.apply(null, args);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    } else if (_resolve) {
                         _resolve.apply(null, args);
                     }
                 });
@@ -10936,8 +10942,9 @@ if (!_global.BI) {
                     pending = true;
                     timerFunc();
                 }
-                if (!cb && typeof Promise !== "undefined") {
-                    return new Promise(function (resolve) {
+                // $flow-disable-line
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve, reject) {
                         _resolve = resolve;
                     });
                 }
@@ -19623,7 +19630,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         });
         this.showingTips = {};
         if (!this.has(name)) {
-            this.create(name, text, level, opt.container || context);
+            this.create(name, text, level, opt.container || "body");
         }
         if (!opt.belowMouse) {
             var offset = context.element.offset();
@@ -37316,7 +37323,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -68160,7 +68167,9 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         if (BI.isEmptyString(dotText)) {
         }else{
             if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-                if(o.digit === false) {
+                // 虽然规定了所填写的小数位数，但是我们认为所有的整数都是满足设置的小数位数的
+                // 100等价于100.0 100.00 100.000
+                if(o.digit === false || BI.isInteger(v)) {
                     valid = true;
                 }else{
                     dotText = dotText || "";
@@ -85953,6 +85962,11 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
             height: o.height,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            }
+        });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
         });
@@ -86342,6 +86356,9 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);
+        });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_FOCUS);
         });
@@ -86465,6 +86482,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         return this.editor.getValue() | 0;
     }
 });
+BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicYearTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";

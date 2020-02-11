@@ -10886,12 +10886,12 @@ if (!_global.BI) {
         nextTick: (function () {
             var callbacks = [];
             var pending = false;
-            var timerFunc;
+            var timerFunc = void 0;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
-                callbacks = [];
+                callbacks.length = 0;
                 for (var i = 0; i < copies.length; i++) {
                     copies[i]();
                 }
@@ -10899,36 +10899,42 @@ if (!_global.BI) {
 
             if (typeof Promise !== "undefined") {
                 var p = Promise.resolve();
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else
-
-            /* istanbul ignore if */
-            if (typeof MutationObserver !== "undefined") {
+            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter + "");
+                var textNode = document.createTextNode(String(counter));
                 observer.observe(textNode, {
                     characterData: true
                 });
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter + "";
+                    textNode.data = String(counter);
+                };
+            } else if (typeof setImmediate !== "undefined") {
+                timerFunc = function timerFunc() {
+                    setImmediate(nextTickHandler);
                 };
             } else {
-                timerFunc = function () {
+                // Fallback to setTimeout.
+                timerFunc = function timerFunc() {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
-                var _resolve;
+
+            return function queueNextTick(cb) {
+                var _resolve = void 0;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
                     if (cb) {
-                        cb.apply(null, args);
-                    }
-                    if (_resolve) {
+                        try {
+                            cb.apply(null, args);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    } else if (_resolve) {
                         _resolve.apply(null, args);
                     }
                 });
@@ -10936,8 +10942,9 @@ if (!_global.BI) {
                     pending = true;
                     timerFunc();
                 }
-                if (!cb && typeof Promise !== "undefined") {
-                    return new Promise(function (resolve) {
+                // $flow-disable-line
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve, reject) {
                         _resolve = resolve;
                     });
                 }
@@ -19623,7 +19630,7 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
         });
         this.showingTips = {};
         if (!this.has(name)) {
-            this.create(name, text, level, opt.container || context);
+            this.create(name, text, level, opt.container || "body");
         }
         if (!opt.belowMouse) {
             var offset = context.element.offset();
@@ -37002,7 +37009,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             args[_key] = arguments[_key];
         }
 
-        return originalMethods.splice.apply(this, args);
+        return originalMethods["splice"].apply(this, args);
     };
 
     function noop(a, b, c) {}
@@ -37094,7 +37101,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else {
             result = model;
         }
-
         return result;
     }
 
@@ -37104,7 +37110,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (Array.isArray(obj)) {
             var result = [].concat(obj);
             if (obj.__ref__ !== undefined) result.__ref__ = obj.__ref__;
-
             return result;
         }
 
@@ -37125,37 +37130,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        // An asynchronous deferring mechanism.
-        // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
-        // but microtasks actually has too high a priority and fires in between
-        // supposedly sequential events (e.g. #4521, #6690) or even between
-        // bubbling of the same event (#6566). Technically setImmediate should be
-        // the ideal choice, but it's not available everywhere; and the only polyfill
-        // that consistently queues the callback after all DOM events triggered in the
-        // same loop is by using MessageChannel.
-        /* istanbul ignore if */
-        if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-            timerFunc = function timerFunc() {
-                setImmediate(nextTickHandler);
-            };
-        } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-            // PhantomJS
-            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
-            var channel = new MessageChannel();
-            var port = channel.port2;
-            channel.port1.onmessage = nextTickHandler;
-            timerFunc = function timerFunc() {
-                port.postMessage(1);
-            };
-            /* istanbul ignore next */
-        } else if (typeof Promise !== 'undefined' && isNative(Promise)) {
-            // use microtask in non-DOM environments, e.g. Weex
+        // Here we have async deferring wrappers using microtasks.
+        // In 2.5 we used (macro) tasks (in combination with microtasks).
+        // However, it has subtle problems when state is changed right before repaint
+        // (e.g. #6813, out-in transitions).
+        // Also, using (macro) tasks in event handler would cause some weird behaviors
+        // that cannot be circumvented (e.g. #7109, #7153, #7546, #7834, #8109).
+        // So we now use microtasks everywhere, again.
+        // A major drawback of this tradeoff is that there are some scenarios
+        // where microtasks have too high a priority and fire in between supposedly
+        // sequential events (e.g. #4521, #6690, which have workarounds)
+        // or even between bubbling of the same event (#6566).
+
+        // The nextTick behavior leverages the microtask queue, which can be accessed
+        // via either native Promise.then or MutationObserver.
+        // MutationObserver has wider support, however it is seriously bugged in
+        // UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
+        // completely stops working after triggering a few times... so, if native
+        // Promise is available, we will use it:
+        /* istanbul ignore next, $flow-disable-line */
+        if (typeof Promise !== 'undefined' && isNative(Promise)) {
             var p = Promise.resolve();
             timerFunc = function timerFunc() {
                 p.then(nextTickHandler);
             };
+        } else if (!isIE && typeof MutationObserver !== 'undefined' && (isNative(MutationObserver) ||
+        // PhantomJS and iOS 7.x
+        MutationObserver.toString() === '[object MutationObserverConstructor]')) {
+            // Use MutationObserver where native Promise is not available,
+            // e.g. PhantomJS, iOS7, Android 4.4
+            // (#6466 MutationObserver is unreliable in IE11)
+            var counter = 1;
+            var observer = new MutationObserver(nextTickHandler);
+            var textNode = document.createTextNode(String(counter));
+            observer.observe(textNode, {
+                characterData: true
+            });
+            timerFunc = function timerFunc() {
+                counter = (counter + 1) % 2;
+                textNode.data = String(counter);
+            };
+        } else if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+            // Fallback to setImmediate.
+            // Technically it leverages the (macro) task queue,
+            // but it is still a better choice than setTimeout.
+            timerFunc = function timerFunc() {
+                setImmediate(nextTickHandler);
+            };
         } else {
-            // fallback to setTimeout
+            // Fallback to setTimeout.
             timerFunc = function timerFunc() {
                 setTimeout(nextTickHandler, 0);
             };
@@ -37188,7 +37211,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     function inherit(sb, sp, overrides) {
-        if (typeof sp === 'object') {
+        if (typeof sp === "object") {
             overrides = sp;
             sp = sb;
             sb = function temp() {
@@ -37203,7 +37226,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _$1.extend(sb.prototype, overrides, {
             superclass: sp
         });
-
         return sb;
     }
 
@@ -37873,7 +37895,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         });
         if (contextListeners.length !== 0 || asyncListeners.length !== 0) {
             nextTick(function () {
-                _$1.each(BI.uniqBy(contextListeners.reverse(), 'id').reverse(), function (listener) {
+                _$1.each(BI.uniqBy(contextListeners.reverse(), "id").reverse(), function (listener) {
                     listener.cb();
                 });
                 _$1.each(asyncListeners, function (listener) {
@@ -67770,7 +67792,9 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         if (BI.isEmptyString(dotText)) {
         }else{
             if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-                if(o.digit === false) {
+                // 虽然规定了所填写的小数位数，但是我们认为所有的整数都是满足设置的小数位数的
+                // 100等价于100.0 100.00 100.000
+                if(o.digit === false || BI.isInteger(v)) {
                     valid = true;
                 }else{
                     dotText = dotText || "";
@@ -85563,6 +85587,11 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
             height: o.height,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            }
+        });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
         });
@@ -85952,6 +85981,9 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);
+        });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_FOCUS);
         });
@@ -86075,6 +86107,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         return this.editor.getValue() | 0;
     }
 });
+BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicYearTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
@@ -91050,4 +91083,4 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_Now": "此刻"
 };
 
-!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return i=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function c(e){if(e&&e.__esModule)return e;var t=i();if(t&&t.has(e))return t.get(e);var r={};if(null!=e){var n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});
+!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(e){return(i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function c(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return c=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function f(e){if(e&&e.__esModule)return e;if(null===e||"object"!==i(e)&&"function"!=typeof e)return{"default":e};var t=c();if(t&&t.has(e))return t.get(e);var r={},n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});

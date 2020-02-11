@@ -5756,7 +5756,9 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         if (BI.isEmptyString(dotText)) {
         }else{
             if (BI.isNumeric(v) && !(BI.isNull(v) || v < this.min || v > this.max)) {
-                if(o.digit === false) {
+                // 虽然规定了所填写的小数位数，但是我们认为所有的整数都是满足设置的小数位数的
+                // 100等价于100.0 100.00 100.000
+                if(o.digit === false || BI.isInteger(v)) {
                     valid = true;
                 }else{
                     dotText = dotText || "";
@@ -23549,6 +23551,11 @@ BI.shortcut("bi.static_year_card", BI.StaticYearCard);BI.DynamicYearCombo = BI.i
             height: o.height,
             value: o.value || ""
         });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_KEY_DOWN, function () {
+            if (self.combo.isViewVisible()) {
+                self.combo.hideView();
+            }
+        });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
         });
@@ -23938,6 +23945,9 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
                 return BI.i18nText("BI-Year_Trigger_Invalid_Text");
             }
         });
+        this.editor.on(BI.SignEditor.EVENT_KEY_DOWN, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_KEY_DOWN, arguments);
+        });
         this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_FOCUS);
         });
@@ -24061,6 +24071,7 @@ BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);BI.DynamicYearTrigger 
         return this.editor.getValue() | 0;
     }
 });
+BI.DynamicYearTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.DynamicYearTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";

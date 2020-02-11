@@ -11684,12 +11684,12 @@ if (!_global.BI) {
         nextTick: (function () {
             var callbacks = [];
             var pending = false;
-            var timerFunc;
+            var timerFunc = void 0;
 
-            function nextTickHandler () {
+            function nextTickHandler() {
                 pending = false;
                 var copies = callbacks.slice(0);
-                callbacks = [];
+                callbacks.length = 0;
                 for (var i = 0; i < copies.length; i++) {
                     copies[i]();
                 }
@@ -11697,36 +11697,42 @@ if (!_global.BI) {
 
             if (typeof Promise !== "undefined") {
                 var p = Promise.resolve();
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else
-
-            /* istanbul ignore if */
-            if (typeof MutationObserver !== "undefined") {
+            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
-                var textNode = document.createTextNode(counter + "");
+                var textNode = document.createTextNode(String(counter));
                 observer.observe(textNode, {
                     characterData: true
                 });
-                timerFunc = function () {
+                timerFunc = function timerFunc() {
                     counter = (counter + 1) % 2;
-                    textNode.data = counter + "";
+                    textNode.data = String(counter);
+                };
+            } else if (typeof setImmediate !== "undefined") {
+                timerFunc = function timerFunc() {
+                    setImmediate(nextTickHandler);
                 };
             } else {
-                timerFunc = function () {
+                // Fallback to setTimeout.
+                timerFunc = function timerFunc() {
                     setTimeout(nextTickHandler, 0);
                 };
             }
-            return function queueNextTick (cb) {
-                var _resolve;
+
+            return function queueNextTick(cb) {
+                var _resolve = void 0;
                 var args = [].slice.call(arguments, 1);
                 callbacks.push(function () {
                     if (cb) {
-                        cb.apply(null, args);
-                    }
-                    if (_resolve) {
+                        try {
+                            cb.apply(null, args);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    } else if (_resolve) {
                         _resolve.apply(null, args);
                     }
                 });
@@ -11734,8 +11740,9 @@ if (!_global.BI) {
                     pending = true;
                     timerFunc();
                 }
-                if (!cb && typeof Promise !== "undefined") {
-                    return new Promise(function (resolve) {
+                // $flow-disable-line
+                if (!cb && typeof Promise !== 'undefined') {
+                    return new Promise(function (resolve, reject) {
                         _resolve = resolve;
                     });
                 }
