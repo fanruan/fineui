@@ -6,5 +6,5 @@ export interface _Pane extends _Widget {
     check: (..._args: any[]) => void;
 }
 export interface _PaneStatic {
-    EVENT_LOADED: "EVENT_LOADED";
+    EVENT_LOADED: string;
 }

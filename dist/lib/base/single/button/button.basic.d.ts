@@ -16,3 +16,6 @@ export interface _BasicButton extends _Single {
     isForceNotSelected(): boolean;
     isDisableSelected(): boolean;
 }
+export interface _BasicButtonStatic {
+    EVENT_CHANGE: string;
+}

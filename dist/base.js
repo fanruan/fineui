@@ -348,8 +348,7 @@ BI.Single = BI.inherit(BI.Widget, {
             warningTitle: null,
             tipType: null, // success或warning
             value: null,
-            belowMouse: false,   // title是否跟随鼠标
-            container: "body"
+            belowMouse: false   // title是否跟随鼠标
         });
     },
 
