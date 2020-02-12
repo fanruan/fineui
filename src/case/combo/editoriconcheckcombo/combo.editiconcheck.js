@@ -32,8 +32,21 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
-            self.fireEvent(BI.EditorIconCheckCombo.EVENT_CHANGE);
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_CHANGE, arguments);
         });
+        this.trigger.on(BI.EditorTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_FOCUS, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_EMPTY, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_EMPTY, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_VALID, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_ERROR, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_ERROR, arguments);
+        });
+
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
@@ -75,4 +88,8 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.EditorIconCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.EditorIconCheckCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.EditorIconCheckCombo.EVENT_EMPTY = "EVENT_EMPTY";
+BI.EditorIconCheckCombo.EVENT_VALID = "EVENT_VALID";
+BI.EditorIconCheckCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);

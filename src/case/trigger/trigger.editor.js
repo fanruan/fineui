@@ -46,6 +46,18 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             self.fireEvent(BI.EditorTrigger.EVENT_CHANGE, arguments);
         });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_FOCUS, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_EMPTY, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_VALID, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_ERROR, arguments);
+        });
 
         BI.createWidget({
             element: this,
@@ -77,4 +89,8 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.EditorTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.EditorTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.EditorTrigger.EVENT_EMPTY = "EVENT_EMPTY";
+BI.EditorTrigger.EVENT_VALID = "EVENT_VALID";
+BI.EditorTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.editor_trigger", BI.EditorTrigger);

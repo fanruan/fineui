@@ -4158,8 +4158,21 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.EditorTrigger.EVENT_CHANGE, function () {
             self.popup.setValue(this.getValue());
-            self.fireEvent(BI.EditorIconCheckCombo.EVENT_CHANGE);
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_CHANGE, arguments);
         });
+        this.trigger.on(BI.EditorTrigger.EVENT_FOCUS, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_FOCUS, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_EMPTY, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_EMPTY, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_VALID, arguments);
+        });
+        this.trigger.on(BI.EditorTrigger.EVENT_ERROR, function () {
+            self.fireEvent(BI.EditorIconCheckCombo.EVENT_ERROR, arguments);
+        });
+
         this.popup = BI.createWidget({
             type: "bi.text_value_check_combo_popup",
             chooseType: o.chooseType,
@@ -4201,6 +4214,10 @@ BI.EditorIconCheckCombo = BI.inherit(BI.Widget, {
     }
 });
 BI.EditorIconCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.EditorIconCheckCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.EditorIconCheckCombo.EVENT_EMPTY = "EVENT_EMPTY";
+BI.EditorIconCheckCombo.EVENT_VALID = "EVENT_VALID";
+BI.EditorIconCheckCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 /**
  * Created by GUY on 2016/2/2.
@@ -9319,6 +9336,18 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
         this.editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             self.fireEvent(BI.EditorTrigger.EVENT_CHANGE, arguments);
         });
+        this.editor.on(BI.SignEditor.EVENT_FOCUS, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_FOCUS, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_EMPTY, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_EMPTY, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_VALID, arguments);
+        });
+        this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
+            self.fireEvent(BI.EditorTrigger.EVENT_ERROR, arguments);
+        });
 
         BI.createWidget({
             element: this,
@@ -9350,6 +9379,10 @@ BI.EditorTrigger = BI.inherit(BI.Trigger, {
     }
 });
 BI.EditorTrigger.EVENT_CHANGE = "EVENT_CHANGE";
+BI.EditorTrigger.EVENT_FOCUS = "EVENT_FOCUS";
+BI.EditorTrigger.EVENT_EMPTY = "EVENT_EMPTY";
+BI.EditorTrigger.EVENT_VALID = "EVENT_VALID";
+BI.EditorTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 /**
  * 图标按钮trigger
