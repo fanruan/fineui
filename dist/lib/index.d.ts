@@ -1,3 +1,4 @@
+import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base/combination/group.button";
 import { _Tab, _TabStatic } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic } from "./base/single/button/button.basic";
@@ -36,6 +37,7 @@ export interface BI extends _func, _i18n, _base {
     Pane: ClassConstructor<_Pane> & _PaneStatic;
     LoadingPane: ClassConstructor<_LoadingPane>;
     Tab: ClassConstructor<_Tab> & _TabStatic;
+    ButtonGroup: ClassConstructor<_ButtonGroup> & _ButtonGroupChooseType & _ButtonGroupStatic;
     Decorators: typeof decorator;
 }
 declare const _default: {

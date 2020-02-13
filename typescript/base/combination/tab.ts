@@ -10,6 +10,8 @@ export interface _Tab extends _Widget {
     getSelectedTab(): _Widget;
 
     getTab(v: string | number): _Widget;
+
+    populate(): void;
 }
 
 export interface _TabStatic {
