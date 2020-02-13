@@ -10,6 +10,7 @@ import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
 import { _Single } from "./base/single/single";
+import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
@@ -63,6 +64,7 @@ export interface BI extends _func, _i18n, _base {
     MultiSelectItem: ClassConstructor<_MultiSelectItem> & _MultiSelectItemStatic;
     AbstractLabel: ClassConstructor<_AbstractLabel>;
     Label: ClassConstructor<_Label>;
+    Text: ClassConstructor<_Text>;
     Editor: ClassConstructor<_Editor> & _EditorStatic;
     Layout: ClassConstructor<_Layout>;
     HTapeLayout: ClassConstructor<_HTapeLayout>;
