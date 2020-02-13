@@ -7,9 +7,9 @@ export interface _Tab extends _Widget {
 
     getSelect(): string | number;
 
-    getSelectedTab(): _Widget;
+    getSelectedTab(): any;
 
-    getTab(v: string | number): _Widget;
+    getTab(v: string | number): any;
 
     populate(): void;
 }

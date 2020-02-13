@@ -3,8 +3,8 @@ export interface _Tab extends _Widget {
     setSelect(v: string | number): void;
     removeTab(v: string | number): void;
     getSelect(): string | number;
-    getSelectedTab(): _Widget;
-    getTab(v: string | number): _Widget;
+    getSelectedTab(): any;
+    getTab(v: string | number): any;
     populate(): void;
 }
 export interface _TabStatic {
