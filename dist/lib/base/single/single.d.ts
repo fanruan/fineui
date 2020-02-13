@@ -11,7 +11,7 @@ export interface _Single extends _Widget {
     isReadOnly(): boolean;
     getTitle(): string;
     getWarningTitle(): string;
-    popluate(..._args: any[]): void;
+    populate(..._args: any[]): void;
 }
 interface SingleOpt {
     container?: any;

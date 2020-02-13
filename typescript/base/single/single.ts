@@ -23,7 +23,7 @@ export interface _Single extends _Widget {
 
     getWarningTitle(): string;
 
-    popluate(..._args: any[]): void;
+    populate(..._args: any[]): void;
 }
 
 interface SingleOpt {

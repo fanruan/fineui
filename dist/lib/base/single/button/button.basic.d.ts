@@ -9,12 +9,14 @@ export interface _BasicButton extends _Single {
     handle(): _BasicButton;
     hover(): void;
     dishover(): void;
-    setSelected(b: any): void;
+    setSelected(b: boolean): void;
     isSelected(): boolean;
     isOnce(): boolean;
     isForceSelected(): boolean;
     isForceNotSelected(): boolean;
     isDisableSelected(): boolean;
+    setText(v: string): void;
+    getText(): string;
 }
 export interface _BasicButtonStatic {
     EVENT_CHANGE: string;

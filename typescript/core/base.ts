@@ -349,7 +349,7 @@ export interface _base {
 
     hyphenate: (string: string) => string;
 
-    isNotEmptyString: (string: string) => boolean;
+    isNotEmptyString: (string: any) => boolean;
 
     isEmptyString: (str: any) => str is "";
 

@@ -1,7 +1,7 @@
 import { _Widget } from "../../core/widget";
 export interface _ButtonGroup extends _Widget {
-    prependItems(items: any): void;
-    addItems(items: any): void;
+    prependItems(items: []): void;
+    addItems(items: []): void;
     removeItemAt(indexes: any): void;
     removeItems(values: any): void;
     populate(items?: any): void;
@@ -13,8 +13,9 @@ export interface _ButtonGroup extends _Widget {
     getSelectedButtons(): [];
     getNotSelectedButtons(): [];
     getIndexByValue(value: any): number;
-    getNodeById(id: any): _Widget;
-    getNodeByValue(value: any): _Widget;
+    getNodeById(id: any): any;
+    getNodeByValue(value: any): any;
+    getValue(): [];
 }
 export interface _ButtonGroupChooseType {
     CHOOSE_TYPE_SINGLE: number;
