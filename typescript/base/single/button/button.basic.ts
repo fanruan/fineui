@@ -19,7 +19,7 @@ export interface _BasicButton extends _Single {
 
     dishover(): void;
 
-    setSelected(b: any): void;
+    setSelected(b: boolean): void;
 
     isSelected(): boolean;
 
@@ -30,6 +30,10 @@ export interface _BasicButton extends _Single {
     isForceNotSelected(): boolean;
 
     isDisableSelected(): boolean;
+
+    setText(v: string): void;
+
+    getText(): string;
 }
 
 export interface _BasicButtonStatic {

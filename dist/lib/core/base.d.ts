@@ -178,7 +178,7 @@ export interface _base {
     stripQuotes: (string: string) => string;
     camelize: (string: string) => string;
     hyphenate: (string: string) => string;
-    isNotEmptyString: (string: string) => boolean;
+    isNotEmptyString: (string: any) => boolean;
     isEmptyString: (str: any) => str is "";
     encrypt: (type: string, text: string, key: string) => string;
     escape: (string: string) => string;
