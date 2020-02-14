@@ -1,9 +1,9 @@
 import { _Widget } from "../../core/widget";
 
 export interface _ButtonGroup extends _Widget {
-    prependItems(items: []): void;
+    prependItems<T>(items: T[]): void;
 
-    addItems(items: []): void;
+    addItems<T>(items: T[]): void;
 
     removeItemAt(indexes: any): void;
 
@@ -13,17 +13,17 @@ export interface _ButtonGroup extends _Widget {
 
     setNotSelectedValue(v: any): void;
 
-    getNotSelectedValue(): [];
+    getNotSelectedValue<T>(): T[];
 
     setEnabledValue(v: any): void;
 
-    getAllButtons(): [];
+    getAllButtons<T>(): T[];
 
-    getAllLeaves(): [];
+    getAllLeaves<T>(): T[];
 
-    getSelectedButtons(): [];
+    getSelectedButtons<T>(): T[];
 
-    getNotSelectedButtons(): [];
+    getNotSelectedButtons<T>(): T[];
 
     getIndexByValue(value: any): number;
 
@@ -31,7 +31,7 @@ export interface _ButtonGroup extends _Widget {
 
     getNodeByValue(value: any): any;
 
-    getValue(): [];
+    getValue<T>(): T[];
 }
 
 export interface _ButtonGroupChooseType {

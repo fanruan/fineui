@@ -13,21 +13,21 @@ export interface _Layout extends _Widget {
 
     updateItemAt(index: number, item: any): any;
 
-    addItems(items: [], context?: any): void;
+    addItems<T>(items: T[], context?: any): void;
 
-    prependItems(items: [], context?: any): void;
+    prependItems<T>(items: T[], context?: any): void;
 
-    getValue(): [];
+    getValue<T>(): T[];
 
     setText(v: string): void;
 
     update(opt: any): any;
 
-    stroke(items: []): void;
+    stroke<T>(items: T[]): void;
 
     removeWidget(nameOrWidget: any): void;
 
-    populate(items?: []): void;
+    populate<T>(items?: T[]): void;
 
     resize(): void;
 }
