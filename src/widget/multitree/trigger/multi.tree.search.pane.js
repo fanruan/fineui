@@ -7,20 +7,16 @@
 
 BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
 
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiTreeSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-search-pane bi-card",
-            itemsCreator: BI.emptyFn,
-            keywordGetter: BI.emptyFn
-        });
+    props: {
+        baseCls: "bi-multi-tree-search-pane bi-card",
+        itemsCreator: BI.emptyFn,
+        keywordGetter: BI.emptyFn
     },
 
-    _init: function () {
-        BI.MultiTreeSearchPane.superclass._init.apply(this, arguments);
-
+    render: function () {
         var self = this, opts = this.options;
 
-        this.partTree = BI.createWidget(opts.el, {
+        return BI.extend({
             type: "bi.part_tree",
             element: this,
             tipText: BI.i18nText("BI-No_Select"),
@@ -28,16 +24,22 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
                 op.keyword = opts.keywordGetter();
                 opts.itemsCreator(op, callback);
             },
-            value: opts.value
-        });
-
-        this.partTree.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.partTree.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiTreeSearchPane.EVENT_CHANGE);
-        });
+            value: opts.value,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.TreeView.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiTreeSearchPane.EVENT_CHANGE);
+                }
+            }],
+            ref: function (_ref) {
+                self.partTree = _ref;
+            }
+        }, opts.el);
     },
 
     hasChecked: function () {
