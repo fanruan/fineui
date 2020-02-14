@@ -20,7 +20,7 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
 
         var self = this, opts = this.options;
 
-        this.partTree = BI.createWidget({
+        this.partTree = BI.createWidget(opts.el, {
             type: "bi.part_tree",
             element: this,
             tipText: BI.i18nText("BI-No_Select"),
