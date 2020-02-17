@@ -107,7 +107,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 
         function nodeSearch(deep, parentValues, current, result) {
             if (self._isMatch(parentValues, current, keyword)) {
-                var checked = isSelected(current);
+                var checked = isSelected(parentValues, current);
                 createOneJson(parentValues, current, false, checked, true, result);
                 return [true, checked];
             }
@@ -127,7 +127,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                 }
             });
             if (can === true) {
-                checked = isSelected(current);
+                checked = isSelected(parentValues, current);
                 createOneJson(parentValues, current, true, checked, false, result);
             }
             return [can, checked];
@@ -177,9 +177,9 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
             });
         }
 
-        function isSelected(value) {
+        function isSelected(parentValues, value) {
             return BI.any(selectedValues, function (idx, array) {
-                return BI.last(array) === value;
+                return BI.isEqual(parentValues, array.slice(0, parentValues.length)) && BI.last(array) === value;
             });
         }
 
@@ -205,7 +205,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
         var times = op.times;
         var parentValues = op.parentValues || [];
         var selectedValues = op.selectedValues || [];
-        var valueMap = dealWithSelectedValue(selectedValues);
+        var valueMap = dealWithSelectedValue(parentValues, selectedValues);
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var checked = BI.has(valueMap, nodes[i].value);
@@ -254,10 +254,12 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
             });
         });
 
-        function dealWithSelectedValue(selectedValues) {
+        function dealWithSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(selectedValues, function (idx, v) {
-                valueMap[BI.last(v)] = [2, 0];
+                if (BI.isEqual(parentValues, v.slice(0, parentValues.length))) {
+                    valueMap[BI.last(v)] = [2, 0];
+                }
             });
             return valueMap;
         }
