@@ -35,6 +35,7 @@ describe("DownListCombo", function () {
         BI.nextTick(function () {
             downListCombo.element.find(".bi-down-list-group:last-child .bi-down-list-item").click();
             expect(downListCombo.getValue()).to.deep.equal([ { value: 33 } ]);
+            downListCombo.destroy();
             done();
         });
     });
