@@ -61,7 +61,7 @@ describe("DateTime", function () {
     /**
      * test_author_windy
      */
-    it("点击取消不选值", function () {
+    it("点击取消不选值", function (done) {
         var dateCombo = BI.Test.createWidget({
             type: "bi.date_time_combo",
             value: {
