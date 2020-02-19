@@ -19,7 +19,6 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,
-                level: o.level,
                 quitChecker: o.quitChecker,
                 validationChecker: o.validationChecker,
                 listeners: [{
@@ -68,10 +67,6 @@ BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
 
     getValue: function () {
         return this.editor.getValue();
-    },
-
-    setTitle: function (v) {
-        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {
