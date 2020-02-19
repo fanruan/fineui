@@ -11,13 +11,13 @@ export interface _SignEditor extends _Widget {
 
     blur(): void;
 
-    doRedMark(...args: any): void;
+    doRedMark(...args: any[]): void;
 
-    unRedMark(...args: any): void;
+    unRedMark(...args: any[]): void;
 
-    doHighLight(...args: any): void;
+    doHighLight(...args: any[]): void;
 
-    unHighLight(...args: any): void;
+    unHighLight(...args: any[]): void;
 
     isValid(): boolean;
 
