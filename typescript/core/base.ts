@@ -297,9 +297,9 @@ export interface _base {
 
     throttle: (func: Function, wait?: number, options?: any) => Function;
 
-    delay: (func: Function, wait: number, ...args: any) => number;
+    delay: (func: Function, wait: number, ...args: any[]) => number;
 
-    defer: (func: Function, ...args: any) => number;
+    defer: (func: Function, ...args: any[]) => number;
 
     wrap: (value: any, wrapper: Function) => Function;
 
