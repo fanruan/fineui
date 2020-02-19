@@ -99,7 +99,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
     },
 
     populateSwitcher: function () {
-        this.button.populate.apply(this.switcher, arguments);
+        this.button.populate.apply(this.button, arguments);
     }
 });
 
