@@ -78240,20 +78240,16 @@ BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);/*
 
 BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
 
-    _defaultConfig: function () {
-        return BI.extend(BI.MultiTreeSearchPane.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multi-tree-search-pane bi-card",
-            itemsCreator: BI.emptyFn,
-            keywordGetter: BI.emptyFn
-        });
+    props: {
+        baseCls: "bi-multi-tree-search-pane bi-card",
+        itemsCreator: BI.emptyFn,
+        keywordGetter: BI.emptyFn
     },
 
-    _init: function () {
-        BI.MultiTreeSearchPane.superclass._init.apply(this, arguments);
-
+    render: function () {
         var self = this, opts = this.options;
 
-        this.partTree = BI.createWidget({
+        return BI.extend({
             type: "bi.part_tree",
             element: this,
             tipText: BI.i18nText("BI-No_Select"),
@@ -78261,16 +78257,22 @@ BI.MultiTreeSearchPane = BI.inherit(BI.Pane, {
                 op.keyword = opts.keywordGetter();
                 opts.itemsCreator(op, callback);
             },
-            value: opts.value
-        });
-
-        this.partTree.on(BI.Controller.EVENT_CHANGE, function () {
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
-        });
-
-        this.partTree.on(BI.TreeView.EVENT_CHANGE, function () {
-            self.fireEvent(BI.MultiTreeSearchPane.EVENT_CHANGE);
-        });
+            value: opts.value,
+            listeners: [{
+                eventName: BI.Controller.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
+                }
+            }, {
+                eventName: BI.TreeView.EVENT_CHANGE,
+                action: function () {
+                    self.fireEvent(BI.MultiTreeSearchPane.EVENT_CHANGE);
+                }
+            }],
+            ref: function (_ref) {
+                self.partTree = _ref;
+            }
+        }, opts.el);
     },
 
     hasChecked: function () {
@@ -89430,7 +89432,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
         function nodeSearch(deep, parentValues, current, result) {
             if (self._isMatch(parentValues, current, keyword)) {
-                var checked = isSelected(current);
+                var checked = isSelected(parentValues, current);
                 createOneJson(parentValues, current, false, checked, true, result);
                 return [true, checked];
             }
@@ -89450,7 +89452,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 }
             });
             if (can === true) {
-                checked = isSelected(current);
+                checked = isSelected(parentValues, current);
                 createOneJson(parentValues, current, true, checked, false, result);
             }
             return [can, checked];
@@ -89500,9 +89502,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         }
 
-        function isSelected(value) {
+        function isSelected(parentValues, value) {
             return BI.any(selectedValues, function (idx, array) {
-                return BI.last(array) === value;
+                return BI.isEqual(parentValues, array.slice(0, parentValues.length)) && BI.last(array) === value;
             });
         }
 
@@ -89528,7 +89530,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var times = op.times;
         var parentValues = op.parentValues || [];
         var selectedValues = op.selectedValues || [];
-        var valueMap = dealWithSelectedValue(selectedValues);
+        var valueMap = dealWithSelectedValue(parentValues, selectedValues);
         var nodes = this._getChildren(parentValues);
         for (var i = (times - 1) * this._const.perPage; nodes[i] && i < times * this._const.perPage; i++) {
             var checked = BI.has(valueMap, nodes[i].value);
@@ -89577,10 +89579,12 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             });
         });
 
-        function dealWithSelectedValue(selectedValues) {
+        function dealWithSelectedValue(parentValues, selectedValues) {
             var valueMap = {};
             BI.each(selectedValues, function (idx, v) {
-                valueMap[BI.last(v)] = [2, 0];
+                if (BI.isEqual(parentValues, v.slice(0, parentValues.length))) {
+                    valueMap[BI.last(v)] = [2, 0];
+                }
             });
             return valueMap;
         }

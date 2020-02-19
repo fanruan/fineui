@@ -16,6 +16,7 @@ import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/i
 import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textvalue";
+import { _SignEditor } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { _Action, _ActionFactory } from "./core/action/action";
@@ -69,6 +70,7 @@ export interface BI extends _func, _i18n, _base {
     Label: ClassConstructor<_Label>;
     Text: ClassConstructor<_Text>;
     Editor: ClassConstructor<_Editor> & _EditorStatic;
+    SignEditor: ClassConstructor<_SignEditor> & _EditorStatic;
     Layout: ClassConstructor<_Layout>;
     HTapeLayout: ClassConstructor<_HTapeLayout>;
     VTapeLayout: ClassConstructor<_VTapeLayout>;
