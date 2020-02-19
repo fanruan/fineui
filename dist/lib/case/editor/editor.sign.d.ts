@@ -5,10 +5,10 @@ export interface _SignEditor extends _Widget {
     setWaterMark(v: string): void;
     focus(): void;
     blur(): void;
-    doRedMark(...args: any): void;
-    unRedMark(...args: any): void;
-    doHighLight(...args: any): void;
-    unHighLight(...args: any): void;
+    doRedMark(...args: any[]): void;
+    unRedMark(...args: any[]): void;
+    doHighLight(...args: any[]): void;
+    unHighLight(...args: any[]): void;
     isValid(): boolean;
     setErrorText(v: string): void;
     getErrorText(): string;

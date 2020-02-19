@@ -152,8 +152,8 @@ export interface _base {
     partial: (func: Function, ...partials: any) => Function;
     debounce: (func: Function, wait?: number, options?: any) => Function;
     throttle: (func: Function, wait?: number, options?: any) => Function;
-    delay: (func: Function, wait: number, ...args: any) => number;
-    defer: (func: Function, ...args: any) => number;
+    delay: (func: Function, wait: number, ...args: any[]) => number;
+    defer: (func: Function, ...args: any[]) => number;
     wrap: (value: any, wrapper: Function) => Function;
     nextTick: (func: Function) => Promise<any>;
     random: (min?: number, max?: number, floating?: boolean) => number;
