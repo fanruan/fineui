@@ -10902,7 +10902,7 @@ if (!_global.BI) {
                 timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
+            } else if (typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
                 var textNode = document.createTextNode(String(counter));
@@ -22819,7 +22819,7 @@ _.extend(BI, {
                 });
             };
 
-        for (i in prefix) {
+        for ( i = 0; i < prefix.length; i++) {
             humpString.push(_toHumb(prefix[i] + "-" + style));
         }
         humpString.push(_toHumb(style));
@@ -37130,55 +37130,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }
 
-        // Here we have async deferring wrappers using microtasks.
-        // In 2.5 we used (macro) tasks (in combination with microtasks).
-        // However, it has subtle problems when state is changed right before repaint
-        // (e.g. #6813, out-in transitions).
-        // Also, using (macro) tasks in event handler would cause some weird behaviors
-        // that cannot be circumvented (e.g. #7109, #7153, #7546, #7834, #8109).
-        // So we now use microtasks everywhere, again.
-        // A major drawback of this tradeoff is that there are some scenarios
-        // where microtasks have too high a priority and fire in between supposedly
-        // sequential events (e.g. #4521, #6690, which have workarounds)
-        // or even between bubbling of the same event (#6566).
-
-        // The nextTick behavior leverages the microtask queue, which can be accessed
-        // via either native Promise.then or MutationObserver.
-        // MutationObserver has wider support, however it is seriously bugged in
-        // UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
-        // completely stops working after triggering a few times... so, if native
-        // Promise is available, we will use it:
-        /* istanbul ignore next, $flow-disable-line */
-        if (typeof Promise !== 'undefined' && isNative(Promise)) {
+        // An asynchronous deferring mechanism.
+        // In pre 2.4, we used to use microtasks (Promise/MutationObserver)
+        // but microtasks actually has too high a priority and fires in between
+        // supposedly sequential events (e.g. #4521, #6690) or even between
+        // bubbling of the same event (#6566). Technically setImmediate should be
+        // the ideal choice, but it's not available everywhere; and the only polyfill
+        // that consistently queues the callback after all DOM events triggered in the
+        // same loop is by using MessageChannel.
+        /* istanbul ignore if */
+        if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
+            timerFunc = function timerFunc() {
+                setImmediate(nextTickHandler);
+            };
+        } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
+        // PhantomJS
+        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            var channel = new MessageChannel();
+            var port = channel.port2;
+            channel.port1.onmessage = nextTickHandler;
+            timerFunc = function timerFunc() {
+                port.postMessage(1);
+            };
+            /* istanbul ignore next */
+        } else if (typeof Promise !== 'undefined' && isNative(Promise)) {
+            // use microtask in non-DOM environments, e.g. Weex
             var p = Promise.resolve();
             timerFunc = function timerFunc() {
                 p.then(nextTickHandler);
             };
-        } else if (!isIE && typeof MutationObserver !== 'undefined' && (isNative(MutationObserver) ||
-        // PhantomJS and iOS 7.x
-        MutationObserver.toString() === '[object MutationObserverConstructor]')) {
-            // Use MutationObserver where native Promise is not available,
-            // e.g. PhantomJS, iOS7, Android 4.4
-            // (#6466 MutationObserver is unreliable in IE11)
-            var counter = 1;
-            var observer = new MutationObserver(nextTickHandler);
-            var textNode = document.createTextNode(String(counter));
-            observer.observe(textNode, {
-                characterData: true
-            });
-            timerFunc = function timerFunc() {
-                counter = (counter + 1) % 2;
-                textNode.data = String(counter);
-            };
-        } else if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
-            // Fallback to setImmediate.
-            // Technically it leverages the (macro) task queue,
-            // but it is still a better choice than setTimeout.
-            timerFunc = function timerFunc() {
-                setImmediate(nextTickHandler);
-            };
         } else {
-            // Fallback to setTimeout.
+            // fallback to setTimeout
             timerFunc = function timerFunc() {
                 setTimeout(nextTickHandler, 0);
             };
@@ -72023,7 +72005,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -72461,7 +72443,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -72920,7 +72902,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -73376,7 +73358,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -75274,6 +75256,10 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.switcher.populate.apply(this.switcher, arguments);
+    },
+
+    populateSwitcher: function () {
+        this.button.populate.apply(this.button, arguments);
     }
 });
 
@@ -78624,8 +78610,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             watermark: o.watermark,
             allowBlank: o.allowBlank,
             value: o.max,
-            level: "warning",
-            tipType: "success",
             title: function () {
                 return self.bigEditor && self.bigEditor.getValue();
             },
@@ -78657,22 +78641,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 right: 5
             }]
         });
-
-        // this.smallCombo = BI.createWidget({
-        //    type: "bi.number_interval_combo",
-        //    cls: "number-interval-small-combo",
-        //    height: o.height,
-        //    value: o.closemin ? 1 : 0,
-        //    offsetStyle: "left"
-        // });
-        //
-        // this.bigCombo = BI.createWidget({
-        //    type: "bi.number_interval_combo",
-        //    cls: "number-interval-big-combo",
-        //    height: o.height,
-        //    value: o.closemax ? 1 : 0,
-        //    offsetStyle: "left"
-        // });
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border-top bi-border-bottom bi-border-right",
@@ -78845,10 +78813,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     },
 
     _setTitle: function (v) {
-        var self = this;
-        self.bigEditor.setTitle(v);
-        self.smallEditor.setTitle(v);
-        self.label.setTitle(v);
+        this.label.setTitle(v);
     },
 
     _setFocusEvent: function (w) {
@@ -79126,7 +79091,6 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,
-                level: o.level,
                 quitChecker: o.quitChecker,
                 validationChecker: o.validationChecker,
                 listeners: [{
@@ -79175,10 +79139,6 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
 
     getValue: function () {
         return this.editor.getValue();
-    },
-
-    setTitle: function (v) {
-        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {
