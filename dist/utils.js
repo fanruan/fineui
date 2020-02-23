@@ -11700,7 +11700,7 @@ if (!_global.BI) {
                 timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
+            } else if (typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
                 var textNode = document.createTextNode(String(counter));

@@ -10902,7 +10902,7 @@ if (!_global.BI) {
                 timerFunc = function timerFunc() {
                     p.then(nextTickHandler);
                 };
-            } else if (!BI.isIE() && typeof MutationObserver !== "undefined") {
+            } else if (typeof MutationObserver !== "undefined") {
                 var counter = 1;
                 var observer = new MutationObserver(nextTickHandler);
                 var textNode = document.createTextNode(String(counter));
@@ -54925,7 +54925,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -55363,7 +55363,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -55822,7 +55822,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -56278,7 +56278,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     populate: function () {
         this.combo.populate.apply(this.combo, arguments);
-        this.numberCounter.populate.apply(this.numberCounter, arguments);
+        this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
 
@@ -58176,6 +58176,10 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.switcher.populate.apply(this.switcher, arguments);
+    },
+
+    populateSwitcher: function () {
+        this.button.populate.apply(this.button, arguments);
     }
 });
 
@@ -61526,8 +61530,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
             watermark: o.watermark,
             allowBlank: o.allowBlank,
             value: o.max,
-            level: "warning",
-            tipType: "success",
             title: function () {
                 return self.bigEditor && self.bigEditor.getValue();
             },
@@ -61559,22 +61561,6 @@ BI.NumberInterval = BI.inherit(BI.Single, {
                 right: 5
             }]
         });
-
-        // this.smallCombo = BI.createWidget({
-        //    type: "bi.number_interval_combo",
-        //    cls: "number-interval-small-combo",
-        //    height: o.height,
-        //    value: o.closemin ? 1 : 0,
-        //    offsetStyle: "left"
-        // });
-        //
-        // this.bigCombo = BI.createWidget({
-        //    type: "bi.number_interval_combo",
-        //    cls: "number-interval-big-combo",
-        //    height: o.height,
-        //    value: o.closemax ? 1 : 0,
-        //    offsetStyle: "left"
-        // });
         this.smallCombo = BI.createWidget({
             type: "bi.icon_combo",
             cls: "number-interval-small-combo bi-border-top bi-border-bottom bi-border-right",
@@ -61747,10 +61733,7 @@ BI.NumberInterval = BI.inherit(BI.Single, {
     },
 
     _setTitle: function (v) {
-        var self = this;
-        self.bigEditor.setTitle(v);
-        self.smallEditor.setTitle(v);
-        self.label.setTitle(v);
+        this.label.setTitle(v);
     },
 
     _setFocusEvent: function (w) {
@@ -62028,7 +62011,6 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
                 watermark: o.watermark,
                 allowBlank: o.allowBlank,
                 value: o.value,
-                level: o.level,
                 quitChecker: o.quitChecker,
                 validationChecker: o.validationChecker,
                 listeners: [{
@@ -62077,10 +62059,6 @@ BI.shortcut("bi.number_interval", BI.NumberInterval);BI.NumberIntervalSingleEidt
 
     getValue: function () {
         return this.editor.getValue();
-    },
-
-    setTitle: function (v) {
-        return this.editor.setTitle(v);
     },
 
     setValue: function (v) {

@@ -114,7 +114,7 @@ _.extend(BI, {
                 });
             };
 
-        for (i in prefix) {
+        for ( i = 0; i < prefix.length; i++) {
             humpString.push(_toHumb(prefix[i] + "-" + style));
         }
         humpString.push(_toHumb(style));
