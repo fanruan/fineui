@@ -130,9 +130,19 @@ module.exports = function (grunt) {
                 dest: "dist/bundle.css"
             },
 
+            bundleWithoutNormalizeCss: {
+                src: ["dist/core_without_normalize.css", "dist/base.css", "dist/widget.css", "public/css/app.css", "public/css/**/*.css", "fineui.typescript.css"],
+                dest: "dist/bundle_without_normalize.css"
+            },
+
             versionFineuiCss: {
                 src: ["dist/bundle.css"],
                 dest: "dist/2.0/fineui.css"
+            },
+
+            versionFineuiWithoutNormalizeCss: {
+                src: ["dist/bundle_without_normalize.css"],
+                dest: "dist/2.0/fineui_without_normalize.css"
             },
 
             fineuiJs: {
@@ -313,7 +323,13 @@ module.exports = function (grunt) {
                 src: "<%= concat.versionFineuiCss.dest %>",
 
                 dest: "dist/2.0/fineui.min.css"
-            }
+            },
+
+            versionFineuiWithoutNormalizeMinCss: {
+                src: "<%= concat.versionFineuiWithoutNormalizeCss.dest %>",
+
+                dest: "dist/2.0/fineui_without_normalize.min.css"
+            },
         },
 
         jshint: {
