@@ -54,7 +54,7 @@
             return nodeList.length === 0 || nodeList.css("display") === "none";
         },
 
-        pushNodeList: function (tId, nodes, populate) {
+        pushNodeList: function (tId, populate) {
             var self = this;
             if (!BI.has(this.nodeLists, tId)) {
                 this.nodeLists[tId] = {

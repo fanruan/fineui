@@ -150,7 +150,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         function callback(nodes, hasNext) {
             if (hasNext) {
-                self.service.pushNodeList(treeNode.tId, self.nodes, getNodes);
+                self.service.pushNodeList(treeNode.tId, getNodes);
             } else {
                 self.service.removeNodeList(treeNode.tId);
             }
