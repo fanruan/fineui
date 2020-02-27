@@ -61,7 +61,7 @@ _.extend(BI, {
             src += "?";
         }
         // 如果以问号结尾，说明没有其他参数
-        if (src.endWith("?") !== false) {
+        if (BI.endWith(src, "?") !== false) {
         } else {
             src += "&";
         }
@@ -90,7 +90,7 @@ _.extend(BI, {
      * @returns {String} 以指定字符开头的字符串
      */
     perfectStart: function (str, start) {
-        if (str.startWith(start)) {
+        if (BI.startWith(str, start)) {
             return str;
         }
         return start + str;
