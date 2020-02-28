@@ -107,4 +107,26 @@ describe("baseFunctionTest", function () {
         var a = BI.makeArray(2, 1);
         expect(a).to.deep.equal([1, 1]);
     });
+
+
+    /**
+     * test_author_windy
+     */
+    it("concat-string", function () {
+        // concat-string
+        expect(BI.concat("a", "b", "c")).to.equal("abc");
+
+        // concat-array
+        expect(BI.concat([1], [2], [3])).to.deep.equal([1, 2, 3]);
+
+        // concat-object-array
+        expect(BI.concat([{text: 1, value: 1}], [{text: 2, value: 2}], [{text: 3, value: 3}])).to.deep.equal([{text: 1, value: 1}, {text: 2, value: 2}, {text: 3, value: 3}]);
+
+        // concat-object
+        expect(BI.concat({a: 1}, {b: 2}, {c: 3})).to.deep.equal({
+            a: 1,
+            b: 2,
+            c: 3
+        });
+    });
 });
