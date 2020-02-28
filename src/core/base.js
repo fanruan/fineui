@@ -230,7 +230,7 @@ if (!_global.BI) {
                 }).join("");
             }
             if (BI.isArray(obj1)) {
-                return [].concat.apply([], arguments);
+                return _.concat.apply([], arguments);
             }
             if (BI.isObject(obj1)) {
                 return _.extend.apply({}, arguments);
