@@ -2326,6 +2326,21 @@
 
             var base64Cipher = cipher.ciphertext.toString(CryptoJS.enc.Base64);
             return base64Cipher;
+        },
+
+        /**
+         * aes解密方法
+         * @param {String} text 
+         * @param {String} key 
+         */
+        aesDecrypt: function (text, key) {
+            key = CryptoJS.enc.Utf8.parse(key);
+            var decipher = CryptoJS.AES.decrypt(text, key, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            return CryptoJS.enc.Utf8.stringify(decipher);
         }
     });
 }());
