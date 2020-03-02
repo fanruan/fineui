@@ -154,13 +154,13 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
             } else {
                 self.service.removeNodeList(treeNode.tId);
             }
-            console.log("add nodes");
+            // console.log("add nodes");
             self.nodes.addNodes(treeNode, nodes);
 
         }
 
         function getNodes(times) {
-            console.log(times);
+            // console.log(times);
             var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
             var op = BI.extend({}, o.paras, {
                 id: treeNode.id,

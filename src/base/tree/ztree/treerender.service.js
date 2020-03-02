@@ -70,7 +70,7 @@
                 this.nodeLists[tId].locked = false;
             }
             if(!this.hasBinded) {
-                console.log("绑定事件");
+                // console.log("绑定事件");
                 this.hasBinded = true;
                 $("#" + this.id).parent().on("scroll", BI.debounce(function () {
                     self.refreshAllNodes();
@@ -108,7 +108,7 @@
                 self.removeNodeList(tId);
             });
             this.nodeLists = {};
-            console.log("解绑事件");
+            // console.log("解绑事件");
             $("#" + this.id).parent().off("scroll");
             this.hasBinded = false;
         }
