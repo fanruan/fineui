@@ -225,13 +225,15 @@ if (!_global.BI) {
 
         concat: function (obj1, obj2) {
             if (BI.isKey(obj1)) {
-                return obj1 + "" + obj2;
+                return BI.map([].slice.apply(arguments), function (idx, v) {
+                    return v;
+                }).join("");
             }
             if (BI.isArray(obj1)) {
-                return obj1.concat(obj2);
+                return _.concat.apply([], arguments);
             }
             if (BI.isObject(obj1)) {
-                return _.extend({}, obj1, obj2);
+                return _.extend.apply({}, arguments);
             }
         },
 
