@@ -11,7 +11,8 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     _init: function () {
         BI.AsyncTree.superclass._init.apply(this, arguments);
         this.service = new BI.TreeRenderService({
-            id: this.id
+            id: this.id,
+            container: this.element
         });
     },
 

@@ -12,10 +12,12 @@
             this.id = this.options.id;
             // renderService是否已经注册了滚动
             this.hasBinded = false;
+
+            this.container = this.options.container;
         },
 
         _getNodeListBounds: function (tId) {
-            var nodeList = $("#" + this.id + " #" + tId + "_ul")[0];
+            var nodeList = BI.$("#" + this.id + " #" + tId + "_ul")[0];
             return {
                 top: nodeList.offsetTop,
                 left: nodeList.offsetLeft,
@@ -24,14 +26,17 @@
             }
         },
 
-        _getTreeContainerBounds: function() {
-            var nodeList = $("#" + this.id).parent()[0];
-            return {
-                top: nodeList.offsetTop + nodeList.scrollTop,
-                left: nodeList.offsetLeft + nodeList.scrollLeft,
-                width: nodeList.offsetWidth,
-                height: nodeList.offsetHeight
+        _getTreeContainerBounds: function () {
+            var nodeList = this.container[0];
+            if (BI.isNotNull(nodeList)) {
+                return {
+                    top: nodeList.offsetTop + nodeList.scrollTop,
+                    left: nodeList.offsetLeft + nodeList.scrollLeft,
+                    width: nodeList.offsetWidth,
+                    height: nodeList.offsetHeight
+                };
             }
+            return {};
         },
 
         _canNodePopulate: function (tId) {
@@ -50,7 +55,7 @@
         },
 
         _isNodeInVisible: function (tId) {
-            var nodeList = $("#" + this.id + " #" + tId + "_ul");
+            var nodeList = BI.$("#" + this.id + " #" + tId + "_ul");
             return nodeList.length === 0 || nodeList.css("display") === "none";
         },
 
@@ -72,7 +77,7 @@
             if(!this.hasBinded) {
                 // console.log("绑定事件");
                 this.hasBinded = true;
-                $("#" + this.id).parent().on("scroll", BI.debounce(function () {
+                this.container && this.container.on("scroll", BI.debounce(function () {
                     self.refreshAllNodes();
                 }, 30));
             }
@@ -109,7 +114,7 @@
             });
             this.nodeLists = {};
             // console.log("解绑事件");
-            $("#" + this.id).parent().off("scroll");
+            this.container.off("scroll");
             this.hasBinded = false;
         }
     });
