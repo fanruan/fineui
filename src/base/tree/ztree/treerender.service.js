@@ -17,7 +17,7 @@
         },
 
         _getNodeListBounds: function (tId) {
-            var nodeList = BI.$("#" + this.id + " #" + tId + "_ul")[0];
+            var nodeList = this.options.subNodeListGetter(tId)[0];
             return {
                 top: nodeList.offsetTop,
                 left: nodeList.offsetLeft,
@@ -55,7 +55,7 @@
         },
 
         _isNodeInVisible: function (tId) {
-            var nodeList = BI.$("#" + this.id + " #" + tId + "_ul");
+            var nodeList = this.options.subNodeListGetter(tId);
             return nodeList.length === 0 || nodeList.css("display") === "none";
         },
 
