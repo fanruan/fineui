@@ -925,6 +925,21 @@ if (!_global.BI) {
         },
 
         /**
+         * 通用解密方法
+         * @param type 解密方式
+         * @param text 文本
+         * @param key 种子
+         * @return {*}
+         */
+        decrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesDecrypt(text, key);
+            }
+        },
+
+        /**
          * 对字符串中的'和\做编码处理
          * @static
          * @param {String} string 要做编码处理的字符串
