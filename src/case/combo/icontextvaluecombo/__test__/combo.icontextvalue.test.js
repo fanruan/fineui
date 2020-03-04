@@ -31,12 +31,13 @@ describe("icontextvaluecombo", function () {
         });
         combo.setValue(2);
         expect(combo.getValue()[0]).to.equal(2);
+        combo.destroy();
     });
 
     /**
      * test_author_windy
      */
-    it("测试populate", function (done) {
+    it("测试populate", function () {
         var combo = BI.Test.createWidget({
             type: "bi.text_value_combo",
             text: "默认值",
@@ -58,7 +59,7 @@ describe("icontextvaluecombo", function () {
         }]);
         combo.setValue(2);
         expect(combo.getValue()[0]).to.equal(2);
-        done();
+        combo.destroy();
     });
 });
 
