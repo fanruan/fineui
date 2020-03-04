@@ -10437,13 +10437,15 @@ if (!_global.BI) {
 
         concat: function (obj1, obj2) {
             if (BI.isKey(obj1)) {
-                return obj1 + "" + obj2;
+                return BI.map([].slice.apply(arguments), function (idx, v) {
+                    return v;
+                }).join("");
             }
             if (BI.isArray(obj1)) {
-                return obj1.concat(obj2);
+                return _.concat.apply([], arguments);
             }
             if (BI.isObject(obj1)) {
-                return _.extend({}, obj1, obj2);
+                return _.extend.apply({}, arguments);
             }
         },
 
@@ -11131,6 +11133,21 @@ if (!_global.BI) {
                 case BI.CRYPT_TYPE.AES:
                 default:
                     return BI.aesEncrypt(text, key);
+            }
+        },
+
+        /**
+         * 通用解密方法
+         * @param type 解密方式
+         * @param text 文本
+         * @param key 种子
+         * @return {*}
+         */
+        decrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesDecrypt(text, key);
             }
         },
 
@@ -14623,6 +14640,21 @@ if (!_global.BI) {
 
             var base64Cipher = cipher.ciphertext.toString(CryptoJS.enc.Base64);
             return base64Cipher;
+        },
+
+        /**
+         * aes解密方法
+         * @param {String} text 
+         * @param {String} key 
+         */
+        aesDecrypt: function (text, key) {
+            key = CryptoJS.enc.Utf8.parse(key);
+            var decipher = CryptoJS.AES.decrypt(text, key, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            return CryptoJS.enc.Utf8.stringify(decipher);
         }
     });
 }());!(function () {
@@ -40242,6 +40274,15 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     },
     _init: function () {
         BI.AsyncTree.superclass._init.apply(this, arguments);
+        var self = this;
+        this.service = new BI.TreeRenderService({
+            id: this.id,
+            container: this.element,
+            subNodeListGetter: function (tId) {
+                // 获取待检测的子节点列表, ztree并没有获取节点列表dom的API, 此处使用BI.$获取
+                return BI.$("#" + self.id + " #" + tId + "_ul");
+            }
+        });
     },
 
     // 配置属性
@@ -40370,36 +40411,39 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     // 展开节点
     _beforeExpandNode: function (treeId, treeNode) {
         var self = this, o = this.options;
-        var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
-        var op = BI.extend({}, o.paras, {
-            id: treeNode.id,
-            times: 1,
-            parentValues: parentValues.concat(this._getNodeValue(treeNode)),
-            checkState: treeNode.getCheckStatus()
-        });
         var complete = function (d) {
             var nodes = d.items || [];
             if (nodes.length > 0) {
                 callback(self._dealWidthNodes(nodes), !!d.hasNext);
             }
         };
-        var times = 1;
 
-        function callback (nodes, hasNext) {
-            self.nodes.addNodes(treeNode, nodes);
-            // 展开节点是没有分页的
-            if (hasNext === true) {
-                BI.delay(function () {
-                    times++;
-                    op.times = times;
-                    o.itemsCreator(op, complete);
-                }, 100);
+        function callback(nodes, hasNext) {
+            if (hasNext) {
+                self.service.pushNodeList(treeNode.tId, getNodes);
+            } else {
+                self.service.removeNodeList(treeNode.tId);
             }
+            // console.log("add nodes");
+            self.nodes.addNodes(treeNode, nodes);
+
+        }
+
+        function getNodes(times) {
+            // console.log(times);
+            var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
+            var op = BI.extend({}, o.paras, {
+                id: treeNode.id,
+                times: times,
+                parentValues: parentValues.concat(self._getNodeValue(treeNode)),
+                checkState: treeNode.getCheckStatus()
+            });
+            o.itemsCreator(op, complete);
         }
 
         if (!treeNode.children) {
             setTimeout(function () {
-                o.itemsCreator(op, complete);
+                getNodes(1);
             }, 17);
         }
     },
@@ -40453,6 +40497,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     // 生成树方法
     stroke: function (config) {
         delete this.options.keyword;
+        this.service.clear();
         BI.extend(this.options.paras, config);
         var setting = this._configSetting();
         this._initTree(setting);
@@ -52193,6 +52238,126 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
 		return html;
 	}
 })(BI.jQuery);/**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2020/1/8
+ */
+
+!(function () {
+    BI.TreeRenderService = BI.inherit(BI.OB, {
+        _init: function () {
+            this.nodeLists = {};
+
+            this.id = this.options.id;
+            // renderService是否已经注册了滚动
+            this.hasBinded = false;
+
+            this.container = this.options.container;
+        },
+
+        _getNodeListBounds: function (tId) {
+            var nodeList = this.options.subNodeListGetter(tId)[0];
+            return {
+                top: nodeList.offsetTop,
+                left: nodeList.offsetLeft,
+                width: nodeList.offsetWidth,
+                height: nodeList.offsetHeight
+            }
+        },
+
+        _getTreeContainerBounds: function () {
+            var nodeList = this.container[0];
+            if (BI.isNotNull(nodeList)) {
+                return {
+                    top: nodeList.offsetTop + nodeList.scrollTop,
+                    left: nodeList.offsetLeft + nodeList.scrollLeft,
+                    width: nodeList.offsetWidth,
+                    height: nodeList.offsetHeight
+                };
+            }
+            return {};
+        },
+
+        _canNodePopulate: function (tId) {
+            if (this.nodeLists[tId].locked) {
+                return false;
+            }
+            // 获取ul, 即子节点列表的bounds
+            // 是否需要继续加载，只需要看子节点列表的下边界与container是否无交集
+            var bounds = this._getNodeListBounds(tId);
+            var containerBounds = this._getTreeContainerBounds(tId);
+            // ul底部是不是漏出来了
+            if (bounds.top + bounds.height < containerBounds.top + containerBounds.height) {
+                return true;
+            }
+            return false;
+        },
+
+        _isNodeInVisible: function (tId) {
+            var nodeList = this.options.subNodeListGetter(tId);
+            return nodeList.length === 0 || nodeList.css("display") === "none";
+        },
+
+        pushNodeList: function (tId, populate) {
+            var self = this;
+            if (!BI.has(this.nodeLists, tId)) {
+                this.nodeLists[tId] = {
+                    populate: BI.debounce(populate, 0),
+                    options: {
+                        times: 1
+                    },
+                    // 在上一次请求返回前, 通过滚动再次触发加载的时候, 不应该认为是下一次分页, 需要等待上次请求返回
+                    // 以保证顺序和请求次数的完整
+                    locked: false
+                };
+            } else {
+                this.nodeLists[tId].locked = false;
+            }
+            if(!this.hasBinded) {
+                // console.log("绑定事件");
+                this.hasBinded = true;
+                this.container && this.container.on("scroll", BI.debounce(function () {
+                    self.refreshAllNodes();
+                }, 30));
+            }
+        },
+
+        refreshAllNodes: function () {
+            var self = this;
+            BI.each(this.nodeLists, function (tId) {
+                // 不展开的节点就不看了
+                !self._isNodeInVisible(tId) && self.refreshNodes(tId);
+            });
+        },
+
+        refreshNodes: function (tId) {
+            if (this._canNodePopulate(tId)) {
+                var nodeList = this.nodeLists[tId];
+                nodeList.options.times++;
+                nodeList.locked = true;
+                nodeList.populate(nodeList.options.times);
+            }
+        },
+
+        removeNodeList: function (tId) {
+            delete this.nodeLists[tId];
+            if (BI.size(this.nodeLists) === 0) {
+                this.clear();
+            }
+        },
+
+        clear: function () {
+            var self = this;
+            BI.each(this.nodeLists, function (tId) {
+                self.removeNodeList(tId);
+            });
+            this.nodeLists = {};
+            // console.log("解绑事件");
+            this.container.off("scroll");
+            this.hasBinded = false;
+        }
+    });
+})();/**
  * 可以改变图标的button
  *
  * Created by GUY on 2016/2/2.
@@ -91079,5 +91244,4 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);;(function () {
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻"
 };
-
-!function(r){var n={};function o(e){if(n[e])return n[e].exports;var t=n[e]={i:e,l:!1,exports:{}};return r[e].call(t.exports,t,t.exports,o),t.l=!0,t.exports}o.m=r,o.c=n,o.d=function(e,t,r){o.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},o.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(e){var t=e&&e.__esModule?function(){return e["default"]}:function(){return e};return o.d(t,"a",t),t},o.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},o.p="",o(o.s=141)}({141:function(e,t,r){e.exports=r(142)},142:function(e,t,r){"use strict";var n=function o(e){return e&&e.__esModule?e:{"default":e}}(r(143));BI.extend(BI,n["default"])},143:function(e,t,r){"use strict";function i(e){return(i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}function c(){if("function"!=typeof WeakMap)return null;var e=new WeakMap;return c=function(){return e},e}Object.defineProperty(t,"__esModule",{value:!0}),t["default"]=void 0;var n={Decorators:function f(e){if(e&&e.__esModule)return e;if(null===e||"object"!==i(e)&&"function"!=typeof e)return{"default":e};var t=c();if(t&&t.has(e))return t.get(e);var r={},n=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var o in e)if(Object.prototype.hasOwnProperty.call(e,o)){var u=n?Object.getOwnPropertyDescriptor(e,o):null;u&&(u.get||u.set)?Object.defineProperty(r,o,u):r[o]=e[o]}r["default"]=e,t&&t.set(e,r);return r}(r(144))};t["default"]=n},144:function(e,t,r){"use strict";function u(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}function i(e,t,r){return t in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}function c(e,t){e.prototype=Object.create(t.prototype),function i(e,t){for(var r=Object.getOwnPropertyNames(t),n=0;n<r.length;n++){var o=r[n],u=Object.getOwnPropertyDescriptor(t,o);u&&u.configurable&&e[o]===undefined&&Object.defineProperty(e,o,u)}return e}(e.prototype.constructor=e,t)}Object.defineProperty(t,"__esModule",{value:!0}),t.shortcut=function o(){return function(e){BI.shortcut(e.xtype,e)}},t.model=function f(){return function(e){BI.model(e.xtype,e)}},t.store=function l(r){var n=1<arguments.length&&arguments[1]!==undefined?arguments[1]:{};return function(e){return function(e){function t(){return e.apply(this,arguments)||this}return c(t,e),t.prototype._store=function(){var e=n.props?n.props.apply(this):undefined;return BI.Models.getModel(r.xtype,e)},t}(e)}},t.Model=void 0;var n=function(o){function e(){for(var e,t=arguments.length,r=new Array(t),n=0;n<t;n++)r[n]=arguments[n];return i(u(e=o.call.apply(o,[this].concat(r))||this),"model",void 0),i(u(e),"store",void 0),i(u(e),"context",void 0),i(u(e),"actions",void 0),i(u(e),"childContext",void 0),i(u(e),"TYPE",void 0),i(u(e),"computed",void 0),e}return c(e,o),e.prototype.state=function(){return{}},e}(Fix.Model);t.Model=n}});
+//# sourceMappingURL=fineui.ie.js.map

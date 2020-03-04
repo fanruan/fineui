@@ -11235,13 +11235,15 @@ if (!_global.BI) {
 
         concat: function (obj1, obj2) {
             if (BI.isKey(obj1)) {
-                return obj1 + "" + obj2;
+                return BI.map([].slice.apply(arguments), function (idx, v) {
+                    return v;
+                }).join("");
             }
             if (BI.isArray(obj1)) {
-                return obj1.concat(obj2);
+                return _.concat.apply([], arguments);
             }
             if (BI.isObject(obj1)) {
-                return _.extend({}, obj1, obj2);
+                return _.extend.apply({}, arguments);
             }
         },
 
@@ -11929,6 +11931,21 @@ if (!_global.BI) {
                 case BI.CRYPT_TYPE.AES:
                 default:
                     return BI.aesEncrypt(text, key);
+            }
+        },
+
+        /**
+         * 通用解密方法
+         * @param type 解密方式
+         * @param text 文本
+         * @param key 种子
+         * @return {*}
+         */
+        decrypt: function (type, text, key) {
+            switch (type) {
+                case BI.CRYPT_TYPE.AES:
+                default:
+                    return BI.aesDecrypt(text, key);
             }
         },
 
@@ -16033,6 +16050,21 @@ if (!_global.BI) {
 
             var base64Cipher = cipher.ciphertext.toString(CryptoJS.enc.Base64);
             return base64Cipher;
+        },
+
+        /**
+         * aes解密方法
+         * @param {String} text 
+         * @param {String} key 
+         */
+        aesDecrypt: function (text, key) {
+            key = CryptoJS.enc.Utf8.parse(key);
+            var decipher = CryptoJS.AES.decrypt(text, key, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            return CryptoJS.enc.Utf8.stringify(decipher);
         }
     });
 }());!(function () {
