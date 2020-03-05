@@ -165,21 +165,27 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
         }
 
-        function getNodes(times) {
+        function getNodes(options) {
             // console.log(times);
+            options = options || {};
             var parentValues = treeNode.parentValues || self._getParentValues(treeNode);
             var op = BI.extend({}, o.paras, {
                 id: treeNode.id,
-                times: times,
+                times: options.times,
                 parentValues: parentValues.concat(self._getNodeValue(treeNode)),
                 checkState: treeNode.getCheckStatus()
-            });
+            }, options);
             o.itemsCreator(op, complete);
         }
 
+        // 展开节点会将halfCheck置为false以开启自动计算半选, 所以第一次展开节点的时候需要在置为false之前获取配置
+        var checkState = treeNode.getCheckStatus();
         if (!treeNode.children) {
             setTimeout(function () {
-                getNodes(1);
+                getNodes({
+                    times: 1,
+                    checkState: checkState
+                });
             }, 17);
         }
     },
