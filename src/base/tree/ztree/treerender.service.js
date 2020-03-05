@@ -96,7 +96,9 @@
                 var nodeList = this.nodeLists[tId];
                 nodeList.options.times++;
                 nodeList.locked = true;
-                nodeList.populate(nodeList.options.times);
+                nodeList.populate({
+                    times: nodeList.options.times
+                });
             }
         },
 
