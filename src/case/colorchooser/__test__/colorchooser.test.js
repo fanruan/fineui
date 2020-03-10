@@ -36,4 +36,17 @@ describe("color_chooser_test", function () {
             done();
         }, 300);
     });
+
+    /**
+     *  test_author_windy
+     **/
+    it("默认值", function () {
+        var widget = BI.Test.createWidget({
+            type: "bi.color_chooser",
+            height: 24,
+            value: "#69821b"
+        });
+        expect(widget.getValue()).to.equal("#69821b");
+        widget.destroy();
+    });
 });
