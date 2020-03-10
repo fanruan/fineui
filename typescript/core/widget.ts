@@ -33,7 +33,11 @@ export interface _Widget extends _OB {
     /**
      * 真实dom的类jQuery对象
      */
-    element: any;
+    element: {
+        width(): number;
+        height(): number;
+        [key: string]: any;
+    };
     /**
      * 子元素
      */
