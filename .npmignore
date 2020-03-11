@@ -12,6 +12,9 @@
 !dist/utils.js
 !dist/utils.min.js
 !dist/utils.min.js.map
+!dist/bundle.min.js
+!dist/bundle.min.css
+!dist/fineui_without_jquery_polyfill.js
 !babel.config.js
 !babel.config.ie8.js
 !dist/fineui.min.css
@@ -27,6 +30,8 @@
 !dist/2.0/fineui.min.css
 !dist/2.0/fineui.min.js
 !dist/2.0/fineui.min.js.map
+!dist/2.0/fineui_without_normalize.css
+!dist/2.0/fineui_without_normalize.min.css
 !dist/font/*
 !dist/font/**/*
 !dist/images/*
