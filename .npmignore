@@ -9,6 +9,9 @@
 !dist/fineui.min.js.map
 !dist/fineui.ie.min.js
 !dist/fineui.ie.min.js.map
+!dist/utils.js
+!dist/utils.min.js
+!dist/utils.min.js.map
 !babel.config.js
 !babel.config.ie8.js
 !dist/fineui.min.css
