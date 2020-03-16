@@ -7,6 +7,7 @@ import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
 import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
+import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
 import { _Single } from "./base/single/single";
@@ -45,6 +46,7 @@ export interface BI extends _func, _i18n, _base {
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
+    Checkbox: ClassConstructor<_Checkbox> & _CheckboxStatic;
     Button: ClassConstructor<_Button> & _ButtonStatic;
     TextButton: ClassConstructor<_TextButton> & _TextButtonStatic;
     IconChangeButton: ClassConstructor<_IconChangeButton> & _IconChangeButtonStatic;
