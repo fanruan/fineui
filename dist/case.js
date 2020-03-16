@@ -2314,6 +2314,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                         }
                     }]
                 }, o.popup),
+                value: o.value,
                 width: 230
             },
             value: o.value
