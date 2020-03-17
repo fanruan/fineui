@@ -19,7 +19,8 @@
                 "%H:%M",  // HH:mm
                 "%M:%S"   // mm:ss
             ],
-            DEFAULT_DATE_STRING: "2000-01-01"
+            DEFAULT_DATE_STRING: "2000-01-01",
+            DEFAULT_HOUR: "00"
         },
 
         props: {
@@ -135,9 +136,22 @@
 
         _dateCheck: function (date) {
             var c = this._const;
+            var self = this;
             return BI.any(c.FORMAT_ARRAY, function (idx, format) {
-                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + date, c.COMPLETE_COMPARE_FORMAT), format) === date;
+                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + self._getCompleteHMS(date, format), c.COMPLETE_COMPARE_FORMAT), format) === date;
             });
+        },
+
+        _getCompleteHMS: function (str, format) {
+            var c = this._const;
+            switch (format) {
+                case "%M:%S":
+                    str = c.DEFAULT_HOUR + ":" + str;
+                    break;
+                default:
+                    break;
+            }
+            return str;
         },
 
         _getTitle: function () {
