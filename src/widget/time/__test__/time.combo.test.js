@@ -168,4 +168,27 @@ describe("TimeCombo", function () {
         })
 
     });
+
+
+    /**
+     * test_author_windy
+     */
+    it("测试%M:%S", function (done) {
+        var timeCombo = BI.Test.createWidget({
+            type: "bi.time_combo",
+            width: 220,
+            height: 30,
+            format: "%M:%S",  // mm:ss
+            value: {
+                hour: 12,
+                minute: 45,
+                second: 0
+            },
+        });
+        BI.nextTick(function () {
+            expect(timeCombo.element.find(".bi-time-trigger .bi-label").text()).to.equal("45:00");
+            timeCombo.destroy();
+            done();
+        });
+    });
 });
