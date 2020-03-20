@@ -78,4 +78,20 @@ describe("PagerTest", function () {
         a.clear();
         a.destroy();
     });
+
+    /**
+     * test_author_windy
+     */
+    it("detail_Pager", function () {
+        var a = BI.Test.createWidget({
+            type: "bi.detail_pager",
+            pages: 100
+        });
+        a.setAllPages(200);
+        a.populate();
+        a.setValue(200);
+        expect(a.hasPrev(200)).to.equal(true);
+        expect(a.hasNext(200)).to.equal(false);
+        a.destroy();
+    });
 });
