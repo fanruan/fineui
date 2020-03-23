@@ -263,7 +263,12 @@
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
+                            try {
+                                // decodeURIComponent特殊字符可能有问题, catch一下，保证能正常上传
+                                attachO.filename = _global.decodeURIComponent(handler.file.fileName);
+                            } catch (e) {
+                                attachO.filename = handler.file.fileName;
+                            }
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
