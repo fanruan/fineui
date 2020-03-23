@@ -74,6 +74,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     },
 
+    getState: function () {
+        return this.editor.getText();
+    },
+
     getKeywords: function () {
         var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);

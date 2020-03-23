@@ -166,6 +166,10 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         }
     },
 
+    getState: function() {
+        return this.editor.getState();
+    },
+
     setValue: function (ob) {
         this.setState(ob);
         this.searcher.setValue(ob);

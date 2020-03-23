@@ -201,6 +201,11 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.text.visible();
     },
 
+    _setText: function (v) {
+        this.text.setText(v);
+        this.text.setTitle(v);
+    },
+
     isValid: function () {
         return this.editor.isValid();
     },
@@ -243,32 +248,32 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Select_All"));
+                this._setText(BI.i18nText("BI-Select_All"));
                 this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Select_Part"));
+                this._setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
                 BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
-            this.text.setText(v);
+            this._setText(v);
             // 配置了defaultText才判断标灰，其他情况不标灰
             (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
                 BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
-                this.text.setText(v[0]);
+                this._setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(BI.i18nText("BI-Select_Part"));
+                this._setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             }
         }
@@ -276,6 +281,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     setTipType: function (v) {
         this.text.options.tipType = v;
+    },
+
+    getText: function () {
+        return this.text.getText();
     }
 });
 BI.StateEditor.EVENT_CHANGE = "EVENT_CHANGE";

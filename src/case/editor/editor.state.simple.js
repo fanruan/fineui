@@ -187,6 +187,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         this.text.visible();
     },
 
+    _setText: function (v) {
+        this.text.setText(v);
+        this.text.setTitle(v);
+    },
+
     isValid: function () {
         return this.editor.isValid();
     },
@@ -228,28 +233,31 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Already_Selected"));
+                this._setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Already_Selected"));
+                this._setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
+                this._setText(o.text);
                 this.text.element.addClass("bi-water-mark");
             }
             return;
         }
         if (!BI.isArray(v) || v.length === 1) {
-            this.text.setText(v);
-            this.text.setTitle(v);
+            this._setText(v);
             this.text.element.removeClass("bi-water-mark");
         } else if (BI.isEmpty(v)) {
-            this.text.setText(o.text);
+            this._setText(o.text);
             this.text.element.addClass("bi-water-mark");
         } else {
-            this.text.setText(BI.i18nText("BI-Already_Selected"));
+            this._setText(BI.i18nText("BI-Already_Selected"));
             this.text.element.removeClass("bi-water-mark");
         }
+    },
+
+    getText: function () {
+        return this.text.getText();
     }
 });
 BI.SimpleStateEditor.EVENT_CHANGE = "EVENT_CHANGE";

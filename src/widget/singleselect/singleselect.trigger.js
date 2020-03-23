@@ -88,7 +88,10 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
