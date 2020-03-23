@@ -12,7 +12,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
             },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowSearchValue: false
+            allowSearchValue: false,
+            title: BI.bind(this._getShowText, this)
         };
     },
 
@@ -209,6 +210,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         }
         return o.valueFormatter(v);
 
+    },
+
+    _getShowText: function () {
+        return this.editor.getText();
     },
 
     stopEditing: function () {
