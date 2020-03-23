@@ -5,7 +5,9 @@
  */
 BI.Msg = function () {
 
-    var messageShow, $mask, $pop;
+    var $mask, $pop;
+
+    var messageShows = [];
 
     var toastStack = [];
 
@@ -67,7 +69,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
+            BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -75,7 +77,7 @@ BI.Msg = function () {
                 right: 0,
                 bottom: 0,
                 opacity: 0.5
-            }).appendTo("body");
+            }).appendTo("body"));
             $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
@@ -85,8 +87,12 @@ BI.Msg = function () {
                 bottom: 0
             }).appendTo("body");
             var close = function () {
-                messageShow.destroy();
-                $mask.remove();
+                messageShows[messageShows.length - 1].destroy();
+                messageShows.pop();
+                if (messageShows.length === 0) {
+                    $mask.remove();
+                    $mask = null;
+                }
             };
             var controlItems = [];
             if (hasCancel === true) {
@@ -191,7 +197,7 @@ BI.Msg = function () {
                 ]
             };
 
-            messageShow = BI.createWidget(conf);
+            messageShows[messageShows.length] = BI.createWidget(conf);
         }
     };
 }();
