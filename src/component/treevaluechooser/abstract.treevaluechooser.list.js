@@ -229,6 +229,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
             BI.each(allNodes, function (idx, node) {
+                var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 var checked = BI.has(valueMap, node.value);
                 result.push({
                     id: node.id,
