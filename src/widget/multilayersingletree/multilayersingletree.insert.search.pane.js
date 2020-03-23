@@ -21,7 +21,7 @@ BI.MultiLayerSingleTreeInsertSearchPane = BI.inherit(BI.Widget, {
     render: function() {
         var self = this, o = this.options;
         this.tree = BI.createWidget({
-            type: "bi.multilayer_select_level_tree",
+            type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
