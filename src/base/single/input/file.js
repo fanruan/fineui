@@ -264,6 +264,7 @@
 
                             // attachO.fileSize = responseText.length;
                             try {
+                                // decodeURIComponent特殊字符可能有问题, catch一下，保证能正常上传
                                 attachO.filename = _global.decodeURIComponent(handler.file.fileName);
                             } catch (e) {
                                 attachO.filename = handler.file.fileName;
