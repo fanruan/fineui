@@ -7200,7 +7200,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
             },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowSearchValue: false
+            allowSearchValue: false,
+            title: BI.bind(this._getShowText, this)
         };
     },
 
@@ -7396,6 +7397,10 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
             return BI.isNotNull(result) ? result.text : o.text;
         }
         return o.valueFormatter(v);
+    },
+
+    _getShowText: function () {
+        return this.editor.getText();
     },
 
     stopEditing: function () {
@@ -8071,7 +8076,7 @@ BI.MultiLayerSingleTreeInsertSearchPane = BI.inherit(BI.Widget, {
     render: function() {
         var self = this, o = this.options;
         this.tree = BI.createWidget({
-            type: "bi.multilayer_select_level_tree",
+            type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
@@ -8405,7 +8410,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
             },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowSearchValue: false
+            allowSearchValue: false,
+            title: BI.bind(this._getShowText, this)
         };
     },
 
@@ -8602,6 +8608,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         }
         return o.valueFormatter(v);
 
+    },
+
+    _getShowText: function () {
+        return this.editor.getText();
     },
 
     stopEditing: function () {
@@ -11417,7 +11427,10 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -12111,7 +12124,10 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -12706,6 +12722,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     },
 
+    getState: function () {
+        return this.editor.getText();
+    },
+
     getKeywords: function () {
         var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
@@ -12890,6 +12910,10 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 this.editor.setState(BI.Selection.Multi);
             }
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -13079,6 +13103,10 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 this.editor.setState(BI.Selection.Multi);
             }
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -16130,6 +16158,10 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
+    getState: function() {
+        return this.editor.getState();
+    },
+
     setValue: function (ob) {
         this.setState(ob);
         this.searcher.setValue(ob);
@@ -16318,6 +16350,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             });
             return text;
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -20271,7 +20307,10 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -22659,7 +22698,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);!(
                 "%H:%M",  // HH:mm
                 "%M:%S"   // mm:ss
             ],
-            DEFAULT_DATE_STRING: "2000-01-01"
+            DEFAULT_DATE_STRING: "2000-01-01",
+            DEFAULT_HOUR: "00"
         },
 
         props: {
@@ -22775,9 +22815,22 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);!(
 
         _dateCheck: function (date) {
             var c = this._const;
+            var self = this;
             return BI.any(c.FORMAT_ARRAY, function (idx, format) {
-                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + date, c.COMPLETE_COMPARE_FORMAT), format) === date;
+                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + self._getCompleteHMS(date, format), c.COMPLETE_COMPARE_FORMAT), format) === date;
             });
+        },
+
+        _getCompleteHMS: function (str, format) {
+            var c = this._const;
+            switch (format) {
+                case "%M:%S":
+                    str = c.DEFAULT_HOUR + ":" + str;
+                    break;
+                default:
+                    break;
+            }
+            return str;
         },
 
         _getTitle: function () {
@@ -27216,6 +27269,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
             BI.each(allNodes, function (idx, node) {
+                var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 var checked = BI.has(valueMap, node.value);
                 result.push({
                     id: node.id,

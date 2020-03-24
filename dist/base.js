@@ -2652,7 +2652,9 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
     _init: function () {
         BI.ListTreeView.superclass._init.apply(this, arguments);
         var o = this.options;
-        this.storeValue = o.value || {};
+        if(BI.isNotNull(o.value)) {
+            this.setSelectedValue(o.value);
+        }
     },
 
     // 配置属性
@@ -5593,7 +5595,9 @@ BI.shortcut("bi.el", BI.EL);/**
  */
 BI.Msg = function () {
 
-    var messageShow, $mask, $pop;
+    var $mask, $pop;
+
+    var messageShows = [];
 
     var toastStack = [];
 
@@ -5655,7 +5659,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
+            BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -5663,7 +5667,7 @@ BI.Msg = function () {
                 right: 0,
                 bottom: 0,
                 opacity: 0.5
-            }).appendTo("body");
+            }).appendTo("body"));
             $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
@@ -5673,8 +5677,12 @@ BI.Msg = function () {
                 bottom: 0
             }).appendTo("body");
             var close = function () {
-                messageShow.destroy();
-                $mask.remove();
+                messageShows[messageShows.length - 1].destroy();
+                messageShows.pop();
+                if (messageShows.length === 0) {
+                    $mask.remove();
+                    $mask = null;
+                }
             };
             var controlItems = [];
             if (hasCancel === true) {
@@ -5779,7 +5787,7 @@ BI.Msg = function () {
                 ]
             };
 
-            messageShow = BI.createWidget(conf);
+            messageShows[messageShows.length] = BI.createWidget(conf);
         }
     };
 }();/**
@@ -10103,7 +10111,12 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
                             }
 
                             // attachO.fileSize = responseText.length;
-                            attachO.filename = _global.decodeURIComponent(handler.file.fileName);
+                            try {
+                                // decodeURIComponent特殊字符可能有问题, catch一下，保证能正常上传
+                                attachO.filename = _global.decodeURIComponent(handler.file.fileName);
+                            } catch (e) {
+                                attachO.filename = handler.file.fileName;
+                            }
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
