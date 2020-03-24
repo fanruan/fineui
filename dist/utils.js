@@ -13568,45 +13568,49 @@ if (!_global.BI) {
         }
     };
 
-    var callPoint = function (inst, type) {
-        if (points[type]) {
-            for (var action in points[type]) {
-                var bfns = points[type][action].before;
-                if (bfns) {
-                    BI.aspect.before(inst, action, function (bfns) {
-                        return function () {
-                            for (var i = 0, len = bfns.length; i < len; i++) {
-                                try {
-                                    bfns[i].apply(inst, arguments);
-                                } catch (e) {
-                                    _global.console && console.error(e);
+    var callPoint = function (inst, types) {
+        types = BI.isArray(types) ? types : [types];
+        BI.each(types, function (idx, type) {
+            if (points[type]) {
+                for (var action in points[type]) {
+                    var bfns = points[type][action].before;
+                    if (bfns) {
+                        BI.aspect.before(inst, action, function (bfns) {
+                            return function () {
+                                for (var i = 0, len = bfns.length; i < len; i++) {
+                                    try {
+                                        bfns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
                                 }
-                            }
-                        };
-                    }(bfns));
-                }
-                var afns = points[type][action].after;
-                if (afns) {
-                    BI.aspect.after(inst, action, function (afns) {
-                        return function () {
-                            for (var i = 0, len = afns.length; i < len; i++) {
-                                try {
-                                    afns[i].apply(inst, arguments);
-                                } catch (e) {
-                                    _global.console && console.error(e);
+                            };
+                        }(bfns));
+                    }
+                    var afns = points[type][action].after;
+                    if (afns) {
+                        BI.aspect.after(inst, action, function (afns) {
+                            return function () {
+                                for (var i = 0, len = afns.length; i < len; i++) {
+                                    try {
+                                        afns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
                                 }
-                            }
-                        };
-                    }(afns));
+                            };
+                        }(afns));
+                    }
                 }
             }
-        }
+        });
     };
 
     BI.Models = {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
+            inst.mixins && callPoint(inst, inst.mixins);
             callPoint(inst, type);
             return inst;
         }

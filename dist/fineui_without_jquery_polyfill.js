@@ -20818,45 +20818,49 @@ _.extend(BI, {
         }
     };
 
-    var callPoint = function (inst, type) {
-        if (points[type]) {
-            for (var action in points[type]) {
-                var bfns = points[type][action].before;
-                if (bfns) {
-                    BI.aspect.before(inst, action, function (bfns) {
-                        return function () {
-                            for (var i = 0, len = bfns.length; i < len; i++) {
-                                try {
-                                    bfns[i].apply(inst, arguments);
-                                } catch (e) {
-                                    _global.console && console.error(e);
+    var callPoint = function (inst, types) {
+        types = BI.isArray(types) ? types : [types];
+        BI.each(types, function (idx, type) {
+            if (points[type]) {
+                for (var action in points[type]) {
+                    var bfns = points[type][action].before;
+                    if (bfns) {
+                        BI.aspect.before(inst, action, function (bfns) {
+                            return function () {
+                                for (var i = 0, len = bfns.length; i < len; i++) {
+                                    try {
+                                        bfns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
                                 }
-                            }
-                        };
-                    }(bfns));
-                }
-                var afns = points[type][action].after;
-                if (afns) {
-                    BI.aspect.after(inst, action, function (afns) {
-                        return function () {
-                            for (var i = 0, len = afns.length; i < len; i++) {
-                                try {
-                                    afns[i].apply(inst, arguments);
-                                } catch (e) {
-                                    _global.console && console.error(e);
+                            };
+                        }(bfns));
+                    }
+                    var afns = points[type][action].after;
+                    if (afns) {
+                        BI.aspect.after(inst, action, function (afns) {
+                            return function () {
+                                for (var i = 0, len = afns.length; i < len; i++) {
+                                    try {
+                                        afns[i].apply(inst, arguments);
+                                    } catch (e) {
+                                        _global.console && console.error(e);
+                                    }
                                 }
-                            }
-                        };
-                    }(afns));
+                            };
+                        }(afns));
+                    }
                 }
             }
-        }
+        });
     };
 
     BI.Models = {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
+            inst.mixins && callPoint(inst, inst.mixins);
             callPoint(inst, type);
             return inst;
         }
@@ -31355,7 +31359,9 @@ BI.shortcut("bi.el", BI.EL);/**
  */
 BI.Msg = function () {
 
-    var messageShow, $mask, $pop;
+    var $mask, $pop;
+
+    var messageShows = [];
 
     var toastStack = [];
 
@@ -31417,7 +31423,7 @@ BI.Msg = function () {
             }, 5000);
         },
         _show: function (hasCancel, title, message, callback) {
-            $mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
+            BI.isNull($mask) && ($mask = BI.Widget._renderEngine.createElement("<div class=\"bi-z-index-mask\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 2,
                 top: 0,
@@ -31425,7 +31431,7 @@ BI.Msg = function () {
                 right: 0,
                 bottom: 0,
                 opacity: 0.5
-            }).appendTo("body");
+            }).appendTo("body"));
             $pop = BI.Widget._renderEngine.createElement("<div class=\"bi-message-depend\">").css({
                 position: "absolute",
                 zIndex: BI.zIndex_tip - 1,
@@ -31435,8 +31441,12 @@ BI.Msg = function () {
                 bottom: 0
             }).appendTo("body");
             var close = function () {
-                messageShow.destroy();
-                $mask.remove();
+                messageShows[messageShows.length - 1].destroy();
+                messageShows.pop();
+                if (messageShows.length === 0) {
+                    $mask.remove();
+                    $mask = null;
+                }
             };
             var controlItems = [];
             if (hasCancel === true) {
@@ -31541,7 +31551,7 @@ BI.Msg = function () {
                 ]
             };
 
-            messageShow = BI.createWidget(conf);
+            messageShows[messageShows.length] = BI.createWidget(conf);
         }
     };
 }();/**
@@ -41727,6 +41737,11 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.text.visible();
     },
 
+    _setText: function (v) {
+        this.text.setText(v);
+        this.text.setTitle(v);
+    },
+
     isValid: function () {
         return this.editor.isValid();
     },
@@ -41769,32 +41784,32 @@ BI.StateEditor = BI.inherit(BI.Widget, {
         this.stateValue = v;
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Select_All"));
+                this._setText(BI.i18nText("BI-Select_All"));
                 this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Select_Part"));
+                this._setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
                 BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
-            this.text.setText(v);
+            this._setText(v);
             // 配置了defaultText才判断标灰，其他情况不标灰
             (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this.text.setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
+                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
                 BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
-                this.text.setText(v[0]);
+                this._setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(BI.i18nText("BI-Select_Part"));
+                this._setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             }
         }
@@ -41802,6 +41817,10 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     setTipType: function (v) {
         this.text.options.tipType = v;
+    },
+
+    getText: function () {
+        return this.text.getText();
     }
 });
 BI.StateEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -42013,6 +42032,11 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         this.text.visible();
     },
 
+    _setText: function (v) {
+        this.text.setText(v);
+        this.text.setTitle(v);
+    },
+
     isValid: function () {
         return this.editor.isValid();
     },
@@ -42054,28 +42078,31 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
         BI.SimpleStateEditor.superclass.setValue.apply(this, arguments);
         if (BI.isNumber(v)) {
             if (v === BI.Selection.All) {
-                this.text.setText(BI.i18nText("BI-Already_Selected"));
+                this._setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("bi-water-mark");
             } else if (v === BI.Selection.Multi) {
-                this.text.setText(BI.i18nText("BI-Already_Selected"));
+                this._setText(BI.i18nText("BI-Already_Selected"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this.text.setText(o.text);
+                this._setText(o.text);
                 this.text.element.addClass("bi-water-mark");
             }
             return;
         }
         if (!BI.isArray(v) || v.length === 1) {
-            this.text.setText(v);
-            this.text.setTitle(v);
+            this._setText(v);
             this.text.element.removeClass("bi-water-mark");
         } else if (BI.isEmpty(v)) {
-            this.text.setText(o.text);
+            this._setText(o.text);
             this.text.element.addClass("bi-water-mark");
         } else {
-            this.text.setText(BI.i18nText("BI-Already_Selected"));
+            this._setText(BI.i18nText("BI-Already_Selected"));
             this.text.element.removeClass("bi-water-mark");
         }
+    },
+
+    getText: function () {
+        return this.text.getText();
     }
 });
 BI.SimpleStateEditor.EVENT_CHANGE = "EVENT_CHANGE";
@@ -52203,7 +52230,8 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
             },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowSearchValue: false
+            allowSearchValue: false,
+            title: BI.bind(this._getShowText, this)
         };
     },
 
@@ -52399,6 +52427,10 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
             return BI.isNotNull(result) ? result.text : o.text;
         }
         return o.valueFormatter(v);
+    },
+
+    _getShowText: function () {
+        return this.editor.getText();
     },
 
     stopEditing: function () {
@@ -53074,7 +53106,7 @@ BI.MultiLayerSingleTreeInsertSearchPane = BI.inherit(BI.Widget, {
     render: function() {
         var self = this, o = this.options;
         this.tree = BI.createWidget({
-            type: "bi.multilayer_select_level_tree",
+            type: "bi.multilayer_single_level_tree",
             isDefaultInit: o.isDefaultInit,
             items: o.items,
             itemsCreator: o.itemsCreator === BI.emptyFn ? BI.emptyFn : function (op, callback) {
@@ -53408,7 +53440,8 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
             },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
-            allowSearchValue: false
+            allowSearchValue: false,
+            title: BI.bind(this._getShowText, this)
         };
     },
 
@@ -53605,6 +53638,10 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         }
         return o.valueFormatter(v);
 
+    },
+
+    _getShowText: function () {
+        return this.editor.getText();
     },
 
     stopEditing: function () {
@@ -56420,7 +56457,10 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -57114,7 +57154,10 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -57709,6 +57752,10 @@ BI.MultiSelectEditor = BI.inherit(BI.Widget, {
 
     },
 
+    getState: function () {
+        return this.editor.getText();
+    },
+
     getKeywords: function () {
         var val = this.editor.getLastChangedValue();
         var keywords = val.match(/[\S]+/g);
@@ -57893,6 +57940,10 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                 this.editor.setState(BI.Selection.Multi);
             }
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -58082,6 +58133,10 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                 this.editor.setState(BI.Selection.Multi);
             }
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -61133,6 +61188,10 @@ BI.MultiListTreeSearcher = BI.inherit(BI.Widget, {
         }
     },
 
+    getState: function() {
+        return this.editor.getState();
+    },
+
     setValue: function (ob) {
         this.setState(ob);
         this.searcher.setValue(ob);
@@ -61321,6 +61380,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             });
             return text;
         }
+    },
+
+    getState: function() {
+        return this.editor.getState();
     },
 
     setValue: function (ob) {
@@ -65274,7 +65337,10 @@ BI.SingleSelectTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: {
-                    type: "bi.layout"
+                    type: "bi.text",
+                    title: function () {
+                        return self.searcher.getState();
+                    }
                 },
                 left: 0,
                 right: 24,
@@ -67662,7 +67728,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);!(
                 "%H:%M",  // HH:mm
                 "%M:%S"   // mm:ss
             ],
-            DEFAULT_DATE_STRING: "2000-01-01"
+            DEFAULT_DATE_STRING: "2000-01-01",
+            DEFAULT_HOUR: "00"
         },
 
         props: {
@@ -67778,9 +67845,22 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);!(
 
         _dateCheck: function (date) {
             var c = this._const;
+            var self = this;
             return BI.any(c.FORMAT_ARRAY, function (idx, format) {
-                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + date, c.COMPLETE_COMPARE_FORMAT), format) === date;
+                return BI.print(BI.parseDateTime(c.DEFAULT_DATE_STRING + " " + self._getCompleteHMS(date, format), c.COMPLETE_COMPARE_FORMAT), format) === date;
             });
+        },
+
+        _getCompleteHMS: function (str, format) {
+            var c = this._const;
+            switch (format) {
+                case "%M:%S":
+                    str = c.DEFAULT_HOUR + ":" + str;
+                    break;
+                default:
+                    break;
+            }
+            return str;
         },
 
         _getTitle: function () {
@@ -72219,6 +72299,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 allNodes = BI.concat(allNodes, self._getAllChildren(parentValues.concat([node.value])));
             });
             BI.each(allNodes, function (idx, node) {
+                var valueMap = dealWithSelectedValue(node.parentValues, selectedValues);
                 var checked = BI.has(valueMap, node.value);
                 result.push({
                     id: node.id,
