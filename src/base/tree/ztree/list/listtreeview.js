@@ -17,7 +17,9 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
     _init: function () {
         BI.ListTreeView.superclass._init.apply(this, arguments);
         var o = this.options;
-        this.storeValue = o.value || {};
+        if(BI.isNotNull(o.value)) {
+            this.setSelectedValue(o.value);
+        }
     },
 
     // 配置属性
