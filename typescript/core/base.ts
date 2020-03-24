@@ -255,7 +255,7 @@ export interface _base {
 
     isNotEmptyArray: <T, U>(arr: T[] | U) => arr is [T, ...T[]];
 
-    isEmptyObject: (obj: any) => obj is object;
+    isEmptyObject: (obj: any) => boolean;
 
     isNotEmptyObject: (obj: any) => obj is object;
 
