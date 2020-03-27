@@ -1,6 +1,6 @@
-import { Widget } from "../../core/widget";
+import { _Widget } from "../../core/widget";
 
-export declare class SignEditor extends Widget {
+export interface _SignEditor extends _Widget {
     setTitle(v: string | Function): void;
 
     setWarningTitle(v: string | Function): void;

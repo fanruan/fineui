@@ -1,6 +1,6 @@
-import { Single } from "../single";
+import { _Single } from "../single";
 
-export declare class Trigger extends Single {
+export interface _Trigger extends _Single {
     setKey(..._args: any[]): void;
 
     getKey(): string;

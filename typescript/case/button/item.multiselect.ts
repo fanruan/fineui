@@ -1,6 +1,6 @@
-import { BasicButton } from "../../base/single/button/button.basic";
+import { _BasicButton } from "../../base/single/button/button.basic";
 
-export declare class MultiSelectItem extends BasicButton {
+export interface _MultiSelectItem extends _BasicButton {
     doClick(...args: any[]): void;
 
     doRedMark(...args: any[]): void;
@@ -8,6 +8,8 @@ export declare class MultiSelectItem extends BasicButton {
     unRedMark(...args: any[]): void;
 
     setSelected(v: boolean): void;
+}
 
-    static EVENT_CHANGE: string;
+export interface _MultiSelectItemStatic {
+    EVENT_CHANGE: string;
 }

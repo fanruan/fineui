@@ -1,6 +1,6 @@
-import { Layout } from "../layout";
+import { _Layout } from "../layout";
 
-export declare class HTapeLayout extends Layout {
+export interface _HTapeLayout extends _Layout {
     resize(): void;
 
     stroke<T>(items: T[]): void;
@@ -10,7 +10,7 @@ export declare class HTapeLayout extends Layout {
     populate<T>(items?: T[]): void;
 }
 
-export declare class VTapeLayout extends Layout {
+export interface _VTapeLayout extends _Layout {
     resize(): void;
 
     stroke<T>(items: T[]): void;

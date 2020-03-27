@@ -1,11 +1,13 @@
-import { Single } from "../../../base/single/single";
+import { _Single } from "../../../base/single/single";
 
-export declare class IconChangeButton extends Single {
+export interface _IconChangeButton extends _Single {
     isSelected(): boolean;
 
     setSelected(v: boolean): void;
 
     setIcon(cls: string): void;
+}
 
-    static EVENT_CHANGE: string;
+export interface _IconChangeButtonStatic {
+    EVENT_CHANGE: string;
 }

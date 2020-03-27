@@ -1,4 +1,4 @@
-export declare class OB {
+export interface _OB {
     props: Props | (<T>(config: T) => Props & T);
 
     options: this["props"];
@@ -40,7 +40,7 @@ interface Props {
     listeners?: {
         eventName: string;
         action: (...args: any[]) => any;
-        target?: typeof OB;
+        target?: _OB;
         once?: boolean;
     }[];
     [key: string]: any;
