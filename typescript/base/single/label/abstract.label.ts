@@ -1,6 +1,6 @@
-import { _Single } from "../single";
+import { Single } from "../single";
 
-export interface _AbstractLabel extends _Single {
+export declare class AbstractLabel extends Single {
     doRedMark(...args: any[]): void;
 
     unRedMark(...args: any[]): void;

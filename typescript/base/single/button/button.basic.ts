@@ -1,6 +1,6 @@
-import { _Single } from "../single";
+import { Single } from "../single";
 
-export interface _BasicButton extends _Single {
+export declare class BasicButton extends Single {
     _createShadow(): void;
 
     bindEvent(): void;
@@ -13,7 +13,7 @@ export interface _BasicButton extends _Single {
 
     doClick(): void;
 
-    handle(): _BasicButton;
+    handle(): BasicButton;
 
     hover(): void;
 
@@ -34,8 +34,6 @@ export interface _BasicButton extends _Single {
     setText(v: string): void;
 
     getText(): string;
-}
 
-export interface _BasicButtonStatic {
-    EVENT_CHANGE: string;
+    static EVENT_CHANGE: string;
 }

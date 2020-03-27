@@ -1,4 +1,4 @@
-import { _Behavior } from "./behavior";
-export interface _RedMarkBehavior extends _Behavior {
+import { Behavior } from "./behavior";
+export declare class RedMarkBehavior extends Behavior {
     
 }

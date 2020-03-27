@@ -1,6 +1,6 @@
-import { _BasicButton } from "../button.basic";
+import { BasicButton } from "../button.basic";
 
-export interface _Button extends _BasicButton {
+export declare class Button extends BasicButton {
     doRedMark(...args: any[]): void;
 
     unRedMark(...args: any[]): void;
@@ -8,8 +8,6 @@ export interface _Button extends _BasicButton {
     doHighLight(...args: any[]): void;
 
     unHighLight(...args: any[]): void;
-}
 
-export interface _ButtonStatic {
-    EVENT_CHANGE: string;
+    static EVENT_CHANGE: string;
 }

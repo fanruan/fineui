@@ -1,6 +1,6 @@
-import { _Widget } from "../widget";
+import { Widget } from "../widget";
 
-export interface _Layout extends _Widget {
+export declare class Layout extends Widget {
     addItem(item: any): any;
 
     prependItem(item: any): any;

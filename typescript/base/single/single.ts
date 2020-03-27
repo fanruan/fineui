@@ -1,6 +1,6 @@
-import { _Widget } from "../../core/widget";
+import { Widget } from "../../core/widget";
 
-export interface _Single extends _Widget {
+export declare class Single extends Widget {
     _showToolTip(e: Event, opt?: SingleOpt): void;
 
     _hideTooltip(): void;

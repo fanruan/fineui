@@ -1,6 +1,6 @@
-import { _Widget } from "../../core/widget";
+import { Widget } from "../../core/widget";
 
-export interface _Tab extends _Widget {
+export declare class Tab extends Widget {
     setSelect(v: string | number): void;
 
     removeTab(v: string | number): void;
@@ -12,8 +12,6 @@ export interface _Tab extends _Widget {
     getTab(v: string | number): any;
 
     populate(): void;
-}
 
-export interface _TabStatic {
-    EVENT_CHANGE: string;
+    static EVENT_CHANGE: string;
 }
