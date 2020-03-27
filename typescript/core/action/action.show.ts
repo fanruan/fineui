@@ -1,5 +1,5 @@
-import { Action } from "./action";
+import { _Action } from "./action";
 
-export declare class ShowAction extends Action {
+export interface _ShowAction extends _Action {
     
 }

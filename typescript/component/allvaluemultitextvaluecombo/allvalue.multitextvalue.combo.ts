@@ -1,9 +1,11 @@
-import { Widget } from "../../core/widget";
+import { _Widget } from "../../core/widget";
 
-export declare class AllValueMultiTextValueCombo extends Widget {
+export interface _AllValueMultiTextValueCombo extends _Widget {
     getValue<T>(): T[];
 
     populate(items: any): void;
+}
 
-    static EVENT_CONFIRM: string;
+export interface _AllValueMultiTextValueComboStatic {
+    EVENT_CONFIRM: string;
 }

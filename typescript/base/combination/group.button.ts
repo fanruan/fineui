@@ -1,6 +1,6 @@
-import { Widget } from "../../core/widget";
+import { _Widget } from "../../core/widget";
 
-export declare class ButtonGroup extends Widget {
+export interface _ButtonGroup extends _Widget {
     prependItems<T>(items: T[]): void;
 
     addItems<T>(items: T[]): void;
@@ -32,11 +32,16 @@ export declare class ButtonGroup extends Widget {
     getNodeByValue(value: any): any;
 
     getValue<T>(): T[];
+}
 
-    static CHOOSE_TYPE_SINGLE: number;
-    static CHOOSE_TYPE_MULTI: number;
-    static CHOOSE_TYPE_ALL: number;
-    static CHOOSE_TYPE_NONE: number;
-    static CHOOSE_TYPE_DEFAULT: number;
-    static EVENT_CHANGE: string;
+export interface _ButtonGroupChooseType {
+    CHOOSE_TYPE_SINGLE: number;
+    CHOOSE_TYPE_MULTI: number;
+    CHOOSE_TYPE_ALL: number;
+    CHOOSE_TYPE_NONE: number;
+    CHOOSE_TYPE_DEFAULT: number;
+}
+
+export interface _ButtonGroupStatic {
+    EVENT_CHANGE: string;
 }

@@ -1,6 +1,6 @@
-import { Single } from "./single";
+import { _Single } from "./single";
 
-export declare class Text extends Single {
+export interface _Text extends _Single {
     doRedMark(keyword: string): void;
 
     unRedMark(): void;
