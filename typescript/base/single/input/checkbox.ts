@@ -1,9 +1,7 @@
-import { _BasicButton } from "../button/button.basic";
+import { BasicButton } from "../button/button.basic";
 
-export interface _Checkbox extends _BasicButton {
+export declare class Checkbox extends BasicButton {
     _setEnable(enable: boolean): void;
-}
 
-export interface _CheckboxStatic {
-    EVENT_CHANGE: string;
+    static EVENT_CHANGE: string;
 }

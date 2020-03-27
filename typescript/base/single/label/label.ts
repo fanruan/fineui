@@ -1,6 +1,6 @@
-import { _AbstractLabel } from "./abstract.label";
+import { AbstractLabel } from "./abstract.label";
 
-export interface _Label extends _AbstractLabel {
+export declare class Label extends AbstractLabel {
     doRedMark(...args: any[]): void;
 
     unRedMark(...args: any[]): void

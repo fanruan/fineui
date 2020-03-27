@@ -1,4 +1,4 @@
-import { _Widget } from "./widget";
+import { Widget } from "./widget";
 
 export interface _base {
     assert: (v: any, is: Function) => Boolean
@@ -7,7 +7,7 @@ export interface _base {
 
     UUID: () => string;
 
-    isWidget: (widget: any) => widget is _Widget;
+    isWidget: (widget: any) => widget is Widget;
 
     createWidgets: (items: any, options: any, context: any) => any;
 

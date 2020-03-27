@@ -1,14 +1,6 @@
-import { _OB } from "./ob";
+import { OB } from "./ob";
 
-export interface _WidgetStatic {
-    /**
-     * 注册渲染引擎
-     * @param engine 引擎
-     */
-    registerRenderEngine(engine: RenderEngine): void;
-}
-
-export interface _Widget extends _OB {
+export declare class Widget extends OB {
     /**
      * 出现loading的锁
      */
@@ -28,7 +20,7 @@ export interface _Widget extends _OB {
     /**
      * 父节点
      */
-    _parent: _Widget | null;
+    _parent: Widget | null;
     // TODO: 完成jquery文件夹后把这块改了
     /**
      * 真实dom的类jQuery对象
@@ -42,7 +34,7 @@ export interface _Widget extends _OB {
      * 子元素
      */
     _children: {
-        [key: string]: _Widget;
+        [key: string]: Widget;
     };
     /**
      * 是否已挂载
@@ -246,18 +238,18 @@ export interface _Widget extends _OB {
     /**
      * 新增子元素
      */
-    addWidget(_name: any, _widget: _Widget): _Widget;
+    addWidget(_name: any, _widget: Widget): Widget;
 
     /**
      * 根据wigetname获取子元素实例
      */
-    getWidgetByName(_name: string): _Widget | undefined;
+    getWidgetByName(_name: string): Widget | undefined;
 
     /**
      * 移除子元素
      * @param nameOrWidget widgetName或widget实例
      */
-    removeWidget(nameOrWidget: string | _Widget): void;
+    removeWidget(nameOrWidget: string | Widget): void;
 
     /**
      * 是否有某个子元素
@@ -376,6 +368,12 @@ export interface _Widget extends _OB {
      * destory元素
      */
     destroy(): void;
+
+    /**
+     * 注册渲染引擎
+     * @param engine 引擎
+     */
+    static registerRenderEngine(engine: RenderEngine): void;
 }
 
 interface RenderEngine {

@@ -1,6 +1,6 @@
-import { _Widget } from "../../core/widget";
+import { Widget } from "../../core/widget";
 
-export interface _Combo extends _Widget {
+export declare class Combo extends Widget {
     populate(items: any): void;
 
     _setEnable(v: boolean): void;
@@ -16,16 +16,14 @@ export interface _Combo extends _Widget {
     getPopupPosition(): any;
 
     toggle(): void;
-}
 
-export interface _ComboStatic {
-    EVENT_TRIGGER_CHANGE: string;
-    EVENT_CHANGE: string;
-    EVENT_EXPAND: string;
-    EVENT_COLLAPSE: string;
-    EVENT_AFTER_INIT: string;
-    EVENT_BEFORE_POPUPVIEW: string;
-    EVENT_AFTER_POPUPVIEW: string;
-    EVENT_BEFORE_HIDEVIEW: string;
-    EVENT_AFTER_HIDEVIEW: string;
+    static EVENT_TRIGGER_CHANGE: string;
+    static EVENT_CHANGE: string;
+    static EVENT_EXPAND: string;
+    static EVENT_COLLAPSE: string;
+    static EVENT_AFTER_INIT: string;
+    static EVENT_BEFORE_POPUPVIEW: string;
+    static EVENT_AFTER_POPUPVIEW: string;
+    static EVENT_BEFORE_HIDEVIEW: string;
+    static EVENT_AFTER_HIDEVIEW: string;
 }
