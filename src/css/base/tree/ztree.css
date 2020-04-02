@@ -12,7 +12,7 @@
   list-style: none;
   line-height: 14px;
   text-align: left;
-  white-space: nowrap;
+  white-space: pre;
   outline: 0;
 }
 .ztree li ul {
