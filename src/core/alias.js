@@ -416,11 +416,10 @@
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;",
-        " ": "&nbsp;"
+        ">": "&gt;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };

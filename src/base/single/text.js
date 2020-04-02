@@ -55,7 +55,7 @@ BI.Text = BI.inherit(BI.Single, {
         }
         this.element.css({
             textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
+            whiteSpace: this._getTextWrap(),
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
             overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
@@ -87,6 +87,17 @@ BI.Text = BI.inherit(BI.Single, {
         }
         if (o.highLight) {
             this.doHighLight();
+        }
+    },
+
+    _getTextWrap: function () {
+        var o = this.options;
+        switch (o.whiteSpace) {
+            case "nowrap":
+                return "pre";
+            case "normal":
+            default:
+                return "pre-wrap";
         }
     },
 
@@ -136,12 +147,8 @@ BI.Text = BI.inherit(BI.Single, {
             this.text.element.html(BI.htmlEncode(this._getShowText()));
             return;
         }
-        if (/\s/.test(text)) {
-            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
-        } else {
-            //  textContent性能更好,并且原生防xss
-            this.text.element[0].textContent = this._getShowText();
-        }
+        //  textContent性能更好,并且原生防xss
+        this.text.element[0].textContent = this._getShowText();
         BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
     }
 });

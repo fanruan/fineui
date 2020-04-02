@@ -324,6 +324,7 @@ BI.AbstractLabel = BI.inherit(BI.Single, {
         BI.createWidget({
             type: adaptLayout,
             element: this,
+            scrollable: o.whiteSpace === "normal",
             items: [this.text]
         });
     },
