@@ -33,7 +33,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 left: 4,
                 right: 4,
                 top: 4,
-                bottom: 8
+                bottom: 4
             }]
         });
 
@@ -86,7 +86,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         whiteSpace: "normal",
                         text: o.watermark,
                         invalid: o.invalid,
-                        disabled: o.disabled
+                        disabled: o.disabled,
+                        hgap: 4,
+                        vgap: 4
                     });
                     this.watermark.on(BI.TextButton.EVENT_CHANGE, function () {
                         self.focus();
@@ -96,9 +98,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 4,
-                            top: 4,
-                            right: 0
+                            left: 0,
+                            top: 0,
+                            right: 0,
+                            bottom: 0
                         }]
                     });
                 } else {
