@@ -28,7 +28,7 @@ describe("DateTime", function () {
                 second: 12
             }
         });
-        expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
+        expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
         dateCombo.destroy();
     });
 
@@ -51,7 +51,7 @@ describe("DateTime", function () {
         BI.nextTick(function () {
             dateCombo.element.find(".bi-calendar:visible .bi-list-item-select :contains(16)").parent().click();
             dateCombo.element.find(".bi-date-time-popup .bi-text:contains(确定)").parent().click();
-            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-16 12:12:12");
+            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-16 12:12:12");
             dateCombo.destroy();
             done();
         })
@@ -77,7 +77,7 @@ describe("DateTime", function () {
         BI.nextTick(function () {
             dateCombo.element.find(".bi-calendar:visible .bi-list-item-select :contains(16)").parent().click();
             dateCombo.element.find(".bi-date-time-popup .bi-text:contains(取消)").parent().click();
-            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
+            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
             dateCombo.destroy();
             done();
         })

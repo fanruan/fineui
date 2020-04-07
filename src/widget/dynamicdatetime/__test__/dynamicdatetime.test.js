@@ -32,7 +32,7 @@ describe("DateTimeCombo", function () {
             }
         });
         BI.nextTick(function () {
-            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
+            expect(dateCombo.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-02-23 12:12:12");
             dateCombo.destroy();
             done();
         })
@@ -318,7 +318,7 @@ describe("DateTimeCombo", function () {
                 input.val("2017-1-1");
                 BI.Test.triggerKeyDown(dateCombo.element.find(".bi-date-time-trigger .bi-input"), null, BI.KeyCode.ENTER, function () {
                     BI.delay(function () {
-                        expect(dateCombo.element.find(".bi-date-time-trigger .bi-text-button").text()).to.equal("2017-01-01 00:00:00");
+                        expect(dateCombo.element.find(".bi-date-time-trigger .bi-text-button").text()).to.equal("2017-01-01 00:00:00");
                         dateCombo.destroy();
                         done();
                     }, 300);

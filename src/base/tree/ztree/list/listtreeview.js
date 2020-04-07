@@ -12,7 +12,9 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
     },
 
     _defaultConfig: function () {
-        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {});
+        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {
+            value: {}
+        });
     },
     _init: function () {
         BI.ListTreeView.superclass._init.apply(this, arguments);
