@@ -117,7 +117,7 @@ describe("TextTest", function () {
             type: "bi.text",
             text: "我是要标红的 A",
         });
-        expect(text.element.text()).to.equal("我是要标红的 A");
+        expect(text.element.text()).to.equal("我是要标红的 A");
         text.destroy();
     });
 

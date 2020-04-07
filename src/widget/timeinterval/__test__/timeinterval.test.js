@@ -61,7 +61,7 @@ describe("DateInterval", function () {
                 }
             },
         });
-        expect(dateInterval.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-01-12 10:10:102019-01-01 00:00:00");
+        expect(dateInterval.element.find(".bi-date-time-trigger .bi-label").text()).to.equal("2018-01-12 10:10:102019-01-01 00:00:00");
         dateInterval.destroy();
     });
 

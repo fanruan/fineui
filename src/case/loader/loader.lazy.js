@@ -8,7 +8,8 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
-            el: {}
+            el: {},
+            items: []
         });
     },
 
