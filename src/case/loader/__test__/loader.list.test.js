@@ -4,7 +4,7 @@
  * Created by windy on 2020/4/3
  */
 
-describe("lazy_loader", function () {
+describe("list_loader", function () {
 
     /**
      *   test_author_windy
@@ -18,7 +18,7 @@ describe("lazy_loader", function () {
             }
         });
         var widget = BI.Test.createWidget({
-            type: "bi.lazy_loader",
+            type: "bi.list_loader",
             el: {
                 layouts: [{
                     type: "bi.left",

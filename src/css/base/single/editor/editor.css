@@ -17,3 +17,6 @@
   line-height: 21px;
   border: none;
 }
+.bi-textarea-editor .textarea-watermark {
+  max-height: 100%;
+}

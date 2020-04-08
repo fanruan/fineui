@@ -17,6 +17,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             hgap: 0,
             lgap: 0,
             rgap: 0,
+            vgap: 0,
             text: "",
             py: ""
         });
@@ -35,6 +36,7 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             width: o.width,
             height: o.height,
             hgap: o.hgap,
+            vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
             text: o.text,
