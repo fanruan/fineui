@@ -36,7 +36,7 @@ export interface _base {
 
     toArray: (collection: any[]|object|string) => any[];
 
-    size: (collection: any[]|object|string) => number;
+    size: (collection: any) => number;
 
     each: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => void)|object|string, thisArg?: any) => any;
 
