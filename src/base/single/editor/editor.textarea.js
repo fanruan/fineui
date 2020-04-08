@@ -81,7 +81,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark cursor-default",
+                        cls: "bi-water-mark cursor-default textarea-watermark",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: o.watermark,
@@ -100,8 +100,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                             el: this.watermark,
                             left: 0,
                             top: 0,
-                            right: 0,
-                            bottom: 0
+                            right: 0
                         }]
                     });
                 } else {

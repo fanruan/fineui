@@ -135,13 +135,13 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
         }
 
-        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate) && this._checkVoid({
+        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate4Check) && this._checkVoid({
             year: smallObj[0],
-            month: smallObj[1],
+            month: smallObj[1] || 1,
             day: 1
-        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate4Check) && this._checkVoid({
             year: bigObj[0],
-            month: bigObj[1],
+            month: bigObj[1] || 1,
             day: 1
         });
     },
