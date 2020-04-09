@@ -52,6 +52,7 @@ if (!_global.BI) {
             if (!this.deepContains(is, v)) {
                 throw new Error(v + " error");
             }
+            return true;
         },
 
         warn: function (message) {
