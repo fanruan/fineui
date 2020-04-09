@@ -129,4 +129,135 @@ describe("baseFunctionTest", function () {
             c: 3
         });
     });
+
+    /**
+     * test_author_windy
+     */
+    it("assert-warning", function () {
+        expect(BI.assert("a", "a")).to.equal(true);
+        expect(BI.assert("a", function (v) {
+            return v === "a";
+        })).to.equal(true);
+        var test = "";
+        try {
+            BI.assert("a", function (v) {
+                return v === "c";
+            });
+        } catch (e) {
+            test = true;
+        }
+        expect(test).to.equal(true);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("packageItems", function () {
+        expect(BI.packageItems([{
+            type: "a",
+            text: "b"
+        }, {
+            type: "b",
+            text: "c"
+        }], [{
+            type: "bi.vertical"
+        }, {
+            type: "bi.center_adapt"
+        }])).to.deep.equal([{
+            type: "bi.vertical",
+            items: [{
+                el: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        el: {
+                            type: "a",
+                            text: "b"
+                        }
+                    }]
+                }
+            }]
+        }, {
+            type: "bi.vertical",
+            items: [{
+                el: {
+                    type: "bi.center_adapt",
+                    items: [{
+                        el: {
+                            type: "b",
+                            text: "c"
+                        }
+                    }]
+                }
+            }]
+        }]);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("inverse", function () {
+        expect(BI.inverse(7, 1)).to.equal(6);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("key", function () {
+        var a = {
+            c: 1,
+            d: 2
+        };
+        expect(BI.firstKey(a)).to.equal("c");
+        expect(BI.lastKey(a)).to.equal("d");
+        expect(BI.firstObject(a)).to.equal(1);
+        expect(BI.lastObject(a)).to.equal(2);
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("back", function () {
+        var a = [{
+            c: 1,
+            d: 2
+        }, {
+            c: 3,
+            d: 4
+        }, {
+            c: 5,
+            d: 6
+        }];
+        var c = [];
+        BI.backEach(a, function (idx, v) {
+            c.push(v.d);
+        });
+        expect(c).to.deep.equal([6, 4, 2]);
+        expect(BI.backEvery(a, function (idx, v) {
+            return v.c = 1;
+        })).to.equal(true);
+        expect(BI.backFindKey({
+            c: 5,
+            d: 6
+        }, function (value, key) {
+            return key === "c";
+        })).to.equal("c");
+        expect(BI.backFind({
+            c: 5,
+            d: 6
+        }, function (v, key) {
+            return v === 5;
+        })).to.deep.equal(5);
+    });
+
+
+    /**
+     * test_author_windy
+     */
+    it("abc", function () {
+        expect(BI.abc2Int("B")).to.equal(2);
+        expect(BI.int2Abc(2)).to.equal("B");
+    });
+
+
 });

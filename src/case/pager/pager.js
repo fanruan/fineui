@@ -168,7 +168,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
                 return BI.extend({
                     disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
                 }, next);
-                
+
             }()));
         }
 
@@ -244,7 +244,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        v = v | 0;
+        v = v || 0;
         v = v < 1 ? 1 : v;
         if (o.pages === false) {
             var lastPage = BI.result(o, "lastPage"), firstPage = 1;
