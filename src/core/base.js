@@ -976,7 +976,7 @@ if (!_global.BI) {
          * 对字符串做替换的函数
          *
          *      var cls = 'my-class', text = 'Some text';
-         *      var res = BI.format('<div class="{0}>{1}</div>"', cls, text);
+         *      var res = BI.format('<div class="{0}">{1}</div>', cls, text);
          *      //res的值为：'<div class="my-class">Some text</div>';
          *
          * @static
