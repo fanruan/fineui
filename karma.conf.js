@@ -57,6 +57,11 @@ module.exports = function (config) {
             "test/**/*.js"
         ],
 
+        exclude: [
+            "src/base/tree/ztree/jquery.ztree.core-3.5.js",
+            "src/base/tree/ztree/jquery.ztree.excheck-3.5.js"
+        ],
+
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor

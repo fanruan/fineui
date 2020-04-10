@@ -254,10 +254,57 @@ describe("baseFunctionTest", function () {
     /**
      * test_author_windy
      */
-    it("abc", function () {
+    it("others", function () {
         expect(BI.abc2Int("B")).to.equal(2);
         expect(BI.int2Abc(2)).to.equal("B");
+        expect(BI.has({a: "1", b: "2"}, "a")).to.equal(true);
+        expect(Object.isFrozen(BI.freeze({a: "1", b: "2"}))).to.equal(true);
+        expect(BI.isCapitalEqual("A", "a")).to.equal(true);
+        expect(BI.isEmptyString("a")).to.equal(false);
+        expect(BI.isNotEmptyString("a")).to.equal(true);
+        expect(BI.isWindow("a")).to.equal(false);
     });
 
+    /**
+     * test_author_windy
+     */
+    it("deepFunc", function () {
+        expect(BI.isDeepMatch({b: {c: {e: 3}}, d:2}, {b: {c: {e: 3}}, d:2})).to.equal(true);
+        expect(BI.deepIndexOf([{a: 1}, {b: 2}, {c: 3}], {c: 3})).to.equal(2);
+        var remove = [{a: 1}, {b: 2}, {c: 3}];
+        BI.deepRemove(remove, {c: 3});
+        expect(remove).to.deep.equal([{a: 1}, {b: 2}]);
+        expect(BI.deepWithout([{a: 1}, {b: 2}, {c: 3}], {c: 3})).to.deep.equal([{a: 1}, {b: 2}]);
+        expect(BI.deepUnique([{c: 3}, {a: 1}, {b: 2}, {c: 3}, {c: 3}])).to.deep.equal([{c: 3}, {a: 1}, {b: 2}]);
+        expect(BI.deepDiff({a: 1, b: 2}, {a: 1, c: 2})).to.deep.equal(["b", "c"]);
+    });
 
+    /**
+     * test_author_windy
+     */
+    it("number", function () {
+        expect(BI.parseSafeInt(9007199254740992)).to.equal(9007199254740991);
+        expect(BI.isNegativeInteger(-3)).to.equal(true);
+        expect(BI.isFloat(1.2)).to.equal(false);
+        expect(BI.isOdd(1)).to.equal(true);
+        expect(BI.isOdd("a")).to.equal(false);
+        expect(BI.isEven("a")).to.equal(false);
+        expect(BI.isEven(2)).to.equal(true);
+        expect(BI.sum([1, 2, 3, 4, 5, 6, 7])).to.equal(28);
+        expect(BI.average([1, 2, 3, 4, 5, 6, 7])).to.equal(4);
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("string", function () {
+        expect(BI.toLowerCase("AAAAA")).to.equal("aaaaa");
+        expect(BI.isLiteral("AAAAA")).to.equal(false);
+        expect(BI.stripQuotes("AAAAA")).to.equal("AAAAA");
+        expect(BI.camelize("background-color")).to.equal("backgroundColor");
+        expect(BI.escape("'\\")).to.equal("\\'\\\\");
+        expect(BI.leftPad("123", 5, "0")).to.equal("00123");
+        var cls = 'my-class', text = 'Some text';
+        expect(BI.format('<div class="{0}">{1}</div>', cls, text)).to.equal('<div class="my-class">Some text</div>');
+    });
 });
