@@ -11,27 +11,69 @@ describe("DateInterval", function () {
      */
     it("DateInterval_defaultValue", function () {
         var dateInterval = BI.Test.createWidget({
+            type: "bi.date_interval"
+        });
+        dateInterval.setValue({
+            start: {
+                type: 1,
+                value: {
+                    year: 2018,
+                    month: 1,
+                    day: 12
+                }
+            },
+            end: {
+                type: 2,
+                value: {
+                    year: -1,
+                    position: 2
+                }
+            }
+        });
+        expect(dateInterval.element.find(".bi-date-trigger .bi-label").text()).to.equal("2018-01-122019-01-01");
+        dateInterval.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("DateInterval_测试报错", function (done) {
+        var testText;
+        var dateInterval = BI.Test.createWidget({
             type: "bi.date_interval",
             value: {
                 start: {
+                    type: 2,
+                    value: {
+                        year: -1,
+                        position: 2
+                    }
+                },
+                end: {
                     type: 1,
                     value: {
                         year: 2018,
                         month: 1,
                         day: 12
                     }
-                },
-                end: {
-                    type: 2,
-                    value: {
-                        year: -1,
-                        position: 2
-                    }
                 }
             },
+            listeners: [{
+                eventName: "EVENT_ERROR",
+                action: function () {
+                    testText = "ERROR";
+                }
+            }]
         });
-        expect(dateInterval.element.find(".bi-date-trigger .bi-label").text()).to.equal("2018-01-122019-01-01");
-        dateInterval.destroy();
+        BI.nextTick(function () {
+            dateInterval.element.find(".first-element .bi-date-trigger .bi-basic-button").click();
+            BI.delay(function () {
+                dateInterval.element.find(".first-element .bi-text-button:contains(确定)").click();
+                expect(testText).to.equal("ERROR");
+                dateInterval.destroy();
+                done();
+            }, 300);
+        })
     });
 
     /**
@@ -97,5 +139,47 @@ describe("DateInterval", function () {
             }
         });
         dateInterval.destroy();
+    });
+
+    /**
+     * test_author_windy
+     */
+    it("TimeInterval_测试报错", function (done) {
+        var testText;
+        var dateInterval = BI.Test.createWidget({
+            type: "bi.time_interval",
+            value: {
+                start: {
+                    type: 2,
+                    value: {
+                        year: -1,
+                        position: 2
+                    }
+                },
+                end: {
+                    type: 1,
+                    value: {
+                        year: 2018,
+                        month: 1,
+                        day: 12
+                    }
+                }
+            },
+            listeners: [{
+                eventName: "EVENT_ERROR",
+                action: function () {
+                    testText = "ERROR";
+                }
+            }]
+        });
+        BI.nextTick(function () {
+            dateInterval.element.find(".first-element .bi-date-time-trigger .bi-basic-button").click();
+            BI.delay(function () {
+                dateInterval.element.find(".first-element .bi-text-button:contains(确定)").click();
+                expect(testText).to.equal("ERROR");
+                dateInterval.destroy();
+                done();
+            }, 300);
+        })
     });
 });
