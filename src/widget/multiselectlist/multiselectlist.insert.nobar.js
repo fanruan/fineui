@@ -52,9 +52,12 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keywords = [self.trigger.getKeyword()];
-                this.setKeyword(op.keywords[0]);
-                o.itemsCreator(op, callback);
+                var keyword = self.trigger.getKeyword();
+                if (BI.isNotEmptyString(keyword)) {
+                    op.keywords = [keyword];
+                    this.setKeyword(op.keywords[0]);
+                    o.itemsCreator(op, callback);
+                }
             },
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
