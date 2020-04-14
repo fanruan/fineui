@@ -21,7 +21,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             iconHeight: 12,
             iconWidth: 12,
             iconCls: "",
-            collapseIconWidth: 16
+            iconWrapperWidth: 16
         });
     },
     _init: function () {
@@ -63,7 +63,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: o.collapseIconWidth,
+            width: o.iconWrapperWidth,
             el: this.checkbox
         }, {
             width: 16,
