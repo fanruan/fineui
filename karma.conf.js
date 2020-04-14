@@ -1,5 +1,10 @@
 // Karma configuration
 // Generated on Mon Nov 27 2017 11:16:26 GMT+0800 (中国标准时间)
+
+const os = require("os");
+
+process.env.CHROME_BIN = require("puppeteer").executablePath();
+
 module.exports = function (config) {
     config.set({
 
@@ -114,10 +119,34 @@ module.exports = function (config) {
         autoWatch: true,
 
 
+        customLaunchers: {
+            HeadlessChrome: {
+                base: "ChromeHeadless",
+                flags: [
+                    "--no-sandbox",
+                    "--remote-debugging-port=9222",
+                    "--enable-logging",
+                    "--user-data-dir=./karma-chrome",
+                    "--v=1",
+                    "--disable-background-timer-throttling",
+                    "--disable-renderer-backgrounding",
+                    "--proxy-bypass-list=*",
+                    "--disable-web-security",
+                    "--disable-gpu",
+                    "--no-sandbox",
+                ],
+            },
+        },
+
+
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        // browsers: [isJenkins ? "Chrome" : "ChromeHeadless"],
-        browsers: ["Chrome"],
+        browsers: [os.platform() === "win32"
+            && parseFloat(os.release()
+                .split(".")
+                .slice(0, 2)
+                .join(".")) <= 6.1
+            ? "HeadlessChrome" : "ChromeHeadless"],
 
         retryLimit: 30,
 
