@@ -55,6 +55,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "postcss-simple-vars": "5.0.2",
+    "puppeteer": "2.1.0",
     "source-map-loader": "0.2.4",
     "style-loader": "0.23.1",
     "typescript": "3.5.2",
