@@ -12,7 +12,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24
+            height: 24,
+            iconWrapperWidth: 16
         });
     },
     _init: function () {
@@ -43,7 +44,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: 16,
+            width: o.iconWrapperWidth,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
