@@ -452,6 +452,6 @@ module.exports = function (grunt) {
         grunt.config.set("connect.options.open", false);
         grunt.task.run(defaultTask);
     });
-    grunt.registerTask("build", ["clean", "less", "cssmin", "concat", "uglify"]);
-    grunt.registerTask("fake-build", ["clean", "less", "cssmin", "concat", "copy"]);
+    grunt.registerTask("build", ["clean", "less", "concat", "cssmin", "uglify"]);
+    grunt.registerTask("fake-build", ["clean", "less", "concat", "cssmin", "copy"]);
 };
