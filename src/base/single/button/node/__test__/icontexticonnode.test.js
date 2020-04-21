@@ -5,6 +5,9 @@
 
 describe("IconTextIconNodeTest", function () {
 
+    /**
+     * test_author_kobi
+     */
     it("setText", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node"
@@ -14,6 +17,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getText", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node",
@@ -23,6 +29,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("setValue", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node"
@@ -32,6 +41,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("readonly下的setValue", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node",
@@ -43,6 +55,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getValue", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node",
@@ -52,6 +67,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("doRedMark和unRedMark", function () {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node",
@@ -64,6 +82,9 @@ describe("IconTextIconNodeTest", function () {
         iconTextIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("Click点击触发事件", function (done) {
         var iconTextIconNode = BI.Test.createWidget({
             type: "bi.icon_text_icon_node",

@@ -5,6 +5,9 @@
 
 describe("TextIconNodeTest", function () {
 
+    /**
+     * test_author_kobi
+     */
     it("setText", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node"
@@ -14,6 +17,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getText", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node",
@@ -23,6 +29,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("setValue", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node"
@@ -32,6 +41,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("readonly下的setValue", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node",
@@ -43,6 +55,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getValue", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node",
@@ -52,6 +67,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("doRedMark和unRedMark", function () {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node",
@@ -64,6 +82,9 @@ describe("TextIconNodeTest", function () {
         textIconNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("Click点击触发事件", function (done) {
         var textIconNode = BI.Test.createWidget({
             type: "bi.text_icon_node",

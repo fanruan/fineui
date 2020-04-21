@@ -5,6 +5,9 @@
 
 describe("TextNodeTest", function () {
 
+    /**
+     * test_author_kobi
+     */
     it("setText", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node"
@@ -14,6 +17,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getText", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node",
@@ -24,6 +30,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("setValue", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node"
@@ -33,6 +42,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("readonly下的setValue", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node",
@@ -44,6 +56,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("getValue", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node",
@@ -53,6 +68,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("doRedMark和unRedMark", function () {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node",
@@ -65,6 +83,9 @@ describe("TextNodeTest", function () {
         textNode.destroy();
     });
 
+    /**
+     * test_author_kobi
+     */
     it("Click点击触发事件", function (done) {
         var textNode = BI.Test.createWidget({
             type: "bi.text_node",
