@@ -140,6 +140,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                     delete pNode[name];
                 }
             }
+            this.options.paras.selectedValues = this._getJoinValue();
         }
         BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
