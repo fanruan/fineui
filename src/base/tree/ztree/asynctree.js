@@ -204,7 +204,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 if (BI.isNull(compare[n])) {
                     self._addTreeNode(map, parent, n, item);
                 } else if (BI.isEmpty(compare[n])) {
-                    self._addTreeNode(map, parent, n, item);
+                    self._addTreeNode(map, parent, n, {});
                 } else {
                     track(parent.concat([n]), node[n], compare[n]);
                 }
