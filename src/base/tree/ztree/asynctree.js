@@ -140,6 +140,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                     delete pNode[name];
                 }
             }
+            this.options.paras.selectedValues = this._getJoinValue();
         }
         BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
@@ -204,7 +205,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 if (BI.isNull(compare[n])) {
                     self._addTreeNode(map, parent, n, item);
                 } else if (BI.isEmpty(compare[n])) {
-                    self._addTreeNode(map, parent, n, {});
+                    self._addTreeNode(map, parent, n, item);
                 } else {
                     track(parent.concat([n]), node[n], compare[n]);
                 }
