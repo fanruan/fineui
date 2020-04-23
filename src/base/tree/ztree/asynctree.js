@@ -11,9 +11,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     _init: function () {
         BI.AsyncTree.superclass._init.apply(this, arguments);
         var self = this;
-        this.service = new BI.TreeRenderService({
-            id: this.id,
-            container: this.element,
+        this.service = new BI.TreeRenderPageService({
             subNodeListGetter: function (tId) {
                 // 获取待检测的子节点列表, ztree并没有获取节点列表dom的API, 此处使用BI.$获取
                 return BI.$("#" + self.id + " #" + tId + "_ul");
@@ -156,13 +154,12 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function callback(nodes, hasNext) {
+            self.nodes.addNodes(treeNode, nodes);
             if (hasNext) {
                 self.service.pushNodeList(treeNode.tId, getNodes);
             } else {
                 self.service.removeNodeList(treeNode.tId);
             }
-            // console.log("add nodes");
-            self.nodes.addNodes(treeNode, nodes);
 
         }
 
