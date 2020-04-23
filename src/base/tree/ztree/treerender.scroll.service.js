@@ -2,10 +2,11 @@
  * @author windy
  * @version 2.0
  * Created by windy on 2020/1/8
+ * 提供节点滚动加载方式
  */
 
 !(function () {
-    BI.TreeRenderService = BI.inherit(BI.OB, {
+    BI.TreeRenderScrollService = BI.inherit(BI.OB, {
         _init: function () {
             this.nodeLists = {};
 
