@@ -31,7 +31,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
+            cls: "single-select-toolbar",
             height: this.constants.height
         });
 
