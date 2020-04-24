@@ -22,7 +22,16 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
+            if (BI.isKey(self._startValue)) {
+                if (self.storeValue.type === BI.Selection.All) {
+                    BI.remove(self.storeValue.value, self._startValue);
+                    self.storeValue.assist = self.storeValue.assist || [];
+                    self.storeValue.assist.pushDistinct(self._startValue);
+                } else {
+                    BI.pushDistinct(self.storeValue.value, self._startValue);
+                    BI.remove(self.storeValue.assist, self._startValue);
+                }
+            }
             self.trigger.getSearcher().setState(self.storeValue);
             self.numberCounter.setButtonChecked(self.storeValue);
         };
