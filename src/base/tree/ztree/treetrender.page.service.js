@@ -56,8 +56,8 @@
         },
 
         removeNodeList: function (tId) {
-            this.nodeLists[tId].loadWidget.destroy();
-            this.nodeLists[tId].loadWidget = null;
+            this.nodeLists[tId] && this.nodeLists[tId].loadWidget.destroy();
+            this.nodeLists[tId] && (this.nodeLists[tId].loadWidget = null);
             delete this.nodeLists[tId];
             if (BI.size(this.nodeLists) === 0) {
                 this.clear();
