@@ -21,7 +21,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
             isAutoSearch: true, // 是否自动搜索
             isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            allowSearchBlank: false, // 是否能够搜索包含空格的字符串
+            allowSearchBlank: true, // 是否能够搜索包含空格的字符串
 
             // isAutoSearch为false时启用
             onSearch: function (op, callback) {
