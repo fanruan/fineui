@@ -42,6 +42,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,

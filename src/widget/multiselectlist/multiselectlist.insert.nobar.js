@@ -81,6 +81,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
