@@ -190,4 +190,49 @@ describe("value_chooser_insert_combo", function () {
             }, 300);
         });
     });
+
+    /**
+     *   test_author_windy
+     **/
+    it("BI-64399", function (done) {
+        var widget = BI.Test.createWidget({
+            type: "bi.value_chooser_insert_combo",
+            width: 220,
+            itemsCreator: function (op, callback) {
+                callback([{
+                    text: "A",
+                    value: "A",
+                    title: "A"
+                }, {
+                    text: "AA",
+                    value: "AA",
+                    title: "AA"
+                }, {
+                    text: "a1",
+                    value: "a1",
+                    title: "a1"
+                }]);
+            }
+        });
+
+        widget.element.find(".bi-multi-select-trigger").click();
+        // 为什么要delay 300呢，因为按钮有debounce
+        BI.delay(function () {
+            // 点选a1
+            BI.each(itemSelectorGetter([3]), function (idx, selector) {
+                widget.element.find(selector).click();
+            });
+            widget.element.find(".bi-multi-select-trigger .tip-text-style").click();
+            // 这边为啥要加呢，因为input的setValue中有nextTick
+            BI.nextTick(function () {
+                BI.Test.triggerKeyDown(widget.element.find(".bi-multi-select-trigger .bi-input"), "A", 65, function () {
+                    BI.nextTick(function () {
+                        expect(widget.element.find(".bi-multi-select-search-pane .multi-select-toolbar").css("display")).to.equal("block");
+                        widget.destroy();
+                        done();
+                    });
+                });
+            });
+        }, 300);
+    });
 });
