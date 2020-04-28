@@ -76,9 +76,6 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_START);
         });
         this.searcher.on(BI.Searcher.EVENT_PAUSE, function () {
-            if (this.hasMatched()) {
-
-            }
             self.fireEvent(BI.MultiTreeSearcher.EVENT_PAUSE);
         });
         this.searcher.on(BI.Searcher.EVENT_STOP, function () {
