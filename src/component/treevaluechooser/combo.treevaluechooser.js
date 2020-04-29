@@ -64,6 +64,11 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 action: function () {
                     self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
                 }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         });
     },
@@ -82,6 +87,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
     }
 });
 
+BI.TreeValueChooserCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.TreeValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.TreeValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
