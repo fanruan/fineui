@@ -99,7 +99,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 value: o.value,
                 maxHeight: 400,
                 minHeight: 240
-            }
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
         };
     },
 
@@ -211,4 +217,5 @@ BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);

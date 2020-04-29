@@ -224,7 +224,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             self.combo.setValue(self.storeValue);
             self.numberCounter.setValue(self.storeValue);
             self.populate();
-
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_BEFORE_POPUPVIEW);
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             if (isSearching()) {
@@ -372,5 +372,6 @@ BI.MultiTreeListCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeListCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiTreeListCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiTreeListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);

@@ -65,6 +65,11 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
                 action: function () {
                     self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
                 }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         });
     },
@@ -89,4 +94,5 @@ BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ListTreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);

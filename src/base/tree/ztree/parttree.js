@@ -42,7 +42,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this.options.paras.selectedValues = this._getJoinValue();
+            this.options.paras.selectedValues = this._getUnionValue();
             // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
@@ -153,6 +153,41 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
 
     getValue: function () {
         return BI.deepClone(this.options.paras.selectedValues || {});
+    },
+
+    _getUnionValue: function () {
+        if (!this.nodes) {
+            return {};
+        }
+        var checkedValues = this._getSelectedValues();
+        if (BI.isEmpty(checkedValues)) {
+            return BI.deepClone(this.options.paras.selectedValues);
+        }
+        if (BI.isEmpty(this.options.paras.selectedValues)) {
+            return checkedValues;
+        }
+        return this._union(checkedValues, this.options.paras.selectedValues);
+    },
+
+    _union: function (valueA, valueB) {
+        var self = this;
+        var map = {};
+        track([], valueA, valueB);
+        track([], valueB, valueA);
+
+        function track (parent, node, compare) {
+            BI.each(node, function (n, item) {
+                if (BI.isNull(compare[n])) {
+                    self._addTreeNode(map, parent, n, item);
+                } else if (BI.isEmpty(compare[n])) {
+                    self._addTreeNode(map, parent, n, {});
+                } else {
+                    track(parent.concat([n]), node[n], compare[n]);
+                }
+            });
+        }
+
+        return map;
     },
 
     // 生成树方法
