@@ -90,6 +90,10 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     self._showAdapter();
+                    // BI-64732 pause 和stop一致, 都应该刷新adapter
+                    BI.nextTick(function () {
+                        self.adapter.populate();
+                    });
                 }
             }]
         });
