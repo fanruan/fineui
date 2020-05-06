@@ -33,6 +33,7 @@ import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Layout } from "./core/wrapper/layout";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -76,6 +77,7 @@ export interface BI extends _func, _i18n, _base {
     Layout: ClassConstructor<_Layout>;
     HTapeLayout: ClassConstructor<_HTapeLayout>;
     VTapeLayout: ClassConstructor<_VTapeLayout>;
+    AbstractTreeValueChooser: ClassConstructor<_AbstractTreeValueChooser>;
     Decorators: typeof decorator;
 }
 
