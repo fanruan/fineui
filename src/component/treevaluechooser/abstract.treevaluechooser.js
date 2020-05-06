@@ -151,23 +151,25 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var p = parentValues.concat(notSelectedValue);
             // 存储的值中存在这个值就把它删掉
             // 例如选中了中国-江苏-南京， 取消中国或江苏或南京
+            // p长度不大于selectedValues的情况才可能找到，这样可以直接删除selectedValues的节点
             if (canFindKey(selectedValues, p)) {
                 // 如果搜索的值在父亲链中
                 if (isSearchValueInParent(p)) {
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消中国
+                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏(干掉了江苏)
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
+                    // 要找到所有以notSelectedValue为叶子节点的链路
                     var find = search(parentValues, notSelectedValue, [], searched);
                     if (find && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
-                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国
+                                // 例如选中了 中国-江苏， 搜索江苏， 取消中国（实际上只想删除中国-江苏，因为搜的是江苏）
+                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 self._deleteNode(selectedValues, arr);
                             } else {
-                                // 例如选中了 中国-江苏，搜索南京，取消中国
+                                // 例如选中了 中国-江苏，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 expandSelectedValue(selectedValues, arr, BI.last(arr));
                             }
                         });
@@ -429,13 +431,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var isCurAllSelected = isAllSelect || isAllSelected(parentValues, current);
             BI.each(children, function (i, child) {
                 var state = nodeSearch(deep + 1, newParents, child.value, isCurAllSelected, result);
+                // 当前节点的子节点是否选中，并不确定全选还是半选
                 if (state[1] === true) {
                     checked = true;
                 }
+                // 当前节点的子节点要不要加入到结果集中
                 if (state[0] === true) {
                     can = true;
                 }
             });
+            // 子节点匹配, 补充父节点
             if (can === true) {
                 checked = isCurAllSelected || (isSelected(parentValues, current) && checked);
                 createOneJson(parentValues, current, true, checked, false, false, result);
@@ -636,8 +641,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 }
             }
             var check;
+            // 展开的节点checked为false 且没有明确得出当前子节点是半选或者全选, 则check状态取决于valueMap
             if (!checked && !halfCheck && !tempCheck) {
-                // 当节点自身是不选的，且通过selectedValues没有得到全选, 则check状态取决于valueMap
                 check = BI.has(valueMap, current);
             } else {
                 // 不是上面那种情况就先看在节点没有带有明确半选的时候，通过节点自身的checked和valueMap的状态能都得到选中信息
