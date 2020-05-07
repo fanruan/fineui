@@ -401,7 +401,7 @@
         return handler;
     };
 
-    BI.File = BI.inherit(BI.Single, {
+    BI.File = BI.inherit(BI.Widget, {
         _defaultConfig: function () {
             var conf = BI.File.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
