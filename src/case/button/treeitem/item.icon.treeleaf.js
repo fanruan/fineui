@@ -75,14 +75,6 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 
     getPId: function () {
         return this.options.pId;
-    },
-
-    doClick: function () {
-        BI.IconTreeLeafItem.superclass.doClick.apply(this, arguments);
-    },
-
-    setSelected: function (v) {
-        BI.IconTreeLeafItem.superclass.setSelected.apply(this, arguments);
     }
 });
 
