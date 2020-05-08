@@ -13,10 +13,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
     },
     _init: function () {
         BI.MidTreeLeafItem.superclass._init.apply(this, arguments);
-        var self = this, o = this.options;
-        this.checkbox = BI.createWidget({
-            type: "bi.checkbox"
-        });
+        var o = this.options;
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
@@ -28,12 +25,6 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py,
             keyword: o.keyword
-        });
-        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
-            if (type === BI.Events.CLICK) {
-                self.setSelected(self.isSelected());
-            }
-            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
@@ -84,16 +75,6 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 
     getPId: function () {
         return this.options.pId;
-    },
-
-    doClick: function () {
-        BI.MidTreeLeafItem.superclass.doClick.apply(this, arguments);
-        this.checkbox.setSelected(this.isSelected());
-    },
-
-    setSelected: function (v) {
-        BI.MidTreeLeafItem.superclass.setSelected.apply(this, arguments);
-        this.checkbox.setSelected(v);
     }
 });
 
