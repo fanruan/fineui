@@ -176,6 +176,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 action: function () {
                     self.trigger.stopEditing();
                 }
+            }, {
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         }
     },
