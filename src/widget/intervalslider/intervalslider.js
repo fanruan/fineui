@@ -397,7 +397,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     // 其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    // 端点处的值有可能因为min,max相差量级很大(precision很大)而丢失精度，此时直接返回端点值即可
     _getValueByPercent: function (percent) {// return (((max-min)*percent)/100+min)
+        if (percent === 0) {
+            return this.min;
+        }
+        if (percent === 100) {
+            return this.max;
+        }
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
