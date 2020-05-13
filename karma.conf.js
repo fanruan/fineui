@@ -66,6 +66,12 @@ module.exports = function (config) {
             "src/base/tree/ztree/jquery.ztree.core-3.5.js",
             "src/base/tree/ztree/jquery.ztree.excheck-3.5.js",
             "src/base/single/input/file.js",
+            "src/case/loading/loading_pane.js",
+            "src/base/tree/ztree/**/*.js",
+            "src/case/tree/ztree/*.js",
+            "src/widget/multitree/**/*.js",
+            "src/widget/multiselecttree/**/*.js",
+            "src/component/treevaluechooser/*.js"
         ],
 
 
