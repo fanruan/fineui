@@ -1,7 +1,7 @@
 @font-face {
   font-family: "fineui";
-  src: url('https://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot');
-  src: url('https://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('https://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('https://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('https://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.svg#svgFontName') format('svg');
+  src: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot');
+  src: url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.woff') format('woff'), /* chrome、firefox */ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('http://fine-design-storage.oss-cn-shanghai.aliyuncs.com/fineui/2.0/font/iconfont.svg#svgFontName') format('svg');
   /*  iOS 4.1- */
 }
 .b-font {

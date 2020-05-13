@@ -33,8 +33,6 @@ import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Layout } from "./core/wrapper/layout";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
-import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
-import { _AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -75,8 +73,6 @@ export interface BI extends _func, _i18n, _base {
     Layout: ClassConstructor<_Layout>;
     HTapeLayout: ClassConstructor<_HTapeLayout>;
     VTapeLayout: ClassConstructor<_VTapeLayout>;
-    AbstractTreeValueChooser: ClassConstructor<_AbstractTreeValueChooser>;
-    AbstractListTreeValueChooser: ClassConstructor<_AbstractListTreeValueChooser>;
     Decorators: typeof decorator;
 }
 declare const _default: {

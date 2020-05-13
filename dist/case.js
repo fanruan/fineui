@@ -426,8 +426,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             id: "",
             pId: "",
             open: false,
-            height: 24,
-            iconWrapperWidth: 16
+            height: 24
         });
     },
     _init: function () {
@@ -458,7 +457,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: o.iconWrapperWidth,
+            width: 16,
             el: this.checkbox
         }, this.text);
         BI.createWidget(BI.extend({
@@ -595,8 +594,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             height: 24,
             iconHeight: 12,
             iconWidth: 12,
-            iconCls: "",
-            iconWrapperWidth: 16
+            iconCls: ""
         });
     },
     _init: function () {
@@ -638,7 +636,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
-            width: o.iconWrapperWidth,
+            width: 16,
             el: this.checkbox
         }, {
             width: 16,
@@ -1061,7 +1059,10 @@ BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicBu
     },
     _init: function () {
         BI.FirstTreeLeafItem.superclass._init.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
+        this.checkbox = BI.createWidget({
+            type: "bi.checkbox"
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
@@ -1073,6 +1074,12 @@ BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicBu
             value: o.value,
             py: o.py,
             keyword: o.keyword
+        });
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
+                self.setSelected(self.isSelected());
+            }
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
@@ -1123,6 +1130,16 @@ BI.shortcut("bi.switch", BI.Switch);BI.FirstTreeLeafItem = BI.inherit(BI.BasicBu
 
     getPId: function () {
         return this.options.pId;
+    },
+
+    doClick: function () {
+        BI.FirstTreeLeafItem.superclass.doClick.apply(this, arguments);
+        this.checkbox.setSelected(this.isSelected());
+    },
+
+    setSelected: function (v) {
+        BI.FirstTreeLeafItem.superclass.setSelected.apply(this, arguments);
+        this.checkbox.setSelected(v);
     }
 });
 
@@ -1203,6 +1220,14 @@ BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);BI.IconTreeLeafItem
 
     getPId: function () {
         return this.options.pId;
+    },
+
+    doClick: function () {
+        BI.IconTreeLeafItem.superclass.doClick.apply(this, arguments);
+    },
+
+    setSelected: function (v) {
+        BI.IconTreeLeafItem.superclass.setSelected.apply(this, arguments);
     }
 });
 
@@ -1221,7 +1246,10 @@ BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem =
     },
     _init: function () {
         BI.LastTreeLeafItem.superclass._init.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
+        this.checkbox = BI.createWidget({
+            type: "bi.checkbox"
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
@@ -1233,6 +1261,12 @@ BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem =
             value: o.value,
             py: o.py,
             keyword: o.keyword
+        });
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
+                self.setSelected(self.isSelected());
+            }
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
@@ -1283,6 +1317,16 @@ BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);BI.LastTreeLeafItem =
 
     getPId: function () {
         return this.options.pId;
+    },
+
+    doClick: function () {
+        BI.LastTreeLeafItem.superclass.doClick.apply(this, arguments);
+        //    this.checkbox.setSelected(this.isSelected());
+    },
+
+    setSelected: function (v) {
+        BI.LastTreeLeafItem.superclass.setSelected.apply(this, arguments);
+        //    this.checkbox.setSelected(v);
     }
 });
 
@@ -1301,7 +1345,10 @@ BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = 
     },
     _init: function () {
         BI.MidTreeLeafItem.superclass._init.apply(this, arguments);
-        var o = this.options;
+        var self = this, o = this.options;
+        this.checkbox = BI.createWidget({
+            type: "bi.checkbox"
+        });
         this.text = BI.createWidget({
             type: "bi.label",
             textAlign: "left",
@@ -1313,6 +1360,12 @@ BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = 
             value: o.value,
             py: o.py,
             keyword: o.keyword
+        });
+        this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
+            if (type === BI.Events.CLICK) {
+                self.setSelected(self.isSelected());
+            }
+            self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, ((o.layer === 0) ? "" : {
@@ -1363,6 +1416,16 @@ BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);BI.MidTreeLeafItem = 
 
     getPId: function () {
         return this.options.pId;
+    },
+
+    doClick: function () {
+        BI.MidTreeLeafItem.superclass.doClick.apply(this, arguments);
+        this.checkbox.setSelected(this.isSelected());
+    },
+
+    setSelected: function (v) {
+        BI.MidTreeLeafItem.superclass.setSelected.apply(this, arguments);
+        this.checkbox.setSelected(v);
     }
 });
 
@@ -7332,8 +7395,7 @@ BI.LazyLoader = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.LazyLoader.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-lazy-loader",
-            el: {},
-            items: []
+            el: {}
         });
     },
 
@@ -8465,7 +8527,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
                 return BI.extend({
                     disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
                 }, next);
-
+                
             }()));
         }
 
@@ -8541,7 +8603,7 @@ BI.DetailPager = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        v = v || 0;
+        v = v | 0;
         v = v < 1 ? 1 : v;
         if (o.pages === false) {
             var lastPage = BI.result(o, "lastPage"), firstPage = 1;

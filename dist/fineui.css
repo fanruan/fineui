@@ -2355,7 +2355,7 @@ textarea {
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/half_selected.png') no-repeat center center;
+  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
@@ -2385,7 +2385,7 @@ textarea {
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/half_selected.png') no-repeat center center;
+  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;
@@ -3653,9 +3653,6 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   line-height: 21px;
   border: none;
 }
-.bi-textarea-editor .textarea-watermark {
-  max-height: 100%;
-}
 .bi-html article,
 .bi-html aside,
 .bi-html details,
@@ -4074,7 +4071,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   /*IE8*/
   box-sizing: border-box;
   /*W3C标准(IE9+，Safari5.1+,Chrome10.0+,Opera10.6+都符合box-sizing的w3c标准语法)*/
-  word-break: break-all;
+  word-break: break-word;
 }
 .bi-bubble .bubble-text {
   -webkit-border-radius: 2px;
@@ -4195,7 +4192,7 @@ body .bi-button.button-ignore.disabled.ghost .b-font:before,
   list-style: none;
   line-height: 14px;
   text-align: left;
-  white-space: pre;
+  white-space: nowrap;
   outline: 0;
 }
 .ztree li ul {
@@ -4739,9 +4736,6 @@ ul.ztree.zTreeDragUL {
 .bi-search-multi-text-value-combo.combo-error .bi-multi-select-searcher .tip-text-style {
   color: #e65251;
 }
-.bi-single-select-search-pane .single-select-toolbar {
-  color: #faaa39;
-}
 .bi-single-select-combo .single-select-trigger-icon-button {
   font-size: 16px;
 }
@@ -4980,7 +4974,7 @@ ul.ztree.zTreeDragUL {
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('resources?path=/com/fr/web/ui/images/2x/icon/half_selected.png') no-repeat center center;
+  background: url('resources?path=/com/fr/web/ui/images/2x/icon/check_box_normal.png') no-repeat center center;
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
@@ -5010,7 +5004,7 @@ ul.ztree.zTreeDragUL {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;
+  background: url('resources?path=/com/fr/web/ui/images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('resources?path=/com/fr/web/ui/images/1x/icon/half_selected.png') no-repeat center center;

@@ -9088,17 +9088,7 @@ BI.shortcut("demo.preview", Demo.Preview);Demo.West = BI.inherit(BI.Widget, {
                     },
                     onSearch: function (op, callback) {
                         var result = BI.Func.getSearchResult(Demo.CONFIG, op.keyword, "text");
-                        var items = BI.concat(result.match, result.find);
-                        var children = [];
-                        BI.each(items, function (index, item) {
-                            var childList = BI.Func.getSearchResult(Demo.CONFIG, item.id, "pId");
-                            BI.each(childList.match, function (index, child) {
-                                if (child.value) {
-                                    children.push(child);
-                                }
-                            });
-                        });
-                        items = BI.concat(items, children);
+                        var items = result.match.concat(result.find);
                         callback(items);
                     }
                 }],

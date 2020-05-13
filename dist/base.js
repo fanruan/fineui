@@ -590,7 +590,7 @@ BI.Text = BI.inherit(BI.Single, {
         }
         this.element.css({
             textAlign: o.textAlign,
-            whiteSpace: this._getTextWrap(),
+            whiteSpace: o.whiteSpace,
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
             overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
@@ -622,17 +622,6 @@ BI.Text = BI.inherit(BI.Single, {
         }
         if (o.highLight) {
             this.doHighLight();
-        }
-    },
-
-    _getTextWrap: function () {
-        var o = this.options;
-        switch (o.whiteSpace) {
-            case "nowrap":
-                return "pre";
-            case "normal":
-            default:
-                return "pre-wrap";
         }
     },
 
@@ -682,8 +671,12 @@ BI.Text = BI.inherit(BI.Single, {
             this.text.element.html(BI.htmlEncode(this._getShowText()));
             return;
         }
-        //  textContent性能更好,并且原生防xss
-        this.text.element[0].textContent = this._getShowText();
+        if (/\s/.test(text)) {
+            this.text.element[0].innerHTML = BI.htmlEncode(this._getShowText());
+        } else {
+            //  textContent性能更好,并且原生防xss
+            this.text.element[0].textContent = this._getShowText();
+        }
         BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
     }
 });
@@ -2237,7 +2230,9 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
     _init: function () {
         BI.AsyncTree.superclass._init.apply(this, arguments);
         var self = this;
-        this.service = new BI.TreeRenderPageService({
+        this.service = new BI.TreeRenderService({
+            id: this.id,
+            container: this.element,
             subNodeListGetter: function (tId) {
                 // 获取待检测的子节点列表, ztree并没有获取节点列表dom的API, 此处使用BI.$获取
                 return BI.$("#" + self.id + " #" + tId + "_ul");
@@ -2300,8 +2295,10 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 // 所有的半选状态都需要取消halfCheck=true的情况
                 function track (children) {
                     BI.each(children, function (i, ch) {
-                        ch.halfCheck = false;
-                        track(ch.children);
+                        if (ch.halfCheck === true) {
+                            ch.halfCheck = false;
+                            track(ch.children);
+                        }
                     });
                 }
 
@@ -2362,7 +2359,6 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                     delete pNode[name];
                 }
             }
-            this.options.paras.selectedValues = this._getJoinValue();
         }
         BI.AsyncTree.superclass._selectTreeNode.apply(self, arguments);
     },
@@ -2378,12 +2374,13 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         };
 
         function callback(nodes, hasNext) {
-            self.nodes.addNodes(treeNode, nodes);
             if (hasNext) {
                 self.service.pushNodeList(treeNode.tId, getNodes);
             } else {
                 self.service.removeNodeList(treeNode.tId);
             }
+            // console.log("add nodes");
+            self.nodes.addNodes(treeNode, nodes);
 
         }
 
@@ -2512,7 +2509,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         var parentValues = BI.deepClone(treeNode.parentValues || self._getParentValues(treeNode));
         var name = this._getNodeValue(treeNode);
         if (treeNode.checked === true) {
-            this.options.paras.selectedValues = this._getUnionValue();
+            this.options.paras.selectedValues = this._getJoinValue();
             // this._buildTree(self.options.paras.selectedValues, BI.concat(parentValues, name));
             o.itemsCreator(BI.extend({}, o.paras, {
                 type: BI.TreeView.REQ_TYPE_ADJUST_DATA,
@@ -2625,41 +2622,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         return BI.deepClone(this.options.paras.selectedValues || {});
     },
 
-    _getUnionValue: function () {
-        if (!this.nodes) {
-            return {};
-        }
-        var checkedValues = this._getSelectedValues();
-        if (BI.isEmpty(checkedValues)) {
-            return BI.deepClone(this.options.paras.selectedValues);
-        }
-        if (BI.isEmpty(this.options.paras.selectedValues)) {
-            return checkedValues;
-        }
-        return this._union(checkedValues, this.options.paras.selectedValues);
-    },
-
-    _union: function (valueA, valueB) {
-        var self = this;
-        var map = {};
-        track([], valueA, valueB);
-        track([], valueB, valueA);
-
-        function track (parent, node, compare) {
-            BI.each(node, function (n, item) {
-                if (BI.isNull(compare[n])) {
-                    self._addTreeNode(map, parent, n, item);
-                } else if (BI.isEmpty(compare[n])) {
-                    self._addTreeNode(map, parent, n, {});
-                } else {
-                    track(parent.concat([n]), node[n], compare[n]);
-                }
-            });
-        }
-
-        return map;
-    },
-
     // 生成树方法
     stroke: function (config) {
         var o = this.options;
@@ -2685,9 +2647,7 @@ BI.ListTreeView = BI.inherit(BI.TreeView, {
     },
 
     _defaultConfig: function () {
-        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {
-            value: {}
-        });
+        return BI.extend(BI.ListTreeView.superclass._defaultConfig.apply(this, arguments), {});
     },
     _init: function () {
         BI.ListTreeView.superclass._init.apply(this, arguments);
@@ -4856,7 +4816,6 @@ BI.Searcher = BI.inherit(BI.Widget, {
             isAutoSearch: true, // 是否自动搜索
             isAutoSync: true, // 是否自动同步数据, 即是否保持搜索面板和adapter面板状态值的统一
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
-            allowSearchBlank: true, // 是否能够搜索包含空格的字符串
 
             // isAutoSearch为false时启用
             onSearch: function (op, callback) {
@@ -5000,7 +4959,7 @@ BI.Searcher = BI.inherit(BI.Widget, {
     },
 
     _search: function () {
-        var self = this, o = this.options, keyword = o.allowSearchBlank ? this.editor.getValue() : this._getLastSearchKeyword();
+        var self = this, o = this.options, keyword = this._getLastSearchKeyword();
         if (keyword === "" || this._stop) {
             return;
         }
@@ -7065,7 +7024,7 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         if (items && this.options.items !== items) {
             this.restore();
         }
-        this._populate(items);
+        this._populate();
     },
 
     destroyed: function () {
@@ -7244,7 +7203,7 @@ BI.Pager = BI.inherit(BI.Widget, {
                 return BI.extend({
                     disabled: pages === false ? o.hasNext(curr) === false : !(curr !== pages && next || dict.flow)
                 }, next);
-
+                
             }()));
         }
 
@@ -7320,7 +7279,7 @@ BI.Pager = BI.inherit(BI.Widget, {
 
     setValue: function (v) {
         var o = this.options;
-        v = v || 0;
+        v = v | 0;
         v = v < 1 ? 1 : v;
         if (o.pages === false) {
             var lastPage = BI.result(o, "lastPage"), firstPage = 1;
@@ -7773,7 +7732,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             hgap: 0,
             lgap: 0,
             rgap: 0,
-            vgap: 0,
             text: "",
             py: ""
         });
@@ -7792,7 +7750,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             width: o.width,
             height: o.height,
             hgap: o.hgap,
-            vgap: o.vgap,
             lgap: o.lgap,
             rgap: o.rgap,
             text: o.text,
@@ -9458,7 +9415,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 left: 4,
                 right: 4,
                 top: 4,
-                bottom: 4
+                bottom: 8
             }]
         });
 
@@ -9506,14 +9463,12 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark cursor-default textarea-watermark",
+                        cls: "bi-water-mark cursor-default",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: o.watermark,
                         invalid: o.invalid,
-                        disabled: o.disabled,
-                        hgap: 4,
-                        vgap: 4
+                        disabled: o.disabled
                     });
                     this.watermark.on(BI.TextButton.EVENT_CHANGE, function () {
                         self.focus();
@@ -9523,8 +9478,8 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                         element: this,
                         items: [{
                             el: this.watermark,
-                            left: 0,
-                            top: 0,
+                            left: 4,
+                            top: 4,
                             right: 0
                         }]
                     });
@@ -10294,7 +10249,7 @@ BI.shortcut("bi.checkbox", BI.Checkbox);/**
         return handler;
     };
 
-    BI.File = BI.inherit(BI.Widget, {
+    BI.File = BI.inherit(BI.Single, {
         _defaultConfig: function () {
             var conf = BI.File.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
@@ -11272,7 +11227,6 @@ BI.AbstractLabel = BI.inherit(BI.Single, {
         BI.createWidget({
             type: adaptLayout,
             element: this,
-            scrollable: o.whiteSpace === "normal",
             items: [this.text]
         });
     },
@@ -14261,11 +14215,10 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
  * @author windy
  * @version 2.0
  * Created by windy on 2020/1/8
- * 提供节点滚动加载方式
  */
 
 !(function () {
-    BI.TreeRenderScrollService = BI.inherit(BI.OB, {
+    BI.TreeRenderService = BI.inherit(BI.OB, {
         _init: function () {
             this.nodeLists = {};
 
@@ -14380,80 +14333,5 @@ BI.shortcut("bi.custom_tree", BI.CustomTree);/*
             this.hasBinded = false;
         }
     });
-})();/**
- * @author windy
- * @version 2.0
- * Created by windy on 2020/1/8
- * 提供节点分页加载方式
- */
-
-!(function () {
-    BI.TreeRenderPageService = BI.inherit(BI.OB, {
-        _init: function () {
-            this.nodeLists = {};
-        },
-
-        _getLoadingBar: function(tId) {
-            var self = this;
-            var tip = BI.createWidget({
-                type: "bi.loading_bar",
-                height: 25,
-                handler: function () {
-                    self.refreshNodes(tId);
-                }
-            });
-            tip.setLoaded();
-            return tip;
-        },
-
-        pushNodeList: function (tId, populate) {
-            var self = this, o = this.options;
-            var tip = this._getLoadingBar(tId);
-            if (!BI.has(this.nodeLists, tId)) {
-                this.nodeLists[tId] = {
-                    populate: BI.debounce(populate, 0),
-                    options: {
-                        times: 1
-                    },
-                    loadWidget: tip
-                };
-            } else {
-                this.nodeLists[tId].loadWidget.destroy();
-                this.nodeLists[tId].loadWidget = tip;
-            }
-            BI.createWidget({
-                type: "bi.vertical",
-                element: o.subNodeListGetter(tId),
-                items: [tip]
-            });
-        },
-
-        refreshNodes: function (tId) {
-            var nodeList = this.nodeLists[tId];
-            nodeList.options.times++;
-            nodeList.loadWidget.setLoading();
-            nodeList.populate({
-                times: nodeList.options.times
-            });
-        },
-
-        removeNodeList: function (tId) {
-            this.nodeLists[tId] && this.nodeLists[tId].loadWidget.destroy();
-            this.nodeLists[tId] && (this.nodeLists[tId].loadWidget = null);
-            delete this.nodeLists[tId];
-            if (BI.size(this.nodeLists) === 0) {
-                this.clear();
-            }
-        },
-
-        clear: function () {
-            var self = this;
-            BI.each(this.nodeLists, function (tId) {
-                self.removeNodeList(tId);
-            });
-            this.nodeLists = {};
-        }
-    });
-
 })();
 //# sourceMappingURL=base.js.map
