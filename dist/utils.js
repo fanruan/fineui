@@ -11062,6 +11062,7 @@ if (!_global.BI) {
             if (!this.deepContains(is, v)) {
                 throw new Error(v + " error");
             }
+            return true;
         },
 
         warn: function (message) {
@@ -11985,7 +11986,7 @@ if (!_global.BI) {
          * 对字符串做替换的函数
          *
          *      var cls = 'my-class', text = 'Some text';
-         *      var res = BI.format('<div class="{0}>{1}</div>"', cls, text);
+         *      var res = BI.format('<div class="{0}">{1}</div>', cls, text);
          *      //res的值为：'<div class="my-class">Some text</div>';
          *
          * @static
@@ -12907,11 +12908,10 @@ if (!_global.BI) {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;",
-        " ": "&nbsp;"
+        ">": "&gt;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
@@ -16937,7 +16937,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         36228: "QJ",
         36426: "XQ",
         36466: "DC",
-        36710: "JC",
+        36710: "CJ",
         36711: "ZYG",
         36767: "PB",
         36866: "SK",
