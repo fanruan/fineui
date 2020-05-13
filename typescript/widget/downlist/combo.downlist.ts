@@ -1,4 +1,4 @@
-import { _Widget } from "typescript/core/widget";
+import { _Widget } from "../../core/widget";
 
 export interface _DownListCombo extends _Widget {
     hideView: () => void;
