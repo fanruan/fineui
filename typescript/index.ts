@@ -3,6 +3,7 @@ import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base
 import { _Tab, _TabStatic } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic } from "./base/single/button/button.basic";
+import { _NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
 import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
@@ -49,6 +50,7 @@ export interface BI extends _func, _i18n, _base {
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
+    NodeButton: ClassConstructor<_NodeButton>;
     Checkbox: ClassConstructor<_Checkbox> & _CheckboxStatic;
     Button: ClassConstructor<_Button> & _ButtonStatic;
     TextButton: ClassConstructor<_TextButton> & _TextButtonStatic;
