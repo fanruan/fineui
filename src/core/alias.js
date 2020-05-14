@@ -617,7 +617,7 @@
      * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
      */
     BI.getEncodeURL = function (urlTemplate, param) {
-        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+        return BI.replaceAll(urlTemplate, "\\{(.*?)\\}", function (ori, str) {
             return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
         });
     };
