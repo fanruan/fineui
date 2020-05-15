@@ -79,10 +79,10 @@ describe("aliasFunctionTest", function () {
         expect(BI.contentFormat(878313600000, "E")).to.eql("9E11");
         expect(BI.contentFormat(1000.23456789, "0,000.####")).to.eql("1,000.2346");
         expect(BI.contentFormat(879051600000, "DTyyyy-MM-dd")).to.eql("1997-11-09");
-        expect(BI.contentFormat(879051600000, "DTyyyy-MM-dd HH:mm:ss a z")).to.eql("1997-11-09 13:00:00 pm ");
-        expect(BI.contentFormat(879051600000, "DTyyyy-MM-dd hh:mm:ss a z")).to.eql("1997-11-09 01:00:00 pm ");
-        expect(BI.contentFormat(879051600000, "DTyyy-M-d H:m:s a z")).to.eql("97-11-9 13:0:0 pm ");
-        expect(BI.contentFormat(879048000000, "DTyyy-M-d h:m:s a z")).to.eql("97-11-9 12:0:0 pm ");
+        expect(BI.contentFormat(879051600000, "DTyyyy-MM-dd HH:mm:ss a")).to.eql("1997-11-09 13:00:00 pm");
+        expect(BI.contentFormat(879051600000, "DTyyyy-MM-dd hh:mm:ss a")).to.eql("1997-11-09 01:00:00 pm");
+        expect(BI.contentFormat(879051600000, "DTyyy-M-d H:m:s a")).to.eql("97-11-9 13:0:0 pm");
+        expect(BI.contentFormat(879048000000, "DTyyy-M-d h:m:s a")).to.eql("97-11-9 12:0:0 pm");
     });
 
     /**
