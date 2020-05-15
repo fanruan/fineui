@@ -180,7 +180,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -434,6 +434,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
     setValue: function (v) {
         this.storeValue = {
             type: BI.Selection.Multi,
@@ -448,7 +452,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
