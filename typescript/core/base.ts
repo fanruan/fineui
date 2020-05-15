@@ -329,9 +329,9 @@ export interface _base {
 
     isEven: (value: string|number) => boolean;
 
-    sum: (array: any[], iteratee: Function, context: any) => number;
+    sum: (array: any[], iteratee?: Function, context?: any) => number;
 
-    average: (array: any[], iteratee: Function, context: any) => number;
+    average: (array: any[], iteratee?: Function, context?: any) => number;
 
     trim: (string?: string, chars?: string) => string;
 
