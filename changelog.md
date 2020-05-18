@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-05)
+- 填加bi-user-select-enable和bi-user-select-disable通用类名
 - 修复上传控件多个title问题
 
 2.0(2020-04)
