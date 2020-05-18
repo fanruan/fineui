@@ -89,4 +89,22 @@ describe("clear_editor", function () {
         editor.destroy();
     });
 
+    /**
+     * test_author_windy
+     */
+    it("getValue1", function () {
+        var editor = BI.Test.createWidget({
+            type: "bi.clear_editor",
+            width: 300,
+            value: "12346 7890",
+            watermark: "添加合法性判断",
+            errorText: "长度必须大于4",
+            validationChecker: function () {
+                return this.getValue().length > 4;
+            }
+        });
+        expect(editor.getValue()).to.equal("12346 7890");
+        editor.destroy();
+    });
+
 });
