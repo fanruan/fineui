@@ -74,10 +74,8 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 // 所有的半选状态都需要取消halfCheck=true的情况
                 function track (children) {
                     BI.each(children, function (i, ch) {
-                        if (ch.halfCheck === true) {
-                            ch.halfCheck = false;
-                            track(ch.children);
-                        }
+                        ch.halfCheck = false;
+                        track(ch.children);
                     });
                 }
 
