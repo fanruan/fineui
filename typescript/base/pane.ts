@@ -5,6 +5,7 @@ export interface _Pane extends _Widget {
     loading: (..._args: any[]) => void;
     loaded: (..._args: any[]) => void;
     check: (..._args: any[]) => void;
+    populate: (items: any[]) => void;
 }
 
 export interface _PaneStatic {
