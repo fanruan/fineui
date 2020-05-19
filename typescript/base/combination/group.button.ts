@@ -9,7 +9,7 @@ export interface _ButtonGroup extends _Widget {
 
     removeItems(values: any): void;
 
-    populate(items?: any): void;
+    populate(items?: any, ...args: any[]): void;
 
     setNotSelectedValue(v: any): void;
 
