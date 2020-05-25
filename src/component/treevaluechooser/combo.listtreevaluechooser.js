@@ -52,8 +52,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
