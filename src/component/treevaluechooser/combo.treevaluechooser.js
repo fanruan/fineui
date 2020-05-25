@@ -51,8 +51,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_SEARCHING,

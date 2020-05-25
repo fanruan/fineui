@@ -181,7 +181,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             self.numberCounter.setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
