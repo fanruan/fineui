@@ -19,6 +19,7 @@ module.exports = {
                 "core-js/features/function/bind",
                 "core-js/features/promise",
                 "core-js/features/string/replace",
+                "core-js/es/map",
                 // "core-js",
             ]
             : [
