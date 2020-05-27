@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-05)
+- 修复bi.button设置宽度并配置iconCls后，文本很长的情况下显示截断的问题
 - 填加bi-user-select-enable和bi-user-select-disable通用类名
 - 修复树系列多层半选状态下,勾选祖先节点,后代节点不受影响的问题
 - 修复上传控件多个title问题

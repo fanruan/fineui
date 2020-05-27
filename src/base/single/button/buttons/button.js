@@ -9,6 +9,10 @@
  */
 BI.Button = BI.inherit(BI.BasicButton, {
 
+    _const: {
+        iconWidth: 18
+    },
+
     _defaultConfig: function (props) {
         var conf = BI.Button.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
@@ -50,7 +54,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
             this.icon = BI.createWidget({
                 type: "bi.icon_label",
                 cls: o.iconCls,
-                width: 18,
+                width: this._const.iconWidth,
                 height: o.height - 2,
                 iconWidth: o.iconWidth,
                 iconHeight: o.iconHeight
@@ -58,6 +62,8 @@ BI.Button = BI.inherit(BI.BasicButton, {
             this.text = BI.createWidget({
                 type: "bi.label",
                 text: o.text,
+                textWidth: BI.isNotNull(o.textWidth) ? o.textWidth - this._const.iconWidth : null,
+                textHeight: o.textHeight,
                 value: o.value,
                 height: o.height - 2
             });
