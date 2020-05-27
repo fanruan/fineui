@@ -1,11 +1,11 @@
 import { _Single } from "../single";
 
 export interface _Iframe extends _Single {
-    setSrc: (v: string) => void;
+    setSrc(v: string): void;
 
-    getSrc: () => string;
+    getSrc(): string;
 
-    setName: (v: string) => void;
+    setNam(v: string): void;
 
-    getName: () => string;
+    getName(): string;
 }
