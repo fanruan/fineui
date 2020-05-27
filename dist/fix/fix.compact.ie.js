@@ -13,10 +13,15 @@
         }
     }
 
-    function createWatcher(vm, keyOrFn, handler) {
-        return Fix.watch(vm.store, keyOrFn, _.bind(handler, vm), {
+    function createWatcher(vm, keyOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        options = options || {};
+        return Fix.watch(vm.model, keyOrFn, _.bind(cb, vm), BI.extend(options, {
             store: vm.store
-        });
+        }));
     }
 
     var target = null;
