@@ -8,6 +8,7 @@ import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
 import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
+import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
@@ -35,7 +36,9 @@ import { _i18n } from "./core/i18n";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Layout } from "./core/wrapper/layout";
+import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 
 
@@ -85,6 +88,9 @@ export interface BI extends _func, _i18n, _base {
     AbstractListTreeValueChooser: ClassConstructor<_AbstractListTreeValueChooser>;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
+    Iframe: ClassConstructor<_Iframe>;
+    AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
+    VerticalLayout: ClassConstructor<_VerticalLayout>;
 }
 
 export default {
