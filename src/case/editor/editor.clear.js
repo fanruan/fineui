@@ -144,8 +144,7 @@ BI.ClearEditor = BI.inherit(BI.Widget, {
 
     getValue: function () {
         if (this.isValid()) {
-            var res = this.editor.getValue().match(/[\S]+/g);
-            return BI.isNull(res) ? "" : res[res.length - 1];
+            return this.editor.getValue();
         }
     },
 

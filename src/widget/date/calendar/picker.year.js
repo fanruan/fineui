@@ -50,7 +50,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             type: "bi.year_date_combo",
             min: o.min,
             behaviors: o.behaviors,
-            max: o.max
+            max: o.max,
+            width: 50
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue());
@@ -69,13 +70,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.center_adapt",
                 items: [{
-                    el: {
-                        type: "bi.horizontal_float",
-                        width: 50,
-                        items: [{
-                            el: this.year
-                        }]
-                    }
+                    el: this.year
                 }]
             }, {
                 el: {

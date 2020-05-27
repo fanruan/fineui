@@ -3,6 +3,9 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-linear-segment bi-split-bottom",
         items: [],
+        layouts: [{
+            type: "bi.center"
+        }],
         height: 29
     },
 
@@ -14,9 +17,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
                 type: "bi.linear_segment_button",
                 height: o.height - 1
             }),
-            layout: [{
-                type: "bi.center"
-            }],
+            layouts: o.layouts,
             listeners: [{
                 eventName: "__EVENT_CHANGE__",
                 action: function () {

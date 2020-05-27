@@ -825,7 +825,7 @@ if (!_global.BI) {
         },
 
         isFloat: function (number) {
-            if (/^([+-]?)\\d*\\.\\d+$/.test(number)) {
+            if (/^([+-]?)\d*\.\d+$/.test(number)) {
                 return true;
             }
             return false;
