@@ -109,7 +109,7 @@ if (!_global.BI) {
                 }
                 if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
                     innerAttr.shift();
-                    return BI.extend({}, outerAttr.shift(), {type: null}, item);
+                    return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
                 if (item.el) {
                     return BI.extend({}, outerAttr.shift(), item, {
@@ -508,7 +508,7 @@ if (!_global.BI) {
         },
 
         isNull: function (obj) {
-            return typeof  obj === "undefined" || obj === null;
+            return typeof obj === "undefined" || obj === null;
         },
 
         isEmptyArray: function (arr) {
@@ -660,7 +660,7 @@ if (!_global.BI) {
     });
 
     // 通用方法
-    _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape"], function (name) {
+    _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape", "before", "after"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
         };
