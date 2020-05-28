@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-05)
+- 修复调用BI.history.navigate(XXX, {trigger: false})时, XXX包含中文空格等字符仍然触发回调的问题
 - 新增BI.after和BI.before方法
 - 修复bi.button设置宽度并配置iconCls后，文本很长的情况下显示截断的问题
 - 填加bi-user-select-enable和bi-user-select-disable通用类名
