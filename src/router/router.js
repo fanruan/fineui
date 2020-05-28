@@ -490,7 +490,12 @@
         // calls `loadUrl`, normalizing across the hidden iframe.
         checkUrl: function (e) {
             var current = this.getFragment();
-
+            try {
+                // getFragment 得到的值是编码过的,而this.fragment是没有编码过的
+                // 英文路径没有问题，遇上中文和空格有问题了
+                current = decodeURIComponent(current);
+            } catch {
+            }
             // If the user pressed the back button, the iframe's hash will have
             // changed and we should use that for comparison.
             if (current === this.fragment && this.iframe) {
