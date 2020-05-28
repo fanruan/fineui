@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,set,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy,uniqBy"`
+ * Build: `lodash core plus="debounce,throttle,get,set,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy,uniqBy,before,after"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -6995,6 +6995,42 @@
   /*------------------------------------------------------------------------*/
 
   /**
+   * The opposite of `_.before`; this method creates a function that invokes
+   * `func` once it's called `n` or more times.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Function
+   * @param {number} n The number of calls before `func` is invoked.
+   * @param {Function} func The function to restrict.
+   * @returns {Function} Returns the new restricted function.
+   * @example
+   *
+   * var saves = ['profile', 'settings'];
+   *
+   * var done = _.after(saves.length, function() {
+   *   console.log('done saving!');
+   * });
+   *
+   * _.forEach(saves, function(type) {
+   *   asyncSave({ 'type': type, 'complete': done });
+   * });
+   * // => Logs 'done saving!' after the two async saves have completed.
+   */
+  function after(n, func) {
+    if (typeof func != 'function') {
+      throw new TypeError(FUNC_ERROR_TEXT);
+    }
+    n = toInteger(n);
+    return function() {
+      if (--n < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  }
+
+  /**
    * Creates a function that invokes `func`, with the `this` binding and arguments
    * of the created function, while it's called less than `n` times. Subsequent
    * calls to the created function return the result of the last `func` invocation.
@@ -9824,6 +9860,7 @@
   /*------------------------------------------------------------------------*/
 
   // Add methods that return wrapped values in chain sequences.
+  lodash.after = after;
   lodash.assignIn = assignIn;
   lodash.before = before;
   lodash.bind = bind;
