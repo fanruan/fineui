@@ -16,6 +16,7 @@
     "@babel/polyfill": "7.6.0",
     "@babel/preset-env": "7.4.5",
     "@babel/preset-typescript": "7.3.3",
+    "@fui/eslint-plugin": "1.0.7",
     "@typescript-eslint/eslint-plugin": "1.11.0",
     "@typescript-eslint/parser": "1.11.0",
     "autoprefixer": "9.6.1",
