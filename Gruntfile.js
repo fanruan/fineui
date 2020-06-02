@@ -200,7 +200,10 @@ module.exports = function (grunt) {
                     "!src/case/colorchooser/**/*.js",
                     "!src/case/tree/ztree/**/*.js",
 
-                    "dist/widget.js", "dist/fix/fix.compact.js", "ui/js/**/*.js"]),
+                    "dist/widget.js",
+                    "dist/fix/fix.compact.js",
+                    "ui/js/**/*.js",
+                    "dist/es5.fineui.js"]),
                 dest: "dist/fineui_without_jquery_polyfill.js"
             },
 
