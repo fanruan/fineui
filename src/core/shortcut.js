@@ -11,6 +11,10 @@
     var createWidget = function (config) {
         var cls = kv[config.type];
 
+        if(!cls){
+            throw new Error("组件"+config.type +"未定义");
+        }
+
         var widget = new cls();
 
         widget._initProps(config);
