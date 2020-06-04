@@ -43,7 +43,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.single_select_search_pane",
+            type: "bi.single_select_search_insert_pane",
             allowNoSelect: o.allowNoSelect,
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
@@ -54,7 +54,22 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
+            listeners: [{
+                eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
+                action: function () {
+                    var keyword = self.trigger.getKeyword();
+                    if (!self.trigger.hasMatched()) {
+                        self.storeValue = keyword;
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }]
         });
         this.searcherPane.setVisible(false);
 
@@ -91,14 +106,19 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    self.storeValue = keyword;
-                    self._showAdapter();
-                    self.adapter.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.adapter.populate();
-                    self._setStartValue();
-                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                    if (this.hasMatched()) {
+                        self.storeValue = keyword;
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self._setStartValue(keyword);
+                        assertShowValue();
+                        self.adapter.populate();
+                        self._setStartValue();
+                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                    } else {
+                        self._showAdapter();
+                    }
+
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
