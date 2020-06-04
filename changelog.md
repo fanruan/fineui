@@ -1,4 +1,7 @@
 # 更新日志
+2.0(2020-06)
+- 增加组件shortcut未定义的错误提示
+
 2.0(2020-05)
 - 修复调用BI.history.navigate(XXX, {trigger: false})时, XXX包含中文空格等字符仍然触发回调的问题
 - 新增BI.after和BI.before方法
