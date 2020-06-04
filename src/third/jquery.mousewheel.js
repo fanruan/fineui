@@ -7,16 +7,8 @@
  */
 
 (function (factory) {
-    if ( typeof define === "function" && define.amd ) {
-        // AMD. Register as an anonymous module.
-        define(["../core/jquery"], factory);
-    } else if (typeof exports === "object") {
-        // Node/CommonJS style for Browserify
-        module.exports = factory;
-    } else {
-        // Browser globals
-        factory(BI.jQuery);
-    }
+    // Browser globals
+    factory(BI.jQuery);
 }(function ($) {
 
     var toFix  = ["wheel", "mousewheel", "DOMMouseScroll", "MozMousePixelScroll"],
