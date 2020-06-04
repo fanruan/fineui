@@ -13,7 +13,7 @@ module.exports = merge(common, {
     devtool: "eval-source-map",
     output: {
         path: dirs.DEST,
-        filename: "[name].[contenthash].js",
+        filename: "[name].js",
     },
     devServer: {
         contentBase: path.join(__dirname, ".."),
@@ -23,11 +23,11 @@ module.exports = merge(common, {
     plugins: [
         new MiniCssExtractPlugin({
             path: dirs.DEST,
-            filename: "fineui.[contenthash].css",
+            filename: "[name].css",
         }),
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, "../index.html"),
-            chunks: ["polyfill", "fineui"],
+            template: path.resolve(__dirname, "../template/index.html"),
+            chunks: ["demo"],
             chunksSortMode: "manual",
         }),
         new ForkTsCheckerWebpackPlugin({
