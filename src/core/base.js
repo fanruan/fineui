@@ -3,7 +3,7 @@
  * Create By GUY 2014\11\17
  *
  */
-var _global;
+_global = undefined;
 if (typeof window !== "undefined") {
     _global = window;
 } else if (typeof global !== "undefined") {
