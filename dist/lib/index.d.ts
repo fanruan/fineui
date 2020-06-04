@@ -3,10 +3,12 @@ import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base
 import { _Tab, _TabStatic } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic } from "./base/single/button/button.basic";
+import { _NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
 import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
+import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
@@ -20,6 +22,8 @@ import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textv
 import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
+import { _AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { _Action, _ActionFactory } from "./core/action/action";
 import { _ShowAction } from "./core/action/action.show";
 import { _base } from "./core/base";
@@ -32,7 +36,10 @@ import { _i18n } from "./core/i18n";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Layout } from "./core/wrapper/layout";
+import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
+import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -43,6 +50,7 @@ export interface BI extends _func, _i18n, _base {
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
+    NodeButton: ClassConstructor<_NodeButton>;
     Checkbox: ClassConstructor<_Checkbox> & _CheckboxStatic;
     Button: ClassConstructor<_Button> & _ButtonStatic;
     TextButton: ClassConstructor<_TextButton> & _TextButtonStatic;
@@ -73,7 +81,13 @@ export interface BI extends _func, _i18n, _base {
     Layout: ClassConstructor<_Layout>;
     HTapeLayout: ClassConstructor<_HTapeLayout>;
     VTapeLayout: ClassConstructor<_VTapeLayout>;
+    AbstractTreeValueChooser: ClassConstructor<_AbstractTreeValueChooser>;
+    AbstractListTreeValueChooser: ClassConstructor<_AbstractListTreeValueChooser>;
     Decorators: typeof decorator;
+    DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
+    Iframe: ClassConstructor<_Iframe>;
+    AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
+    VerticalLayout: ClassConstructor<_VerticalLayout>;
 }
 declare const _default: {
     Decorators: typeof decorator;
