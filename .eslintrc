@@ -12,7 +12,8 @@
     "Data": true,
     "Fix": true,
     "module": true,
-    "Demo": true
+    "Demo": true,
+    "_global": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -29,6 +30,9 @@
     "extends": "plugin:@fui/es5"
   }, {
     "files": ["webpack/*.js", "types/*.ts", "typescript/*.ts","typescript/**/*.ts", "./*.js", "lib/**/*.js", "lib/*.js"],
-    "extends": "plugin:@fui/typescript"
+    "extends": "plugin:@fui/typescript",
+    "rules": {
+      "template-curly-spacing" : "off"
+    }
   }]
 }
