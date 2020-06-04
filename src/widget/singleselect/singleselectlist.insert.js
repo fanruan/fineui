@@ -65,7 +65,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                         self.adapter.setValue(self.storeValue);
                         self.adapter.populate();
                         if (self.storeValue.type === BI.Selection.Multi) {
-                            self.fireEvent(BI.MultiSelectInsertList.EVENT_CHANGE);
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
                         }
                     }
                 }
