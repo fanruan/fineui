@@ -51,7 +51,7 @@ BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         this.options.items = items;
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     },
 
     _digestValue: function (v) {
