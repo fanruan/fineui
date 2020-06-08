@@ -67,7 +67,10 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     _checkError: function (v) {
-        if(BI.isNotNull(v)) {
+        if(BI.isNull(v) || BI.isEmptyArray(v)) {
+            this.trigger.options.tipType = "success";
+            this.element.removeClass("combo-error");
+        } else {
             v = BI.isArray(v) ? v : [v];
             var result = BI.find(this.options.items, function (idx, item) {
                 return BI.contains(v, item.value);
