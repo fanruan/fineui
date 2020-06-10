@@ -486,6 +486,16 @@
             this.handlers.unshift({route: route, callback: callback});
         },
 
+        // remove a route match in routes
+        unRoute: function (route) {
+            var index = _.findIndex(this.handlers, function (handler) {
+                return handler.route.test(route);
+            });
+            if (index > -1) {
+                this.handlers.splice(index, 1);
+            }
+        },
+
         // Checks the current URL to see if it has changed, and if it has,
         // calls `loadUrl`, normalizing across the hidden iframe.
         checkUrl: function (e) {
