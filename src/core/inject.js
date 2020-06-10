@@ -57,6 +57,7 @@
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
+                providerInstance[type] = null;
                 return configFn(providers[type]);
             }
             return BI.Plugin.configWidget(type, configFn);
@@ -74,6 +75,7 @@
                         if (!providers[type]) {
                             providers[type] = new providerInjection[type]();
                         }
+                        providerInstance[type] = null;
                         queue[i](providers[type]);
                         continue;
                     }
