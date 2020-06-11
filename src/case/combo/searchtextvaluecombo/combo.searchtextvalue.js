@@ -124,7 +124,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
     },
 
     _checkError: function (v) {
-        if(BI.isNull(v) || BI.isEmptyArray(v)) {
+        if(BI.isNull(v) || BI.isEmptyArray(v) || BI.isEmptyString(v)) {
             this.trigger.options.tipType = "success";
             this.element.removeClass("combo-error");
         } else {
