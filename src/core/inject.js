@@ -57,7 +57,10 @@
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
-                providerInstance[type] = null;
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
                 return configFn(providers[type]);
             }
             return BI.Plugin.configWidget(type, configFn);
@@ -75,7 +78,9 @@
                         if (!providers[type]) {
                             providers[type] = new providerInjection[type]();
                         }
-                        providerInstance[type] = null;
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
+                        }
                         queue[i](providers[type]);
                         continue;
                     }
