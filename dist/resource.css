@@ -81,7 +81,7 @@
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part {
-  background: url('images/2x/icon/check_box_normal.png') no-repeat center center;
+  background: url('images/2x/icon/half_selected.png') no-repeat center center;
   background-size: contain;
 }
 .ztree li span.button.chk.checkbox_false_part_focus {
@@ -111,7 +111,7 @@
   background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part {
-  background: url('images/1x/icon/check_box_normal.png') no-repeat center center;
+  background: url('images/1x/icon/half_selected.png') no-repeat center center;
 }
 .ztree.hack li span.button.chk.checkbox_false_part_focus {
   background: url('images/1x/icon/half_selected.png') no-repeat center center;

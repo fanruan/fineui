@@ -206,7 +206,9 @@
                 return stores[type];
             }
             var inst = stores[type] = new storeInjection[type](config);
-            inst._constructor && inst._constructor(config);
+            inst._constructor && inst._constructor(config, function () {
+                delete stores[type];
+            });
             callPoint(inst, type);
             return inst;
         }
