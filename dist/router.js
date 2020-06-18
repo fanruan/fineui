@@ -486,11 +486,26 @@
             this.handlers.unshift({route: route, callback: callback});
         },
 
+        // remove a route match in routes
+        unRoute: function (route) {
+            var index = _.findIndex(this.handlers, function (handler) {
+                return handler.route.test(route);
+            });
+            if (index > -1) {
+                this.handlers.splice(index, 1);
+            }
+        },
+
         // Checks the current URL to see if it has changed, and if it has,
         // calls `loadUrl`, normalizing across the hidden iframe.
         checkUrl: function (e) {
             var current = this.getFragment();
-
+            try {
+                // getFragment 得到的值是编码过的,而this.fragment是没有编码过的
+                // 英文路径没有问题，遇上中文和空格有问题了
+                current = decodeURIComponent(current);
+            } catch(e) {
+            }
             // If the user pressed the back button, the iframe's hash will have
             // changed and we should use that for comparison.
             if (current === this.fragment && this.iframe) {

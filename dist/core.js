@@ -22,7 +22,7 @@ if(_global.BI.prepares == null) {
 }/**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash core plus="debounce,throttle,get,set,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy,uniqBy"`
+ * Build: `lodash core plus="debounce,throttle,get,set,findIndex,findLastIndex,findKey,findLastKey,isArrayLike,invert,invertBy,uniq,uniqBy,omit,omitBy,zip,unzip,rest,range,random,reject,intersection,drop,countBy,union,zipObject,initial,cloneDeep,clamp,isPlainObject,take,takeRight,without,difference,defaultsDeep,trim,merge,groupBy,uniqBy,before,after"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -7016,6 +7016,42 @@ if(_global.BI.prepares == null) {
   /*------------------------------------------------------------------------*/
 
   /**
+   * The opposite of `_.before`; this method creates a function that invokes
+   * `func` once it's called `n` or more times.
+   *
+   * @static
+   * @memberOf _
+   * @since 0.1.0
+   * @category Function
+   * @param {number} n The number of calls before `func` is invoked.
+   * @param {Function} func The function to restrict.
+   * @returns {Function} Returns the new restricted function.
+   * @example
+   *
+   * var saves = ['profile', 'settings'];
+   *
+   * var done = _.after(saves.length, function() {
+   *   console.log('done saving!');
+   * });
+   *
+   * _.forEach(saves, function(type) {
+   *   asyncSave({ 'type': type, 'complete': done });
+   * });
+   * // => Logs 'done saving!' after the two async saves have completed.
+   */
+  function after(n, func) {
+    if (typeof func != 'function') {
+      throw new TypeError(FUNC_ERROR_TEXT);
+    }
+    n = toInteger(n);
+    return function() {
+      if (--n < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  }
+
+  /**
    * Creates a function that invokes `func`, with the `this` binding and arguments
    * of the created function, while it's called less than `n` times. Subsequent
    * calls to the created function return the result of the last `func` invocation.
@@ -9845,6 +9881,7 @@ if(_global.BI.prepares == null) {
   /*------------------------------------------------------------------------*/
 
   // Add methods that return wrapped values in chain sequences.
+  lodash.after = after;
   lodash.assignIn = assignIn;
   lodash.before = before;
   lodash.bind = bind;
@@ -10264,6 +10301,7 @@ if (!_global.BI) {
             if (!this.deepContains(is, v)) {
                 throw new Error(v + " error");
             }
+            return true;
         },
 
         warn: function (message) {
@@ -10320,7 +10358,7 @@ if (!_global.BI) {
                 }
                 if (item.el instanceof BI.Widget || (BI.View && item.el instanceof BI.View)) {
                     innerAttr.shift();
-                    return BI.extend({}, outerAttr.shift(), {type: null}, item);
+                    return BI.extend({}, outerAttr.shift(), { type: null }, item);
                 }
                 if (item.el) {
                     return BI.extend({}, outerAttr.shift(), item, {
@@ -10719,7 +10757,7 @@ if (!_global.BI) {
         },
 
         isNull: function (obj) {
-            return typeof  obj === "undefined" || obj === null;
+            return typeof obj === "undefined" || obj === null;
         },
 
         isEmptyArray: function (arr) {
@@ -10871,7 +10909,7 @@ if (!_global.BI) {
     });
 
     // 通用方法
-    _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape"], function (name) {
+    _.each(["uniqueId", "result", "chain", "iteratee", "escape", "unescape", "before", "after"], function (name) {
         BI[name] = function () {
             return _[name].apply(_, arguments);
         };
@@ -11036,7 +11074,7 @@ if (!_global.BI) {
         },
 
         isFloat: function (number) {
-            if (/^([+-]?)\\d*\\.\\d+$/.test(number)) {
+            if (/^([+-]?)\d*\.\d+$/.test(number)) {
                 return true;
             }
             return false;
@@ -11187,7 +11225,7 @@ if (!_global.BI) {
          * 对字符串做替换的函数
          *
          *      var cls = 'my-class', text = 'Some text';
-         *      var res = BI.format('<div class="{0}>{1}</div>"', cls, text);
+         *      var res = BI.format('<div class="{0}">{1}</div>', cls, text);
          *      //res的值为：'<div class="my-class">Some text</div>';
          *
          * @static
@@ -12251,6 +12289,10 @@ if (!_global.BI) {
     var createWidget = function (config) {
         var cls = kv[config.type];
 
+        if(!cls){
+            throw new Error("组件"+config.type +"未定义");
+        }
+
         var widget = new cls();
 
         widget._initProps(config);
@@ -12312,7 +12354,8 @@ if (!_global.BI) {
         return widget.element;
     };
 
-})();!(function () {
+})();
+!(function () {
     /*
     CryptoJS v3.1.2
     code.google.com/p/crypto-js
@@ -15523,7 +15566,7 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
         36228: "QJ",
         36426: "XQ",
         36466: "DC",
-        36710: "JC",
+        36710: "CJ",
         36711: "ZYG",
         36767: "PB",
         36866: "SK",
@@ -18302,11 +18345,10 @@ BI.ShowAction = BI.inherit(BI.Action, {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;",
-        " ": "&nbsp;"
+        ">": "&gt;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
@@ -18504,7 +18546,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
      * BI.getEncodeURL("design/{tableName}/{fieldName}",{tableName: "A", fieldName: "a"}) //  design/A/a
      */
     BI.getEncodeURL = function (urlTemplate, param) {
-        return urlTemplate.replaceAll("\\{(.*?)\\}", function (ori, str) {
+        return BI.replaceAll(urlTemplate, "\\{(.*?)\\}", function (ori, str) {
             return BI.encodeURIComponent(BI.isObject(param) ? param[str] : param);
         });
     };
@@ -20859,7 +20901,7 @@ _.extend(BI, {
      * @returns {String} 替换后的字符串
      */
     replaceAll: function (str, s1, s2) {
-        return str.replace(new RegExp(s1, "gm"), s2);
+        return BI.isString(str) ? str.replace(new RegExp(s1, "gm"), s2) : str;
     },
     /**
      * 总是让字符串以指定的字符开头
@@ -20986,6 +21028,10 @@ _.extend(BI, {
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
                 return configFn(providers[type]);
             }
             return BI.Plugin.configWidget(type, configFn);
@@ -21002,6 +21048,9 @@ _.extend(BI, {
                     if (providerInjection[type]) {
                         if (!providers[type]) {
                             providers[type] = new providerInjection[type]();
+                        }
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
                         }
                         queue[i](providers[type]);
                         continue;
@@ -21128,7 +21177,9 @@ _.extend(BI, {
                 return stores[type];
             }
             var inst = stores[type] = new storeInjection[type](config);
-            inst._constructor && inst._constructor(config);
+            inst._constructor && inst._constructor(config, function () {
+                delete stores[type];
+            });
             callPoint(inst, type);
             return inst;
         }

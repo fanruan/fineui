@@ -367,7 +367,8 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             type: "bi.year_date_combo",
             min: o.min,
             behaviors: o.behaviors,
-            max: o.max
+            max: o.max,
+            width: 50
         });
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue());
@@ -386,13 +387,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.center_adapt",
                 items: [{
-                    el: {
-                        type: "bi.horizontal_float",
-                        width: 50,
-                        items: [{
-                            el: this.year
-                        }]
-                    }
+                    el: this.year
                 }]
             }, {
                 el: {
@@ -5855,7 +5850,14 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
     },
 
     // 其中取max-min后保留4为有效数字后的值的小数位数为最终value的精度
+    // 端点处的值有可能因为min,max相差量级很大(precision很大)而丢失精度，此时直接返回端点值即可
     _getValueByPercent: function (percent) {// return (((max-min)*percent)/100+min)
+        if (percent === 0) {
+            return this.min;
+        }
+        if (percent === 100) {
+            return this.max;
+        }
         var sub = this.calculation.accurateSubtraction(this.max, this.min);
         var mul = this.calculation.accurateMultiplication(sub, percent);
         var div = this.calculation.accurateDivisionTenExponent(mul, 2);
@@ -6729,7 +6731,13 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 value: o.value,
                 maxHeight: 400,
                 minHeight: 240
-            }
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
         };
     },
 
@@ -6801,6 +6809,11 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
                 action: function () {
                     self.trigger.stopEditing();
                 }
+            }, {
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         }
     },
@@ -6842,6 +6855,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSelectTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSelectTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSelectTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);/**
  * Created by GUY on 2016/1/26.
  *
@@ -7130,7 +7144,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            minHeight: 240
         });
     },
 
@@ -7169,6 +7184,8 @@ BI.MultiLayerSelectTreePopup = BI.inherit(BI.Widget, {
         this.tree.on(BI.MultiLayerSelectLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSelectTreePopup.EVENT_CHANGE);
         });
+
+        this.tree.css("min-height", o.minHeight - 10);
     },
 
     getValue: function () {
@@ -7941,7 +7958,13 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 value: o.value,
                 maxHeight: 400,
                 minHeight: 240
-            }
+            },
+            listeners: [{
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
+            }]
         };
     },
 
@@ -8012,6 +8035,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 action: function () {
                     self.trigger.stopEditing();
                 }
+            }, {
+                eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW);
+                }
             }]
         }
     },
@@ -8053,6 +8081,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiLayerSingleTreeCombo.EVENT_BLUR = "EVENT_BLUR";
 BI.MultiLayerSingleTreeCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.MultiLayerSingleTreeCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);/**
  * Created by GUY on 2016/1/26.
  *
@@ -8340,7 +8369,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
             isDefaultInit: false,
             itemsCreator: BI.emptyFn,
             items: [],
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            minHeight: 240
         });
     },
 
@@ -8379,6 +8409,8 @@ BI.MultiLayerSingleTreePopup = BI.inherit(BI.Widget, {
         this.tree.on(BI.MultiLayerSingleLevelTree.EVENT_CHANGE, function () {
             self.fireEvent(BI.MultiLayerSingleTreePopup.EVENT_CHANGE);
         });
+
+        this.tree.css("min-height", o.minHeight - 10);
     },
 
     getValue: function () {
@@ -9563,7 +9595,17 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
+            if (BI.isKey(self._startValue)) {
+                if (self.storeValue.type === BI.Selection.All) {
+                    BI.remove(self.storeValue.value, self._startValue);
+                    self.storeValue.assist = self.storeValue.assist || [];
+                    self.storeValue.assist.pushDistinct(self._startValue);
+                } else {
+                    BI.pushDistinct(self.storeValue.value, self._startValue);
+                    BI.remove(self.storeValue.assist, self._startValue);
+                }
+            }
+
             self.trigger.getSearcher().setState(self.storeValue);
             self.numberCounter.setButtonChecked(self.storeValue);
         };
@@ -9719,7 +9761,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -9951,6 +9993,10 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
     setValue: function (v) {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
@@ -9963,7 +10009,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
@@ -10004,7 +10050,16 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
+            if (BI.isKey(self._startValue)) {
+                if (self.storeValue.type === BI.Selection.All) {
+                    BI.remove(self.storeValue.value, self._startValue);
+                    self.storeValue.assist = self.storeValue.assist || [];
+                    self.storeValue.assist.pushDistinct(self._startValue);
+                } else {
+                    BI.pushDistinct(self.storeValue.value, self._startValue);
+                    BI.remove(self.storeValue.assist, self._startValue);
+                }
+            }
             self.trigger.getSearcher().setState(self.storeValue);
             self.numberCounter.setButtonChecked(self.storeValue);
         };
@@ -10151,7 +10206,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -10387,6 +10442,10 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
     setValue: function (v) {
         this.storeValue = {
             type: BI.Selection.Multi,
@@ -10401,7 +10460,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
@@ -10443,7 +10502,16 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
+            if (BI.isKey(self._startValue)) {
+                if(self.storeValue.type === BI.Selection.All) {
+                    BI.remove(self.storeValue.value, self._startValue);
+                    self.storeValue.assist = self.storeValue.assist || [];
+                    self.storeValue.assist.pushDistinct(self._startValue);
+                } else {
+                    BI.pushDistinct(self.storeValue.value, self._startValue);
+                    BI.remove(self.storeValue.assist, self._startValue);
+                }
+            }
             self.trigger.getSearcher().setState(self.storeValue);
             self.numberCounter.setButtonChecked(self.storeValue);
         };
@@ -10494,7 +10562,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
             if (!this.getSearcher().hasMatched()) {
                 self._addItem(assertShowValue);
+                var addedValue = this.getSearcher().getKeyword();
                 self._stopEditing();
+                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_ADD_ITEM, addedValue);
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
@@ -10594,7 +10664,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -10848,6 +10918,10 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
     setValue: function (v) {
         this.storeValue = v || {};
         this._assertValue(this.storeValue);
@@ -10860,7 +10934,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
@@ -10876,6 +10950,7 @@ BI.MultiSelectInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiSelectInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiSelectInsertCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);/**
  *
@@ -10901,7 +10976,16 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
 
         var assertShowValue = function () {
-            BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
+            if (BI.isKey(self._startValue)) {
+                if (self.storeValue.type === BI.Selection.All) {
+                    BI.remove(self.storeValue.value, self._startValue);
+                    self.storeValue.assist = self.storeValue.assist || [];
+                    self.storeValue.assist.pushDistinct(self._startValue);
+                } else {
+                    BI.pushDistinct(self.storeValue.value, self._startValue);
+                    BI.remove(self.storeValue.assist, self._startValue);
+                }
+            }
             self.trigger.getSearcher().setState(self.storeValue);
             self.numberCounter.setButtonChecked(self.storeValue);
         };
@@ -10948,7 +11032,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_ADD_ITEM, function () {
             if (!this.getSearcher().hasMatched()) {
                 self._addItem(assertShowValue);
+                var addedValue = this.getSearcher().getKeyword();
                 self._stopEditing();
+                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM, addedValue);
             }
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_SEARCHING, function (keywords) {
@@ -11048,7 +11134,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             this.setValue(self.storeValue);
             BI.nextTick(function () {
-                self.populate();
+                self._populate();
             });
         });
         // 当退出的时候如果还在处理请求，则等请求结束后再对外发确定事件
@@ -11302,6 +11388,10 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.popup.setStartValue(value);
     },
 
+    _populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
+    },
+
     setValue: function (v) {
         this.storeValue = {
             type: BI.Selection.Multi,
@@ -11316,7 +11406,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.combo.populate.apply(this.combo, arguments);
+        this._populate.apply(this, arguments);
         this.numberCounter.populateSwitcher.apply(this.numberCounter, arguments);
     }
 });
@@ -11327,6 +11417,7 @@ BI.extend(BI.MultiSelectInsertNoBarCombo, {
 });
 
 BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiSelectInsertNoBarCombo.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 
 BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarCombo);/**
  *
@@ -12259,8 +12350,10 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        var btn;
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
+            return keyword === btn.getValue();
+        });
+        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
         this.tooltipClick.setVisible(isMatchTipVisible);
         this.addNotMatchTip.setVisible(!isMatchTipVisible);
         !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
@@ -12788,6 +12881,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -12987,6 +13081,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -13290,9 +13385,12 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keywords = [self.trigger.getKeyword()];
-                this.setKeyword(op.keywords[0]);
-                o.itemsCreator(op, callback);
+                var keyword = self.trigger.getKeyword();
+                if (BI.isNotEmptyString(keyword)) {
+                    op.keywords = [keyword];
+                    this.setKeyword(op.keywords[0]);
+                    o.itemsCreator(op, callback);
+                }
             },
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
@@ -13316,6 +13414,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -13628,9 +13727,12 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keywords = [self.trigger.getKeyword()];
-                this.setKeyword(op.keywords[0]);
-                o.itemsCreator(op, callback);
+                var keyword = self.trigger.getKeyword();
+                if (BI.isNotEmptyString(keyword)) {
+                    op.keywords = [keyword];
+                    this.setKeyword(op.keywords[0]);
+                    o.itemsCreator(op, callback);
+                }
             },
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
@@ -13654,6 +13756,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -13968,15 +14071,19 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                 return self.trigger.getKeyword();
             },
             itemsCreator: function (op, callback) {
-                op.keywords = [self.trigger.getKeyword()];
-                this.setKeyword(op.keywords[0]);
-                o.itemsCreator(op, callback);
+                var keyword = self.trigger.getKeyword();
+                if (BI.isNotEmptyString(keyword)) {
+                    op.keywords = [keyword];
+                    this.setKeyword(op.keywords[0]);
+                    o.itemsCreator(op, callback);
+                }
             }
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -14352,6 +14459,10 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     self._showAdapter();
+                    // BI-64732 pause 和stop一致, 都应该刷新adapter
+                    BI.nextTick(function () {
+                        self.adapter.populate();
+                    });
                 }
             }]
         });
@@ -14687,7 +14798,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
                         };
                         self.trigger.getSearcher().setState(val);
                         self.numberCounter.setButtonChecked(val);
-                        self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
+                        self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
                     }
                 }, {
                     eventName: BI.MultiTreePopup.EVENT_CLICK_CONFIRM,
@@ -14783,7 +14894,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             };
             this.getSearcher().setState(checked ? BI.Selection.Multi : BI.Selection.None);
             self.numberCounter.setButtonChecked(val);
-            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM);
+            self.fireEvent(BI.MultiTreeCombo.EVENT_CLICK_ITEM, self.combo.getValue());
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
@@ -14797,7 +14908,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             self.combo.setValue(self.storeValue);
             self.numberCounter.setValue(self.storeValue);
             self.populate();
-
+            self.fireEvent(BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW);
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             if (isSearching()) {
@@ -14935,6 +15046,7 @@ BI.MultiTreeCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiTreeCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);/**
  * 可以往当前选中节点下添加新值的下拉树
@@ -15143,7 +15255,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             self.combo.setValue(self.storeValue);
             self.numberCounter.setValue(self.storeValue);
             self.populate();
-
+            self.fireEvent(BI.MultiTreeInsertCombo.EVENT_BEFORE_POPUPVIEW);
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             if (isSearching()) {
@@ -15286,6 +15398,7 @@ BI.MultiTreeInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiTreeInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiTreeInsertCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);/**
  * 选中节点不影响父子节点状态的下拉树
@@ -15513,7 +15626,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             self.combo.setValue(self.storeValue);
             self.numberCounter.setValue(self.storeValue);
             self.populate();
-
+            self.fireEvent(BI.MultiTreeListCombo.EVENT_BEFORE_POPUPVIEW);
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_HIDEVIEW, function () {
             if (isSearching()) {
@@ -15661,6 +15774,7 @@ BI.MultiTreeListCombo.EVENT_STOP = "EVENT_STOP";
 BI.MultiTreeListCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.MultiTreeListCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.MultiTreeListCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.MultiTreeListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
 BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);/**
  * 带加载的多选下拉面板
@@ -16263,9 +16377,6 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             self.fireEvent(BI.MultiTreeSearcher.EVENT_START);
         });
         this.searcher.on(BI.Searcher.EVENT_PAUSE, function () {
-            if (this.hasMatched()) {
-
-            }
             self.fireEvent(BI.MultiTreeSearcher.EVENT_PAUSE);
         });
         this.searcher.on(BI.Searcher.EVENT_STOP, function () {
@@ -18071,6 +18182,7 @@ BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -18995,7 +19107,7 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
+            cls: "single-select-toolbar",
             height: this.constants.height
         });
 
@@ -19042,8 +19154,10 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        var btn;
-        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
+            return keyword === btn.getValue();
+        });
+        var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
         this.tooltipClick.setVisible(isMatchTipVisible);
         this.addNotMatchTip.setVisible(!isMatchTipVisible);
         !isMatchTipVisible && this.addNotMatchTip.setText(BI.i18nText("BI-Basic_Click_To_Add_Text", keyword));
@@ -19106,7 +19220,7 @@ BI.SingleSelectSearchPane = BI.inherit(BI.Widget, {
             type: "bi.label",
             invisible: true,
             text: BI.i18nText("BI-Click_Blank_To_Select"),
-            cls: "multi-select-toolbar",
+            cls: "single-select-toolbar",
             height: this.constants.height
         });
 
@@ -20401,7 +20515,7 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
         });
 
         this.searcherPane = BI.createWidget({
-            type: "bi.single_select_search_pane",
+            type: "bi.single_select_search_insert_pane",
             allowNoSelect: o.allowNoSelect,
             cls: "bi-border-left bi-border-right bi-border-bottom",
             valueFormatter: o.valueFormatter,
@@ -20412,12 +20526,28 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 op.keywords = [self.trigger.getKeyword()];
                 this.setKeyword(op.keywords[0]);
                 o.itemsCreator(op, callback);
-            }
+            },
+            listeners: [{
+                eventName: BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM,
+                action: function () {
+                    var keyword = self.trigger.getKeyword();
+                    if (!self.trigger.hasMatched()) {
+                        self.storeValue = keyword;
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self.adapter.populate();
+                        if (self.storeValue.type === BI.Selection.Multi) {
+                            self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                        }
+                    }
+                }
+            }]
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
             onSearch: function (op, callback) {
@@ -20448,14 +20578,19 @@ BI.SingleSelectInsertList = BI.inherit(BI.Single, {
                 eventName: BI.Searcher.EVENT_PAUSE,
                 action: function () {
                     var keyword = this.getKeyword();
-                    self.storeValue = keyword;
-                    self._showAdapter();
-                    self.adapter.setValue(self.storeValue);
-                    self._setStartValue(keyword);
-                    assertShowValue();
-                    self.adapter.populate();
-                    self._setStartValue();
-                    self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                    if (this.hasMatched()) {
+                        self.storeValue = keyword;
+                        self._showAdapter();
+                        self.adapter.setValue(self.storeValue);
+                        self._setStartValue(keyword);
+                        assertShowValue();
+                        self.adapter.populate();
+                        self._setStartValue();
+                        self.fireEvent(BI.SingleSelectInsertList.EVENT_CHANGE);
+                    } else {
+                        self._showAdapter();
+                    }
+
                 }
             }, {
                 eventName: BI.Searcher.EVENT_SEARCHING,
@@ -20723,6 +20858,7 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
 
         this.searcher = BI.createWidget({
             type: "bi.searcher",
+            allowSearchBlank: false,
             element: this,
             height: o.height,
             isAutoSearch: false,
@@ -25147,13 +25283,13 @@ BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);BI.Year
             bigDate4Check = (bigObj[0] || "") + "-" + (bigObj[1] || 1);
         }
 
-        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate) && this._checkVoid({
+        return this._dateCheck(smallDate4Check) && BI.checkDateLegal(smallDate4Check) && this._checkVoid({
             year: smallObj[0],
-            month: smallObj[1],
+            month: smallObj[1] || 1,
             day: 1
-        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate) && this._checkVoid({
+        }) && this._dateCheck(bigDate4Check) && BI.checkDateLegal(bigDate4Check) && this._checkVoid({
             year: bigObj[0],
-            month: bigObj[1],
+            month: bigObj[1] || 1,
             day: 1
         });
     },
@@ -26125,7 +26261,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     }
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
@@ -26245,7 +26381,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);BI.AllValueMult
 
     populate: function (items) {
         this.options.items = items;
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     },
 
     _digestValue: function (v) {
@@ -26410,23 +26546,25 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var p = parentValues.concat(notSelectedValue);
             // 存储的值中存在这个值就把它删掉
             // 例如选中了中国-江苏-南京， 取消中国或江苏或南京
+            // p长度不大于selectedValues的情况才可能找到，这样可以直接删除selectedValues的节点
             if (canFindKey(selectedValues, p)) {
                 // 如果搜索的值在父亲链中
                 if (isSearchValueInParent(p)) {
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏
-                    // 例如选中了 中国-江苏， 搜索江苏， 取消中国
+                    // 例如选中了 中国-江苏， 搜索江苏， 取消江苏(干掉了江苏)
                     self._deleteNode(selectedValues, p);
                 } else {
                     var searched = [];
+                    // 要找到所有以notSelectedValue为叶子节点的链路
                     var find = search(parentValues, notSelectedValue, [], searched);
                     if (find && BI.isNotEmptyArray(searched)) {
                         BI.each(searched, function (i, arr) {
                             var node = self._getNode(selectedValues, arr);
                             if (node) {
-                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国
+                                // 例如选中了 中国-江苏， 搜索江苏， 取消中国（实际上只想删除中国-江苏，因为搜的是江苏）
+                                // 例如选中了 中国-江苏-南京，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 self._deleteNode(selectedValues, arr);
                             } else {
-                                // 例如选中了 中国-江苏，搜索南京，取消中国
+                                // 例如选中了 中国-江苏，搜索南京，取消中国（实际上只想删除中国-江苏-南京，因为搜的是南京）
                                 expandSelectedValue(selectedValues, arr, BI.last(arr));
                             }
                         });
@@ -26688,13 +26826,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             var isCurAllSelected = isAllSelect || isAllSelected(parentValues, current);
             BI.each(children, function (i, child) {
                 var state = nodeSearch(deep + 1, newParents, child.value, isCurAllSelected, result);
+                // 当前节点的子节点是否选中，并不确定全选还是半选
                 if (state[1] === true) {
                     checked = true;
                 }
+                // 当前节点的子节点要不要加入到结果集中
                 if (state[0] === true) {
                     can = true;
                 }
             });
+            // 子节点匹配, 补充父节点
             if (can === true) {
                 checked = isCurAllSelected || (isSelected(parentValues, current) && checked);
                 createOneJson(parentValues, current, true, checked, false, false, result);
@@ -26895,8 +27036,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 }
             }
             var check;
+            // 展开的节点checked为false 且没有明确得出当前子节点是半选或者全选, 则check状态取决于valueMap
             if (!checked && !halfCheck && !tempCheck) {
-                // 当节点自身是不选的，且通过selectedValues没有得到全选, 则check状态取决于valueMap
                 check = BI.has(valueMap, current);
             } else {
                 // 不是上面那种情况就先看在节点没有带有明确半选的时候，通过节点自身的checked和valueMap的状态能都得到选中信息
@@ -27378,8 +27519,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeListCombo.EVENT_SEARCHING,
@@ -27390,6 +27531,11 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
                 eventName: BI.MultiTreeListCombo.EVENT_CONFIRM,
                 action: function () {
                     self.fireEvent(BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW);
                 }
             }]
         });
@@ -27415,6 +27561,7 @@ BI.ListTreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.ListTreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.ListTreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.ListTreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.ListTreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况, 可以自增值
  *
@@ -27468,8 +27615,8 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 }
             }, {
                 eventName: BI.MultiTreeInsertCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeInsertCombo.EVENT_SEARCHING,
@@ -27480,6 +27627,11 @@ BI.TreeValueChooserInsertCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 eventName: BI.MultiTreeInsertCombo.EVENT_CONFIRM,
                 action: function () {
                     self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_CONFIRM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW);
                 }
             }]
         });
@@ -27505,6 +27657,7 @@ BI.TreeValueChooserInsertCombo.EVENT_STOP = "EVENT_STOP";
 BI.TreeValueChooserInsertCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
 BI.TreeValueChooserInsertCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
 BI.TreeValueChooserInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.TreeValueChooserInsertCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo);/**
  * 简单的复选下拉树控件, 适用于数据量少的情况
  *
@@ -27558,8 +27711,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_CLICK_ITEM,
-                action: function () {
-                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM);
+                action: function (v) {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_CLICK_ITEM, v);
                 }
             }, {
                 eventName: BI.MultiTreeCombo.EVENT_SEARCHING,
@@ -27570,6 +27723,11 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
                 eventName: BI.MultiTreeCombo.EVENT_CONFIRM,
                 action: function () {
                     self.fireEvent(BI.TreeValueChooserCombo.EVENT_CONFIRM);
+                }
+            }, {
+                eventName: BI.MultiTreeCombo.EVENT_BEFORE_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.TreeValueChooserCombo.EVENT_BEFORE_POPUPVIEW);
                 }
             }]
         });
@@ -27589,6 +27747,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
     }
 });
 
+BI.TreeValueChooserCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.TreeValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.TreeValueChooserCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.TreeValueChooserCombo.EVENT_BLUR = "EVENT_BLUR";
@@ -27820,7 +27979,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     }
 });
 
@@ -27916,7 +28075,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;
-        this.combo.populate.apply(this, arguments);
+        this.combo.populate.apply(this.combo, arguments);
     }
 });
 
