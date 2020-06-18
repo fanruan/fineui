@@ -216,6 +216,8 @@ BI.ColorChooserPopup = BI.inherit(BI.Widget, {
     setStoreColors: function (colors) {
         if (BI.isArray(colors)) {
             this.storeColors.populate([this._digestStoreColors(colors)]);
+            // BI-66973 选中颜色的同时选中历史
+            this.storeColors.setValue(this.getValue());
         }
     },
 
