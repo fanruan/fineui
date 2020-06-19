@@ -1,7 +1,7 @@
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-combo bi-border bi-focus-shadow",
+        baseCls: "bi-year-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
