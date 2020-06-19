@@ -1,7 +1,7 @@
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
 
     props: {
-        baseCls: "bi-year-month-combo bi-border bi-focus-shadow",
+        baseCls: "bi-year-month-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
