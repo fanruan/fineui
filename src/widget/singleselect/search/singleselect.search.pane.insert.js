@@ -78,8 +78,9 @@ BI.SingleSelectSearchInsertPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
+        var o = this.options;
         var hasSameValue = BI.some(this.loader.getAllButtons(), function (idx, btn) {
-            return keyword === btn.getValue();
+            return keyword === (o.valueFormatter(btn.getValue()) || btn.getValue());
         });
         var isMatchTipVisible = this.loader.getAllButtons().length > 0 && hasSameValue;
         this.tooltipClick.setVisible(isMatchTipVisible);

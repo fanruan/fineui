@@ -64,8 +64,8 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
     },
 
     setKeyword: function (keyword) {
-        var btn;
-        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === btn.getValue());
+        var btn, o = this.options;
+        var isVisible = this.loader.getAllButtons().length > 0 && (btn = this.loader.getAllButtons()[0]) && (keyword === (o.valueFormatter(btn.getValue()) || btn.getValue()));
         if (isVisible !== this.tooltipClick.isVisible()) {
             this.tooltipClick.setVisible(isVisible);
             this.resizer.attr("items")[0].height = (isVisible ? this.constants.height : 0);
