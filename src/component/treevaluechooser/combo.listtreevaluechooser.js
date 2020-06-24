@@ -13,7 +13,8 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
             width: 200,
             height: 24,
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            isNeedAdjustWidth: true,
         });
     },
 
@@ -25,6 +26,7 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
         }
         this.combo = BI.createWidget({
             type: "bi.multi_tree_list_combo",
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             element: this,
             text: o.text,
             value: o.value,
