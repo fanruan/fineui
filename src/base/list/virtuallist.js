@@ -114,7 +114,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 this.cache[i].destroyed = true;
             }
         }
-        var firstFragment = BI.Widget._renderEngine.createFragment(), lastFragment = BI.Widget._renderEngine.createFragment();
+        var firstFragment = BI.Widget._renderEngine.createFragment(),
+            lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
             var index = this.cache[i].index;
@@ -146,7 +147,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         }
         this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
         this._calculateBlocksToRender();
-        this.element.scrollTop(o.scrollTop);
+        try {
+            this.element.scrollTop(o.scrollTop);
+        } catch (e) {
+        }
     },
 
     _clearChildren: function () {
