@@ -105,6 +105,7 @@ BI.ListView = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && this.options.items !== items) {
+            this.options.items = items;
             this.restore();
         }
         this._populate(items);
