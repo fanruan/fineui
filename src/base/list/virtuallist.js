@@ -132,9 +132,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         }
         this.container.element.prepend(firstFragment);
         this.container.element.append(lastFragment);
-        this.topBlank.setHeight(this.cache[start < 0 ? 0 : start].scrollTop);
-        var lastCache = this.cache[Math.min(end, this.renderedIndex)];
-        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - lastCache.scrollTop - lastCache.height);
+        this.topBlank.setHeight(this.tree.sumTo(Math.max(-1, start - 1)));
+        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
@@ -173,7 +172,6 @@ BI.VirtualList = BI.inherit(BI.Widget, {
 
     populate: function (items) {
         if (items && this.options.items !== items) {
-            this.options.items = items;
             this.restore();
         }
         this._populate(items);
