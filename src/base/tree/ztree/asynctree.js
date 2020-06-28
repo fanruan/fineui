@@ -68,6 +68,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
         }
 
         function beforeCheck (treeId, treeNode) {
+            // 下面主动修改了node的halfCheck属性, 节点属性的判断依赖halfCheck，改之前就获取一下
             var status = treeNode.getCheckStatus();
             treeNode.halfCheck = false;
             if (treeNode.checked === true) {
