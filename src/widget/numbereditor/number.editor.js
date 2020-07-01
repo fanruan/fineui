@@ -15,9 +15,7 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             value: 0,
             allowBlank: false,
             errorText: "",
-            step: 1,
-            min: BI.MIN,
-            max: BI.MAX
+            step: 1
         });
     },
 
@@ -29,16 +27,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             height: o.height - 2,
             allowBlank: o.allowBlank,
             value: o.valueFormatter(o.value),
-            validationChecker: function (v) {
-                if(!self._checkValueInRange(v)) {
-                    return false;
-                }
-                return o.validationChecker(v);
-            },
+            validationChecker: o.validationChecker,
             errorText: o.errorText
         });
         this.editor.on(BI.TextEditor.EVENT_CHANGE, function () {
-            self._checkAdjustDisabled(o.value);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
         });
         this.editor.on(BI.TextEditor.EVENT_ERROR, function () {
@@ -54,12 +46,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             forceNotSelected: true,
             trigger: "lclick,",
-            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12",
-            disabled: BI.parseFloat(o.value) >= o.max
+            cls: "add-up-font top-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.topBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(o.step);
-            self._checkAdjustDisabled(o.value);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
@@ -67,12 +57,10 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
             type: "bi.icon_button",
             trigger: "lclick,",
             forceNotSelected: true,
-            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12",
-            disabled: BI.parseFloat(o.value) <= o.min
+            cls: "minus-down-font bottom-button bi-border-left bi-list-item-active2 icon-size-12"
         });
         this.bottomBtn.on(BI.IconButton.EVENT_CHANGE, function () {
             self._finetuning(-o.step);
-            self._checkAdjustDisabled(o.value);
             self.fireEvent(BI.NumberEditor.EVENT_CHANGE);
             self.fireEvent(BI.NumberEditor.EVENT_CONFIRM);
         });
@@ -106,16 +94,6 @@ BI.NumberEditor = BI.inherit(BI.Widget, {
 
     isEditing: function () {
         return this.editor.isEditing();
-    },
-
-    _checkValueInRange: function(v) {
-        var o = this.options;
-        return !!(BI.isNumeric(v) && BI.parseFloat(v) >= o.min && BI.parseFloat(v) <= o.max);
-    },
-
-    _checkAdjustDisabled: function(v) {
-        this.bottomBtn.setEnable(BI.parseFloat(v) > this.options.min);
-        this.topBtn.setEnable(BI.parseFloat(v) < this.options.max);
     },
 
     // 微调
