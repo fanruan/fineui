@@ -19,6 +19,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
+        o.value = o.value || "";
         this.combo = BI.createWidget({
             type: "bi.combo",
             element: this,
@@ -89,7 +90,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     },
 
     setValue: function (color) {
-        this.combo.setValue(color);
+        this.combo.setValue(color || "");
     },
 
     getValue: function () {
