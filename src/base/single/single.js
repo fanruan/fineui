@@ -162,6 +162,10 @@ BI.Single = BI.inherit(BI.Widget, {
         }
     },
 
+    setTipType: function (type) {
+        this.options.tipType = type;
+    },
+
     getTipType: function () {
         return this.options.tipType;
     },
