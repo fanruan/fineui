@@ -63,10 +63,10 @@ BI.MultiLayerSelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
         });
         items.push(this.node);
         BI.createWidget({
-            type: "bi.horizontal_adapt",
+            type: "bi.td",
             element: this,
             columnSize: BI.makeArray(o.layer, 12),
-            items: items
+            items: [items]
         });
     },
 
