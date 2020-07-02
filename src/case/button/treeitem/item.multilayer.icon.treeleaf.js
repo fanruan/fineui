@@ -48,10 +48,10 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
         });
         items.push(this.item);
         BI.createWidget({
-            type: "bi.td",
+            type: "bi.horizontal_adapt",
             element: this,
             columnSize: BI.makeArray(o.layer, 15),
-            items: [items]
+            items: items
         });
     },
 
