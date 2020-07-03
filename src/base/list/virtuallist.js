@@ -114,7 +114,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
                 this.cache[i].destroyed = true;
             }
         }
-        var firstFragment = BI.Widget._renderEngine.createFragment(), lastFragment = BI.Widget._renderEngine.createFragment();
+        var firstFragment = BI.Widget._renderEngine.createFragment(),
+            lastFragment = BI.Widget._renderEngine.createFragment();
         var currentFragment = firstFragment;
         for (var i = (start < 0 ? 0 : start); i <= end && i <= this.renderedIndex; i++) {
             var index = this.cache[i].index;
@@ -131,9 +132,8 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         }
         this.container.element.prepend(firstFragment);
         this.container.element.append(lastFragment);
-        this.topBlank.setHeight(this.cache[start < 0 ? 0 : start].scrollTop);
-        var lastCache = this.cache[Math.min(end, this.renderedIndex)];
-        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - lastCache.scrollTop - lastCache.height);
+        this.topBlank.setHeight(this.tree.sumTo(Math.max(-1, start - 1)));
+        this.bottomBlank.setHeight(this.tree.sumTo(this.renderedIndex) - this.tree.sumTo(Math.min(end, this.renderedIndex)));
         BI.each(needDestroyed, function (i, child) {
             child && child._destroy();
         });
@@ -146,7 +146,10 @@ BI.VirtualList = BI.inherit(BI.Widget, {
         }
         this.tree = BI.PrefixIntervalTree.empty(Math.ceil(o.items.length / o.blockSize));
         this._calculateBlocksToRender();
-        this.element.scrollTop(o.scrollTop);
+        try {
+            this.element.scrollTop(o.scrollTop);
+        } catch (e) {
+        }
     },
 
     _clearChildren: function () {

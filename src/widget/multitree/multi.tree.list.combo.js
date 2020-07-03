@@ -22,7 +22,8 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             height: 24,
             allowEdit: true,
-            allowInsertValue: true
+            allowInsertValue: true,
+            isNeedAdjustWidth: true
         });
     },
 
@@ -140,8 +141,10 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
                         self.numberCounter.adjustView();
                         self.trigger.getSearcher().adjustView();
                     });
-                }
+                },
+                maxWidth: o.isNeedAdjustWidth ? "auto" : 500,
             },
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             value: {value: o.value || {}},
             hideChecker: function (e) {
                 return triggerBtn.element.find(e.target).length === 0 &&

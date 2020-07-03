@@ -57,6 +57,10 @@
                 if (!providers[type]) {
                     providers[type] = new providerInjection[type]();
                 }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
                 return configFn(providers[type]);
             }
             return BI.Plugin.configWidget(type, configFn);
@@ -73,6 +77,9 @@
                     if (providerInjection[type]) {
                         if (!providers[type]) {
                             providers[type] = new providerInjection[type]();
+                        }
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
                         }
                         queue[i](providers[type]);
                         continue;
@@ -199,7 +206,9 @@
                 return stores[type];
             }
             var inst = stores[type] = new storeInjection[type](config);
-            inst._constructor && inst._constructor(config);
+            inst._constructor && inst._constructor(config, function () {
+                delete stores[type];
+            });
             callPoint(inst, type);
             return inst;
         }

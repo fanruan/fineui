@@ -13,7 +13,8 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             width: 200,
             height: 24,
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            isNeedAdjustWidth: true
         });
     },
 
@@ -34,6 +35,7 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             listeners: [{
                 eventName: BI.MultiTreeCombo.EVENT_FOCUS,
                 action: function () {

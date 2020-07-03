@@ -10,6 +10,15 @@ export function shortcut() {
 }
 
 /**
+ * 注册provider
+ */
+export function provider() {
+    return function decorator<U>(Target: Constructor<U> & {xtype: string}): void {
+        BI.provider(Target.xtype, Target);
+    };
+}
+
+/**
  * 注册model
  */
 export function model() {

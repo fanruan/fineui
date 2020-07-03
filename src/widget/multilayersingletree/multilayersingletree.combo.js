@@ -21,7 +21,8 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
             },
             allowEdit: false,
             allowSearchValue: false,
-            allowInsertValue: false
+            allowInsertValue: false,
+            isNeedAdjustWidth: true
         });
     },
 
@@ -98,8 +99,10 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 },
                 value: o.value,
                 maxHeight: 400,
+                maxWidth: o.isNeedAdjustWidth ? "auto" : 500,
                 minHeight: 240
             },
+            isNeedAdjustWidth: o.isNeedAdjustWidth,
             listeners: [{
                 eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                 action: function () {

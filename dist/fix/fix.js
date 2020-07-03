@@ -359,7 +359,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -1337,7 +1337,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             _classCallCheck(this, Model);
         }
 
-        Model.prototype._constructor = function _constructor(model) {
+        Model.prototype._constructor = function _constructor(model, destroyHandler) {
             if (model instanceof Observer || model instanceof Model) {
                 model = model.model;
             }
@@ -1365,6 +1365,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
+            this._destroyHandler = destroyHandler;
             if (this.$$model) {
                 return this.model;
             }
@@ -1391,6 +1392,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.$$model = null;
             this.$$computed = null;
             this.$$state = null;
+            this._destroyHandler && this._destroyHandler();
         };
 
         return Model;

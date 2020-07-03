@@ -459,6 +459,9 @@ if (!_global.BI) {
             while (BI.prepares && BI.prepares.length > 0) {
                 BI.prepares.shift()();
             }
+            while (_global.___fineuiExposedFunction && _global.___fineuiExposedFunction.length > 0) {
+                _global.___fineuiExposedFunction.shift()();
+            }
             BI.initialized = true;
         },
 

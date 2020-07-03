@@ -181,6 +181,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
         }
 
         function beforeCheck (treeId, treeNode) {
+            // 下面主动修改了node的halfCheck属性, 节点属性的判断依赖halfCheck，改之前就获取一下
+            var status = treeNode.getCheckStatus();
             treeNode.halfCheck = false;
             if (treeNode.checked === true) {
                 // 将展开的节点halfCheck设为false，解决展开节点存在halfCheck=true的情况 guy
@@ -201,7 +203,6 @@ BI.TreeView = BI.inherit(BI.Pane, {
                     node.halfCheck = false;
                 });
             }
-            var status = treeNode.getCheckStatus();
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             if(status.half === true && status.checked === true) {
                 treeNode.checked = false;
