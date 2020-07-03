@@ -418,6 +418,14 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
+    showView:function (){
+        this.combo.showView();
+    },
+
+    hideView:function (){
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.storeValue = {
             type: BI.Selection.Multi,

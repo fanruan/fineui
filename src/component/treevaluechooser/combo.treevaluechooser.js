@@ -75,6 +75,14 @@ BI.TreeValueChooserCombo = BI.inherit(BI.AbstractTreeValueChooser, {
         });
     },
 
+    showView: function () {
+        this.combo.showView();
+    },
+
+    hideView: function () {
+        this.combo.hideView();
+    },
+
     setValue: function (v) {
         this.combo.setValue(v);
     },
