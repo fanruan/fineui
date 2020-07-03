@@ -18,37 +18,11 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
         BI.MonthPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
 
-        // 纵向排列月
-        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
-        var items = [];
-        items.push(month.slice(0, 2));
-        items.push(month.slice(2, 4));
-        items.push(month.slice(4, 6));
-        items.push(month.slice(6, 8));
-        items.push(month.slice(8, 10));
-        items.push(month.slice(10, 12));
-        items = BI.map(items, function (i, item) {
-            return BI.map(item, function (j, td) {
-                return {
-                    type: "bi.text_item",
-                    cls: "bi-list-item-select",
-                    textAlign: "center",
-                    whiteSpace: "nowrap",
-                    once: false,
-                    forceSelected: true,
-                    height: 23,
-                    width: 38,
-                    value: td,
-                    text: td
-                };
-            });
-        });
-
         this.month = BI.createWidget({
             type: "bi.button_group",
             element: this,
             behaviors: o.behaviors,
-            items: BI.createItems(items, {}),
+            items: BI.createItems(this._getItems(o.allowMonths), {}),
             layouts: [BI.LogicFactory.createLogic("table", BI.extend({
                 dynamic: true
             }, {
@@ -70,6 +44,41 @@ BI.MonthPopup = BI.inherit(BI.Widget, {
                 self.fireEvent(BI.MonthPopup.EVENT_CHANGE);
             }
         });
+    },
+
+    _getItems: function(m) {
+        // 纵向排列月
+        var month = [1, 7, 2, 8, 3, 9, 4, 10, 5, 11, 6, 12];
+        var items = [];
+        items.push(month.slice(0, 2));
+        items.push(month.slice(2, 4));
+        items.push(month.slice(4, 6));
+        items.push(month.slice(6, 8));
+        items.push(month.slice(8, 10));
+        items.push(month.slice(10, 12));
+        items = BI.map(items, function (i, item) {
+            return BI.map(item, function (j, td) {
+                return {
+                    type: "bi.text_item",
+                    cls: "bi-list-item-select",
+                    textAlign: "center",
+                    whiteSpace: "nowrap",
+                    once: false,
+                    forceSelected: true,
+                    height: 23,
+                    width: 38,
+                    value: td,
+                    text: td,
+                    disabled: !BI.contains(m, td)
+                };
+            });
+        });
+
+        return items;
+    },
+
+    populate: function(months) {
+        this.month.populate(this._getItems(months));
     },
 
     getValue: function () {

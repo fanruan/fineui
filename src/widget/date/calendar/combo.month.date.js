@@ -23,6 +23,7 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
 
         this.popup = BI.createWidget({
             type: "bi.month_popup",
+            allowMonths: o.allowMonths,
             behaviors: o.behaviors
         });
 
@@ -53,6 +54,10 @@ BI.MonthDateCombo = BI.inherit(BI.Trigger, {
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.doBehavior();
         });
+    },
+
+    populate: function () {
+        this.combo.populate.apply(this.combo, arguments);
     },
 
     setValue: function (v) {
