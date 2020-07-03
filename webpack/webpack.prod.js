@@ -43,7 +43,6 @@ module.exports = merge.smart(common, {
             }),
             new webpack.BannerPlugin({
                 banner: `time: ${new Date().toLocaleString()}`,
-                exclude: /\.css$/g,
             }),
         ],
     },
