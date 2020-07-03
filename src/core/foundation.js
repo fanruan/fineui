@@ -4,7 +4,7 @@
 /**
  * 初始化BI对象
  */
-var _global;
+_global = undefined;
 if (typeof window !== "undefined") {
     _global = window;
 } else if (typeof global !== "undefined") {
