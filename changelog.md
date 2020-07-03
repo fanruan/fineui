@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-07)
+- 修复date_picker最大值最小值判断问题
 - 复选下拉树和下拉列表添加showView和hideVIew方法
 - number_editor支持自动检测数值与范围是否合法
 - 修复了颜色选择器设置值为null的时候,trigger和popup表现不一致的问题
