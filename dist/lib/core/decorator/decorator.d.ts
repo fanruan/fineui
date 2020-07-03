@@ -6,6 +6,12 @@ export declare function shortcut(): <U>(Target: Constructor<U> & {
     xtype: string;
 }) => void;
 /**
+ * 注册provider
+ */
+export declare function provider(): <U>(Target: Constructor<U> & {
+    xtype: string;
+}) => void;
+/**
  * 注册model
  */
 export declare function model(): <U extends (new (...args: any[]) => {}) & {
