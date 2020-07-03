@@ -8,6 +8,10 @@ function sync(patterns) {
     return uniq(grunt.file.expand({ filter: path => !new RegExp(/__test__/g).test(path) }, patterns)).map(name => `./${name}`);
 }
 
+const fixJs = "./dist/fix/fix.js";
+const fixIEJs = "./dist/fix/fix.ie.js";
+const lodashJs = "src/core/lodash.js";
+
 const basicAttachmentMap = {
     polyfill: sync(["src/core/foundation.js", "src/polyfill/**/*.js"]).concat(["@babel/polyfill", "es6-promise/auto"]),
     polyfillIE: sync(["src/core/foundation.js", "src/polyfill/**/*.js"]).concat([
@@ -28,7 +32,7 @@ const basicAttachmentMap = {
         "src/less/core/**/*.less",
         "src/less/theme/**/*.less",
         "src/core/foundation.js",
-        "src/core/lodash.js",
+        lodashJs,
         // 'src/core/mvc/**/*.js',
         "src/core/base.js",
         "src/core/ob.js",
@@ -87,7 +91,7 @@ const basicAttachmentMap = {
     config: sync(["demo/version.js", "i18n/i18n.cn.js"]),
     utils: sync([
         "src/core/foundation.js",
-        "src/core/lodash.js",
+        lodashJs,
         "src/core/var.js",
         "src/core/func/array.js",
         "src/core/func/number.js",
@@ -105,8 +109,8 @@ const basicAttachmentMap = {
         "src/data/data.js",
         "src/data/**/*.js",
     ]),
-    fix: ['./typescript/fix/fix.ts'],
-    fixIE: ['./typescript/fix/fix.ie.ts'],
+    fix: [fixJs],
+    fixIE: [fixIEJs],
 };
 
 const bundle = [].concat(
@@ -177,7 +181,7 @@ const fineuiIE = [].concat(
 const fineuiWithoutJqueryAndPolyfillJs = [].concat(
     sync([
         "src/core/foundation.js",
-        "src/core/lodash.js",
+        lodashJs,
         // 'src/core/mvc/**/*.js',
         "src/core/base.js",
         "src/core/ob.js",
@@ -232,6 +236,10 @@ const demo = [].concat(
 );
 
 module.exports = {
+    fix: fixJs,
+    fixIE: fixIEJs,
+    lodash: lodashJs,
+    font: basicAttachmentMap.font,
     bundle: uniq(bundle),
     bundleIE: uniq(bundleIE),
     bundleWithoutNormalize: uniq(bundleWithoutNormalize),

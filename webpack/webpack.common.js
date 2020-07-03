@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const autoprefixer = require("autoprefixer");
+const path = require("path");
 
 const dirs = require("./dirs");
 
@@ -22,7 +23,7 @@ module.exports = {
             {
                 test: /\.(js|ts)$/,
                 include: [dirs.NODE_MODULES, dirs.PRIVATE, dirs.TYPESCRIPT],
-                exclude: /(node_modules(\/|\\)core-js|\.\/demo|\.\/src|\.\/public|\.\/i18n|\.\/ui|\.\/_mobile|\.dist).+\.js$/,
+                exclude: /node_modules(\/|\\)core-js/,
                 use: [{
                     loader: "babel-loader",
                     options: {
@@ -33,6 +34,49 @@ module.exports = {
                     options: {
                         enforce: "pre",
                     },
+                }],
+            },
+            {
+                test: /\.js$/,
+                include: [
+                    dirs.DEMO,
+                    dirs.SRC,
+                    dirs.PUBLIC,
+                    dirs.MOBILE,
+                    dirs.I18N,
+                    dirs.UI,
+                    dirs.FIX,
+                ],
+                use: [
+                    {
+                        loader: "source-map-loader",
+                        options: {
+                            enforce: "pre",
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.js$/,
+                include: [path.resolve(__dirname, '../', attachments.lodash)],
+                use: [
+                    {
+                        loader: "script-loader",
+                    },
+                ],
+            },
+            {
+                test: path.resolve(__dirname, '../', attachments.fix),
+                use: [{
+                    loader: 'expose-loader',
+                    options: 'Fix',
+                }],
+            },
+            {
+                test: path.resolve(__dirname, '../', attachments.fixIE),
+                use: [{
+                    loader: 'expose-loader',
+                    options: 'Fix',
                 }],
             },
             {

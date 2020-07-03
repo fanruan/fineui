@@ -6,4 +6,11 @@ module.exports = {
     BABEL_CONFIG: path.resolve(__dirname, "../babel.config.js"),
     IE8_BABEL_CONFIG: path.resolve(__dirname, "../babel.config.ie8.js"),
     TYPESCRIPT: path.resolve(__dirname, "../typescript"),
+    SRC: path.resolve(__dirname, "../src"),
+    DEMO: path.resolve(__dirname, "../demo"),
+    PUBLIC: path.resolve(__dirname, "../public"),
+    I18N: path.resolve(__dirname, "../i18n"),
+    UI: path.resolve(__dirname, "../ui"),
+    MOBILE: path.resolve(__dirname, "../_mobile"),
+    FIX: path.resolve(__dirname, "../dist/fix"),
 };

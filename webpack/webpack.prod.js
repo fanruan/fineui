@@ -14,17 +14,23 @@ const attachments = require("./attachments");
 module.exports = merge.smart(common, {
     mode: "production",
     entry: {
-        'bundle.min': attachments.bundle,
-        'bundle_without_normalize': attachments.bundleWithoutNormalize,
+        font: attachments.font,
         fineui: attachments.fineui,
-        'fineui_without_jquery_polyfill': attachments.fineuiWithoutJqueryAndPolyfillJs,
+        "fineui.min": attachments.fineui,
+        "fineui.ie.min": attachments.fineuiIE,
         utils: attachments.utils,
-        'bundle.ie': attachments.bundleIE,
-        'fineui.ie': attachments.fineuiIE,
+        "utils.min": attachments.utils,
+        "bundle.min": attachments.bundle,
+        "fineui_without_jquery_polyfill": attachments.fineuiWithoutJqueryAndPolyfillJs,
+        "2.0/fineui.ie.min": attachments.bundleIE,
+        "2.0/fineui": attachments.bundle,
+        "2.0/fineui.min": attachments.bundle,
+        '2.0/fineui_without_normalize': attachments.bundleWithoutNormalize,
     },
     optimization: {
         minimizer: [
             new UglifyJsPlugin({
+                include: /\.min/,
                 parallel: true,
                 sourceMap: true,
                 uglifyOptions: {
