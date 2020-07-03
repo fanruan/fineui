@@ -30,9 +30,6 @@
     "extends": "plugin:@fui/es5"
   }, {
     "files": ["webpack/*.js", "types/*.ts", "typescript/*.ts","typescript/**/*.ts", "./*.js", "lib/**/*.js", "lib/*.js"],
-    "extends": "plugin:@fui/typescript",
-    "rules": {
-      "template-curly-spacing" : "off"
-    }
+    "extends": "plugin:@fui/typescript"
   }]
 }
