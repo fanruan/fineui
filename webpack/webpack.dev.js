@@ -10,7 +10,7 @@ const dirs = require("./dirs");
 const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
-    devtool: "eval-source-map",
+    devtool: "source-map",
     output: {
         path: dirs.DEST,
         filename: "[name].js",

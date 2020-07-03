@@ -9,6 +9,8 @@ const attachments = require("./attachments");
 module.exports = {
     entry: {
         demo: attachments.demo,
+        // 用于启动dev模式时，工程引用调试
+        fineui: attachments.fineui,
     },
     externals: {
         lodash: '_',
