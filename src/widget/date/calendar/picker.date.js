@@ -6,7 +6,7 @@
 BI.DatePicker = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         var conf = BI.DatePicker.superclass._defaultConfig.apply(this, arguments);
-        
+
         return BI.extend(conf, {
             baseCls: "bi-date-picker",
             height: 40,
@@ -76,13 +76,14 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue({
                 year: self.year.getValue(),
-                month: self.month.getValue(),
+                month: self._refreshMonth()
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
         this.month = BI.createWidget({
             type: "bi.month_date_combo",
             behaviors: o.behaviors,
+            allowMonths: this._getAllowMonths()
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
@@ -128,12 +129,29 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         });
     },
 
+    _refreshMonth: function () {
+        var month = this.month.getValue();
+        this.month.populate(this._getAllowMonths());
+        var allowMonth = this._getAllowMonths();
+        if (!BI.contains(allowMonth, month)) {
+            month = allowMonth[0];
+        }
+        return month;
+    },
+
+    _getAllowMonths: function () {
+        var self = this, o = this.options;
+        return BI.filter(BI.range(1, 13), function (idx, v) {
+            return !BI.checkDateVoid(self.year.getValue(), v, 1, o.min, o.max)[0];
+        })
+    },
+
     _checkLeftValid: function () {
         var o = this.options;
         var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var valid = !(this._month <= (minDate.getMonth() + 1) && this._year <= minDate.getFullYear());
         this.left.setEnable(valid);
-        
+
         return valid;
     },
 
@@ -142,7 +160,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
         var valid = !(this._month >= (maxDate.getMonth() + 1) && this._year >= maxDate.getFullYear());
         this.right.setEnable(valid);
-        
+
         return valid;
     },
 
