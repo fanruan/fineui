@@ -92,6 +92,54 @@ _.extend(BI.Func, {
             match: matched,
             find: find
         };
+    },
+
+    /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     * @return {any[]}
+     */
+    getSortedResult: function (items, key) {
+        var getTextOfItem = BI.isFunction(key) ? key :
+            function (item, key) {
+                if (BI.isNotNull(key)) {
+                    return item[key];
+                }
+                if (BI.isNotNull(item.text)) {
+                    return item.text;
+                }
+                if (BI.isNotNull(item.value)) {
+                    return item.value;
+                }
+                return item;
+            };
+
+        return items.sort(function (item1, item2) {
+            var str1 = getTextOfItem(item1, key);
+            var str2 = getTextOfItem(item2, key);
+            if (BI.isNull(str1) && BI.isNull(str2)) {
+                return 0;
+            }
+            if (BI.isNull(str1)) {
+                return -1;
+            }
+            if (BI.isNull(str2)) {
+                return 1;
+            }
+            if (str1 === str2) {
+                return 0;
+            }
+            var len1 = str1.length, len2 = str2.length;
+            for (var i = 0; i < len1 && i < len2; i++) {
+                var char1 = str1[i];
+                var char2 = str2[i];
+                if (char1 !== char2) {
+                    return BI.CODE_INDEX[char1] - BI.CODE_INDEX[char2]
+                }
+            }
+            return len1 - len2;
+        });
     }
 });
 
