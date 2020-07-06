@@ -33,6 +33,7 @@ import { _RedMarkBehavior } from "./core/behavior/behavior.redmark";
 import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
+import { _Plugin } from "./core/plugin";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
 import { _Layout } from "./core/wrapper/layout";
@@ -50,6 +51,7 @@ type ClassConstructor<T extends {}> = T & {
 
 export interface BI extends _func, _i18n, _base {
     OB: ClassConstructor<_OB>;
+    Plugin:_Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
