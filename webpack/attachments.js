@@ -87,7 +87,11 @@ const basicAttachmentMap = {
     resource: sync(["src/less/resource/**/*.less"]),
     font: sync(["public/less/font.less"]),
     ts: ['./typescript/bundle.ts'],
-    ui: sync(['ui/js/**/*.js']),
+    ui: sync([
+        'ui/less/app.less',
+        'ui/less/**/*.less',
+        'ui/js/**/*.js',
+    ]),
     config: sync(["demo/version.js", "i18n/i18n.cn.js"]),
     utils: sync([
         "src/core/foundation.js",
