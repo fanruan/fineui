@@ -21,7 +21,7 @@ export interface _base {
     shuffle: (collection: any[] | object | string) => any[];
     sample: (collection: any[] | object | string, n?: number) => any[];
     toArray: (collection: any[] | object | string) => any[];
-    size: (collection: any[] | object | string) => number;
+    size: (collection: any) => number;
     each: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => void) | object | string, thisArg?: any) => any;
     map: <T, U>(collection: T[] | object | string | null | undefined, callback?: ((index: number, value: T) => U) | object | string, thisArg?: any) => U[];
     reduce: <T, U>(collection: T[] | object | string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T) | object | string, initialValue?: U | T) => U extends T ? U : T;
@@ -131,7 +131,7 @@ export interface _base {
         length: 0;
     };
     isNotEmptyArray: <T, U>(arr: T[] | U) => arr is [T, ...T[]];
-    isEmptyObject: (obj: any) => obj is object;
+    isEmptyObject: (obj: any) => boolean;
     isNotEmptyObject: (obj: any) => obj is object;
     isWindow: (obj: any) => obj is Window;
     isDeepMatch: (object: any, attrs: any) => boolean;
@@ -168,8 +168,8 @@ export interface _base {
     isFloat: (value: string | number) => boolean;
     isOdd: (value: string | number) => boolean;
     isEven: (value: string | number) => boolean;
-    sum: (array: any[], iteratee: Function, context: any) => number;
-    average: (array: any[], iteratee: Function, context: any) => number;
+    sum: (array: any[], iteratee?: Function, context?: any) => number;
+    average: (array: any[], iteratee?: Function, context?: any) => number;
     trim: (string?: string, chars?: string) => string;
     toUpperCase: (string: string) => string;
     toLowerCase: (string: string) => string;

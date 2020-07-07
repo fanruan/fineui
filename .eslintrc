@@ -12,7 +12,8 @@
     "Data": true,
     "Fix": true,
     "module": true,
-    "Demo": true
+    "Demo": true,
+    "_global": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

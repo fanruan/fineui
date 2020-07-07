@@ -5,43 +5,58 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
-const isBuilt4IE8 = process.env.BROWSER_VERSION === "ie8";
-
 const dirs = require("./dirs");
 
 const common = require("./webpack.common.js");
 
+const attachments = require("./attachments");
+
 module.exports = merge.smart(common, {
     mode: "production",
+    entry: {
+        font: attachments.font,
+        "fineui.min": attachments.fineui,
+        "fineui.ie.min": attachments.fineuiIE,
+        utils: attachments.utils,
+        "utils.min": attachments.utils,
+        "bundle.min": attachments.bundle,
+        "fineui_without_jquery_polyfill": attachments.fineuiWithoutJqueryAndPolyfillJs,
+        "2.0/fineui.ie.min": attachments.bundleIE,
+        "2.0/fineui": attachments.bundle,
+        "2.0/fineui.min": attachments.bundle,
+        '2.0/fineui_without_normalize': attachments.bundleWithoutNormalize,
+        '2.0/fineui_without_normalize.min': attachments.bundleWithoutNormalize,
+    },
     optimization: {
         minimizer: [
-          new UglifyJsPlugin({
-            parallel: true,
-            sourceMap: true,
-            uglifyOptions: {
-              ie8: true,
-                output: {
-                    comments: false,
+            new UglifyJsPlugin({
+                include: /\.min/,
+                parallel: true,
+                sourceMap: true,
+                uglifyOptions: {
+                    ie8: true,
+                    output: {
+                        comments: false,
+                    },
                 },
-            }
-          })
-        ]
-      },
+            }),
+            new webpack.BannerPlugin({
+                banner: `time: ${new Date().toLocaleString()}`,
+            }),
+        ],
+    },
 
     devtool: "hidden-source-map",
 
     output: {
         path: dirs.DEST,
-        filename: isBuilt4IE8 ? "ie.[name].js" : "es5.[name].js",
+        filename: "[name].js",
     },
 
     plugins: [
         new MiniCssExtractPlugin({
             path: dirs.DEST,
-            filename: "es5.fineui.css",
-        }),
-        new webpack.BannerPlugin({
-            banner: `time: ${new Date().toLocaleString()}`,
+            filename: "[name].css",
         }),
         new ForkTsCheckerWebpackPlugin({
         }),

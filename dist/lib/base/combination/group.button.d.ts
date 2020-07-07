@@ -4,7 +4,7 @@ export interface _ButtonGroup extends _Widget {
     addItems<T>(items: T[]): void;
     removeItemAt(indexes: any): void;
     removeItems(values: any): void;
-    populate(items?: any): void;
+    populate(items?: any, ...args: any[]): void;
     setNotSelectedValue(v: any): void;
     getNotSelectedValue<T>(): T[];
     setEnabledValue(v: any): void;
