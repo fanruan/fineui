@@ -48,7 +48,7 @@
     };
 
     var configFunctions = {};
-    BI.config = function (type, configFn) {
+    BI.config = function (type, configFn, opt) {
         if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
@@ -63,7 +63,7 @@
                 }
                 return configFn(providers[type]);
             }
-            return BI.Plugin.configWidget(type, configFn);
+            return BI.Plugin.configWidget(type, configFn, opt);
         }
         if (!configFunctions[type]) {
             configFunctions[type] = [];

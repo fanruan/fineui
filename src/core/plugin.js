@@ -39,13 +39,15 @@ BI.Plugin = BI.Plugin || {};
             __GlobalObjectConfigFns = __GlobalObjectConfigFns.concat(_.isArray(objectConfigFn) ? objectConfigFn : [objectConfigFn]);
         },
 
-        configWidget: function (type, fn) {
-            if (!_ConfigPlugin[type]) {
+        configWidget: function (type, fn, opt) {
+            // opt.single: true 最后一次注册有效
+            if (!_ConfigPlugin[type] || (opt && opt.single)) {
                 _ConfigPlugin[type] = [];
             }
             _ConfigPlugin[type].push(fn);
         },
 
+        // Deprecated
         registerWidget: function (type, fn) {
             if (!_WidgetsPlugin[type]) {
                 _WidgetsPlugin[type] = [];
