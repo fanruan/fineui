@@ -301,12 +301,15 @@
         },
 
         _popupView: function (e) {
+            var self = this;
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
 
             this.popupView.visible();
-            BI.each(needHideWhenAnotherComboOpen, function(i, combo){
-                combo && combo.hideView();
+            BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
+                if (i !== self.getName()) {
+                    combo && combo.hideView();
+                }
             });
             needHideWhenAnotherComboOpen = {};
             this.options.hideWhenAnotherComboOpen && (needHideWhenAnotherComboOpen[this.getName()] = this);
