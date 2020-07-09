@@ -1,6 +1,6 @@
 (function () {
     var kv = {};
-    BI.shortcut = BI.component = function (xtype, cls) {
+    BI.shortcut = BI.component = BI.shortcut || function (xtype, cls) {
         if (kv[xtype] != null) {
             _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
@@ -24,7 +24,7 @@
         return widget;
     };
 
-    BI.createWidget = function (item, options, context) {
+    BI.createWidget = BI.createWidget || function (item, options, context) {
         // 先把准备环境准备好
         BI.init();
         var el, w;
@@ -71,7 +71,7 @@
         throw new Error("无法根据item创建组件");
     };
 
-    BI.createElement = function () {
+    BI.createElement = BI.createElement || function () {
         var widget = BI.createWidget.apply(this, arguments);
         return widget.element;
     };

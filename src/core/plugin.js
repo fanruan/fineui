@@ -5,7 +5,7 @@ BI.Plugin = BI.Plugin || {};
     var _ConfigPlugin = {};
     var _GlobalWidgetConfigFns = [];
     var __GlobalObjectConfigFns = [];
-    BI.extend(BI.Plugin, {
+    BI.defaults(BI.Plugin, {
 
         getWidget: function (type, options) {
             if (_GlobalWidgetConfigFns.length > 0) {
