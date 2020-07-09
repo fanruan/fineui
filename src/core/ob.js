@@ -28,10 +28,10 @@
      * @class BI.OB
      * @abstract
      */
-    BI.OB = BI.OB || function (config) {
+    var OB = function (config) {
         this._constructor(config);
     };
-    _.defaults(BI.OB.prototype, {
+    _.extend(OB.prototype, {
         props: {},
         init: null,
         destroyed: null,
@@ -184,4 +184,5 @@
             this.purgeListeners();
         }
     });
+    BI.OB = BI.OB || OB;
 })();
