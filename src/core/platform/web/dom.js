@@ -3,7 +3,7 @@
  * @type {{}}
  */
 !(function () {
-    BI.DOM = {};
+    BI.DOM = BI.DOM || {};
 
     BI.extend(BI.DOM, {
         ready: function (fn) {

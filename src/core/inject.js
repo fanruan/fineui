@@ -1,6 +1,6 @@
 (function () {
     var moduleInjection = {};
-    BI.module = function (xtype, cls) {
+    BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module:[" + xtype + "] has been registed");
         }
@@ -8,7 +8,7 @@
     };
 
     var constantInjection = {};
-    BI.constant = function (xtype, cls) {
+    BI.constant = BI.constant || function (xtype, cls) {
         if (constantInjection[xtype] != null) {
             _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
@@ -16,7 +16,7 @@
     };
 
     var modelInjection = {};
-    BI.model = function (xtype, cls) {
+    BI.model = BI.model || function (xtype, cls) {
         if (modelInjection[xtype] != null) {
             _global.console && console.error("model:[" + xtype + "] has been registed");
         }
@@ -24,7 +24,7 @@
     };
 
     var storeInjection = {};
-    BI.store = function (xtype, cls) {
+    BI.store = BI.store || function (xtype, cls) {
         if (storeInjection[xtype] != null) {
             _global.console && console.error("store:[" + xtype + "] has been registed");
         }
@@ -32,7 +32,7 @@
     };
 
     var serviceInjection = {};
-    BI.service = function (xtype, cls) {
+    BI.service = BI.service || function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
             _global.console && console.error("service:[" + xtype + "] has been registed");
         }
@@ -40,7 +40,7 @@
     };
 
     var providerInjection = {};
-    BI.provider = function (xtype, cls) {
+    BI.provider = BI.provider || function (xtype, cls) {
         if (providerInjection[xtype] != null) {
             _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
@@ -48,7 +48,7 @@
     };
 
     var configFunctions = {};
-    BI.config = function (type, configFn, opt) {
+    BI.config = BI.config || function (type, configFn, opt) {
         if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
@@ -94,7 +94,7 @@
 
     var actions = {};
     var globalAction = [];
-    BI.action = function (type, actionFn) {
+    BI.action = BI.action || function (type, actionFn) {
         if (BI.isFunction(type)) {
             globalAction.push(type);
             return function () {
@@ -118,7 +118,7 @@
     };
 
     var points = {};
-    BI.point = function (type, action, pointFn, after) {
+    BI.point = BI.point || function (type, action, pointFn, after) {
         if (!points[type]) {
             points[type] = {};
         }
@@ -131,7 +131,7 @@
         points[type][action][after ? "after" : "before"].push(pointFn);
     };
 
-    BI.Modules = {
+    BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
                 _global.console && console.error("module:[" + type + "] does not exists");
@@ -144,7 +144,7 @@
         }
     };
 
-    BI.Constants = {
+    BI.Constants = BI.Constants || {
         getConstant: function (type) {
             return constantInjection[type];
         }
@@ -188,7 +188,7 @@
         });
     };
 
-    BI.Models = {
+    BI.Models = BI.Models || {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
@@ -200,7 +200,7 @@
 
     var stores = {};
 
-    BI.Stores = {
+    BI.Stores = BI.Stores || {
         getStore: function (type, config) {
             if (stores[type]) {
                 return stores[type];
@@ -216,7 +216,7 @@
 
     var services = {};
 
-    BI.Services = {
+    BI.Services = BI.Services || {
         getService: function (type, config) {
             if (services[type]) {
                 return services[type];
@@ -230,7 +230,7 @@
     var providers = {},
         providerInstance = {};
 
-    BI.Providers = {
+    BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
@@ -242,7 +242,7 @@
         }
     };
 
-    BI.Actions = {
+    BI.Actions = BI.Actions || {
         runAction: function (type, event, config) {
             BI.each(actions[type], function (i, act) {
                 try {
@@ -264,7 +264,7 @@
         }
     };
 
-    BI.getContext = function (type, config) {
+    BI.getContext = BI.getContext || function (type, config) {
         if (constantInjection[type]) {
             return BI.Constants.getConstant(type);
         }

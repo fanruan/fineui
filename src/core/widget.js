@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    BI.Widget = BI.inherit(BI.OB, {
+    BI.Widget = BI.Widget || BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
                 root: false,

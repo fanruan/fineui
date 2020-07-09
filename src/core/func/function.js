@@ -2,7 +2,7 @@
  * 基本的函数
  * Created by GUY on 2015/6/24.
  */
-BI.Func = {};
+BI.Func = BI.Func || {};
 _.extend(BI.Func, {
     /**
      * 创建唯一的名字
