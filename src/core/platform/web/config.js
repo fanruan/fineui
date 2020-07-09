@@ -13,7 +13,7 @@ BI.prepares.push(function () {
         }
         return _isSupportFlex;
     };
-    BI.Plugin.registerWidget("bi.horizontal", function (ob) {
+    BI.Plugin.configWidget("bi.horizontal", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), isLessIE8 = isIE && BI.getIEVersion() < 8;
         // center_adapt
         if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Center) {
@@ -44,7 +44,7 @@ BI.prepares.push(function () {
         }
         return ob;
     });
-    BI.Plugin.registerWidget("bi.center_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         if (!isIE && supportFlex && justOneItem) {
             // 有滚动条的情况下需要用到flex_scrollable_center_adapt布局
@@ -60,7 +60,7 @@ BI.prepares.push(function () {
         }
         return ob;
     });
-    BI.Plugin.registerWidget("bi.vertical_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex();
         if (!isIE && supportFlex) {
             // 有滚动条的情况下需要用到flex_scrollable_center_adapt布局
@@ -72,13 +72,13 @@ BI.prepares.push(function () {
         }
         return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
     });
-    BI.Plugin.registerWidget("bi.horizontal_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.horizontal_adapt", function (ob) {
         if (ob.items && ob.items.length <= 1) {
             return BI.extend(ob, {type: "bi.horizontal_auto"});
         }
         return ob;
     });
-    BI.Plugin.registerWidget("bi.float_center_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.float_center_adapt", function (ob) {
         if (!BI.isIE() && isSupportFlex()) {
             // 有滚动条的情况下需要用到flex_scrollable_center_adapt布局
             if (ob.scrollable === true || ob.scrollx === true || ob.scrolly === true) {
@@ -90,57 +90,57 @@ BI.prepares.push(function () {
         return BI.extend(ob, {type: "bi.inline_center_adapt"});
     });
 
-    BI.Plugin.registerWidget("bi.flex_horizontal", function (ob) {
+    BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_vertical", function (ob) {
+    BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_horizontal_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.flex_horizontal_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_vertical_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.flex_vertical_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_horizontal_center_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.flex_horizontal_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_vertical_center_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.flex_vertical_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
-    BI.Plugin.registerWidget("bi.flex_center_adapt", function (ob) {
+    BI.Plugin.configWidget("bi.flex_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true || ob.scrollx === true) {
             return BI.extend({}, ob, {type: "bi.flex_scrollable_center_adapt"});
         }
     });
 
-    BI.Plugin.registerWidget("bi.radio", function (ob) {
+    BI.Plugin.configWidget("bi.radio", function (ob) {
         if (BI.isIE() && BI.getIEVersion() < 9) {
             return BI.extend(ob, {type: "bi.image_radio"});
         }
         return ob;
     });
 
-    BI.Plugin.registerWidget("bi.checkbox", function (ob) {
+    BI.Plugin.configWidget("bi.checkbox", function (ob) {
         if (BI.isIE() && BI.getIEVersion() < 9) {
             return BI.extend(ob, {type: "bi.image_checkbox"});
         }
         return ob;
     });
 
-    BI.Plugin.registerWidget("bi.half_icon_button", function (ob) {
+    BI.Plugin.configWidget("bi.half_icon_button", function (ob) {
         if (BI.isIE() && BI.getIEVersion() < 9) {
             return ob;
         }
