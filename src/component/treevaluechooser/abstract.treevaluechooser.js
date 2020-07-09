@@ -783,5 +783,35 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
     _getChildCount: function (parentValues) {
         return this._getChildren(parentValues).length;
-    }
+    },
+
+    buildCompleteTree: function (selectedValues) {
+        var self = this;
+        var result = {};
+
+        if (selectedValues !== null && !BI.isEmpty(selectedValues)) {
+            fill([], this.tree.getRoot(), selectedValues, result);
+        }
+
+        return result;
+
+        function fill(parentValues, node, selected, r) {
+            if (selected === null || BI.isEmpty(selected)) {
+                BI.each(node.getChildren(), function (i, child) {
+                    var newParents = BI.clone(parentValues);
+                    newParents.push(child.value);
+                    r[child.value] = {};
+                    fill(newParents, child, null, r[child.value]);
+                });
+                return;
+            }
+            BI.each(selected, function (k) {
+                var node = self._getTreeNode(parentValues, k);
+                var newParents = BI.clone(parentValues);
+                newParents.push(node.value);
+                r[k] = {};
+                fill(newParents, node, selected[k], r[k]);
+            });
+        }
+    },
 });

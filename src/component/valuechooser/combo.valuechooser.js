@@ -81,6 +81,15 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
         };
     },
 
+    getAllValue: function() {
+        var val = this.combo.getValue() || {};
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
+        }
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
+    },
+
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;

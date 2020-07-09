@@ -1,5 +1,7 @@
 # 更新日志
 2.0(2020-07)
+- 同步复选下拉及其面板新增getAllValue获取所有已选值
+- 同步复选下拉树及其面板新增getAllValue获取完整的选中树节点
 - 修复date_picker最大值最小值与面板展示判断问题
 - 复选下拉树和下拉列表添加showView和hideVIew方法
 - number_editor支持自动检测数值与范围是否合法
