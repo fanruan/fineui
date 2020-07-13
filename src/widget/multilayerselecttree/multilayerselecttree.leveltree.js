@@ -113,7 +113,7 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
                 isDefaultInit: o.itemsCreator !== BI.emptyFn,
                 el: {
                     type: "bi.button_tree",
-                    chooseType: BI.Selection.None,
+                    chooseType: BI.Selection.Multi, // 不使用buttontree内部getValue逻辑
                     behaviors: o.behaviors,
                     layouts: [{
                         type: "bi.vertical"
