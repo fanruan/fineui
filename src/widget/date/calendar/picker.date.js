@@ -176,6 +176,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this._year = BI.parseInt(ob.year);
         this._month = BI.parseInt(ob.month);
         this.year.setValue(ob.year);
+        this._refreshMonth();
         this.month.setValue(ob.month);
         this._checkLeftValid();
         this._checkRightValid();
