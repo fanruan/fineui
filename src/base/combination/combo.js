@@ -31,7 +31,8 @@
                 el: {},
                 popup: {},
                 comboClass: "bi-combo-popup",
-                hoverClass: "bi-combo-hover"
+                hoverClass: "bi-combo-hover",
+                belowMouse: false
             });
         },
 
@@ -349,7 +350,7 @@
             }
             var isVisible = this.popupView.isVisible();
             this.popupView.visible();
-            var combo = BI.isNotNull(e) ? {
+            var combo = (o.belowMouse && BI.isNotNull(e)) ? {
                 element: {
                     offset: function () {
                         return {
