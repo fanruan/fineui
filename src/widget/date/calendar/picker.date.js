@@ -141,9 +141,16 @@ BI.DatePicker = BI.inherit(BI.Widget, {
 
     _getAllowMonths: function () {
         var self = this, o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        minDate.setDate(1);
+        maxDate.setDate(1);
+        var calcMin = BI.print(minDate, "%Y-%X-%d");
+        var calcMax = BI.print(maxDate, "%Y-%X-%d");
+        
         return BI.filter(BI.range(1, 13), function (idx, v) {
-            return !BI.checkDateVoid(self.year.getValue(), v, 1, o.min, o.max)[0];
-        })
+            return !BI.checkDateVoid(self.year.getValue(), v, 1, calcMin, calcMax)[0];
+        });
     },
 
     _checkLeftValid: function () {
