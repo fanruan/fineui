@@ -88,13 +88,13 @@
             }, this));
         },
 
-        _toggle: function () {
+        _toggle: function (e) {
             this._assertPopupViewRender();
             if (this.popupView.isVisible()) {
-                this._hideView();
+                this._hideView(e);
             } else {
                 if (this.isEnabled()) {
-                    this._popupView();
+                    this._popupView(e);
                 }
             }
         },
@@ -113,9 +113,9 @@
 
             var enterPopup = false;
 
-            function hide () {
+            function hide (e) {
                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
-                    self._hideView();
+                    self._hideView(e);
                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
                     self.fireEvent(BI.Combo.EVENT_COLLAPSE);
                 }
@@ -128,7 +128,7 @@
                     case "hover":
                         self.element.on("mouseenter." + self.getName(), function (e) {
                             if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                self._popupView();
+                                self._popupView(e);
                                 self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                 self.fireEvent(BI.Combo.EVENT_EXPAND);
                             }
@@ -138,13 +138,13 @@
                                 self.popupView.element.on("mouseenter." + self.getName(), function (e) {
                                     enterPopup = true;
                                     self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                        hide();
+                                        hide(e);
                                     });
                                     self.popupView.element.off("mouseenter." + self.getName());
                                 });
                                 BI.defer(function () {
                                     if (!enterPopup) {
-                                        hide();
+                                        hide(e);
                                     }
                                 }, 50);
                             }
@@ -157,7 +157,7 @@
                                     // if (!o.toggle && self.isViewVisible()) {
                                     //     return;
                                     // }
-                                    o.toggle ? self._toggle() : self._popupView();
+                                    o.toggle ? self._toggle(e) : self._popupView(e);
                                     if (self.isViewVisible()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_EXPAND);
@@ -183,7 +183,7 @@
                                     // if (self.isViewVisible()) {
                                     //     return;
                                     // }
-                                    self._popupView();
+                                    self._popupView(e);
                                     if (self.isViewVisible()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_EXPAND);
@@ -203,13 +203,13 @@
                                 self.popupView.element.on("mouseenter." + self.getName(), function (e) {
                                     enterPopup = true;
                                     self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                        hide();
+                                        hide(e);
                                     });
                                     self.popupView.element.off("mouseenter." + self.getName());
                                 });
                                 BI.defer(function () {
                                     if (!enterPopup) {
-                                        hide();
+                                        hide(e);
                                     }
                                 }, 50);
                             }
@@ -261,17 +261,17 @@
             }
         },
 
-        _hideIf: function (e) {
+        _hideIf: function (e, skipTriggerChecker) {
             // if (this.element.__isMouseInBounds__(e) || (this.popupView && this.popupView.element.__isMouseInBounds__(e))) {
             //     return;
             // }
             // BI-10290 公式combo双击公式内容会收起
-            if ((this.element.find(e.target).length > 0)
+            if (e && ((!skipTriggerChecker && this.element.find(e.target).length > 0)
                 || (this.popupView && this.popupView.element.find(e.target).length > 0)
-                || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
+                || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0)) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
                 var directions = this.options.direction.split(",");
                 if (BI.contains(directions, "innerLeft") || BI.contains(directions, "innerRight")) {
-                    // popup可以出现的trigger内部的combo，滚动时不需要消失，而是调整位置
+                    // popup可以出现在trigger内部的combo，滚动时不需要消失，而是调整位置
                     this.adjustWidth();
                     this.adjustHeight();
                 }
@@ -309,7 +309,7 @@
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
-                    if (combo && combo._hideIf(e)) {
+                    if (combo && combo._hideIf(e, true)) {
                         delete needHideWhenAnotherComboOpen[i];
                     }
                 }
