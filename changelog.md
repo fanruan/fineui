@@ -1,6 +1,7 @@
 # 更新日志
 2.0(2020-07)
 - combo新增belowMouse属性,允许popup在点击处弹出
+- combo新增hideWhenAnotherComboOpen属性,开启则当前popup展开时强制其他所有combo都收起
 - 修复了datePicker在setValue的时候没有动态刷新可用月份的问题
 - 同步复选下拉及其面板新增getAllValue获取所有已选值
 - 同步复选下拉树及其面板新增getAllValue获取完整的选中树节点
