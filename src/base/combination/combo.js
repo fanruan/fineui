@@ -275,13 +275,14 @@
                     this.adjustWidth();
                     this.adjustHeight();
                 }
-                return;
+                return false;
             }
             var isHide = this.options.hideChecker.apply(this, [e]);
             if (isHide === false) {
-                return;
+                return false;
             }
             this._hideView();
+            return true;
         },
 
         _hideView: function () {
@@ -308,10 +309,11 @@
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
-                    combo && combo.hideView();
+                    if (combo && combo._hideIf(e)) {
+                        delete needHideWhenAnotherComboOpen[i];
+                    }
                 }
             });
-            needHideWhenAnotherComboOpen = {};
             this.options.hideWhenAnotherComboOpen && (needHideWhenAnotherComboOpen[this.getName()] = this);
             this.adjustWidth(e);
             this.adjustHeight(e);
