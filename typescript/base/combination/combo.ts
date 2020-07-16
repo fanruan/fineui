@@ -1,7 +1,7 @@
 import { _Widget } from "../../core/widget";
 
 export interface _Combo extends _Widget {
-    populate(items: any): void;
+    populate(...args: any[]): void;
 
     _setEnable(v: boolean): void;
 
