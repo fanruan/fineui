@@ -78,6 +78,11 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             self._setStartValue("");
             self.fireEvent(BI.MultiSelectNoBarCombo.EVENT_STOP);
         });
+        this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
+            if (this.getSearcher().hasMatched()) {
+                self._addItem(assertShowValue);
+            }
+        });
 
         this.trigger.on(BI.MultiSelectTrigger.EVENT_SEARCHING, function (keywords) {
             var last = BI.last(keywords);
@@ -269,6 +274,25 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                 top: 0,
                 height: o.height
             }]
+        });
+    },
+
+    _addItem: function (assertShowValue) {
+        var self = this;
+        var keyword = this.trigger.getSearcher().getKeyword();
+        this._join({
+            type: BI.Selection.Multi,
+            value: [keyword]
+        }, function () {
+            // 如果在不选的状态下直接把该值添加进来
+            if (self.storeValue.type === BI.Selection.Multi) {
+                BI.pushDistinct(self.storeValue.value, keyword);
+            }
+            self.combo.setValue(self.storeValue);
+            self._setStartValue(keyword);
+            assertShowValue();
+            self.populate();
+            self._setStartValue("");
         });
     },
 
