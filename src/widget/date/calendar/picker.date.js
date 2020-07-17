@@ -147,7 +147,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         maxDate.setDate(1);
         var calcMin = BI.print(minDate, "%Y-%X-%d");
         var calcMax = BI.print(maxDate, "%Y-%X-%d");
-        
+
         return BI.filter(BI.range(1, 13), function (idx, v) {
             return !BI.checkDateVoid(self.year.getValue(), v, 1, calcMin, calcMax)[0];
         });
@@ -172,10 +172,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     },
 
     setMinDate: function (minDate) {
+        this.options.min = minDate;
         this.year.setMinDate(minDate);
     },
 
     setMaxDate: function (maxDate) {
+        this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
     },
 

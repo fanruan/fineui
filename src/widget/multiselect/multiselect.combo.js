@@ -14,7 +14,8 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             attributes: {
                 tabIndex: 0
             },
-            allowEdit: true
+            allowEdit: true,
+            allowBlankAdd: true
         });
     },
 
