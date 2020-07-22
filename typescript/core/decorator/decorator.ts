@@ -46,6 +46,7 @@ export function store<T>(Model: Constructor<T> & {xtype: string}, opts: { props?
 
 /**
  * 注册mixin
+ * ie8下不能使用
  */
 export function mixin<T>() {
     return function decorator(Target: Constructor<T> & { xtype: string }): void {
@@ -67,6 +68,7 @@ export function mixin<T>() {
 
 /**
  * 类注册mixins属性
+ * ie8下不能使用
  * @param Mixins
  */
 export function mixins(...Mixins: ({ new (...args: any[]): {} } & { xtype: string })[]) {
