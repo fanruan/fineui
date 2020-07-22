@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-07)
+- 修复了grid_view执行_unMount时不调用子组件的_unMount的问题
 - combo新增belowMouse属性,允许popup在点击处弹出
 - combo新增hideWhenAnotherComboOpen属性,开启则其他combo下拉时当前combo收起
 - 修复了datePicker在setValue的时候没有动态刷新可用月份的问题

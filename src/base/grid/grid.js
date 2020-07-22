@@ -150,7 +150,8 @@ BI.GridView = BI.inherit(BI.Widget, {
                         if (this.renderedCells[index]._top !== rowDatum.offset + verticalOffsetAdjustment) {
                             this.renderedCells[index].el.element.css("top", (rowDatum.offset + verticalOffsetAdjustment) + "px");
                         }
-                        renderedCells.push(child = this.renderedCells[index]);
+                        child = this.renderedCells[index].el;
+                        renderedCells.push(this.renderedCells[index]);
                     } else {
                         child = BI.createWidget(BI.extend({
                             type: "bi.label",
