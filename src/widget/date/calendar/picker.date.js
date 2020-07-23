@@ -35,7 +35,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             } else {
                 self.setValue({
                     year: self.year.getValue(),
-                    month: self.month.getValue() - 1,
+                    month: (self.month.getValue() - 1) || BI.getDate().getMonth(),
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -59,7 +59,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             } else {
                 self.setValue({
                     year: self.year.getValue(),
-                    month: self.month.getValue() + 1,
+                    month: (self.month.getValue() + 1) || (BI.getDate().getMonth() + 2),
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
