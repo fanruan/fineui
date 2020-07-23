@@ -135,7 +135,8 @@ _.extend(BI.Func, {
                 var char1 = str1[i];
                 var char2 = str2[i];
                 if (char1 !== char2) {
-                    return BI.CODE_INDEX[char1] - BI.CODE_INDEX[char2]
+                    // 找不到的字符都往后面放
+                    return (BI.isNull(BI.CODE_INDEX[char1]) ? BI.MAX : BI.CODE_INDEX[char1]) - (BI.isNull(BI.CODE_INDEX[char2]) ? BI.MAX : BI.CODE_INDEX[char2]);
                 }
             }
             return len1 - len2;
