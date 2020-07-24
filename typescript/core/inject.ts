@@ -15,19 +15,19 @@ interface _constants {
 }
 
 interface _models {
-    getModel: (type: string, options: any) => any;
+    getModel: (type: string, options?: any) => any;
 }
 
 interface _stores {
-    getStore: (type: string, options: any) => any;
+    getStore: (type: string, options?: any) => any;
 }
 
 interface _providers {
-    getProvider: (type: string, options: any) => any;
+    getProvider: (type: string, options?: any) => any;
 }
 
 interface _services {
-    getService: (type: string, options: any) => any;
+    getService: (type: string, options?: any) => any;
 }
 
 
