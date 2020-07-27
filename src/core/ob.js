@@ -1,5 +1,5 @@
 !(function () {
-    function extend () {
+    function extend() {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
             // Only deal with non-null/undefined values
@@ -86,8 +86,8 @@
         },
 
         _getEvents: function () {
-            if (!_.isArray(this.events)) {
-                this.events = [];
+            if (!_.isObject(this.events)) {
+                this.events = {};
             }
             return this.events;
         },
@@ -98,6 +98,7 @@
          * @param {Function} fn 事件对应的执行函数
          */
         on: function (eventName, fn) {
+            var self = this;
             eventName = eventName.toLowerCase();
             var fns = this._getEvents()[eventName];
             if (!_.isArray(fns)) {
@@ -105,6 +106,10 @@
                 this._getEvents()[eventName] = fns;
             }
             fns.push(fn);
+
+            return function () {
+                self.un(eventName, fn);
+            };
         },
 
         /**
@@ -148,7 +153,7 @@
          */
         purgeListeners: function () {
             /* alex:清空events*/
-            this.events = [];
+            this.events = {};
         },
         /**
          * 触发绑定过的事件

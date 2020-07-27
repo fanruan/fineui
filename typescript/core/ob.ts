@@ -19,7 +19,7 @@ export interface _OB {
 
     _getEvents(): { [eventName: string]: Function[] };
 
-    on(eventName: string, fn: Function): void;
+    on(eventName: string, fn: Function): Function;
 
     once(eventName: string, fn: Function): void;
 
