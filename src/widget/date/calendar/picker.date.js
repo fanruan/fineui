@@ -171,7 +171,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         return valid;
     },
 
-    _getCheckMinMaxDate() {
+    _getCheckMinMaxDate: function() {
         var o = this.options;
         var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
