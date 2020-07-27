@@ -87,7 +87,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
-                year: self.year.getValue(),
+                year: self.year.getValue() || self._year,
                 month: self.month.getValue(),
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
