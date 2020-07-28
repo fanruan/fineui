@@ -103,6 +103,7 @@
         // FireFox 3+, Safari 4 beta (Chrome 2 beta file is buggy and will not work)
         if (xhr.upload || xhr.sendAsBinary) {
             sendFile = function (handler, maxSize, width, height) {
+                var current = handler.current;
                 if (-1 < maxSize && maxSize < handler.file.fileSize) {
                     if (isFunction(handler.onerror)) {
                         handler.onerror();
@@ -190,7 +191,7 @@
                                     if (handler.file.type.indexOf("image") != -1) {
                                         attachO.attach_type = "image";
                                     }
-                                    handler.attach_array.push(attachO);
+                                    handler.attach_array[current] = attachO;
                                 } else {
                                     upload["onerror"]({});
                                 }
@@ -211,7 +212,7 @@
                                     handler.attach_array[0] = attachO;
                                     //                                   handler.attach_array.push(attachO);
                                 } else {
-                                    handler.attach_array.push(attachO);
+                                    handler.attach_array[current] = attachO;
                                 }
                                 break;
                         }
@@ -238,6 +239,7 @@
         // Internet Explorer, Opera, others
         else {
             sendFile = function (handler, maxSize, width, height) {
+                var current = handler.current;
                 var url = handler.url.concat(-1 === handler.url.indexOf("?") ? "?" : "&", "AjaxUploadFrame=true"),
                     rpe = {
                         loaded: 1, total: 100, simulation: true, interval: setInterval(function () {
@@ -272,7 +274,7 @@
                             if (handler.maxlength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
-                                handler.attach_array.push(attachO);
+                                handler.attach_array[current] = attachO;
                             }
                         } catch (e) {
                             if (isFunction(handler.onerror)) {
