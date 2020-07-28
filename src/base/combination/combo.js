@@ -31,7 +31,8 @@
                 el: {},
                 popup: {},
                 comboClass: "bi-combo-popup",
-                hoverClass: "bi-combo-hover"
+                hoverClass: "bi-combo-hover",
+                belowMouse: false
             });
         },
 
@@ -266,7 +267,7 @@
             //     return;
             // }
             // BI-10290 公式combo双击公式内容会收起
-            if (e && ((!skipTriggerChecker && this.element.find(e.target).length > 0)
+            if (e && ((skipTriggerChecker !== true && this.element.find(e.target).length > 0)
                 || (this.popupView && this.popupView.element.find(e.target).length > 0)
                 || e.target.className === "CodeMirror-cursor" || BI.Widget._renderEngine.createElement(e.target).closest(".CodeMirror-hints").length > 0)) {// BI-9887 CodeMirror的公式弹框需要特殊处理下
                 var directions = this.options.direction.split(",");
@@ -275,11 +276,12 @@
                     this.adjustWidth();
                     this.adjustHeight();
                 }
-                return false;
+
+                return;
             }
             var isHide = this.options.hideChecker.apply(this, [e]);
             if (isHide === false) {
-                return false;
+                return;
             }
             this._hideView();
             return true;
@@ -309,7 +311,7 @@
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {
-                    if (combo && combo._hideIf(e, true)) {
+                    if (combo && combo._hideIf(e, true) === true) {
                         delete needHideWhenAnotherComboOpen[i];
                     }
                 }
@@ -349,7 +351,7 @@
             }
             var isVisible = this.popupView.isVisible();
             this.popupView.visible();
-            var combo = BI.isNotNull(e) ? {
+            var combo = (o.belowMouse && BI.isNotNull(e)) ? {
                 element: {
                     offset: function () {
                         return {

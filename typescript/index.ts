@@ -36,6 +36,7 @@ import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
+import { _inject } from "./core/inject";
 import { _Layout } from "./core/wrapper/layout";
 import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
@@ -49,9 +50,9 @@ type ClassConstructor<T extends {}> = T & {
     readonly prototype: T;
 }
 
-export interface BI extends _func, _i18n, _base {
+export interface BI extends _func, _i18n, _base, _inject {
     OB: ClassConstructor<_OB>;
-    Plugin:_Plugin;
+    Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;

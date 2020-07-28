@@ -35,7 +35,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             } else {
                 self.setValue({
                     year: self.year.getValue(),
-                    month: self.month.getValue() - 1,
+                    month: (self.month.getValue() - 1) || BI.getDate().getMonth(),
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -59,7 +59,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             } else {
                 self.setValue({
                     year: self.year.getValue(),
-                    month: self.month.getValue() + 1,
+                    month: (self.month.getValue() + 1) || (BI.getDate().getMonth() + 2),
                 });
             }
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -87,7 +87,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         });
         this.month.on(BI.MonthDateCombo.EVENT_CHANGE, function () {
             self.setValue({
-                year: self.year.getValue(),
+                year: self.year.getValue() || self._year,
                 month: self.month.getValue(),
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
@@ -136,40 +136,68 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         if (!BI.contains(allowMonth, month)) {
             month = allowMonth[0];
         }
+
         return month;
     },
 
     _getAllowMonths: function () {
-        var self = this, o = this.options;
+        var obj = this._getCheckMinMaxDate();
+        var year = this.year.getValue() || this._year;
+
         return BI.filter(BI.range(1, 13), function (idx, v) {
-            return !BI.checkDateVoid(self.year.getValue(), v, 1, o.min, o.max)[0];
-        })
+            return !BI.checkDateVoid(year, v, 1, obj.min, obj.max)[0];
+        });
     },
 
+    // 上一年月不合法则灰化
     _checkLeftValid: function () {
-        var o = this.options;
-        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
-        var valid = !(this._month <= (minDate.getMonth() + 1) && this._year <= minDate.getFullYear());
+        var obj = this._getCheckMinMaxDate();
+        var year = this._month === 1 ? this._year - 1 : this._year;
+        var month = this._month === 1 ? 12 : this.month - 1;
+        var valid = BI.isNull(BI.checkDateVoid(year, month, 1, obj.min, obj.max)[0]);
         this.left.setEnable(valid);
 
         return valid;
     },
 
+    // 下一年月不合法则灰化
     _checkRightValid: function () {
-        var o = this.options;
-        var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
-        var valid = !(this._month >= (maxDate.getMonth() + 1) && this._year >= maxDate.getFullYear());
+        var obj = this._getCheckMinMaxDate();
+        var year = this._month === 12 ? this._year + 1 : this._year;
+        var month = this._month === 12 ? 1 : this.month + 1;
+        var valid = BI.isNull(BI.checkDateVoid(year, month, 1, obj.min, obj.max)[0]);
         this.right.setEnable(valid);
 
         return valid;
     },
 
+    _getCheckMinMaxDate: function() {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        minDate.setDate(1);
+        maxDate.setDate(1);
+
+        return {
+            min: BI.print(minDate, "%Y-%X-%d"),
+            max: BI.print(maxDate, "%Y-%X-%d")
+        };
+    },
+
     setMinDate: function (minDate) {
+        this.options.min = minDate;
         this.year.setMinDate(minDate);
+        this._refreshMonth();
+        this._checkLeftValid();
+        this._checkRightValid();
     },
 
     setMaxDate: function (maxDate) {
+        this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
+        this._refreshMonth();
+        this._checkLeftValid();
+        this._checkRightValid();
     },
 
     setValue: function (ob) {

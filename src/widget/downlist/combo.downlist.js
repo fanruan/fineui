@@ -45,6 +45,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             container: o.container,
             adjustLength: o.adjustLength,
             direction: o.direction,
+            belowMouse: o.belowMouse,
             stopPropagation: o.stopPropagation,
             el: BI.createWidget(o.el, {
                 type: "bi.icon_trigger",
