@@ -153,7 +153,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _checkLeftValid: function () {
         var obj = this._getCheckMinMaxDate();
         var year = this._month === 1 ? this._year - 1 : this._year;
-        var month = this._month === 1 ? 12 : this.month - 1;
+        var month = this._month === 1 ? 12 : this._month - 1;
         var valid = BI.isNull(BI.checkDateVoid(year, month, 1, obj.min, obj.max)[0]);
         this.left.setEnable(valid);
 
@@ -164,7 +164,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     _checkRightValid: function () {
         var obj = this._getCheckMinMaxDate();
         var year = this._month === 12 ? this._year + 1 : this._year;
-        var month = this._month === 12 ? 1 : this.month + 1;
+        var month = this._month === 12 ? 1 : this._month + 1;
         var valid = BI.isNull(BI.checkDateVoid(year, month, 1, obj.min, obj.max)[0]);
         this.right.setEnable(valid);
 
