@@ -136,7 +136,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         if (!BI.contains(allowMonth, month)) {
             month = allowMonth[0];
         }
-
+        this.month.setValue(month);
         return month;
     },
 

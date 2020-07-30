@@ -103,17 +103,17 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
     },
 
     _checkMin: function () {
-        var calendar = this.calendar.getSelectedCard();
-        if (BI.isNotNull(calendar)) {
-            calendar.setMinDate(this.options.min);
-        }
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
     },
 
     _checkMax: function () {
-        var calendar = this.calendar.getSelectedCard();
-        if (BI.isNotNull(calendar)) {
-            calendar.setMaxDate(this.options.max);
-        }
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
     },
 
     setMinDate: function (minDate) {
