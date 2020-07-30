@@ -23,8 +23,6 @@ BI.Calendar = BI.inherit(BI.Widget, {
         var self = this, o = this.options, log = {}, De = BI.getDate();
         var mins = o.min.match(/\d+/g);
         var maxs = o.max.match(/\d+/g);
-        Y < (mins[0] | 0) && (Y = (mins[0] | 0));
-        Y > (maxs[0] | 0) && (Y = (maxs[0] | 0));
 
         De.setFullYear(Y, M, D);
         log.ymd = [De.getFullYear(), De.getMonth(), De.getDate()];

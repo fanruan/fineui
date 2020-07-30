@@ -1,6 +1,7 @@
 # 更新日志
 2.0(2020-07)
 - bi.file文件上传控件accept属性与 [input accept Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept) 统一
+- 修复了日期类型控件设置一个不在minDate和maxDate之间的日期值时，面板灰化与翻页按钮状态不对的问题
 - BI.OB的on方法返回一个解除监听的函数
 - 修复了grid_view执行_unMount时不调用子组件的_unMount的问题
 - combo新增belowMouse属性,允许popup在点击处弹出
