@@ -66,6 +66,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         });
     },
 
+    _reset: function () {
+        this.file.reset();
+    },
+
     select: function () {
         this.file.select();
     },
@@ -75,11 +79,12 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
     },
 
     upload: function () {
+        this._reset();
         this.file.upload();
     },
 
     reset: function () {
-        this.file.reset();
+        this._reset();
     }
 });
 BI.MultifileEditor.EVENT_CHANGE = "EVENT_CHANGE";
