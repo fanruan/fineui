@@ -124,6 +124,10 @@ BI.Navigation = BI.inherit(BI.Widget, {
         }
     },
 
+    getAllCard: function() {
+        return BI.values(this.cardMap);
+    },
+
     /**
      * @override
      */
