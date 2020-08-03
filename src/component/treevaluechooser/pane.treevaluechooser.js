@@ -49,8 +49,9 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         return this.buildCompleteTree(this.combo.getValue());
     },
 
-    populate: function () {
-        this.pane.populate.apply(this.pane, arguments);
+    populate: function (items) {
+        this._initData(items);
+        this.pane.populate();
     }
 });
 BI.TreeValueChooserPane.EVENT_CHANGE = "EVENT_CHANGE";
