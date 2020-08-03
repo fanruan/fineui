@@ -93,7 +93,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;
-        this.combo.populate.apply(this.combo, arguments);
+        this.combo.populate();
     }
 });
 
