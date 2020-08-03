@@ -62,7 +62,7 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
         this.items = items;
-        this.combo.populate.apply(this.combo, arguments);
+        this.combo.populate();
     }
 });
 BI.AllValueChooserCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
