@@ -26,7 +26,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
             logic: {
-                dynamic: true
+                dynamic: false
             },
             // onLoaded: o.onLoaded,
             el: {},

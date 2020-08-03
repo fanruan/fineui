@@ -163,8 +163,8 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
     },
 
     populate: function () {
-        this.searcher.populate.apply(this.searcher, arguments);
-        this.adapter.populate.apply(this.adapter, arguments);
+        this.searcher.populate();
+        this.adapter.populate();
     }
 });
 BI.MultiSelectTree.EVENT_CHANGE = "EVENT_CHANGE";
