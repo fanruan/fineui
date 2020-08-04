@@ -29,7 +29,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         });
         if (BI.isNotNull(o.items)) {
             this._initData(o.items);
-            this.populate();
+            this.pane.populate();
         }
     },
 
