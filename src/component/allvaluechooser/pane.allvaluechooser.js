@@ -22,9 +22,6 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
     _init: function () {
         BI.AllValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (BI.isNotNull(o.items)) {
-            this.items = o.items;
-        }
         this.list = BI.createWidget({
             type: "bi.multi_select_list",
             element: this,
@@ -37,6 +34,11 @@ BI.AllValueChooserPane = BI.inherit(BI.AbstractAllValueChooser, {
         this.list.on(BI.MultiSelectList.EVENT_CHANGE, function () {
             self.fireEvent(BI.AllValueChooserPane.EVENT_CHANGE);
         });
+
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+            this.list.populate();
+        }
     },
 
     setValue: function (v) {
