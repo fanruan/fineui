@@ -29,12 +29,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.left.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 1) {
                 self.setValue({
-                    year: self.year.getValue() - 1,
+                    year: (self.year.getValue() - 1) || (BI.getDate().getFullYear() - 1),
                     month: 12,
                 });
             } else {
                 self.setValue({
-                    year: self.year.getValue(),
+                    year: self.year.getValue() || BI.getDate().getFullYear(),
                     month: (self.month.getValue() - 1) || BI.getDate().getMonth(),
                 });
             }
@@ -53,12 +53,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this.right.on(BI.IconButton.EVENT_CHANGE, function () {
             if (self._month === 12) {
                 self.setValue({
-                    year: self.year.getValue() + 1,
+                    year: (self.year.getValue() + 1) || (BI.getDate().getFullYear() + 1),
                     month: 1,
                 });
             } else {
                 self.setValue({
-                    year: self.year.getValue(),
+                    year: self.year.getValue() || BI.getDate().getFullYear(),
                     month: (self.month.getValue() + 1) || (BI.getDate().getMonth() + 2),
                 });
             }
@@ -129,12 +129,12 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         });
     },
 
-    _refreshMonth: function () {
+    _refreshMonth: function (defaultMonth) {
         var month = this.month.getValue();
         this.month.populate(this._getAllowMonths());
         var allowMonth = this._getAllowMonths();
         if (!BI.contains(allowMonth, month)) {
-            month = allowMonth[0];
+            month = defaultMonth || allowMonth[0];
         }
         this.month.setValue(month);
         return month;
@@ -187,7 +187,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         this.options.min = minDate;
         this.year.setMinDate(minDate);
-        this._refreshMonth();
+        this._refreshMonth(this._month);
         this._checkLeftValid();
         this._checkRightValid();
     },
@@ -195,7 +195,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     setMaxDate: function (maxDate) {
         this.options.max = maxDate;
         this.year.setMaxDate(maxDate);
-        this._refreshMonth();
+        this._refreshMonth(this._month);
         this._checkLeftValid();
         this._checkRightValid();
     },
@@ -204,7 +204,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
         this._year = BI.parseInt(ob.year);
         this._month = BI.parseInt(ob.month);
         this.year.setValue(ob.year);
-        this._refreshMonth();
+        this._refreshMonth(this._month);
         this.month.setValue(ob.month);
         this._checkLeftValid();
         this._checkRightValid();
