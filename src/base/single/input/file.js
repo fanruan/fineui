@@ -413,6 +413,9 @@
      * @returns {boolean}
      */
     var fileTypeValidate = function (fileName, fileType) {
+        if (!fileType) {
+            return true;
+        }
         var mimes = fileType.split(",");
         if (mimes[0] === fileType) {
             mimes = (fileType + "").split(";");
