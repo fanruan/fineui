@@ -1,4 +1,7 @@
 # 更新日志
+2.0(2020-08)
+- BI.makeObject 方法支持传入iteratee
+
 2.0(2020-07)
 - 修复了日期类型控件先展开切换日期月份面板，再设置区间使得该月份不合法，查看该月份面板灰化不对的问题
 - bi.file文件上传控件accept属性与 [input accept Attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept) 统一

@@ -387,6 +387,8 @@ if (!_global.BI) {
             for (var i = 0; i < array.length; i++) {
                 if (BI.isNull(value)) {
                     map[array[i]] = array[i];
+                } else if (BI.isFunction(value)) {
+                    map[array[i]] = value(i, array[i]);
                 } else {
                     map[array[i]] = BI.deepClone(value);
                 }
