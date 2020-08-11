@@ -14,7 +14,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             extraCls: "bi-time-interval",
             minDate: "1900-01-01",
-            maxDate: "2099-12-31"
+            maxDate: "2099-12-31",
+            height: 24
         });
     },
     _init: function () {
@@ -26,14 +27,14 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.right = this._createCombo(o.value.end);
         this.label = BI.createWidget({
             type: "bi.label",
-            height: this.constants.height,
+            height: o.height,
             width: this.constants.width,
             text: "-"
         });
         BI.createWidget({
             element: self,
             type: "bi.center",
-            height: this.constants.height,
+            height: o.height,
             items: [{
                 type: "bi.absolute",
                 items: [{
@@ -68,7 +69,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
             behaviors: o.behaviors,
-            value: v
+            value: v,
+            height: o.height,
         });
         combo.on(BI.DynamicDateTimeCombo.EVENT_ERROR, function () {
             self._clearTitle();
