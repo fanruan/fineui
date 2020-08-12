@@ -60,7 +60,9 @@ BI.ValueChooserPane = BI.inherit(BI.AbstractValueChooser, {
 
     populate: function (items) {
         // 直接用combo的populate不会作用到AbstractValueChooser上
-        items && (this.items = items);
+        if (BI.isNotNull(items)) {
+            this.items = items;
+        }
         this.list.populate();
     }
 });
