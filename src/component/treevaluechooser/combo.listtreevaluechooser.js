@@ -93,7 +93,9 @@ BI.ListTreeValueChooserInsertCombo = BI.inherit(BI.AbstractListTreeValueChooser,
     },
 
     populate: function (items) {
-        this._initData(items);
+        if (BI.isNotNull(items)) {
+            this._initData(items);
+        }
         this.combo.populate();
     }
 });
