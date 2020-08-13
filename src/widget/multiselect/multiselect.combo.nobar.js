@@ -80,7 +80,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
-                self._addItem(assertShowValue);
+                self._addItem(assertShowValue, true);
             }
         });
 
@@ -277,9 +277,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _addItem: function (assertShowValue) {
+    _addItem: function (assertShowValue, matched) {
         var self = this;
-        var keyword = this.trigger.getSearcher().getKeyword();
+        var keyword = matched ? this.trigger.getSearcher().getMatchedItemValue() : this.trigger.getSearcher().getKeyword();
         this._join({
             type: BI.Selection.Multi,
             value: [keyword]

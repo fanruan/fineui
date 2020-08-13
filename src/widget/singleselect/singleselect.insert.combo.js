@@ -83,7 +83,7 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.SingleSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
+                var keyword = this.getSearcher().getMatchedItemValue();
                 self.storeValue = keyword;
                 self.combo.setValue(self.storeValue);
                 self._setStartValue(keyword);

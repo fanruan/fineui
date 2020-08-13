@@ -80,7 +80,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_PAUSE, function () {
             if (this.getSearcher().hasMatched()) {
-                var keyword = this.getSearcher().getKeyword();
+                var keyword = this.getSearcher().getMatchedItemValue();
                 self._join({
                     type: BI.Selection.Multi,
                     value: [keyword]
