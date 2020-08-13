@@ -3,9 +3,12 @@
  */
 BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
 
-    props: {
-        extraCls: "bi-search-text-value-trigger bi-border",
-        height: 24
+    props: function () {
+        return {
+            extraCls: "bi-search-text-value-trigger bi-border",
+            height: 24,
+            watermark: BI.i18nText("BI-Basic_Search")
+        };
     },
 
     render: function () {
@@ -25,6 +28,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             ref: function () {
                                 self.editor = this;
                             },
+                            watermark: o.watermark,
                             defaultText: o.text,
                             text: this._digest(o.value, o.items),
                             value: o.value,

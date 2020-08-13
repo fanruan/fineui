@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-08)
+- search_text_value_combo支持水印
 - BI.makeObject 方法支持传入iteratee
 
 2.0(2020-07)
