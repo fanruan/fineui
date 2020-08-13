@@ -95,6 +95,10 @@ BI.SingleSelectSearcher = BI.inherit(BI.Widget, {
         }
     },
 
+    getMatchedItemValue: function() {
+        return this.searcher.getView().getMatchedItemValue();
+    },
+
     adjustView: function () {
         this.searcher.adjustView();
     },

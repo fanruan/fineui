@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-08)
+- 修复了复选下拉系列'点按空格添加完全匹配项'添加的是显示值而非实际值的问题
 - search_text_value_combo支持水印
 - BI.makeObject 方法支持传入iteratee
 
