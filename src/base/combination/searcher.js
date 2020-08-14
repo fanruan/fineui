@@ -80,7 +80,10 @@ BI.Searcher = BI.inherit(BI.Widget, {
                     search();
                     break;
                 case BI.Events.PAUSE:
-                    self._pauseSearch();
+                    // 可以搜索空格的情况下输入空格不做处理, 展示上一次的结果
+                    if (!o.allowSearchBlank) {
+                        self._pauseSearch();
+                    }
                     break;
             }
         });

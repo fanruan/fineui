@@ -44,7 +44,7 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                             var keyword = obj.keyword;
                             var finding = BI.Func.getSearchResult(o.items, keyword);
                             var matched = finding.match, find = finding.find;
-                            callback(find, matched);
+                            callback(matched, find);
                         },
                         listeners: [{
                             eventName: BI.Searcher.EVENT_CHANGE,
