@@ -4,6 +4,9 @@
         if (kv[xtype] != null) {
             _global.console && console.error("shortcut:[" + xtype + "] has been registed");
         }
+        if (cls) {
+            cls["xtype"] = xtype;
+        }
         kv[xtype] = cls;
     };
 
