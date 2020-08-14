@@ -44,7 +44,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
-                            self.fireEvent("EVENT_CHANGE");
+                            self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                         }
                     }],
                     ref: function () {
@@ -67,7 +67,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        self.fireEvent("EVENT_CHANGE");
+                                        self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                     }
                                 }],
                                 ref: function () {
@@ -82,7 +82,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
                                         if(self._checkValue(self.getValue())) {
-                                            self.fireEvent("EVENT_CHANGE");
+                                            self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                         }
                                     }
                                 }],
@@ -146,6 +146,9 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         };
     }
 });
+
+BI.DynamicDatePane.EVENT_CHANGE = "EVENT_CHANGE";
+
 BI.shortcut("bi.dynamic_date_pane", BI.DynamicDatePane);
 
 BI.extend(BI.DynamicDatePane, {
