@@ -48,6 +48,7 @@ type ClassConstructor<T extends {}> = T & {
     new(config: any): T;
     (config: any): T;
     readonly prototype: T;
+    readonly xtype: string;
 }
 
 export interface BI extends _func, _i18n, _base, _inject {
