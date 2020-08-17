@@ -15,6 +15,8 @@ export interface _Combo extends _Widget {
 
     getPopupPosition(): any;
 
+    adjustHeight(e?: MouseEvent): void;
+
     toggle(): void;
 }
 

@@ -10,7 +10,6 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big"
         },
-        HEADER_HEIGHT: 40
     },
 
     _defaultConfig: function () {
@@ -23,6 +22,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                 dynamic: false
             },
             header: null,
+            headerHeight: 40,
             body: null,
             footer: null,
             closable: true // BI-40839 是否显示右上角的关闭按钮
@@ -61,7 +61,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                         }) : {
                             type: "bi.label",
                             cls: "bi-font-bold",
-                            height: this._constant.HEADER_HEIGHT,
+                            height: o.headerHeight,
                             text: o.header,
                             title: o.header,
                             textAlign: "left"
@@ -75,7 +75,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                     el: o.closable ? {
                         type: "bi.icon_button",
                         cls: "bi-message-close close-font",
-                        height: this._constant.HEADER_HEIGHT,
+                        height: o.headerHeight,
                         handler: function () {
                             self.close();
                         }
@@ -84,9 +84,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                     },
                     width: 56
                 }],
-                height: this._constant.HEADER_HEIGHT
+                height: o.headerHeight
             },
-            height: this._constant.HEADER_HEIGHT
+            height: o.headerHeight
         }, {
             el: o.logic.dynamic ? {
                 type: "bi.vertical",

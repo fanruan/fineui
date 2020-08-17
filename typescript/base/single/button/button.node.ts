@@ -1,11 +1,11 @@
 import { _BasicButton } from "./button.basic";
 
 export interface _NodeButton extends _BasicButton {
-    isOpened: () => void;
+    isOpened(): void;
 
-    setOpened: (b: boolean) => void;
+    setOpened(b: boolean): void;
 
-    triggerCollapse: () => void;
+    triggerCollapse(): void;
 
-    triggerExpand: () => void;
+    triggerExpand(): void;
 }
