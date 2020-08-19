@@ -18,7 +18,8 @@ BI.AbstractLabel = BI.inherit(BI.Single, {
             tgap: 0,
             bgap: 0,
             text: "",
-            highLight: false
+            highLight: false,
+            handler: null
         });
     },
 
@@ -33,7 +34,8 @@ BI.AbstractLabel = BI.inherit(BI.Single, {
             value: o.value,
             py: o.py,
             keyword: o.keyword,
-            highLight: o.highLight
+            highLight: o.highLight,
+            handler: o.handler
         };
     },
 

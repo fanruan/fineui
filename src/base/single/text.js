@@ -59,7 +59,7 @@ BI.Text = BI.inherit(BI.Single, {
             textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
             overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
         });
-        if (o.handler) {
+        if (o.handler && o.handler !== BI.emptyFn) {
             this.text = BI.createWidget({
                 type: "bi.layout",
                 tagName: "span"
