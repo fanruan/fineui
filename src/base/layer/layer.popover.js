@@ -25,6 +25,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             headerHeight: 40,
             body: null,
             footer: null,
+            footerHeight: 44,
             closable: true // BI-40839 是否显示右上角的关闭按钮
         });
     },
@@ -122,9 +123,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                         right: 20,
                         bottom: 0
                     }],
-                    height: 44
+                    height: o.footerHeight
                 },
-                height: 44
+                height: o.footerHeight
             });
         }
 
@@ -154,7 +155,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         if (o.logic.dynamic) {
             var size = this._calculateSize();
             var height = this.element.height();
-            var compareHeight = BI.clamp(height, size.height, 600) - (o.footer ? 84 : 44);
+            var compareHeight = BI.clamp(height, size.height, 600) - (o.footer ? o.footerHeight + o.headerHeight : o.headerHeight);
             this.body.element.height(compareHeight);
         }
     },
