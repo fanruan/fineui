@@ -19,11 +19,14 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var o = this.options;
+        var self = this, o = this.options;
         o.attributes.frameborder = "0";
         o.attributes.src = o.src;
         o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
+        this.element.on("load", function () {
+            self.fireEvent("EVENT_LOADED");
+        });
     },
 
     setSrc: function (src) {
