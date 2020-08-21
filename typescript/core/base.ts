@@ -85,7 +85,7 @@ export interface _base {
 
     lastObject: (obj: object) => any;
 
-    concat: (obj1: any, obj2: any) => any;
+    concat: (obj1: any, obj2: any, ...args: any[]) => any;
 
     backEach: (obj: any, predicate: Function, context?: any) => boolean;
 
