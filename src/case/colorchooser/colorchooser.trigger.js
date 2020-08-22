@@ -35,10 +35,10 @@ BI.ColorChooserTrigger = BI.inherit(BI.Trigger, {
             element: this,
             items: [{
                 el: this.colorContainer,
-                left: 3,
-                right: 3,
-                top: 3,
-                bottom: 3
+                left: 2,
+                right: 2,
+                top: 2,
+                bottom: 2
             }, {
                 el: down,
                 right: -1,
