@@ -11,7 +11,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-color-chooser",
             value: "",
-            height: 24
+            height: 24,
+            el: {}
         });
     },
 
@@ -32,8 +33,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.type ? o.width : o.width - 2,
-                height: o.type ? o.height : o.height - 2
+                width: o.el.type ? o.width : o.width - 2,
+                height: o.el.type ? o.height : o.height - 2
             }, o.el),
             popup: {
                 el: BI.extend({
