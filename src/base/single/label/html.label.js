@@ -16,7 +16,8 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
             text: o.text,
-            value: o.value
+            value: o.value,
+            handler: o.handler
         };
     }
 });
