@@ -18,7 +18,8 @@ BI.Html = BI.inherit(BI.Single, {
         tgap: 0,
         bgap: 0,
         text: "",
-        highLight: false
+        highLight: false,
+        handler: null
     },
 
     render: function () {
