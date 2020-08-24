@@ -16,13 +16,14 @@ BI.Popover = BI.inherit(BI.Widget, {
         baseCls: "bi-popover bi-card bi-border-radius",
         size: "normal", // small, normal, big
         logic: {
-            dynamic: false,
+            dynamic: false
         },
         header: null,
+        headerHeight: 40,
         body: null,
         footer: null,
+        footerHeight: 44,
         closable: true, // BI-40839 是否显示右上角的关闭按钮
-        headerHeight: 40,
     },
 
     render: function () {
