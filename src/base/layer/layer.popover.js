@@ -16,7 +16,8 @@ BI.Popover = BI.inherit(BI.Widget, {
         baseCls: "bi-popover bi-card bi-border-radius",
         size: "normal", // small, normal, big
         logic: {
-            dynamic: false
+            dynamic: false,
+            maxHeight: 600,
         },
         header: null,
         headerHeight: 40,
@@ -155,7 +156,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         if (o.logic.dynamic) {
             var size = this._calculateSize();
             var height = this.element.height();
-            var compareHeight = BI.clamp(height, size.height, 600) - (o.footer ? o.footerHeight + o.headerHeight : o.headerHeight);
+            var compareHeight = BI.clamp(height, size.height, o.logic.maxHeight || 600) - (o.footer ? o.footerHeight + o.headerHeight : o.headerHeight);
             this.body.element.height(compareHeight);
         }
     },

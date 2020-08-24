@@ -169,14 +169,15 @@ Demo.Func = BI.inherit(BI.Widget, {
             }, {
                 type: "bi.text_button",
                 height: 30,
-                text: "弹出一个高度动态的popover层, 此弹出层指定size为small, 但是高度随内容自适应，自适应支持的最大高度为600px",
+                text: "弹出一个高度动态的popover层, 此弹出层指定size为small, 但是高度随内容自适应，自适应支持的最大高度为默认为600px",
                 handler: function() {
                     var id = "弹出层id1"
                     BI.Popovers.create(id, {
                         // String或者是json都行
                         header: "弹出层标题",
                         logic: {
-                            dynamic: true
+                            dynamic: true,
+                            maxHeight: 700,
                         },
                         size: "small",
                         body: {
