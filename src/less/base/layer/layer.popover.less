@@ -1,5 +1,18 @@
+@maxHeight: 600px;
+
 .bi-popover {
-    .dynamic-height-limit-layout {
-        max-height: 100%;
+    .dynamic-height-limit-layout-small {
+        min-height: 200px;
+        max-height: @maxHeight;
+    }
+
+    .dynamic-height-limit-layout-big {
+        min-height: 500px;
+        max-height: @maxHeight;
+    }
+
+    .dynamic-height-limit-layout-small {
+        min-height: 500px;
+        max-height: @maxHeight;
     }
 }

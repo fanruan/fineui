@@ -31,6 +31,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         var self = this; var o = this.options;
         this.startX = 0;
         this.startY = 0;
+        var size = this._calculateSize();
         this.tracker = new BI.MouseMoveTracker(function (deltaX, deltaY) {
             var W = BI.Widget._renderEngine.createElement("body").width();
             var H = BI.Widget._renderEngine.createElement("body").height();
@@ -98,7 +99,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                 tgap: 10,
                 items: [{
                     el: BI.extend({}, o.body, {
-                        extraCls: "dynamic-height-limit-layout",
+                        extraCls: "dynamic-height-limit-layout-" + size.type,
                     }),
                 }],
             } : {
@@ -129,15 +130,12 @@ BI.Popover = BI.inherit(BI.Widget, {
             });
         }
 
-        var size = this._calculateSize();
-
         return BI.extend({
             type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
             width: size.width,
         }, o.logic.dynamic ? {
             type: "bi.vertical",
-            extraCls: "dynamic-layout",
             scrolly: false,
         } : {
             type: "bi.vtape",
@@ -153,12 +151,6 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.startY = pos.top;
             self.tracker.captureMouseMoves(e);
         });
-        if (o.logic.dynamic) {
-            var size = this._calculateSize();
-            var height = this.element.height();
-            var compareHeight = BI.clamp(height, size.height, o.logic.maxHeight || 600) - (o.footer ? o.footerHeight + o.headerHeight : o.headerHeight);
-            this.body.element.height(compareHeight);
-        }
     },
 
     _calculateSize: function () {
@@ -169,20 +161,24 @@ BI.Popover = BI.inherit(BI.Widget, {
                 case this._constant.SIZE.SMALL:
                     size.width = 450;
                     size.height = 200;
+                    size.type = "small";
                     break;
                 case this._constant.SIZE.BIG:
                     size.width = 900;
                     size.height = 500;
+                    size.type = "big";
                     break;
                 default:
                     size.width = 550;
                     size.height = 500;
+                    size.type = "default";
             }
         }
 
         return {
             width: o.width || size.width,
             height: o.height || size.height,
+            type: size.type || "default",
         };
     },
 
