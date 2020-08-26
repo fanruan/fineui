@@ -18,7 +18,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            textAlign: "left"
+            horizontalAlign: "left"
         });
     },
 
@@ -27,7 +27,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         this.element.css({
             whiteSpace: "nowrap",
-            textAlign: o.textAlign
+            textAlign: o.horizontalAlign
         });
         this.populate(this.options.items);
     },
