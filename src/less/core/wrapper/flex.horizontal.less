@@ -55,6 +55,7 @@
     -o-align-items: center;
     align-items: center;
   }
+
   &.v-bottom {
     /* 09版 */
     -webkit-box-align: flex-end;
@@ -66,6 +67,7 @@
     -o-align-items: flex-end;
     align-items: flex-end;
   }
+
   &.v-stretch {
     /* 09版 */
     -webkit-box-align: stretch;
@@ -76,6 +78,27 @@
     -ms-flex-align: stretch;
     -o-align-items: stretch;
     align-items: stretch;
+  }
+
+  &.h-center {
+    /* 09版 */
+    -webkit-box-pack: center;
+    /* 12版 */
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -o-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+
+  &.h-right {
+    /* 12版 */
+    -webkit-flex-direction: row-reverse;
+    -moz-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    -o-flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 
   &.h-stretch {
