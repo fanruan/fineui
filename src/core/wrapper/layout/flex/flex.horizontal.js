@@ -36,7 +36,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             "flex-shrink": "0"
         });
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i]);
+            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]);
         }
         if (o.columnSize[i] === "fill") {
             w.element.css("flex", "1");

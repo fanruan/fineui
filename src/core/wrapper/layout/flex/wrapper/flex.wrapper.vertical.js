@@ -37,7 +37,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             "flex-shrink": "0"
         });
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i]);
+            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
         }
         if (o.rowSize[i] === "fill") {
             w.element.css("flex", "1");
