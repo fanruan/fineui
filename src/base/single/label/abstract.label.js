@@ -211,9 +211,6 @@
         _createNotCenterEl: function () {
             var o = this.options;
             var adaptLayout = "bi.vertical_adapt";
-            if (o.textAlign === "right" && (BI.isIE() || !isSupportFlex())) {
-                adaptLayout = "bi.right_vertical_adapt";
-            }
             var json = this._createJson();
             if (BI.isNumber(o.width) && o.width > 0) {
                 if (BI.isNumber(o.textWidth) && o.textWidth > 0) {
