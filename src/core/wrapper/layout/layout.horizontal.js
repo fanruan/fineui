@@ -25,8 +25,8 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         this.$table = BI.Widget._renderEngine.createElement("<table>").attr({cellspacing: 0, cellpadding: 0}).css({
             position: "relative",
             "white-space": "nowrap",
-            height: o.verticalAlign === BI.VerticalAlign.Middle ? "100%" : "auto",
             width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            height: (o.verticalAlign === BI.VerticalAlign.Middle || o.verticalAlign === BI.VerticalAlign.Stretch) ? "100%" : "auto",
             "border-spacing": "0px",
             border: "none",
             "border-collapse": "separate"
@@ -79,7 +79,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
