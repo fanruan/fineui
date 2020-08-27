@@ -10,9 +10,11 @@
 BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
-        return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
+        return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-center-adapt-layout",
             horizontalAlign: BI.HorizontalAlign.Center,
+            verticalAlign: BI.VerticalAlign.Middle,
+            columnSize: [],
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -23,8 +25,8 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
-        var o = this.options;
         BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
+        var o = this.options;
         this.element.css({
             whiteSpace: "nowrap",
             textAlign: o.horizontalAlign
@@ -34,10 +36,11 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item, length) {
         var o = this.options;
-        var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
+        var w = BI.InlineCenterAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
+            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
             position: "relative",
-            "vertical-align": "middle"
+            "vertical-align": o.verticalAlign
         });
         w.element.addClass("inline-center-adapt-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
