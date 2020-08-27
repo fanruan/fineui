@@ -18,6 +18,9 @@ BI.prepares.push(function () {
         if (isLessIE8) {
             return ob;
         }
+        if (ob.items && ob.items.length > 1) {
+            return BI.extend(ob, {type: "bi.table_adapt"});
+        }
         if (!IE && supportFlex) {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
