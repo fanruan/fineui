@@ -27,6 +27,8 @@ BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
             scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
             items: o.items,
             ref: function (_ref) {
                 self.layout = _ref;

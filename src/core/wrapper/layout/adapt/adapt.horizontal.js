@@ -28,6 +28,8 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable,
             ref: function (_ref) {
                 self.layout = _ref;
             },
