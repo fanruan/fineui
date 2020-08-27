@@ -12,13 +12,13 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-vertical-adapt-layout",
+            horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0,
-            horizontalAlign: BI.HorizontalAlign.Left
+            bgap: 0
         });
     },
 
