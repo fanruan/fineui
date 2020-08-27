@@ -24,7 +24,7 @@ BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
         return {
             type: "bi.horizontal",
             verticalAlign: o.verticalAlign,
-            horizontalAlign: BI.HorizontalAlign.Stretch,
+            horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: o.columnSize,
             items: o.items,
             scrollx: o.scrollx,
