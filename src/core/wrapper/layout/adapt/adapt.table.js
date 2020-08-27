@@ -25,7 +25,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         this.$table = BI.Widget._renderEngine.createElement("<div>").css({
             position: "relative",
             display: "table",
-            width: (o.horizontalAlign === BI.HorizontalAlign.Center || BI.HorizontalAlign.Stretch) ? "100%" : "auto",
+            width: (o.horizontalAlign === BI.HorizontalAlign.Center || o.horizontalAlign === BI.HorizontalAlign.Stretch) ? "100%" : "auto",
             height: (o.verticalAlign === BI.VerticalAlign.Middle || o.verticalAlign === BI.VerticalAlign.Stretch) ? "100%" : "auto",
             "white-space": "nowrap"
         });
