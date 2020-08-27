@@ -18,10 +18,10 @@ BI.prepares.push(function () {
         if (isLessIE8) {
             return ob;
         }
-        if (IE || !supportFlex || (ob.items && ob.items.length > 1)) {
-            return BI.extend(ob, {type: "bi.table_adapt"});
+        if (!IE && supportFlex) {
+            return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
-        return BI.extend(ob, {type: "bi.flex_horizontal"});
+        return BI.extend(ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
