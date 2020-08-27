@@ -144,13 +144,15 @@ BI.Text = BI.inherit(BI.Single, {
         //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
         this.options.text = BI.isNotNull(text) ? text : "";
         if (BI.isIE9Below()) {
-            this.text.element.html(BI.htmlEncode(this._getShowText()));
+            this.text.element.html(BI.htmlEncode(BI.Text.formatText(this._getShowText())));
             return;
         }
         //  textContent性能更好,并且原生防xss
-        this.text.element[0].textContent = this._getShowText();
+        this.text.element[0].textContent = BI.Text.formatText(this._getShowText());
         BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
     }
 });
-
+BI.Text.formatText = function (text) {
+    return text;
+};
 BI.shortcut("bi.text", BI.Text);

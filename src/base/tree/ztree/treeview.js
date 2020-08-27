@@ -32,7 +32,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             element: this,
             items: [this.tip]
         });
-        if(BI.isNotNull(o.value)) {
+        if (BI.isNotNull(o.value)) {
             this.setSelectedValue(o.value);
         }
         if (BI.isIE9Below && BI.isIE9Below()) {
@@ -111,7 +111,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
             var checked = treeNode.checked;
             var status = treeNode.getCheckStatus();
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 checked = false;
             }
             // 更新此node的check状态, 影响父子关联，并调用beforeCheck和onCheck回调
@@ -204,7 +204,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 });
             }
             // 当前点击节点的状态是半选，且为true_part, 则将其改为false_part,使得点击半选后切换到的是全选
-            if(status.half === true && status.checked === true) {
+            if (status.half === true && status.checked === true) {
                 treeNode.checked = false;
             }
         }
@@ -333,11 +333,12 @@ BI.TreeView = BI.inherit(BI.Pane, {
         BI.each(ns, function (i, n) {
             n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
+            n.value = n.value || n.text;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
-                n.text = BI.$("<div>").__textKeywordMarked__(n.text, o.paras.keyword, n.py).html();
+                n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();
             } else {
-                n.text = BI.htmlEncode(n.text + "");
+                n.text = BI.htmlEncode(BI.Text.formatText(n.text + ""));
             }
         });
         return nodes;
