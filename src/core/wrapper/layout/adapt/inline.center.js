@@ -12,6 +12,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-center-adapt-layout",
+            horizontalAlign: BI.HorizontalAlign.Center,
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -25,7 +26,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap",
-            textAlign: "center"
+            textAlign: o.horizontalAlign
         });
         this.populate(this.options.items);
     },

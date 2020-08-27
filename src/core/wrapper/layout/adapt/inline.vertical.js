@@ -12,13 +12,13 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
             baseCls: "bi-inline-vertical-adapt-layout",
+            horizontalAlign: BI.HorizontalAlign.Left,
             hgap: 0,
             vgap: 0,
             lgap: 0,
             rgap: 0,
             tgap: 0,
-            bgap: 0,
-            horizontalAlign: "left"
+            bgap: 0
         });
     },
 
@@ -29,7 +29,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             whiteSpace: "nowrap",
             textAlign: o.horizontalAlign
         });
-        this.populate(this.options.items);
+        this.populate(o.items);
     },
 
     _addElement: function (i, item) {
@@ -47,7 +47,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
             w.element.css({
-                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) +"px"
+                "margin-left": (i === 0 ? o.hgap : 0) + o.lgap + (item.lgap || 0) + (item.hgap || 0) + "px"
             });
         }
         if (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0) !== 0) {
