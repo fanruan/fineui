@@ -23,12 +23,13 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     render: function () {
+        var o = this.options;
         BI.InlineCenterAdaptLayout.superclass.render.apply(this, arguments);
         this.element.css({
             whiteSpace: "nowrap",
             textAlign: o.horizontalAlign
         });
-        this.populate(this.options.items);
+        this.populate(o.items);
     },
 
     _addElement: function (i, item, length) {
