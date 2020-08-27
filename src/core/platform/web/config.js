@@ -18,7 +18,16 @@ BI.prepares.push(function () {
         if (isLessIE8) {
             return ob;
         }
-        if (ob.items && ob.items.length > 1) {
+        // center_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Center) {
+            return BI.extend(ob, {type: "bi.table_adapt"});
+        }
+        // vertical_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Middle && ob.horizontalAlign === BI.HorizontalAlign.Left) {
+            return BI.extend(ob, {type: "bi.table_adapt"});
+        }
+        // horizontal_adapt
+        if (ob.verticalAlign === BI.VerticalAlign.Top && ob.horizontalAlign === BI.HorizontalAlign.Center) {
             return BI.extend(ob, {type: "bi.table_adapt"});
         }
         if (!IE && supportFlex) {
