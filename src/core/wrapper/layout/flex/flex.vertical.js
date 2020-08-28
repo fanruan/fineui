@@ -31,9 +31,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         var w = BI.FlexVerticalLayout.superclass._addElement.apply(this, arguments);
         var o = this.options;
         w.element.css({
-            position: "relative",
-            "flex-shrink": "0"
+            position: "relative"
         });
+        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
+            w.element.css({
+                "flex-shrink": "0"
+            });
+        }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
         }
