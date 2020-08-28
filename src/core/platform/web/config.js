@@ -23,7 +23,7 @@ BI.prepares.push(function () {
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
             return BI.extend(ob, {type: "bi.table_adapt"});
         }
-        if (!IE && supportFlex) {
+        if (!isIE && supportFlex) {
             return BI.extend(ob, {type: "bi.flex_horizontal"});
         }
         // 解决使用inline_vertical_adapt的顺序问题
