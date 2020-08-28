@@ -2,13 +2,6 @@
  * Created by dailer on 2019/6/19.
  */
 !(function () {
-    var _isSupportFlex;
-    var isSupportFlex = function () {
-        if (_isSupportFlex == null) {
-            _isSupportFlex = !!(BI.isSupportCss3 && BI.isSupportCss3("flex"));
-        }
-        return _isSupportFlex;
-    };
     BI.AbstractLabel = BI.inherit(BI.Single, {
 
         _defaultConfig: function (props) {

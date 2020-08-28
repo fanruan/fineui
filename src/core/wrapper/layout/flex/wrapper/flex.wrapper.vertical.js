@@ -33,9 +33,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.FlexWrapperVerticalLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            position: "relative",
-            "flex-shrink": "0"
+            position: "relative"
         });
+        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
+            w.element.css({
+                "flex-shrink": "0"
+            });
+        }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : o.rowSize[i]);
         }
