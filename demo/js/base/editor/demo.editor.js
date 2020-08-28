@@ -6,7 +6,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
         var editor1 = BI.createWidget({
             type: "bi.editor",
             cls: "bi-border",
-            watermark: "alert信息显示在下面",
+            watermark: "报错信息显示在控件上方",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
             height: 24
