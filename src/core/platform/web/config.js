@@ -40,6 +40,9 @@ BI.prepares.push(function () {
             if (!isIE && supportFlex) {
                 return BI.extend(ob, {type: "bi.flex_center_adapt"});
             }
+            if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
+                return BI.extend(ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
+            }
             return BI.extend(ob, {type: "bi.inline_center_adapt"});
         }
         return ob;
@@ -50,6 +53,9 @@ BI.prepares.push(function () {
         if (!isAdapt || justOneItem) {
             if (!isIE && supportFlex) {
                 return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
+            }
+            if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
+                return BI.extend(ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
             }
             return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
         }
