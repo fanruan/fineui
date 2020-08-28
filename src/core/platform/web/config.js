@@ -36,12 +36,10 @@ BI.prepares.push(function () {
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isIE && supportFlex) {
-            if (!isAdapt || justOneItem) {
+        if (!isAdapt || justOneItem) {
+            if (!isIE && supportFlex) {
                 return BI.extend(ob, {type: "bi.flex_center_adapt"});
             }
-        }
-        if (!isAdapt || justOneItem) {
             return BI.extend(ob, {type: "bi.inline_center_adapt"});
         }
         return ob;
@@ -49,19 +47,18 @@ BI.prepares.push(function () {
     BI.Plugin.configWidget("bi.vertical_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
-        if (!isIE && supportFlex) {
-            if (!isAdapt || justOneItem) {
+        if (!isAdapt || justOneItem) {
+            if (!isIE && supportFlex) {
                 return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
             }
-        }
-        if (!isAdapt || justOneItem) {
             return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
         }
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_adapt", function (ob) {
+        var justOneItem = (ob.items && ob.items.length <= 1);
         if (!ob.verticalAlign || ob.verticalAlign === BI.VerticalAlign.TOP) {
-            if (ob.items && ob.items.length <= 1) {
+            if (justOneItem) {
                 return BI.extend(ob, {type: "bi.horizontal_auto"});
             }
         }
