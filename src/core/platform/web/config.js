@@ -29,7 +29,10 @@ BI.prepares.push(function () {
         // 解决使用inline_vertical_adapt的顺序问题
         // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
         if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-            return BI.extend(ob, {type: "bi.inline_vertical_adapt", items: ob.items && ob.items.reverse()});
+            return BI.extend({verticalAlign: BI.VerticalAlign.Top}, ob, {
+                type: "bi.inline_vertical_adapt",
+                items: ob.items && ob.items.reverse()
+            });
         }
         return BI.extend(ob, {type: "bi.table_adapt"});
     });
@@ -55,7 +58,7 @@ BI.prepares.push(function () {
                 return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
             }
             if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-                return BI.extend(ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
+                return BI.extend(ob, {type: "bi.inline_vertical_adapt", items: ob.items && ob.items.reverse()});
             }
             return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
         }
