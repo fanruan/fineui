@@ -6,6 +6,7 @@
 BI.Editor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         var conf = BI.Editor.superclass._defaultConfig.apply(this, arguments);
+
         return BI.extend(conf, {
             baseCls: "bi-editor bi-focus-shadow",
             hgap: 4,
@@ -21,7 +22,7 @@ BI.Editor = BI.inherit(BI.Single, {
             quitChecker: BI.emptyFn,
             allowBlank: false,
             watermark: "",
-            errorText: ""
+            errorText: "",
         });
     },
 
@@ -46,27 +47,6 @@ BI.Editor = BI.inherit(BI.Single, {
             padding: "0",
             margin: "0"
         });
-        if (BI.isKey(this.options.watermark)) {
-            this._assertWaterMark();
-        }
-
-        var _items = [];
-        if (this.watermark) {
-            _items.push({
-                el: this.watermark,
-                left: 3,
-                right: 3,
-                top: 0,
-                bottom: 0
-            });
-        }
-        _items.push({
-            el: this.editor,
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-        });
 
         var items = [{
             el: {
@@ -74,7 +54,13 @@ BI.Editor = BI.inherit(BI.Single, {
                 ref: function(_ref) {
                     self.contentWrapper = _ref;
                 },
-                items: _items
+                items: [{
+                    el: this.editor,
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }]
             },
             left: o.hgap + o.lgap,
             right: o.hgap + o.rgap,
@@ -87,6 +73,9 @@ BI.Editor = BI.inherit(BI.Single, {
             element: this,
             items: items
         });
+
+        this.setWaterMark(this.options.watermark);
+
         this.editor.on(BI.Controller.EVENT_CHANGE, function () {
             self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
         });
@@ -199,7 +188,7 @@ BI.Editor = BI.inherit(BI.Single, {
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
-                height: o.height - 2 * (o.vgap + o.tgap),
+                height: o.height - 2 * o.vgap - o.tgap,
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -247,8 +236,13 @@ BI.Editor = BI.inherit(BI.Single, {
     },
 
     setWaterMark: function(v) {
+        if (!BI.isKey(v)) {
+            return;
+        }
+
         this.options.watermark = v;
-        if(BI.isNull(this.watermark)) {
+
+        if (BI.isNull(this.watermark)) {
             this._assertWaterMark();
             BI.createWidget({
                 type: "bi.absolute",
@@ -258,11 +252,11 @@ BI.Editor = BI.inherit(BI.Single, {
                     left: 3,
                     right: 3,
                     top: 0,
-                    bottom: 0
-                }]
-            })
+                    bottom: 0,
+                }],
+            });
         }
-        BI.isKey(v) && this.watermark.setText(v);
+        this.watermark.setText(v);
     },
 
     _setErrorVisible: function (b) {

@@ -53,7 +53,7 @@
     "webpack-merge": "4.2.1"
   },
   "scripts": {
-    "webpack:dev": "webpack-dev-server -p --progress --host 0.0.0.0 --config=webpack/webpack.dev.js --mode development",
+    "webpack:dev": "node --max_old_space_size=4096 node_modules/.bin/webpack-dev-server -p --progress --host 0.0.0.0 --config=webpack/webpack.dev.js --mode development",
     "webpack:prod": "webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "start": "node server.js",
     "build": "npm run webpack:prod && tsc",
