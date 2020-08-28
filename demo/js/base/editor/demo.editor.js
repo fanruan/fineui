@@ -16,7 +16,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
         });
         var editor2 = BI.createWidget({
             type: "bi.editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             watermark: "输入'a'会有错误信息",
             disabled: true,
             errorText: "字段不可重名",
@@ -32,7 +32,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
         });
         var editor3 = BI.createWidget({
             type: "bi.editor",
-            cls: "mvc-border",
+            cls: "bi-border",
             watermark: "输入'a'会有错误信息且回车键不能退出编辑",
             errorText: "字段不可重名",
             value: "a",
