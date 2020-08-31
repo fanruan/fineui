@@ -20,6 +20,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             allowBlank: true,
             watermark: "",
             errorText: "",
+            textAlign: "left",
             height: 24
         });
     },
@@ -49,7 +50,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             title: o.title,
             warningTitle: o.warningTitle,
             tipType: o.tipType,
-            textAlign: "left",
+            textAlign: o.textAlign,
             height: o.height,
             hgap: o.hgap,
             handler: function () {
