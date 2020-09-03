@@ -118,7 +118,7 @@
 
         doRedMark: function (keyword) {
             if (BI.isKey(this.options.keyword)) {
-                this._doRedMark(keyword);
+                this._doRedMark(this.options.keyword);
             }
         },
 
