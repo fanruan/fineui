@@ -109,11 +109,17 @@
             return BI.Text.formatText(text + "");
         },
 
-        doRedMark: function (keyword) {
+        _doRedMark: function (keyword) {
             var o = this.options;
             // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
             this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
+        },
+
+        doRedMark: function (keyword) {
+            if (BI.isKey(this.options.keyword)) {
+                this._doRedMark(keyword);
+            }
         },
 
         unRedMark: function () {
@@ -145,7 +151,7 @@
             BI.Text.superclass.setText.apply(this, arguments);
             //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
             this.options.text = BI.isNotNull(text) ? text : "";
-            this.doRedMark(this.options.keyword);
+            this._doRedMark(this.options.keyword);
         }
     });
     var formatters = [];
