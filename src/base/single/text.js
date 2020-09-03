@@ -104,21 +104,28 @@
 
         _getShowText: function () {
             var o = this.options;
-            return BI.isFunction(o.text) ? o.text() : o.text;
+            var text = BI.isFunction(o.text) ? o.text() : o.text;
+            text = BI.isKey(text) ? text : o.value;
+            return BI.Text.formatText(text + "");
         },
 
-
-        doRedMark: function (keyword) {
+        _doRedMark: function (keyword) {
             var o = this.options;
             // render之后做的doredmark,这个时候虽然标红了，但是之后text mounted执行的时候并没有keyword
             o.keyword = keyword;
-            this.text.element.__textKeywordMarked__(this._getShowText() || o.value, keyword, o.py);
+            this.text.element.__textKeywordMarked__(this._getShowText(), keyword, o.py);
+        },
+
+        doRedMark: function (keyword) {
+            if (BI.isKey(keyword)) {
+                this._doRedMark(keyword);
+            }
         },
 
         unRedMark: function () {
             var o = this.options;
             o.keyword = "";
-            this.text.element.__textKeywordMarked__(this._getShowText() || o.value, "", o.py);
+            this.text.element.__textKeywordMarked__(this._getShowText(), "", o.py);
         },
 
         doHighLight: function () {
@@ -144,13 +151,7 @@
             BI.Text.superclass.setText.apply(this, arguments);
             //  为textContext赋值为undefined时在ie和edge下会真的显示undefined
             this.options.text = BI.isNotNull(text) ? text : "";
-            if (BI.isIE9Below()) {
-                this.text.element.html(BI.htmlEncode(BI.Text.formatText(this._getShowText())));
-                return;
-            }
-            //  textContent性能更好,并且原生防xss
-            this.text.element[0].textContent = BI.Text.formatText(this._getShowText());
-            BI.isKey(this.options.keyword) && this.doRedMark(this.options.keyword);
+            this._doRedMark(this.options.keyword);
         }
     });
     var formatters = [];
