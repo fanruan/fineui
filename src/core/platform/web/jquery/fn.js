@@ -78,7 +78,12 @@ if (BI.jQuery) {
          */
         __textKeywordMarked__: function (text, keyword, py) {
             if (!BI.isKey(keyword) || (text + "").length > 100) {
-                return this.html(BI.htmlEncode(text));
+                if (BI.isIE9Below()) {
+                    return this.html(BI.htmlEncode(text));
+                }
+                //  textContent性能更好,并且原生防xss
+                this[0].textContent = text;
+                return this;
             }
             keyword = keyword + "";
             keyword = BI.toUpperCase(keyword);
