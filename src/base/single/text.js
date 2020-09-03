@@ -106,6 +106,9 @@
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
             text = BI.isKey(text) ? text : o.value;
+            if (!BI.isKey(text)) {
+                return "";
+            }
             return BI.Text.formatText(text + "");
         },
 
