@@ -28,9 +28,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         });
     },
 
-    _createBubble: function (direct, text, level, height) {
+    _createBubble: function (direct, text, level, height, fixed) {
         return BI.createWidget({
-            type: "bi.bubble",
+            type: fixed === false ? "bi.bubble_view" : "bi.bubble",
             text: text,
             level: level,
             height: height || 18,
@@ -110,15 +110,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     show: function (name, text, context, opt) {
         opt || (opt = {});
         var container = opt.container || context;
-        var offsetStyle = opt.offsetStyle || {};
+        var offsetStyle = opt.offsetStyle || "left";
         var level = opt.level || "error";
         var adjustYOffset = opt.adjustYOffset || 0;
         var adjustXOffset = opt.adjustXOffset || 0;
+        var fixed = opt.fixed === false;
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
         if (!this.storeBubbles[name]["top"]) {
-            this.storeBubbles[name]["top"] = this._createBubble("top", text, level);
+            this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
         }
         BI.createWidget({
             type: "bi.absolute",
@@ -128,12 +129,64 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             }]
         });
         this.set(name, this.storeBubbles[name]["top"]);
+
+        // 如果是非固定位置（fixed）的bubble
+        if (fixed === false) {
+            var bubble = this.storeBubbles[name]["top"];
+            var bounds = bubble.element.bounds();
+            if (BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
+                var top = -(bounds.height + adjustYOffset);
+                switch (offsetStyle) {
+                    case "center":
+                        bubble.element.css({
+                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
+                            top: top
+                        });
+                        break;
+                    case "right":
+                        bubble.element.css({
+                            right: adjustXOffset,
+                            top: top
+                        });
+                        break;
+                    default:
+                        bubble.element.css({
+                            left: adjustXOffset,
+                            top: top
+                        });
+                        break;
+                }
+            } else {
+                var bottom = -(bounds.height + adjustYOffset);
+                switch (offsetStyle) {
+                    case "center":
+                        bubble.element.css({
+                            left: (context.element.bounds().width - bounds.width) / 2 + adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                    case "right":
+                        bubble.element.css({
+                            right: adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                    default:
+                        bubble.element.css({
+                            left: adjustXOffset,
+                            bottom: bottom
+                        });
+                        break;
+                }
+            }
+            return this;
+        }
         var position = this._getTopPosition(name, context, offsetStyle);
         this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
         if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
             this.get(name).invisible();
             if (!this.storeBubbles[name]["left"]) {
-                this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
+                this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30, fixed);
             }
             BI.createWidget({
                 type: "bi.absolute",
@@ -148,7 +201,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             if (!BI.DOM.isLeftSpaceEnough(context, this.get(name), adjustXOffset)) {
                 this.get(name).invisible();
                 if (!this.storeBubbles[name]["right"]) {
-                    this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
+                    this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30, fixed);
                 }
                 BI.createWidget({
                     type: "bi.absolute",
@@ -163,7 +216,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
                     this.get(name).invisible();
                     if (!this.storeBubbles[name]["bottom"]) {
-                        this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
+                        this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level, null, fixed);
                     }
                     BI.createWidget({
                         type: "bi.absolute",
@@ -174,7 +227,10 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     });
                     this.set(name, this.storeBubbles[name]["bottom"]);
                     var position = this._getBottomPosition(name, context, offsetStyle);
-                    this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
+                    this.get(name).element.css({
+                        left: position.left + adjustXOffset,
+                        top: position.top + adjustYOffset
+                    });
                 }
             }
         }
