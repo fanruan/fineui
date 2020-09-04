@@ -130,8 +130,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         this.set(name, this.storeBubbles[name]["top"]);
         var position = this._getTopPosition(name, context, offsetStyle);
         this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-        this.get(name).invisible();
         if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
+            this.get(name).invisible();
             if (!this.storeBubbles[name]["left"]) {
                 this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
             }
@@ -145,8 +145,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
             this.set(name, this.storeBubbles[name]["left"]);
             var position = this._getLeftPosition(name, context, offsetStyle);
             this.get(name).element.css({left: position.left - adjustXOffset, top: position.top - adjustYOffset});
-            this.get(name).invisible();
             if (!BI.DOM.isLeftSpaceEnough(context, this.get(name), adjustXOffset)) {
+                this.get(name).invisible();
                 if (!this.storeBubbles[name]["right"]) {
                     this.storeBubbles[name]["right"] = this._createBubble("right", text, level, 30);
                 }
@@ -160,8 +160,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 this.set(name, this.storeBubbles[name]["right"]);
                 var position = this._getRightPosition(name, context, offsetStyle);
                 this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-                this.get(name).invisible();
                 if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
+                    this.get(name).invisible();
                     if (!this.storeBubbles[name]["bottom"]) {
                         this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                     }
@@ -175,12 +175,9 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     this.set(name, this.storeBubbles[name]["bottom"]);
                     var position = this._getBottomPosition(name, context, offsetStyle);
                     this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
-                    this.get(name).invisible();
                 }
             }
         }
-        this.get(name).setText(text);
-        this.get(name).visible();
         return this;
     },
 
