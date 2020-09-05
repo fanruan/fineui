@@ -234,6 +234,8 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 }
             }
         }
+        this.get(name).setText(text);
+        this.get(name).visible();
         return this;
     },
 
