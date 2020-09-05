@@ -179,61 +179,66 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                         break;
                 }
             }
-            return this;
-        }
-        var position = this._getTopPosition(name, context, offsetStyle);
-        this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-        if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
-            this.get(name).invisible();
-            if (!this.storeBubbles[name]["bottom"]) {
-                this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
-            }
-            BI.createWidget({
-                type: "bi.absolute",
-                element: container,
-                items: [{
-                    el: this.storeBubbles[name]["bottom"]
-                }]
-            });
-            this.set(name, this.storeBubbles[name]["bottom"]);
-            var position = this._getBottomPosition(name, context, offsetStyle);
-            this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
-            if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
+        } else {
+            var position = this._getTopPosition(name, context, offsetStyle);
+            this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
+            if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
                 this.get(name).invisible();
-                if (!this.storeBubbles[name]["right"]) {
-                    this.storeBubbles[name]["right"] = this._createBubble("right", text, level);
+                if (!this.storeBubbles[name]["bottom"]) {
+                    this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                 }
                 BI.createWidget({
                     type: "bi.absolute",
                     element: container,
                     items: [{
-                        el: this.storeBubbles[name]["right"]
+                        el: this.storeBubbles[name]["bottom"]
                     }]
                 });
-                this.set(name, this.storeBubbles[name]["right"]);
-                var position = this._getRightPosition(name, context, offsetStyle);
-                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
-                if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
+                this.set(name, this.storeBubbles[name]["bottom"]);
+                var position = this._getBottomPosition(name, context, offsetStyle);
+                this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
+                if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
                     this.get(name).invisible();
-                    if (!this.storeBubbles[name]["left"]) {
-                        this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
+                    if (!this.storeBubbles[name]["right"]) {
+                        this.storeBubbles[name]["right"] = this._createBubble("right", text, level);
                     }
                     BI.createWidget({
                         type: "bi.absolute",
                         element: container,
                         items: [{
-                            el: this.storeBubbles[name]["left"]
+                            el: this.storeBubbles[name]["right"]
                         }]
                     });
-                    this.set(name, this.storeBubbles[name]["left"]);
-                    var position = this._getLeftPosition(name, context, offsetStyle);
+                    this.set(name, this.storeBubbles[name]["right"]);
+                    var position = this._getRightPosition(name, context, offsetStyle);
                     this.get(name).element.css({
-                        left: position.left - adjustXOffset,
+                        left: position.left + adjustXOffset,
                         top: position.top - adjustYOffset
                     });
+                    if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
+                        this.get(name).invisible();
+                        if (!this.storeBubbles[name]["left"]) {
+                            this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
+                        }
+                        BI.createWidget({
+                            type: "bi.absolute",
+                            element: container,
+                            items: [{
+                                el: this.storeBubbles[name]["left"]
+                            }]
+                        });
+                        this.set(name, this.storeBubbles[name]["left"]);
+                        var position = this._getLeftPosition(name, context, offsetStyle);
+                        this.get(name).element.css({
+                            left: position.left - adjustXOffset,
+                            top: position.top - adjustYOffset
+                        });
+                    }
                 }
             }
         }
+        this.get(name).setText(text);
+        this.get(name).visible();
         return this;
     },
 
