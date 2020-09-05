@@ -24,7 +24,7 @@ BI.Msg = function () {
         toast: function (message, options, context) {
             options = options || {};
             context = context || BI.Widget._renderEngine.createElement("body");
-            var level = options.level || "normal";
+            var level = options.level || "common";
             var autoClose = BI.isNull(options.autoClose) ? true : options.autoClose;
             var callback = BI.isFunction(options.callback) ? options.callback : BI.emptyFn;
             var toast = BI.createWidget({
