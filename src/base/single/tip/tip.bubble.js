@@ -110,7 +110,7 @@ BI.shortcut("bi.bubble", BI.Bubble);
 
 BI.BubbleView = BI.inherit(BI.Single, {
     _defaultConfig: function () {
-        return BI.extend(BI.Bubble.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.BubbleView.superclass._defaultConfig.apply(this, arguments), {
             extraCls: "bi-bubble",
             direction: "top",
             text: "",
