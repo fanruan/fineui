@@ -114,7 +114,7 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var level = opt.level || "error";
         var adjustYOffset = opt.adjustYOffset || 0;
         var adjustXOffset = opt.adjustXOffset || 0;
-        var fixed = opt.fixed === false;
+        var fixed = opt.fixed !== false;
         if (!this.storeBubbles[name]) {
             this.storeBubbles[name] = {};
         }
