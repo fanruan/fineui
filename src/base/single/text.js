@@ -162,8 +162,10 @@
         formatters.push(formatter);
     };
     BI.Text.formatText = function (text) {
-        for (var i = 0, len = formatters.length; i < len; i++) {
-            text = formatters[i](text);
+        if (formatters.length > 0) {
+            for (var i = 0, len = formatters.length; i < len; i++) {
+                text = formatters[i](text);
+            }
         }
         return text;
     };
