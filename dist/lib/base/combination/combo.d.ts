@@ -1,12 +1,13 @@
 import { _Widget } from "../../core/widget";
 export interface _Combo extends _Widget {
-    populate(items: any): void;
+    populate(...args: any[]): void;
     _setEnable(v: boolean): void;
     isViewVisible(): boolean;
     showView(e?: any): void;
     hideView(): void;
     getView(): any;
     getPopupPosition(): any;
+    adjustHeight(e?: MouseEvent): void;
     toggle(): void;
 }
 export interface _ComboStatic {

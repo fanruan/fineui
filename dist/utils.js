@@ -1,4 +1,4 @@
-/*! time: 2020-7-3 12:02:09 */
+/*! time: 2020-9-7 17:30:04 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1073);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1081);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -556,6 +556,8 @@ if (!_global.BI) {
             for (var i = 0; i < array.length; i++) {
                 if (BI.isNull(value)) {
                     map[array[i]] = array[i];
+                } else if (BI.isFunction(value)) {
+                    map[array[i]] = value(i, array[i]);
                 } else {
                     map[array[i]] = BI.deepClone(value);
                 }
@@ -1686,7 +1688,7 @@ if (!_global.BI) {
 /***/ (function(module, exports) {
 
 !(function () {
-    function extend () {
+    function extend() {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
             // Only deal with non-null/undefined values
@@ -1715,10 +1717,10 @@ if (!_global.BI) {
      * @class BI.OB
      * @abstract
      */
-    BI.OB = function (config) {
+    var OB = function (config) {
         this._constructor(config);
     };
-    _.extend(BI.OB.prototype, {
+    _.extend(OB.prototype, {
         props: {},
         init: null,
         destroyed: null,
@@ -1773,8 +1775,8 @@ if (!_global.BI) {
         },
 
         _getEvents: function () {
-            if (!_.isArray(this.events)) {
-                this.events = [];
+            if (!_.isObject(this.events)) {
+                this.events = {};
             }
             return this.events;
         },
@@ -1785,6 +1787,7 @@ if (!_global.BI) {
          * @param {Function} fn 事件对应的执行函数
          */
         on: function (eventName, fn) {
+            var self = this;
             eventName = eventName.toLowerCase();
             var fns = this._getEvents()[eventName];
             if (!_.isArray(fns)) {
@@ -1792,6 +1795,10 @@ if (!_global.BI) {
                 this._getEvents()[eventName] = fns;
             }
             fns.push(fn);
+
+            return function () {
+                self.un(eventName, fn);
+            };
         },
 
         /**
@@ -1835,7 +1842,7 @@ if (!_global.BI) {
          */
         purgeListeners: function () {
             /* alex:清空events*/
-            this.events = [];
+            this.events = {};
         },
         /**
          * 触发绑定过的事件
@@ -1871,119 +1878,8 @@ if (!_global.BI) {
             this.purgeListeners();
         }
     });
+    BI.OB = BI.OB || OB;
 })();
-
-/***/ }),
-
-/***/ 1073:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(101);
-__webpack_require__(102);
-__webpack_require__(130);
-__webpack_require__(123);
-__webpack_require__(126);
-__webpack_require__(127);
-__webpack_require__(124);
-__webpack_require__(125);
-__webpack_require__(105);
-__webpack_require__(107);
-__webpack_require__(122);
-__webpack_require__(129);
-__webpack_require__(128);
-__webpack_require__(108);
-__webpack_require__(109);
-__webpack_require__(110);
-__webpack_require__(111);
-__webpack_require__(112);
-__webpack_require__(113);
-__webpack_require__(114);
-__webpack_require__(115);
-__webpack_require__(116);
-__webpack_require__(117);
-__webpack_require__(118);
-__webpack_require__(119);
-__webpack_require__(120);
-__webpack_require__(121);
-__webpack_require__(744);
-__webpack_require__(1074);
-__webpack_require__(131);
-__webpack_require__(132);
-module.exports = __webpack_require__(133);
-
-
-/***/ }),
-
-/***/ 1074:
-/***/ (function(module, exports) {
-
-/**
- * Created by astronaut007 on 2018/8/8
- */
-// 牵扯到国际化这些常量在页面加载后再生效
-// full day names
-BI.Date = BI.Date || {};
-BI.Date._DN = ["星期日",
-    "星期一",
-    "星期二",
-    "星期三",
-    "星期四",
-    "星期五",
-    "星期六",
-    "星期日"];
-
-// short day names
-BI.Date._SDN = ["日",
-    "一",
-    "二",
-    "三",
-    "四",
-    "五",
-    "六",
-    "日"];
-
-// Monday first, etc.
-BI.Date._FD = 1;
-
-// full month namesdat
-BI.Date._MN = [
-    "一月",
-    "二月",
-    "三月",
-    "四月",
-    "五月",
-    "六月",
-    "七月",
-    "八月",
-    "九月",
-    "十月",
-    "十一月",
-    "十二月"];
-
-// short month names
-BI.Date._SMN = [0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11];
-
-BI.Date._QN = ["", "第1季度",
-    "第2季度",
-    "第3季度",
-    "第4季度"];
-
-/** Adds the number of days array to the Date object. */
-BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-// 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 
 
 /***/ }),
@@ -4337,6 +4233,119 @@ BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
         }
     });
 }());
+
+/***/ }),
+
+/***/ 1081:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(101);
+__webpack_require__(102);
+__webpack_require__(130);
+__webpack_require__(123);
+__webpack_require__(126);
+__webpack_require__(127);
+__webpack_require__(124);
+__webpack_require__(125);
+__webpack_require__(105);
+__webpack_require__(107);
+__webpack_require__(122);
+__webpack_require__(129);
+__webpack_require__(128);
+__webpack_require__(108);
+__webpack_require__(109);
+__webpack_require__(110);
+__webpack_require__(111);
+__webpack_require__(112);
+__webpack_require__(113);
+__webpack_require__(114);
+__webpack_require__(115);
+__webpack_require__(116);
+__webpack_require__(117);
+__webpack_require__(118);
+__webpack_require__(119);
+__webpack_require__(120);
+__webpack_require__(121);
+__webpack_require__(746);
+__webpack_require__(1082);
+__webpack_require__(131);
+__webpack_require__(132);
+module.exports = __webpack_require__(133);
+
+
+/***/ }),
+
+/***/ 1082:
+/***/ (function(module, exports) {
+
+/**
+ * Created by astronaut007 on 2018/8/8
+ */
+// 牵扯到国际化这些常量在页面加载后再生效
+// full day names
+BI.Date = BI.Date || {};
+BI.Date._DN = ["星期日",
+    "星期一",
+    "星期二",
+    "星期三",
+    "星期四",
+    "星期五",
+    "星期六",
+    "星期日"];
+
+// short day names
+BI.Date._SDN = ["日",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "日"];
+
+// Monday first, etc.
+BI.Date._FD = 1;
+
+// full month namesdat
+BI.Date._MN = [
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月"];
+
+// short month names
+BI.Date._SMN = [0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11];
+
+BI.Date._QN = ["", "第1季度",
+    "第2季度",
+    "第3季度",
+    "第4季度"];
+
+/** Adds the number of days array to the Date object. */
+BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+// 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+
 
 /***/ }),
 
@@ -7838,7 +7847,7 @@ _.extend(BI, {
  * 基本的函数
  * Created by GUY on 2015/6/24.
  */
-BI.Func = {};
+BI.Func = BI.Func || {};
 _.extend(BI.Func, {
     /**
      * 创建唯一的名字
@@ -7928,6 +7937,55 @@ _.extend(BI.Func, {
             match: matched,
             find: find
         };
+    },
+
+    /**
+     * 获取按GB2312排序的结果
+     * @param items
+     * @param key
+     * @return {any[]}
+     */
+    getSortedResult: function (items, key) {
+        var getTextOfItem = BI.isFunction(key) ? key :
+            function (item, key) {
+                if (BI.isNotNull(key)) {
+                    return item[key];
+                }
+                if (BI.isNotNull(item.text)) {
+                    return item.text;
+                }
+                if (BI.isNotNull(item.value)) {
+                    return item.value;
+                }
+                return item;
+            };
+
+        return items.sort(function (item1, item2) {
+            var str1 = getTextOfItem(item1, key);
+            var str2 = getTextOfItem(item2, key);
+            if (BI.isNull(str1) && BI.isNull(str2)) {
+                return 0;
+            }
+            if (BI.isNull(str1)) {
+                return -1;
+            }
+            if (BI.isNull(str2)) {
+                return 1;
+            }
+            if (str1 === str2) {
+                return 0;
+            }
+            var len1 = str1.length, len2 = str2.length;
+            for (var i = 0; i < len1 && i < len2; i++) {
+                var char1 = str1[i];
+                var char2 = str2[i];
+                if (char1 !== char2) {
+                    // 找不到的字符都往后面放
+                    return (BI.isNull(BI.CODE_INDEX[char1]) ? BI.MAX : BI.CODE_INDEX[char1]) - (BI.isNull(BI.CODE_INDEX[char2]) ? BI.MAX : BI.CODE_INDEX[char2]);
+                }
+            }
+            return len1 - len2;
+        });
     }
 });
 
@@ -7954,6 +8012,7 @@ _.extend(BI, {
         };
     }
 });
+
 
 /***/ }),
 
@@ -8289,7 +8348,7 @@ _.extend(BI, {
 
 (function () {
     var moduleInjection = {};
-    BI.module = function (xtype, cls) {
+    BI.module = BI.module || function (xtype, cls) {
         if (moduleInjection[xtype] != null) {
             _global.console && console.error("module:[" + xtype + "] has been registed");
         }
@@ -8297,7 +8356,7 @@ _.extend(BI, {
     };
 
     var constantInjection = {};
-    BI.constant = function (xtype, cls) {
+    BI.constant = BI.constant || function (xtype, cls) {
         if (constantInjection[xtype] != null) {
             _global.console && console.error("constant:[" + xtype + "] has been registed");
         }
@@ -8305,7 +8364,7 @@ _.extend(BI, {
     };
 
     var modelInjection = {};
-    BI.model = function (xtype, cls) {
+    BI.model = BI.model || function (xtype, cls) {
         if (modelInjection[xtype] != null) {
             _global.console && console.error("model:[" + xtype + "] has been registed");
         }
@@ -8313,7 +8372,7 @@ _.extend(BI, {
     };
 
     var storeInjection = {};
-    BI.store = function (xtype, cls) {
+    BI.store = BI.store || function (xtype, cls) {
         if (storeInjection[xtype] != null) {
             _global.console && console.error("store:[" + xtype + "] has been registed");
         }
@@ -8321,7 +8380,7 @@ _.extend(BI, {
     };
 
     var serviceInjection = {};
-    BI.service = function (xtype, cls) {
+    BI.service = BI.service || function (xtype, cls) {
         if (serviceInjection[xtype] != null) {
             _global.console && console.error("service:[" + xtype + "] has been registed");
         }
@@ -8329,7 +8388,7 @@ _.extend(BI, {
     };
 
     var providerInjection = {};
-    BI.provider = function (xtype, cls) {
+    BI.provider = BI.provider || function (xtype, cls) {
         if (providerInjection[xtype] != null) {
             _global.console && console.error("provider:[" + xtype + "] has been registed");
         }
@@ -8337,7 +8396,7 @@ _.extend(BI, {
     };
 
     var configFunctions = {};
-    BI.config = function (type, configFn) {
+    BI.config = BI.config || function (type, configFn, opt) {
         if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
@@ -8352,7 +8411,7 @@ _.extend(BI, {
                 }
                 return configFn(providers[type]);
             }
-            return BI.Plugin.configWidget(type, configFn);
+            return BI.Plugin.configWidget(type, configFn, opt);
         }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
@@ -8383,7 +8442,7 @@ _.extend(BI, {
 
     var actions = {};
     var globalAction = [];
-    BI.action = function (type, actionFn) {
+    BI.action = BI.action || function (type, actionFn) {
         if (BI.isFunction(type)) {
             globalAction.push(type);
             return function () {
@@ -8407,7 +8466,7 @@ _.extend(BI, {
     };
 
     var points = {};
-    BI.point = function (type, action, pointFn, after) {
+    BI.point = BI.point || function (type, action, pointFn, after) {
         if (!points[type]) {
             points[type] = {};
         }
@@ -8420,7 +8479,7 @@ _.extend(BI, {
         points[type][action][after ? "after" : "before"].push(pointFn);
     };
 
-    BI.Modules = {
+    BI.Modules = BI.Modules || {
         getModule: function (type) {
             if (!moduleInjection[type]) {
                 _global.console && console.error("module:[" + type + "] does not exists");
@@ -8433,7 +8492,7 @@ _.extend(BI, {
         }
     };
 
-    BI.Constants = {
+    BI.Constants = BI.Constants || {
         getConstant: function (type) {
             return constantInjection[type];
         }
@@ -8477,7 +8536,7 @@ _.extend(BI, {
         });
     };
 
-    BI.Models = {
+    BI.Models = BI.Models || {
         getModel: function (type, config) {
             var inst = new modelInjection[type](config);
             inst._constructor && inst._constructor(config);
@@ -8489,7 +8548,7 @@ _.extend(BI, {
 
     var stores = {};
 
-    BI.Stores = {
+    BI.Stores = BI.Stores || {
         getStore: function (type, config) {
             if (stores[type]) {
                 return stores[type];
@@ -8505,7 +8564,7 @@ _.extend(BI, {
 
     var services = {};
 
-    BI.Services = {
+    BI.Services = BI.Services || {
         getService: function (type, config) {
             if (services[type]) {
                 return services[type];
@@ -8519,7 +8578,7 @@ _.extend(BI, {
     var providers = {},
         providerInstance = {};
 
-    BI.Providers = {
+    BI.Providers = BI.Providers || {
         getProvider: function (type, config) {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
@@ -8531,7 +8590,7 @@ _.extend(BI, {
         }
     };
 
-    BI.Actions = {
+    BI.Actions = BI.Actions || {
         runAction: function (type, event, config) {
             BI.each(actions[type], function (i, act) {
                 try {
@@ -8553,7 +8612,7 @@ _.extend(BI, {
         }
     };
 
-    BI.getContext = function (type, config) {
+    BI.getContext = BI.getContext || function (type, config) {
         if (constantInjection[type]) {
             return BI.Constants.getConstant(type);
         }
@@ -8571,6 +8630,7 @@ _.extend(BI, {
         }
     };
 })();
+
 
 /***/ }),
 
@@ -9106,7 +9166,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 744:
+/***/ 746:
 /***/ (function(module, exports) {
 
 BI.i18n = {

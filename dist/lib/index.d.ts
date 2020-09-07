@@ -33,8 +33,10 @@ import { _RedMarkBehavior } from "./core/behavior/behavior.redmark";
 import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
+import { _Plugin } from "./core/plugin";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic } from "./core/widget";
+import { _inject } from "./core/inject";
 import { _Layout } from "./core/wrapper/layout";
 import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
@@ -44,9 +46,11 @@ declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
     readonly prototype: T;
+    readonly xtype: string;
 };
-export interface BI extends _func, _i18n, _base {
+export interface BI extends _func, _i18n, _base, _inject {
     OB: ClassConstructor<_OB>;
+    Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
     Single: ClassConstructor<_Single>;
     BasicButton: ClassConstructor<_BasicButton> & _BasicButtonStatic;
