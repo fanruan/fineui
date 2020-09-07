@@ -14,8 +14,8 @@
         },
         props: {
             baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
-            width: 78,
-            height: 22,
+            // width: 78,
+            // height: 22,
             format: "",
             allowEdit: false
         },
