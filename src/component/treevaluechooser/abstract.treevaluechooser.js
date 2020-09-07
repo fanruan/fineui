@@ -726,6 +726,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         var self = this;
         var findParentNode;
         var index = 0;
+        var currentParent = this.tree.getRoot();
         this.tree.traverse(function (node) {
             if (self.tree.isRoot(node)) {
                 return;
@@ -733,14 +734,27 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
             if (index > parentValues.length) {
                 return false;
             }
+
+            /**
+             * 一个树结构。要找root_1_3的子节点
+             * {root: { 1: {1: {}, 2: {}, 3: {}}, 3: {1: {}, 2: {}} } }
+             * 当遍历到root_1节点时，index++，而下一个节点root_3时，符合下面的if逻辑，这样找到的节点就是root_3节点了，需要加步判断是否是root_1的子节点
+             */
             if (index === parentValues.length && node.value === v) {
+                if (node.getParent() !== currentParent) {
+                    return;
+                }
+
                 findParentNode = node;
+
                 return false;
             }
             if (node.value === parentValues[index]) {
                 index++;
+                currentParent = node;
                 return;
             }
+
             return true;
         });
         return findParentNode;
