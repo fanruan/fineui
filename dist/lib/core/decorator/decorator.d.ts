@@ -35,6 +35,27 @@ export declare function store<T>(Model: Constructor<T> & {
     };
 } & U;
 /**
+ * 注册mixin
+ * ie8下不能使用
+ */
+export declare function mixin<T>(): (Target: Constructor<T> & {
+    xtype: string;
+}) => void;
+/**
+ * 类注册mixins属性
+ * ie8下不能使用
+ * @param Mixins
+ */
+export declare function mixins(...Mixins: ({
+    new (...args: any[]): {};
+} & {
+    xtype: string;
+})[]): <U extends new (...args: any[]) => {}>(constructor: U) => {
+    new (...args: any[]): {
+        mixins: string[];
+    };
+} & U;
+/**
  * Model基类
  */
 export declare class Model<U extends {

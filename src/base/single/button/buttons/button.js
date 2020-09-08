@@ -74,6 +74,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 vgap: o.vgap,
                 items: [{
                     type: "bi.horizontal",
+                    columnSize: ["", "fill"],
                     items: [this.icon, this.text]
                 }]
             });

@@ -45,7 +45,7 @@ export interface _base {
     lastKey: (obj: object) => string;
     firstObject: (obj: object) => any;
     lastObject: (obj: object) => any;
-    concat: (obj1: any, obj2: any) => any;
+    concat: (obj1: any, obj2: any, ...args: any[]) => any;
     backEach: (obj: any, predicate: Function, context?: any) => boolean;
     backAny: (obj: any, predicate: Function, context?: any) => boolean;
     backEvery: (obj: any, predicate: Function, context?: any) => boolean;
