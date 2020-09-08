@@ -1,4 +1,4 @@
-/*! time: 2020-9-8 09:56:16 */
+/*! time: 2020-9-8 14:00:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -68852,14 +68852,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
                 return false;
             }
-            if (node.value === parentValues[index]) {
+            if (node.value === parentValues[index] && node.getParent() === currentParent) {
                 index++;
                 currentParent = node;
+
                 return;
             }
 
             return true;
         });
+        
         return findParentNode;
     },
 
