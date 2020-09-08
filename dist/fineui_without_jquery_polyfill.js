@@ -1,4 +1,4 @@
-/*! time: 2020-9-8 15:40:19 */
+/*! time: 2020-9-8 18:00:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26555,7 +26555,8 @@ BI.Input = BI.inherit(BI.Single, {
             .focus(function (e) { // 可以不用冒泡
                 self._focusDebounce();
             })
-            .focusout(function (e) {
+            .blur(function (e) {
+                //  DEC-14919  IE11在浏览器重新获得焦点之后会先触发focusout再触发focus,要保持先获得焦点再失去焦点的顺序不变,因此采用blur
                 self._blurDebounce();
             });
         if (BI.isKey(this.options.value) || BI.isEmptyString(this.options.value)) {
