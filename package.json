@@ -1,6 +1,6 @@
 {
   "name": "fineui",
-  "version": "2.0.0",
+  "version": "2.0.20200907174012",
   "description": "fineui",
   "main": "dist/fineui.min.js",
   "types": "dist/lib/index.d.ts",
@@ -60,8 +60,9 @@
     "postbuild": "node ./lib/postbuild/postbuild.js",
     "test": "karma start",
     "dev": "npm run webpack:dev",
-    "prepublishOnly": "npm run build && node ./lib/prepublish/prepublish.js",
-    "postpublish": "cnpm sync fineui"
+    "prepublishToPrivate": "npm run build && node ./lib/prepublish/prepublish.js",
+    "publishToPrivate": "npm publish",
+    "postpublishToPrivate": " node ./lib/postpublish/postpublish.js"
   },
   "repository": {
     "type": "git",
