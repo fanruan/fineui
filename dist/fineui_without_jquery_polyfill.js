@@ -1,4 +1,4 @@
-/*! time: 2020-9-8 14:00:16 */
+/*! time: 2020-9-8 15:40:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24129,6 +24129,7 @@ BI.Button = BI.inherit(BI.BasicButton, {
                 vgap: o.vgap,
                 items: [{
                     type: "bi.horizontal",
+                    columnSize: ["", "fill"],
                     items: [this.icon, this.text]
                 }]
             });
