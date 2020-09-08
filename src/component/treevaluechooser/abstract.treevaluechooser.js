@@ -749,14 +749,16 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
                 return false;
             }
-            if (node.value === parentValues[index]) {
+            if (node.value === parentValues[index] && node.getParent() === currentParent) {
                 index++;
                 currentParent = node;
+
                 return;
             }
 
             return true;
         });
+        
         return findParentNode;
     },
 
