@@ -1,4 +1,4 @@
-/*! time: 2020-9-9 16:10:26 */
+/*! time: 2020-9-9 18:00:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15479,14 +15479,16 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     _init: function () {
         BI.BubblesController.superclass._init.apply(this, arguments);
         var self = this;
+        this.fixedBubblesManager = {};
+        this.fixedStoreBubbles = {};
         this.bubblesManager = {};
         this.storeBubbles = {};
         BI.Resizers.add("bubbleController" + BI.uniqueId(), function () {
-            BI.each(self.bubblesManager, function (name) {
+            BI.each(self.fixedBubblesManager, function (name) {
                 self.remove(name);
             });
-            self.bubblesManager = {};
-            self.storeBubbles = {};
+            self.fixedBubblesManager = {};
+            self.fixedStoreBubbles = {};
         });
     },
 
@@ -15577,23 +15579,22 @@ BI.BubblesController = BI.inherit(BI.Controller, {
         var adjustYOffset = opt.adjustYOffset || 0;
         var adjustXOffset = opt.adjustXOffset || 0;
         var fixed = opt.fixed !== false;
-        if (!this.storeBubbles[name]) {
-            this.storeBubbles[name] = {};
-        }
-        if (!this.storeBubbles[name]["top"]) {
-            this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
-        }
-        BI.createWidget({
-            type: "bi.absolute",
-            element: container,
-            items: [{
-                el: this.storeBubbles[name]["top"]
-            }]
-        });
-        this.set(name, this.storeBubbles[name]["top"]);
-
         // 如果是非固定位置（fixed）的bubble
         if (fixed === false) {
+            if (!this.storeBubbles[name]) {
+                this.storeBubbles[name] = {};
+            }
+            if (!this.storeBubbles[name]["top"]) {
+                this.storeBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
+            }
+            BI.createWidget({
+                type: "bi.absolute",
+                element: container,
+                items: [{
+                    el: this.storeBubbles[name]["top"]
+                }]
+            });
+            this.set(name, this.storeBubbles[name]["top"]);
             var bubble = this.storeBubbles[name]["top"];
             var bounds = bubble.element.bounds();
             if (BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
@@ -15642,36 +15643,50 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                 }
             }
         } else {
+            if (!this.fixedStoreBubbles[name]) {
+                this.fixedStoreBubbles[name] = {};
+            }
+            if (!this.fixedStoreBubbles[name]["top"]) {
+                this.fixedStoreBubbles[name]["top"] = this._createBubble("top", text, level, null, fixed);
+            }
+            BI.createWidget({
+                type: "bi.absolute",
+                element: container,
+                items: [{
+                    el: this.fixedStoreBubbles[name]["top"]
+                }]
+            });
+            this.set(name, this.fixedStoreBubbles[name]["top"]);
             var position = this._getTopPosition(name, context, offsetStyle);
             this.get(name).element.css({left: position.left + adjustXOffset, top: position.top - adjustYOffset});
             if (!BI.DOM.isTopSpaceEnough(context, this.get(name), adjustYOffset)) {
                 this.get(name).invisible();
-                if (!this.storeBubbles[name]["bottom"]) {
-                    this.storeBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
+                if (!this.fixedStoreBubbles[name]["bottom"]) {
+                    this.fixedStoreBubbles[name]["bottom"] = this._createBubble("bottom", text, level);
                 }
                 BI.createWidget({
                     type: "bi.absolute",
                     element: container,
                     items: [{
-                        el: this.storeBubbles[name]["bottom"]
+                        el: this.fixedStoreBubbles[name]["bottom"]
                     }]
                 });
-                this.set(name, this.storeBubbles[name]["bottom"]);
+                this.set(name, this.fixedStoreBubbles[name]["bottom"]);
                 var position = this._getBottomPosition(name, context, offsetStyle);
                 this.get(name).element.css({left: position.left + adjustXOffset, top: position.top + adjustYOffset});
                 if (!BI.DOM.isBottomSpaceEnough(context, this.get(name), adjustYOffset)) {
                     this.get(name).invisible();
-                    if (!this.storeBubbles[name]["right"]) {
-                        this.storeBubbles[name]["right"] = this._createBubble("right", text, level);
+                    if (!this.fixedStoreBubbles[name]["right"]) {
+                        this.fixedStoreBubbles[name]["right"] = this._createBubble("right", text, level);
                     }
                     BI.createWidget({
                         type: "bi.absolute",
                         element: container,
                         items: [{
-                            el: this.storeBubbles[name]["right"]
+                            el: this.fixedStoreBubbles[name]["right"]
                         }]
                     });
-                    this.set(name, this.storeBubbles[name]["right"]);
+                    this.set(name, this.fixedStoreBubbles[name]["right"]);
                     var position = this._getRightPosition(name, context, offsetStyle);
                     this.get(name).element.css({
                         left: position.left + adjustXOffset,
@@ -15679,17 +15694,17 @@ BI.BubblesController = BI.inherit(BI.Controller, {
                     });
                     if (!BI.DOM.isRightSpaceEnough(context, this.get(name), adjustXOffset)) {
                         this.get(name).invisible();
-                        if (!this.storeBubbles[name]["left"]) {
-                            this.storeBubbles[name]["left"] = this._createBubble("left", text, level, 30);
+                        if (!this.fixedStoreBubbles[name]["left"]) {
+                            this.fixedStoreBubbles[name]["left"] = this._createBubble("left", text, level, 30);
                         }
                         BI.createWidget({
                             type: "bi.absolute",
                             element: container,
                             items: [{
-                                el: this.storeBubbles[name]["left"]
+                                el: this.fixedStoreBubbles[name]["left"]
                             }]
                         });
-                        this.set(name, this.storeBubbles[name]["left"]);
+                        this.set(name, this.fixedStoreBubbles[name]["left"]);
                         var position = this._getLeftPosition(name, context, offsetStyle);
                         this.get(name).element.css({
                             left: position.left - adjustXOffset,
@@ -15721,21 +15736,26 @@ BI.BubblesController = BI.inherit(BI.Controller, {
     },
 
     get: function (name) {
-        return this.bubblesManager[name];
+        return this.fixedBubblesManager[name] || this.bubblesManager[name];
     },
 
-    set: function (name, bubble) {
-        this.bubblesManager[name] = bubble;
+    set: function (name, bubble, fixed) {
+        fixed === false ? (this.bubblesManager[name] = bubble) : (this.fixedBubblesManager[name] = bubble);
     },
 
     has: function (name) {
-        return this.bubblesManager[name] != null;
+        return this.fixedBubblesManager[name] != null || this.bubblesManager[name] != null;
     },
 
     remove: function (name) {
         if (!this.has(name)) {
             return this;
         }
+        BI.each(this.fixedStoreBubbles[name], function (dir, bubble) {
+            bubble.destroy();
+        });
+        delete this.fixedStoreBubbles[name];
+        delete this.fixedBubblesManager[name];
         BI.each(this.storeBubbles[name], function (dir, bubble) {
             bubble.destroy();
         });
