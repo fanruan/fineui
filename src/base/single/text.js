@@ -20,7 +20,8 @@
             bgap: 0,
             text: "",
             py: "",
-            highLight: false
+            highLight: false,
+            lineNumber: null,
         },
 
         render: function () {
@@ -54,12 +55,20 @@
             if (BI.isWidthOrHeight(o.maxWidth)) {
                 this.element.css({maxWidth: o.maxWidth});
             }
-            this.element.css({
+            var cssObj = {
                 textAlign: o.textAlign,
                 whiteSpace: this._getTextWrap(),
                 textOverflow: o.whiteSpace === "nowrap" ? "ellipsis" : "",
-                overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : "")
-            });
+                overflow: o.whiteSpace === "nowrap" ? "" : (BI.isWidthOrHeight(o.height) ? "auto" : ""),
+            };
+            if (BI.isNumber(o.lineNumber)) {
+                BI.extend(cssObj, {
+                    display: "-webkit-box",
+                    "-webkit-line-clamp": o.lineNumber + "",
+                    "-webkit-box-orient": "vertical",
+                });
+            }
+            this.element.css(cssObj);
             if (o.handler && o.handler !== BI.emptyFn) {
                 this.text = BI.createWidget({
                     type: "bi.layout",

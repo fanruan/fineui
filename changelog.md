@@ -1,4 +1,7 @@
 # 更新日志
+2.0(2020-09)
+- bi.label支持多行文本溢出显示...(仅支持webkit内核)
+
 2.0(2020-08)
 - bi.sign_editor支持显示值居左/居中/居右显示
 - bi.iframe新增EVENT_LOADED事件
