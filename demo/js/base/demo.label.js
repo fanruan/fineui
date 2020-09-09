@@ -105,14 +105,6 @@ Demo.Label = BI.inherit(BI.Widget, {
                 textHeight: 30,
                 height: 60
             }, {
-                type: "bi.label",
-                cls: "layout-bg1",
-                text: "label设置了宽度, 并且设置了显示行数是2行, 无论输入多少文本，在允许换行的情况下只会显示2行，并在第二行结尾出现...",
-                textAlign: "left",
-                width: 300,
-                lineNumber: 2,
-                whiteSpace: "normal"
-            }, {
                 type: "bi.left",
                 items: [{
                     type: "bi.label",

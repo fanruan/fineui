@@ -17,7 +17,6 @@ BI.Label = BI.inherit(BI.AbstractLabel, {
             textAlign: o.textAlign,
             whiteSpace: o.whiteSpace,
             lineHeight: o.textHeight,
-            lineNumber: o.lineNumber,
             text: o.text,
             value: o.value,
             py: o.py,
