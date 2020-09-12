@@ -1,4 +1,4 @@
-/*! time: 2020-9-9 18:00:23 */
+/*! time: 2020-9-12 09:50:41 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -6533,20 +6533,21 @@ BI.ScalingCellSizeAndPositionManager.prototype = {
             
         },
 
-        traversal: function (array, callback) {
+        traversal: function (array, callback, pNode) {
             if (BI.isNull(array)) {
                 return;
             }
             var self = this;
             BI.some(array, function (i, item) {
-                if (callback(i, item) === false) {
+                if (callback(i, item, pNode) === false) {
                     return true;
                 }
-                self.traversal(item.children, callback);
+                self.traversal(item.children, callback, item);
             });
         }
     });
 })();
+
 
 /***/ }),
 

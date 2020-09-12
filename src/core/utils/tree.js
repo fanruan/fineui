@@ -500,16 +500,16 @@
             
         },
 
-        traversal: function (array, callback) {
+        traversal: function (array, callback, pNode) {
             if (BI.isNull(array)) {
                 return;
             }
             var self = this;
             BI.some(array, function (i, item) {
-                if (callback(i, item) === false) {
+                if (callback(i, item, pNode) === false) {
                     return true;
                 }
-                self.traversal(item.children, callback);
+                self.traversal(item.children, callback, item);
             });
         }
     });
