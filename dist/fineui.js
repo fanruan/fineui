@@ -1,4 +1,4 @@
-/*! time: 2020-9-12 09:50:41 */
+/*! time: 2020-9-14 13:02:03 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -31374,21 +31374,6 @@ BI.Label = BI.inherit(BI.AbstractLabel, {
         keyword: ""
     },
 
-    _createJson: function () {
-        var o = this.options;
-        return {
-            type: "bi.text",
-            textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
-            lineHeight: o.textHeight,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword,
-            highLight: o.highLight
-        };
-    },
-
     doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
@@ -31399,6 +31384,7 @@ BI.Label = BI.inherit(BI.AbstractLabel, {
 });
 
 BI.shortcut("bi.label", BI.Label);
+
 
 /***/ }),
 /* 432 */
