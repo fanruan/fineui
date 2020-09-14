@@ -10,21 +10,6 @@ BI.Label = BI.inherit(BI.AbstractLabel, {
         keyword: ""
     },
 
-    _createJson: function () {
-        var o = this.options;
-        return {
-            type: "bi.text",
-            textAlign: o.textAlign,
-            whiteSpace: o.whiteSpace,
-            lineHeight: o.textHeight,
-            text: o.text,
-            value: o.value,
-            py: o.py,
-            keyword: o.keyword,
-            highLight: o.highLight
-        };
-    },
-
     doRedMark: function () {
         this.text.doRedMark.apply(this.text, arguments);
     },
