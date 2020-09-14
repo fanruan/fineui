@@ -4,7 +4,7 @@
 BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-down-list-combo",
+            baseCls: "bi-down-list-combo" + (BI.isIE() ? " hack" : ""),
             height: 24,
             items: [],
             adjustLength: 0,
