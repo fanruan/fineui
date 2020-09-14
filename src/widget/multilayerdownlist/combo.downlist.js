@@ -1,9 +1,9 @@
 /**
  * Created by roy on 15/8/14.
  */
-BI.DownListCombo = BI.inherit(BI.Widget, {
+BI.MultiLayerDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
-        return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
+        return BI.extend(BI.MultiLayerDownListCombo.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multilayer-down-list-combo",
             height: 24,
             items: [],
@@ -17,7 +17,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        BI.DownListCombo.superclass._init.apply(this, arguments);
+        BI.MultiLayerDownListCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.popupview = BI.createWidget({
             type: "bi.multi_layer_down_list_popup",
@@ -26,13 +26,13 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
             value: o.value
         });
 
-        this.popupview.on(BI.DownListPopup.EVENT_CHANGE, function (value) {
-            self.fireEvent(BI.DownListCombo.EVENT_CHANGE, value);
+        this.popupview.on(BI.MultiLayerDownListPopup.EVENT_CHANGE, function (value) {
+            self.fireEvent(BI.MultiLayerDownListCombo.EVENT_CHANGE, value);
             self.downlistcombo.hideView();
         });
 
-        this.popupview.on(BI.DownListPopup.EVENT_SON_VALUE_CHANGE, function (value, fatherValue) {
-            self.fireEvent(BI.DownListCombo.EVENT_SON_VALUE_CHANGE, value, fatherValue);
+        this.popupview.on(BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE, function (value, fatherValue) {
+            self.fireEvent(BI.MultiLayerDownListCombo.EVENT_SON_VALUE_CHANGE, value, fatherValue);
             self.downlistcombo.hideView();
         });
 
@@ -60,7 +60,7 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         });
 
         this.downlistcombo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.fireEvent(BI.DownListCombo.EVENT_BEFORE_POPUPVIEW);
+            self.fireEvent(BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW);
         });
     },
 
@@ -83,8 +83,8 @@ BI.DownListCombo = BI.inherit(BI.Widget, {
         return this.popupview.getValue();
     }
 });
-BI.DownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
-BI.DownListCombo.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
-BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiLayerDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.MultiLayerDownListCombo.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
+BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 
-BI.shortcut("bi.multi_layer_down_list_combo", BI.DownListCombo);
+BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
