@@ -1,4 +1,4 @@
-/*! time: 2020-9-15 09:20:14 */
+/*! time: 2020-9-15 15:02:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -54485,7 +54485,8 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
         });
     },
     _init: function () {
@@ -54554,6 +54555,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight,
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -54648,7 +54652,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -54659,7 +54663,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -54828,7 +54832,8 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiSelectInsertNoBarList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24
         });
     },
     _init: function () {
@@ -54903,6 +54908,9 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -54999,7 +55007,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -55010,7 +55018,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -55176,14 +55184,12 @@ BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList)
  * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
-    _constant: {
-        EDITOR_HEIGHT: 24
-    },
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24
         });
     },
     _init: function () {
@@ -55236,6 +55242,9 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -55325,7 +55334,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: this._constant.EDITOR_HEIGHT
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -55336,7 +55345,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: this._constant.EDITOR_HEIGHT,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
