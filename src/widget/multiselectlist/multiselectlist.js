@@ -7,7 +7,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            searcherHeight: 24
+            searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
@@ -26,6 +27,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             logic: {
                 dynamic: false
             },
@@ -54,7 +56,8 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
-            }
+            },
+            itemHeight: o.itemHeight
         });
         this.searcherPane.setVisible(false);
 

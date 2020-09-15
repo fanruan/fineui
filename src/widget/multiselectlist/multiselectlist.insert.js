@@ -8,6 +8,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
@@ -25,6 +26,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             type: "bi.multi_select_loader",
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             logic: {
                 dynamic: false
@@ -54,6 +56,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     o.itemsCreator(op, callback);
                 }
             },
+            itemHeight: o.itemHeight,
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
                 action: function () {
