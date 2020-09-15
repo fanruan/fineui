@@ -28,6 +28,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             type: "bi.multi_select_no_bar_loader",
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             logic: {
                 dynamic: false

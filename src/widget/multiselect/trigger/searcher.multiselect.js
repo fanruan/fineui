@@ -15,7 +15,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             adapter: null,
             masker: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            itemHeight: 24
         });
     },
 
@@ -64,6 +65,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
+                itemHeight: o.itemHeight,
                 value: o.value
             }, o.popup),
 
