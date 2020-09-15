@@ -30,7 +30,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -70,7 +70,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {
