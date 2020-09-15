@@ -1,4 +1,4 @@
-/*! time: 2020-9-15 17:20:24 */
+/*! time: 2020-9-15 18:00:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42475,7 +42475,7 @@ BI.extend(BI.DynamicDateTimePane, {
 BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-down-list-combo",
+            baseCls: "bi-down-list-combo" + (BI.isIE() ? " hack" : ""),
             height: 24,
             items: [],
             adjustLength: 0,
@@ -63068,14 +63068,19 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
-
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this._setVisible(true);
             this.enable = true;
-            this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max));
+            if (o.digit) {
+                this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max));
+            } else {
+                this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Integer_Number_Between", this.min, this.max));
+            }
+
             if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
                 this.label.setValue(this.value);
                 this._setAllPosition(this._getPercentByValue(this.value));
