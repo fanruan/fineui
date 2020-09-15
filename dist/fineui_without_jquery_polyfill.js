@@ -1,4 +1,4 @@
-/*! time: 2020-9-14 13:02:03 */
+/*! time: 2020-9-15 09:20:14 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -65774,7 +65774,22 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
                 hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
-    }
+    },
+
+    _assertValue: function (v) {
+        v = v || {};
+        var value = v;
+        if (v.type === BI.Selection.Multi && BI.isNotNull(this.items)) {
+            var isAllSelect = BI.difference(BI.map(this.items, "value"), v.value).length === 0;
+            if (isAllSelect) {
+                value = {
+                    type: BI.Selection.All,
+                    value: [],
+                };
+            }
+        }
+        return value;
+    },
 });
 
 /***/ }),
@@ -65809,7 +65824,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -65849,7 +65864,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {
@@ -65923,7 +65938,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -65963,7 +65978,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {
