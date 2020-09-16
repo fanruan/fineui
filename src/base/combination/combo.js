@@ -8,7 +8,7 @@
         _defaultConfig: function () {
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
-                baseCls: (conf.baseCls || "") + " bi-combo",
+                baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 trigger: "click",
                 toggle: true,
                 direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
