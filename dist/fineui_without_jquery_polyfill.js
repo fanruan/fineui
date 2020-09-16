@@ -1,4 +1,4 @@
-/*! time: 2020-9-15 18:00:27 */
+/*! time: 2020-9-16 11:20:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19705,7 +19705,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
         _defaultConfig: function () {
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
-                baseCls: (conf.baseCls || "") + " bi-combo",
+                baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 trigger: "click",
                 toggle: true,
                 direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
@@ -38502,7 +38502,7 @@ BI.extend(BI.DynamicDateTimePane, {
 BI.DownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.DownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-down-list-combo" + (BI.isIE() ? " hack" : ""),
+            baseCls: "bi-down-list-combo",
             height: 24,
             items: [],
             adjustLength: 0,
