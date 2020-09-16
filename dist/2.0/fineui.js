@@ -1,4 +1,4 @@
-/*! time: 2020-9-16 11:20:25 */
+/*! time: 2020-9-16 15:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18631,7 +18631,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign === BI.HorizontalAlign.Left || o.horizontalAlign === BI.HorizontalAlign.Right) {
+        if (BI.contains([BI.HorizontalAlign.Left, BI.HorizontalAlign.Right, BI.HorizontalAlign.Center], o.horizontalAlign)) {
             w.element.css({
                 "flex-shrink": "0"
             });
