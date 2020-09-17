@@ -10,6 +10,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiSelectInsertSearcher.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-searcher",
             itemsCreator: BI.emptyFn,
+            itemHeight: 24,
             el: {},
             popup: {},
             valueFormatter: BI.emptyFn,
@@ -64,6 +65,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
+                itemHeight: o.itemHeight,
                 value: o.value,
                 listeners: [{
                     eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,

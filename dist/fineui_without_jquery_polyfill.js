@@ -1,4 +1,4 @@
-/*! time: 2020-9-14 13:02:03 */
+/*! time: 2020-9-16 15:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14658,7 +14658,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign === BI.HorizontalAlign.Left || o.horizontalAlign === BI.HorizontalAlign.Right) {
+        if (BI.contains([BI.HorizontalAlign.Left, BI.HorizontalAlign.Right, BI.HorizontalAlign.Center], o.horizontalAlign)) {
             w.element.css({
                 "flex-shrink": "0"
             });
@@ -19705,7 +19705,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
         _defaultConfig: function () {
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
-                baseCls: (conf.baseCls || "") + " bi-combo",
+                baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 trigger: "click",
                 toggle: true,
                 direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
@@ -46544,6 +46544,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             height: 24,
             attributes: {
                 tabIndex: 0
@@ -46594,6 +46595,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: this.storeValue
         });
 
@@ -46704,6 +46706,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemsHeight: o.itemsHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -47015,6 +47018,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             height: 24,
             attributes: {
                 tabIndex: 0
@@ -47062,6 +47066,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: {
                 type: BI.Selection.Multi,
                 value: o.value
@@ -47165,6 +47170,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -47506,6 +47512,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
+            itemHeight: 24,
             attributes: {
                 tabIndex: 0
             },
@@ -47552,6 +47559,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: o.value
         });
 
@@ -47661,6 +47669,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 }],
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
+                itemHeight: o.itemHeight,
                 onLoaded: function () {
                     BI.nextTick(function () {
                         self.combo.adjustWidth();
@@ -47995,6 +48004,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-insert-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemsHeight: 24,
             height: 24,
             attributes: {
                 tabIndex: 0
@@ -48042,6 +48052,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: {
                 type: BI.Selection.Multi,
                 value: o.value
@@ -48142,6 +48153,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {
@@ -48485,6 +48497,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             searcher: {},
             switcher: {},
 
@@ -48508,6 +48521,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             watermark: o.watermark,
             popup: {},
             adapter: o.adapter,
@@ -48647,7 +48661,8 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            itemHeight: 24
         });
     },
 
@@ -48755,7 +48770,7 @@ BI.MultiSelectLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             logic: this.options.logic,
             cls: "bi-list-item-active",
-            height: 24,
+            height: this.options.itemHeight,
             selected: this.isAllSelected(),
             iconWrapperWidth: 36
         });
@@ -48840,6 +48855,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             },
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: 24,
             onLoaded: BI.emptyFn
         });
     },
@@ -48939,7 +48955,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
             type: "bi.multi_select_item",
             cls: "bi-list-item-active",
             logic: this.options.logic,
-            height: 24,
+            height: this.options.itemHeight,
             iconWrapperWidth: 36
         });
     },
@@ -49018,7 +49034,8 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
-            onLoaded: BI.emptyFn
+            onLoaded: BI.emptyFn,
+            itemHeight: 24,
         });
     },
 
@@ -49029,6 +49046,7 @@ BI.MultiSelectPopupView = BI.inherit(BI.Widget, {
         this.loader = BI.createWidget({
             type: "bi.multi_select_loader",
             itemsCreator: opts.itemsCreator,
+            itemHeight: opts.itemHeight,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
             value: opts.value
@@ -49116,6 +49134,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
             maxHeight: 400,
             valueFormatter: BI.emptyFn,
             itemsCreator: BI.emptyFn,
+            itemHeight: 24,
             onLoaded: BI.emptyFn
         });
     },
@@ -49127,6 +49146,7 @@ BI.MultiSelectNoBarPopupView = BI.inherit(BI.Widget, {
         this.loader = BI.createWidget({
             type: "bi.multi_select_no_bar_loader",
             itemsCreator: opts.itemsCreator,
+            itemHeight: opts.itemHeight,
             valueFormatter: opts.valueFormatter,
             onLoaded: opts.onLoaded,
             value: opts.value
@@ -49220,7 +49240,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
             adapter: null,
             masker: {},
-            allowEdit: true
+            allowEdit: true,
+            itemHeight: 24
         });
     },
 
@@ -49237,6 +49258,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             text: o.text,
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             watermark: o.watermark,
             popup: {},
@@ -49374,7 +49396,8 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            keywordGetter: BI.emptyFn
+            keywordGetter: BI.emptyFn,
+            itemHeight: 24
         });
     },
 
@@ -49412,6 +49435,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
                     self.setKeyword(o.keywordGetter());
                 }]);
             },
+            itemHeight: o.itemHeight,
             value: o.value
         });
         this.loader.on(BI.Controller.EVENT_CHANGE, function () {
@@ -49503,7 +49527,8 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-search-loader",
             itemsCreator: BI.emptyFn,
             keywordGetter: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            itemHeight: 24
         });
     },
 
@@ -49583,7 +49608,7 @@ BI.MultiSelectSearchLoader = BI.inherit(BI.Widget, {
             logic: {
                 dynamic: false
             },
-            height: 24,
+            height: this.options.itemHeight,
             selected: this.isAllSelected(),
             cls: "bi-list-item-active",
             iconWrapperWidth: 36
@@ -49676,7 +49701,8 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            keywordGetter: BI.emptyFn
+            keywordGetter: BI.emptyFn,
+            itemHeight: 24,
         });
     },
 
@@ -49702,6 +49728,7 @@ BI.MultiSelectSearchPane = BI.inherit(BI.Widget, {
                     self.setKeyword(o.keywordGetter());
                 }]);
             },
+            itemHeight: o.itemHeight,
             value: o.value
         });
         this.loader.on(BI.Controller.EVENT_CHANGE, function () {
@@ -49990,6 +50017,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
         return BI.extend(BI.MultiSelectInsertSearcher.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-searcher",
             itemsCreator: BI.emptyFn,
+            itemHeight: 24,
             el: {},
             popup: {},
             valueFormatter: BI.emptyFn,
@@ -50044,6 +50072,7 @@ BI.MultiSelectInsertSearcher = BI.inherit(BI.Widget, {
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
+                itemHeight: o.itemHeight,
                 value: o.value,
                 listeners: [{
                     eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
@@ -50205,7 +50234,8 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
             valueFormatter: BI.emptyFn,
             adapter: null,
             masker: {},
-            text: BI.i18nText("BI-Basic_Please_Select")
+            text: BI.i18nText("BI-Basic_Please_Select"),
+            itemHeight: 24
         });
     },
 
@@ -50254,6 +50284,7 @@ BI.MultiSelectSearcher = BI.inherit(BI.Widget, {
                     this.setKeyword(keyword);
                     o.itemsCreator(op, callback);
                 },
+                itemHeight: o.itemHeight,
                 value: o.value
             }, o.popup),
 
@@ -50512,7 +50543,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
@@ -50530,6 +50563,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             type: "bi.multi_select_loader",
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             logic: {
                 dynamic: false
@@ -50559,6 +50593,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     o.itemsCreator(op, callback);
                 }
             },
+            itemHeight: o.itemHeight,
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
                 action: function () {
@@ -50581,6 +50616,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight,
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -50675,7 +50713,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -50686,7 +50724,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -50855,7 +50893,8 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiSelectInsertNoBarList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24
         });
     },
     _init: function () {
@@ -50876,6 +50915,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             type: "bi.multi_select_no_bar_loader",
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             logic: {
                 dynamic: false
@@ -50930,6 +50970,9 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -51026,7 +51069,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -51037,7 +51080,7 @@ BI.MultiSelectInsertNoBarList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -51203,14 +51246,13 @@ BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList)
  * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
-    _constant: {
-        EDITOR_HEIGHT: 24
-    },
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
@@ -51229,6 +51271,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             logic: {
                 dynamic: false
             },
@@ -51257,12 +51300,16 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
-            }
+            },
+            itemHeight: o.itemHeight
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -51352,7 +51399,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: this._constant.EDITOR_HEIGHT
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -51363,7 +51410,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: this._constant.EDITOR_HEIGHT,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -59048,14 +59095,19 @@ BI.SingleSlider = BI.inherit(BI.Single, {
         this.min = 0;
         this.max = 0;
         this._setBlueTrack(0);
-
     },
 
     populate: function () {
+        var o = this.options;
         if (!isNaN(this.min) && !isNaN(this.max)) {
             this._setVisible(true);
             this.enable = true;
-            this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max));
+            if (o.digit) {
+                this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Number_Between", this.min, this.max));
+            } else {
+                this.label.setErrorText(BI.i18nText("BI-Basic_Please_Enter_Integer_Number_Between", this.min, this.max));
+            }
+
             if (BI.isNumeric(this.value) || BI.isNotEmptyString(this.value)) {
                 this.label.setValue(this.value);
                 this._setAllPosition(this._getPercentByValue(this.value));
@@ -65774,7 +65826,22 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
                 hasNext: self._hasNextByTimes(resultItems, options.times)
             });
         }
-    }
+    },
+
+    _assertValue: function (v) {
+        v = v || {};
+        var value = v;
+        if (v.type === BI.Selection.Multi && BI.isNotNull(this.items)) {
+            var isAllSelect = BI.difference(BI.map(this.items, "value"), v.value).length === 0;
+            if (isAllSelect) {
+                value = {
+                    type: BI.Selection.All,
+                    value: [],
+                };
+            }
+        }
+        return value;
+    },
 });
 
 /***/ }),
@@ -65809,7 +65876,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -65849,7 +65916,7 @@ BI.ValueChooserInsertCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {
@@ -65923,7 +65990,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
             element: this,
             allowEdit: o.allowEdit,
             text: o.text,
-            value: o.value,
+            value: this._assertValue(o.value),
             itemsCreator: BI.bind(this._itemsCreator, this),
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
@@ -65963,7 +66030,7 @@ BI.ValueChooserCombo = BI.inherit(BI.AbstractValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue(v);
+        this.combo.setValue(this._assertValue(v));
     },
 
     getValue: function () {

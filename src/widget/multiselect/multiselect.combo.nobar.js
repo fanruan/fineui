@@ -10,6 +10,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo-no-bar",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             height: 24,
             attributes: {
                 tabIndex: 0
@@ -57,6 +58,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: {
                 type: BI.Selection.Multi,
                 value: o.value
@@ -160,6 +162,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemHeight: o.itemHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {

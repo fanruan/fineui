@@ -18,7 +18,8 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
             baseCls: "bi-multi-select-search-pane bi-card",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
-            keywordGetter: BI.emptyFn
+            keywordGetter: BI.emptyFn,
+            itemHeight: 24
         });
     },
 
@@ -56,6 +57,7 @@ BI.MultiSelectSearchInsertPane = BI.inherit(BI.Widget, {
                     self.setKeyword(o.keywordGetter());
                 }]);
             },
+            itemHeight: o.itemHeight,
             value: o.value
         });
         this.loader.on(BI.Controller.EVENT_CHANGE, function () {

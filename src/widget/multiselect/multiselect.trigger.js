@@ -23,7 +23,8 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
 
             adapter: null,
             masker: {},
-            allowEdit: true
+            allowEdit: true,
+            itemHeight: 24
         });
     },
 
@@ -40,6 +41,7 @@ BI.MultiSelectTrigger = BI.inherit(BI.Trigger, {
             height: o.height,
             text: o.text,
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             watermark: o.watermark,
             popup: {},
