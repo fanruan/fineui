@@ -17,7 +17,7 @@ BI.Popover = BI.inherit(BI.Widget, {
         size: "normal", // small, normal, big
         logic: {
             dynamic: false,
-            maxHeight: 600,
+            maxHeight: 500,
         },
         header: null,
         headerHeight: 40,
