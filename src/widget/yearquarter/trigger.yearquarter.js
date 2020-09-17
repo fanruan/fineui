@@ -39,9 +39,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: 24
+                            width: o.height
                         },
-                        width: 24}]
+                        width: o.height}]
                 }]
             }, {
                 el: {
