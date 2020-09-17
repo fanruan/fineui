@@ -1,4 +1,4 @@
-/*! time: 2020-9-16 15:00:22 */
+/*! time: 2020-9-17 21:40:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63687,9 +63687,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: 24
+                            width: o.height
                         },
-                        width: 24}]
+                        width: o.height}]
                 }]
             }, {
                 el: {
