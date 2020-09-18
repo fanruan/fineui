@@ -483,10 +483,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             this.valueOne = minNumber;
             this.valueTwo = maxNumber;
             this.precision = this._getPrecision();
-            this._setDraggableEnable(true);
+            this.setEnable(true);
         }
         if (maxNumber === minNumber) {
-            this._setDraggableEnable(false);
+            this.setEnable(false);
         }
     },
 
