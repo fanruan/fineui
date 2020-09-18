@@ -1,4 +1,4 @@
-/*! time: 2020-9-17 21:40:27 */
+/*! time: 2020-9-18 16:50:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -7041,10 +7041,11 @@ BI.Region.prototype = {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;"
+        ">": "&gt;",
+        " ": "&nbsp;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };

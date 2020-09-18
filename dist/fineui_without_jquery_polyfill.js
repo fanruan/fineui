@@ -1,4 +1,4 @@
-/*! time: 2020-9-17 21:40:27 */
+/*! time: 2020-9-18 16:50:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -7315,10 +7315,11 @@ BI.Region.prototype = {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;"
+        ">": "&gt;",
+        " ": "&nbsp;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
@@ -42668,11 +42669,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         return (v - this.min) * 100 / (this.max - this.min);
     },
 
-    _setDraggableEnable: function (enable) {
-        this.sliderOne.setEnable(enable);
-        this.sliderTwo.setEnable(enable);
-    },
-
     _getPrecision: function () {
         // 计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
         // 如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
@@ -42730,10 +42726,10 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
             this.valueOne = minNumber;
             this.valueTwo = maxNumber;
             this.precision = this._getPrecision();
-            this._setDraggableEnable(true);
+            this.setEnable(true);
         }
         if (maxNumber === minNumber) {
-            this._setDraggableEnable(false);
+            this.setEnable(false);
         }
     },
 
@@ -63960,7 +63956,22 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
                 hasNext: false
             });
         }
-    }
+    },
+
+    _assertValue: function (v) {
+        v = v || {};
+        var value = v;
+        if (BI.isNotNull(this.items)) {
+            var isAllSelect = BI.difference(BI.map(this.items, "value"), v.value).length === 0;
+            if (isAllSelect) {
+                value = {
+                    type: BI.Selection.All,
+                    value: [],
+                };
+            }
+        }
+        return value;
+    },
 });
 
 /***/ }),
@@ -64002,10 +64013,10 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
-            value: {
+            value: this._assertValue({
                 type: BI.Selection.Multi,
                 value: o.value || []
-            }
+            })
         });
 
         this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
@@ -64014,10 +64025,10 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue({
+        this.combo.setValue(this._assertValue({
             type: BI.Selection.Multi,
             value: v || []
-        });
+        }));
     },
 
     getValue: function () {
