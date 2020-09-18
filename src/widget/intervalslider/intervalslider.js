@@ -421,11 +421,6 @@ BI.IntervalSlider = BI.inherit(BI.Single, {
         return (v - this.min) * 100 / (this.max - this.min);
     },
 
-    _setDraggableEnable: function (enable) {
-        this.sliderOne.setEnable(enable);
-        this.sliderTwo.setEnable(enable);
-    },
-
     _getPrecision: function () {
         // 计算每一份值的精度(最大值和最小值的差值保留4为有效数字后的精度)
         // 如果差值的整数位数大于4,toPrecision(4)得到的是科学计数法123456 => 1.235e+5
