@@ -33,10 +33,10 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
-            value: {
+            value: this._assertValue({
                 type: BI.Selection.Multi,
                 value: o.value || []
-            }
+            })
         });
 
         this.combo.on(BI.MultiSelectCombo.EVENT_CONFIRM, function () {
@@ -45,10 +45,10 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     setValue: function (v) {
-        this.combo.setValue({
+        this.combo.setValue(this._assertValue({
             type: BI.Selection.Multi,
             value: v || []
-        });
+        }));
     },
 
     getValue: function () {
