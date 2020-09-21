@@ -486,6 +486,7 @@
         destroy: function () {
             this.__d();
             this.element.destroy();
+            this.fireEvent(BI.Events.UNMOUNT);
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
             this.purgeListeners();
