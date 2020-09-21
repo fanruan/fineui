@@ -1,4 +1,4 @@
-/*! time: 2020-9-18 16:50:19 */
+/*! time: 2020-9-21 12:00:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10064,6 +10064,7 @@ BI.Req = {
         destroy: function () {
             this.__d();
             this.element.destroy();
+            this.fireEvent(BI.Events.UNMOUNT);
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
             this.purgeListeners();
@@ -17968,7 +17969,7 @@ BI.Single = BI.inherit(BI.Widget, {
                     clearTimeout(self.showTimeout);
                     self.showTimeout = null;
                 }
-                if(BI.isNull(self.hideTimeout)) {
+                if (BI.isNull(self.hideTimeout)) {
                     self.hideTimeout = BI.delay(function () {
                         if (BI.isNotNull(self.hideTimeout)) {
                             self._hideTooltip();
@@ -18048,7 +18049,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getTitle: function () {
         var title = this.options.title;
-        if(BI.isFunction(title)) {
+        if (BI.isFunction(title)) {
             return title();
         }
         return title;
@@ -18056,7 +18057,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
     getWarningTitle: function () {
         var title = this.options.warningTitle;
-        if(BI.isFunction(title)) {
+        if (BI.isFunction(title)) {
             return title();
         }
         return title;
@@ -18072,14 +18073,13 @@ BI.Single = BI.inherit(BI.Widget, {
         return this.options.value;
     },
 
-    _unMount: function () {
-        BI.Single.superclass._unMount.apply(this, arguments);
-        if(BI.isNotNull(this.showTimeout)) {
+    destroyed: function () {
+        if (BI.isNotNull(this.showTimeout)) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
         }
         BI.Tooltips.remove(this.getName());
-    }
+    },
 });
 
 /***/ }),
