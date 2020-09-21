@@ -189,6 +189,10 @@ Demo.Func = BI.inherit(BI.Widget, {
                                 };
                             }),
                         },
+                        footer: {
+                            type: "bi.label",
+                            text: "这个是footer",
+                        },
                     }).open(id);
                 },
             }],
