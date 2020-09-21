@@ -146,7 +146,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             scrolly: false,
         } : {
             type: "bi.vtape",
-            height: size.height,
+            height: size.height - 2,
         });
     },
 
