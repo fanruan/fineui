@@ -100,6 +100,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                 },
                 css: {
                     "max-height": c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP - 2,
+                    "min-height": size.height,
                 },
                 items: [{
                     el: o.body,
