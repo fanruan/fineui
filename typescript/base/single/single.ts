@@ -15,6 +15,8 @@ export interface _Single extends _Widget {
 
     setWarningTitle(title: string, opt?: SingleOpt): void;
 
+    setTipType(v: string): void;
+
     getTipType(): string;
 
     isReadOnly(): boolean;
