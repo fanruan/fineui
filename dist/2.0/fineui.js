@@ -1,4 +1,4 @@
-/*! time: 2020-9-23 10:10:18 */
+/*! time: 2020-9-23 11:20:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26685,7 +26685,7 @@ BI.Popover = BI.inherit(BI.Widget, {
                     self.body = this;
                 },
                 css: {
-                    "max-height": c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP - 2,
+                    "max-height": c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP,
                     "min-height": size.height,
                 },
                 items: [{
@@ -26732,7 +26732,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             scrolly: false,
         } : {
             type: "bi.vtape",
-            height: size.height - 2,
+            height: size.height,
         });
     },
 
