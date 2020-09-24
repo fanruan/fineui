@@ -18,6 +18,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.yearEditor = this._createEditor(true);
         this.quarterEditor = this._createEditor(false);
 
+        // 暂时的解决方法
+        var height = o.height + 2;
+
         BI.createWidget({
             element: this,
             type: "bi.htape",
@@ -29,9 +32,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Year"),
-                            width: o.height
+                            width: height
                         },
-                        width: o.height
+                        width: height
                     }]
                 }, {
                     type: "bi.htape",
@@ -39,16 +42,17 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height
+                            width: height
                         },
-                        width: o.height}]
+                        width: height
+                    }]
                 }]
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
-                    width: o.height
+                    width: height
                 },
-                width: o.height
+                width: height
             }]
         });
         this.setValue(o.value);
