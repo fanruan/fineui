@@ -52,6 +52,10 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     getValue: function () {
+        return this.getAllValue();
+    },
+
+    getAllValue: function () {
         var val = this.combo.getValue() || {};
         if (val.type === BI.Selection.Multi) {
             return val.value || [];
