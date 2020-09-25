@@ -52,11 +52,16 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     getValue: function () {
+        return this.getAllValue();
+    },
+
+    getAllValue: function () {
         var val = this.combo.getValue() || {};
-        if (val.type === BI.Selection.All) {
-            return val.assist;
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
         }
-        return val.value || [];
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
     },
 
     populate: function (items) {
