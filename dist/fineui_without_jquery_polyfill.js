@@ -1,4 +1,4 @@
-/*! time: 2020-9-23 11:20:21 */
+/*! time: 2020-9-28 11:52:41 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63668,6 +63668,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.yearEditor = this._createEditor(true);
         this.quarterEditor = this._createEditor(false);
 
+        // 暂时的解决方法
+        var height = o.height + 2;
+
         BI.createWidget({
             element: this,
             type: "bi.htape",
@@ -63679,9 +63682,9 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Year"),
-                            width: o.height
+                            width: height
                         },
-                        width: o.height
+                        width: height
                     }]
                 }, {
                     type: "bi.htape",
@@ -63689,16 +63692,17 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                         el: {
                             type: "bi.text_button",
                             text: BI.i18nText("BI-Multi_Date_Quarter"),
-                            width: o.height
+                            width: height
                         },
-                        width: o.height}]
+                        width: height
+                    }]
                 }]
             }, {
                 el: {
                     type: "bi.trigger_icon_button",
-                    width: o.height
+                    width: height
                 },
-                width: o.height
+                width: height
             }]
         });
         this.setValue(o.value);
@@ -64038,11 +64042,16 @@ BI.AllValueChooserCombo = BI.inherit(BI.AbstractAllValueChooser, {
     },
 
     getValue: function () {
+        return this.getAllValue();
+    },
+
+    getAllValue: function () {
         var val = this.combo.getValue() || {};
-        if (val.type === BI.Selection.All) {
-            return val.assist;
+        if (val.type === BI.Selection.Multi) {
+            return val.value || [];
         }
-        return val.value || [];
+
+        return BI.difference(BI.map(this.items, "value"), val.value || []);
     },
 
     populate: function (items) {
@@ -65735,7 +65744,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
     },
 
     getAllValue: function() {
-        return this.buildCompleteTree(this.combo.getValue());
+        return this.buildCompleteTree(this.pane.getValue());
     },
 
     populate: function (items) {
