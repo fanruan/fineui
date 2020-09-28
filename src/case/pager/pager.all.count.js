@@ -11,7 +11,8 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             height: 24,
             pages: 1, // 必选项
             curr: 1, // 初始化当前页， pages为数字时可用，
-            count: 1 // 总行数
+            count: 1, // 总行数
+            showRowCount: true
         });
     },
     _init: function () {
@@ -101,30 +102,33 @@ BI.AllCountPager = BI.inherit(BI.Widget, {
             title: o.count
         });
 
-        var count = BI.createWidget({
-            type: "bi.left",
-            height: o.height,
-            scrollable: false,
-            items: [{
-                type: "bi.label",
-                height: o.height,
-                text: BI.i18nText("BI-Basic_Total"),
-                width: 15
-            }, this.rowCount, {
-                type: "bi.label",
-                height: o.height,
-                text: BI.i18nText("BI-Tiao_Data"),
-                width: 50,
-                textAlign: "left"
-            }]
-        });
-        BI.createWidget({
+        BI.createWidget(o.showRowCount ? {
             type: "bi.left_right_vertical_adapt",
             element: this,
             items: {
-                left: [count],
+                left: [{
+                    type: "bi.left",
+                    height: o.height,
+                    scrollable: false,
+                    items: [{
+                        type: "bi.label",
+                        height: o.height,
+                        text: BI.i18nText("BI-Basic_Total"),
+                        width: 15
+                    }, this.rowCount, {
+                        type: "bi.label",
+                        height: o.height,
+                        text: BI.i18nText("BI-Tiao_Data"),
+                        width: 50,
+                        textAlign: "left"
+                    }]
+                }],
                 right: [this.editor, this.allPages, this.pager]
             }
+        } : {
+            type: "bi.vertical_adapt",
+            element: this,
+            items: [this.editor, this.allPages, this.pager]
         });
     },
 
