@@ -1,4 +1,4 @@
-/*! time: 2020-9-30 17:20:20 */
+/*! time: 2020-9-30 18:10:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19916,14 +19916,14 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                             }
                         });
                         break;
-                    case "focus":
+                    case "click-blur":
                         var debounce = BI.debounce(function (e) {
                             if (self.combo.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
                                     // if (!o.toggle && self.isViewVisible()) {
                                     //     return;
                                     // }
-                                    self._popupView(e);
+                                    o.toggle ? self._toggle(e) : self._popupView(e);
                                     if (self.isViewVisible()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_EXPAND);
@@ -19938,15 +19938,12 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                             "trailing": false
                         });
                         self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
+                            debounce(e);
                             try {
                                 self.element[0].focus();
                             } catch (e) {
 
                             }
-                            st(e);
-                        });
-                        self.element.off("focus." + self.getName()).on("focus." + self.getName(), function (e) {
-                            debounce(e);
                             st(e);
                         });
                         self.element.off("blur." + self.getName()).on("blur." + self.getName(), function (e) {
@@ -20273,7 +20270,6 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                 .unbind("mouseenter." + this.getName())
                 .unbind("mousemove." + this.getName())
                 .unbind("mouseleave." + this.getName())
-                .unbind("focus." + this.getName())
                 .unbind("blur." + this.getName());
             BI.Resizers.remove(this.getName());
             this.popupView && this.popupView._destroy();
