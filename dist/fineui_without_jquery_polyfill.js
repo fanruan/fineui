@@ -1,4 +1,4 @@
-/*! time: 2020-9-28 17:00:17 */
+/*! time: 2020-9-30 17:20:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19706,6 +19706,9 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             var conf = BI.Combo.superclass._defaultConfig.apply(this, arguments);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
+                attributes: {
+                    tabIndex: 0
+                },
                 trigger: "click",
                 toggle: true,
                 direction: "bottom", // top||bottom||left||right||top,left||top,right||bottom,left||bottom,right||right,innerRight||right,innerLeft||innerRight||innerLeft
@@ -19911,6 +19914,44 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
                                     }
                                 }, 50);
                             }
+                        });
+                        break;
+                    case "focus":
+                        var debounce = BI.debounce(function (e) {
+                            if (self.combo.element.__isMouseInBounds__(e)) {
+                                if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                    // if (!o.toggle && self.isViewVisible()) {
+                                    //     return;
+                                    // }
+                                    self._popupView(e);
+                                    if (self.isViewVisible()) {
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
+                                        self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                    } else {
+                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                                        self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+                                    }
+                                }
+                            }
+                        }, BI.EVENT_RESPONSE_TIME, {
+                            "leading": true,
+                            "trailing": false
+                        });
+                        self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
+                            try {
+                                self.element[0].focus();
+                            } catch (e) {
+
+                            }
+                            st(e);
+                        });
+                        self.element.off("focus." + self.getName()).on("focus." + self.getName(), function (e) {
+                            debounce(e);
+                            st(e);
+                        });
+                        self.element.off("blur." + self.getName()).on("blur." + self.getName(), function (e) {
+                            self._hideView(e);
+                            st(e);
                         });
                         break;
                 }
@@ -20225,11 +20266,15 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
         },
 
         destroyed: function () {
-            BI.Widget._renderEngine.createElement(document).unbind("mousedown." + this.getName())
+            BI.Widget._renderEngine.createElement(document)
+                .unbind("click." + this.getName())
+                .unbind("mousedown." + this.getName())
                 .unbind("mousewheel." + this.getName())
                 .unbind("mouseenter." + this.getName())
                 .unbind("mousemove." + this.getName())
-                .unbind("mouseleave." + this.getName());
+                .unbind("mouseleave." + this.getName())
+                .unbind("focus." + this.getName())
+                .unbind("blur." + this.getName());
             BI.Resizers.remove(this.getName());
             this.popupView && this.popupView._destroy();
             delete needHideWhenAnotherComboOpen[this.getName()];
