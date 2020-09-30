@@ -250,7 +250,9 @@
                             st(e);
                         });
                         self.element.off("blur." + self.getName()).on("blur." + self.getName(), function (e) {
-                            self._hideView(e);
+                            if (self.isViewVisible()) {
+                                self._hideView(e);
+                            }
                             st(e);
                         });
                         break;
