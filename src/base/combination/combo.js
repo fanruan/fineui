@@ -10,7 +10,7 @@
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 attributes: {
-                    tabIndex: 0
+                    tabIndex: -1
                 },
                 trigger: "click",
                 toggle: true,
