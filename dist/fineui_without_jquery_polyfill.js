@@ -1,4 +1,4 @@
-/*! time: 2020-9-30 18:40:25 */
+/*! time: 2020-10-9 11:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19707,7 +19707,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
             return BI.extend(conf, {
                 baseCls: (conf.baseCls || "") + " bi-combo" + (BI.isIE() ? " hack" : ""),
                 attributes: {
-                    tabIndex: 0
+                    tabIndex: -1
                 },
                 trigger: "click",
                 toggle: true,
