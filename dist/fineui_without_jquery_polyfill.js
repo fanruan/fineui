@@ -1,4 +1,4 @@
-/*! time: 2020-10-10 14:30:21 */
+/*! time: 2020-10-10 15:10:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17788,6 +17788,7 @@ BI.Pane = BI.inherit(BI.Widget, {
         return BI.extend(BI.Pane.superclass._defaultConfig.apply(this, arguments), {
             _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
+            loadingText: "",
             overlap: true,
             onLoaded: BI.emptyFn
         });
@@ -17843,11 +17844,9 @@ BI.Pane = BI.inherit(BI.Widget, {
         if (o.overlap === true) {
             if (!BI.Layers.has(this.getName())) {
                 BI.createWidget({
-                    type: "bi.absolute_center_adapt",
+                    type: "bi.center_adapt",
                     cls: "loading-container",
-                    items: [{
-                        el: loadingAnimation
-                    }],
+                    items: this._getLoadingTipItems(loadingAnimation),
                     element: BI.Layers.make(this.getName(), this)
                 });
             }
@@ -17856,18 +17855,30 @@ BI.Pane = BI.inherit(BI.Widget, {
             this._loading = loadingAnimation;
             this._loading.element.css("zIndex", 1);
             BI.createWidget({
-                type: "bi.absolute_center_adapt",
+                type: "bi.center_adapt",
                 element: this,
                 cls: "loading-container",
-                items: [{
-                    el: this._loading,
-                    left: 0,
-                    right: 0,
-                    top: 0
-                }]
+                items: this._getLoadingTipItems(this._loading)
             });
         }
         this.element.addClass("loading-status");
+    },
+
+    _getLoadingTipItems: function (loadingTip) {
+        var o = this.options;
+        var loadingTipItems = [{
+            type: "bi.horizontal_adapt",
+            items: [loadingTip]
+        }];
+        BI.isNotEmptyString(o.loadingText) && loadingTipItems.push({
+            type: "bi.text",
+            text: o.loadingText
+        });
+
+        return [{
+            type: "bi.vertical",
+            items: loadingTipItems
+        }];
     },
 
     loaded: function () {
