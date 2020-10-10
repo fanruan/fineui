@@ -101,6 +101,26 @@
         return result;
     };
 
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            if (BI.isKey(watch)) {
+                var key = watch;
+                watch = {};
+                watch[key] = handler;
+            }
+            for (var key in watch) {
+                var handler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
+                    }
+                } else {
+                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
+                }
+            }
+        }
+    };
+
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
         BI.Loader.prototype[name] = function () {
@@ -324,5 +344,4 @@
             return _.cloneDeep(obj);
         }
     }
-    BI.watch = Fix.watch;
 }());
