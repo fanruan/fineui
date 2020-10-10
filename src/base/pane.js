@@ -106,13 +106,13 @@ BI.Pane = BI.inherit(BI.Widget, {
     },
 
     loaded: function () {
-        // var self = this, o = this.options;
-        // BI.Layers.remove(self.getName());
-        // this._loading && this._loading.destroy();
-        // this._loading && (this._loading = null);
-        // o.onLoaded();
-        // self.fireEvent(BI.Pane.EVENT_LOADED);
-        // this.element.removeClass("loading-status");
+        var self = this, o = this.options;
+        BI.Layers.remove(self.getName());
+        this._loading && this._loading.destroy();
+        this._loading && (this._loading = null);
+        o.onLoaded();
+        self.fireEvent(BI.Pane.EVENT_LOADED);
+        this.element.removeClass("loading-status");
     },
 
     check: function () {
