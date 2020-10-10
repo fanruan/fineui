@@ -164,6 +164,11 @@
         _initElement: function () {
             var self = this;
             var els = this.render && this.render();
+            if (!els) {
+                pushTarget(this);
+                els = this.setup && this.setup();
+                popTarget();
+            }
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -492,6 +497,39 @@
             this.purgeListeners();
         }
     });
+    var context = null;
+    var contextStack = [];
+
+    function pushTarget (_context) {
+        if (context) contextStack.push(context);
+        BI.Widget.current = context = _context;
+    }
+
+    function popTarget () {
+        BI.Widget.current = context = contextStack.pop();
+    }
+
+    BI.onBeforeMount = function (beforeMount) {
+        if (context) {
+            context.beforeMount = beforeMount;
+        }
+    };
+    BI.onMounted = function (mounted) {
+        if (context) {
+            context.mounted = mounted;
+        }
+    };
+    BI.onBeforeUnmount = function (beforeDestroy) {
+        if (context) {
+            context.beforeDestroy = beforeDestroy;
+        }
+    };
+    BI.onUnmounted = function (destroyed) {
+        if (context) {
+            context.destroyed = destroyed;
+        }
+    };
+
     BI.Widget.registerRenderEngine = function (engine) {
         BI.Widget._renderEngine = engine;
     };

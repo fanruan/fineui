@@ -13,7 +13,7 @@
         }
     }
 
-    function createWatcher(vm, keyOrFn, cb, options) {
+    function createWatcher (vm, keyOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -108,6 +108,26 @@
         // }
         pushed && popContext();
         return result;
+    };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            if (BI.isKey(watch)) {
+                var key = watch;
+                watch = {};
+                watch[key] = handler;
+            }
+            for (var key in watch) {
+                var handler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
+                    }
+                } else {
+                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
+                }
+            }
+        }
     };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
@@ -280,5 +300,4 @@
             return Fix.toJSON(ob);
         };
     }
-    BI.watch = Fix.watch;
 }());
