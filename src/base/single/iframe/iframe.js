@@ -5,24 +5,24 @@
  * Created by GameJian on 2016/3/2.
  */
 BI.Iframe = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.Iframe.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
             name: "",
-            attributes: {},
+            attributes: {
+                frameborder: 0,
+                src: config.src,
+                name: config.name
+            },
             width: "100%",
             height: "100%"
         });
     },
 
     _init: function () {
-        var self = this, o = this.options;
-        o.attributes.frameborder = "0";
-        o.attributes.src = o.src;
-        o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");

@@ -10,9 +10,6 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             extraCls: "bi-display-tree"
         });
     },
-    _init: function () {
-        BI.DisplayTree.superclass._init.apply(this, arguments);
-    },
 
     // 配置属性
     _configSetting: function () {
@@ -62,10 +59,6 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
         this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
-    },
-
-    destroy: function () {
-        BI.DisplayTree.superclass.destroy.apply(this, arguments);
     }
 });
 BI.DisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
