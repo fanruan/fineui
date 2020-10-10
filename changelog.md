@@ -1,4 +1,7 @@
 # 更新日志
+2.0(2020-10)
+- pane和loadingPane支持加载时自定义提示文本
+
 2.0(2020-09)
 - combo增加click-blur(点击显示,blur消失)作为触发条件功能
 - allCountPager支持是否显示总行数
