@@ -9,10 +9,6 @@ BI.ShowAction = BI.inherit(BI.Action, {
         return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init: function () {
-        BI.ShowAction.superclass._init.apply(this, arguments);
-    },
-
     actionPerformed: function (src, tar, callback) {
         tar = tar || this.options.tar;
         tar.setVisible(true);

@@ -14,10 +14,6 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         });
     },
 
-    _init: function () {
-        BI.MultiPopupView.superclass._init.apply(this, arguments);
-    },
-
     _createToolBar: function () {
         var o = this.options, self = this;
         if (o.buttons.length === 0) {

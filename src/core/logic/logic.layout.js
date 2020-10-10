@@ -43,10 +43,6 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.VerticalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -96,10 +92,6 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -148,10 +140,6 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             vgap: o.vgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.TableLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -204,9 +192,5 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
 });

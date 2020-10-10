@@ -9,10 +9,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init: function () {
-        BI.PartTree.superclass._init.apply(this, arguments);
-    },
-
     _loadMore: function () {
         var self = this, o = this.options;
         var op = BI.extend({}, o.paras, {
