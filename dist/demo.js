@@ -1,4 +1,4 @@
-/*! time: 2020-10-10 17:20:25 */
+/*! time: 2020-10-10 17:40:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4629,7 +4629,7 @@ if (!_global.BI) {
 /***/ (function(module, exports) {
 
 !(function () {
-    function extend() {
+    function extend () {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
             // Only deal with non-null/undefined values
@@ -13573,6 +13573,14 @@ module.exports = function (exec) {
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+            // do nothing
+        },
+
+        _lazyConstructor: function () {
+            if (!this._constructed) {
+                this._constructed = true;
+                this._init();
+            }
         },
 
         beforeInit: null,
@@ -13599,7 +13607,6 @@ module.exports = function (exec) {
 
         _init: function () {
             BI.Widget.superclass._init.apply(this, arguments);
-            this._initRoot();
             this._initElementWidth();
             this._initElementHeight();
             this._initVisual();
@@ -13635,14 +13642,15 @@ module.exports = function (exec) {
             var o = this.options;
             this.widgetName = o.widgetName || BI.uniqueId("widget");
             this._isRoot = o.root;
+            this._children = {};
             if (BI.isWidget(o.element)) {
+                this.element = this.options.element.element;
                 if (o.element instanceof BI.Widget) {
                     this._parent = o.element;
                     this._parent.addWidget(this.widgetName, this);
                 } else {
                     this._isRoot = true;
                 }
-                this.element = this.options.element.element;
             } else if (o.element) {
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
@@ -13665,7 +13673,6 @@ module.exports = function (exec) {
             if (o.css) {
                 this.element.css(o.css);
             }
-            this._children = {};
         },
 
         _initElementWidth: function () {
@@ -13875,6 +13882,7 @@ module.exports = function (exec) {
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
+            widget._lazyConstructor();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -14152,16 +14160,18 @@ module.exports = function (exec) {
     var createWidget = function (config) {
         var cls = kv[config.type];
 
-        if(!cls){
-            throw new Error("组件"+config.type +"未定义");
+        if (!cls) {
+            throw new Error("组件" + config.type + "未定义");
         }
 
         var widget = new cls();
 
         widget._initProps(config);
-        widget._init();
+        widget._initRoot();
         widget._initRef();
-
+        // if (config.element || config.root) {
+        widget._lazyConstructor();
+        // }
         return widget;
     };
 
@@ -15305,10 +15315,6 @@ BI.ShowAction = BI.inherit(BI.Action, {
         return BI.extend(BI.ShowAction.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init: function () {
-        BI.ShowAction.superclass._init.apply(this, arguments);
-    },
-
     actionPerformed: function (src, tar, callback) {
         tar = tar || this.options.tar;
         tar.setVisible(true);
@@ -15321,6 +15327,7 @@ BI.ShowAction = BI.inherit(BI.Action, {
         callback && callback();
     }
 });
+
 
 /***/ }),
 /* 309 */
@@ -15425,16 +15432,10 @@ BI.Controller = BI.inherit(BI.OB, {
         return BI.extend(BI.Controller.superclass._defaultConfig.apply(this, arguments), {
 
         });
-    },
-    _init: function () {
-        BI.Controller.superclass._init.apply(this, arguments);
-    },
-
-    destroy: function () {
-
     }
 });
 BI.Controller.EVENT_CHANGE = "__EVENT_CHANGE__";
+
 
 /***/ }),
 /* 312 */
@@ -17135,10 +17136,6 @@ BI.VerticalLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.VerticalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -17188,10 +17185,6 @@ BI.HorizontalLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -17240,10 +17233,6 @@ BI.TableLayoutLogic = BI.inherit(BI.Logic, {
             vgap: o.vgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.TableLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
 
@@ -17296,12 +17285,9 @@ BI.HorizontalFillLayoutLogic = BI.inherit(BI.Logic, {
             bgap: o.bgap,
             items: o.items
         };
-    },
-
-    _init: function () {
-        BI.HorizontalFillLayoutLogic.superclass._init.apply(this, arguments);
     }
 });
+
 
 /***/ }),
 /* 325 */
@@ -30380,24 +30366,24 @@ BI.shortcut("bi.icon", BI.Icon);
  * Created by GameJian on 2016/3/2.
  */
 BI.Iframe = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.Iframe.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             tagName: "iframe",
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
             name: "",
-            attributes: {},
+            attributes: {
+                frameborder: 0,
+                src: config.src,
+                name: config.name
+            },
             width: "100%",
             height: "100%"
         });
     },
 
     _init: function () {
-        var self = this, o = this.options;
-        o.attributes.frameborder = "0";
-        o.attributes.src = o.src;
-        o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
@@ -30439,22 +30425,16 @@ BI.shortcut("bi.iframe", BI.Iframe);
  * @abstract
  */
 BI.Img = BI.inherit(BI.Single, {
-    _defaultConfig: function () {
+    _defaultConfig: function (config) {
         var conf = BI.Img.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
             tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
-            attributes: {},
+            attributes: config.src ? {src: config.src} : {},
             width: "100%",
             height: "100%"
         });
-    },
-
-    _init: function () {
-        var o = this.options;
-        o.attributes.src = o.src;
-        BI.Img.superclass._init.apply(this, arguments);
     },
 
     setSrc: function (src) {
@@ -31514,14 +31494,11 @@ BI.Link = BI.inherit(BI.Label, {
             href: o.href,
             target: o.target
         };
-    },
-
-    _init: function () {
-        BI.Link.superclass._init.apply(this, arguments);
     }
 });
 
 BI.shortcut("bi.link", BI.Link);
+
 
 /***/ }),
 /* 432 */
@@ -37538,10 +37515,6 @@ BI.MultiPopupView = BI.inherit(BI.PopupView, {
         });
     },
 
-    _init: function () {
-        BI.MultiPopupView.superclass._init.apply(this, arguments);
-    },
-
     _createToolBar: function () {
         var o = this.options, self = this;
         if (o.buttons.length === 0) {
@@ -37587,6 +37560,7 @@ BI.MultiPopupView.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
 
 BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
+
 /***/ }),
 /* 490 */
 /***/ (function(module, exports) {
@@ -37605,10 +37579,6 @@ BI.PopupPanel = BI.inherit(BI.MultiPopupView, {
             baseCls: (conf.baseCls || "") + " bi-popup-panel",
             title: ""
         });
-    },
-
-    _init: function () {
-        BI.PopupPanel.superclass._init.apply(this, arguments);
     },
 
     _createTool: function () {
@@ -37648,6 +37618,7 @@ BI.PopupPanel.EVENT_CLOSE = "EVENT_CLOSE";
 BI.PopupPanel.EVENT_CLICK_TOOLBAR_BUTTON = "EVENT_CLICK_TOOLBAR_BUTTON";
 
 BI.shortcut("bi.popup_panel", BI.PopupPanel);
+
 
 /***/ }),
 /* 491 */
@@ -83664,10 +83635,6 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
         return BI.extend(BI.PartTree.superclass._defaultConfig.apply(this, arguments), {});
     },
 
-    _init: function () {
-        BI.PartTree.superclass._init.apply(this, arguments);
-    },
-
     _loadMore: function () {
         var self = this, o = this.options;
         var op = BI.extend({}, o.paras, {
@@ -83857,6 +83824,7 @@ BI.PartTree = BI.inherit(BI.AsyncTree, {
 });
 
 BI.shortcut("bi.part_tree", BI.PartTree);
+
 
 /***/ }),
 /* 710 */
@@ -89108,9 +89076,6 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
             extraCls: "bi-display-tree"
         });
     },
-    _init: function () {
-        BI.DisplayTree.superclass._init.apply(this, arguments);
-    },
 
     // 配置属性
     _configSetting: function () {
@@ -89160,15 +89125,12 @@ BI.DisplayTree = BI.inherit(BI.TreeView, {
     initTree: function (nodes, setting) {
         var setting = setting || this._configSetting();
         this.nodes = BI.$.fn.zTree.init(this.tree.element, setting, nodes);
-    },
-
-    destroy: function () {
-        BI.DisplayTree.superclass.destroy.apply(this, arguments);
     }
 });
 BI.DisplayTree.EVENT_CHANGE = "EVENT_CHANGE";
 
 BI.shortcut("bi.display_tree", BI.DisplayTree);
+
 
 /***/ }),
 /* 731 */
