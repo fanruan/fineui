@@ -28,6 +28,14 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+            // do nothing
+        },
+
+        _lazyConstructor: function () {
+            if (!this._constructed) {
+                this._constructed = true;
+                this._init();
+            }
         },
 
         beforeInit: null,
@@ -54,7 +62,6 @@
 
         _init: function () {
             BI.Widget.superclass._init.apply(this, arguments);
-            this._initRoot();
             this._initElementWidth();
             this._initElementHeight();
             this._initVisual();
@@ -90,14 +97,15 @@
             var o = this.options;
             this.widgetName = o.widgetName || BI.uniqueId("widget");
             this._isRoot = o.root;
+            this._children = {};
             if (BI.isWidget(o.element)) {
+                this.element = this.options.element.element;
                 if (o.element instanceof BI.Widget) {
                     this._parent = o.element;
                     this._parent.addWidget(this.widgetName, this);
                 } else {
                     this._isRoot = true;
                 }
-                this.element = this.options.element.element;
             } else if (o.element) {
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
@@ -120,7 +128,6 @@
             if (o.css) {
                 this.element.css(o.css);
             }
-            this._children = {};
         },
 
         _initElementWidth: function () {
@@ -330,6 +337,7 @@
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
+            widget._lazyConstructor();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
