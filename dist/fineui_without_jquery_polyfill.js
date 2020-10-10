@@ -1,4 +1,4 @@
-/*! time: 2020-10-10 15:20:29 */
+/*! time: 2020-10-10 17:20:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64887,15 +64887,19 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     parentCheckState.half = find.halfCheck;
                 }
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
+
+                var isParent = node.getChildrenLength() > 0;
                 result.push({
                     id: node.id,
                     pId: node.pId,
                     value: node.value,
                     text: node.text,
                     times: 1,
-                    isParent: node.getChildrenLength() > 0,
-                    checked: state[0],
-                    halfCheck: state[1],
+                    isParent: isParent,
+                    // 同步树的情况下，父亲节点的状态由子控制，不再设置checked和halfCheck属性
+                    // 叶子节点本身不存在halfCheck属性且checked属性由计算得到
+                    checked: isParent ? undefined : state[0],
+                    // halfCheck: state[1],
                     open: self.options.open
                 });
             });
