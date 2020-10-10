@@ -1,4 +1,4 @@
-/*! time: 2020-10-9 11:50:32 */
+/*! time: 2020-10-10 14:30:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13709,6 +13709,11 @@ module.exports = function (exec) {
         _initElement: function () {
             var self = this;
             var els = this.render && this.render();
+            if (!els) {
+                pushTarget(this);
+                els = this.setup && this.setup();
+                popTarget();
+            }
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -14037,6 +14042,39 @@ module.exports = function (exec) {
             this.purgeListeners();
         }
     });
+    var context = null;
+    var contextStack = [];
+
+    function pushTarget (_context) {
+        if (context) contextStack.push(context);
+        BI.Widget.current = context = _context;
+    }
+
+    function popTarget () {
+        BI.Widget.current = context = contextStack.pop();
+    }
+
+    BI.onBeforeMount = function (beforeMount) {
+        if (context) {
+            context.beforeMount = beforeMount;
+        }
+    };
+    BI.onMounted = function (mounted) {
+        if (context) {
+            context.mounted = mounted;
+        }
+    };
+    BI.onBeforeUnmount = function (beforeDestroy) {
+        if (context) {
+            context.beforeDestroy = beforeDestroy;
+        }
+    };
+    BI.onUnmounted = function (destroyed) {
+        if (context) {
+            context.destroyed = destroyed;
+        }
+    };
+
     BI.Widget.registerRenderEngine = function (engine) {
         BI.Widget._renderEngine = engine;
     };
@@ -90849,7 +90887,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         }
     }
 
-    function createWatcher(vm, keyOrFn, cb, options) {
+    function createWatcher (vm, keyOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -90944,6 +90982,26 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         // }
         pushed && popContext();
         return result;
+    };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            if (BI.isKey(watch)) {
+                var key = watch;
+                watch = {};
+                watch[key] = handler;
+            }
+            for (var key in watch) {
+                var handler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
+                    }
+                } else {
+                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
+                }
+            }
+        }
     };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
@@ -91116,7 +91174,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             return Fix.toJSON(ob);
         };
     }
-    BI.watch = Fix.watch;
 }());
 
 
