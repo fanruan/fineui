@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-10)
+- 支持Composition API
 - pane和loadingPane支持加载时自定义提示文本
 
 2.0(2020-09)
