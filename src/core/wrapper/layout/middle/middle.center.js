@@ -24,7 +24,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
             list.push({
                 column: i,
                 row: 0,
-                el: BI.createWidget({
+                el: BI._lazyCreateWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
@@ -32,7 +32,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,

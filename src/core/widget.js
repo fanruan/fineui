@@ -35,6 +35,7 @@
             if (!this._constructed) {
                 this._constructed = true;
                 this._init();
+                this._initRef();
             }
         },
 
@@ -181,7 +182,7 @@
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI.createWidget(el, {
+                    BI._lazyCreateWidget(el, {
                         element: self
                     });
                 });
@@ -337,7 +338,9 @@
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
+            BI.Widget.pushContext(widget);
             widget._lazyConstructor();
+            BI.Widget.popContext();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -505,36 +508,47 @@
             this.purgeListeners();
         }
     });
-    var context = null;
-    var contextStack = [];
+    var context = null, current = null;
+    var contextStack = [], currentStack = [];
 
-    function pushTarget (_context) {
+    BI.Widget.pushContext = function (_context) {
         if (context) contextStack.push(context);
-        BI.Widget.current = context = _context;
+        BI.Widget.context = context = _context;
+    };
+
+    BI.Widget.popContext = function () {
+        contextStack.pop();
+        BI.Widget.context = context = null;
+    };
+
+    function pushTarget (_current) {
+        if (current) currentStack.push(current);
+        BI.Widget.current = current = _current;
     }
 
     function popTarget () {
-        BI.Widget.current = context = contextStack.pop();
+        currentStack.pop();
+        BI.Widget.current = current = null;
     }
 
     BI.onBeforeMount = function (beforeMount) {
-        if (context) {
-            context.beforeMount = beforeMount;
+        if (current) {
+            current.beforeMount = beforeMount;
         }
     };
     BI.onMounted = function (mounted) {
-        if (context) {
-            context.mounted = mounted;
+        if (current) {
+            current.mounted = mounted;
         }
     };
     BI.onBeforeUnmount = function (beforeDestroy) {
-        if (context) {
-            context.beforeDestroy = beforeDestroy;
+        if (current) {
+            current.beforeDestroy = beforeDestroy;
         }
     };
     BI.onUnmounted = function (destroyed) {
-        if (context) {
-            context.destroyed = destroyed;
+        if (current) {
+            current.destroyed = destroyed;
         }
     };
 

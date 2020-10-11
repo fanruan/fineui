@@ -11,7 +11,7 @@
     };
 
     // 根据配置属性生成widget
-    var createWidget = function (config) {
+    var createWidget = function (config, lazy) {
         var cls = kv[config.type];
 
         if (!cls) {
@@ -19,17 +19,17 @@
         }
 
         var widget = new cls();
-
+        BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
-        widget._initRef();
-        // if (config.element || config.root) {
-        widget._lazyConstructor();
-        // }
+        if (!lazy || config.element || config.root) {
+            widget._lazyConstructor();
+        }
+        BI.Widget.popContext();
         return widget;
     };
 
-    BI.createWidget = BI.createWidget || function (item, options, context) {
+    BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
         var el, w;
@@ -57,7 +57,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -68,12 +68,16 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
         }
         throw new Error("无法根据item创建组件");
+    };
+
+    BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
+        return BI.createWidget(item, options, context, true);
     };
 
     BI.createElement = BI.createElement || function () {

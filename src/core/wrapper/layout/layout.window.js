@@ -95,7 +95,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(o.items[i][j]);
+                    var w = BI._lazyCreateWidget(o.items[i][j]);
                     w.element.css({position: "absolute"});
                     this.addWidget(this.getName() + i + "_" + j, w);
                 }
