@@ -33,7 +33,8 @@
     }
 
     function popTarget () {
-        Fix.Model.target = target = targetStack.pop();
+        targetStack.pop();
+        Fix.Model.target = target = null;
     }
 
     var oldWatch = Fix.watch;
