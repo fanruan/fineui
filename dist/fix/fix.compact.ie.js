@@ -57,7 +57,7 @@
         if (target != null) {
             return target;
         }
-        widget = widget || context;
+        widget = widget || BI.Widget.context;
         var p = widget;
         while (p) {
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
