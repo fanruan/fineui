@@ -1,4 +1,4 @@
-/*! time: 2020-10-10 17:40:22 */
+/*! time: 2020-10-11 23:40:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13580,6 +13580,7 @@ module.exports = function (exec) {
             if (!this._constructed) {
                 this._constructed = true;
                 this._init();
+                this._initRef();
             }
         },
 
@@ -13726,7 +13727,7 @@ module.exports = function (exec) {
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI.createWidget(el, {
+                    BI._lazyCreateWidget(el, {
                         element: self
                     });
                 });
@@ -13882,7 +13883,9 @@ module.exports = function (exec) {
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
+            BI.Widget.pushContext(widget);
             widget._lazyConstructor();
+            BI.Widget.popContext();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -14050,36 +14053,51 @@ module.exports = function (exec) {
             this.purgeListeners();
         }
     });
-    var context = null;
-    var contextStack = [];
+    var context = null, current = null;
+    var contextStack = [], currentStack = [];
 
-    function pushTarget (_context) {
+    BI.Widget.pushContext = function (_context) {
         if (context) contextStack.push(context);
-        BI.Widget.current = context = _context;
+        BI.Widget.context = context = _context;
+    };
+
+    BI.Widget.popContext = function () {
+        BI.Widget.context = context = contextStack.pop();
+        if (contextStack.length <= 0) {
+            BI.Widget.context = context = null;
+        }
+    };
+
+    function pushTarget (_current) {
+        if (current) currentStack.push(current);
+        BI.Widget.current = current = _current;
     }
 
     function popTarget () {
-        BI.Widget.current = context = contextStack.pop();
+        BI.Widget.current = current = currentStack.pop();
+        if (currentStack.length <= 0) {
+            BI.Widget.current = current = null;
+        }
     }
 
     BI.onBeforeMount = function (beforeMount) {
-        if (context) {
-            context.beforeMount = beforeMount;
+        if (current) {
+            current.beforeMount = beforeMount;
         }
     };
     BI.onMounted = function (mounted) {
-        if (context) {
-            context.mounted = mounted;
+        if (current) {
+            current.mounted = mounted;
         }
     };
     BI.onBeforeUnmount = function (beforeDestroy) {
-        if (context) {
-            context.beforeDestroy = beforeDestroy;
+        if (current) {
+            current.beforeDestroy = beforeDestroy;
         }
     };
     BI.onUnmounted = function (destroyed) {
-        if (context) {
-            context.destroyed = destroyed;
+        if (current) {
+            current.destroyed = destroyed;
         }
     };
 
@@ -14157,7 +14175,7 @@ module.exports = function (exec) {
     };
 
     // 根据配置属性生成widget
-    var createWidget = function (config) {
+    var createWidget = function (config, lazy) {
         var cls = kv[config.type];
 
         if (!cls) {
@@ -14165,17 +14183,17 @@ module.exports = function (exec) {
         }
 
         var widget = new cls();
-
+        BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
-        widget._initRef();
-        // if (config.element || config.root) {
-        widget._lazyConstructor();
-        // }
+        if (!lazy || config.element || config.root) {
+            widget._lazyConstructor();
+        }
+        BI.Widget.popContext();
         return widget;
     };
 
-    BI.createWidget = BI.createWidget || function (item, options, context) {
+    BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
         var el, w;
@@ -14203,7 +14221,7 @@ module.exports = function (exec) {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -14214,12 +14232,16 @@ module.exports = function (exec) {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
         }
         throw new Error("无法根据item创建组件");
+    };
+
+    BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
+        return BI.createWidget(item, options, context, true);
     };
 
     BI.createElement = BI.createElement || function () {
@@ -14633,7 +14655,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     _addElement: function (i, item, context) {
         var self = this, w;
         if (!this.hasWidget(this._getChildName(i))) {
-            w = BI.createWidget(item, context);
+            w = BI._lazyCreateWidget(item, context);
             w.on(BI.Events.DESTROY, function () {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
@@ -17943,9 +17965,9 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
+            var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
-            td = BI.createWidget({
+            td = BI._lazyCreateWidget({
                 type: "bi.default",
                 width: width,
                 items: [w]
@@ -18176,7 +18198,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
                 delete self._children[i];
             }
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.horizontal_auto",
             element: this,
             items: [this.left]
@@ -18185,7 +18207,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item) {
         var self = this, o = this.options;
-        this.left = BI.createWidget({
+        this.left = BI._lazyCreateWidget({
             type: "bi.vertical",
             items: [item],
             hgap: o.hgap,
@@ -18196,7 +18218,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.left",
             element: this,
             items: [this.left]
@@ -18211,6 +18233,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
+
 
 /***/ }),
 /* 337 */
@@ -19464,7 +19487,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "north")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "north", w);
                     }
                     this.getWidgetByName(this.getName() + "north").element.height(item.height)
@@ -19484,7 +19507,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "south")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "south", w);
                     }
                     this.getWidgetByName(this.getName() + "south").element.height(item.height)
@@ -19504,7 +19527,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "west")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "west", w);
                     }
                     this.getWidgetByName(this.getName() + "west").element.width(item.width)
@@ -19524,7 +19547,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "east")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "east", w);
                     }
                     this.getWidgetByName(this.getName() + "east").element.width(item.width)
@@ -19543,7 +19566,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["center"];
             if (item != null) {
                 if (!this.hasWidget(this.getName() + "center")) {
-                    var w = BI.createWidget(item);
+                    var w = BI._lazyCreateWidget(item);
                     this.addWidget(this.getName() + "center", w);
                 }
                 this.getWidgetByName(this.getName() + "center").element
@@ -19561,6 +19584,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.border", BI.BorderLayout);
+
 
 /***/ }),
 /* 353 */
@@ -19596,7 +19620,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (item) {
                 if (!self.hasWidget(item.cardName)) {
-                    var w = BI.createWidget(item);
+                    var w = BI._lazyCreateWidget(item);
                     w.on(BI.Events.DESTROY, function () {
                         var index = BI.findIndex(o.items, function (i, tItem) {
                             return tItem.cardName == item.cardName;
@@ -19666,7 +19690,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (this.isCardExisted(cardName)) {
             throw new Error("cardName is already exist");
         }
-        var widget = BI.createWidget(cardItem, this);
+        var widget = BI._lazyCreateWidget(cardItem, this);
         widget.element.css({
             position: "relative",
             top: "0",
@@ -19775,6 +19799,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.card", BI.CardLayout);
+
 
 /***/ }),
 /* 354 */
@@ -19961,7 +19986,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(map[i][j]);
+                    var w = BI._lazyCreateWidget(map[i][j]);
                     this.addWidget(this.getName() + i + "_" + j, w);
                 } else {
                     w = this.getWidgetByName(this.getName() + i + "_" + j);
@@ -20006,6 +20031,7 @@ BI.DivisionLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.division", BI.DivisionLayout);
+
 
 /***/ }),
 /* 356 */
@@ -20262,16 +20288,16 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el);
+                    els[i][j] = BI._lazyCreateWidget(el);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item);
+            els[item.row][item.column] = BI._lazyCreateWidget(item);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (!els[i][j]) {
-                    els[i][j] = BI.createWidget({
+                    els[i][j] = BI._lazyCreateWidget({
                         type: "bi.layout"
                     });
                 }
@@ -20297,6 +20323,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.grid", BI.GridLayout);
+
 
 /***/ }),
 /* 358 */
@@ -20345,9 +20372,9 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         var td;
         var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
-            var w = BI.createWidget(item);
+            var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
-            td = BI.createWidget({
+            td = BI._lazyCreateWidget({
                 type: "bi.default",
                 tagName: "td",
                 attributes: {
@@ -20728,7 +20755,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 right: right <= 1 ? right * 100 + "%" : right
             }, arr[i]));
         }
-        var w = BI.createWidget({
+        var w = BI._lazyCreateWidget({
             type: "bi.absolute",
             height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
             items: abs
@@ -20765,6 +20792,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.table", BI.TableLayout);
+
 
 /***/ }),
 /* 362 */
@@ -20819,7 +20847,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -20932,7 +20960,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         items = BI.compact(items);
         BI.each(items, function (i, item) {
             if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 self.addWidget(self.getName() + i + "", w);
             } else {
                 w = self.getWidgetByName(self.getName() + i + "");
@@ -20989,6 +21017,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.vtape", BI.VTapeLayout);
+
 
 /***/ }),
 /* 363 */
@@ -21073,13 +21102,13 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        var tr = BI.createWidget({
+        var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr"
         });
 
         for (var i = 0; i < arr.length; i++) {
-            var w = BI.createWidget(arr[i]);
+            var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
                 w.element.css({"margin-left": arr[i].lgap + "px"});
@@ -21094,7 +21123,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 w.element.css({"margin-bottom": arr[i].bgap + "px"});
             }
             first(w, this.rows++, i);
-            var td = BI.createWidget({
+            var td = BI._lazyCreateWidget({
                 type: "bi.default",
                 attributes: {
                     width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]
@@ -21140,6 +21169,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.td", BI.TdLayout);
+
 
 /***/ }),
 /* 364 */
@@ -21309,7 +21339,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                     throw new Error("item be required");
                 }
                 if (!this.hasWidget(this.getName() + i + "_" + j)) {
-                    var w = BI.createWidget(o.items[i][j]);
+                    var w = BI._lazyCreateWidget(o.items[i][j]);
                     w.element.css({position: "absolute"});
                     this.addWidget(this.getName() + i + "_" + j, w);
                 }
@@ -21404,6 +21434,7 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.window", BI.WindowLayout);
 
+
 /***/ }),
 /* 366 */
 /***/ (function(module, exports) {
@@ -21434,7 +21465,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
             list.push({
                 column: i,
                 row: 0,
-                el: BI.createWidget({
+                el: BI._lazyCreateWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
@@ -21442,7 +21473,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -21485,6 +21516,7 @@ BI.CenterLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.center", BI.CenterLayout);
 
+
 /***/ }),
 /* 367 */
 /***/ (function(module, exports) {
@@ -21511,7 +21543,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options, items = o.items;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
-            var widget = BI.createWidget({
+            var widget = BI._lazyCreateWidget({
                 type: "bi.default"
             });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
@@ -21524,7 +21556,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -21565,6 +21597,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
+
 /***/ }),
 /* 368 */
 /***/ (function(module, exports) {
@@ -21594,7 +21627,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
             list.push({
                 column: i,
                 row: 0,
-                el: BI.createWidget({
+                el: BI._lazyCreateWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
@@ -21602,7 +21635,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -21644,6 +21677,7 @@ BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
+
 /***/ }),
 /* 369 */
 /***/ (function(module, exports) {
@@ -21674,7 +21708,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
             list.push({
                 column: 0,
                 row: i,
-                el: BI.createWidget({
+                el: BI._lazyCreateWidget({
                     type: "bi.default",
                     cls: "center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")
                 })
@@ -21682,7 +21716,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,
@@ -21723,6 +21757,7 @@ BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     }
 });
 BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
+
 
 /***/ }),
 /* 370 */
@@ -90885,18 +90920,9 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-    }
-
-    var context = null;
-    var contextStack = [];
-
-    function pushContext (_context) {
-        if (context) contextStack.push(context);
-        Fix.Model.context = context = _context;
-    }
-
-    function popContext () {
-        Fix.Model.context = context = contextStack.pop();
+        if (targetStack.length <= 0) {
+            Fix.Model.target = target = null;
+        }
     }
 
     var oldWatch = Fix.watch;
@@ -90924,7 +90950,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         if (target != null) {
             return target;
         }
-        widget = widget || context;
+        widget = widget || BI.Widget.context;
         var p = widget;
         while (p) {
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
@@ -90941,25 +90967,25 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         }
     }
 
-    var _create = BI.createWidget;
-    BI.createWidget = function (item, options, context) {
-        var pushed = false;
-        if (BI.isWidget(options)) {
-            pushContext(options);
-            pushed = true;
-        } else if (context != null) {
-            pushContext(context);
-            pushed = true;
-        }
-        var result = _create.apply(this, arguments);
-        // try {
-        //     var result = _create.apply(this, arguments);
-        // } catch (e) {
-        //     console.error(e);
-        // }
-        pushed && popContext();
-        return result;
-    };
+    // var _create = BI.createWidget;
+    // BI.createWidget = function (item, options, context) {
+    //     var pushed = false;
+    //     if (BI.isWidget(options)) {
+    //         pushContext(options);
+    //         pushed = true;
+    //     } else if (context != null) {
+    //         pushContext(context);
+    //         pushed = true;
+    //     }
+    //     var result = _create.apply(this, arguments);
+    //     // try {
+    //     //     var result = _create.apply(this, arguments);
+    //     // } catch (e) {
+    //     //     console.error(e);
+    //     // }
+    //     pushed && popContext();
+    //     return result;
+    // };
 
     BI.watch = function (watch, handler) {
         if (BI.Widget.current) {
@@ -90984,13 +91010,13 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
         BI.Loader.prototype[name] = function () {
-            pushContext(this);
+            BI.Widget.pushContext(this);
             try {
                 var result = old.apply(this, arguments);
             } catch (e) {
                 console.error(e);
             }
-            popContext();
+            BI.Widget.popContext();
             return result;
         };
     });
