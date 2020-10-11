@@ -35,7 +35,7 @@
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
         if (targetStack.length <= 0) {
-            BI.Widget.target = target = null;
+            Fix.Model.target = target = null;
         }
     }
 
