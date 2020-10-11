@@ -34,9 +34,6 @@
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-        if (targetStack.length <= 0) {
-            Fix.Model.target = target = null;
-        }
     }
 
     var oldWatch = Fix.watch;
