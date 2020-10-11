@@ -23,7 +23,7 @@
         widget._initProps(config);
         widget._initRoot();
         widget._initRef();
-        if (config.element || config.root || !lazy) {
+        if (!lazy || config.element || config.root) {
             widget._lazyConstructor();
         }
         return widget;
