@@ -517,8 +517,10 @@
     };
 
     BI.Widget.popContext = function () {
-        contextStack.pop();
-        BI.Widget.context = context = null;
+        BI.Widget.context = context = contextStack.pop();
+        if (contextStack.length <= 0) {
+            BI.Widget.context = context = null;
+        }
     };
 
     function pushTarget (_current) {
@@ -527,8 +529,10 @@
     }
 
     function popTarget () {
-        currentStack.pop();
-        BI.Widget.current = current = null;
+        BI.Widget.current = current = currentStack.pop();
+        if (currentStack.length <= 0) {
+            BI.Widget.current = current = null;
+        }
     }
 
     BI.onBeforeMount = function (beforeMount) {
