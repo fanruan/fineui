@@ -506,36 +506,45 @@
             this.purgeListeners();
         }
     });
-    var context = null;
-    var contextStack = [];
+    var context = null, current = null;
+    var contextStack = [], currentStack = [];
 
-    function pushTarget (_context) {
+    BI.Widget.pushContext = function (_context) {
         if (context) contextStack.push(context);
-        BI.Widget.current = context = _context;
+        BI.Widget.context = context = _context;
+    };
+
+    BI.Widget.popContext = function () {
+        BI.Widget.context = context = contextStack.pop();
+    };
+
+    function pushTarget (_current) {
+        if (current) currentStack.push(current);
+        BI.Widget.current = current = _current;
     }
 
     function popTarget () {
-        BI.Widget.current = context = contextStack.pop();
+        BI.Widget.current = current = currentStack.pop();
     }
 
     BI.onBeforeMount = function (beforeMount) {
-        if (context) {
-            context.beforeMount = beforeMount;
+        if (current) {
+            current.beforeMount = beforeMount;
         }
     };
     BI.onMounted = function (mounted) {
-        if (context) {
-            context.mounted = mounted;
+        if (current) {
+            current.mounted = mounted;
         }
     };
     BI.onBeforeUnmount = function (beforeDestroy) {
-        if (context) {
-            context.beforeDestroy = beforeDestroy;
+        if (current) {
+            current.beforeDestroy = beforeDestroy;
         }
     };
     BI.onUnmounted = function (destroyed) {
-        if (context) {
-            context.destroyed = destroyed;
+        if (current) {
+            current.destroyed = destroyed;
         }
     };
 

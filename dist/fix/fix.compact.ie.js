@@ -36,18 +36,6 @@
         Fix.Model.target = target = targetStack.pop();
     }
 
-    var context = null;
-    var contextStack = [];
-
-    function pushContext(_context) {
-        if (context) contextStack.push(context);
-        Fix.Model.context = context = _context;
-    }
-
-    function popContext() {
-        Fix.Model.context = context = contextStack.pop();
-    }
-
     var oldWatch = Fix.watch;
     Fix.watch = function (model, expOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
@@ -86,20 +74,20 @@
         }
     }
 
-    var _create = BI.createWidget;
-    BI.createWidget = function (item, options, context) {
-        var pushed = false;
-        if (BI.isWidget(options)) {
-            pushContext(options);
-            pushed = true;
-        } else if (context != null) {
-            pushContext(context);
-            pushed = true;
-        }
-        var result = _create.apply(this, arguments);
-        pushed && popContext();
-        return result;
-    };
+    // var _create = BI.createWidget;
+    // BI.createWidget = function (item, options, context) {
+    //     var pushed = false;
+    //     if (BI.isWidget(options)) {
+    //         pushContext(options);
+    //         pushed = true;
+    //     } else if (context != null) {
+    //         pushContext(context);
+    //         pushed = true;
+    //     }
+    //     var result = _create.apply(this, arguments);
+    //     pushed && popContext();
+    //     return result;
+    // };
 
     BI.watch = function (watch, handler) {
         if (BI.Widget.current) {
@@ -124,9 +112,9 @@
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
         BI.Loader.prototype[name] = function () {
-            pushContext(this);
+            BI.Widget.pushContext(this);
             var result = old.apply(this, arguments);
-            popContext();
+            BI.Widget.popContext();
             return result;
         };
     });

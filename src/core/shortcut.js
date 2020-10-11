@@ -19,12 +19,13 @@
         }
 
         var widget = new cls();
-
+        BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
         if (!lazy || config.element || config.root) {
             widget._lazyConstructor();
         }
+        BI.Widget.popContext();
         return widget;
     };
 
