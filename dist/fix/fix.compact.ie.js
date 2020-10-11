@@ -1,5 +1,5 @@
 ;(function () {
-    function initWatch(vm, watch) {
+    function initWatch (vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -13,7 +13,7 @@
         }
     }
 
-    function createWatcher(vm, keyOrFn, cb, options) {
+    function createWatcher (vm, keyOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -27,16 +27,13 @@
     var target = null;
     var targetStack = [];
 
-    function pushTarget(_target) {
+    function pushTarget (_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-        if (targetStack.length <= 0) {
-            Fix.Model.target = target = null;
-        }
     }
 
     var oldWatch = Fix.watch;
@@ -56,7 +53,7 @@
         }, options);
     };
 
-    function findStore(widget) {
+    function findStore (widget) {
         if (target != null) {
             return target;
         }
@@ -122,7 +119,7 @@
         };
     });
 
-    function createStore() {
+    function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
             var store = findStore(this.options.context || this.options.element);
@@ -231,14 +228,14 @@
             BI.defer(function () {
                 additionFunc();
             }, 200);
-        }
+        };
         var back = window.history.back;
         window.history.back = function () {
             back.apply(this, arguments);
             BI.defer(function () {
                 additionFunc();
             }, 200);
-        }
+        };
     }
 
     if (BI.Router) {
@@ -246,22 +243,22 @@
         BI.Router.prototype.execute = function () {
             execute.apply(this, arguments);
             additionFunc();
-        }
+        };
     }
 
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition",
         "keys", "allKeys", "values", "pairs", "invert",
         "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-            var old = BI[name];
-            BI[name] = function (obj, fn, context) {
-                return typeof fn === "function" ? old(obj, function (key, value) {
-                    if (!(key in Fix.$$skipArray)) {
-                        return fn.apply(this, arguments);
-                    }
-                }, context) : old.apply(this, arguments);
-            };
-        });
+        var old = BI[name];
+        BI[name] = function (obj, fn, context) {
+            return typeof fn === "function" ? old(obj, function (key, value) {
+                if (!(key in Fix.$$skipArray)) {
+                    return fn.apply(this, arguments);
+                }
+            }, context) : old.apply(this, arguments);
+        };
+    });
     BI.isEmpty = function (ob) {
         if (BI.isPlainObject(ob) && ob.__ob__) {
             return BI.keys(ob).length === 0;
@@ -317,7 +314,7 @@
 
     Fix.set = function (obj, k, v) {
         try {
-            if(obj) {
+            if (obj) {
                 obj[k] = v;
             }
         } catch (e) {
@@ -325,7 +322,7 @@
         } finally {
             return _.cloneDeep(obj);
         }
-    }
+    };
     Fix.del = function (obj, k) {
         try {
             delete obj[k];
@@ -334,5 +331,5 @@
         } finally {
             return _.cloneDeep(obj);
         }
-    }
+    };
 }());
