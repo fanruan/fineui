@@ -35,6 +35,7 @@
             if (!this._constructed) {
                 this._constructed = true;
                 this._init();
+                this._initRef();
             }
         },
 
