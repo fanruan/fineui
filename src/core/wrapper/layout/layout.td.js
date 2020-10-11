@@ -77,13 +77,13 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             }
         }
 
-        var tr = BI.createWidget({
+        var tr = BI._lazyCreateWidget({
             type: "bi.default",
             tagName: "tr"
         });
 
         for (var i = 0; i < arr.length; i++) {
-            var w = BI.createWidget(arr[i]);
+            var w = BI._lazyCreateWidget(arr[i]);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
             if (arr[i].lgap) {
                 w.element.css({"margin-left": arr[i].lgap + "px"});
@@ -98,7 +98,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
                 w.element.css({"margin-bottom": arr[i].bgap + "px"});
             }
             first(w, this.rows++, i);
-            var td = BI.createWidget({
+            var td = BI._lazyCreateWidget({
                 type: "bi.default",
                 attributes: {
                     width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i]

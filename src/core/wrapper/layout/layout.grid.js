@@ -93,16 +93,16 @@ BI.GridLayout = BI.inherit(BI.Layout, {
         BI.each(items, function (i, item) {
             if (BI.isArray(item)) {
                 BI.each(item, function (j, el) {
-                    els[i][j] = BI.createWidget(el);
+                    els[i][j] = BI._lazyCreateWidget(el);
                 });
                 return;
             }
-            els[item.row][item.column] = BI.createWidget(item);
+            els[item.row][item.column] = BI._lazyCreateWidget(item);
         });
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
                 if (!els[i][j]) {
-                    els[i][j] = BI.createWidget({
+                    els[i][j] = BI._lazyCreateWidget({
                         type: "bi.layout"
                     });
                 }

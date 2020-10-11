@@ -181,7 +181,7 @@
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI.createWidget(el, {
+                    BI._lazyCreateWidget(el, {
                         element: self
                     });
                 });
