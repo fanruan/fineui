@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 09:40:26 */
+/*! time: 2020-10-12 11:50:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -30402,11 +30402,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
             name: "",
-            attributes: {
-                frameborder: 0,
-                src: config.src,
-                name: config.name
-            },
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -30418,6 +30414,16 @@ BI.Iframe = BI.inherit(BI.Single, {
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
+    },
+
+    _initProps: function () {
+        BI.Iframe.superclass._initProps.apply(this, arguments);
+        var o = this.options;
+        this.options.attributes = BI.extend({
+            frameborder: 0,
+            src: o.src,
+            name: o.name
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {
@@ -30461,10 +30467,18 @@ BI.Img = BI.inherit(BI.Single, {
             tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
-            attributes: config.src ? {src: config.src} : {},
+            attributes: config.src ? { src: config.src } : {},
             width: "100%",
             height: "100%"
         });
+    },
+
+    _initProps: function () {
+        BI.Img.superclass._initProps.apply(this, arguments);
+        var o = this.options;
+        this.options.attributes = BI.extend({
+            src: o.src
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {
