@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 16:20:20 */
+/*! time: 2020-10-12 16:30:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -68200,7 +68200,7 @@ exports.Model = Model;
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element || BI.Widget.context || this._context);
+            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
