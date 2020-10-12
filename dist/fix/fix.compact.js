@@ -135,7 +135,7 @@
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || BI.Widget.context || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;

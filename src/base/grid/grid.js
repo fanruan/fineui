@@ -35,7 +35,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
         }, 1000 / 60);
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.absolute"
         });
         this.element.scroll(function () {
@@ -50,7 +50,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
@@ -153,7 +153,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
-                        child = BI.createWidget(BI.extend({
+                        child = BI._lazyCreateWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size

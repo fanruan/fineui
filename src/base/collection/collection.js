@@ -32,7 +32,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
         }, 1000 / 60);
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.absolute"
         });
         this.element.scroll(function () {
@@ -47,7 +47,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
@@ -176,7 +176,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
-                    child = BI.createWidget(BI.extend({
+                    child = BI._lazyCreateWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
