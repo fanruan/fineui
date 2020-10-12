@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 18:30:19 */
+/*! time: 2020-10-12 20:20:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13883,9 +13883,6 @@ module.exports = function (exec) {
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
-            BI.Widget.pushContext(widget);
-            widget._lazyConstructor();
-            BI.Widget.popContext();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
@@ -14175,16 +14172,18 @@ module.exports = function (exec) {
         if (!cls) {
             throw new Error("组件" + config.type + "未定义");
         }
-
+        var pushed = false;
+        if (context) {
+            pushed = true;
+            BI.Widget.pushContext(context);
+        }
         var widget = new cls();
-        widget._context = context;
-        BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
-        if (!lazy || config.element || config.root) {
-            widget._lazyConstructor();
-        }
-        BI.Widget.popContext();
+        // if (!lazy || config.element || config.root) {
+        widget._lazyConstructor();
+        // }
+        pushed && BI.Widget.popContext();
         return widget;
     };
 
@@ -91022,7 +91021,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
+            var store = findStore(this.options.context || this._parent || this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
