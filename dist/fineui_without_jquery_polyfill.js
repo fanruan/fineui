@@ -1,4 +1,4 @@
-/*! time: 2020-10-11 23:40:24 */
+/*! time: 2020-10-12 09:00:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10095,9 +10095,6 @@ BI.Req = {
 
     BI.Widget.popContext = function () {
         BI.Widget.context = context = contextStack.pop();
-        if (contextStack.length <= 0) {
-            BI.Widget.context = context = null;
-        }
     };
 
     function pushTarget (_current) {
@@ -10107,9 +10104,6 @@ BI.Req = {
 
     function popTarget () {
         BI.Widget.current = current = currentStack.pop();
-        if (currentStack.length <= 0) {
-            BI.Widget.current = current = null;
-        }
     }
 
     BI.onBeforeMount = function (beforeMount) {
@@ -68088,9 +68082,6 @@ exports.Model = Model;
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-        if (targetStack.length <= 0) {
-            Fix.Model.target = target = null;
-        }
     }
 
     var oldWatch = Fix.watch;

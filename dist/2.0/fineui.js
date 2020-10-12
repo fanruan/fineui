@@ -1,4 +1,4 @@
-/*! time: 2020-10-11 23:40:24 */
+/*! time: 2020-10-12 09:00:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14063,9 +14063,6 @@ module.exports = function (exec) {
 
     BI.Widget.popContext = function () {
         BI.Widget.context = context = contextStack.pop();
-        if (contextStack.length <= 0) {
-            BI.Widget.context = context = null;
-        }
     };
 
     function pushTarget (_current) {
@@ -14075,9 +14072,6 @@ module.exports = function (exec) {
 
     function popTarget () {
         BI.Widget.current = current = currentStack.pop();
-        if (currentStack.length <= 0) {
-            BI.Widget.current = current = null;
-        }
     }
 
     BI.onBeforeMount = function (beforeMount) {
@@ -90920,9 +90914,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-        if (targetStack.length <= 0) {
-            Fix.Model.target = target = null;
-        }
     }
 
     var oldWatch = Fix.watch;
