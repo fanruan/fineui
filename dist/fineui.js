@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 16:30:22 */
+/*! time: 2020-10-12 18:30:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -90743,6 +90743,25 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         vm.$$context = createViewModel$1({}, props);
     }
 
+    function getInjectValue(vm, key) {
+        var p = vm._parent;
+        while (p) {
+            if (p.$$context && key in p.$$context) {
+                return p.$$context[key];
+            }
+            p = p._parent;
+        }
+    }
+
+    function getInjectValues(vm) {
+        var inject = vm.inject || [];
+        var result = {};
+        _.each(inject, function (key) {
+            result[key] = getInjectValue(vm, key);
+        });
+        return result;
+    }
+
     var Model = function () {
         function Model() {
             _classCallCheck(this, Model);
@@ -90761,17 +90780,18 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             var state = _.isFunction(this.state) ? this.state() : this.state;
             var computed = this.computed;
             var context = this.context;
+            var inject = this.inject;
             var childContext = this.childContext;
             var watch$$1 = this.watch;
             var actions = this.actions;
-            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(context || []);
+            var keys = _.keys(this.$$model).concat(_.keys(state)).concat(_.keys(computed)).concat(inject || []).concat(context || []);
             var mixins = this.mixins;
             defineProps(this, keys);
             childContext && defineContext(this, childContext);
             this.$$model && (this.model.__ob__ = this.$$model.__ob__);
             initMixins(this, mixins);
             this.init();
-            initState(this, state);
+            initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
             initWatch(this, watch$$1);
             initMethods(this, actions);
