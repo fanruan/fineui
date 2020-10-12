@@ -19,9 +19,12 @@ BI.Img = BI.inherit(BI.Single, {
         });
     },
 
-    _init: function () {
-        BI.Img.superclass._init.apply(this, arguments);
-        this.setSrc(this.options.src);
+    _initProps: function () {
+        BI.Img.superclass._initProps.apply(this, arguments);
+        var o = this.options;
+        this.options.attributes = BI.extend({
+            src: o.src
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {

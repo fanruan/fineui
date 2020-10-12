@@ -19,16 +19,21 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        var self = this, o = this.options;
+        var self = this;
         BI.Iframe.superclass._init.apply(this, arguments);
-        this.element.attr(BI.extend({
-            frameborder: 0,
-            src: o.src,
-            name: o.name
-        }, o.attributes));
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
+    },
+
+    _initProps: function () {
+        BI.Iframe.superclass._initProps.apply(this, arguments);
+        var o = this.options;
+        this.options.attributes = BI.extend({
+            frameborder: 0,
+            src: o.src,
+            name: o.name
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {
