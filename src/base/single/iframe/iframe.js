@@ -23,6 +23,7 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     _init: function () {
+        var self = this;
         BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
