@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 09:00:19 */
+/*! time: 2020-10-12 09:40:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26445,6 +26445,7 @@ BI.Iframe = BI.inherit(BI.Single, {
     },
 
     _init: function () {
+        var self = this;
         BI.Iframe.superclass._init.apply(this, arguments);
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
