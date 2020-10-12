@@ -13,10 +13,15 @@ BI.Img = BI.inherit(BI.Single, {
             tagName: "img",
             baseCls: (conf.baseCls || "") + " bi-img display-block",
             src: "",
-            attributes: config.src ? {src: config.src} : {},
+            attributes: config.src ? { src: config.src } : {},
             width: "100%",
             height: "100%"
         });
+    },
+
+    _init: function () {
+        BI.Img.superclass._init.apply(this, arguments);
+        this.setSrc(this.options.src);
     },
 
     setSrc: function (src) {

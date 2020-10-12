@@ -20,10 +20,12 @@ BI.Iframe = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.attributes.frameborder = "0";
-        o.attributes.src = o.src;
-        o.attributes.name = o.name;
         BI.Iframe.superclass._init.apply(this, arguments);
+        this.element.attr(BI.extend({
+            frameborder: 0,
+            src: o.src,
+            name: o.name
+        }, o.attributes));
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
