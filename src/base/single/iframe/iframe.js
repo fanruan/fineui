@@ -12,11 +12,7 @@ BI.Iframe = BI.inherit(BI.Single, {
             baseCls: (conf.baseCls || "") + " bi-iframe",
             src: "",
             name: "",
-            attributes: {
-                frameborder: 0,
-                src: config.src,
-                name: config.name
-            },
+            attributes: {},
             width: "100%",
             height: "100%"
         });
@@ -28,6 +24,16 @@ BI.Iframe = BI.inherit(BI.Single, {
         this.element.on("load", function () {
             self.fireEvent("EVENT_LOADED");
         });
+    },
+
+    _initProps: function () {
+        BI.Iframe.superclass._initProps.apply(this, arguments);
+        var o = this.options;
+        this.options.attributes = BI.extend({
+            frameborder: 0,
+            src: o.src,
+            name: o.name
+        }, this.options.attributes);
     },
 
     setSrc: function (src) {
