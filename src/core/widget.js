@@ -338,9 +338,6 @@
                 throw new Error("name has already been existed");
             }
             widget._setParent && widget._setParent(this);
-            BI.Widget.pushContext(widget);
-            widget._lazyConstructor();
-            BI.Widget.popContext();
             widget.on(BI.Events.DESTROY, function () {
                 BI.remove(self._children, this);
             });
