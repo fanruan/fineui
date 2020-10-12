@@ -11,7 +11,7 @@
     };
 
     // 根据配置属性生成widget
-    var createWidget = function (config, lazy) {
+    var createWidget = function (config, context, lazy) {
         var cls = kv[config.type];
 
         if (!cls) {
@@ -19,6 +19,7 @@
         }
 
         var widget = new cls();
+        widget._context = context;
         BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
@@ -57,7 +58,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -68,7 +69,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
