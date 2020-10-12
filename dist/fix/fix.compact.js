@@ -135,7 +135,7 @@
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this._parent || this.options.element || this._context);
+            var store = findStore(this.options.context || this._parent || this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
