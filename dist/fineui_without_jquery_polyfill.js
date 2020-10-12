@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 11:50:19 */
+/*! time: 2020-10-12 16:20:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10201,7 +10201,7 @@ BI.Req = {
     };
 
     // 根据配置属性生成widget
-    var createWidget = function (config, lazy) {
+    var createWidget = function (config, context, lazy) {
         var cls = kv[config.type];
 
         if (!cls) {
@@ -10209,6 +10209,7 @@ BI.Req = {
         }
 
         var widget = new cls();
+        widget._context = context;
         BI.Widget.pushContext(widget);
         widget._initProps(config);
         widget._initRoot();
@@ -10247,7 +10248,7 @@ BI.Req = {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -10258,7 +10259,7 @@ BI.Req = {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
@@ -19408,7 +19409,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
         }, 1000 / 60);
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.absolute"
         });
         this.element.scroll(function () {
@@ -19423,7 +19424,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
@@ -19552,7 +19553,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                     }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {
-                    child = BI.createWidget(BI.extend({
+                    child = BI._lazyCreateWidget(BI.extend({
                         type: "bi.label",
                         width: datum.width,
                         height: datum.height
@@ -19754,6 +19755,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
 });
 BI.CollectionView.EVENT_SCROLL = "EVENT_SCROLL";
 BI.shortcut("bi.collection_view", BI.CollectionView);
+
 
 /***/ }),
 /* 380 */
@@ -22373,7 +22375,7 @@ BI.GridView = BI.inherit(BI.Widget, {
         this._debounceRelease = BI.debounce(function () {
             self._scrollLock = false;
         }, 1000 / 60);
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.absolute"
         });
         this.element.scroll(function () {
@@ -22388,7 +22390,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                 scrollTop: o.scrollTop
             });
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.vertical",
             element: this,
             scrollable: o.overflowX === true && o.overflowY === true,
@@ -22491,7 +22493,7 @@ BI.GridView = BI.inherit(BI.Widget, {
                         child = this.renderedCells[index].el;
                         renderedCells.push(this.renderedCells[index]);
                     } else {
-                        child = BI.createWidget(BI.extend({
+                        child = BI._lazyCreateWidget(BI.extend({
                             type: "bi.label",
                             width: columnDatum.size,
                             height: rowDatum.size
@@ -68198,7 +68200,7 @@ exports.Model = Model;
     function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element || BI.Widget.context || this._context);
             if (store) {
                 pushTarget(store);
                 needPop = true;
