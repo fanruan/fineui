@@ -1,4 +1,4 @@
-/*! time: 2020-10-13 11:40:24 */
+/*! time: 2020-10-13 17:40:15 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -98447,7 +98447,8 @@ __webpack_require__(1246);
 __webpack_require__(1247);
 __webpack_require__(1248);
 __webpack_require__(1249);
-module.exports = __webpack_require__(1250);
+__webpack_require__(1250);
+module.exports = __webpack_require__(1251);
 
 
 /***/ }),
@@ -102865,7 +102866,13 @@ Demo.FIX_CONFIG = [{
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"
+}, {
+    id: 80,
+    pId: 7,
+    text: "inject",
+    value: "demo.fix_inject"
 }];
+
 
 /***/ }),
 /* 1161 */
@@ -107173,6 +107180,8 @@ BI.shortcut("demo.face", Demo.Face);
         childContext: ["context"]
     });
 
+    BI.model("demo.model.context.parent_store",ParentStore)
+
     var ChildStore = BI.inherit(Fix.Model, {
         context: ["context"],
         computed: {
@@ -107187,9 +107196,11 @@ BI.shortcut("demo.face", Demo.Face);
         }
     });
 
+    BI.model("demo.model.context.child_store",ChildStore)
+
     var Child = BI.inherit(BI.Widget, {
         _store: function () {
-            return new ChildStore();
+            return BI.Models.getModel("demo.model.context.child_store");
         },
         watch: {
             currContext: function (val) {
@@ -107218,7 +107229,7 @@ BI.shortcut("demo.face", Demo.Face);
 
     var Parent = BI.inherit(BI.Widget, {
         _store: function () {
-            return new ParentStore();
+            return BI.Models.getModel("demo.model.context.parent_store");
         },
         render: function () {
             var self = this;
@@ -107238,6 +107249,7 @@ BI.shortcut("demo.face", Demo.Face);
 
     BI.shortcut("demo.fix_context", Parent);
 }());
+
 
 /***/ }),
 /* 1205 */
@@ -107428,6 +107440,114 @@ BI.shortcut("demo.face", Demo.Face);
 
 /***/ }),
 /* 1208 */
+/***/ (function(module, exports) {
+
+(function () {
+    var ParentStore = BI.inherit(Fix.Model, {
+        state: function () {
+            return {
+                context: {
+                    one: {
+                        key: "one.key"
+                    }
+                }
+            };
+        },
+        childContext: ["context"],
+
+        actions: {
+            changeContext: function () {
+                this.model.context = {
+                    two: {
+                        key: "two.key"
+                    }
+                };
+            }
+        }
+    });
+
+    BI.model("demo.model.inject.parent_store", ParentStore);
+
+    var ChildStore = BI.inherit(Fix.Model, {
+        inject: ["context"],
+        computed: {
+            currContext: function () {
+                return this.model.context.one.key;
+            }
+        },
+        actions: {
+            changeContext: function () {
+                this.model.context = {
+                    one: {
+                        key: "one.changed_key"
+                    }
+                };
+            }
+        }
+    });
+
+    BI.model("demo.model.inject.child_store", ChildStore);
+
+    var Child = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model.inject.child_store");
+        },
+        watch: {
+            currContext: function (val) {
+                this.button.setText(val);
+            }
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.button",
+                ref: function () {
+                    self.button = this;
+                },
+                text: this.model.currContext,
+                handler: function () {
+                    self.store.changeContext();
+                }
+            };
+        },
+    });
+
+    BI.shortcut("demo.fix_inject_child", Child);
+
+    var Parent = BI.inherit(BI.Widget, {
+        _store: function () {
+            return BI.Models.getModel("demo.model.inject.parent_store");
+        },
+        render: function () {
+            var self = this;
+            return {
+                type: "bi.vertical",
+                items: [{
+                    el: {
+                        type: "demo.fix_inject_child"
+                    }
+                }, {
+                    el: {
+                        type: "bi.button",
+                        text: "点击修改parent state",
+                        handler: function () {
+                            self.store.changeContext();
+                        }
+                    }
+                }]
+            };
+        },
+        mounted: function () {
+
+        }
+    });
+
+    BI.shortcut("demo.fix_inject", Parent);
+}());
+
+
+/***/ }),
+/* 1209 */
 /***/ (function(module, exports) {
 
 /**
@@ -107877,7 +107997,7 @@ BI.shortcut("demo.face", Demo.Face);
 })();
 
 /***/ }),
-/* 1209 */
+/* 1210 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -107931,7 +108051,7 @@ BI.shortcut("demo.face", Demo.Face);
 }());
 
 /***/ }),
-/* 1210 */
+/* 1211 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -107996,7 +108116,7 @@ BI.shortcut("demo.face", Demo.Face);
 }());
 
 /***/ }),
-/* 1211 */
+/* 1212 */
 /***/ (function(module, exports) {
 
 (function () {
@@ -108052,7 +108172,7 @@ BI.shortcut("demo.face", Demo.Face);
 }());
 
 /***/ }),
-/* 1212 */
+/* 1213 */
 /***/ (function(module, exports) {
 
 Demo.Main = BI.inherit(BI.Widget, {
@@ -108118,7 +108238,7 @@ Demo.Main = BI.inherit(BI.Widget, {
 BI.shortcut("demo.main", Demo.Main);
 
 /***/ }),
-/* 1213 */
+/* 1214 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -108188,7 +108308,7 @@ BI.shortcut("demo.main", Demo.Main);
 })();
 
 /***/ }),
-/* 1214 */
+/* 1215 */
 /***/ (function(module, exports) {
 
 Demo.North = BI.inherit(BI.Widget, {
@@ -108239,7 +108359,7 @@ Demo.North.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.shortcut("demo.north", Demo.North);
 
 /***/ }),
-/* 1215 */
+/* 1216 */
 /***/ (function(module, exports) {
 
 Demo.Preview = BI.inherit(BI.Widget, {
@@ -108325,7 +108445,7 @@ Demo.Preview = BI.inherit(BI.Widget, {
 BI.shortcut("demo.preview", Demo.Preview);
 
 /***/ }),
-/* 1216 */
+/* 1217 */
 /***/ (function(module, exports) {
 
 Demo.West = BI.inherit(BI.Widget, {
@@ -108403,7 +108523,7 @@ Demo.West.EVENT_VALUE_CHANGE = "EVENT_VALUE_CHANGE";
 BI.shortcut("demo.west", Demo.West);
 
 /***/ }),
-/* 1217 */
+/* 1218 */
 /***/ (function(module, exports) {
 
 /**
@@ -108488,7 +108608,7 @@ Demo.Buttons = BI.inherit(BI.Widget, {
 BI.shortcut("demo.buttons", Demo.Buttons);
 
 /***/ }),
-/* 1218 */
+/* 1219 */
 /***/ (function(module, exports) {
 
 /**
@@ -108533,7 +108653,7 @@ Demo.Items = BI.inherit(BI.Widget, {
 BI.shortcut("demo.items", Demo.Items);
 
 /***/ }),
-/* 1219 */
+/* 1220 */
 /***/ (function(module, exports) {
 
 /**
@@ -108574,7 +108694,7 @@ Demo.Nodes = BI.inherit(BI.Widget, {
 BI.shortcut("demo.nodes", Demo.Nodes);
 
 /***/ }),
-/* 1220 */
+/* 1221 */
 /***/ (function(module, exports) {
 
 /**
@@ -108614,7 +108734,7 @@ Demo.Segments = BI.inherit(BI.Widget, {
 BI.shortcut("demo.segments", Demo.Segments);
 
 /***/ }),
-/* 1221 */
+/* 1222 */
 /***/ (function(module, exports) {
 
 /**
@@ -108765,7 +108885,7 @@ Demo.Tips = BI.inherit(BI.Widget, {
 BI.shortcut("demo.tips", Demo.Tips);
 
 /***/ }),
-/* 1222 */
+/* 1223 */
 /***/ (function(module, exports) {
 
 Demo.DatePane = BI.inherit(BI.Widget, {
@@ -108851,7 +108971,7 @@ Demo.DatePane = BI.inherit(BI.Widget, {
 BI.shortcut("demo.date_pane", Demo.DatePane);
 
 /***/ }),
-/* 1223 */
+/* 1224 */
 /***/ (function(module, exports) {
 
 /**
@@ -108961,7 +109081,7 @@ Demo.Date = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multidate_combo", Demo.Date);
 
 /***/ }),
-/* 1224 */
+/* 1225 */
 /***/ (function(module, exports) {
 
 /**
@@ -109007,7 +109127,7 @@ Demo.CustomDateTime = BI.inherit(BI.Widget, {
 BI.shortcut("demo.date_time", Demo.CustomDateTime);
 
 /***/ }),
-/* 1225 */
+/* 1226 */
 /***/ (function(module, exports) {
 
 Demo.Downlist = BI.inherit(BI.Widget, {
@@ -109205,7 +109325,7 @@ Demo.Downlist = BI.inherit(BI.Widget, {
 BI.shortcut("demo.down_list", Demo.Downlist);
 
 /***/ }),
-/* 1226 */
+/* 1227 */
 /***/ (function(module, exports) {
 
 /**
@@ -109239,7 +109359,7 @@ Demo.SearchEditor = BI.inherit(BI.Widget, {
 BI.shortcut("demo.search_editor", Demo.SearchEditor);
 
 /***/ }),
-/* 1227 */
+/* 1228 */
 /***/ (function(module, exports) {
 
 /**
@@ -109272,7 +109392,7 @@ Demo.TextEditor = BI.inherit(BI.Widget, {
 BI.shortcut("demo.text_editor", Demo.TextEditor);
 
 /***/ }),
-/* 1228 */
+/* 1229 */
 /***/ (function(module, exports) {
 
 /**
@@ -109365,7 +109485,7 @@ Demo.MultiSelectCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multi_select_combo", Demo.MultiSelectCombo);
 
 /***/ }),
-/* 1229 */
+/* 1230 */
 /***/ (function(module, exports) {
 
 /**
@@ -109465,7 +109585,7 @@ Demo.MultiSelectList = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multi_select_list", Demo.MultiSelectList);
 
 /***/ }),
-/* 1230 */
+/* 1231 */
 /***/ (function(module, exports) {
 
 /**
@@ -109525,7 +109645,7 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multi_tree_combo", Demo.MultiTreeCombo);
 
 /***/ }),
-/* 1231 */
+/* 1232 */
 /***/ (function(module, exports) {
 
 /**
@@ -109599,7 +109719,7 @@ Demo.MultiTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multi_select_tree", Demo.MultiTreeCombo);
 
 /***/ }),
-/* 1232 */
+/* 1233 */
 /***/ (function(module, exports) {
 
 /* 文件管理导航
@@ -109640,7 +109760,7 @@ Demo.FileManager = BI.inherit(BI.Widget, {
 BI.shortcut("demo.number_editor", Demo.FileManager);
 
 /***/ }),
-/* 1233 */
+/* 1234 */
 /***/ (function(module, exports) {
 
 /**
@@ -109692,7 +109812,7 @@ Demo.NumericalInterval = BI.inherit(BI.Widget, {
 BI.shortcut("demo.number_interval", Demo.NumericalInterval);
 
 /***/ }),
-/* 1234 */
+/* 1235 */
 /***/ (function(module, exports) {
 
 /**
@@ -109740,7 +109860,7 @@ Demo.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multilayer_select_tree_combo", Demo.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 1235 */
+/* 1236 */
 /***/ (function(module, exports) {
 
 /**
@@ -109788,7 +109908,7 @@ Demo.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.select_tree_combo", Demo.SelectTreeCombo);
 
 /***/ }),
-/* 1236 */
+/* 1237 */
 /***/ (function(module, exports) {
 
 /**
@@ -109892,7 +110012,7 @@ Demo.SingleSelectCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.single_select_combo", Demo.SingleSelectCombo);
 
 /***/ }),
-/* 1237 */
+/* 1238 */
 /***/ (function(module, exports) {
 
 /**
@@ -109939,7 +110059,7 @@ Demo.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multilayer_single_tree_combo", Demo.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 1238 */
+/* 1239 */
 /***/ (function(module, exports) {
 
 /**
@@ -109987,7 +110107,7 @@ Demo.SingleTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.single_tree_combo", Demo.SingleTreeCombo);
 
 /***/ }),
-/* 1239 */
+/* 1240 */
 /***/ (function(module, exports) {
 
 /**
@@ -110121,7 +110241,7 @@ Demo.Slider = BI.inherit(BI.Widget, {
 BI.shortcut("demo.slider", Demo.Slider);
 
 /***/ }),
-/* 1240 */
+/* 1241 */
 /***/ (function(module, exports) {
 
 /**
@@ -110174,7 +110294,7 @@ Demo.TimeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.time_combo", Demo.TimeCombo);
 
 /***/ }),
-/* 1241 */
+/* 1242 */
 /***/ (function(module, exports) {
 
 /**
@@ -110284,7 +110404,7 @@ Demo.TimeInterval = BI.inherit(BI.Widget, {
 BI.shortcut("demo.time_interval", Demo.TimeInterval);
 
 /***/ }),
-/* 1242 */
+/* 1243 */
 /***/ (function(module, exports) {
 
 /**
@@ -110336,7 +110456,7 @@ Demo.MultiLayerSelectLevelTree = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multilayer_select_level_tree", Demo.MultiLayerSelectLevelTree);
 
 /***/ }),
-/* 1243 */
+/* 1244 */
 /***/ (function(module, exports) {
 
 /**
@@ -110413,7 +110533,7 @@ Demo.MultiLayerSingleLevelTree = BI.inherit(BI.Widget, {
 BI.shortcut("demo.multilayer_single_level_tree", Demo.MultiLayerSingleLevelTree);
 
 /***/ }),
-/* 1244 */
+/* 1245 */
 /***/ (function(module, exports) {
 
 /**
@@ -110465,7 +110585,7 @@ Demo.SelectLevelTree = BI.inherit(BI.Widget, {
 BI.shortcut("demo.select_level_tree", Demo.SelectLevelTree);
 
 /***/ }),
-/* 1245 */
+/* 1246 */
 /***/ (function(module, exports) {
 
 /**
@@ -110517,7 +110637,7 @@ Demo.SingleLevelTree = BI.inherit(BI.Widget, {
 BI.shortcut("demo.single_level_tree", Demo.SingleLevelTree);
 
 /***/ }),
-/* 1246 */
+/* 1247 */
 /***/ (function(module, exports) {
 
 /**
@@ -110567,7 +110687,7 @@ Demo.Year = BI.inherit(BI.Widget, {
 BI.shortcut("demo.year", Demo.Year);
 
 /***/ }),
-/* 1247 */
+/* 1248 */
 /***/ (function(module, exports) {
 
 /**
@@ -110621,7 +110741,7 @@ Demo.YearMonthCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.year_month_combo", Demo.YearMonthCombo);
 
 /***/ }),
-/* 1248 */
+/* 1249 */
 /***/ (function(module, exports) {
 
 Demo.YearMonthInterval = BI.inherit(BI.Widget, {
@@ -110671,7 +110791,7 @@ Demo.YearMonthInterval = BI.inherit(BI.Widget, {
 BI.shortcut("demo.year_month_interval", Demo.YearMonthInterval);
 
 /***/ }),
-/* 1249 */
+/* 1250 */
 /***/ (function(module, exports) {
 
 /**
@@ -110726,7 +110846,7 @@ Demo.YearQuarterCombo = BI.inherit(BI.Widget, {
 BI.shortcut("demo.year_quarter_combo", Demo.YearQuarterCombo);
 
 /***/ }),
-/* 1250 */
+/* 1251 */
 /***/ (function(module, exports) {
 
 Demo.CONFIG = Demo.CORE_CONFIG.concat(Demo.BASE_CONFIG).concat(Demo.CASE_CONFIG).concat(Demo.WIDGET_CONFIG).concat(Demo.COMPONENT_CONFIG).concat(Demo.FIX_CONFIG);
