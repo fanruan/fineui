@@ -1,4 +1,4 @@
-/*! time: 2020-10-12 20:20:22 */
+/*! time: 2020-10-13 11:40:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1705,6 +1705,7 @@ if (!_global.BI) {
 
                     case "%M":
                         min = parseInt(a[i], 10);
+                        break;
                     case "%S":
                         sec = parseInt(a[i], 10);
                         break;
@@ -1763,6 +1764,9 @@ if (!_global.BI) {
             }
             if (y == 0) {
                 y = today.getFullYear();
+            }
+            if (m === -1) {
+                m = today.getMonth();
             }
             if (m != -1 && d != 0) {
                 return BI.getDate(y, m, d, hr, min, sec);
