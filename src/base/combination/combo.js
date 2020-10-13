@@ -81,7 +81,7 @@
                 element: this
             }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
                 items: [
-                    {el: this.combo}
+                    { el: this.combo }
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
@@ -117,7 +117,7 @@
 
             var enterPopup = false;
 
-            function hide (e) {
+            function hide(e) {
                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                     self._hideView(e);
                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
@@ -223,13 +223,17 @@
                         var debounce = BI.debounce(function (e) {
                             if (self.combo.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                    // if (!o.toggle && self.isViewVisible()) {
-                                    //     return;
-                                    // }
                                     o.toggle ? self._toggle(e) : self._popupView(e);
                                     if (self.isViewVisible()) {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                        self.popupView.element.off("mouseenter." + self.getName()).on("mouseenter." + self.getName(), function (e) {
+                                            enterPopup = true;
+                                            self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                                enterPopup = false;
+                                                self.popupView.element.off("mouseleave." + self.getName());
+                                            });
+                                        });
                                     } else {
                                         self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
                                         self.fireEvent(BI.Combo.EVENT_COLLAPSE);
@@ -243,15 +247,30 @@
                         self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
                             debounce(e);
                             try {
-                                self.element[0].focus();
+                                self.element.focus();
                             } catch (e) {
 
                             }
                             st(e);
                         });
+
+                        var enterCombo = false;
+                        self.combo.element.off("mouseenter." + self.getName()).on("mouseenter." + self.getName(), function (e) {
+                            enterCombo = true;
+                            self.combo.element.on("mouseleave." + self.getName(), function (e) {
+                                enterCombo = false;
+                                self.combo.element.off("mouseleave." + self.getName());
+                            });
+                        });
+
+
                         self.element.off("blur." + self.getName()).on("blur." + self.getName(), function (e) {
                             if (self.isViewVisible()) {
-                                self._hideView(e);
+                                if (!enterCombo && !enterPopup) {
+                                    self._hideView(e);
+                                    self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
+                                    self.fireEvent(BI.Combo.EVENT_COLLAPSE);
+                                }
                             }
                             st(e);
                         });
@@ -295,7 +314,7 @@
                     scrolly: false,
                     element: this.options.container || this,
                     items: [
-                        {el: this.popupView}
+                        { el: this.popupView }
                     ]
                 });
                 this._rendered = true;
