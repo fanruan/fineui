@@ -432,4 +432,12 @@ describe("baseFunctionTest", function () {
         expect(BI.deepRemove(obj, { d: 3, e: { f: 4 } })).to.eql(true);
         expect(BI.deepWithout(obj, { d: 3, e: { f: 4 } })).to.eql({ a: 1, b: 2 });
     });
+
+    /**
+     * test_author_teller
+     * 只传一个时分秒format的时间进去后,在某些情况下,返回的是当前时间,然而想要的是返回正确的时分秒
+    */
+    it("parseDateTime", function () {
+        expect(BI.parseDateTime("14:13:16", "%H:%M:%S").getTime()).to.eql(1602655996000);
+    });
 });
