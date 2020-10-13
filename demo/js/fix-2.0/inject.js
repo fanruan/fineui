@@ -2,33 +2,41 @@
     var ParentStore = BI.inherit(Fix.Model, {
         state: function () {
             return {
-                context: "默认context"
+                context: {
+                    one: {
+                        key: "one.key"
+                    }
+                }
             };
         },
         childContext: ["context"]
     });
 
-    BI.model("demo.model.context.parent_store",ParentStore)
+    BI.model("demo.model.inject.parent_store", ParentStore);
 
     var ChildStore = BI.inherit(Fix.Model, {
-        context: ["context"],
+        inject: ["context"],
         computed: {
             currContext: function () {
-                return this.model.context;
+                return this.model.context.one.key;
             }
         },
         actions: {
             changeContext: function () {
-                this.model.context = "改变后的context";
+                this.model.context = {
+                    two: {
+                        key: "two.key"
+                    }
+                };
             }
         }
     });
 
-    BI.model("demo.model.context.child_store",ChildStore)
+    BI.model("demo.model.inject.child_store", ChildStore);
 
     var Child = BI.inherit(BI.Widget, {
         _store: function () {
-            return BI.Models.getModel("demo.model.context.child_store");
+            return BI.Models.getModel("demo.model.inject.child_store");
         },
         watch: {
             currContext: function (val) {
@@ -42,7 +50,7 @@
                 ref: function () {
                     self.button = this;
                 },
-                text: this.model.context,
+                text: this.model.currContext,
                 handler: function () {
                     self.store.changeContext();
                 }
@@ -53,11 +61,11 @@
         }
     });
 
-    BI.shortcut("demo.fix_context_child", Child);
+    BI.shortcut("demo.fix_inject_child", Child);
 
     var Parent = BI.inherit(BI.Widget, {
         _store: function () {
-            return BI.Models.getModel("demo.model.context.parent_store");
+            return BI.Models.getModel("demo.model.inject.parent_store");
         },
         render: function () {
             var self = this;
@@ -65,7 +73,7 @@
                 type: "bi.absolute",
                 items: [{
                     el: {
-                        type: "demo.fix_context_child"
+                        type: "demo.fix_inject_child"
                     }
                 }]
             };
@@ -75,5 +83,5 @@
         }
     });
 
-    BI.shortcut("demo.fix_context", Parent);
+    BI.shortcut("demo.fix_inject", Parent);
 }());
