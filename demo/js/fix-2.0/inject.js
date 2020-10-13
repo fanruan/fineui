@@ -9,7 +9,17 @@
                 }
             };
         },
-        childContext: ["context"]
+        childContext: ["context"],
+
+        actions: {
+            changeContext: function () {
+                this.model.context = {
+                    two: {
+                        key: "two.key"
+                    }
+                };
+            }
+        }
     });
 
     BI.model("demo.model.inject.parent_store", ParentStore);
@@ -24,8 +34,8 @@
         actions: {
             changeContext: function () {
                 this.model.context = {
-                    two: {
-                        key: "two.key"
+                    one: {
+                        key: "one.changed_key"
                     }
                 };
             }
@@ -56,9 +66,6 @@
                 }
             };
         },
-        mounted: function () {
-
-        }
     });
 
     BI.shortcut("demo.fix_inject_child", Child);
@@ -70,10 +77,18 @@
         render: function () {
             var self = this;
             return {
-                type: "bi.absolute",
+                type: "bi.vertical",
                 items: [{
                     el: {
                         type: "demo.fix_inject_child"
+                    }
+                }, {
+                    el: {
+                        type: "bi.button",
+                        text: "点击修改parent state",
+                        handler: function () {
+                            self.store.changeContext();
+                        }
                     }
                 }]
             };
