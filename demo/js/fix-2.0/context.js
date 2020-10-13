@@ -8,6 +8,8 @@
         childContext: ["context"]
     });
 
+    BI.model("demo.model.context.parent_store",ParentStore)
+
     var ChildStore = BI.inherit(Fix.Model, {
         context: ["context"],
         computed: {
@@ -22,9 +24,11 @@
         }
     });
 
+    BI.model("demo.model.context.child_store",ChildStore)
+
     var Child = BI.inherit(BI.Widget, {
         _store: function () {
-            return new ChildStore();
+            return BI.Models.getModel("demo.model.context.child_store");
         },
         watch: {
             currContext: function (val) {
@@ -53,7 +57,7 @@
 
     var Parent = BI.inherit(BI.Widget, {
         _store: function () {
-            return new ParentStore();
+            return BI.Models.getModel("demo.model.context.parent_store");
         },
         render: function () {
             var self = this;
