@@ -58,6 +58,8 @@ module.exports = function (config) {
             "src/case/**/*.js",
             "src/widget/**/*.js",
             "src/component/**/*.js",
+            "dist/fix/fix.js",
+            "dist/fix/fix.compact.js",
             "src/**/*.test.js",
             "test/**/*.js"
         ],
