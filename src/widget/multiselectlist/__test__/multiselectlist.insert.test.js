@@ -144,6 +144,13 @@ describe("multi_list_insert_pane", function () {
             type: "bi.multi_select_insert_list",
             width: 220,
             itemsCreator: function (op, callback) {
+                if (op.keywords) {
+                    callback({
+                        items: [],
+                        hasNext: false
+                    })
+                    return;
+                }
                 callback({
                     items: items,
                     hasNext: false
