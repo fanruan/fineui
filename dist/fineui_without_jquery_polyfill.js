@@ -1,4 +1,4 @@
-/*! time: 2020-10-13 11:40:24 */
+/*! time: 2020-10-19 14:10:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1253);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1254);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -50679,7 +50679,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        this.storeValue = o.value || {};
+        this.storeValue = this._assertValue(o.value || {});
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
@@ -50877,6 +50877,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         val || (val = {});
         val.type || (val.type = BI.Selection.Multi);
         val.value || (val.value = []);
+        return val;
     },
 
     _makeMap: function (values) {
@@ -68893,7 +68894,8 @@ exports.Model = Model;
 /* 1250 */,
 /* 1251 */,
 /* 1252 */,
-/* 1253 */
+/* 1253 */,
+/* 1254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);

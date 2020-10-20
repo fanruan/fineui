@@ -19,11 +19,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            "src/css/core/**/*.css",
-            "src/css/theme/**/*.css",
-            "src/css/base/**/*.css",
-            "src/css/widget/**/*.css",
-            "public/css/app.css",
+            "dist/fineui.min.css",
             "src/core/foundation.js",
             "src/core/lodash.js",
             "src/core/base.js",
@@ -58,6 +54,8 @@ module.exports = function (config) {
             "src/case/**/*.js",
             "src/widget/**/*.js",
             "src/component/**/*.js",
+            "dist/fix/fix.js",
+            "dist/fix/fix.compact.js",
             "src/**/*.test.js",
             "test/**/*.js"
         ],

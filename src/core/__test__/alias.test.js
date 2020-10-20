@@ -18,7 +18,7 @@ describe("aliasFunctionTest", function () {
 
         var targetString = "<a>1 2&</a>";
         var encodeString = BI.htmlEncode(targetString);
-        expect(encodeString).to.equal("&lt;a&gt;1 2&amp;&lt;/a&gt;");
+        expect(encodeString).to.equal("&lt;a&gt;1&nbsp;2&amp;&lt;/a&gt;");
         expect(BI.htmlDecode(encodeString)).to.equal(targetString);
     });
 
