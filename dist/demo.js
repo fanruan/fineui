@@ -1,4 +1,4 @@
-/*! time: 2020-10-19 14:10:27 */
+/*! time: 2020-10-20 16:20:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -43107,7 +43107,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                         item.el.childValues.push(child.value);
                     });
                 } else {
-                    item.type = "bi.down_list_item";
+                    item.type = item.type || "bi.down_list_item";
                     item.title = item.title || item.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;

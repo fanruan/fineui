@@ -133,7 +133,7 @@ BI.DownListPopup = BI.inherit(BI.Pane, {
                         item.el.childValues.push(child.value);
                     });
                 } else {
-                    item.type = "bi.down_list_item";
+                    item.type = item.type || "bi.down_list_item";
                     item.title = item.title || item.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
