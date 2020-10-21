@@ -28,6 +28,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             py: o.py,
+            keyword: o.keyword,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
