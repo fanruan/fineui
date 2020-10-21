@@ -1,4 +1,4 @@
-/*! time: 2020-10-20 16:20:29 */
+/*! time: 2020-10-21 16:00:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -32644,7 +32644,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
 
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -32678,7 +32679,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    
+
     setText: function (text) {
         BI.ArrowNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);
@@ -32691,6 +32692,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
+
 
 /***/ }),
 /* 446 */
@@ -32835,7 +32837,8 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -32884,6 +32887,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
+
 
 /***/ }),
 /* 448 */
@@ -33094,7 +33098,8 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.setSelected(self.isSelected());
@@ -33666,6 +33671,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             py: o.py,
+            keyword: o.keyword,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
@@ -33771,7 +33777,8 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             rgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         BI.createWidget({
             type: "bi.htape",
@@ -33808,6 +33815,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
 });
 
 BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
+
 
 /***/ }),
 /* 459 */
