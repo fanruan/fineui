@@ -1,5 +1,12 @@
 # 更新日志
+2.0(2020-10)
+- 支持Composition API
+- pane和loadingPane支持加载时自定义提示文本
+
 2.0(2020-09)
+- combo增加click-blur(点击显示,blur消失)作为触发条件功能
+- allCountPager支持是否显示总行数
+- 修复区间滑块setEnable(false)滑块不灰化的问题
 - 修复同步复选下拉框系列setValue所有值后触发器不显示全选的问题
 - BI.Tree.traversal方法迭代函数增加父节点参数
 

@@ -20,7 +20,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options, items = o.items;
         var list = [], width = 100 / items.length;
         BI.each(items, function (i) {
-            var widget = BI.createWidget({
+            var widget = BI._lazyCreateWidget({
                 type: "bi.default"
             });
             widget.element.addClass("center-element " + (i === 0 ? "first-element " : "") + (i === items.length - 1 ? "last-element" : "")).css({
@@ -33,7 +33,7 @@ BI.FloatCenterLayout = BI.inherit(BI.Layout, {
         });
         BI.each(items, function (i, item) {
             if (item) {
-                var w = BI.createWidget(item);
+                var w = BI._lazyCreateWidget(item);
                 w.element.css({
                     position: "absolute",
                     left: o.hgap + o.lgap,

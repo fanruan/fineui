@@ -46,7 +46,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
     },
 
     getAllValue: function() {
-        return this.buildCompleteTree(this.combo.getValue());
+        return this.buildCompleteTree(this.pane.getValue());
     },
 
     populate: function (items) {

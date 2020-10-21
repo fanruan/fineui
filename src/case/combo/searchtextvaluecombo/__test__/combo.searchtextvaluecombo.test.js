@@ -6,12 +6,15 @@
 
 describe("search_text_value_combo", function () {
 
-    var items = BI.map(BI.makeArray(100, null), function(idx, v) {
-        return {
-            text: idx,
-            value: idx,
-            title: idx
-        };
+    var items;
+    before(function () {
+         items = BI.map(BI.makeArray(100, null), function(idx, v) {
+            return {
+                text: idx,
+                value: idx,
+                title: idx
+            };
+        });
     });
 
     /**
@@ -77,7 +80,7 @@ describe("search_text_value_combo", function () {
             BI.nextTick(function () {
                 BI.Test.triggerKeyDown(widget.element.find(".bi-search-text-value-trigger .bi-input"), "2", 50, function () {
                     BI.nextTick(function () {
-                        widget.element.find(".bi-search-text-value-popup .bi-single-select-item").click();
+                        widget.element.find(".bi-search-text-value-popup .bi-single-select-item")[0].click();
                         expect(widget.getValue()[0]).to.deep.equal(2);
                         widget.destroy();
                         done();

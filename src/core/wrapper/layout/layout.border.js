@@ -36,7 +36,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "north")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "north", w);
                     }
                     this.getWidgetByName(this.getName() + "north").element.height(item.height)
@@ -56,7 +56,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "south")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "south", w);
                     }
                     this.getWidgetByName(this.getName() + "south").element.height(item.height)
@@ -76,7 +76,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "west")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "west", w);
                     }
                     this.getWidgetByName(this.getName() + "west").element.width(item.width)
@@ -96,7 +96,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             if (item != null) {
                 if (item.el) {
                     if (!this.hasWidget(this.getName() + "east")) {
-                        var w = BI.createWidget(item);
+                        var w = BI._lazyCreateWidget(item);
                         this.addWidget(this.getName() + "east", w);
                     }
                     this.getWidgetByName(this.getName() + "east").element.width(item.width)
@@ -115,7 +115,7 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["center"];
             if (item != null) {
                 if (!this.hasWidget(this.getName() + "center")) {
-                    var w = BI.createWidget(item);
+                    var w = BI._lazyCreateWidget(item);
                     this.addWidget(this.getName() + "center", w);
                 }
                 this.getWidgetByName(this.getName() + "center").element

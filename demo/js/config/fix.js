@@ -46,4 +46,9 @@ Demo.FIX_CONFIG = [{
     pId: 7,
     text: "场景",
     value: "demo.fix_scene"
+}, {
+    id: 80,
+    pId: 7,
+    text: "inject",
+    value: "demo.fix_inject"
 }];

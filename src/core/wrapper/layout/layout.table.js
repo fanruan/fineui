@@ -110,7 +110,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 right: right <= 1 ? right * 100 + "%" : right
             }, arr[i]));
         }
-        var w = BI.createWidget({
+        var w = BI._lazyCreateWidget({
             type: "bi.absolute",
             height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
             items: abs

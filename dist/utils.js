@@ -1,4 +1,4 @@
-/*! time: 2020-9-16 15:00:22 */
+/*! time: 2020-10-21 16:00:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1081);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1080);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1301,6 +1301,7 @@ if (!_global.BI) {
 
                     case "%M":
                         min = parseInt(a[i], 10);
+                        break;
                     case "%S":
                         sec = parseInt(a[i], 10);
                         break;
@@ -1359,6 +1360,9 @@ if (!_global.BI) {
             }
             if (y == 0) {
                 y = today.getFullYear();
+            }
+            if (m === -1) {
+                m = today.getMonth();
             }
             if (m != -1 && d != 0) {
                 return BI.getDate(y, m, d, hr, min, sec);
@@ -1688,7 +1692,7 @@ if (!_global.BI) {
 /***/ (function(module, exports) {
 
 !(function () {
-    function extend() {
+    function extend () {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
             // Only deal with non-null/undefined values
@@ -4236,7 +4240,7 @@ if (!_global.BI) {
 
 /***/ }),
 
-/***/ 1081:
+/***/ 1080:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);
@@ -4266,8 +4270,8 @@ __webpack_require__(118);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
-__webpack_require__(746);
-__webpack_require__(1082);
+__webpack_require__(745);
+__webpack_require__(1081);
 __webpack_require__(131);
 __webpack_require__(132);
 module.exports = __webpack_require__(133);
@@ -4275,7 +4279,7 @@ module.exports = __webpack_require__(133);
 
 /***/ }),
 
-/***/ 1082:
+/***/ 1081:
 /***/ (function(module, exports) {
 
 /**
@@ -7041,10 +7045,11 @@ BI.Region.prototype = {
         "&": "&amp;",
         "\"": "&quot;",
         "<": "&lt;",
-        ">": "&gt;"
+        ">": "&gt;",
+        " ": "&nbsp;"
     };
     BI.htmlEncode = function (text) {
-        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>", function (v) {
+        return BI.isNull(text) ? "" : BI.replaceAll(text + "", "&|\"|<|>|\\s", function (v) {
             return SPECIAL_TAGS[v] ? SPECIAL_TAGS[v] : "&nbsp;";
         });
     };
@@ -9167,7 +9172,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 746:
+/***/ 745:
 /***/ (function(module, exports) {
 
 BI.i18n = {

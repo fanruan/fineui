@@ -28,6 +28,15 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+            // do nothing
+        },
+
+        _lazyConstructor: function () {
+            if (!this._constructed) {
+                this._constructed = true;
+                this._init();
+                this._initRef();
+            }
         },
 
         beforeInit: null,
@@ -54,7 +63,6 @@
 
         _init: function () {
             BI.Widget.superclass._init.apply(this, arguments);
-            this._initRoot();
             this._initElementWidth();
             this._initElementHeight();
             this._initVisual();
@@ -90,14 +98,15 @@
             var o = this.options;
             this.widgetName = o.widgetName || BI.uniqueId("widget");
             this._isRoot = o.root;
+            this._children = {};
             if (BI.isWidget(o.element)) {
+                this.element = this.options.element.element;
                 if (o.element instanceof BI.Widget) {
                     this._parent = o.element;
                     this._parent.addWidget(this.widgetName, this);
                 } else {
                     this._isRoot = true;
                 }
-                this.element = this.options.element.element;
             } else if (o.element) {
                 // if (o.root !== true) {
                 //     throw new Error("root is a required property");
@@ -120,7 +129,6 @@
             if (o.css) {
                 this.element.css(o.css);
             }
-            this._children = {};
         },
 
         _initElementWidth: function () {
@@ -164,12 +172,17 @@
         _initElement: function () {
             var self = this;
             var els = this.render && this.render();
+            if (!els) {
+                pushTarget(this);
+                els = this.setup && this.setup();
+                popTarget();
+            }
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI.createWidget(el, {
+                    BI._lazyCreateWidget(el, {
                         element: self
                     });
                 });
@@ -486,11 +499,54 @@
         destroy: function () {
             this.__d();
             this.element.destroy();
+            this.fireEvent(BI.Events.UNMOUNT);
             this.fireEvent(BI.Events.DESTROY);
             this._purgeRef();
             this.purgeListeners();
         }
     });
+    var context = null, current = null;
+    var contextStack = [], currentStack = [];
+
+    BI.Widget.pushContext = function (_context) {
+        if (context) contextStack.push(context);
+        BI.Widget.context = context = _context;
+    };
+
+    BI.Widget.popContext = function () {
+        BI.Widget.context = context = contextStack.pop();
+    };
+
+    function pushTarget (_current) {
+        if (current) currentStack.push(current);
+        BI.Widget.current = current = _current;
+    }
+
+    function popTarget () {
+        BI.Widget.current = current = currentStack.pop();
+    }
+
+    BI.onBeforeMount = function (beforeMount) {
+        if (current) {
+            current.beforeMount = beforeMount;
+        }
+    };
+    BI.onMounted = function (mounted) {
+        if (current) {
+            current.mounted = mounted;
+        }
+    };
+    BI.onBeforeUnmount = function (beforeDestroy) {
+        if (current) {
+            current.beforeDestroy = beforeDestroy;
+        }
+    };
+    BI.onUnmounted = function (destroyed) {
+        if (current) {
+            current.destroyed = destroyed;
+        }
+    };
+
     BI.Widget.registerRenderEngine = function (engine) {
         BI.Widget._renderEngine = engine;
     };

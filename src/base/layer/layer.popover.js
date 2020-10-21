@@ -10,6 +10,9 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big",
         },
+        MAX_HEIGHT: 600,
+        BODY_TGAP: 10,
+        BODY_HGAP: 20,
     },
 
     props: {
@@ -17,7 +20,6 @@ BI.Popover = BI.inherit(BI.Widget, {
         size: "normal", // small, normal, big
         logic: {
             dynamic: false,
-            maxHeight: 500,
         },
         header: null,
         headerHeight: 40,
@@ -29,6 +31,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this; var o = this.options;
+        var c = this._constant;
         this.startX = 0;
         this.startY = 0;
         var size = this._calculateSize();
@@ -87,28 +90,32 @@ BI.Popover = BI.inherit(BI.Widget, {
                 height: o.headerHeight,
             },
             height: o.headerHeight,
-        }, {
-            el: o.logic.dynamic ? {
+        }, o.logic.dynamic ? {
+            el: {
                 type: "bi.vertical",
-                scrolly: false,
+                scrolly: true,
                 cls: "popover-body",
                 ref: function () {
                     self.body = this;
                 },
-                hgap: 20,
-                tgap: 10,
+                css: {
+                    "max-height": c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP,
+                    "min-height": size.height,
+                },
                 items: [{
-                    el: BI.extend({}, o.body, {
-                        extraCls: "dynamic-height-limit-layout-" + size.type,
-                    }),
+                    el: o.body,
                 }],
-            } : {
+            },
+            hgap: c.BODY_HGAP,
+            tgap: c.BODY_TGAP,
+        } : {
+            el: {
                 type: "bi.absolute",
                 items: [{
                     el: o.body,
-                    left: 20,
-                    top: 10,
-                    right: 20,
+                    left: c.BODY_HGAP,
+                    top: c.BODY_TGAP,
+                    right: c.BODY_HGAP,
                     bottom: 0,
                 }],
             },
