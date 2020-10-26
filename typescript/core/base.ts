@@ -263,7 +263,7 @@ export interface _base {
 
     isDeepMatch: (object: any, attrs: any) => boolean;
 
-    contains: (obj: any[], target: any, fromIndex?: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => boolean;
 
     deepContains: (obj: any[], copy: any) => number;
 
