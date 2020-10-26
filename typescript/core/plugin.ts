@@ -1,6 +1,6 @@
 import { _Widget } from "./widget";
 
-type configWidgetFn = (type: string, options: object) => object
+type configWidgetFn = (type: string, options: Obj) => void
 type configObjectFn = (type: string, widget: _Widget) => void
 
 export type _config = (widgetFunction: configWidgetFn | configWidgetFn[], objectFunction: configObjectFn | configObjectFn[]) => void
