@@ -20,7 +20,6 @@ export interface _Input extends _Single {
     getLastValidValue(): string;
 
     getLastChangedValue(): string;
-
 }
 
 export interface _InputStatic {
