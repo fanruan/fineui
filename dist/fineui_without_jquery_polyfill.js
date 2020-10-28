@@ -1,4 +1,4 @@
-/*! time: 2020-10-20 16:20:29 */
+/*! time: 2020-10-26 17:50:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -28676,7 +28676,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
 
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -28710,7 +28711,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    
+
     setText: function (text) {
         BI.ArrowNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);
@@ -28723,6 +28724,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
+
 
 /***/ }),
 /* 446 */
@@ -28867,7 +28869,8 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
             if (type === BI.Events.CLICK) {
@@ -28916,6 +28919,7 @@ BI.IconArrowNode = BI.inherit(BI.NodeButton, {
 });
 
 BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
+
 
 /***/ }),
 /* 448 */
@@ -29126,7 +29130,8 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.setSelected(self.isSelected());
@@ -29698,6 +29703,7 @@ BI.MultiLayerIconTreeLeafItem = BI.inherit(BI.BasicButton, {
             text: o.text,
             value: o.value,
             py: o.py,
+            keyword: o.keyword,
             iconWidth: o.iconWidth,
             iconHeight: o.iconHeight
         });
@@ -29803,7 +29809,8 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
             rgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         BI.createWidget({
             type: "bi.htape",
@@ -29840,6 +29847,7 @@ BI.TreeTextLeafItem = BI.inherit(BI.BasicButton, {
 });
 
 BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
+
 
 /***/ }),
 /* 459 */
@@ -64908,19 +64916,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     parentCheckState.half = find.halfCheck;
                 }
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
-
-                var isParent = node.getChildrenLength() > 0;
                 result.push({
                     id: node.id,
                     pId: node.pId,
                     value: node.value,
                     text: node.text,
                     times: 1,
-                    isParent: isParent,
-                    // 同步树的情况下，父亲节点的状态由子控制，不再设置checked和halfCheck属性
-                    // 叶子节点本身不存在halfCheck属性且checked属性由计算得到
-                    checked: isParent ? undefined : state[0],
-                    // halfCheck: state[1],
+                    isParent: node.getChildrenLength() > 0,
+                    checked: state[0],
+                    halfCheck: state[1],
                     open: self.options.open
                 });
             });
