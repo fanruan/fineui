@@ -1,4 +1,4 @@
-/*! time: 2020-10-26 17:50:30 */
+/*! time: 2020-10-28 14:50:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -32248,13 +32248,14 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button overflow-hidden",
             extraCls: "pull-down-font"
         });
     }
 });
 BI.TriggerIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
+
 
 /***/ }),
 /* 439 */
