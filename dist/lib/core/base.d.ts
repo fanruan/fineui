@@ -135,7 +135,7 @@ export interface _base {
     isNotEmptyObject: (obj: any) => obj is object;
     isWindow: (obj: any) => obj is Window;
     isDeepMatch: (object: any, attrs: any) => boolean;
-    contains: (obj: any[], target: any, fromIndex?: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => boolean;
     deepContains: (obj: any[], copy: any) => number;
     deepIndexOf: (obj: any[], target: any) => number;
     deepRemove: (obj: any[], target: any) => boolean;
