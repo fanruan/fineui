@@ -10,6 +10,7 @@ import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listite
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
+import { _Input } from "./base/single/input/input";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
 import { _Single } from "./base/single/single";
@@ -95,6 +96,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     Iframe: ClassConstructor<_Iframe>;
     AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
     VerticalLayout: ClassConstructor<_VerticalLayout>;
+    Input: ClassConstructor<_Input>;
 }
 
 export default {
