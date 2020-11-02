@@ -1,4 +1,4 @@
-/*! time: 2020-10-22 11:20:30 */
+/*! time: 2020-11-2 10:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27777,7 +27777,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             items: BI.createItems(view, {
                 cls: "bi-list-item-select bi-border-radius",
                 height: 23,
-                hgap: 10
+                hgap: 10,
+                stopPropagation: true
             }),
             behaviors: o.behaviors,
             layouts: o.layouts
@@ -32248,13 +32249,14 @@ BI.TriggerIconButton = BI.inherit(BI.IconButton, {
     _defaultConfig: function () {
         var conf = BI.TriggerIconButton.superclass._defaultConfig.apply(this, arguments);
         return BI.extend(conf, {
-            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button",
+            baseCls: (conf.baseCls || "") + " bi-trigger-icon-button overflow-hidden",
             extraCls: "pull-down-font"
         });
     }
 });
 BI.TriggerIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
+
 
 /***/ }),
 /* 439 */
@@ -68884,19 +68886,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                     parentCheckState.half = find.halfCheck;
                 }
                 var state = getCheckState(node.value, node.parentValues, valueMap, parentCheckState);
-
-                var isParent = node.getChildrenLength() > 0;
                 result.push({
                     id: node.id,
                     pId: node.pId,
                     value: node.value,
                     text: node.text,
                     times: 1,
-                    isParent: isParent,
-                    // 同步树的情况下，父亲节点的状态由子控制，不再设置checked和halfCheck属性
-                    // 叶子节点本身不存在halfCheck属性且checked属性由计算得到
-                    checked: isParent ? undefined : state[0],
-                    // halfCheck: state[1],
+                    isParent: node.getChildrenLength() > 0,
+                    checked: state[0],
+                    halfCheck: state[1],
                     open: self.options.open
                 });
             });
