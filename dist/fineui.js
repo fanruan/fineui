@@ -1,4 +1,4 @@
-/*! time: 2020-10-29 20:40:26 */
+/*! time: 2020-11-2 10:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27777,7 +27777,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             items: BI.createItems(view, {
                 cls: "bi-list-item-select bi-border-radius",
                 height: 23,
-                hgap: 10
+                hgap: 10,
+                stopPropagation: true
             }),
             behaviors: o.behaviors,
             layouts: o.layouts

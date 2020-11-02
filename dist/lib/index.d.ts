@@ -20,6 +20,7 @@ import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/i
 import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textvalue";
+import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
@@ -94,6 +95,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
     VerticalLayout: ClassConstructor<_VerticalLayout>;
     Input: ClassConstructor<_Input> & _InputStatic;
+    SearchTextValueCombo: ClassConstructor<_SearchTextValueCombo> & _SearchTextValueComboStatic;
 }
 declare const _default: {
     Decorators: typeof decorator;
