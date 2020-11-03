@@ -1,4 +1,4 @@
-/*! time: 2020-11-2 10:40:29 */
+/*! time: 2020-11-3 14:20:49 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66978,7 +66978,7 @@ exports.Model = Model;
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -67469,7 +67469,7 @@ exports.Model = Model;
                 // Deep watchers and watchers on Object/Arrays should fire even
                 // when the value is the same, because the value may
                 // have mutated.
-                options && options.refresh || this.deep) {
+                _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -68082,6 +68082,7 @@ exports.Model = Model;
 
     exports.__esModule = true;
 });
+
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),
