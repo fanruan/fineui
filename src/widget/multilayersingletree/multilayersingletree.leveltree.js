@@ -32,7 +32,10 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
         var self = this, o = this.options;
         var keyword = o.keywordGetter();
         BI.each(nodes, function (i, node) {
-            var extend = {};
+            var extend = {
+                isFirstNode: i === 0,
+                isLastNode: i === nodes.length - 1
+            };
             node.layer = layer;
             if (!BI.isKey(node.id)) {
                 node.id = BI.UUID();
@@ -40,27 +43,49 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             node.keyword = node.keyword || keyword;
             extend.pNode = pNode;
             if (node.isParent === true || node.parent === true || BI.isNotEmptyArray(node.children)) {
-                extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
-                if (i === nodes.length - 1) {
-                    extend.type = "bi.multilayer_single_tree_last_plus_group_node";
-                    extend.isLastNode = true;
-                }
-                if (i === 0 && !pNode) {
-                    extend.type = "bi.multilayer_single_tree_first_plus_group_node";
-                }
-                if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
+                // extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
+                // if (i === nodes.length - 1) {
+                //     extend.type = "bi.multilayer_single_tree_last_plus_group_node";
+                //     extend.isLastNode = true;
+                // }
+                // if (i === 0 && !pNode) {
+                //     extend.type = "bi.multilayer_single_tree_first_plus_group_node";
+                // }
+                // if (i === 0 && i === nodes.length - 1 && !pNode) {  // 根
+                //     extend.type = "bi.multilayer_single_tree_plus_group_node";
+                // }
+
+                if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
                     extend.type = "bi.multilayer_single_tree_plus_group_node";
+                } else if (layer === 0 && extend.isFirstNode) {
+                    extend.type = "bi.multilayer_single_tree_first_plus_group_node";
+                } else if (extend.isLastNode) {
+                    extend.type = "bi.multilayer_single_tree_last_plus_group_node";
+                } else {
+                    extend.type = "bi.multilayer_single_tree_mid_plus_group_node";
                 }
+
                 BI.defaults(node, extend);
                 self._formatItems(node.children, layer + 1, node);
             } else {
-                extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
-                if (i === 0 && !pNode) {
+                // extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
+                // if (i === 0 && !pNode) {
+                //     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
+                // }
+                // if (i === nodes.length - 1) {
+                //     extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
+                // }
+
+                if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
+                    extend.type = ""; // todo 缺一个根节点的item
+                } else if (layer === 0 && extend.isFirstNode) {
                     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
-                }
-                if (i === nodes.length - 1) {
+                } else if (extend.isLastNode) {
                     extend.type = "bi.multilayer_single_tree_last_tree_leaf_item";
+                } else {
+                    extend.type = "bi.multilayer_single_tree_mid_tree_leaf_item";
                 }
+
                 BI.defaults(node, extend);
             }
         });
@@ -83,6 +108,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             type: "bi.custom_tree",
             cls: "tree-view display-table",
             expander: {
+                type: "bi.tree_expander",
                 isDefaultInit: o.isDefaultInit,
                 el: {},
                 popup: {
@@ -150,7 +176,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
 
     setValue: function (v) {
         // getValue依赖于storeValue, 那么不选的时候就不要更新storeValue了
-        if(this.options.chooseType === BI.Selection.None) {
+        if (this.options.chooseType === BI.Selection.None) {
         } else {
             this.storeValue = v;
             this.tree.setValue(v);
@@ -159,8 +185,8 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
 
     getValue: function () {
         return BI.isArray(this.storeValue) ?
-                    this.storeValue : BI.isNull(this.storeValue) ?
-                        [] : [this.storeValue];
+            this.storeValue : BI.isNull(this.storeValue) ?
+                [] : [this.storeValue];
     },
 
     getAllLeaves: function () {
