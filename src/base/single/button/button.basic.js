@@ -298,8 +298,8 @@ BI.BasicButton = BI.inherit(BI.Single, {
                     this.setSelected(!this.isSelected()));
         }
         if (this.isValid()) {
-            o.handler.call(this, this.getValue(), this, e);
             var v = this.getValue();
+            o.handler.call(this, v, this, e);
             this.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.CLICK, v, this, e);
             this.fireEvent(BI.BasicButton.EVENT_CHANGE, v, this);
             if (o.action) {
