@@ -147,11 +147,11 @@ export interface _base {
     chain: (value: any) => any;
     iteratee: (func?: Function, thisArg?: any) => Function;
     unescape: (str?: string) => string;
-    bind: (func: Function, thisArg: any, ...partials: any) => Function;
+    bind: <T extends Function>(func: T, thisArg: any, ...partials: any) => T;
     once: (func: Function) => Function;
     partial: (func: Function, ...partials: any) => Function;
-    debounce: (func: Function, wait?: number, options?: any) => Function;
-    throttle: (func: Function, wait?: number, options?: any) => Function;
+    debounce: <T extends Function>(func: T, wait?: number, options?: any) => T;
+    throttle: <T extends Function>(func: T, wait?: number, options?: any) => T;
     delay: (func: Function, wait: number, ...args: any[]) => number;
     defer: (func: Function, ...args: any[]) => number;
     wrap: (value: any, wrapper: Function) => Function;
