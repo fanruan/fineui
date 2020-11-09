@@ -81,7 +81,7 @@
                 element: this
             }, BI.LogicFactory.createLogic("vertical", BI.extend(o.logic, {
                 items: [
-                    {el: this.combo}
+                    { el: this.combo }
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
@@ -117,7 +117,7 @@
 
             var enterPopup = false;
 
-            function hide (e) {
+            function hide(e) {
                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid() && o.toggle === true) {
                     self._hideView(e);
                     self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.COLLAPSE, "", self.combo);
@@ -181,45 +181,49 @@
                         });
                         break;
                     case "click-hover":
-                        var debounce = BI.debounce(function (e) {
-                            if (self.combo.element.__isMouseInBounds__(e)) {
-                                if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
-                                    // if (self.isViewVisible()) {
-                                    //     return;
-                                    // }
-                                    self._popupView(e);
-                                    if (self.isViewVisible()) {
-                                        self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
-                                        self.fireEvent(BI.Combo.EVENT_EXPAND);
+                    case "click-blur":
+                        // IE走click-hover逻辑
+                        if (BI.isIE() || ev === "click-hover") {
+                            var debounce = BI.debounce(function (e) {
+                                if (self.combo.element.__isMouseInBounds__(e)) {
+                                    if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
+                                        // if (self.isViewVisible()) {
+                                        //     return;
+                                        // }
+                                        self._popupView(e);
+                                        if (self.isViewVisible()) {
+                                            self.fireEvent(BI.Controller.EVENT_CHANGE, BI.Events.EXPAND, "", self.combo);
+                                            self.fireEvent(BI.Combo.EVENT_EXPAND);
+                                        }
                                     }
                                 }
-                            }
-                        }, BI.EVENT_RESPONSE_TIME, {
-                            "leading": true,
-                            "trailing": false
-                        });
-                        self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
-                            debounce(e);
-                            st(e);
-                        });
-                        self.element.on("mouseleave." + self.getName(), function (e) {
-                            if (self.popupView) {
-                                self.popupView.element.on("mouseenter." + self.getName(), function (e) {
-                                    enterPopup = true;
-                                    self.popupView.element.on("mouseleave." + self.getName(), function (e) {
-                                        hide(e);
+                            }, BI.EVENT_RESPONSE_TIME, {
+                                "leading": true,
+                                "trailing": false
+                            });
+                            self.element.off("click." + self.getName()).on("click." + self.getName(), function (e) {
+                                debounce(e);
+                                st(e);
+                            });
+                            self.element.on("mouseleave." + self.getName(), function (e) {
+                                if (self.popupView) {
+                                    self.popupView.element.on("mouseenter." + self.getName(), function (e) {
+                                        enterPopup = true;
+                                        self.popupView.element.on("mouseleave." + self.getName(), function (e) {
+                                            hide(e);
+                                        });
+                                        self.popupView.element.off("mouseenter." + self.getName());
                                     });
-                                    self.popupView.element.off("mouseenter." + self.getName());
-                                });
-                                BI.defer(function () {
-                                    if (!enterPopup) {
-                                        hide(e);
-                                    }
-                                }, 50);
-                            }
-                        });
-                        break;
-                    case "click-blur":
+                                    BI.defer(function () {
+                                        if (!enterPopup) {
+                                            hide(e);
+                                        }
+                                    }, 50);
+                                }
+                            });
+                            break;
+                        }
+
                         var debounce = BI.debounce(function (e) {
                             if (self.combo.element.__isMouseInBounds__(e)) {
                                 if (self.isEnabled() && self.isValid() && self.combo.isEnabled() && self.combo.isValid()) {
@@ -295,7 +299,7 @@
                     scrolly: false,
                     element: this.options.container || this,
                     items: [
-                        {el: this.popupView}
+                        { el: this.popupView }
                     ]
                 });
                 this._rendered = true;
