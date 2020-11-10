@@ -31,29 +31,28 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
         var checker = function (v) {
             return BI.isNumeric(v) && (v | 0) >= 0 && (v | 0) <= 255;
         };
-        var Ws = BI.createWidgets([{}, {}, {}], {
-            type: "bi.small_text_editor",
-            cls: "color-picker-editor-input",
-            validationChecker: checker,
-            errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
-            allowBlank: true,
-            value: 255,
-            width: c.RGB_WIDTH,
-            height: 20,
-            listeners: [{
-                eventName: BI.TextEditor.EVENT_CHANGE,
-                action: function () {
-                    self._checkEditors();
-                    if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
-                        self.colorShow.element.css("background-color", self.getValue());
-                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+        var Ws = BI.map(BI.range(0, 3), function () {
+            return {
+                type: "bi.small_text_editor",
+                cls: "color-picker-editor-input",
+                validationChecker: checker,
+                errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
+                allowBlank: true,
+                value: 255,
+                width: c.RGB_WIDTH,
+                height: 20,
+                listeners: [{
+                    eventName: BI.TextEditor.EVENT_CHANGE,
+                    action: function () {
+                        self._checkEditors();
+                        if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                            self.colorShow.element.css("background-color", self.getValue());
+                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                        }
                     }
-                }
-            }]
+                }]
+            };
         });
-        this.R = Ws[0];
-        this.G = Ws[1];
-        this.B = Ws[2];
 
         return {
             type: "bi.absolute",
@@ -98,13 +97,25 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                                 }
                             }]
                         }, {
-                            el: this.R,
+                            el: BI.extend(Ws[0], {
+                                ref: function (_ref) {
+                                    self.R = _ref
+                                }
+                            }),
                             width: c.RGB_WIDTH
                         }, {
-                            el: this.G,
+                            el: BI.extend(Ws[1], {
+                                ref: function (_ref) {
+                                    self.G = _ref
+                                }
+                            }),
                             width: c.RGB_WIDTH
                         }, {
-                            el: this.B,
+                            el: BI.extend(Ws[2], {
+                                ref: function (_ref) {
+                                    self.B = _ref
+                                }
+                            }),
                             width: c.RGB_WIDTH
                         }, {
                             el: {
