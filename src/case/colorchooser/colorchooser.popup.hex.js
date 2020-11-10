@@ -15,8 +15,6 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
     render: function () {
         var self = this, o = this.options;
 
-        this.customColorChooser = BI.createWidget();
-
         return {
             type: "bi.absolute",
             items: [{
