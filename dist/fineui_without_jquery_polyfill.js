@@ -1,4 +1,4 @@
-/*! time: 2020-11-9 20:40:23 */
+/*! time: 2020-11-10 09:40:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26122,7 +26122,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     _defaultConfig: function () {
         return BI.extend(BI.TextAreaEditor.superclass._defaultConfig.apply(), {
             baseCls: "bi-textarea-editor",
-            value: ""
+            value: "",
+            errorText: "",
+            validationChecker: function () {
+                return true;
+            },
         });
     },
 
@@ -26152,15 +26156,15 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         });
 
         this.content.element.on("input propertychange", function (e) {
+            self._checkError();
             self._checkWaterMark();
             self.fireEvent(BI.TextAreaEditor.EVENT_CHANGE);
         });
 
         this.content.element.focus(function () {
-            if (self.isValid()) {
-                self._focus();
-                self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
-            }
+            self._checkError();
+            self._focus();
+            self.fireEvent(BI.TextAreaEditor.EVENT_FOCUS);
             BI.Widget._renderEngine.createElement(document).bind("mousedown." + self.getName(), function (e) {
                 if (BI.DOM.isExist(self) && !self.element.__isMouseInBounds__(e)) {
                     BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
@@ -26169,10 +26173,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             });
         });
         this.content.element.blur(function () {
-            if (self.isValid()) {
-                self._blur();
-                self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
-            }
+            self._setErrorVisible(false);
+            self._blur();
+            self.fireEvent(BI.TextAreaEditor.EVENT_BLUR);
             BI.Widget._renderEngine.createElement(document).unbind("mousedown." + self.getName());
         });
         if (BI.isKey(o.value)) {
@@ -26226,6 +26229,10 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
     },
 
+    _checkError: function () {
+        this._setErrorVisible(this.isEnabled() && !this.options.validationChecker(this.getValue()));
+    },
+
     _focus: function () {
         this.content.element.addClass("textarea-editor-focus");
         this._checkWaterMark();
@@ -26234,6 +26241,20 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
     _blur: function () {
         this.content.element.removeClass("textarea-editor-focus");
         this._checkWaterMark();
+    },
+
+    _setErrorVisible: function (b) {
+        var o = this.options;
+        var errorText = o.errorText;
+        if (BI.isFunction(errorText)) {
+            errorText = errorText(BI.trim(this.getValue()));
+        }
+        if (!this.disabledError && BI.isKey(errorText)) {
+            BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
+                adjustYOffset: 2
+            });
+            return BI.Bubbles.get(this.getName());
+        }
     },
 
     focus: function () {
@@ -26252,6 +26273,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 
     setValue: function (value) {
         this.content.element.val(value);
+        this._checkError();
         this._checkWaterMark();
     },
 
