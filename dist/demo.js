@@ -1,4 +1,4 @@
-/*! time: 2020-11-11 11:00:20 */
+/*! time: 2020-11-11 12:10:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17481,27 +17481,39 @@ BI.version = "2.0";
             }));
         }
 
-        var models = {};
+        var models = {}, watches = {};
         addEventListener("message", function (e) {
             var data = e.data;
             switch (data.eventType) {
                 case "action":
                     models[data.name][data.action].apply(models[data.name], data.args);
                     break;
-                default:
+                case "destroy":
+                    BI.each(watches[data.name], function (i, unwatches) {
+                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                        BI.each(unwatches, function (j, unwatch) {
+                            unwatch();
+                        });
+                    });
+                    delete models[data.name];
+                    delete watches[data.name];
+                    break;
+                case "create":
                     var store = models[data.name] = BI.Models.getModel(data.type, data.options);
-                    for (var i = 0, len = data.watches.length; i < len; i++) {
-                        var key = data.watches[i];
-                        createWatcher(store.model, key, function () {
+                    watches[data.name] = [];
+                    BI.each(data.watches, function (i, key) {
+                        watches[data.name].push(createWatcher(store.model, key, function (newValue, oldValue) {
                             postMessage(BI.extend({}, data, {
                                 eventType: "watch",
                                 currentWatchType: key
-                            }, {args: [].slice.call(arguments, 0, 2)}));
-                        });
-                    }
-                    postMessage(BI.extend({
+                            }, {args: [newValue, oldValue]}));
+                        }));
+                    });
+                    postMessage(BI.extend({}, data, {
                         eventType: "create"
-                    }, data, {msg: store.model}));
+                    }, {msg: store.model}));
+                    break;
+                default:
                     break;
             }
         }, false);
