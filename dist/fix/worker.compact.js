@@ -1,9 +1,9 @@
 ;(function () {
     var contexts = {};
 
-    var worker;
+    var WORKER;
     BI.useWorker = function (wk) {
-        worker = wk;
+        WORKER = wk;
 
         var _init = BI.Widget.prototype._init;
         BI.Widget.prototype._init = function () {
@@ -29,7 +29,7 @@
             }
         };
         BI.Widget.prototype._initRender = function () {
-            if (_global.Worker && this._worker) {
+            if (WORKER && this._worker) {
                 this.__asking = true;
                 this.__async = true;
             } else {
@@ -48,50 +48,104 @@
             }
         };
 
-        worker.addEventListener("message", function (e) {
-            var data = e.data;
-            postMessage.apply(contexts[data.name], [data]);
-        }, false);
+        if (WORKER) {
+            WORKER.addEventListener("message", function (e) {
+                var data = e.data;
+                postMessage.apply(contexts[data.name], [data]);
+            }, false);
+        }
     };
 
     function createWorker () {
         var self = this;
-        if (_global.Worker && this._worker) {
+        if (this._worker) {
             var name = this.getName();
-            contexts[name] = this;
             var modelType = this._worker();
-            worker.postMessage({
-                type: modelType,
-                name: name,
-                eventType: "create",
-                watches: BI.map(this.watch, function (key) {
-                    return key;
-                })
-            });
-            var store = {};
-            this.store = new Proxy(store, {
-                get (target, key) {
-                    return function () {
-                        worker.postMessage({
-                            type: modelType,
-                            name: name,
-                            eventType: "action",
-                            action: key,
-                            args: [].slice.call(arguments)
-                        });
-                    };
-                },
-                set (target, key, value) {
-                    return Reflect.set(target, key, value);
-                }
-            });
-            return function () {
-                worker.postMessage({
+            if (WORKER) {
+                contexts[name] = this;
+                WORKER.postMessage({
                     type: modelType,
                     name: name,
-                    eventType: "destroy"
+                    eventType: "create",
+                    watches: BI.map(this.watch, function (key) {
+                        return key;
+                    })
                 });
-            };
+                var store = {};
+                this.store = new Proxy(store, {
+                    get (target, key) {
+                        return function () {
+                            WORKER.postMessage({
+                                type: modelType,
+                                name: name,
+                                eventType: "action",
+                                action: key,
+                                args: [].slice.call(arguments)
+                            });
+                        };
+                    },
+                    set (target, key, value) {
+                        return Reflect.set(target, key, value);
+                    }
+                });
+                return function () {
+                    WORKER.postMessage({
+                        type: modelType,
+                        name: name,
+                        eventType: "destroy"
+                    });
+                };
+            } else {
+                this.store = BI.Models.getModel(modelType);
+                this.store && (this.store._widget = this);
+                if (this.store instanceof Fix.Model) {
+                    this.model = this.store.model;
+                } else {
+                    this.model = this.store;
+                }
+                initWatch(this, this.watch);
+                return function () {
+                    this.store && BI.isFunction(this.store.destroy) && this.store.destroy();
+                    BI.each(this._watchers, function (i, unwatches) {
+                        unwatches = BI.isArray(unwatches) ? unwatches : [unwatches];
+                        BI.each(unwatches, function (j, unwatch) {
+                            unwatch();
+                        });
+                    });
+                    this._watchers && (this._watchers = []);
+                    if (this.store) {
+                        this.store._parent && (this.store._parent = null);
+                        this.store._widget && (this.store._widget = null);
+                        this.store = null;
+                    }
+                };
+            }
+
         }
+    }
+
+    function initWatch (vm, watch) {
+        vm._watchers || (vm._watchers = []);
+        for (var key in watch) {
+            var handler = watch[key];
+            if (BI.isArray(handler)) {
+                for (var i = 0; i < handler.length; i++) {
+                    vm._watchers.push(createWatcher(vm, key, handler[i]));
+                }
+            } else {
+                vm._watchers.push(createWatcher(vm, key, handler));
+            }
+        }
+    }
+
+    function createWatcher (vm, keyOrFn, cb, options) {
+        if (BI.isPlainObject(cb)) {
+            options = cb;
+            cb = cb.handler;
+        }
+        options = options || {};
+        return Fix.watch(vm.model, keyOrFn, _.bind(cb, vm), BI.extend(options, {
+            store: vm.store
+        }));
     }
 }());
