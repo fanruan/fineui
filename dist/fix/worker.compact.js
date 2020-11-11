@@ -16,7 +16,7 @@
         };
 
         var _initRender = BI.Widget.prototype._initRender;
-        BI.Widget.prototype.postMessage = function (data) {
+        var postMessage = function (data) {
             switch (data.eventType) {
                 case "create":
                     this.model = data.msg;
@@ -49,7 +49,7 @@
 
         worker.addEventListener("message", function (e) {
             var data = e.data;
-            contexts[data.name].postMessage(data);
+            postMessage.apply(contexts[data.name], [data]);
         }, false);
     };
 
