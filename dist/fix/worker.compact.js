@@ -39,7 +39,6 @@
 
         var unMount = BI.Widget.prototype.__d;
         BI.Widget.prototype.__d = function () {
-            delete contexts[this.getName()];
             this.$destroyWorker && this.$destroyWorker();
             try {
                 unMount.apply(this, arguments);
@@ -61,12 +60,18 @@
         if (this._worker) {
             var name = this.getName();
             var modelType = this._worker();
+            var options;
+            if (BI.isArray(modelType)) {
+                options = modelType[1];
+                modelType = modelType[0];
+            }
             if (WORKER) {
                 contexts[name] = this;
                 WORKER.postMessage({
                     type: modelType,
                     name: name,
                     eventType: "create",
+                    options: options,
                     watches: BI.map(this.watch, function (key) {
                         return key;
                     })
@@ -89,6 +94,7 @@
                     }
                 });
                 return function () {
+                    delete contexts[name];
                     WORKER.postMessage({
                         type: modelType,
                         name: name,
@@ -96,7 +102,7 @@
                     });
                 };
             } else {
-                this.store = BI.Models.getModel(modelType);
+                this.store = BI.Models.getModel(modelType, options);
                 this.store && (this.store._widget = this);
                 if (this.store instanceof Fix.Model) {
                     this.model = this.store.model;
