@@ -7,7 +7,7 @@
 
         var _init = BI.Widget.prototype._init;
         BI.Widget.prototype._init = function () {
-            createWorker.call(this);
+            this.$destroyWorker = createWorker.call(this);
             try {
                 _init.apply(this, arguments);
             } catch (e) {
@@ -40,6 +40,7 @@
         var unMount = BI.Widget.prototype.__d;
         BI.Widget.prototype.__d = function () {
             delete contexts[this.getName()];
+            this.$destroyWorker && this.$destroyWorker();
             try {
                 unMount.apply(this, arguments);
             } catch (e) {
@@ -84,6 +85,13 @@
                     return Reflect.set(target, key, value);
                 }
             });
+            return function () {
+                worker.postMessage({
+                    type: modelType,
+                    name: name,
+                    eventType: "destroy"
+                });
+            };
         }
     }
 }());
