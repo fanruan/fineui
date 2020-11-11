@@ -10,8 +10,8 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.CustomColorChooser.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-custom-color-chooser",
-            width: 227,
-            height: 245
+            width: 292,
+            height: 265
         });
     },
 
@@ -19,7 +19,7 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
         BI.CustomColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.editor = BI.createWidget(o.editor, {
-            type: "bi.simple_color_picker_editor"
+            type: "bi.simple_hex_color_picker_editor"
         });
         this.editor.on(BI.ColorPickerEditor.EVENT_CHANGE, function () {
             self.setValue(this.getValue());
@@ -42,13 +42,13 @@ BI.CustomColorChooser = BI.inherit(BI.Widget, {
                     top: 0,
                     right: 0
                 }],
-                height: 30
+                height: 50
             }, {
                 type: "bi.absolute",
                 items: [{
                     el: this.farbtastic,
-                    left: 15,
-                    right: 15,
+                    left: 46,
+                    right: 46,
                     top: 7
                 }],
                 height: 215
