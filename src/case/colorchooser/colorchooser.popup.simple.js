@@ -17,7 +17,7 @@ BI.SimpleColorChooserPopup = BI.inherit(BI.Widget, {
         BI.SimpleColorChooserPopup.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.popup = BI.createWidget({
-            type: "bi.color_chooser_popup",
+            type: o.hex ? "bi.hex_color_chooser_popup" : "bi.color_chooser_popup",
             value: o.value,
             element: this,
             simple: true // 是否有自动

@@ -38,7 +38,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             }, o.el),
             popup: {
                 el: BI.extend({
-                    type: "bi.color_chooser_popup",
+                    type: "bi.hex_color_chooser_popup",
                     ref: function (_ref) {
                         self.colorPicker = _ref;
                     },
@@ -59,7 +59,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                     }]
                 }, o.popup),
                 value: o.value,
-                width: 230
+                width: 292
             },
             value: o.value
         });
