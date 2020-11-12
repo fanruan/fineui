@@ -1,4 +1,4 @@
-/*! time: 2020-11-12 10:50:23 */
+/*! time: 2020-11-12 19:40:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41334,14 +41334,14 @@ BI.YearPicker = BI.inherit(BI.Widget, {
 
     _checkLeftValid: function () {
         var o = this.options;
-        var valid = !(this._year === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear());
+        var valid = this._year > BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear();
         this.left.setEnable(valid);
         return valid;
     },
 
     _checkRightValid: function () {
         var o = this.options;
-        var valid = !(this._year === BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear());
+        var valid = this._year < BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear();
         this.right.setEnable(valid);
         return valid;
     },
