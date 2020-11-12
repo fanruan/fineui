@@ -35,11 +35,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["north"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "north")) {
+                    if (!this.hasWidget(this._getChildName("north"))) {
                         var w = BI._lazyCreateWidget(item);
-                        this.addWidget(this.getName() + "north", w);
+                        this.addWidget(this._getChildName("north"), w);
                     }
-                    this.getWidgetByName(this.getName() + "north").element.height(item.height)
+                    this.getWidgetByName(this._getChildName("north")).element.height(item.height)
                         .css({
                             position: "absolute",
                             top: (item.top || 0),
@@ -55,11 +55,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["south"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "south")) {
+                    if (!this.hasWidget(this._getChildName("south"))) {
                         var w = BI._lazyCreateWidget(item);
-                        this.addWidget(this.getName() + "south", w);
+                        this.addWidget(this._getChildName("south"), w);
                     }
-                    this.getWidgetByName(this.getName() + "south").element.height(item.height)
+                    this.getWidgetByName(this._getChildName("south")).element.height(item.height)
                         .css({
                             position: "absolute",
                             bottom: (item.bottom || 0),
@@ -75,11 +75,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["west"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "west")) {
+                    if (!this.hasWidget(this._getChildName("west"))) {
                         var w = BI._lazyCreateWidget(item);
-                        this.addWidget(this.getName() + "west", w);
+                        this.addWidget(this._getChildName("west"), w);
                     }
-                    this.getWidgetByName(this.getName() + "west").element.width(item.width)
+                    this.getWidgetByName(this._getChildName("west")).element.width(item.width)
                         .css({
                             position: "absolute",
                             left: (item.left || 0),
@@ -95,11 +95,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
             item = regions["east"];
             if (item != null) {
                 if (item.el) {
-                    if (!this.hasWidget(this.getName() + "east")) {
+                    if (!this.hasWidget(this._getChildName("east"))) {
                         var w = BI._lazyCreateWidget(item);
-                        this.addWidget(this.getName() + "east", w);
+                        this.addWidget(this._getChildName("east"), w);
                     }
-                    this.getWidgetByName(this.getName() + "east").element.width(item.width)
+                    this.getWidgetByName(this._getChildName("east")).element.width(item.width)
                         .css({
                             position: "absolute",
                             right: (item.right || 0),
@@ -114,11 +114,11 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
         if ("center" in regions) {
             item = regions["center"];
             if (item != null) {
-                if (!this.hasWidget(this.getName() + "center")) {
+                if (!this.hasWidget(this._getChildName("center"))) {
                     var w = BI._lazyCreateWidget(item);
-                    this.addWidget(this.getName() + "center", w);
+                    this.addWidget(this._getChildName("center"), w);
                 }
-                this.getWidgetByName(this.getName() + "center").element
+                this.getWidgetByName(this._getChildName("center")).element
                     .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
             }
         }

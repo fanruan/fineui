@@ -115,7 +115,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             });
             tr.addItem(td);
         }
-        this.addWidget(this.getName() + idx, tr);
+        this.addWidget(this._getChildName(idx), tr);
         return tr;
     },
 
