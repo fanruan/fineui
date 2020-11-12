@@ -1,4 +1,4 @@
-/*! time: 2020-11-12 20:10:26 */
+/*! time: 2020-11-12 20:20:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15751,7 +15751,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     _deleteCardByName: function (cardName) {
-        delete this._children[this.getName() + "_" + cardName];
+        delete this._children[this._getChildName(cardName)];
         var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
@@ -16930,7 +16930,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
-            if (!self.hasWidget(self.getName() + "_" + i)) {
+            if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
             } else {
