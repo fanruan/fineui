@@ -1,4 +1,4 @@
-/*! time: 2020-11-11 21:20:27 */
+/*! time: 2020-11-12 10:50:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26861,8 +26861,8 @@ BI.Popover = BI.inherit(BI.Widget, {
                     self.body = this;
                 },
                 css: {
-                    "max-height": c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP,
-                    "min-height": size.height,
+                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP),
+                    "min-height": this._getSuitableBodyHeight(size.height),
                 },
                 items: [{
                     el: o.body,
@@ -26908,7 +26908,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             scrolly: false,
         } : {
             type: "bi.vtape",
-            height: size.height,
+            height: BI.clamp(size.height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight),
         });
     },
 
@@ -26920,6 +26920,12 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.startY = pos.top;
             self.tracker.captureMouseMoves(e);
         });
+    },
+
+    _getSuitableBodyHeight: function (height) {
+        var o = this.options;
+        var c = this._constant;
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP);
     },
 
     _calculateSize: function () {
