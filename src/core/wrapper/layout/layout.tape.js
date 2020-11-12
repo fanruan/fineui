@@ -46,7 +46,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
-            if (!self.hasWidget(self.getName() + "_" + i)) {
+            if (!self.hasWidget(self._getChildName(i))) {
                 var w = BI._lazyCreateWidget(item);
                 self.addWidget(self._getChildName(i), w);
             } else {

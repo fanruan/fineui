@@ -76,7 +76,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
     },
 
     _deleteCardByName: function (cardName) {
-        delete this._children[this.getName() + "_" + cardName];
+        delete this._children[this._getChildName(cardName)];
         var index = BI.findIndex(this.options.items, function (i, item) {
             return item.cardName == cardName;
         });
