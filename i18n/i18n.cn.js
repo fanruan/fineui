@@ -187,5 +187,6 @@ BI.i18n = {
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
-    "BI-Basic_Now": "此刻"
+    "BI-Basic_Now": "此刻",
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
 };
