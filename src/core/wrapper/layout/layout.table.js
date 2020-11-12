@@ -116,14 +116,14 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             items: abs
         });
         if (this.rows > 0) {
-            this.getWidgetByName(this.getName() + (this.rows - 1)).element.css({
+            this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
                 "margin-bottom": o.vgap
             });
         }
         w.element.css({
             position: "relative"
         });
-        this.addWidget(this.getName() + (this.rows++), w);
+        this.addWidget(this._getChildName(this.rows++), w);
         return w;
     },
 
