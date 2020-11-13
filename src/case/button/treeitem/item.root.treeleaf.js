@@ -1,21 +1,23 @@
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
-    _defaultConfig: function () {
-        return BI.extend(BI.RootTreeLeafItem.superclass._defaultConfig.apply(this, arguments), {
-            extraCls: "bi-root-tree-leaf-item bi-list-item-active",
-            logic: {
-                dynamic: false
-            },
-            id: "",
-            pId: "",
-            layer: 0,
-            height: 24
-        });
+    props: {
+        baseCls: "bi-root-tree-leaf-item bi-list-item-active",
+        logic: {
+            dynamic: false
+        },
+        id: "",
+        pId: "",
+        layer: 0,
+        height: 24
     },
-    _init: function () {
-        BI.RootTreeLeafItem.superclass._init.apply(this, arguments);
+
+    render: function () {
+        var self = this;
         var o = this.options;
-        this.text = BI.createWidget({
+        var text = {
             type: "bi.label",
+            ref: function (_ref) {
+                self.text = _ref;
+            },
             textAlign: "left",
             whiteSpace: "nowrap",
             textHeight: o.height,
@@ -25,7 +27,8 @@ BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
             value: o.value,
             py: o.py,
             keyword: o.keyword
-        });
+        };
+
         var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
         var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
             width: 24,
@@ -35,13 +38,12 @@ BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
                 height: o.height
             }
         }, {
-            el: this.text
+            el: text
         });
-        BI.createWidget(BI.extend({
-            element: this
-        }, BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
+
+        return BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
             items: items
-        }))));
+        }));
     },
 
     doRedMark: function () {
