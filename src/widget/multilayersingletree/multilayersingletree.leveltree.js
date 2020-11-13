@@ -59,7 +59,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             } else {
 
                 if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
-                    extend.type = ""; // todo 缺一个根节点的item
+                    extend.type = "bi.root_tree_leaf_item";
                 } else if (layer === 0 && extend.isFirstNode) {
                     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 } else if (extend.isLastNode) {
