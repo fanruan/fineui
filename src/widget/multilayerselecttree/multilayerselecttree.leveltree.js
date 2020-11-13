@@ -54,14 +54,12 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
                     extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
                 }
 
-
-
                 BI.defaults(node, extend);
                 self._formatItems(node.children, layer + 1, node);
             } else {
 
                 if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
-                    extend.type = ""; // todo 缺一个根节点的item
+                    extend.type = "bi.root_tree_leaf_item";
                 } else if (layer === 0 && extend.isFirstNode) {
                     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 } else if (extend.isLastNode) {
