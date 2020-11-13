@@ -67,6 +67,10 @@
         populate: function (items) {
             this.expander.populate(items);
         },
+
+        getAllLeaves: function () {
+            return this.expander && this.expander.getAllLeaves();
+        }
     });
 
     BI.shortcut("bi.tree_expander", Widget);
