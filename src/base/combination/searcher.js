@@ -101,18 +101,17 @@ BI.Searcher = BI.inherit(BI.Widget, {
                 if (type === BI.Events.CLICK) {
                     if (o.isAutoSync) {
                         var values = o.adapter && o.adapter.getValue();
-                        if (!obj.isSelected()) {
-                            o.adapter && o.adapter.setValue(BI.deepWithout(values, obj.getValue()));
-                        } else {
-                            switch (o.chooseType) {
-                                case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
-                                    o.adapter && o.adapter.setValue([obj.getValue()]);
-                                    break;
-                                case BI.ButtonGroup.CHOOSE_TYPE_MULTI:
-                                    values.push(obj.getValue());
-                                    o.adapter && o.adapter.setValue(values);
-                                    break;
-                            }
+                        switch (o.chooseType) {
+                            case BI.ButtonGroup.CHOOSE_TYPE_SINGLE:
+                                o.adapter && o.adapter.setValue([obj.getValue()]);
+                                break;
+                            case BI.ButtonGroup.CHOOSE_TYPE_MULTI:
+                                if (!obj.isSelected()) {
+                                    o.adapter && o.adapter.setValue(BI.deepWithout(values, obj.getValue()));
+                                }
+                                values.push(obj.getValue());
+                                o.adapter && o.adapter.setValue(values);
+                                break;
                         }
                     }
                     self.fireEvent(BI.Searcher.EVENT_CHANGE, value, obj);

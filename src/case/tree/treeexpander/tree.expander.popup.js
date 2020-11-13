@@ -12,7 +12,9 @@
             var self = this;
             var o = this.options;
 
-            this.popupView = BI.createWidget(o.el, this);
+            this.popupView = BI.createWidget(BI.extend(o.el, {
+                value: o.value
+            }), this);
 
             this.popupView.on(BI.Controller.EVENT_CHANGE, function () {
                 self.fireEvent(BI.Controller.EVENT_CHANGE, arguments);
