@@ -1,4 +1,4 @@
-/*! time: 2020-11-13 11:10:23 */
+/*! time: 2020-11-13 11:50:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1262);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1263);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -29868,6 +29868,86 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 /* 460 */
 /***/ (function(module, exports) {
 
+BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
+    props: {
+        baseCls: "bi-root-tree-leaf-item bi-list-item-active",
+        logic: {
+            dynamic: false
+        },
+        id: "",
+        pId: "",
+        layer: 0,
+        height: 24
+    },
+
+    render: function () {
+        var self = this;
+        var o = this.options;
+        var text = {
+            type: "bi.label",
+            ref: function (_ref) {
+                self.text = _ref;
+            },
+            textAlign: "left",
+            whiteSpace: "nowrap",
+            textHeight: o.height,
+            height: o.height,
+            hgap: o.hgap,
+            text: o.text,
+            value: o.value,
+            py: o.py,
+            keyword: o.keyword
+        };
+
+        var type = BI.LogicFactory.createLogicTypeByDirection(BI.Direction.Left);
+        var items = BI.LogicFactory.createLogicItemsByDirection(BI.Direction.Left, {
+            width: 24,
+            el: {
+                type: "bi.layout",
+                width: 24,
+                height: o.height
+            }
+        }, {
+            el: text
+        });
+
+        return BI.LogicFactory.createLogic(type, BI.extend(o.logic, {
+            items: items
+        }));
+    },
+
+    doRedMark: function () {
+        this.text.doRedMark.apply(this.text, arguments);
+    },
+
+    unRedMark: function () {
+        this.text.unRedMark.apply(this.text, arguments);
+    },
+
+    doHighLight: function () {
+        this.text.doHighLight.apply(this.text, arguments);
+    },
+
+    unHighLight: function () {
+        this.text.unHighLight.apply(this.text, arguments);
+    },
+
+    getId: function () {
+        return this.options.id;
+    },
+
+    getPId: function () {
+        return this.options.pId;
+    }
+});
+
+BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
+
+
+/***/ }),
+/* 461 */
+/***/ (function(module, exports) {
+
 /**
  * 树叶子节点
  * Created by GUY on 2015/9/6.
@@ -29941,7 +30021,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 461 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -29999,7 +30079,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 462 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -30238,7 +30318,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 463 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -30414,7 +30494,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -30440,7 +30520,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -30471,7 +30551,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -30500,7 +30580,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -30529,7 +30609,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -30558,7 +30638,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -30587,7 +30667,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 /**
@@ -30810,7 +30890,7 @@ BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -30980,7 +31060,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -31081,7 +31161,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -31185,7 +31265,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -31255,7 +31335,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -31362,7 +31442,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -31473,7 +31553,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 /**
@@ -31555,7 +31635,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -31724,7 +31804,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -31801,7 +31881,7 @@ BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 /**
@@ -31919,7 +31999,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 /**
@@ -32010,7 +32090,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -32078,7 +32158,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 /**
@@ -32184,7 +32264,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -32258,7 +32338,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -32324,7 +32404,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -32511,7 +32591,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -32793,7 +32873,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -33074,7 +33154,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -33389,7 +33469,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -33676,7 +33756,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -33742,7 +33822,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -33801,7 +33881,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -33983,7 +34063,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -34068,7 +34148,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -34127,7 +34207,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -34183,7 +34263,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -34405,7 +34485,7 @@ BI.SelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_list", BI.SelectList);
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -34513,7 +34593,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -34714,7 +34794,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -34896,7 +34976,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -34932,7 +35012,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -35146,7 +35226,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -35427,7 +35507,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -35720,7 +35800,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -35775,7 +35855,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -35844,7 +35924,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -35989,7 +36069,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports) {
 
 /**
@@ -36131,7 +36211,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36209,7 +36289,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36262,7 +36342,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 /**
@@ -36364,7 +36444,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -36399,7 +36479,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -36509,7 +36589,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -36589,7 +36669,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -36668,7 +36748,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -36746,7 +36826,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 517 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -36815,7 +36895,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -36877,7 +36957,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -36955,7 +37035,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -37043,7 +37123,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 521 */
+/* 522 */
 /***/ (function(module, exports) {
 
 /**
@@ -37270,7 +37350,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 522 */
+/* 523 */
 /***/ (function(module, exports) {
 
 /**
@@ -37405,7 +37485,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -37557,7 +37637,7 @@ BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -37656,7 +37736,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -37807,7 +37887,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -37878,7 +37958,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -38034,7 +38114,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -38196,7 +38276,7 @@ BI.extend(BI.DynamicDatePane, {
 });
 
 /***/ }),
-/* 529 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -38336,7 +38416,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 530 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -38455,7 +38535,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 531 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -38523,7 +38603,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 532 */
+/* 533 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -38698,7 +38778,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 533 */
+/* 534 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -38856,7 +38936,7 @@ BI.extend(BI.DynamicDateTimePane, {
 });
 
 /***/ }),
-/* 534 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -38953,7 +39033,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports) {
 
 /**
@@ -39009,7 +39089,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -39112,7 +39192,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -39232,7 +39312,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -39524,7 +39604,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -39596,7 +39676,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -39946,7 +40026,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -40141,9 +40221,9 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
-                                self.popup.setValue(self.storeValue);
                                 self.popup.setMinDate(opts.minDate);
                                 self.popup.setMaxDate(opts.maxDate);
+                                self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW);
                             }
                         }]
@@ -40267,7 +40347,7 @@ BI.extend(BI.DynamicDateCombo, {
 });
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -40391,7 +40471,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -40627,7 +40707,7 @@ BI.DynamicDatePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -40985,7 +41065,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -41314,7 +41394,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 });
 
 /***/ }),
-/* 546 */
+/* 547 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -41564,7 +41644,7 @@ BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 547 */
+/* 548 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -41781,7 +41861,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 548 */
+/* 549 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -42163,7 +42243,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 549 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -42376,7 +42456,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 550 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -42401,7 +42481,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 551 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -42580,7 +42660,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 552 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -42605,7 +42685,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 553 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -43150,7 +43230,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 554 */
+/* 555 */
 /***/ (function(module, exports) {
 
 /**
@@ -43377,7 +43457,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 555 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -43472,7 +43552,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 556 */
+/* 557 */
 /***/ (function(module, exports) {
 
 /**
@@ -43806,7 +43886,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 557 */
+/* 558 */
 /***/ (function(module, exports) {
 
 /**
@@ -44038,7 +44118,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 558 */
+/* 559 */
 /***/ (function(module, exports) {
 
 /**
@@ -44135,7 +44215,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports) {
 
 /**
@@ -44194,14 +44274,12 @@ BI.MultiLayerSelectLevelTree = BI.inherit(BI.Pane, {
                     extend.type = "bi.multilayer_select_tree_mid_plus_group_node";
                 }
 
-
-
                 BI.defaults(node, extend);
                 self._formatItems(node.children, layer + 1, node);
             } else {
 
                 if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
-                    extend.type = ""; // todo 缺一个根节点的item
+                    extend.type = "bi.root_tree_leaf_item";
                 } else if (layer === 0 && extend.isFirstNode) {
                     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 } else if (extend.isLastNode) {
@@ -44332,7 +44410,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -44414,7 +44492,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports) {
 
 /**
@@ -44666,7 +44744,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports) {
 
 /**
@@ -44771,7 +44849,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports) {
 
 /**
@@ -44865,7 +44943,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -44959,7 +45037,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports) {
 
 /**
@@ -45057,7 +45135,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports) {
 
 /**
@@ -45291,7 +45369,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports) {
 
 /**
@@ -45388,7 +45466,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports) {
 
 /**
@@ -45452,7 +45530,7 @@ BI.MultiLayerSingleLevelTree = BI.inherit(BI.Pane, {
             } else {
 
                 if (layer === 0 && extend.isFirstNode && extend.isLastNode) {
-                    extend.type = ""; // todo 缺一个根节点的item
+                    extend.type = "bi.root_tree_leaf_item";
                 } else if (layer === 0 && extend.isFirstNode) {
                     extend.type = "bi.multilayer_single_tree_first_tree_leaf_item";
                 } else if (extend.isLastNode) {
@@ -45582,7 +45660,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports) {
 
 /**
@@ -45663,7 +45741,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports) {
 
 /**
@@ -45915,7 +45993,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports) {
 
 /**
@@ -46012,7 +46090,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports) {
 
 /**
@@ -46108,7 +46186,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports) {
 
 /**
@@ -46204,7 +46282,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports) {
 
 /**
@@ -46311,7 +46389,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -46403,7 +46481,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -46495,7 +46573,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -46587,7 +46665,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -46700,7 +46778,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -46792,7 +46870,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -47266,7 +47344,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -47759,7 +47837,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -48252,7 +48330,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -48737,7 +48815,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -48902,7 +48980,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -49096,7 +49174,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -49279,7 +49357,7 @@ BI.MultiSelectNoBarLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -49379,7 +49457,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -49475,7 +49553,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -49636,7 +49714,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -49774,7 +49852,7 @@ BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -49941,7 +50019,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -50065,7 +50143,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -50161,7 +50239,7 @@ BI.MultiSelectCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelectedButton);
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -50265,7 +50343,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -50477,7 +50555,7 @@ BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -50682,7 +50760,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -50795,7 +50873,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUP
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -51146,7 +51224,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -51503,7 +51581,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -51861,7 +51939,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -52038,7 +52116,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -52100,7 +52178,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -52224,7 +52302,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -52579,7 +52657,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -52949,7 +53027,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -53343,7 +53421,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -53449,7 +53527,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -53522,7 +53600,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -53646,7 +53724,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -53727,7 +53805,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -53896,7 +53974,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -54094,7 +54172,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -54253,7 +54331,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -54801,7 +54879,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -54890,7 +54968,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -55384,7 +55462,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -55547,7 +55625,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -55727,7 +55805,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -55820,7 +55898,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -56003,7 +56081,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -56094,7 +56172,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -56185,7 +56263,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -56276,7 +56354,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -56367,7 +56445,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -56447,7 +56525,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -56529,7 +56607,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -56635,7 +56713,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -56793,7 +56871,7 @@ BI.SingleSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -56927,7 +57005,7 @@ BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -57047,7 +57125,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -57343,7 +57421,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -57643,7 +57721,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectComboItem = BI.inherit(BI.BasicButton, {
@@ -57713,7 +57791,7 @@ BI.SingleSelectComboItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_combo_item", BI.SingleSelectComboItem);
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -57877,7 +57955,7 @@ BI.SingleSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -58044,7 +58122,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -58127,7 +58205,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -58272,7 +58350,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -58534,7 +58612,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -58627,7 +58705,7 @@ BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 /**
@@ -58798,7 +58876,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -58998,7 +59076,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -59039,7 +59117,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 /**
@@ -59386,7 +59464,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -59702,7 +59780,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 /**
@@ -59992,7 +60070,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 /**
@@ -60078,7 +60156,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -60149,7 +60227,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -60215,7 +60293,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -60320,7 +60398,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -60380,7 +60458,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -60479,7 +60557,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -60712,7 +60790,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -60904,7 +60982,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -61092,7 +61170,7 @@ BI.DateInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.date_interval", BI.DateInterval);
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -61281,7 +61359,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -61406,7 +61484,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -61472,7 +61550,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -61639,7 +61717,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -61813,7 +61891,7 @@ BI.extend(BI.DynamicYearCombo, {
 });
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -62025,7 +62103,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -62204,7 +62282,7 @@ BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -62285,7 +62363,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -62450,7 +62528,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -62643,7 +62721,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 });
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -62869,7 +62947,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -63135,7 +63213,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -63333,7 +63411,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -63414,7 +63492,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -63529,7 +63607,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -63702,7 +63780,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 });
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -63907,7 +63985,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -64141,7 +64219,7 @@ BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -64247,7 +64325,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -64329,7 +64407,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -64403,7 +64481,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -64474,7 +64552,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -65313,7 +65391,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -65605,7 +65683,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -65721,7 +65799,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -65836,7 +65914,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -65955,7 +66033,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -66021,7 +66099,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -66133,7 +66211,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 /**
@@ -66243,7 +66321,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 /**
@@ -66357,7 +66435,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 /**
@@ -66433,20 +66511,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(688));
+var _index = _interopRequireDefault(__webpack_require__(689));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66459,7 +66537,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var decorator = _interopRequireWildcard(__webpack_require__(689));
+var decorator = _interopRequireWildcard(__webpack_require__(690));
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -66471,7 +66549,7 @@ var _default = {
 exports["default"] = _default;
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66682,7 +66760,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 690 */,
 /* 691 */,
 /* 692 */,
 /* 693 */,
@@ -66737,14 +66814,15 @@ exports.Model = Model;
 /* 742 */,
 /* 743 */,
 /* 744 */,
-/* 745 */
+/* 745 */,
+/* 746 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(746);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(747);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
 
 /***/ }),
-/* 746 */
+/* 747 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -68216,12 +68294,12 @@ exports.Model = Model;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),
-/* 747 */,
 /* 748 */,
 /* 749 */,
 /* 750 */,
 /* 751 */,
-/* 752 */
+/* 752 */,
+/* 753 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -68518,7 +68596,6 @@ exports.Model = Model;
 
 
 /***/ }),
-/* 753 */,
 /* 754 */,
 /* 755 */,
 /* 756 */,
@@ -68730,13 +68807,13 @@ exports.Model = Model;
 /* 962 */,
 /* 963 */,
 /* 964 */,
-/* 965 */
+/* 965 */,
+/* 966 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 966 */,
 /* 967 */,
 /* 968 */,
 /* 969 */,
@@ -69032,7 +69109,8 @@ exports.Model = Model;
 /* 1259 */,
 /* 1260 */,
 /* 1261 */,
-/* 1262 */
+/* 1262 */,
+/* 1263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);
@@ -69136,7 +69214,7 @@ __webpack_require__(371);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
-__webpack_require__(745);
+__webpack_require__(746);
 __webpack_require__(372);
 __webpack_require__(373);
 __webpack_require__(374);
@@ -69284,6 +69362,7 @@ __webpack_require__(515);
 __webpack_require__(516);
 __webpack_require__(517);
 __webpack_require__(518);
+__webpack_require__(519);
 __webpack_require__(134);
 __webpack_require__(135);
 __webpack_require__(136);
@@ -69342,7 +69421,6 @@ __webpack_require__(188);
 __webpack_require__(189);
 __webpack_require__(190);
 __webpack_require__(191);
-__webpack_require__(519);
 __webpack_require__(520);
 __webpack_require__(521);
 __webpack_require__(522);
@@ -69510,9 +69588,10 @@ __webpack_require__(683);
 __webpack_require__(684);
 __webpack_require__(685);
 __webpack_require__(686);
-__webpack_require__(752);
-__webpack_require__(965);
-module.exports = __webpack_require__(687);
+__webpack_require__(687);
+__webpack_require__(753);
+__webpack_require__(966);
+module.exports = __webpack_require__(688);
 
 
 /***/ })
