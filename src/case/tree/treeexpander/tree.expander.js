@@ -35,6 +35,7 @@
                     isFirstNode: o.isFirstNode || o.el.isFirstNode,
                     el: o.popup,
                 },
+                value: o.value,
                 listeners: [
                     {
                         eventName: BI.Controller.EVENT_CHANGE,
