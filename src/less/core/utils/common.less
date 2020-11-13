@@ -42,7 +42,10 @@ textarea {
 }
 
 .bi-focus-shadow {
-  &:focus-within, &:focus, &:hover {
+  &:focus, &:hover {
+    border-color: @color-bi-border-highlight;
+  }
+  &:focus-within{
     border-color: @color-bi-border-highlight;
   }
   &.disabled {
