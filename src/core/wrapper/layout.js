@@ -83,7 +83,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     _getChildName: function (index) {
-        return index + "";
+        return this.getName() + "_" + index;
     },
 
     _addElement: function (i, item, context) {
@@ -94,7 +94,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
                         BI.remove(self._children, child);
-                        self.removeItemAt(name | 0);
+                        self.removeItemAt(name.replace(self.getName() + "_", "") | 0);
                     }
                 });
             });
@@ -316,14 +316,13 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     prependItems: function (items, context) {
-        var self = this;
         items = items || [];
         var fragment = BI.Widget._renderEngine.createFragment();
         var added = [];
         for (var i = items.length - 1; i >= 0; i--) {
             this._addItemAt(0, items[i]);
             var w = this._addElement(0, items[i], context);
-            self._children[self._getChildName(0)] = w;
+            this._children[this._getChildName(0)] = w;
             this.options.items.unshift(items[i]);
             added.push(w);
             fragment.appendChild(w.element[0]);
@@ -565,11 +564,11 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     removeWidget: function (nameOrWidget) {
-        var removeIndex;
+        var removeIndex, self = this;
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeIndex = name;
+                    removeIndex = name.replace(self.getName() + "_", "");
                 }
             });
         } else {

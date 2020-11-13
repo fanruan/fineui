@@ -8,7 +8,7 @@
 BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        REB_WIDTH: 32
+        RGB_WIDTH: 32
     },
 
     _defaultConfig: function () {
@@ -45,7 +45,7 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: c.REB_WIDTH,
+            width: c.RGB_WIDTH,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -74,19 +74,19 @@ BI.SimpleColorPickerEditor = BI.inherit(BI.Widget, {
                 width: 20
             }, {
                 el: this.R,
-                width: c.REB_WIDTH
+                width: c.RGB_WIDTH
             }, {
                 el: RGB[1],
                 width: 20
             }, {
                 el: this.G,
-                width: c.REB_WIDTH
+                width: c.RGB_WIDTH
             }, {
                 el: RGB[2],
                 width: 20
             }, {
                 el: this.B,
-                width: c.REB_WIDTH
+                width: c.RGB_WIDTH
             }]
         });
     },

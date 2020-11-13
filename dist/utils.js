@@ -1,4 +1,4 @@
-/*! time: 2020-11-9 17:00:22 */
+/*! time: 2020-11-13 09:30:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1083);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1088);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -4240,7 +4240,7 @@ if (!_global.BI) {
 
 /***/ }),
 
-/***/ 1083:
+/***/ 1088:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);
@@ -4270,8 +4270,8 @@ __webpack_require__(118);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
-__webpack_require__(748);
-__webpack_require__(1084);
+__webpack_require__(753);
+__webpack_require__(1089);
 __webpack_require__(131);
 __webpack_require__(132);
 module.exports = __webpack_require__(133);
@@ -4279,7 +4279,7 @@ module.exports = __webpack_require__(133);
 
 /***/ }),
 
-/***/ 1084:
+/***/ 1089:
 /***/ (function(module, exports) {
 
 /**
@@ -9172,7 +9172,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 748:
+/***/ 753:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -9364,7 +9364,8 @@ BI.i18n = {
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
-    "BI-Basic_Now": "此刻"
+    "BI-Basic_Now": "此刻",
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
 };
 
 /***/ })

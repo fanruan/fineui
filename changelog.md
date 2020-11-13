@@ -1,4 +1,9 @@
 # 更新日志
+2.0(2020-11)
+- 修复了Popover小屏幕上看不完整的问题
+- 颜色选择器支持输入16进制颜色编号
+- bi.textarea_editor支持气泡提示报错
+
 2.0(2020-10)
 - 支持Composition API
 - pane和loadingPane支持加载时自定义提示文本
