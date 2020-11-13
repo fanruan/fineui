@@ -1,4 +1,4 @@
-/*! time: 2020-11-12 20:20:29 */
+/*! time: 2020-11-13 09:30:19 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -92346,7 +92346,8 @@ BI.i18n = {
     "BI-Basic_Billion": "亿",
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
-    "BI-Basic_Now": "此刻"
+    "BI-Basic_Now": "此刻",
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
 };
 
 /***/ }),
