@@ -26,7 +26,7 @@ BI.SimpleColorChooser = BI.inherit(BI.Widget, {
             width: o.width,
             height: o.height,
             popup: {
-                type: "bi.simple_color_chooser_popup"
+                type: "bi.simple_hex_color_chooser_popup"
             }
         });
         this.combo.on(BI.ColorChooser.EVENT_CHANGE, function () {

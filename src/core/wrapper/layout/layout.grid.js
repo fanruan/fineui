@@ -114,7 +114,7 @@ BI.GridLayout = BI.inherit(BI.Layout, {
                     right: (100 - (width * (j + 1))) + "%",
                     bottom: (100 - (height * (i + 1))) + "%"
                 });
-                this.addWidget(els[i][j]);
+                this.addWidget(this._getChildName(i + "_" + j), els[i][j]);
             }
         }
     },

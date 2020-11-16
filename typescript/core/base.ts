@@ -263,7 +263,7 @@ export interface _base {
 
     isDeepMatch: (object: any, attrs: any) => boolean;
 
-    contains: (obj: any[], target: any, fromIndex?: number) => number;
+    contains: (obj: any[], target: any, fromIndex?: number) => boolean;
 
     deepContains: (obj: any[], copy: any) => number;
 
@@ -287,15 +287,15 @@ export interface _base {
 
     unescape: (str?: string) => string;
 
-    bind: (func: Function, thisArg: any, ...partials: any) => Function;
+    bind: <T extends Function>(func: T, thisArg: any, ...partials: any) => T;
 
     once: (func: Function) => Function;
 
     partial: (func: Function, ...partials: any) => Function;
 
-    debounce: (func: Function, wait?: number, options?: any) => Function;
+    debounce: <T extends Function>(func: T, wait?: number, options?: any) => T;
 
-    throttle: (func: Function, wait?: number, options?: any) => Function;
+    throttle: <T extends Function>(func: T, wait?: number, options?: any) => T;
 
     delay: (func: Function, wait: number, ...args: any[]) => number;
 

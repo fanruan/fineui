@@ -359,7 +359,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -850,7 +850,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // Deep watchers and watchers on Object/Arrays should fire even
                 // when the value is the same, because the value may
                 // have mutated.
-                options && options.refresh || this.deep) {
+                _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
