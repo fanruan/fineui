@@ -56,6 +56,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_BEFORE_POPUPVIEW, function () {
             self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW);
         });
+        this.switcher.on(BI.Switcher.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW);
+        });
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
@@ -105,4 +108,5 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
 BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
 BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
