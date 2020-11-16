@@ -1,4 +1,4 @@
-/*! time: 2020-11-16 16:50:28 */
+/*! time: 2020-11-16 17:10:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -51170,6 +51170,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -51638,6 +51644,12 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -52134,6 +52146,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -52621,6 +52639,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -54865,6 +54889,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_BEFORE_POPUPVIEW, function () {
             self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW);
         });
+        this.switcher.on(BI.Switcher.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW);
+        });
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
@@ -54914,6 +54941,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
 BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
 BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
@@ -56620,6 +56648,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -56977,6 +57011,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                 want2showCounter = null;
                 showCounter();
             }
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -57376,6 +57416,12 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
