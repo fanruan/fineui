@@ -140,13 +140,13 @@ BI.Popover = BI.inherit(BI.Widget, {
         return BI.extend({
             type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
-            width: this._getSuitableBodyWidth(size.width),
+            width: this._getSuitableWidth(size.width),
         }, o.logic.dynamic ? {
             type: "bi.vertical",
             scrolly: false,
         } : {
             type: "bi.vtape",
-            height: BI.clamp(size.height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight),
+            height: this._getSuitableHeight(size.height),
         });
     },
 
@@ -166,7 +166,11 @@ BI.Popover = BI.inherit(BI.Widget, {
         return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP);
     },
 
-    _getSuitableBodyWidth: function (width) {
+    _getSuitableHeight: function (height) {
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight);
+    },
+
+    _getSuitableWidth: function (width) {
         return BI.clamp(width, 0, BI.Widget._renderEngine.createElement("body").width());
     },
 
