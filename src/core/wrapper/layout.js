@@ -448,7 +448,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._children = {};
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
-            var key = node.key == null ? self._getChildName(i) : node.key;
+            var key = node.key == null ? i : node.key;
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -466,7 +466,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? self._getChildName(index) : opt.key;
+            var key = opt.key == null ? index : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -482,7 +482,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 var ch = vnodes[startIdx];
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
-                    var key = node.key == null ? self._getChildName(startIdx) : node.key;
+                    var key = node.key == null ? startIdx : node.key;
                     delete self._children[self._getChildName(key)];
                     children[key]._destroy();
                 }
