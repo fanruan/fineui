@@ -1,4 +1,4 @@
-/*! time: 2020-11-16 17:10:38 */
+/*! time: 2020-11-16 20:20:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13566,7 +13566,7 @@ module.exports = function (exec) {
         if (self[life]) {
             var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
             BI.each(hooks, function (i, hook) {
-                hook();
+                hook.apply(self);
             });
         }
     }
