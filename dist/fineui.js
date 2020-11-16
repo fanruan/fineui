@@ -1,4 +1,4 @@
-/*! time: 2020-11-13 14:00:23 */
+/*! time: 2020-11-13 18:30:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40255,6 +40255,10 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
         populate: function (items) {
             this.expander.populate(items);
         },
+
+        getAllLeaves: function () {
+            return this.expander && this.expander.getAllLeaves();
+        }
     });
 
     BI.shortcut("bi.tree_expander", Widget);
@@ -40310,6 +40314,10 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
         populate: function (items) {
             this.popupview.populate(items);
         },
+
+        getAllLeaves: function () {
+            return this.popupView && this.popupView.getAllLeaves();
+        }
     });
 
     BI.shortcut("bi.tree_expander.popup", Widget);

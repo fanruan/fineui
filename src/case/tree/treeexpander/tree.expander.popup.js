@@ -43,6 +43,10 @@
         populate: function (items) {
             this.popupview.populate(items);
         },
+
+        getAllLeaves: function () {
+            return this.popupView && this.popupView.getAllLeaves();
+        }
     });
 
     BI.shortcut("bi.tree_expander.popup", Widget);
