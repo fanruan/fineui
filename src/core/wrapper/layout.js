@@ -399,23 +399,23 @@ BI.Layout = BI.inherit(BI.Widget, {
                 oldEndVnode = oldCh[--oldEndIdx];
             } else if (sameVnode(oldStartVnode, newStartVnode, oldStartIdx, newStartIdx)) {
                 updated = this.patchItem(oldStartVnode, newStartVnode, oldStartIdx) || updated;
-                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 oldStartVnode = oldCh[++oldStartIdx];
                 newStartVnode = newCh[++newStartIdx];
             } else if (sameVnode(oldEndVnode, newEndVnode, oldEndIdx, newEndIdx)) {
                 updated = this.patchItem(oldEndVnode, newEndVnode, oldEndIdx) || updated;
-                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 oldEndVnode = oldCh[--oldEndIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldStartVnode, newEndVnode)) {
                 updated = this.patchItem(oldStartVnode, newEndVnode, oldStartIdx) || updated;
-                children[oldStartVnode.key == null ? this._getChildName(oldStartIdx) : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
+                children[oldStartVnode.key == null ? oldStartIdx : oldStartVnode.key] = this._children[this._getChildName(oldStartIdx)];
                 insertBefore(oldStartVnode, oldEndVnode, true);
                 oldStartVnode = oldCh[++oldStartIdx];
                 newEndVnode = newCh[--newEndIdx];
             } else if (sameVnode(oldEndVnode, newStartVnode)) {
                 updated = this.patchItem(oldEndVnode, newStartVnode, oldEndIdx) || updated;
-                children[oldEndVnode.key == null ? this._getChildName(oldEndIdx) : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
+                children[oldEndVnode.key == null ? oldEndIdx : oldEndVnode.key] = this._children[this._getChildName(oldEndIdx)];
                 insertBefore(oldEndVnode, oldStartVnode);
                 oldEndVnode = oldCh[--oldEndIdx];
                 newStartVnode = newCh[++newStartIdx];
@@ -429,7 +429,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                     BI.each(oldCh, function (index, child) {
                         if (child && sameVnode(child, newStartVnode)) {
                             updated = self.patchItem(sameOldVnode, newStartVnode, index) || updated;
-                            children[sameOldVnode.key == null ? self._getChildName(index) : sameOldVnode.key] = self._children[self._getChildName(index)];
+                            children[sameOldVnode.key == null ? index : sameOldVnode.key] = self._children[self._getChildName(index)];
                             oldCh[index] = undefined;
                             insertBefore(sameOldVnode, oldStartVnode);
                         }
@@ -448,7 +448,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         this._children = {};
         BI.each(newCh, function (i, child) {
             var node = self._getOptions(child);
-            var key = node.key == null ? self._getChildName(i) : node.key;
+            var key = node.key == null ? i : node.key;
             children[key]._mount();
             self._children[self._getChildName(i)] = children[key];
         });
@@ -466,7 +466,7 @@ BI.Layout = BI.inherit(BI.Widget, {
 
         function addNode (vnode, index) {
             var opt = self._getOptions(vnode);
-            var key = opt.key == null ? self._getChildName(index) : opt.key;
+            var key = opt.key == null ? index : opt.key;
             return children[key] = self._addElement(key, vnode);
         }
 
@@ -482,7 +482,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 var ch = vnodes[startIdx];
                 if (BI.isNotNull(ch)) {
                     var node = self._getOptions(ch);
-                    var key = node.key == null ? self._getChildName(startIdx) : node.key;
+                    var key = node.key == null ? startIdx : node.key;
                     delete self._children[self._getChildName(key)];
                     children[key]._destroy();
                 }
@@ -492,9 +492,9 @@ BI.Layout = BI.inherit(BI.Widget, {
         function insertBefore (insert, before, isNext, index) {
             insert = self._getOptions(insert);
             before = before && self._getOptions(before);
-            var insertKey = BI.isKey(insert.key) ? insert.key : self._getChildName(index);
+            var insertKey = BI.isKey(insert.key) ? insert.key : index;
             if (before && children[before.key]) {
-                var beforeKey = BI.isKey(before.key) ? before.key : self._getChildName(index);
+                var beforeKey = BI.isKey(before.key) ? before.key : index;
                 var next;
                 if (isNext) {
                     next = children[beforeKey].element.next();
