@@ -2,14 +2,13 @@
  * Created by zcf_1 on 2017/5/2.
  */
 BI.MultiSelectList = BI.inherit(BI.Widget, {
-    _constant: {
-        EDITOR_HEIGHT: 24
-    },
     _defaultConfig: function () {
         return BI.extend(BI.MultiSelectList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
@@ -28,6 +27,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             logic: {
                 dynamic: false
             },
@@ -56,12 +56,16 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
                     this.setKeyword(op.keywords[0]);
                     o.itemsCreator(op, callback);
                 }
-            }
+            },
+            itemHeight: o.itemHeight
         });
         this.searcherPane.setVisible(false);
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -151,7 +155,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: this._constant.EDITOR_HEIGHT
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -162,7 +166,7 @@ BI.MultiSelectList = BI.inherit(BI.Widget, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: this._constant.EDITOR_HEIGHT,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0

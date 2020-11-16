@@ -8,7 +8,7 @@
 BI.ColorPickerEditor = BI.inherit(BI.Widget, {
 
     constants: {
-        REB_WIDTH: 32
+        RGB_WIDTH: 32
     },
 
     _defaultConfig: function () {
@@ -46,7 +46,7 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
             errorText: BI.i18nText("BI-Color_Picker_Error_Text"),
             allowBlank: true,
             value: 255,
-            width: c.REB_WIDTH,
+            width: c.RGB_WIDTH,
             height: 20
         });
         BI.each(Ws, function (i, w) {
@@ -124,19 +124,19 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
                         width: 20
                     }, {
                         el: this.R,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: RGB[1],
                         width: 20
                     }, {
                         el: this.G,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: RGB[2],
                         width: 20
                     }, {
                         el: this.B,
-                        width: c.REB_WIDTH
+                        width: c.RGB_WIDTH
                     }, {
                         el: this.transparent,
                         width: 16,
@@ -221,8 +221,8 @@ BI.ColorPickerEditor = BI.inherit(BI.Widget, {
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.storeValue = {
             r: BI.isNull(json.r) ? "" : json.r,
-            g: BI.isNull(json.r) ? "" : json.g,
-            b: BI.isNull(json.r) ? "" : json.b
+            g: BI.isNull(json.g) ? "" : json.g,
+            b: BI.isNull(json.b) ? "" : json.b
         };
         this.R.setValue(this.storeValue.r);
         this.G.setValue(this.storeValue.g);

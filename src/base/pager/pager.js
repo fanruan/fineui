@@ -178,7 +178,8 @@ BI.Pager = BI.inherit(BI.Widget, {
             items: BI.createItems(view, {
                 cls: "bi-list-item-select bi-border-radius",
                 height: 23,
-                hgap: 10
+                hgap: 10,
+                stopPropagation: true
             }),
             behaviors: o.behaviors,
             layouts: o.layouts

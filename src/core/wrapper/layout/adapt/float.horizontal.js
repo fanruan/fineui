@@ -33,7 +33,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
                 delete self._children[i];
             }
         });
-        BI.createWidget({
+        BI._lazyCreateWidget({
             type: "bi.horizontal_auto",
             element: this,
             items: [this.left]
@@ -42,7 +42,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
 
     _addElement: function (i, item) {
         var self = this, o = this.options;
-        this.left = BI.createWidget({
+        this.left = BI._lazyCreateWidget({
             type: "bi.vertical",
             items: [item],
             hgap: o.hgap,
@@ -53,7 +53,7 @@ BI.FloatHorizontalLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap
         });
 
-        this.container = BI.createWidget({
+        this.container = BI._lazyCreateWidget({
             type: "bi.left",
             element: this,
             items: [this.left]

@@ -1,5 +1,5 @@
 ;(function () {
-    function initWatch(vm, watch) {
+    function initWatch (vm, watch) {
         vm._watchers || (vm._watchers = []);
         for (var key in watch) {
             var handler = watch[key];
@@ -13,7 +13,7 @@
         }
     }
 
-    function createWatcher(vm, keyOrFn, cb, options) {
+    function createWatcher (vm, keyOrFn, cb, options) {
         if (BI.isPlainObject(cb)) {
             options = cb;
             cb = cb.handler;
@@ -27,25 +27,13 @@
     var target = null;
     var targetStack = [];
 
-    function pushTarget(_target) {
+    function pushTarget (_target) {
         if (target) targetStack.push(target);
         Fix.Model.target = target = _target;
     }
 
-    function popTarget() {
+    function popTarget () {
         Fix.Model.target = target = targetStack.pop();
-    }
-
-    var context = null;
-    var contextStack = [];
-
-    function pushContext(_context) {
-        if (context) contextStack.push(context);
-        Fix.Model.context = context = _context;
-    }
-
-    function popContext() {
-        Fix.Model.context = context = contextStack.pop();
     }
 
     var oldWatch = Fix.watch;
@@ -65,11 +53,11 @@
         }, options);
     };
 
-    function findStore(widget) {
+    function findStore (widget) {
         if (target != null) {
             return target;
         }
-        widget = widget || context;
+        widget = widget || BI.Widget.context;
         var p = widget;
         while (p) {
             if (p instanceof Fix.Model || p.store || p.__cacheStore) {
@@ -86,35 +74,55 @@
         }
     }
 
-    var _create = BI.createWidget;
-    BI.createWidget = function (item, options, context) {
-        var pushed = false;
-        if (BI.isWidget(options)) {
-            pushContext(options);
-            pushed = true;
-        } else if (context != null) {
-            pushContext(context);
-            pushed = true;
+    // var _create = BI.createWidget;
+    // BI.createWidget = function (item, options, context) {
+    //     var pushed = false;
+    //     if (BI.isWidget(options)) {
+    //         pushContext(options);
+    //         pushed = true;
+    //     } else if (context != null) {
+    //         pushContext(context);
+    //         pushed = true;
+    //     }
+    //     var result = _create.apply(this, arguments);
+    //     pushed && popContext();
+    //     return result;
+    // };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            if (BI.isKey(watch)) {
+                var key = watch;
+                watch = {};
+                watch[key] = handler;
+            }
+            for (var key in watch) {
+                var handler = watch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
+                    }
+                } else {
+                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
+                }
+            }
         }
-        var result = _create.apply(this, arguments);
-        pushed && popContext();
-        return result;
     };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];
         BI.Loader.prototype[name] = function () {
-            pushContext(this);
+            BI.Widget.pushContext(this);
             var result = old.apply(this, arguments);
-            popContext();
+            BI.Widget.popContext();
             return result;
         };
     });
 
-    function createStore() {
+    function createStore () {
         var needPop = false;
         if (_global.Fix && this._store) {
-            var store = findStore(this.options.context || this.options.element);
+            var store = findStore(this.options.context || this._parent || this.options.element);
             if (store) {
                 pushTarget(store);
                 needPop = true;
@@ -220,14 +228,14 @@
             BI.defer(function () {
                 additionFunc();
             }, 200);
-        }
+        };
         var back = window.history.back;
         window.history.back = function () {
             back.apply(this, arguments);
             BI.defer(function () {
                 additionFunc();
             }, 200);
-        }
+        };
     }
 
     if (BI.Router) {
@@ -235,22 +243,22 @@
         BI.Router.prototype.execute = function () {
             execute.apply(this, arguments);
             additionFunc();
-        }
+        };
     }
 
     _.each(["each", "map", "reduce", "reduceRight", "find", "filter", "reject", "every", "all", "some", "any", "max", "min",
         "sortBy", "groupBy", "indexBy", "countBy", "partition",
         "keys", "allKeys", "values", "pairs", "invert",
         "mapObject", "findKey", "pick", "omit", "tap"], function (name) {
-            var old = BI[name];
-            BI[name] = function (obj, fn, context) {
-                return typeof fn === "function" ? old(obj, function (key, value) {
-                    if (!(key in Fix.$$skipArray)) {
-                        return fn.apply(this, arguments);
-                    }
-                }, context) : old.apply(this, arguments);
-            };
-        });
+        var old = BI[name];
+        BI[name] = function (obj, fn, context) {
+            return typeof fn === "function" ? old(obj, function (key, value) {
+                if (!(key in Fix.$$skipArray)) {
+                    return fn.apply(this, arguments);
+                }
+            }, context) : old.apply(this, arguments);
+        };
+    });
     BI.isEmpty = function (ob) {
         if (BI.isPlainObject(ob) && ob.__ob__) {
             return BI.keys(ob).length === 0;
@@ -306,7 +314,7 @@
 
     Fix.set = function (obj, k, v) {
         try {
-            if(obj) {
+            if (obj) {
                 obj[k] = v;
             }
         } catch (e) {
@@ -314,7 +322,7 @@
         } finally {
             return _.cloneDeep(obj);
         }
-    }
+    };
     Fix.del = function (obj, k) {
         try {
             delete obj[k];
@@ -323,6 +331,5 @@
         } finally {
             return _.cloneDeep(obj);
         }
-    }
-    BI.watch = Fix.watch;
+    };
 }());

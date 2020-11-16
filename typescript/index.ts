@@ -10,6 +10,7 @@ import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listite
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
+import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
 import { _Single } from "./base/single/single";
@@ -19,6 +20,7 @@ import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/i
 import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textvalue";
+import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
@@ -95,6 +97,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     Iframe: ClassConstructor<_Iframe>;
     AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
     VerticalLayout: ClassConstructor<_VerticalLayout>;
+    Input: ClassConstructor<_Input> & _InputStatic;
+    SearchTextValueCombo: ClassConstructor<_SearchTextValueCombo> & _SearchTextValueComboStatic;
 }
 
 export default {

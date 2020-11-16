@@ -1,5 +1,5 @@
 !(function () {
-    function extend() {
+    function extend () {
         var target = arguments[0] || {}, length = arguments.length, i = 1, options, name, src, copy;
         for (; i < length; i++) {
             // Only deal with non-null/undefined values

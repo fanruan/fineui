@@ -42,7 +42,11 @@ textarea {
 }
 
 .bi-focus-shadow {
-  &:focus-within, &:focus, &:hover {
+  &:focus, &:hover {
+    border-color: @color-bi-border-highlight;
+  }
+  // ie下不支持focus-within， 和上面写在一起会导致ie下:hover不生效
+  &:focus-within{
     border-color: @color-bi-border-highlight;
   }
   &.disabled {

@@ -11,23 +11,28 @@
     };
 
     // 根据配置属性生成widget
-    var createWidget = function (config) {
+    var createWidget = function (config, context, lazy) {
         var cls = kv[config.type];
 
-        if(!cls){
-            throw new Error("组件"+config.type +"未定义");
+        if (!cls) {
+            throw new Error("组件" + config.type + "未定义");
         }
-
+        var pushed = false;
+        if (context) {
+            pushed = true;
+            BI.Widget.pushContext(context);
+        }
         var widget = new cls();
-
         widget._initProps(config);
-        widget._init();
-        widget._initRef();
-
+        widget._initRoot();
+        // if (!lazy || config.element || config.root) {
+        widget._lazyConstructor();
+        // }
+        pushed && BI.Widget.popContext();
         return widget;
     };
 
-    BI.createWidget = BI.createWidget || function (item, options, context) {
+    BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
         var el, w;
@@ -55,7 +60,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -66,12 +71,16 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w) : BI.createWidget(BI.extend({}, item, {type: w.type}, options));
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
         }
         throw new Error("无法根据item创建组件");
+    };
+
+    BI._lazyCreateWidget = BI._lazyCreateWidget || function (item, options, context) {
+        return BI.createWidget(item, options, context, true);
     };
 
     BI.createElement = BI.createElement || function () {

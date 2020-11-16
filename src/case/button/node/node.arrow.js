@@ -32,7 +32,8 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
 
         this.checkbox.on(BI.Controller.EVENT_CHANGE, function (type) {
@@ -66,7 +67,7 @@ BI.ArrowNode = BI.inherit(BI.NodeButton, {
         BI.ArrowNode.superclass.doClick.apply(this, arguments);
         this.checkbox.setSelected(this.isOpened());
     },
-    
+
     setText: function (text) {
         BI.ArrowNode.superclass.setText.apply(this, arguments);
         this.text.setText(text);

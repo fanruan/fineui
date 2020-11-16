@@ -6,14 +6,16 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         return BI.extend(BI.MultiSelectInsertList.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-multi-select-insert-list",
             itemsCreator: BI.emptyFn,
-            valueFormatter: BI.emptyFn
+            valueFormatter: BI.emptyFn,
+            searcherHeight: 24,
+            itemHeight: 24
         });
     },
     _init: function () {
         BI.MultiSelectInsertList.superclass._init.apply(this, arguments);
 
         var self = this, o = this.options;
-        this.storeValue = o.value || {};
+        this.storeValue = this._assertValue(o.value || {});
 
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
@@ -24,6 +26,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             type: "bi.multi_select_loader",
             cls: "popup-multi-select-list bi-border-left bi-border-right bi-border-bottom",
             itemsCreator: o.itemsCreator,
+            itemHeight: o.itemHeight,
             valueFormatter: o.valueFormatter,
             logic: {
                 dynamic: false
@@ -53,6 +56,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
                     o.itemsCreator(op, callback);
                 }
             },
+            itemHeight: o.itemHeight,
             listeners: [{
                 eventName: BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM,
                 action: function () {
@@ -75,6 +79,9 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.searcher",
+            el: {
+                height: o.searcherHeight,
+            },
             allowSearchBlank: false,
             isAutoSearch: false,
             isAutoSync: false,
@@ -169,7 +176,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.trigger,
-                height: 24
+                height: o.searcherHeight
             }, {
                 el: this.adapter,
                 height: "fill"
@@ -180,7 +187,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
             element: this,
             items: [{
                 el: this.searcherPane,
-                top: 30,
+                top: o.searcherHeight,
                 bottom: 0,
                 left: 0,
                 right: 0
@@ -206,6 +213,7 @@ BI.MultiSelectInsertList = BI.inherit(BI.Single, {
         val || (val = {});
         val.type || (val.type = BI.Selection.Multi);
         val.value || (val.value = []);
+        return val;
     },
 
     _makeMap: function (values) {

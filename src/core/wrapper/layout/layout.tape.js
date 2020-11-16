@@ -46,11 +46,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
-            if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item);
-                self.addWidget(self.getName() + i + "", w);
+            if (!self.hasWidget(self._getChildName(i))) {
+                var w = BI._lazyCreateWidget(item);
+                self.addWidget(self._getChildName(i), w);
             } else {
-                w = self.getWidgetByName(self.getName() + i + "");
+                w = self.getWidgetByName(self._getChildName(i));
             }
             w.element.css({position: "absolute", top: (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px", bottom: (item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap + "px"});
         });
@@ -60,7 +60,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
         right[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
-            var w = self.getWidgetByName(self.getName() + i + "");
+            var w = self.getWidgetByName(self._getChildName(i));
             if (BI.isNull(left[i])) {
                 left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
@@ -77,7 +77,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             }
         });
         BI.backAny(items, function (i, item) {
-            var w = self.getWidgetByName(self.getName() + i + "");
+            var w = self.getWidgetByName(self._getChildName(i));
             if (BI.isNull(right[i])) {
                 right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
@@ -159,11 +159,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         var self = this, o = this.options;
         items = BI.compact(items);
         BI.each(items, function (i, item) {
-            if (!self.hasWidget(self.getName() + i + "")) {
-                var w = BI.createWidget(item);
-                self.addWidget(self.getName() + i + "", w);
+            if (!self.hasWidget(self._getChildName(i))) {
+                var w = BI._lazyCreateWidget(item);
+                self.addWidget(self._getChildName(i), w);
             } else {
-                w = self.getWidgetByName(self.getName() + i + "");
+                w = self.getWidgetByName(self._getChildName(i));
             }
             w.element.css({position: "absolute", left: (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px", right: + (item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap + "px"});
         });
@@ -173,7 +173,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
         bottom[items.length - 1] = 0;
 
         BI.any(items, function (i, item) {
-            var w = self.getWidgetByName(self.getName() + i + "");
+            var w = self.getWidgetByName(self._getChildName(i));
             if (BI.isNull(top[i])) {
                 top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
@@ -190,7 +190,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             }
         });
         BI.backAny(items, function (i, item) {
-            var w = self.getWidgetByName(self.getName() + i + "");
+            var w = self.getWidgetByName(self._getChildName(i));
             if (BI.isNull(bottom[i])) {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }

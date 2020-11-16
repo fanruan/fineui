@@ -18,6 +18,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             baseCls: "bi-multi-select-trigger bi-border bi-border-radius",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             searcher: {},
             switcher: {},
 
@@ -41,6 +42,7 @@ BI.MultiSelectInsertTrigger = BI.inherit(BI.Trigger, {
             text: o.text,
             itemsCreator: o.itemsCreator,
             valueFormatter: o.valueFormatter,
+            itemHeight: o.itemHeight,
             watermark: o.watermark,
             popup: {},
             adapter: o.adapter,

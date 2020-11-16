@@ -10,6 +10,9 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big",
         },
+        MAX_HEIGHT: 600,
+        BODY_TGAP: 10,
+        BODY_HGAP: 20,
     },
 
     props: {
@@ -17,7 +20,6 @@ BI.Popover = BI.inherit(BI.Widget, {
         size: "normal", // small, normal, big
         logic: {
             dynamic: false,
-            maxHeight: 600,
         },
         header: null,
         headerHeight: 40,
@@ -29,6 +31,7 @@ BI.Popover = BI.inherit(BI.Widget, {
 
     render: function () {
         var self = this; var o = this.options;
+        var c = this._constant;
         this.startX = 0;
         this.startY = 0;
         var size = this._calculateSize();
@@ -87,28 +90,32 @@ BI.Popover = BI.inherit(BI.Widget, {
                 height: o.headerHeight,
             },
             height: o.headerHeight,
-        }, {
-            el: o.logic.dynamic ? {
+        }, o.logic.dynamic ? {
+            el: {
                 type: "bi.vertical",
-                scrolly: false,
+                scrolly: true,
                 cls: "popover-body",
                 ref: function () {
                     self.body = this;
                 },
-                hgap: 20,
-                tgap: 10,
+                css: {
+                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP),
+                    "min-height": this._getSuitableBodyHeight(size.height),
+                },
                 items: [{
-                    el: BI.extend({}, o.body, {
-                        extraCls: "dynamic-height-limit-layout-" + size.type,
-                    }),
+                    el: o.body,
                 }],
-            } : {
+            },
+            hgap: c.BODY_HGAP,
+            tgap: c.BODY_TGAP,
+        } : {
+            el: {
                 type: "bi.absolute",
                 items: [{
                     el: o.body,
-                    left: 20,
-                    top: 10,
-                    right: 20,
+                    left: c.BODY_HGAP,
+                    top: c.BODY_TGAP,
+                    right: c.BODY_HGAP,
                     bottom: 0,
                 }],
             },
@@ -133,13 +140,13 @@ BI.Popover = BI.inherit(BI.Widget, {
         return BI.extend({
             type: o.logic.dynamic ? "bi.vertical" : "bi.vtape",
             items: items,
-            width: size.width,
+            width: this._getSuitableWidth(size.width),
         }, o.logic.dynamic ? {
             type: "bi.vertical",
             scrolly: false,
         } : {
             type: "bi.vtape",
-            height: size.height,
+            height: this._getSuitableHeight(size.height),
         });
     },
 
@@ -151,6 +158,20 @@ BI.Popover = BI.inherit(BI.Widget, {
             self.startY = pos.top;
             self.tracker.captureMouseMoves(e);
         });
+    },
+
+    _getSuitableBodyHeight: function (height) {
+        var o = this.options;
+        var c = this._constant;
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP);
+    },
+
+    _getSuitableHeight: function (height) {
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight);
+    },
+
+    _getSuitableWidth: function (width) {
+        return BI.clamp(width, 0, BI.Widget._renderEngine.createElement("body").width());
     },
 
     _calculateSize: function () {

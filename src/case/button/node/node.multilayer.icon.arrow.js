@@ -29,7 +29,8 @@ BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
             hgap: o.hgap,
             text: o.text,
             value: o.value,
-            py: o.py
+            py: o.py,
+            keyword: o.keyword
         });
         this.node.on(BI.Controller.EVENT_CHANGE, function (type) {
             self.setSelected(self.isSelected());

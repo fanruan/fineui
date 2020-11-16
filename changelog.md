@@ -1,4 +1,20 @@
 # 更新日志
+2.0(2020-11)
+- 修复了Popover小屏幕上看不完整的问题
+- 颜色选择器支持输入16进制颜色编号
+- bi.textarea_editor支持气泡提示报错
+
+2.0(2020-10)
+- 支持Composition API
+- pane和loadingPane支持加载时自定义提示文本
+
+2.0(2020-09)
+- combo增加click-blur(点击显示,blur消失)作为触发条件功能
+- allCountPager支持是否显示总行数
+- 修复区间滑块setEnable(false)滑块不灰化的问题
+- 修复同步复选下拉框系列setValue所有值后触发器不显示全选的问题
+- BI.Tree.traversal方法迭代函数增加父节点参数
+
 2.0(2020-08)
 - bi.sign_editor支持显示值居左/居中/居右显示
 - bi.iframe新增EVENT_LOADED事件

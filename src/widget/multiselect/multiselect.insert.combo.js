@@ -11,6 +11,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
+            itemHeight: 24,
             attributes: {
                 tabIndex: 0
             },
@@ -57,6 +58,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: o.value
         });
 
@@ -166,6 +168,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 }],
                 itemsCreator: o.itemsCreator,
                 valueFormatter: o.valueFormatter,
+                itemHeight: o.itemHeight,
                 onLoaded: function () {
                     BI.nextTick(function () {
                         self.combo.adjustWidth();

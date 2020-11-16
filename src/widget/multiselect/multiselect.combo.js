@@ -10,6 +10,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             baseCls: "bi-multi-select-combo",
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
+            itemHeight: 24,
             height: 24,
             attributes: {
                 tabIndex: 0
@@ -60,6 +61,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             },
             valueFormatter: o.valueFormatter,
             itemsCreator: BI.bind(this._itemsCreator4Trigger, this),
+            itemHeight: o.itemHeight,
             value: this.storeValue
         });
 
@@ -170,6 +172,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                     }
                 }],
                 itemsCreator: o.itemsCreator,
+                itemsHeight: o.itemsHeight,
                 valueFormatter: o.valueFormatter,
                 onLoaded: function () {
                     BI.nextTick(function () {

@@ -7,6 +7,7 @@ export interface _Single extends _Widget {
     disabledHover(): void;
     setTitle(title: string, opt?: SingleOpt): void;
     setWarningTitle(title: string, opt?: SingleOpt): void;
+    setTipType(v: string): void;
     getTipType(): string;
     isReadOnly(): boolean;
     getTitle(): string;
