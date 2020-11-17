@@ -1,4 +1,4 @@
-/*! time: 2020-11-16 20:20:25 */
+/*! time: 2020-11-17 18:00:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13566,7 +13566,7 @@ module.exports = function (exec) {
         if (self[life]) {
             var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
             BI.each(hooks, function (i, hook) {
-                hook.apply(self);
+                hook.call(self);
             });
         }
     }
@@ -14706,7 +14706,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     _getChildName: function (index) {
-        return this.getName() + "_" + index;
+        return "" + index;
     },
 
     _addElement: function (i, item, context) {
@@ -14717,7 +14717,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
                         BI.remove(self._children, child);
-                        self.removeItemAt(name.replace(self.getName() + "_", "") | 0);
+                        self.removeItemAt(name | 0);
                     }
                 });
             });
@@ -15191,7 +15191,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeIndex = name.replace(self.getName() + "_", "");
+                    removeIndex = name;
                 }
             });
         } else {
@@ -19897,7 +19897,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeName = name.replace(self.getName() + "_", "");
+                    removeName = name;
                 }
             });
         } else {
