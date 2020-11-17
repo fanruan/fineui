@@ -1,6 +1,6 @@
 # 更新日志
 2.0(2020-11)
-- store支持webworker机制，可以将状态处理多线程处理
+- store支持webworker,引入多线程机制
 - 修复了Popover小屏幕上看不完整的问题
 - 颜色选择器支持输入16进制颜色编号
 - bi.textarea_editor支持气泡提示报错
