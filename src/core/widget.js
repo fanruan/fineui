@@ -11,7 +11,7 @@
         if (self[life]) {
             var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
             BI.each(hooks, function (i, hook) {
-                hook.apply(self);
+                hook.call(self);
             });
         }
     }
