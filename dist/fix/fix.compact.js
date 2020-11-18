@@ -11,6 +11,25 @@
                 vm._watchers.push(createWatcher(vm, key, handler));
             }
         }
+        BI.each(vm.$watchDelayCallbacks, function (i, watchDelayCallback) {
+            var innerWatch = watchDelayCallback[0];
+            var innerHandler = watchDelayCallback[1];
+            if (BI.isKey(innerWatch)) {
+                var key = innerWatch;
+                innerWatch = {};
+                innerWatch[key] = innerHandler;
+            }
+            for (var key in innerWatch) {
+                var handler = innerWatch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        vm._watchers.push(createWatcher(vm, key, handler[i]));
+                    }
+                } else {
+                    vm._watchers.push(createWatcher(vm, key, handler));
+                }
+            }
+        });
     }
 
     function createWatcher (vm, keyOrFn, cb, options) {
@@ -97,26 +116,6 @@
     //     pushed && popContext();
     //     return result;
     // };
-
-    BI.watch = function (watch, handler) {
-        if (BI.Widget.current) {
-            if (BI.isKey(watch)) {
-                var key = watch;
-                watch = {};
-                watch[key] = handler;
-            }
-            for (var key in watch) {
-                var handler = watch[key];
-                if (BI.isArray(handler)) {
-                    for (var i = 0; i < handler.length; i++) {
-                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
-                    }
-                } else {
-                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
-                }
-            }
-        }
-    };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];

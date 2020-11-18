@@ -196,7 +196,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeName = name.replace(self.getName() + "_", "");
+                    removeName = name;
                 }
             });
         } else {

@@ -83,7 +83,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     _getChildName: function (index) {
-        return this.getName() + "_" + index;
+        return "" + index;
     },
 
     _addElement: function (i, item, context) {
@@ -94,7 +94,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
                         BI.remove(self._children, child);
-                        self.removeItemAt(name.replace(self.getName() + "_", "") | 0);
+                        self.removeItemAt(name | 0);
                     }
                 });
             });
@@ -568,7 +568,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeIndex = name.replace(self.getName() + "_", "");
+                    removeIndex = name;
                 }
             });
         } else {

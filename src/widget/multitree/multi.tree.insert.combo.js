@@ -273,6 +273,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             }
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));

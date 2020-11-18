@@ -1,4 +1,4 @@
-/*! time: 2020-11-16 12:50:27 */
+/*! time: 2020-11-17 18:00:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13562,6 +13562,15 @@ module.exports = function (exec) {
  */
 
 !(function () {
+    function callLifeHook (self, life) {
+        if (self[life]) {
+            var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
+            BI.each(hooks, function (i, hook) {
+                hook.call(self);
+            });
+        }
+    }
+
     BI.Widget = BI.Widget || BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -13583,7 +13592,11 @@ module.exports = function (exec) {
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
-            // do nothing
+            if (this.setup) {
+                pushTarget(this);
+                this.render = this.setup();
+                popTarget();
+            }
         },
 
         _lazyConstructor: function () {
@@ -13639,10 +13652,10 @@ module.exports = function (exec) {
 
         _render: function () {
             this.__asking = false;
-            this.beforeCreate && this.beforeCreate();
+            callLifeHook(this, "beforeCreate");
             this._initElement();
             this._initEffects();
-            this.created && this.created();
+            callLifeHook(this, "created");
         },
 
         /**
@@ -13727,11 +13740,6 @@ module.exports = function (exec) {
         _initElement: function () {
             var self = this;
             var els = this.render && this.render();
-            if (!els) {
-                pushTarget(this);
-                els = this.setup && this.setup();
-                popTarget();
-            }
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -13765,7 +13773,7 @@ module.exports = function (exec) {
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
-            lifeHook !== false && this.beforeMount && this.beforeMount();
+            lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
@@ -13773,7 +13781,7 @@ module.exports = function (exec) {
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
-            lifeHook !== false && this.mounted && this.mounted();
+            lifeHook !== false && callLifeHook(this, "mounted");
             this.fireEvent(BI.Events.MOUNT);
             predicate && predicate(this);
             return true;
@@ -14012,7 +14020,7 @@ module.exports = function (exec) {
         },
 
         __d: function () {
-            this.beforeDestroy && this.beforeDestroy();
+            callLifeHook(this, "beforeDestroy");
             this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
@@ -14020,7 +14028,7 @@ module.exports = function (exec) {
             this._children = {};
             this._parent = null;
             this._isMounted = false;
-            this.destroyed && this.destroyed();
+            callLifeHook(this, "destroyed");
             this.destroyed = null;
         },
 
@@ -14081,24 +14089,69 @@ module.exports = function (exec) {
         BI.Widget.current = current = currentStack.pop();
     }
 
+    BI.useStore = function (_store) {
+        if (current && current.store) {
+            return current.store;
+        }
+        if (current && current.$storeDelegate) {
+            return current.$storeDelegate;
+        }
+        if (current) {
+            var delegate = {};
+            current._store = function () {
+                var st = _store.apply(this, arguments);
+                BI.extend(delegate, st);
+                return st;
+            };
+            return current.$storeDelegate = delegate;
+        }
+    };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
+            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+        }
+    };
+
     BI.onBeforeMount = function (beforeMount) {
         if (current) {
-            current.beforeMount = beforeMount;
+            if (!current.beforeMount) {
+                current.beforeMount = [];
+            } else if (!BI.isArray(current.beforeMount)) {
+                current.beforeMount = [current.beforeMount];
+            }
+            current.beforeMount.push(beforeMount);
         }
     };
     BI.onMounted = function (mounted) {
         if (current) {
-            current.mounted = mounted;
+            if (!current.mounted) {
+                current.mounted = [];
+            } else if (!BI.isArray(current.mounted)) {
+                current.mounted = [current.mounted];
+            }
+            current.mounted.push(mounted);
         }
     };
     BI.onBeforeUnmount = function (beforeDestroy) {
         if (current) {
-            current.beforeDestroy = beforeDestroy;
+            if (!current.beforeDestroy) {
+                current.beforeDestroy = [];
+            } else if (!BI.isArray(current.beforeDestroy)) {
+                current.beforeDestroy = [current.beforeDestroy];
+            }
+            current.beforeDestroy.push(beforeDestroy);
         }
     };
     BI.onUnmounted = function (destroyed) {
         if (current) {
-            current.destroyed = destroyed;
+            if (!current.destroyed) {
+                current.destroyed = [];
+            } else if (!BI.isArray(current.destroyed)) {
+                current.destroyed = [current.destroyed];
+            }
+            current.destroyed.push(destroyed);
         }
     };
 
@@ -14653,7 +14706,7 @@ BI.Layout = BI.inherit(BI.Widget, {
     },
 
     _getChildName: function (index) {
-        return this.getName() + "_" + index;
+        return "" + index;
     },
 
     _addElement: function (i, item, context) {
@@ -14664,7 +14717,7 @@ BI.Layout = BI.inherit(BI.Widget, {
                 BI.each(self._children, function (name, child) {
                     if (child === w) {
                         BI.remove(self._children, child);
-                        self.removeItemAt(name.replace(self.getName() + "_", "") | 0);
+                        self.removeItemAt(name | 0);
                     }
                 });
             });
@@ -15138,7 +15191,7 @@ BI.Layout = BI.inherit(BI.Widget, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeIndex = name.replace(self.getName() + "_", "");
+                    removeIndex = name;
                 }
             });
         } else {
@@ -19844,7 +19897,7 @@ BI.CardLayout = BI.inherit(BI.Layout, {
         if (BI.isWidget(nameOrWidget)) {
             BI.each(this._children, function (name, child) {
                 if (child === nameOrWidget) {
-                    removeName = name.replace(self.getName() + "_", "");
+                    removeName = name;
                 }
             });
         } else {
@@ -51117,6 +51170,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -51585,6 +51644,12 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -52081,6 +52146,12 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -52568,6 +52639,12 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -54812,6 +54889,9 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
         this.switcher.on(BI.Switcher.EVENT_BEFORE_POPUPVIEW, function () {
             self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW);
         });
+        this.switcher.on(BI.Switcher.EVENT_AFTER_HIDEVIEW, function () {
+            self.fireEvent(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW);
+        });
         this.switcher.on(BI.Switcher.EVENT_AFTER_POPUPVIEW, function () {
             var me = this;
             BI.nextTick(function () {
@@ -54861,6 +54941,7 @@ BI.MultiSelectCheckSelectedSwitcher = BI.inherit(BI.Widget, {
 
 BI.MultiSelectCheckSelectedSwitcher.EVENT_TRIGGER_CHANGE = "EVENT_TRIGGER_CHANGE";
 BI.MultiSelectCheckSelectedSwitcher.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
@@ -56567,6 +56648,12 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
             });
         });
 
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
+        });
+
         this.trigger.element.click(function (e) {
             if (self.trigger.element.find(e.target).length > 0) {
                 self.numberCounter.hideView();
@@ -56924,6 +57011,12 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
                 want2showCounter = null;
                 showCounter();
             }
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
+            });
         });
 
         this.numberCounter.on(BI.Events.VIEW, function (b) {
@@ -57323,6 +57416,12 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
         this.numberCounter.on(BI.Events.VIEW, function (b) {
             BI.nextTick(function () {// 自动调整宽度
                 self.trigger.refreshPlaceHolderWidth((b === true ? self.numberCounter.element.outerWidth() + 8 : 0));
+            });
+        });
+
+        this.numberCounter.on(BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW, function () {
+            BI.nextTick(function () {// 收起时自动调整宽度
+                self.trigger.refreshPlaceHolderWidth(0);
             });
         });
 
@@ -91939,6 +92038,25 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 vm._watchers.push(createWatcher(vm, key, handler));
             }
         }
+        BI.each(vm.$watchDelayCallbacks, function (i, watchDelayCallback) {
+            var innerWatch = watchDelayCallback[0];
+            var innerHandler = watchDelayCallback[1];
+            if (BI.isKey(innerWatch)) {
+                var key = innerWatch;
+                innerWatch = {};
+                innerWatch[key] = innerHandler;
+            }
+            for (var key in innerWatch) {
+                var handler = innerWatch[key];
+                if (BI.isArray(handler)) {
+                    for (var i = 0; i < handler.length; i++) {
+                        vm._watchers.push(createWatcher(vm, key, handler[i]));
+                    }
+                } else {
+                    vm._watchers.push(createWatcher(vm, key, handler));
+                }
+            }
+        });
     }
 
     function createWatcher (vm, keyOrFn, cb, options) {
@@ -92025,26 +92143,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     //     pushed && popContext();
     //     return result;
     // };
-
-    BI.watch = function (watch, handler) {
-        if (BI.Widget.current) {
-            if (BI.isKey(watch)) {
-                var key = watch;
-                watch = {};
-                watch[key] = handler;
-            }
-            for (var key in watch) {
-                var handler = watch[key];
-                if (BI.isArray(handler)) {
-                    for (var i = 0; i < handler.length; i++) {
-                        BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler[i]));
-                    }
-                } else {
-                    BI.Widget.current._watchers.push(createWatcher(BI.Widget.current, key, handler));
-                }
-            }
-        }
-    };
 
     _.each(["populate", "addItems", "prependItems"], function (name) {
         var old = BI.Loader.prototype[name];

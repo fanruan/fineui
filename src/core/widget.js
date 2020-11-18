@@ -7,6 +7,15 @@
  */
 
 !(function () {
+    function callLifeHook (self, life) {
+        if (self[life]) {
+            var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
+            BI.each(hooks, function (i, hook) {
+                hook.call(self);
+            });
+        }
+    }
+
     BI.Widget = BI.Widget || BI.inherit(BI.OB, {
         _defaultConfig: function () {
             return BI.extend(BI.Widget.superclass._defaultConfig.apply(this), {
@@ -28,7 +37,11 @@
 
         // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
-            // do nothing
+            if (this.setup) {
+                pushTarget(this);
+                this.render = this.setup();
+                popTarget();
+            }
         },
 
         _lazyConstructor: function () {
@@ -84,10 +97,10 @@
 
         _render: function () {
             this.__asking = false;
-            this.beforeCreate && this.beforeCreate();
+            callLifeHook(this, "beforeCreate");
             this._initElement();
             this._initEffects();
-            this.created && this.created();
+            callLifeHook(this, "created");
         },
 
         /**
@@ -172,11 +185,6 @@
         _initElement: function () {
             var self = this;
             var els = this.render && this.render();
-            if (!els) {
-                pushTarget(this);
-                els = this.setup && this.setup();
-                popTarget();
-            }
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -210,7 +218,7 @@
             if (!force && (this._isMounted || !this.isVisible() || this.__asking === true || !(this._isRoot === true || (this._parent && this._parent._isMounted === true)))) {
                 return false;
             }
-            lifeHook !== false && this.beforeMount && this.beforeMount();
+            lifeHook !== false && callLifeHook(this, "beforeMount");
             this._isMounted = true;
             this._mountChildren && this._mountChildren();
             BI.each(this._children, function (i, widget) {
@@ -218,7 +226,7 @@
                 !self.isValid() && widget._setValid(false);
                 widget._mount && widget._mount(deep ? force : false, deep, lifeHook, predicate);
             });
-            lifeHook !== false && this.mounted && this.mounted();
+            lifeHook !== false && callLifeHook(this, "mounted");
             this.fireEvent(BI.Events.MOUNT);
             predicate && predicate(this);
             return true;
@@ -457,7 +465,7 @@
         },
 
         __d: function () {
-            this.beforeDestroy && this.beforeDestroy();
+            callLifeHook(this, "beforeDestroy");
             this.beforeDestroy = null;
             BI.each(this._children, function (i, widget) {
                 widget && widget._unMount && widget._unMount();
@@ -465,7 +473,7 @@
             this._children = {};
             this._parent = null;
             this._isMounted = false;
-            this.destroyed && this.destroyed();
+            callLifeHook(this, "destroyed");
             this.destroyed = null;
         },
 
@@ -526,24 +534,69 @@
         BI.Widget.current = current = currentStack.pop();
     }
 
+    BI.useStore = function (_store) {
+        if (current && current.store) {
+            return current.store;
+        }
+        if (current && current.$storeDelegate) {
+            return current.$storeDelegate;
+        }
+        if (current) {
+            var delegate = {};
+            current._store = function () {
+                var st = _store.apply(this, arguments);
+                BI.extend(delegate, st);
+                return st;
+            };
+            return current.$storeDelegate = delegate;
+        }
+    };
+
+    BI.watch = function (watch, handler) {
+        if (BI.Widget.current) {
+            BI.Widget.current.$watchDelayCallbacks || (BI.Widget.current.$watchDelayCallbacks = []);
+            BI.Widget.current.$watchDelayCallbacks.push([watch, handler]);
+        }
+    };
+
     BI.onBeforeMount = function (beforeMount) {
         if (current) {
-            current.beforeMount = beforeMount;
+            if (!current.beforeMount) {
+                current.beforeMount = [];
+            } else if (!BI.isArray(current.beforeMount)) {
+                current.beforeMount = [current.beforeMount];
+            }
+            current.beforeMount.push(beforeMount);
         }
     };
     BI.onMounted = function (mounted) {
         if (current) {
-            current.mounted = mounted;
+            if (!current.mounted) {
+                current.mounted = [];
+            } else if (!BI.isArray(current.mounted)) {
+                current.mounted = [current.mounted];
+            }
+            current.mounted.push(mounted);
         }
     };
     BI.onBeforeUnmount = function (beforeDestroy) {
         if (current) {
-            current.beforeDestroy = beforeDestroy;
+            if (!current.beforeDestroy) {
+                current.beforeDestroy = [];
+            } else if (!BI.isArray(current.beforeDestroy)) {
+                current.beforeDestroy = [current.beforeDestroy];
+            }
+            current.beforeDestroy.push(beforeDestroy);
         }
     };
     BI.onUnmounted = function (destroyed) {
         if (current) {
-            current.destroyed = destroyed;
+            if (!current.destroyed) {
+                current.destroyed = [];
+            } else if (!BI.isArray(current.destroyed)) {
+                current.destroyed = [current.destroyed];
+            }
+            current.destroyed.push(destroyed);
         }
     };
 
