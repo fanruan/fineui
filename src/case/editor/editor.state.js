@@ -244,6 +244,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
 
     setState: function (v) {
         var o = this.options;
+        var defaultText = BI.isFunction(o.defaultText) ? o.defaultText() : o.defaultText;
         BI.StateEditor.superclass.setValue.apply(this, arguments);
         this.stateValue = v;
         if (BI.isNumber(v)) {
@@ -254,21 +255,21 @@ BI.StateEditor = BI.inherit(BI.Widget, {
                 this._setText(BI.i18nText("BI-Select_Part"));
                 this.text.element.removeClass("bi-water-mark");
             } else {
-                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
-                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+                this._setText(BI.isKey(defaultText) ? defaultText : o.text);
+                BI.isKey(defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             }
             return;
         }
         if (BI.isString(v)) {
             this._setText(v);
             // 配置了defaultText才判断标灰，其他情况不标灰
-            (BI.isKey(o.defaultText) && o.defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+            (BI.isKey(defaultText) && defaultText === v) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             return;
         }
         if (BI.isArray(v)) {
             if (BI.isEmpty(v)) {
-                this._setText(BI.isKey(o.defaultText) ? o.defaultText : o.text);
-                BI.isKey(o.defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
+                this._setText(BI.isKey(defaultText) ? defaultText : o.text);
+                BI.isKey(defaultText) ? this.text.element.addClass("bi-water-mark") : this.text.element.removeClass("bi-water-mark");
             } else if (v.length === 1) {
                 this._setText(v[0]);
                 this.text.element.removeClass("bi-water-mark");
