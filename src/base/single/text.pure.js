@@ -35,7 +35,7 @@
 
         setText: function (text) {
             this.options.text = BI.isNotNull(text) ? text : "";
-            this.text.element.__textKeywordMarked__(this._getShowText());
+            this.element.__textKeywordMarked__(this._getShowText());
         }
     });
     BI.shortcut("bi.pure_text", BI.PureText);
