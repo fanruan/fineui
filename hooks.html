@@ -50,11 +50,10 @@
     });
 
     BI.model("demo.model", Model);
-    function expandFunction () {
+
+    function expandFunction (storeCreator) {
         var button;
-        var store = BI.useStore(function () {
-            return BI.Models.getModel("demo.model");
-        });
+        var store = BI.useStore(storeCreator);
         BI.onBeforeMount(function () {
 
         });
@@ -84,11 +83,9 @@
         };
     }
 
-    function clearAllFunction () {
+    function clearAllFunction (storeCreator) {
         var button;
-        var store = BI.useStore(function () {
-            return BI.Models.getModel("demo.model");
-        });
+        var store = BI.useStore(storeCreator);
         BI.onBeforeMount(function () {
 
         });
@@ -118,11 +115,9 @@
         };
     }
 
-    function undoFunction () {
+    function undoFunction (storeCreator) {
         var button;
-        var store = BI.useStore(function () {
-            return BI.Models.getModel("demo.model");
-        });
+        var store = BI.useStore(storeCreator);
         BI.onBeforeMount(function () {
 
         });
@@ -152,11 +147,9 @@
         };
     }
 
-    function redoFunction () {
+    function redoFunction (storeCreator) {
         var button;
-        var store = BI.useStore(function () {
-            return BI.Models.getModel("demo.model");
-        });
+        var store = BI.useStore(storeCreator);
         BI.onBeforeMount(function () {
 
         });
@@ -188,10 +181,13 @@
 
     var Widget = BI.inherit(BI.Widget, {
         setup: function () {
-            var expandComponent = expandFunction();
-            var clearAllComponent = clearAllFunction();
-            var undoComponent = undoFunction();
-            var redoComponent = redoFunction();
+            var storeCreator = function () {
+                return BI.Models.getModel("demo.model");
+            };
+            var expandComponent = expandFunction(storeCreator);
+            var clearAllComponent = clearAllFunction(storeCreator);
+            var undoComponent = undoFunction(storeCreator);
+            var redoComponent = redoFunction(storeCreator);
             return function () {
                 return {
                     type: "bi.vertical",
