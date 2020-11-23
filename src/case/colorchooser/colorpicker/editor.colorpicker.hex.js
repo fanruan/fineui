@@ -85,15 +85,19 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
                             },
                             cls: "color-picker-editor-input",
                             validationChecker: this._hexChecker,
+                            allowBlank: true,
                             errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                             width: c.HEX_WIDTH,
                             height: 20,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
-                                    self.setValue("#" + this.getValue());
-                                    self.colorShow.element.css("background-color", self.getValue());
-                                    self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                    self._checkHexEditor();
+                                    if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                                        self.colorShow.element.css("background-color", self.getValue());
+                                        self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                                    }
+
                                 }
                             }]
                         }, {
@@ -236,6 +240,21 @@ BI.HexColorPickerEditor = BI.inherit(BI.Widget, {
 
     _isEmptyRGB: function () {
         return BI.isEmptyString(this.storeValue.r) && BI.isEmptyString(this.storeValue.g) && BI.isEmptyString(this.storeValue.b);
+    },
+
+    _checkHexEditor: function () {
+        if (BI.isEmptyString(this.hexEditor.getValue())) {
+            this.hexEditor.setValue("000000");
+        }
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb("#" + this.hexEditor.getValue()));
+        this.storeValue = {
+            r: json.r || 0,
+            g: json.g || 0,
+            b: json.b || 0,
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
     },
 
     _showPreColor: function (color) {
