@@ -1,4 +1,4 @@
-/*! time: 2020-11-20 23:10:26 */
+/*! time: 2020-11-23 10:50:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1090);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1091);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -4309,7 +4309,7 @@ if (!_global.BI) {
 
 /***/ }),
 
-/***/ 1090:
+/***/ 1091:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);
@@ -4339,8 +4339,8 @@ __webpack_require__(118);
 __webpack_require__(119);
 __webpack_require__(120);
 __webpack_require__(121);
-__webpack_require__(755);
-__webpack_require__(1091);
+__webpack_require__(756);
+__webpack_require__(1092);
 __webpack_require__(131);
 __webpack_require__(132);
 module.exports = __webpack_require__(133);
@@ -4348,7 +4348,7 @@ module.exports = __webpack_require__(133);
 
 /***/ }),
 
-/***/ 1091:
+/***/ 1092:
 /***/ (function(module, exports) {
 
 /**
@@ -8618,7 +8618,7 @@ _.extend(BI, {
         }
     };
 
-    BI.getContext = BI.getContext || function (type, config) {
+    BI.getResource = BI.getResource || function (type, config) {
         if (constantInjection[type]) {
             return BI.Constants.getConstant(type);
         }
@@ -9172,7 +9172,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 755:
+/***/ 756:
 /***/ (function(module, exports) {
 
 BI.i18n = {
