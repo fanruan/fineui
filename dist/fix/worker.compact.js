@@ -78,7 +78,7 @@
                 });
                 var store = {};
                 this.store = new Proxy(store, {
-                    get (target, key) {
+                    get: function (target, key) {
                         return function () {
                             WORKER.postMessage({
                                 type: modelType,
@@ -89,7 +89,7 @@
                             });
                         };
                     },
-                    set (target, key, value) {
+                    set: function (target, key, value) {
                         return Reflect.set(target, key, value);
                     }
                 });
