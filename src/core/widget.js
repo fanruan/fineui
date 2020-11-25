@@ -8,9 +8,8 @@
 
 !(function () {
     function callLifeHook (self, life) {
-        var hook = self.options[life] || self[life];
-        if (hook) {
-            var hooks = BI.isArray(hook) ? hook : [hook];
+        if (self[life]) {
+            var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
             BI.each(hooks, function (i, hook) {
                 hook.call(self);
             });
@@ -85,9 +84,9 @@
         },
 
         _initRender: function () {
-            if (this.options.beforeInit || this.beforeInit) {
+            if (this.beforeInit) {
                 this.__asking = true;
-                (this.options.beforeInit || this.beforeInit)(BI.bind(this._render, this));
+                this.beforeInit(BI.bind(this._render, this));
                 if (this.__asking === true) {
                     this.__async = true;
                 }
@@ -185,8 +184,7 @@
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
-            var els = render && render.call(this);
+            var els = this.render && this.render();
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -612,6 +610,7 @@
                 if (o.element) {
                     return BI.$(o.element);
                 }
+                return BI.$(document.createElement(o.tagName));
                 if (o.tagName) {
                     return BI.$(document.createElement(o.tagName));
                 }
@@ -660,3 +659,4 @@
         return widget._mount(true, false, false, predicate);
     };
 })();
+
