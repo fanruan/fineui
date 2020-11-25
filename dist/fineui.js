@@ -1,4 +1,4 @@
-/*! time: 2020-11-24 16:50:27 */
+/*! time: 2020-11-25 17:20:34 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -89822,7 +89822,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
         this.G.setValue(BI.isNull(json.g) ? "" : json.g);
         this.B.setValue(BI.isNull(json.b) ? "" : json.b);
-        this.hexEditor.setValue(color.slice(this.constants.HEX_PREFIX_POSITION));
+        this.hexEditor.setValue(BI.isEmptyObject(json) ? "" : color.slice(this.constants.HEX_PREFIX_POSITION));
     },
 
     getValue: function () {
