@@ -611,10 +611,6 @@
                     return BI.$(o.element);
                 }
                 return BI.$(document.createElement(o.tagName));
-                if (o.tagName) {
-                    return BI.$(document.createElement(o.tagName));
-                }
-                return BI.$(document.createDocumentFragment());
             }
             return BI.$(widget);
         },
