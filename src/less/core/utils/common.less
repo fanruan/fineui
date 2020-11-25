@@ -927,34 +927,82 @@ textarea {
     }
   }
   &.disabled {
-    color: @color-bi-text-disabled !important;
-    & .bi-input {
+    &, &:hover, &:active {
       color: @color-bi-text-disabled !important;
-    }
-    & .bi-textarea {
-      color: @color-bi-text-disabled !important;
-    }
-    background-color: transparent !important;
-    & .bi-high-light {
-      color: @color-bi-text-disabled !important;
-    }
-    &.bi-high-light-border {
-      border-color: @color-bi-border-disabled;
-    }
-    &.hover, &.active {
-      color: @color-bi-text !important;
       & .bi-input {
-        color: @color-bi-text !important;
+        color: @color-bi-text-disabled !important;
       }
       & .bi-textarea {
-        color: @color-bi-text !important;
+        color: @color-bi-text-disabled !important;
       }
-      background-color: @color-bi-background-dark-gray !important;
+      background-color: transparent !important;
       & .bi-high-light {
         color: @color-bi-text-disabled !important;
       }
       &.bi-high-light-border {
         border-color: @color-bi-border-disabled;
+      }
+      &.hover, &.active {
+        color: @color-bi-text !important;
+        & .bi-input {
+          color: @color-bi-text !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text !important;
+        }
+        background-color: @color-bi-background-dark-gray !important;
+        & .bi-high-light {
+          color: @color-bi-text-disabled !important;
+        }
+        &.bi-high-light-border {
+          border-color: @color-bi-border-disabled;
+        }
+      }
+    }
+  }
+}
+
+.bi-theme-dark {
+  .bi-list-item-select {
+    &:hover, &.hover {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      .background-color(@color-bi-background-default, 5%);
+    }
+    &:active, &.active {
+      color: @color-bi-text;
+      & .bi-input {
+        color: @color-bi-text;
+      }
+      & .bi-textarea {
+        color: @color-bi-text;
+      }
+      background-color: @color-bi-background-highlight;
+      & .bi-high-light {
+        color: @color-bi-text;
+      }
+    }
+    &.disabled {
+      &, &:hover, &:active {
+        background-color: transparent !important;
+        color: @color-bi-text-disabled-theme-dark !important;
+        & .bi-input {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-textarea {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+        & .bi-high-light {
+          color: @color-bi-text-disabled-theme-dark !important;
+        }
+      }
+      &.hover, &.active {
+        background-color: @background-color-black-theme-dark !important;
       }
     }
   }
@@ -1031,7 +1079,7 @@ textarea {
     &.active {
       background-color: @color-bi-background-default-theme-dark;
     }
-    
+
     &.disabled {
       &, &:hover, &:active {
         background-color: transparent !important;
@@ -1045,6 +1093,9 @@ textarea {
         & .bi-high-light {
           color: @color-bi-text-disabled-theme-dark !important;
         }
+      }
+      &.active {
+        background-color: @background-color-black-theme-dark !important;
       }
     }
   }
@@ -1090,49 +1141,6 @@ textarea {
     &.disabled {
       &:hover, &.hover, &:active, &.active {
         background-color: @color-bi-background-default-theme-dark !important;
-      }
-    }
-  }
-}
-
-.bi-theme-dark {
-  .bi-list-item-select {
-    &:hover, &.hover {
-      color: @color-bi-text;
-      & .bi-input {
-        color: @color-bi-text;
-      }
-      & .bi-textarea {
-        color: @color-bi-text;
-      }
-      .background-color(@color-bi-background-default, 5%);
-    }
-    &:active, &.active {
-      color: @color-bi-text;
-      & .bi-input {
-        color: @color-bi-text;
-      }
-      & .bi-textarea {
-        color: @color-bi-text;
-      }
-      background-color: @color-bi-background-highlight;
-      & .bi-high-light {
-        color: @color-bi-text;
-      }
-    }
-    &.disabled {
-      &, &:hover, &:active {
-        background-color: transparent !important;
-        color: @color-bi-text-disabled-theme-dark !important;
-        & .bi-input {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-        & .bi-textarea {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
-        & .bi-high-light {
-          color: @color-bi-text-disabled-theme-dark !important;
-        }
       }
     }
   }
