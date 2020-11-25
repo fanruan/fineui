@@ -438,6 +438,7 @@ describe("baseFunctionTest", function () {
      * 只传一个时分秒format的时间进去后,在某些情况下,返回的是当前时间,然而想要的是返回正确的时分秒
     */
     it("parseDateTime2", function () {
-        expect(BI.parseDateTime("2020-11-11 14:13:16", "%Y-%X-%e %H:%M:%S").getTime()).to.eql(1605075196000);
+        var date = BI.getDate();
+        expect(BI.parseDateTime("14:13:16", "%H:%M:%S").getTime()).to.eql(BI.getDate(date.getFullYear(), date.getMonth(), 14, 14, 13, 16).getTime());
     });
 });
