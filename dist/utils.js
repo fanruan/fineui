@@ -1,4 +1,4 @@
-/*! time: 2020-11-19 09:50:32 */
+/*! time: 2020-11-25 17:20:34 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1089);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1091);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -4240,45 +4240,6 @@ if (!_global.BI) {
 
 /***/ }),
 
-/***/ 1089:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(101);
-__webpack_require__(102);
-__webpack_require__(130);
-__webpack_require__(123);
-__webpack_require__(126);
-__webpack_require__(127);
-__webpack_require__(124);
-__webpack_require__(125);
-__webpack_require__(105);
-__webpack_require__(107);
-__webpack_require__(122);
-__webpack_require__(129);
-__webpack_require__(128);
-__webpack_require__(108);
-__webpack_require__(109);
-__webpack_require__(110);
-__webpack_require__(111);
-__webpack_require__(112);
-__webpack_require__(113);
-__webpack_require__(114);
-__webpack_require__(115);
-__webpack_require__(116);
-__webpack_require__(117);
-__webpack_require__(118);
-__webpack_require__(119);
-__webpack_require__(120);
-__webpack_require__(121);
-__webpack_require__(754);
-__webpack_require__(1090);
-__webpack_require__(131);
-__webpack_require__(132);
-module.exports = __webpack_require__(133);
-
-
-/***/ }),
-
 /***/ 109:
 /***/ (function(module, exports) {
 
@@ -4348,7 +4309,46 @@ module.exports = __webpack_require__(133);
 
 /***/ }),
 
-/***/ 1090:
+/***/ 1091:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(101);
+__webpack_require__(102);
+__webpack_require__(130);
+__webpack_require__(123);
+__webpack_require__(126);
+__webpack_require__(127);
+__webpack_require__(124);
+__webpack_require__(125);
+__webpack_require__(105);
+__webpack_require__(107);
+__webpack_require__(122);
+__webpack_require__(129);
+__webpack_require__(128);
+__webpack_require__(108);
+__webpack_require__(109);
+__webpack_require__(110);
+__webpack_require__(111);
+__webpack_require__(112);
+__webpack_require__(113);
+__webpack_require__(114);
+__webpack_require__(115);
+__webpack_require__(116);
+__webpack_require__(117);
+__webpack_require__(118);
+__webpack_require__(119);
+__webpack_require__(120);
+__webpack_require__(121);
+__webpack_require__(756);
+__webpack_require__(1092);
+__webpack_require__(131);
+__webpack_require__(132);
+module.exports = __webpack_require__(133);
+
+
+/***/ }),
+
+/***/ 1092:
 /***/ (function(module, exports) {
 
 /**
@@ -8618,7 +8618,7 @@ _.extend(BI, {
         }
     };
 
-    BI.getContext = BI.getContext || function (type, config) {
+    BI.getResource = BI.getResource || function (type, config) {
         if (constantInjection[type]) {
             return BI.Constants.getConstant(type);
         }
@@ -9172,7 +9172,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 754:
+/***/ 756:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -9186,7 +9186,7 @@ BI.i18n = {
     "BI-Basic_Altogether": "共",
     "BI-Basic_Sunday": "星期日",
     "BI-Widget_Background_Colour": "组件背景",
-    "BI-Color_Picker_Error_Text": "请输入0~255的正整数",
+    "BI-Color_Picker_Error_Text": "请输入0-255的正整数",
     "BI-Multi_Date_Month": "月",
     "BI-No_Selected_Item": "没有可选项",
     "BI-Multi_Date_Year_Begin": "年初",
@@ -9268,6 +9268,7 @@ BI.i18n = {
     "BI-Summary_Values": "汇总",
     "BI-Basic_Clear": "清除",
     "BI-Upload_File_Size_Error": "文件大小不支持",
+    "BI-Upload_File_Count_Error": "超出上传数量上限，请重新上传",
     "BI-Up_Page": "向上翻页",
     "BI-Basic_Simple_Sunday": "日",
     "BI-Multi_Date_Relative_Current_Time": "相对当前时间",

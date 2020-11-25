@@ -181,7 +181,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         width: datum.width,
                         height: datum.height
                     }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
