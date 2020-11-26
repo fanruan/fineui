@@ -1,4 +1,4 @@
-/*! time: 2020-11-25 23:40:26 */
+/*! time: 2020-11-26 11:40:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26254,7 +26254,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         });
     },
 
-    render: function() {
+    render: function () {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -26263,7 +26263,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({resize: "none"});
+        this.content.element.css({ resize: "none" });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -26413,6 +26413,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         return this.style;
     },
 
+    setWatermark: function (v) {
+        this.options.watermark = v;
+        this._checkWaterMark();
+    },
+
     _setValid: function (b) {
         BI.TextAreaEditor.superclass._setValid.apply(this, arguments);
         // this.content.setValid(b);
@@ -26428,6 +26433,7 @@ BI.TextAreaEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.TextAreaEditor.EVENT_BLUR = "EVENT_BLUR";
 BI.TextAreaEditor.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
+
 
 /***/ }),
 /* 420 */
