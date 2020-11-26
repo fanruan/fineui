@@ -1,6 +1,7 @@
 # 更新日志
 2.0(2020-11)
 - bi.textarea_editor添加setWatermark方法
+- 生命周期可以通过属性传递来操作
 - 修复了颜色选择器hex框不能输入为空的问题
 - 增加纯文本组件bi.pure_text
 - store支持webworker,引入多线程机制

@@ -1,4 +1,4 @@
-/*! time: 2020-11-23 11:50:31 */
+/*! time: 2020-11-25 23:40:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14215,6 +14215,7 @@ module.exports = function (exec) {
 })();
 
 
+
 /***/ }),
 /* 302 */
 /***/ (function(module, exports) {
@@ -23646,7 +23647,7 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         width: datum.width,
                         height: datum.height
                     }, o.items[datum.index], {
-                        cls: (o.items[datum.index].cls || "") + " container-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
+                        cls: (o.items[datum.index].cls || "") + " collection-cell" + (datum.y === 0 ? " first-row" : "") + (datum.x === 0 ? " first-col" : ""),
                         _left: datum.x,
                         _top: datum.y
                     }));
@@ -89822,7 +89823,7 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
         this.G.setValue(BI.isNull(json.g) ? "" : json.g);
         this.B.setValue(BI.isNull(json.b) ? "" : json.b);
-        this.hexEditor.setValue(color.slice(this.constants.HEX_PREFIX_POSITION));
+        this.hexEditor.setValue(BI.isEmptyObject(json) ? "" : color.slice(this.constants.HEX_PREFIX_POSITION));
     },
 
     getValue: function () {
