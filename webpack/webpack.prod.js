@@ -26,6 +26,8 @@ module.exports = merge.smart(common, {
         "2.0/fineui.min": attachments.bundle,
         '2.0/fineui_without_normalize': attachments.bundleWithoutNormalize,
         '2.0/fineui_without_normalize.min': attachments.bundleWithoutNormalize,
+        core: attachments.coreJs,
+        resource: attachments.resource,
     },
     optimization: {
         minimizer: [
