@@ -1,4 +1,4 @@
-/*! time: 2020-11-27 10:11:48 */
+/*! time: 2020-11-27 17:00:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -41913,8 +41913,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
-
-            afterCardShow: function () {
+            afterCardCreated: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
                 calendar && self.backBtn.setEnable(!calendar.isFrontYear());
