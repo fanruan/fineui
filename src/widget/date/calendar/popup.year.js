@@ -68,8 +68,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
-
-            afterCardShow: function () {
+            afterCardCreated: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
                 calendar && self.backBtn.setEnable(!calendar.isFrontYear());
