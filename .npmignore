@@ -17,9 +17,6 @@
 !dist/utils.js.map
 !dist/utils.min.js
 !dist/utils.min.js.map
-!dist/bundle.min.css
-!dist/bundle.min.js
-!dist/bundle.min.js.map
 !dist/fineui_without_jquery_polyfill.js
 !dist/2.0/fineui.ie.min.js
 !dist/2.0/fineui.ie.min.js.map

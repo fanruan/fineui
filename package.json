@@ -15,6 +15,7 @@
     "babel-loader": "8.0.6",
     "chai": "4.2.0",
     "cnpm": "6.1.1",
+    "concat": "1.0.3",
     "core-js": "3.3.2",
     "cross-env": "6.0.0",
     "css-loader": "3.0.0",
