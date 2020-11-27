@@ -16,7 +16,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         });
     },
 
-    render: function() {
+    render: function () {
         var o = this.options, self = this;
         this.content = BI.createWidget({
             type: "bi.layout",
@@ -25,7 +25,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             height: "100%",
             cls: "bi-textarea textarea-editor-content display-block"
         });
-        this.content.element.css({resize: "none"});
+        this.content.element.css({ resize: "none" });
         BI.createWidget({
             type: "bi.absolute",
             element: this,
@@ -173,6 +173,11 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
 
     getStyle: function () {
         return this.style;
+    },
+
+    setWatermark: function (v) {
+        this.options.watermark = v;
+        this._checkWaterMark();
     },
 
     _setValid: function (b) {

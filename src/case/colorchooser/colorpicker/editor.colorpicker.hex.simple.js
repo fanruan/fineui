@@ -82,15 +82,18 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
                     },
                     cls: "color-picker-editor-input",
                     validationChecker: this._hexChecker,
+                    allowBlank: true,
                     errorText: BI.i18nText("BI-Color_Picker_Error_Text_Hex"),
                     width: c.HEX_WIDTH,
                     height: 20,
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            self.setValue("#" + this.getValue());
-                            self.colorShow.element.css("background-color", self.getValue());
-                            self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                            self._checkHexEditor();
+                            if (checker(self.storeValue.r) && checker(self.storeValue.g) && checker(self.storeValue.b)) {
+                                self.colorShow.element.css("background-color", self.getValue());
+                                self.fireEvent(BI.ColorPickerEditor.EVENT_CHANGE);
+                            }
                         }
                     }]
                 }, {
@@ -157,13 +160,28 @@ BI.SimpleHexColorPickerEditor = BI.inherit(BI.Widget, {
         this.hexEditor.setValue(this.getValue().slice(this.constants.HEX_PREFIX_POSITION));
     },
 
+    _checkHexEditor: function () {
+        if (BI.isEmptyString(this.hexEditor.getValue())) {
+            this.hexEditor.setValue("000000");
+        }
+        var json = BI.DOM.rgb2json(BI.DOM.hex2rgb("#" + this.hexEditor.getValue()));
+        this.storeValue = {
+            r: json.r || 0,
+            g: json.g || 0,
+            b: json.b || 0,
+        };
+        this.R.setValue(this.storeValue.r);
+        this.G.setValue(this.storeValue.g);
+        this.B.setValue(this.storeValue.b);
+    },
+
     setValue: function (color) {
         this.colorShow.element.css({"background-color": color});
         var json = BI.DOM.rgb2json(BI.DOM.hex2rgb(color));
         this.R.setValue(BI.isNull(json.r) ? "" : json.r);
         this.G.setValue(BI.isNull(json.g) ? "" : json.g);
         this.B.setValue(BI.isNull(json.b) ? "" : json.b);
-        this.hexEditor.setValue(color.slice(this.constants.HEX_PREFIX_POSITION));
+        this.hexEditor.setValue(BI.isEmptyObject(json) ? "" : color.slice(this.constants.HEX_PREFIX_POSITION));
     },
 
     getValue: function () {

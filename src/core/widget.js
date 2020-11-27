@@ -11,7 +11,7 @@
         if (self[life]) {
             var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
             BI.each(hooks, function (i, hook) {
-                hook.apply(self);
+                hook.call(self);
             });
         }
     }
@@ -610,7 +610,10 @@
                 if (o.element) {
                     return BI.$(o.element);
                 }
-                return BI.$(document.createElement(o.tagName));
+                if (o.tagName) {
+                    return BI.$(document.createElement(o.tagName));
+                }
+                return BI.$(document.createDocumentFragment());
             }
             return BI.$(widget);
         },
@@ -655,3 +658,4 @@
         return widget._mount(true, false, false, predicate);
     };
 })();
+

@@ -10,6 +10,9 @@ function sync(patterns) {
 
 const fixJs = "./dist/fix/fix.js";
 const fixIEJs = "./dist/fix/fix.ie.js";
+const fixCompact = "./dist/fix/fix.compact.js";
+const fixIECompact = './dist/fix/fix.compact.ie.js';
+const workerCompact = './dist/fix/worker.compact.js';
 const lodashJs = "src/core/lodash.js";
 
 const basicAttachmentMap = {
@@ -125,7 +128,7 @@ const bundle = [].concat(
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
     sync(["public/less/app.less", "public/less/**/*.less"]),
-    ['./dist/fix/fix.compact.js'],
+    [fixCompact, workerCompact],
     basicAttachmentMap.router,
     sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
     basicAttachmentMap.ts,
@@ -155,7 +158,7 @@ const bundleIE = [].concat(
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
     sync(["public/less/app.less", "public/less/**/*.less"]),
-    ['./dist/fix/fix.compact.ie.js'],
+    [fixIECompact, workerCompact],
     basicAttachmentMap.router,
     sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]),
     basicAttachmentMap.ts,
@@ -180,7 +183,7 @@ const fineui = [].concat(
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
     basicAttachmentMap.router,
-    ["./dist/fix/fix.compact.js"],
+    [fixCompact, workerCompact],
     basicAttachmentMap.ui,
     basicAttachmentMap.ts,
 );
@@ -193,7 +196,7 @@ const fineuiIE = [].concat(
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
     basicAttachmentMap.router,
-    ["./dist/fix/fix.compact.ie.js"],
+    [fixIECompact, workerCompact],
     basicAttachmentMap.ui,
     basicAttachmentMap.ts,
 );
@@ -236,7 +239,7 @@ const fineuiWithoutJqueryAndPolyfillJs = [].concat(
         "!src/case/tree/ztree/**/*.js",
     ]),
     basicAttachmentMap.widget,
-    sync(["dist/fix/fix.compact.js", "ui/js/**/*.js"]),
+    sync([fixCompact, workerCompact, "ui/js/**/*.js"]),
     basicAttachmentMap.ts,
 );
 
@@ -249,7 +252,7 @@ const demo = [].concat(
     basicAttachmentMap.case,
     basicAttachmentMap.widget,
     sync(["public/less/app.less", "public/less/**/*.less"]),
-    ['./dist/fix/fix.compact.js'],
+    [fixCompact, workerCompact],
     basicAttachmentMap.config,
     basicAttachmentMap.ts,
     sync(["demo/less/*.less", "demo/less/**/*.less", "demo/app.js", "demo/js/**/*.js", "demo/config.js"]),

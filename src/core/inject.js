@@ -264,7 +264,7 @@
         }
     };
 
-    BI.getContext = BI.getContext || function (type, config) {
+    BI.getResource = BI.getResource || function (type, config) {
         if (constantInjection[type]) {
             return BI.Constants.getConstant(type);
         }
