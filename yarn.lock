@@ -2482,9 +2482,9 @@ concat-stream@^1.5.0, concat-stream@^1.6.2:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-concat@^1.0.3:
+concat@1.0.3:
   version "1.0.3"
-  resolved "https://registry.yarnpkg.com/concat/-/concat-1.0.3.tgz#40f3353089d65467695cb1886b45edd637d8cca8"
+  resolved "https://registry.npm.taobao.org/concat/download/concat-1.0.3.tgz#40f3353089d65467695cb1886b45edd637d8cca8"
   integrity sha1-QPM1MInWVGdpXLGIa0Xt1jfYzKg=
   dependencies:
     commander "^2.9.0"
