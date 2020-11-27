@@ -134,6 +134,22 @@ const bundle = [].concat(
     basicAttachmentMap.ts,
 );
 
+const coreJs = [].concat(
+    basicAttachmentMap.polyfill,
+    basicAttachmentMap.core,
+    basicAttachmentMap.fix,
+    basicAttachmentMap.base,
+    basicAttachmentMap.case,
+    basicAttachmentMap.widget,
+    ['./dist/fix/fix.compact.js'],
+    basicAttachmentMap.router,
+    basicAttachmentMap.ts,
+);
+
+const resource = sync(["private/less/app.less", "private/less/**/*.less"]);
+
+const config = sync(["public/js/**/*.js", "public/js/index.js", "i18n/i18n.cn.js"]);
+
 const bundleIE = [].concat(
     basicAttachmentMap.polyfillIE,
     basicAttachmentMap.core,
@@ -255,4 +271,7 @@ module.exports = {
     fineuiWithoutJqueryAndPolyfillJs: uniq(fineuiWithoutJqueryAndPolyfillJs),
     utils: uniq(basicAttachmentMap.utils),
     demo: uniq(demo),
+    coreJs: uniq(coreJs),
+    resource: uniq((resource)),
+    config: uniq(config),
 };
