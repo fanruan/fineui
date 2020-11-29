@@ -8,8 +8,9 @@
 
 !(function () {
     function callLifeHook (self, life) {
-        if (self[life]) {
-            var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
+        var hook = self.options[life] || self[life];
+        if (hook) {
+            var hooks = BI.isArray(hook) ? hook : [hook];
             BI.each(hooks, function (i, hook) {
                 hook.call(self);
             });
@@ -84,9 +85,9 @@
         },
 
         _initRender: function () {
-            if (this.beforeInit) {
+            if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                this.beforeInit(BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
                 if (this.__asking === true) {
                     this.__async = true;
                 }
@@ -184,7 +185,8 @@
 
         _initElement: function () {
             var self = this;
-            var els = this.render && this.render();
+            var render = this.options.render || this.render;
+            var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -542,7 +544,22 @@
             return current.$storeDelegate;
         }
         if (current) {
-            var delegate = {};
+            var delegate = {}, origin;
+            if (_global.Proxy) {
+                var proxy = new Proxy(delegate, {
+                    get: function (target, key) {
+                        return Reflect.get(origin, key);
+                    },
+                    set: function (target, key, value) {
+                        return Reflect.set(origin, key, value);
+                    }
+                });
+                current._store = function () {
+                    origin = _store.apply(this, arguments);
+                    return origin;
+                };
+                return current.$storeDelegate = proxy;
+            }
             current._store = function () {
                 var st = _store.apply(this, arguments);
                 BI.extend(delegate, st);
@@ -658,4 +675,3 @@
         return widget._mount(true, false, false, predicate);
     };
 })();
-
