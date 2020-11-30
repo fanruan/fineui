@@ -1,6 +1,6 @@
 # 更新日志
 2.0(2020-11)
-- title提示最多显示25行
+- 限制了title的最大高度
 - bi.textarea_editor添加setWatermark方法
 - 生命周期可以通过属性传递来操作
 - 修复了颜色选择器hex框不能输入为空的问题
