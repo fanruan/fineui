@@ -1,4 +1,4 @@
-/*! time: 2020-11-27 17:20:30 */
+/*! time: 2020-11-30 09:00:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -8670,47 +8670,16 @@ _.extend(BI, {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
-        if (BI.initialized) {
-            if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
-            }
-            if (providerInjection[type]) {
-                if (!providers[type]) {
-                    providers[type] = new providerInjection[type]();
-                }
-                // 如果config被重新配置的话，需要删除掉之前的实例
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                return configFn(providers[type]);
-            }
-            return BI.Plugin.configWidget(type, configFn, opt);
-        }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                for (var i = 0; i < queue.length; i++) {
-                    if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        queue[i](providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, queue[i]);
-                }
-                configFunctions[type] = null;
-            });
         }
-        configFunctions[type].push(configFn);
+        configFunctions[type].push({fn: configFn, args: opt});
+    };
+
+    BI.Configs = BI.Configs || {
+        getConfig: function (type) {
+            return configFunctions[type];
+        }
     };
 
     var actions = {};
@@ -8767,7 +8736,16 @@ _.extend(BI, {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            return constantInjection[type];
+            var instance = constantInjection[type];
+            BI.each(configFunctions[type], function (i, cf) {
+                var res = cf.fn(instance);
+                if (res) {
+                    instance = res;
+                }
+            });
+            constantInjection[type] = instance;
+            configFunctions[type] && (configFunctions[type] = null);
+            return instance;
         }
     };
 
@@ -8856,9 +8834,17 @@ _.extend(BI, {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
+            var instance = providers[type];
+            BI.each(configFunctions[type], function (i, cf) {
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                cf.fn(instance);
+            });
             if (!providerInstance[type]) {
                 providerInstance[type] = new (providers[type].$get())(config);
             }
+            configFunctions[type] && (configFunctions[type] = null);
             return providerInstance[type];
         }
     };
@@ -9590,8 +9576,9 @@ BI.Req = {
 
 !(function () {
     function callLifeHook (self, life) {
-        if (self[life]) {
-            var hooks = BI.isArray(self[life]) ? self[life] : [self[life]];
+        var hook = self.options[life] || self[life];
+        if (hook) {
+            var hooks = BI.isArray(hook) ? hook : [hook];
             BI.each(hooks, function (i, hook) {
                 hook.call(self);
             });
@@ -9666,9 +9653,9 @@ BI.Req = {
         },
 
         _initRender: function () {
-            if (this.beforeInit) {
+            if (this.options.beforeInit || this.beforeInit) {
                 this.__asking = true;
-                this.beforeInit(BI.bind(this._render, this));
+                (this.options.beforeInit || this.beforeInit).call(this, BI.bind(this._render, this));
                 if (this.__asking === true) {
                     this.__async = true;
                 }
@@ -9766,7 +9753,8 @@ BI.Req = {
 
         _initElement: function () {
             var self = this;
-            var els = this.render && this.render();
+            var render = this.options.render || this.render;
+            var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
             }
@@ -10281,6 +10269,16 @@ BI.Req = {
         return widget;
     };
 
+    function configWidget (type) {
+        var configFunctions = BI.Configs.getConfig(type);
+        if (configFunctions) {
+            BI.each(configFunctions[type], function (i, cf) {
+                BI.Plugin.configWidget(type, cf.fn, cf.args);
+            });
+            configFunctions[type] && (configFunctions[type] = null);
+        }
+    }
+
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
@@ -10302,6 +10300,7 @@ BI.Req = {
         }
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
+            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -10313,6 +10312,7 @@ BI.Req = {
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
+            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
