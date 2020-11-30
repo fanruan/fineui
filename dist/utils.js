@@ -1,4 +1,4 @@
-/*! time: 2020-11-27 17:00:25 */
+/*! time: 2020-11-30 11:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -8403,47 +8403,16 @@ _.extend(BI, {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
-        if (BI.initialized) {
-            if (constantInjection[type]) {
-                return (constantInjection[type] = configFn(constantInjection[type]));
-            }
-            if (providerInjection[type]) {
-                if (!providers[type]) {
-                    providers[type] = new providerInjection[type]();
-                }
-                // 如果config被重新配置的话，需要删除掉之前的实例
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                return configFn(providers[type]);
-            }
-            return BI.Plugin.configWidget(type, configFn, opt);
-        }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
-            BI.prepares.push(function () {
-                var queue = configFunctions[type];
-                for (var i = 0; i < queue.length; i++) {
-                    if (constantInjection[type]) {
-                        constantInjection[type] = queue[i](constantInjection[type]);
-                        continue;
-                    }
-                    if (providerInjection[type]) {
-                        if (!providers[type]) {
-                            providers[type] = new providerInjection[type]();
-                        }
-                        if (providerInstance[type]) {
-                            delete providerInstance[type];
-                        }
-                        queue[i](providers[type]);
-                        continue;
-                    }
-                    BI.Plugin.configWidget(type, queue[i]);
-                }
-                configFunctions[type] = null;
-            });
         }
-        configFunctions[type].push(configFn);
+        configFunctions[type].push({fn: configFn, args: opt});
+    };
+
+    BI.Configs = BI.Configs || {
+        getConfig: function (type) {
+            return configFunctions[type];
+        }
     };
 
     var actions = {};
@@ -8500,7 +8469,16 @@ _.extend(BI, {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            return constantInjection[type];
+            var instance = constantInjection[type];
+            BI.each(configFunctions[type], function (i, cf) {
+                var res = cf.fn(instance);
+                if (res) {
+                    instance = res;
+                }
+            });
+            constantInjection[type] = instance;
+            configFunctions[type] && (configFunctions[type] = null);
+            return instance;
         }
     };
 
@@ -8589,9 +8567,17 @@ _.extend(BI, {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
+            var instance = providers[type];
+            BI.each(configFunctions[type], function (i, cf) {
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                cf.fn(instance);
+            });
             if (!providerInstance[type]) {
                 providerInstance[type] = new (providers[type].$get())(config);
             }
+            configFunctions[type] && (configFunctions[type] = null);
             return providerInstance[type];
         }
     };
