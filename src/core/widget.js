@@ -185,7 +185,7 @@
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
