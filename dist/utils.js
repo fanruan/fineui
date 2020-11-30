@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 14:20:28 */
+/*! time: 2020-11-30 15:50:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -8410,9 +8410,12 @@ _.extend(BI, {
     };
 
     BI.Configs = BI.Configs || {
+        getConfigs: function () {
+            return configFunctions;
+        },
         getConfig: function (type) {
             return configFunctions[type];
-        }
+        },
     };
 
     var actions = {};
