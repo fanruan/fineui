@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 11:00:30 */
+/*! time: 2020-11-30 14:20:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -13726,7 +13726,7 @@ module.exports = function (exec) {
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
