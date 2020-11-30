@@ -544,7 +544,22 @@
             return current.$storeDelegate;
         }
         if (current) {
-            var delegate = {};
+            var delegate = {}, origin;
+            if (_global.Proxy) {
+                var proxy = new Proxy(delegate, {
+                    get: function (target, key) {
+                        return Reflect.get(origin, key);
+                    },
+                    set: function (target, key, value) {
+                        return Reflect.set(origin, key, value);
+                    }
+                });
+                current._store = function () {
+                    origin = _store.apply(this, arguments);
+                    return origin;
+                };
+                return current.$storeDelegate = proxy;
+            }
             current._store = function () {
                 var st = _store.apply(this, arguments);
                 BI.extend(delegate, st);
@@ -660,4 +675,3 @@
         return widget._mount(true, false, false, predicate);
     };
 })();
-
