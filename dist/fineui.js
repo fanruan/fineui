@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 16:40:34 */
+/*! time: 2020-11-30 19:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22338,8 +22338,6 @@ BI.Single = BI.inherit(BI.Widget, {
             var text = this._getShowText();
             if (BI.isKey(text)) {
                 this.setText(text);
-            } else if (BI.isKey(o.value)) {
-                this.setText(o.value);
             }
             if (BI.isKey(o.keyword)) {
                 this.doRedMark(o.keyword);
@@ -22363,7 +22361,6 @@ BI.Single = BI.inherit(BI.Widget, {
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            text = BI.isKey(text) ? text : o.value;
             if (!BI.isKey(text)) {
                 return "";
             }
