@@ -1,4 +1,4 @@
-/*! time: 2020-12-1 10:00:32 */
+/*! time: 2020-12-1 11:40:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24516,7 +24516,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },
