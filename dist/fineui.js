@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 19:40:29 */
+/*! time: 2020-12-1 09:00:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -85161,7 +85161,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }
