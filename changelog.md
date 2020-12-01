@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-11)
+- bi.file上传文件errorMsg默认调用国际化
 - 修复了文本标签text传递空字符串后显示value值的问题
 - 限制了title的最大高度
 - bi.textarea_editor添加setWatermark方法

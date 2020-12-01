@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 19:40:29 */
+/*! time: 2020-12-1 10:00:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -22276,7 +22276,6 @@ BI.Single = BI.inherit(BI.Widget, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            text: "",
             py: "",
             highLight: false
         },
@@ -22336,8 +22335,10 @@ BI.Single = BI.inherit(BI.Widget, {
             }
 
             var text = this._getShowText();
-            if (BI.isKey(text)) {
+            if (!BI.isUndefined(text)) {
                 this.setText(text);
+            } else if (BI.isKey(o.value)) {
+                this.setText(o.value);
             }
             if (BI.isKey(o.keyword)) {
                 this.doRedMark(o.keyword);
@@ -22361,10 +22362,8 @@ BI.Single = BI.inherit(BI.Widget, {
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            if (!BI.isKey(text)) {
-                return "";
-            }
-            return BI.Text.formatText(text + "");
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
         _doRedMark: function (keyword) {
@@ -22446,7 +22445,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,
@@ -31221,7 +31219,6 @@ BI.shortcut("bi.radio", BI.Radio);
                 rgap: 0,
                 tgap: 0,
                 bgap: 0,
-                text: "",
                 highLight: false,
                 handler: null
             });
@@ -85161,7 +85158,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }
