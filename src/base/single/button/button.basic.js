@@ -11,7 +11,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,

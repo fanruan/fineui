@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 11:00:30 */
+/*! time: 2020-12-1 14:31:42 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11216,9 +11216,12 @@ _.extend(BI, {
     };
 
     BI.Configs = BI.Configs || {
+        getConfigs: function () {
+            return configFunctions;
+        },
         getConfig: function (type) {
             return configFunctions[type];
-        }
+        },
     };
 
     var actions = {};
@@ -13726,7 +13729,7 @@ module.exports = function (exec) {
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
@@ -14259,10 +14262,11 @@ module.exports = function (exec) {
     function configWidget (type) {
         var configFunctions = BI.Configs.getConfig(type);
         if (configFunctions) {
-            BI.each(configFunctions[type], function (i, cf) {
+            BI.each(configFunctions, function (i, cf) {
                 BI.Plugin.configWidget(type, cf.fn, cf.args);
             });
-            configFunctions[type] && (configFunctions[type] = null);
+            var configs = BI.Configs.getConfigs();
+            configs[type] && (configs[type] = null);
         }
     }
 
@@ -22272,7 +22276,6 @@ BI.Single = BI.inherit(BI.Widget, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            text: "",
             py: "",
             highLight: false
         },
@@ -22332,7 +22335,7 @@ BI.Single = BI.inherit(BI.Widget, {
             }
 
             var text = this._getShowText();
-            if (BI.isKey(text)) {
+            if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
                 this.setText(o.value);
@@ -22359,11 +22362,8 @@ BI.Single = BI.inherit(BI.Widget, {
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            text = BI.isKey(text) ? text : o.value;
-            if (!BI.isKey(text)) {
-                return "";
-            }
-            return BI.Text.formatText(text + "");
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
         _doRedMark: function (keyword) {
@@ -22445,7 +22445,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,
@@ -28490,7 +28489,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },
@@ -31220,7 +31218,6 @@ BI.shortcut("bi.radio", BI.Radio);
                 rgap: 0,
                 tgap: 0,
                 bgap: 0,
-                text: "",
                 highLight: false,
                 handler: null
             });
@@ -85160,7 +85157,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }

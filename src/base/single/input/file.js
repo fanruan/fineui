@@ -525,7 +525,7 @@
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }
