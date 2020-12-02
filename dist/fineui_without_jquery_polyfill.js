@@ -1,4 +1,4 @@
-/*! time: 2020-12-1 16:40:30 */
+/*! time: 2020-12-2 09:20:51 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26180,6 +26180,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
             multiple: o.multiple,
             accept: o.accept,
             maxSize: o.maxSize,
+            maxLength: o.maxLength,
             title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
