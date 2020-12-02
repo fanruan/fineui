@@ -154,7 +154,9 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", BI.appendQuery(handler.url, {
+                    filename: _global.encodeURIComponent(handler.file.fileName),
+                }), true);
                 if (!xhr.upload) {
                     var rpe = { loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true };
                     rpe.interval = setInterval(function () {
