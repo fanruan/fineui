@@ -1,4 +1,4 @@
-/*! time: 2020-12-2 09:20:51 */
+/*! time: 2020-12-2 12:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -88207,8 +88207,12 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                                                 self.more.hideView();
                                                 break;
                                             case 1:
-                                                self.setValue(self.customColorChooser.getValue());
-                                                self._dealStoreColors();
+                                                var color = self.customColorChooser.getValue();
+                                                // farbtastic选择器没有透明和自动选项，点击保存不应该设置透明
+                                                if (BI.isNotEmptyString(color)) {
+                                                    self.setValue(color);
+                                                    self._dealStoreColors();
+                                                }
                                                 self.more.hideView();
                                                 self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                                                 break;
@@ -91190,7 +91194,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -91937,10 +91941,11 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
@@ -92001,7 +92006,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -92213,7 +92218,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             this.init();
             initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
             this._destroyHandler = destroyHandler;
@@ -92249,6 +92254,13 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         return Model;
     }();
 
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
@@ -92279,6 +92291,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
@@ -92294,7 +92307,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     exports.__esModule = true;
 });
-
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),

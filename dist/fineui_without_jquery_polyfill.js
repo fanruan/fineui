@@ -1,4 +1,4 @@
-/*! time: 2020-12-2 09:20:51 */
+/*! time: 2020-12-2 12:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -67536,7 +67536,7 @@ exports.Model = Model;
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -68283,10 +68283,11 @@ exports.Model = Model;
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
@@ -68347,7 +68348,7 @@ exports.Model = Model;
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -68559,7 +68560,7 @@ exports.Model = Model;
             this.init();
             initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
             this._destroyHandler = destroyHandler;
@@ -68595,6 +68596,13 @@ exports.Model = Model;
         return Model;
     }();
 
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
@@ -68625,6 +68633,7 @@ exports.Model = Model;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
@@ -68640,7 +68649,6 @@ exports.Model = Model;
 
     exports.__esModule = true;
 });
-
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),
