@@ -359,7 +359,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -1106,10 +1106,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
@@ -1170,7 +1171,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -1382,7 +1383,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.init();
             initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
             this._destroyHandler = destroyHandler;
@@ -1418,6 +1419,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         return Model;
     }();
 
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
@@ -1448,6 +1456,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
