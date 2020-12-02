@@ -154,7 +154,9 @@
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", BI.appendQuery(handler.url, {
+                    filename: _global.encodeURIComponent(handler.file.fileName),
+                }), true);
                 if (!xhr.upload) {
                     var rpe = { loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true };
                     rpe.interval = setInterval(function () {
@@ -208,7 +210,7 @@
                                     attachO.attach_type = "image";
                                 }
                                 attachO.filename = handler.file.fileName;
-                                if (handler.maxlength == 1) {
+                                if (handler.maxLength == 1) {
                                     handler.attach_array[0] = attachO;
                                     //                                   handler.attach_array.push(attachO);
                                 } else {
@@ -271,7 +273,7 @@
                             } catch (e) {
                                 attachO.filename = handler.file.fileName;
                             }
-                            if (handler.maxlength == 1) {
+                            if (handler.maxLength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
                                 handler.attach_array[current] = attachO;
@@ -444,7 +446,8 @@
                 url: "",
                 multiple: true,
                 accept: "", //  .png,.pdf,image/jpg,image/*  等
-                maxSize: -1 // 1024 * 1024
+                maxSize: -1, // 1024 * 1024
+                maxLength: -1 // 无限制, 与multiple配合使用
             });
         },
 
@@ -463,7 +466,7 @@
             var self = this, o = this.options;
             // create the noswfupload.wrap Object
             // wrap.maxSize 文件大小限制
-            // wrap.maxlength 文件个数限制
+            // wrap.maxLength 文件个数限制
             var _wrap = this.wrap = this._wrap(this.element[0], o.maxSize);
             // fileType could contain whatever text but filter checks *.{extension}
             // if present
@@ -525,7 +528,7 @@
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }
@@ -545,30 +548,39 @@
             var self = this;
             event.add(wrap.dom.input, "change", function () {
                 event.del(wrap.dom.input, "change", arguments.callee);
-                for (var input = wrap.dom.input.cloneNode(true), i = 0, files = F(wrap.dom.input); i < files.length; i++) {
-                    var item = files.item(i);
-                    var tempFile = item.value || item.name;
-                    var value = item.fileName || (item.fileName = tempFile.split("\\").pop()),
-                        ext = -1 !== value.indexOf(".") ? value.split(".").pop().toLowerCase() : "unknown",
-                        size = item.fileSize || item.size;
-                    var validateFileType = fileTypeValidate(value, wrap.fileType);
-                    if (!validateFileType) {
-                        // 文件类型不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR, {
-                            errorType: 0,
-                            file: item
-                        });
-                    } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
-                        // 文件大小不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR, {
-                            errorType: 1,
-                            file: item
-                        });
-                    } else {
-                        wrap.files.unshift(item);
-                        // BI.Msg.toast(value);
+                var input = wrap.dom.input.cloneNode(true);
+                var files = F(wrap.dom.input);
+                if (wrap.maxLength !== -1 && wrap.maxLength < files.length) {
+                    BI.Msg.toast(BI.i18nText("BI-Upload_File_Count_Error"), { level: "error" });
+                    self.fireEvent(BI.File.EVENT_ERROR, {
+                        errorType: 2
+                    });
+                } else {
+                    for (var i = 0; i < files.length; i++) {
+                        var item = files.item(i);
+                        var tempFile = item.value || item.name;
+                        var value = item.fileName || (item.fileName = tempFile.split("\\").pop()),
+                            ext = -1 !== value.indexOf(".") ? value.split(".").pop().toLowerCase() : "unknown",
+                            size = item.fileSize || item.size;
+                        var validateFileType = fileTypeValidate(value, wrap.fileType);
+                        if (!validateFileType) {
+                            // 文件类型不支持
+                            BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"), { level: "error" });
+                            self.fireEvent(BI.File.EVENT_ERROR, {
+                                errorType: 0,
+                                file: item
+                            });
+                        } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
+                            // 文件大小不支持
+                            BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"), { level: "error" });
+                            self.fireEvent(BI.File.EVENT_ERROR, {
+                                errorType: 1,
+                                file: item
+                            });
+                        } else {
+                            wrap.files.unshift(item);
+                            // BI.Msg.toast(value);
+                        }
                     }
                 }
                 wrap.files.length > 0 && self.fireEvent(BI.File.EVENT_CHANGE, {
@@ -602,6 +614,7 @@
                 name: input.name,        // name to send for each file ($_FILES[{name}] in the server)
                 // maxSize is the maximum amount of bytes for each file
                 maxSize: o.maxSize ? o.maxSize >> 0 : -1,
+                maxLength: o.maxLength,
                 files: [],               // file list
 
                 // remove every file from the noswfupload component

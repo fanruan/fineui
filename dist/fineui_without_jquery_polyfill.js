@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 11:00:30 */
+/*! time: 2020-12-2 16:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -8677,9 +8677,12 @@ _.extend(BI, {
     };
 
     BI.Configs = BI.Configs || {
+        getConfigs: function () {
+            return configFunctions;
+        },
         getConfig: function (type) {
             return configFunctions[type];
-        }
+        },
     };
 
     var actions = {};
@@ -9753,7 +9756,7 @@ BI.Req = {
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
@@ -10286,10 +10289,11 @@ BI.Req = {
     function configWidget (type) {
         var configFunctions = BI.Configs.getConfig(type);
         if (configFunctions) {
-            BI.each(configFunctions[type], function (i, cf) {
+            BI.each(configFunctions, function (i, cf) {
                 BI.Plugin.configWidget(type, cf.fn, cf.args);
             });
-            configFunctions[type] && (configFunctions[type] = null);
+            var configs = BI.Configs.getConfigs();
+            configs[type] && (configs[type] = null);
         }
     }
 
@@ -18299,7 +18303,6 @@ BI.Single = BI.inherit(BI.Widget, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            text: "",
             py: "",
             highLight: false
         },
@@ -18359,7 +18362,7 @@ BI.Single = BI.inherit(BI.Widget, {
             }
 
             var text = this._getShowText();
-            if (BI.isKey(text)) {
+            if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
                 this.setText(o.value);
@@ -18386,11 +18389,8 @@ BI.Single = BI.inherit(BI.Widget, {
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            text = BI.isKey(text) ? text : o.value;
-            if (!BI.isKey(text)) {
-                return "";
-            }
-            return BI.Text.formatText(text + "");
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
         _doRedMark: function (keyword) {
@@ -18472,7 +18472,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,
@@ -24517,7 +24516,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },
@@ -26182,6 +26180,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
             multiple: o.multiple,
             accept: o.accept,
             maxSize: o.maxSize,
+            maxLength: o.maxLength,
             title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
@@ -27247,7 +27246,6 @@ BI.shortcut("bi.radio", BI.Radio);
                 rgap: 0,
                 tgap: 0,
                 bgap: 0,
-                text: "",
                 highLight: false,
                 handler: null
             });
@@ -67538,7 +67536,7 @@ exports.Model = Model;
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -68285,10 +68283,11 @@ exports.Model = Model;
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
@@ -68349,7 +68348,7 @@ exports.Model = Model;
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -68561,7 +68560,7 @@ exports.Model = Model;
             this.init();
             initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
             this._destroyHandler = destroyHandler;
@@ -68597,6 +68596,13 @@ exports.Model = Model;
         return Model;
     }();
 
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
@@ -68627,6 +68633,7 @@ exports.Model = Model;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
@@ -68642,7 +68649,6 @@ exports.Model = Model;
 
     exports.__esModule = true;
 });
-
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),

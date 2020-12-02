@@ -12,7 +12,7 @@ export type _createDistinctName = (array: any[], name: string) => string;
  * @param keyword 关键字
  * @param param  搜索哪个属性
  */
-export type _getSearchResult = (items: any, keyword: any, param: string) => {find: any, match: any}
+export type _getSearchResult = (items: any, keyword: any, param?: string) => { find: any[], match: any[] }
 
 /**
  * 在方法A执行之前执行方法B

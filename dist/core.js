@@ -1,4 +1,4 @@
-/*! time: 2020-11-30 11:00:30 */
+/*! time: 2020-12-2 16:40:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11216,9 +11216,12 @@ _.extend(BI, {
     };
 
     BI.Configs = BI.Configs || {
+        getConfigs: function () {
+            return configFunctions;
+        },
         getConfig: function (type) {
             return configFunctions[type];
-        }
+        },
     };
 
     var actions = {};
@@ -13726,7 +13729,7 @@ module.exports = function (exec) {
 
         _initElement: function () {
             var self = this;
-            var render = this.options.render || this.render;
+            var render = BI.isFunction(this.options.render) ? this.options.render : this.render;
             var els = render && render.call(this);
             if (BI.isPlainObject(els)) {
                 els = [els];
@@ -14259,10 +14262,11 @@ module.exports = function (exec) {
     function configWidget (type) {
         var configFunctions = BI.Configs.getConfig(type);
         if (configFunctions) {
-            BI.each(configFunctions[type], function (i, cf) {
+            BI.each(configFunctions, function (i, cf) {
                 BI.Plugin.configWidget(type, cf.fn, cf.args);
             });
-            configFunctions[type] && (configFunctions[type] = null);
+            var configs = BI.Configs.getConfigs();
+            configs[type] && (configs[type] = null);
         }
     }
 
@@ -22272,7 +22276,6 @@ BI.Single = BI.inherit(BI.Widget, {
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            text: "",
             py: "",
             highLight: false
         },
@@ -22332,7 +22335,7 @@ BI.Single = BI.inherit(BI.Widget, {
             }
 
             var text = this._getShowText();
-            if (BI.isKey(text)) {
+            if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
                 this.setText(o.value);
@@ -22359,11 +22362,8 @@ BI.Single = BI.inherit(BI.Widget, {
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            text = BI.isKey(text) ? text : o.value;
-            if (!BI.isKey(text)) {
-                return "";
-            }
-            return BI.Text.formatText(text + "");
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
         _doRedMark: function (keyword) {
@@ -22445,7 +22445,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
         return BI.extend(conf, {
             _baseCls: (conf._baseCls || "") + " bi-basic-button" + (conf.invalid ? "" : " cursor-pointer") + ((BI.isIE() && BI.getIEVersion() < 10) ? " hack" : ""),
             value: "",
-            text: "",
             stopEvent: false,
             stopPropagation: false,
             selected: false,
@@ -28490,7 +28489,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },
@@ -30155,6 +30153,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
             multiple: o.multiple,
             accept: o.accept,
             maxSize: o.maxSize,
+            maxLength: o.maxLength,
             title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
@@ -31220,7 +31219,6 @@ BI.shortcut("bi.radio", BI.Radio);
                 rgap: 0,
                 tgap: 0,
                 bgap: 0,
-                text: "",
                 highLight: false,
                 handler: null
             });
@@ -84789,7 +84787,9 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     },
                     false
                 );
-                xhr.open("post", handler.url + "&filename=" + _global.encodeURIComponent(handler.file.fileName), true);
+                xhr.open("post", BI.appendQuery(handler.url, {
+                    filename: _global.encodeURIComponent(handler.file.fileName),
+                }), true);
                 if (!xhr.upload) {
                     var rpe = { loaded: 0, total: handler.file.fileSize || handler.file.size, simulation: true };
                     rpe.interval = setInterval(function () {
@@ -84843,7 +84843,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                                     attachO.attach_type = "image";
                                 }
                                 attachO.filename = handler.file.fileName;
-                                if (handler.maxlength == 1) {
+                                if (handler.maxLength == 1) {
                                     handler.attach_array[0] = attachO;
                                     //                                   handler.attach_array.push(attachO);
                                 } else {
@@ -84906,7 +84906,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                             } catch (e) {
                                 attachO.filename = handler.file.fileName;
                             }
-                            if (handler.maxlength == 1) {
+                            if (handler.maxLength == 1) {
                                 handler.attach_array[0] = attachO;
                             } else {
                                 handler.attach_array[current] = attachO;
@@ -85079,7 +85079,8 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                 url: "",
                 multiple: true,
                 accept: "", //  .png,.pdf,image/jpg,image/*  等
-                maxSize: -1 // 1024 * 1024
+                maxSize: -1, // 1024 * 1024
+                maxLength: -1 // 无限制, 与multiple配合使用
             });
         },
 
@@ -85098,7 +85099,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
             var self = this, o = this.options;
             // create the noswfupload.wrap Object
             // wrap.maxSize 文件大小限制
-            // wrap.maxlength 文件个数限制
+            // wrap.maxLength 文件个数限制
             var _wrap = this.wrap = this._wrap(this.element[0], o.maxSize);
             // fileType could contain whatever text but filter checks *.{extension}
             // if present
@@ -85160,7 +85161,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     }
                     var error = BI.some(_wrap.attach_array, function (index, attach) {
                         if (attach.errorCode) {
-                            BI.Msg.toast(attach.errorMsg, { level: "error" });
+                            BI.Msg.toast(BI.i18nText(attach.errorMsg), { level: "error" });
                             self.fireEvent(BI.File.EVENT_ERROR, attach);
                             return true;
                         }
@@ -85180,30 +85181,39 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
             var self = this;
             event.add(wrap.dom.input, "change", function () {
                 event.del(wrap.dom.input, "change", arguments.callee);
-                for (var input = wrap.dom.input.cloneNode(true), i = 0, files = F(wrap.dom.input); i < files.length; i++) {
-                    var item = files.item(i);
-                    var tempFile = item.value || item.name;
-                    var value = item.fileName || (item.fileName = tempFile.split("\\").pop()),
-                        ext = -1 !== value.indexOf(".") ? value.split(".").pop().toLowerCase() : "unknown",
-                        size = item.fileSize || item.size;
-                    var validateFileType = fileTypeValidate(value, wrap.fileType);
-                    if (!validateFileType) {
-                        // 文件类型不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR, {
-                            errorType: 0,
-                            file: item
-                        });
-                    } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
-                        // 文件大小不支持
-                        BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"), { level: "error" });
-                        self.fireEvent(BI.File.EVENT_ERROR, {
-                            errorType: 1,
-                            file: item
-                        });
-                    } else {
-                        wrap.files.unshift(item);
-                        // BI.Msg.toast(value);
+                var input = wrap.dom.input.cloneNode(true);
+                var files = F(wrap.dom.input);
+                if (wrap.maxLength !== -1 && wrap.maxLength < files.length) {
+                    BI.Msg.toast(BI.i18nText("BI-Upload_File_Count_Error"), { level: "error" });
+                    self.fireEvent(BI.File.EVENT_ERROR, {
+                        errorType: 2
+                    });
+                } else {
+                    for (var i = 0; i < files.length; i++) {
+                        var item = files.item(i);
+                        var tempFile = item.value || item.name;
+                        var value = item.fileName || (item.fileName = tempFile.split("\\").pop()),
+                            ext = -1 !== value.indexOf(".") ? value.split(".").pop().toLowerCase() : "unknown",
+                            size = item.fileSize || item.size;
+                        var validateFileType = fileTypeValidate(value, wrap.fileType);
+                        if (!validateFileType) {
+                            // 文件类型不支持
+                            BI.Msg.toast(BI.i18nText("BI-Upload_File_Type_Error"), { level: "error" });
+                            self.fireEvent(BI.File.EVENT_ERROR, {
+                                errorType: 0,
+                                file: item
+                            });
+                        } else if (wrap.maxSize !== -1 && size && wrap.maxSize < size) {
+                            // 文件大小不支持
+                            BI.Msg.toast(BI.i18nText("BI-Upload_File_Size_Error"), { level: "error" });
+                            self.fireEvent(BI.File.EVENT_ERROR, {
+                                errorType: 1,
+                                file: item
+                            });
+                        } else {
+                            wrap.files.unshift(item);
+                            // BI.Msg.toast(value);
+                        }
                     }
                 }
                 wrap.files.length > 0 && self.fireEvent(BI.File.EVENT_CHANGE, {
@@ -85237,6 +85247,7 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                 name: input.name,        // name to send for each file ($_FILES[{name}] in the server)
                 // maxSize is the maximum amount of bytes for each file
                 maxSize: o.maxSize ? o.maxSize >> 0 : -1,
+                maxLength: o.maxLength,
                 files: [],               // file list
 
                 // remove every file from the noswfupload component
@@ -88198,8 +88209,12 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                                                 self.more.hideView();
                                                 break;
                                             case 1:
-                                                self.setValue(self.customColorChooser.getValue());
-                                                self._dealStoreColors();
+                                                var color = self.customColorChooser.getValue();
+                                                // farbtastic选择器没有透明和自动选项，点击保存不应该设置透明
+                                                if (BI.isNotEmptyString(color)) {
+                                                    self.setValue(color);
+                                                    self._dealStoreColors();
+                                                }
                                                 self.more.hideView();
                                                 self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                                                 break;
@@ -91019,7 +91034,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性
+                //添加访问器属性 
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
@@ -91766,10 +91781,11 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     }
 
     var computedWatcherOptions = { lazy: true };
+    var REACTIVE = true;
 
     function initState(vm, state) {
         if (state) {
-            vm.$$state = observe(state).model;
+            vm.$$state = REACTIVE ? observe(state).model : state;
         }
     }
 
@@ -91830,7 +91846,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
                 if (watcher.dirty) {
                     watcher.evaluate();
                 }
-                if (Dep.target) {
+                if (REACTIVE && Dep.target) {
                     watcher.depend();
                 }
                 return watcher.value;
@@ -92042,7 +92058,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
             this.init();
             initState(this, _.extend(getInjectValues(this), state));
             initComputed(this, computed);
-            initWatch(this, watch$$1);
+            REACTIVE && initWatch(this, watch$$1);
             initMethods(this, actions);
             this.created && this.created();
             this._destroyHandler = destroyHandler;
@@ -92078,6 +92094,13 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         return Model;
     }();
 
+    function config(options) {
+        options || (options = {});
+        if ("reactive" in options) {
+            REACTIVE = options.reactive;
+        }
+    }
+
     function toJSON(model) {
         var result = void 0;
         if (_.isArray(model)) {
@@ -92108,6 +92131,7 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
     exports.observe = observe;
@@ -92123,7 +92147,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     exports.__esModule = true;
 });
-
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),

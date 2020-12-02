@@ -1,5 +1,13 @@
 # 更新日志
+2.0(2020-12)
+- 修复bi.file的url参数拼接问题
+- 修复了colorChooser选择透明后, 打开更多选色面板, 直接点保存会选中自动的问题
+- bi.file支持限制上传文件数
+
 2.0(2020-11)
+- bi.file上传文件errorMsg默认调用国际化
+- 修复了文本标签text传递空字符串后显示value值的问题
+- 限制了title的最大高度
 - bi.textarea_editor添加setWatermark方法
 - 生命周期可以通过属性传递来操作
 - 修复了颜色选择器hex框不能输入为空的问题

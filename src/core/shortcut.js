@@ -35,10 +35,11 @@
     function configWidget (type) {
         var configFunctions = BI.Configs.getConfig(type);
         if (configFunctions) {
-            BI.each(configFunctions[type], function (i, cf) {
+            BI.each(configFunctions, function (i, cf) {
                 BI.Plugin.configWidget(type, cf.fn, cf.args);
             });
-            configFunctions[type] && (configFunctions[type] = null);
+            var configs = BI.Configs.getConfigs();
+            configs[type] && (configs[type] = null);
         }
     }
 

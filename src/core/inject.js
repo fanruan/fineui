@@ -56,9 +56,12 @@
     };
 
     BI.Configs = BI.Configs || {
+        getConfigs: function () {
+            return configFunctions;
+        },
         getConfig: function (type) {
             return configFunctions[type];
-        }
+        },
     };
 
     var actions = {};
