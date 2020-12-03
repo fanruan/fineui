@@ -49,6 +49,22 @@
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
+        if (opt && opt.immediate) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
+            }
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn, opt);
+        }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
         }
