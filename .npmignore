@@ -13,6 +13,10 @@
 !dist/fineui.min.js.map
 !dist/fineui.ie.min.js
 !dist/fineui.ie.min.js.map
+!dist/core.css
+!dist/core.js
+!dist/resource.css
+!dist/resource.js
 !dist/utils.js
 !dist/utils.js.map
 !dist/utils.min.js
