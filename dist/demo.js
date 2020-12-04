@@ -1,4 +1,4 @@
-/*! time: 2020-12-2 16:40:29 */
+/*! time: 2020-12-4 10:11:16 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11209,6 +11209,22 @@ _.extend(BI, {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
+        if (opt && opt.immediate) {
+            if (constantInjection[type]) {
+                return (constantInjection[type] = configFn(constantInjection[type]));
+            }
+            if (providerInjection[type]) {
+                if (!providers[type]) {
+                    providers[type] = new providerInjection[type]();
+                }
+                // 如果config被重新配置的话，需要删除掉之前的实例
+                if (providerInstance[type]) {
+                    delete providerInstance[type];
+                }
+                return configFn(providers[type]);
+            }
+            return BI.Plugin.configWidget(type, configFn, opt);
+        }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
         }
@@ -48619,9 +48635,6 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
         return {
             extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
             height: 24,
-            valueFormatter: function (v) {
-                return v;
-            },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
             allowSearchValue: false,
@@ -48814,13 +48827,19 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     _digest: function (v) {
         var o = this.options;
-        if(o.itemsCreator === BI.emptyFn) {
+        if (BI.isFunction(o.valueFormatter)) {
+            return o.valueFormatter(v);
+        }
+
+        if (o.itemsCreator === BI.emptyFn) {
             var result = BI.find(o.items, function (i, item) {
                 return item.value === v;
             });
+
             return BI.isNotNull(result) ? result.text : o.text;
         }
-        return o.valueFormatter(v);
+
+        return v;
     },
 
     _getShowText: function () {
@@ -49868,9 +49887,6 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
         return {
             extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow bi-border-radius",
             height: 24,
-            valueFormatter: function (v) {
-                return v;
-            },
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
             allowSearchValue: false,
@@ -50063,13 +50079,20 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     _digest: function (v) {
         var o = this.options;
-        if(o.itemsCreator === BI.emptyFn) {
+
+        if (BI.isFunction(o.valueFormatter)) {
+            return o.valueFormatter(v);
+        }
+
+        if (o.itemsCreator === BI.emptyFn) {
             var result = BI.find(o.items, function (i, item) {
                 return item.value === v;
             });
+
             return BI.isNotNull(result) ? result.text : o.text;
         }
-        return o.valueFormatter(v);
+
+        return v;
 
     },
 
