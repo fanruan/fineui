@@ -89,16 +89,7 @@
                 configFunctions[type] = null;
             });
         }
-        configFunctions[type].push({fn: configFn, args: opt});
-    };
-
-    BI.Configs = BI.Configs || {
-        getConfigs: function () {
-            return configFunctions;
-        },
-        getConfig: function (type) {
-            return configFunctions[type];
-        },
+        configFunctions[type].push(configFn);
     };
 
     var actions = {};
