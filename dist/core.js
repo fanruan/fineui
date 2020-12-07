@@ -1,4 +1,4 @@
-/*! time: 2020-12-4 22:30:18 */
+/*! time: 2020-12-7 11:50:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11209,7 +11209,7 @@ _.extend(BI, {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
-        if (opt && opt.immediate) {
+        if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
             }
@@ -11227,17 +11227,29 @@ _.extend(BI, {
         }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
+                    if (constantInjection[type]) {
+                        constantInjection[type] = queue[i](constantInjection[type]);
+                        continue;
+                    }
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
+                        }
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
+                        }
+                        queue[i](providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, queue[i]);
+                }
+                configFunctions[type] = null;
+            });
         }
-        configFunctions[type].push({fn: configFn, args: opt});
-    };
-
-    BI.Configs = BI.Configs || {
-        getConfigs: function () {
-            return configFunctions;
-        },
-        getConfig: function (type) {
-            return configFunctions[type];
-        },
+        configFunctions[type].push(configFn);
     };
 
     var actions = {};
@@ -11294,16 +11306,7 @@ _.extend(BI, {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            var instance = constantInjection[type];
-            BI.each(configFunctions[type], function (i, cf) {
-                var res = cf.fn(instance);
-                if (res) {
-                    instance = res;
-                }
-            });
-            constantInjection[type] = instance;
-            configFunctions[type] && (configFunctions[type] = null);
-            return instance;
+            return constantInjection[type];
         }
     };
 
@@ -11392,17 +11395,9 @@ _.extend(BI, {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
-            var instance = providers[type];
-            BI.each(configFunctions[type], function (i, cf) {
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                cf.fn(instance);
-            });
             if (!providerInstance[type]) {
                 providerInstance[type] = new (providers[type].$get())(config);
             }
-            configFunctions[type] && (configFunctions[type] = null);
             return providerInstance[type];
         }
     };
@@ -14275,17 +14270,6 @@ module.exports = function (exec) {
         return widget;
     };
 
-    function configWidget (type) {
-        var configFunctions = BI.Configs.getConfig(type);
-        if (configFunctions) {
-            BI.each(configFunctions, function (i, cf) {
-                BI.Plugin.configWidget(type, cf.fn, cf.args);
-            });
-            var configs = BI.Configs.getConfigs();
-            configs[type] && (configs[type] = null);
-        }
-    }
-
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
@@ -14307,7 +14291,6 @@ module.exports = function (exec) {
         }
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -14319,7 +14302,6 @@ module.exports = function (exec) {
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -36768,7 +36750,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap
+            hgap: o.hgap + 2
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -37050,7 +37032,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -37330,7 +37312,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -37646,7 +37628,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             text: o.text,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();

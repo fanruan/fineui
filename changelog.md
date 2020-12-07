@@ -1,6 +1,7 @@
 # 更新日志
 2.0(2020-12)
 - bi.editor支持传入autocomplete
+- [视觉]editor水印间距统一与文本域水印不可选中
 - 修复bi.file的url参数拼接问题
 - 修复了colorChooser选择透明后, 打开更多选色面板, 直接点保存会选中自动的问题
 - bi.file支持限制上传文件数
