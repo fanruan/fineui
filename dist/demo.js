@@ -1,4 +1,4 @@
-/*! time: 2020-12-7 11:50:25 */
+/*! time: 2020-12-7 14:13:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -29775,9 +29775,11 @@ BI.Editor = BI.inherit(BI.Single, {
     _init: function () {
         BI.Editor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
+        var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
         this.editor = this.addWidget(BI.createWidget({
             type: "bi.input",
-            element: "<input type='" + o.inputType + "'/>",
+            element: "<input type='" + o.inputType + "'" + autocomplete + " />",
             root: true,
             value: o.value,
             watermark: o.watermark,
@@ -101274,7 +101276,7 @@ BI.shortcut("demo.pager", Demo.Func);
 
 Demo.Editor = BI.inherit(BI.Widget, {
     props: {
-        baseCls: "demo-editor"
+        baseCls: "demo-editor",
     },
     render: function () {
         var editor1 = BI.createWidget({
@@ -101283,7 +101285,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
             watermark: "报错信息显示在控件上方",
             errorText: "字段不可重名!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
             width: 200,
-            height: 24
+            height: 24,
         });
         editor1.on(BI.Editor.EVENT_ENTER, function () {
             editor1.blur();
@@ -101298,11 +101300,12 @@ Demo.Editor = BI.inherit(BI.Widget, {
                 if (v == "a") {
                     return false;
                 }
+                
                 return true;
             },
             allowBlank: true,
             width: 200,
-            height: 24
+            height: 24,
         });
         var editor3 = BI.createWidget({
             type: "bi.editor",
@@ -101314,6 +101317,7 @@ Demo.Editor = BI.inherit(BI.Widget, {
                 if (v == "a") {
                     return false;
                 }
+                
                 return true;
             },
             quitChecker: function (v) {
@@ -101321,7 +101325,17 @@ Demo.Editor = BI.inherit(BI.Widget, {
             },
             allowBlank: true,
             width: 300,
-            height: 24
+            height: 24,
+        });
+        var editor4 = BI.createWidget({
+            type: "bi.editor",
+            cls: "bi-border",
+            inputType: "password",
+            autocomplete: "new-password",
+            watermark: "请输入密码",
+            allowBlank: true,
+            width: 300,
+            height: 24,
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -101329,15 +101343,19 @@ Demo.Editor = BI.inherit(BI.Widget, {
             items: [{
                 el: editor1,
                 left: 0,
-                top: 0
+                top: 0,
             }, {
                 el: editor2,
                 left: 250,
-                top: 30
+                top: 30,
             }, {
                 el: editor3,
                 left: 500,
-                top: 60
+                top: 60,
+            }, {
+                el: editor4,
+                left: 700,
+                top: 60,
             }, {
                 el: {
                     type: "bi.button",
@@ -101347,10 +101365,10 @@ Demo.Editor = BI.inherit(BI.Widget, {
                         editor2.setEnable(false);
                         editor3.setEnable(false);
                     },
-                    height: 30
+                    height: 30,
                 },
                 left: 100,
-                bottom: 60
+                bottom: 60,
             }, {
                 el: {
                     type: "bi.button",
@@ -101360,15 +101378,16 @@ Demo.Editor = BI.inherit(BI.Widget, {
                         editor2.setEnable(true);
                         editor3.setEnable(true);
                     },
-                    height: 30
+                    height: 30,
                 },
                 left: 200,
-                bottom: 60
-            }]
+                bottom: 60,
+            }],
         });
-    }
+    },
 });
 BI.shortcut("demo.editor", Demo.Editor);
+
 
 /***/ }),
 /* 1116 */
