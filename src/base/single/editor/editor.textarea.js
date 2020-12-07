@@ -84,7 +84,7 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
                 if (!this.watermark) {
                     this.watermark = BI.createWidget({
                         type: "bi.text_button",
-                        cls: "bi-water-mark cursor-default textarea-watermark bi-user-select-disable",
+                        cls: "bi-water-mark cursor-default textarea-watermark",
                         textAlign: "left",
                         whiteSpace: "normal",
                         text: o.watermark,
