@@ -1,4 +1,4 @@
-/*! time: 2020-12-9 09:00:31 */
+/*! time: 2020-12-9 09:36:04 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40797,7 +40797,7 @@ BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4
+        hgap: 6
     },
 
     _defaultConfig: function () {
@@ -41022,7 +41022,7 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
  */
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4
+        hgap: 6
     },
 
     _defaultConfig: function () {
@@ -58297,9 +58297,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
-            BI.each(ob, function (name, children) {
+            var names = BI.Func.getSortedResult(BI.keys(ob));
+            BI.each(names, function (idx, name) {
                 index++;
-                var childNodes = getChildrenNode(children);
+                var childNodes = getChildrenNode(ob[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
