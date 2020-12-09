@@ -1,4 +1,4 @@
-/*! time: 2020-12-9 16:50:25 */
+/*! time: 2020-12-9 19:50:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -52141,7 +52141,8 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
 
         this.adapter = BI.createWidget({
             type: "bi.multi_select_tree_popup",
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            showLine: o.showLine
         });
         this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
             if (self.searcher.isSearching()) {
@@ -52311,6 +52312,7 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.async_tree",
+            showLine: o.showLine,
             element: this,
             itemsCreator: o.itemsCreator
         });
@@ -53648,6 +53650,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
         this.tree = BI.createWidget(opts.el, {
             type: "bi.async_tree",
+            showLine: opts.showLine,
             height: 400,
             cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
@@ -66245,7 +66248,8 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-pane",
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            showLine: false
         });
     },
 
@@ -66253,8 +66257,9 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         BI.TreeValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.pane = BI.createWidget({
-            type: "bi.multi_select_tree",
+            type: o.hideSearch ? "bi.multi_select_tree_popup" : "bi.multi_select_tree",
             element: this,
+            showLine: o.showLine,
             itemsCreator: BI.bind(this._itemsCreator, this)
         });
 
