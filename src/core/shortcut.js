@@ -32,17 +32,6 @@
         return widget;
     };
 
-    function configWidget (type) {
-        var configFunctions = BI.Configs.getConfig(type);
-        if (configFunctions) {
-            BI.each(configFunctions, function (i, cf) {
-                BI.Plugin.configWidget(type, cf.fn, cf.args);
-            });
-            var configs = BI.Configs.getConfigs();
-            configs[type] && (configs[type] = null);
-        }
-    }
-
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
@@ -64,7 +53,6 @@
         }
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -76,7 +64,6 @@
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,

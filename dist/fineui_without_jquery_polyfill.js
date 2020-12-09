@@ -1,4 +1,4 @@
-/*! time: 2020-12-4 10:11:16 */
+/*! time: 2020-12-9 14:00:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1265);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1264);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -8670,7 +8670,7 @@ _.extend(BI, {
 
     var configFunctions = {};
     BI.config = BI.config || function (type, configFn, opt) {
-        if (opt && opt.immediate) {
+        if (BI.initialized) {
             if (constantInjection[type]) {
                 return (constantInjection[type] = configFn(constantInjection[type]));
             }
@@ -8688,17 +8688,29 @@ _.extend(BI, {
         }
         if (!configFunctions[type]) {
             configFunctions[type] = [];
+            BI.prepares.push(function () {
+                var queue = configFunctions[type];
+                for (var i = 0; i < queue.length; i++) {
+                    if (constantInjection[type]) {
+                        constantInjection[type] = queue[i](constantInjection[type]);
+                        continue;
+                    }
+                    if (providerInjection[type]) {
+                        if (!providers[type]) {
+                            providers[type] = new providerInjection[type]();
+                        }
+                        if (providerInstance[type]) {
+                            delete providerInstance[type];
+                        }
+                        queue[i](providers[type]);
+                        continue;
+                    }
+                    BI.Plugin.configWidget(type, queue[i]);
+                }
+                configFunctions[type] = null;
+            });
         }
-        configFunctions[type].push({fn: configFn, args: opt});
-    };
-
-    BI.Configs = BI.Configs || {
-        getConfigs: function () {
-            return configFunctions;
-        },
-        getConfig: function (type) {
-            return configFunctions[type];
-        },
+        configFunctions[type].push(configFn);
     };
 
     var actions = {};
@@ -8755,16 +8767,7 @@ _.extend(BI, {
 
     BI.Constants = BI.Constants || {
         getConstant: function (type) {
-            var instance = constantInjection[type];
-            BI.each(configFunctions[type], function (i, cf) {
-                var res = cf.fn(instance);
-                if (res) {
-                    instance = res;
-                }
-            });
-            constantInjection[type] = instance;
-            configFunctions[type] && (configFunctions[type] = null);
-            return instance;
+            return constantInjection[type];
         }
     };
 
@@ -8853,17 +8856,9 @@ _.extend(BI, {
             if (!providers[type]) {
                 providers[type] = new providerInjection[type]();
             }
-            var instance = providers[type];
-            BI.each(configFunctions[type], function (i, cf) {
-                if (providerInstance[type]) {
-                    delete providerInstance[type];
-                }
-                cf.fn(instance);
-            });
             if (!providerInstance[type]) {
                 providerInstance[type] = new (providers[type].$get())(config);
             }
-            configFunctions[type] && (configFunctions[type] = null);
             return providerInstance[type];
         }
     };
@@ -10302,17 +10297,6 @@ BI.Req = {
         return widget;
     };
 
-    function configWidget (type) {
-        var configFunctions = BI.Configs.getConfig(type);
-        if (configFunctions) {
-            BI.each(configFunctions, function (i, cf) {
-                BI.Plugin.configWidget(type, cf.fn, cf.args);
-            });
-            var configs = BI.Configs.getConfigs();
-            configs[type] && (configs[type] = null);
-        }
-    }
-
     BI.createWidget = BI.createWidget || function (item, options, context, lazy) {
         // 先把准备环境准备好
         BI.init();
@@ -10334,7 +10318,6 @@ BI.Req = {
         }
         if (item.type || options.type) {
             el = BI.extend({}, options, item);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -10346,7 +10329,6 @@ BI.Req = {
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
-            configWidget(el.type);
             w = BI.Plugin.getWidget(el.type, el);
             w.listeners = (w.listeners || []).concat([{
                 eventName: BI.Events.MOUNT,
@@ -25820,9 +25802,11 @@ BI.Editor = BI.inherit(BI.Single, {
     _init: function () {
         BI.Editor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
+        var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
         this.editor = this.addWidget(BI.createWidget({
             type: "bi.input",
-            element: "<input type='" + o.inputType + "'/>",
+            element: "<input type='" + o.inputType + "'" + autocomplete + " />",
             root: true,
             value: o.value,
             watermark: o.watermark,
@@ -32795,7 +32779,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap
+            hgap: o.hgap + 2
         });
         BI.createWidget({
             type: "bi.absolute",
@@ -33077,7 +33061,7 @@ BI.SignEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -33357,7 +33341,7 @@ BI.StateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             height: o.height,
             text: o.text,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -33673,7 +33657,7 @@ BI.SimpleStateEditor = BI.inherit(BI.Widget, {
             textAlign: "left",
             text: o.text,
             height: o.height,
-            hgap: o.hgap,
+            hgap: o.hgap + 2,
             handler: function () {
                 self._showInput();
                 self.editor.focus();
@@ -36840,7 +36824,7 @@ BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4
+        hgap: 6
     },
 
     _defaultConfig: function () {
@@ -37065,7 +37049,7 @@ BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
  */
 BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4
+        hgap: 6
     },
 
     _defaultConfig: function () {
@@ -54340,9 +54324,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
-            BI.each(ob, function (name, children) {
+            var names = BI.Func.getSortedResult(BI.keys(ob));
+            BI.each(names, function (idx, name) {
                 index++;
-                var childNodes = getChildrenNode(children);
+                var childNodes = getChildrenNode(ob[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;
@@ -67021,8 +67006,7 @@ exports.Model = Model;
 /* 739 */,
 /* 740 */,
 /* 741 */,
-/* 742 */,
-/* 743 */
+/* 742 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -67185,17 +67169,17 @@ exports.Model = Model;
 
 
 /***/ }),
+/* 743 */,
 /* 744 */,
 /* 745 */,
-/* 746 */,
-/* 747 */
+/* 746 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(748);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(747);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
 
 /***/ }),
-/* 748 */
+/* 747 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -68675,8 +68659,8 @@ exports.Model = Model;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(52).setImmediate))
 
 /***/ }),
-/* 749 */,
-/* 750 */
+/* 748 */,
+/* 749 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -68972,6 +68956,7 @@ exports.Model = Model;
 
 
 /***/ }),
+/* 750 */,
 /* 751 */,
 /* 752 */,
 /* 753 */,
@@ -69188,13 +69173,13 @@ exports.Model = Model;
 /* 964 */,
 /* 965 */,
 /* 966 */,
-/* 967 */,
-/* 968 */
+/* 967 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
+/* 968 */,
 /* 969 */,
 /* 970 */,
 /* 971 */,
@@ -69490,8 +69475,7 @@ exports.Model = Model;
 /* 1261 */,
 /* 1262 */,
 /* 1263 */,
-/* 1264 */,
-/* 1265 */
+/* 1264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(101);
@@ -69595,7 +69579,7 @@ __webpack_require__(371);
 __webpack_require__(131);
 __webpack_require__(132);
 __webpack_require__(133);
-__webpack_require__(747);
+__webpack_require__(746);
 __webpack_require__(372);
 __webpack_require__(373);
 __webpack_require__(374);
@@ -69971,9 +69955,9 @@ __webpack_require__(685);
 __webpack_require__(686);
 __webpack_require__(687);
 __webpack_require__(688);
-__webpack_require__(750);
-__webpack_require__(743);
-__webpack_require__(968);
+__webpack_require__(749);
+__webpack_require__(742);
+__webpack_require__(967);
 module.exports = __webpack_require__(689);
 
 
