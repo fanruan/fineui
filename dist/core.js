@@ -1,4 +1,4 @@
-/*! time: 2020-12-9 14:00:24 */
+/*! time: 2020-12-9 16:00:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -83511,9 +83511,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 // Expose jQuery and $ identifiers, even in
 // AMD (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 // and CommonJS for browser emulators (#13566)
-	if ( !noGlobal ) {
-		window.jQuery = window.$ = jQuery;
-	}
+	window.jQuery = window.$ = jQuery;
 
 	BI.jQuery = BI.$ = jQuery;
 
