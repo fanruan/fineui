@@ -150,9 +150,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
-            BI.each(ob, function (name, children) {
+            var names = BI.Func.getSortedResult(BI.keys(ob));
+            BI.each(names, function (idx, name) {
                 index++;
-                var childNodes = getChildrenNode(children);
+                var childNodes = getChildrenNode(ob[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;

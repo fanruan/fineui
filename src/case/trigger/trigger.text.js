@@ -7,7 +7,7 @@
  */
 BI.TextTrigger = BI.inherit(BI.Trigger, {
     _const: {
-        hgap: 4
+        hgap: 6
     },
 
     _defaultConfig: function () {
