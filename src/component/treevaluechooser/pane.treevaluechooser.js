@@ -12,7 +12,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
             baseCls: "bi-tree-value-chooser-pane",
             items: null,
             itemsCreator: BI.emptyFn,
-            showLine: false
+            showLine: true
         });
     },
 
