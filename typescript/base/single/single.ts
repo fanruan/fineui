@@ -11,7 +11,7 @@ export interface _Single extends _Widget {
 
     disabledHover(): void;
 
-    setTitle(title: string, opt?: SingleOpt): void;
+    setTitle(title: string | Function, opt?: SingleOpt): void;
 
     setWarningTitle(title: string, opt?: SingleOpt): void;
 
