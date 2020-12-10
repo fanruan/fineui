@@ -1,4 +1,4 @@
-/*! time: 2020-12-10 17:10:28 */
+/*! time: 2020-12-10 17:20:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -21909,6 +21909,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             loadingText: "",
+            loadingSize: "small",
             overlap: true,
             onLoaded: BI.emptyFn
         });
@@ -21937,25 +21938,25 @@ BI.Pane = BI.inherit(BI.Widget, {
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
             cls: "bi-loading-widget" + (isIE ? " wave-loading hack" : ""),
-            height: 30,
-            width: 30,
-            hgap: 5,
+            height: this._getSize(60),
+            width: this._getSize(60),
+            hgap: this._getSize(10),
             vgap: 2.5,
             items: isIE ? [] : [{
                 type: "bi.layout",
                 cls: "animate-rect rect1",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect2",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect3",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
@@ -21984,6 +21985,10 @@ BI.Pane = BI.inherit(BI.Widget, {
         this.element.addClass("loading-status");
     },
 
+    _getSize: function(v) {
+        return Math.ceil(v / (this.options.loadingSize === 'small' ? 2 : 1));
+    },
+
     _getLoadingTipItems: function (loadingTip) {
         var o = this.options;
         var loadingTipItems = [{
@@ -21992,7 +21997,8 @@ BI.Pane = BI.inherit(BI.Widget, {
         }];
         BI.isNotEmptyString(o.loadingText) && loadingTipItems.push({
             type: "bi.text",
-            text: o.loadingText
+            text: o.loadingText,
+            tgap: this._getSize(10),
         });
 
         return [{
