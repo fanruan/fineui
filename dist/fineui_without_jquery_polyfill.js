@@ -1,4 +1,4 @@
-/*! time: 2020-12-9 19:50:30 */
+/*! time: 2020-12-10 11:20:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66249,7 +66249,7 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
             baseCls: "bi-tree-value-chooser-pane",
             items: null,
             itemsCreator: BI.emptyFn,
-            showLine: false
+            showLine: true
         });
     },
 
