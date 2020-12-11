@@ -92,6 +92,10 @@
         configFunctions[type].push(configFn);
     };
 
+    BI.getDOMNode = BI.getDOMNode || function (type, fn) {
+        return BI.Plugin.registerObject(type, fn);
+    };
+
     var actions = {};
     var globalAction = [];
     BI.action = BI.action || function (type, actionFn) {
