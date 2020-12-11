@@ -1,4 +1,4 @@
-/*! time: 2020-12-11 16:20:32 */
+/*! time: 2020-12-11 17:20:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70766,10 +70766,10 @@ Object.defineProperty(exports, "Icon", {
     return _icon.Icon;
   }
 });
-Object.defineProperty(exports, "LeftRightVerticalAdapt", {
+Object.defineProperty(exports, "LeftRightVerticalAdaptLayout", {
   enumerable: true,
   get: function get() {
-    return _adapt.LeftRightVerticalAdapt;
+    return _adapt.LeftRightVerticalAdaptLayout;
   }
 });
 Object.defineProperty(exports, "IconTextIconItem", {
