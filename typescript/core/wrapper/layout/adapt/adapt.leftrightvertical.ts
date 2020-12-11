@@ -1,5 +1,5 @@
 import { Layout } from "../../layout";
 
-export declare class LeftRightVerticalAdapt extends Layout {
+export declare class LeftRightVerticalAdaptLayout extends Layout {
     static xtype: string;
 }
