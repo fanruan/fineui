@@ -49,6 +49,7 @@ import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
+import { IconButton } from "./base/single/button/buttons/button.icon";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -106,9 +107,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
     LeftRightVerticalAdaptLayout: typeof LeftRightVerticalAdaptLayout;
     IconTextIconItem: typeof IconTextIconItem;
+    IconButton: typeof IconButton;
 }
 declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, };
+export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, IconButton, };
