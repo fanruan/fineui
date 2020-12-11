@@ -11,8 +11,8 @@ import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
-import { _AbstractLabel } from "./base/single/label/abstract.label";
-import { _Label } from "./base/single/label/label";
+import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
+import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
 import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
@@ -124,4 +124,6 @@ export {
     LeftRightVerticalAdaptLayout,
     IconTextIconItem,
     IconButton,
+    AbstractLabel,
+    Label,
 };
