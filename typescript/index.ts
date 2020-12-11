@@ -50,6 +50,7 @@ import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertic
 import { LeftRightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
 import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizontal";
+import { InlineVerticalAdaptLayout } from "./core/wrapper/layout/adapt/inline.vertical";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -111,6 +112,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     LeftRightVerticalAdaptLayout: typeof LeftRightVerticalAdaptLayout;
     IconTextIconItem: typeof IconTextIconItem;
     HorizontalAutoLayout: typeof HorizontalAutoLayout;
+    InlineVerticalAdaptLayout: typeof InlineVerticalAdaptLayout;
 }
 
 export default {
@@ -124,4 +126,5 @@ export {
     LeftRightVerticalAdaptLayout,
     IconTextIconItem,
     HorizontalAutoLayout,
+    InlineVerticalAdaptLayout,
 };
