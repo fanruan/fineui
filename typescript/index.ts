@@ -46,6 +46,8 @@ import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
+import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
+
 
 type ClassConstructor<T extends {}> = T & {
     new(config: any): T;
@@ -102,6 +104,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     Input: ClassConstructor<_Input> & _InputStatic;
     SearchTextValueCombo: ClassConstructor<_SearchTextValueCombo> & _SearchTextValueComboStatic;
     Icon: typeof Icon;
+    LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
 }
 
 export default {
