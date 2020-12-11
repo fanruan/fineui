@@ -2,7 +2,7 @@ import { _Combo, _ComboStatic } from "./base/combination/combo";
 import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base/combination/group.button";
 import { _Tab, _TabStatic } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
-import { _BasicButton, _BasicButtonStatic } from "./base/single/button/button.basic";
+import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
 import { _NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
 import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
@@ -48,6 +48,7 @@ import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.do
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
+import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -107,6 +108,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     Icon: typeof Icon;
     LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
     LeftRightVerticalAdaptLayout: typeof LeftRightVerticalAdaptLayout;
+    IconTextIconItem: typeof IconTextIconItem;
 }
 
 export default {
@@ -115,6 +117,8 @@ export default {
 export {
     Widget,
     Single,
+    BasicButton,
     Icon,
     LeftRightVerticalAdaptLayout,
+    IconTextIconItem,
 };
