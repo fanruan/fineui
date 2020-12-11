@@ -13,7 +13,7 @@ import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label } from "./base/single/label/label";
-import { _Single } from "./base/single/single";
+import { _Single, Single } from "./base/single/single";
 import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
@@ -37,7 +37,7 @@ import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
 import { _OB } from "./core/ob";
-import { _Widget, _WidgetStatic } from "./core/widget";
+import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
 import { _Layout } from "./core/wrapper/layout";
 import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
@@ -45,6 +45,7 @@ import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
 import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
+import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 
 
@@ -102,9 +103,15 @@ export interface BI extends _func, _i18n, _base, _inject {
     DefaultLayout: ClassConstructor<_DefaultLayout>;
     Input: ClassConstructor<_Input> & _InputStatic;
     SearchTextValueCombo: ClassConstructor<_SearchTextValueCombo> & _SearchTextValueComboStatic;
+    Icon: typeof Icon;
     LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
 }
 
 export default {
     Decorators: decorator,
+};
+export {
+    Widget,
+    Single,
+    Icon,
 };
