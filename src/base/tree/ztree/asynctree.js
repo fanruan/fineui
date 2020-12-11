@@ -21,6 +21,7 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
 
     // 配置属性
     _configSetting: function () {
+        var o = this.options;
         var paras = this.options.paras;
         var self = this;
         var setting = {
@@ -44,7 +45,8 @@ BI.AsyncTree = BI.inherit(BI.TreeView, {
                 showIcon: false,
                 expandSpeed: "",
                 nameIsHTML: true,
-                dblClickExpand: false
+                dblClickExpand: false,
+                showLine: o.showLine
             },
             callback: {
                 beforeCheck: beforeCheck,

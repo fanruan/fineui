@@ -43,7 +43,9 @@ import { _Layout } from "./core/wrapper/layout";
 import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
 import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
+import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
+import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -94,8 +96,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     Iframe: ClassConstructor<_Iframe>;
     AbsoluteLayout: ClassConstructor<_AbsoluteLayout>;
     VerticalLayout: ClassConstructor<_VerticalLayout>;
+    DefaultLayout: ClassConstructor<_DefaultLayout>;
     Input: ClassConstructor<_Input> & _InputStatic;
     SearchTextValueCombo: ClassConstructor<_SearchTextValueCombo> & _SearchTextValueComboStatic;
+    LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
 }
 declare const _default: {
     Decorators: typeof decorator;

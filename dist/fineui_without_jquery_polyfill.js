@@ -1,4 +1,4 @@
-/*! time: 2020-12-9 16:00:25 */
+/*! time: 2020-12-11 15:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -17936,6 +17936,7 @@ BI.Pane = BI.inherit(BI.Widget, {
             _baseCls: "bi-pane",
             tipText: BI.i18nText("BI-No_Selected_Item"),
             loadingText: "",
+            loadingSize: "small",
             overlap: true,
             onLoaded: BI.emptyFn
         });
@@ -17964,25 +17965,25 @@ BI.Pane = BI.inherit(BI.Widget, {
         var loadingAnimation = BI.createWidget({
             type: "bi.horizontal",
             cls: "bi-loading-widget" + (isIE ? " wave-loading hack" : ""),
-            height: 30,
-            width: 30,
-            hgap: 5,
+            height: this._getSize(60),
+            width: this._getSize(60),
+            hgap: this._getSize(10),
             vgap: 2.5,
             items: isIE ? [] : [{
                 type: "bi.layout",
                 cls: "animate-rect rect1",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect2",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }, {
                 type: "bi.layout",
                 cls: "animate-rect rect3",
-                height: 25,
-                width: 3
+                height: this._getSize(50),
+                width: this._getSize(5),
             }]
         });
         // pane在同步方式下由items决定tipText的显示与否
@@ -18011,6 +18012,10 @@ BI.Pane = BI.inherit(BI.Widget, {
         this.element.addClass("loading-status");
     },
 
+    _getSize: function(v) {
+        return Math.ceil(v / (this.options.loadingSize === 'small' ? 2 : 1));
+    },
+
     _getLoadingTipItems: function (loadingTip) {
         var o = this.options;
         var loadingTipItems = [{
@@ -18019,7 +18024,8 @@ BI.Pane = BI.inherit(BI.Widget, {
         }];
         BI.isNotEmptyString(o.loadingText) && loadingTipItems.push({
             type: "bi.text",
-            text: o.loadingText
+            text: o.loadingText,
+            tgap: this._getSize(10),
         });
 
         return [{
@@ -52141,7 +52147,8 @@ BI.MultiSelectTree = BI.inherit(BI.Single, {
 
         this.adapter = BI.createWidget({
             type: "bi.multi_select_tree_popup",
-            itemsCreator: o.itemsCreator
+            itemsCreator: o.itemsCreator,
+            showLine: o.showLine
         });
         this.adapter.on(BI.MultiSelectTreePopup.EVENT_CHANGE, function () {
             if (self.searcher.isSearching()) {
@@ -52311,6 +52318,7 @@ BI.MultiSelectTreePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         this.popup = BI.createWidget({
             type: "bi.async_tree",
+            showLine: o.showLine,
             element: this,
             itemsCreator: o.itemsCreator
         });
@@ -53648,6 +53656,7 @@ BI.MultiTreePopup = BI.inherit(BI.Pane, {
 
         this.tree = BI.createWidget(opts.el, {
             type: "bi.async_tree",
+            showLine: opts.showLine,
             height: 400,
             cls: "popup-view-tree",
             itemsCreator: opts.itemsCreator,
@@ -66245,7 +66254,8 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         return BI.extend(BI.TreeValueChooserPane.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-tree-value-chooser-pane",
             items: null,
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            showLine: true
         });
     },
 
@@ -66253,8 +66263,9 @@ BI.TreeValueChooserPane = BI.inherit(BI.AbstractTreeValueChooser, {
         BI.TreeValueChooserPane.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.pane = BI.createWidget({
-            type: "bi.multi_select_tree",
+            type: o.hideSearch ? "bi.multi_select_tree_popup" : "bi.multi_select_tree",
             element: this,
+            showLine: o.showLine,
             itemsCreator: BI.bind(this._itemsCreator, this)
         });
 
