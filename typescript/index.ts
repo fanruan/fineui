@@ -47,10 +47,11 @@ import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
-import { LeftRightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
+import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
 import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizontal";
 import { InlineVerticalAdaptLayout } from "./core/wrapper/layout/adapt/inline.vertical";
+import { TableAdaptLayout } from "./core/wrapper/layout/adapt/adapt.table";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -113,6 +114,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     IconTextIconItem: typeof IconTextIconItem;
     HorizontalAutoLayout: typeof HorizontalAutoLayout;
     InlineVerticalAdaptLayout: typeof InlineVerticalAdaptLayout;
+    RightVerticalAdaptLayout: typeof RightVerticalAdaptLayout;
+    TableAdaptLayout: typeof TableAdaptLayout;
 }
 
 export default {
@@ -127,4 +130,6 @@ export {
     IconTextIconItem,
     HorizontalAutoLayout,
     InlineVerticalAdaptLayout,
+    RightVerticalAdaptLayout,
+    TableAdaptLayout,
 };
