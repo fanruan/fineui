@@ -108,6 +108,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     Icon: typeof Icon;
     LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
     LeftRightVerticalAdapt: typeof LeftRightVerticalAdapt;
+    IconTextIconItem: typeof IconTextIconItem;
 }
 
 export default {
