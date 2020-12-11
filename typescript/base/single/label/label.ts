@@ -6,8 +6,4 @@ export interface _Label extends _AbstractLabel {
     unRedMark(...args: any[]): void
 }
 
-export declare class Label extends AbstractLabel {
-    doRedMark(...args: any[]): void;
-
-    unRedMark(...args: any[]): void
-}
+export declare class Label extends AbstractLabel {}
