@@ -6,4 +6,6 @@ export interface _Label extends _AbstractLabel {
     unRedMark(...args: any[]): void
 }
 
-export declare class Label extends AbstractLabel {}
+export declare class Label extends AbstractLabel {
+    static xtype: string;
+}
