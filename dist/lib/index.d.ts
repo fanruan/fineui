@@ -11,8 +11,8 @@ import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
-import { _AbstractLabel } from "./base/single/label/abstract.label";
-import { _Label } from "./base/single/label/label";
+import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
+import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
 import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
@@ -47,8 +47,11 @@ import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
-import { LeftRightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
+import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
+import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizontal";
+import { InlineVerticalAdaptLayout } from "./core/wrapper/layout/adapt/inline.vertical";
+import { TableAdaptLayout } from "./core/wrapper/layout/adapt/adapt.table";
 import { IconButton } from "./base/single/button/buttons/button.icon";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
@@ -107,10 +110,14 @@ export interface BI extends _func, _i18n, _base, _inject {
     LeftVerticalAdaptLayout: ClassConstructor<_LeftVerticalAdapt>;
     LeftRightVerticalAdaptLayout: typeof LeftRightVerticalAdaptLayout;
     IconTextIconItem: typeof IconTextIconItem;
+    HorizontalAutoLayout: typeof HorizontalAutoLayout;
+    InlineVerticalAdaptLayout: typeof InlineVerticalAdaptLayout;
+    RightVerticalAdaptLayout: typeof RightVerticalAdaptLayout;
+    TableAdaptLayout: typeof TableAdaptLayout;
     IconButton: typeof IconButton;
 }
 declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, IconButton, };
+export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, IconButton, AbstractLabel, Label, };
