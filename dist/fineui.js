@@ -1,4 +1,4 @@
-/*! time: 2020-12-11 18:40:27 */
+/*! time: 2020-12-13 17:10:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -11297,7 +11297,7 @@ _.extend(BI, {
         configFunctions[type].push(configFn);
     };
 
-    BI.getDOMNode = BI.getDOMNode || function (type, fn) {
+    BI.getReference = BI.getReference || function (type, fn) {
         return BI.Plugin.registerObject(type, fn);
     };
 
@@ -92726,42 +92726,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         Dep.target = targetStack.pop();
     }
 
-    var arrayProto = Array.prototype;
-    var arrayMethods = [];
-    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
-        var original = arrayProto[method];
-        arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
-            }
-
-            var ob = this.__ob__;
-            var inserted = void 0;
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    inserted = args;
-                    break;
-                case 'splice':
-                    inserted = args.slice(2);
-                    break;
-            }
-            if (inserted) inserted = ob.observeArray(inserted);
-            switch (method) {
-                case 'push':
-                case 'unshift':
-                    args = inserted;
-                    break;
-                case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
-                    break;
-            }
-            var result = original.apply(this, args);
-            notify(ob.parent, ob.parentKey, ob.dep, true);
-            return result;
-        };
-    });
-
     //如果浏览器不支持ecma262v5的Object.defineProperties或者存在BUG，比如IE8
     //标准浏览器使用__defineGetter__, __defineSetter__实现
     var canHideProperty = true;
@@ -92877,6 +92841,303 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
     }
 
     var createViewModel$1 = createViewModel;
+
+    var queue = [];
+    var activatedChildren = [];
+    var has = {};
+    var waiting = false;
+    var flushing = false;
+    var index = 0;
+
+    function resetSchedulerState() {
+        index = queue.length = activatedChildren.length = 0;
+        has = {};
+        waiting = flushing = false;
+    }
+
+    function flushSchedulerQueue() {
+        flushing = true;
+        var watcher = void 0,
+            id = void 0,
+            options = void 0;
+
+        // Sort queue before flush.
+        // This ensures that:
+        // 1. Components are updated from parent to child. (because parent is always
+        //    created before the child)
+        // 2. A component's user watchers are run before its render watcher (because
+        //    user watchers are created before the render watcher)
+        // 3. If a component is destroyed during a parent component's watcher run,
+        //    its watchers can be skipped.
+        queue.sort(function (a, b) {
+            return a.id - b.id;
+        });
+
+        // do not cache length because more watchers might be pushed
+        // as we run existing watchers
+        for (index = 0; index < queue.length; index++) {
+            watcher = queue[index].watcher;
+            options = queue[index].options;
+            id = watcher.id;
+            has[id] = null;
+            watcher.run(options);
+        }
+
+        resetSchedulerState();
+    }
+
+    function queueWatcher(watcher, options) {
+        var id = watcher.id;
+        if (has[id] == null) {
+            has[id] = true;
+            if (!flushing) {
+                queue.push({ watcher: watcher, options: options });
+            } else {
+                // if already flushing, splice the watcher based on its id
+                // if already past its id, it will be run next immediately.
+                var i = queue.length - 1;
+                while (i > index && queue[i].watcher.id > watcher.id) {
+                    i--;
+                }
+                queue.splice(i + 1, 0, { watcher: watcher, options: options });
+            }
+            // queue the flush
+            if (!waiting) {
+                waiting = true;
+                nextTick(flushSchedulerQueue);
+            }
+        }
+    }
+
+    var uid$1 = 0;
+
+    var Watcher = function () {
+        function Watcher(vm, expOrFn, cb, options) {
+            _classCallCheck(this, Watcher);
+
+            this.vm = vm;
+            // vm._watchers || (vm._watchers = [])
+            // vm._watchers.push(this)
+            // options
+            if (options) {
+                this.deep = !!options.deep;
+                this.user = !!options.user;
+                this.lazy = !!options.lazy;
+                this.sync = !!options.sync;
+            } else {
+                this.deep = this.user = this.lazy = this.sync = false;
+            }
+            this.cb = cb;
+            this.id = ++uid$1; // uid for batching
+            this.active = true;
+            this.dirty = this.lazy; // for lazy watchers
+            this.deps = [];
+            this.newDeps = [];
+            this.depIds = new Set();
+            this.newDepIds = new Set();
+            this.expression = '';
+            // parse expression for getter
+            if (typeof expOrFn === 'function') {
+                this.getter = expOrFn;
+            } else {
+                this.getter = parsePath(expOrFn);
+                if (!this.getter) {
+                    this.getter = function () {};
+                }
+            }
+            this.value = this.lazy ? undefined : this.get();
+        }
+
+        Watcher.prototype.get = function get() {
+            pushTarget(this);
+            var value = void 0;
+            var vm = this.vm;
+            try {
+                value = this.getter.call(vm, vm);
+            } catch (e) {
+                // if (this.user) {
+                // } else {
+                // console.error(e)
+                // }
+            } finally {
+                // "touch" every property so they are all tracked as
+                // dependencies for deep watching
+                if (this.deep) {
+                    traverse(value);
+                }
+                popTarget();
+                this.cleanupDeps();
+            }
+            return value;
+        };
+
+        Watcher.prototype.addDep = function addDep(dep) {
+            var id = dep.id;
+            if (!this.newDepIds.has(id)) {
+                this.newDepIds.add(id);
+                this.newDeps.push(dep);
+                if (!this.depIds.has(id)) {
+                    dep.addSub(this);
+                }
+            }
+        };
+
+        Watcher.prototype.cleanupDeps = function cleanupDeps() {
+            var i = this.deps.length;
+            while (i--) {
+                var dep = this.deps[i];
+                if (!this.newDepIds.has(dep.id)) {
+                    dep.removeSub(this);
+                }
+            }
+            var tmp = this.depIds;
+            this.depIds = this.newDepIds;
+            this.newDepIds = tmp;
+            this.newDepIds.clear();
+            tmp = this.deps;
+            this.deps = this.newDeps;
+            this.newDeps = tmp;
+            this.newDeps.length = 0;
+        };
+
+        Watcher.prototype.update = function update(options) {
+            /* istanbul ignore else */
+            if (this.lazy) {
+                this.dirty = true;
+            } else if (this.sync) {
+                this.run(options);
+            } else {
+                queueWatcher(this, options);
+            }
+        };
+
+        Watcher.prototype.run = function run(options) {
+            if (this.active) {
+                var value = this.get();
+                if (value !== this.value ||
+                // Deep watchers and watchers on Object/Arrays should fire even
+                // when the value is the same, because the value may
+                // have mutated.
+                _.isObject(value) && options && options.refresh || this.deep) {
+                    // set new value
+                    var oldValue = this.value;
+                    this.value = value;
+                    if (this.user) {
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    } else {
+                        try {
+                            this.cb.call(this.vm, value, oldValue, options);
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                }
+            }
+        };
+
+        Watcher.prototype.evaluate = function evaluate() {
+            this.value = this.get();
+            this.dirty = false;
+        };
+
+        Watcher.prototype.depend = function depend() {
+            var i = this.deps.length;
+            while (i--) {
+                this.deps[i].depend();
+            }
+        };
+
+        Watcher.prototype.teardown = function teardown() {
+            if (this.active) {
+                // remove self from vm's watcher list
+                // this is a somewhat expensive operation so we skip it
+                // if the vm is being destroyed.
+                remove(this.vm._watchers, this);
+                var i = this.deps.length;
+                while (i--) {
+                    this.deps[i].removeSub(this);
+                }
+                this.active = false;
+            }
+        };
+
+        return Watcher;
+    }();
+
+    var seenObjects = new Set();
+
+    function traverse(val) {
+        seenObjects.clear();
+        _traverse(val, seenObjects);
+    }
+
+    function _traverse(val, seen) {
+        var i = void 0,
+            keys = void 0;
+        var isA = _.isArray(val);
+        if (!isA && !_.isObject(val)) {
+            return;
+        }
+        if (val.__ob__) {
+            var depId = val.__ob__.dep.id;
+            if (seen.has(depId)) {
+                return;
+            }
+            seen.add(depId);
+        }
+        if (isA) {
+            i = val.length;
+            while (i--) {
+                _traverse(val[i], seen);
+            }
+        } else {
+            keys = _.keys(val);
+            i = keys.length;
+            while (i--) {
+                _traverse(val[keys[i]], seen);
+            }
+        }
+    }
+
+    var arrayProto = Array.prototype;
+    var arrayMethods = [];
+    _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
+        var original = arrayProto[method];
+        arrayMethods[method] = function mutator() {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+            }
+
+            var ob = this.__ob__;
+            var inserted = void 0;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = args;
+                    break;
+                case 'splice':
+                    inserted = args.slice(2);
+                    break;
+            }
+            if (inserted) inserted = ob.observeArray(inserted);
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    args = inserted;
+                    break;
+                case 'splice':
+                    args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    break;
+            }
+            var result = original.apply(this, args);
+            notify(ob.parent, ob.parentKey, ob.dep, true);
+            return result;
+        };
+    });
 
     var arrayKeys = _.keys(arrayMethods);
 
@@ -93152,267 +93413,6 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         }
     }
 
-    var queue = [];
-    var activatedChildren = [];
-    var has = {};
-    var waiting = false;
-    var flushing = false;
-    var index = 0;
-
-    function resetSchedulerState() {
-        index = queue.length = activatedChildren.length = 0;
-        has = {};
-        waiting = flushing = false;
-    }
-
-    function flushSchedulerQueue() {
-        flushing = true;
-        var watcher = void 0,
-            id = void 0,
-            options = void 0;
-
-        // Sort queue before flush.
-        // This ensures that:
-        // 1. Components are updated from parent to child. (because parent is always
-        //    created before the child)
-        // 2. A component's user watchers are run before its render watcher (because
-        //    user watchers are created before the render watcher)
-        // 3. If a component is destroyed during a parent component's watcher run,
-        //    its watchers can be skipped.
-        queue.sort(function (a, b) {
-            return a.id - b.id;
-        });
-
-        // do not cache length because more watchers might be pushed
-        // as we run existing watchers
-        for (index = 0; index < queue.length; index++) {
-            watcher = queue[index].watcher;
-            options = queue[index].options;
-            id = watcher.id;
-            has[id] = null;
-            watcher.run(options);
-        }
-
-        resetSchedulerState();
-    }
-
-    function queueWatcher(watcher, options) {
-        var id = watcher.id;
-        if (has[id] == null) {
-            has[id] = true;
-            if (!flushing) {
-                queue.push({ watcher: watcher, options: options });
-            } else {
-                // if already flushing, splice the watcher based on its id
-                // if already past its id, it will be run next immediately.
-                var i = queue.length - 1;
-                while (i > index && queue[i].watcher.id > watcher.id) {
-                    i--;
-                }
-                queue.splice(i + 1, 0, { watcher: watcher, options: options });
-            }
-            // queue the flush
-            if (!waiting) {
-                waiting = true;
-                nextTick(flushSchedulerQueue);
-            }
-        }
-    }
-
-    var uid$1 = 0;
-
-    var Watcher = function () {
-        function Watcher(vm, expOrFn, cb, options) {
-            _classCallCheck(this, Watcher);
-
-            this.vm = vm;
-            // vm._watchers || (vm._watchers = [])
-            // vm._watchers.push(this)
-            // options
-            if (options) {
-                this.deep = !!options.deep;
-                this.user = !!options.user;
-                this.lazy = !!options.lazy;
-                this.sync = !!options.sync;
-            } else {
-                this.deep = this.user = this.lazy = this.sync = false;
-            }
-            this.cb = cb;
-            this.id = ++uid$1; // uid for batching
-            this.active = true;
-            this.dirty = this.lazy; // for lazy watchers
-            this.deps = [];
-            this.newDeps = [];
-            this.depIds = new Set();
-            this.newDepIds = new Set();
-            this.expression = '';
-            // parse expression for getter
-            if (typeof expOrFn === 'function') {
-                this.getter = expOrFn;
-            } else {
-                this.getter = parsePath(expOrFn);
-                if (!this.getter) {
-                    this.getter = function () {};
-                }
-            }
-            this.value = this.lazy ? undefined : this.get();
-        }
-
-        Watcher.prototype.get = function get() {
-            pushTarget(this);
-            var value = void 0;
-            var vm = this.vm;
-            try {
-                value = this.getter.call(vm, vm);
-            } catch (e) {
-                // if (this.user) {
-                // } else {
-                // console.error(e)
-                // }
-            } finally {
-                // "touch" every property so they are all tracked as
-                // dependencies for deep watching
-                if (this.deep) {
-                    traverse(value);
-                }
-                popTarget();
-                this.cleanupDeps();
-            }
-            return value;
-        };
-
-        Watcher.prototype.addDep = function addDep(dep) {
-            var id = dep.id;
-            if (!this.newDepIds.has(id)) {
-                this.newDepIds.add(id);
-                this.newDeps.push(dep);
-                if (!this.depIds.has(id)) {
-                    dep.addSub(this);
-                }
-            }
-        };
-
-        Watcher.prototype.cleanupDeps = function cleanupDeps() {
-            var i = this.deps.length;
-            while (i--) {
-                var dep = this.deps[i];
-                if (!this.newDepIds.has(dep.id)) {
-                    dep.removeSub(this);
-                }
-            }
-            var tmp = this.depIds;
-            this.depIds = this.newDepIds;
-            this.newDepIds = tmp;
-            this.newDepIds.clear();
-            tmp = this.deps;
-            this.deps = this.newDeps;
-            this.newDeps = tmp;
-            this.newDeps.length = 0;
-        };
-
-        Watcher.prototype.update = function update(options) {
-            /* istanbul ignore else */
-            if (this.lazy) {
-                this.dirty = true;
-            } else if (this.sync) {
-                this.run(options);
-            } else {
-                queueWatcher(this, options);
-            }
-        };
-
-        Watcher.prototype.run = function run(options) {
-            if (this.active) {
-                var value = this.get();
-                if (value !== this.value ||
-                // Deep watchers and watchers on Object/Arrays should fire even
-                // when the value is the same, because the value may
-                // have mutated.
-                _.isObject(value) && options && options.refresh || this.deep) {
-                    // set new value
-                    var oldValue = this.value;
-                    this.value = value;
-                    if (this.user) {
-                        try {
-                            this.cb.call(this.vm, value, oldValue, options);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    } else {
-                        try {
-                            this.cb.call(this.vm, value, oldValue, options);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
-                }
-            }
-        };
-
-        Watcher.prototype.evaluate = function evaluate() {
-            this.value = this.get();
-            this.dirty = false;
-        };
-
-        Watcher.prototype.depend = function depend() {
-            var i = this.deps.length;
-            while (i--) {
-                this.deps[i].depend();
-            }
-        };
-
-        Watcher.prototype.teardown = function teardown() {
-            if (this.active) {
-                // remove self from vm's watcher list
-                // this is a somewhat expensive operation so we skip it
-                // if the vm is being destroyed.
-                remove(this.vm._watchers, this);
-                var i = this.deps.length;
-                while (i--) {
-                    this.deps[i].removeSub(this);
-                }
-                this.active = false;
-            }
-        };
-
-        return Watcher;
-    }();
-
-    var seenObjects = new Set();
-
-    function traverse(val) {
-        seenObjects.clear();
-        _traverse(val, seenObjects);
-    }
-
-    function _traverse(val, seen) {
-        var i = void 0,
-            keys = void 0;
-        var isA = _.isArray(val);
-        if (!isA && !_.isObject(val)) {
-            return;
-        }
-        if (val.__ob__) {
-            var depId = val.__ob__.dep.id;
-            if (seen.has(depId)) {
-                return;
-            }
-            seen.add(depId);
-        }
-        if (isA) {
-            i = val.length;
-            while (i--) {
-                _traverse(val[i], seen);
-            }
-        } else {
-            keys = _.keys(val);
-            i = keys.length;
-            while (i--) {
-                _traverse(val[keys[i]], seen);
-            }
-        }
-    }
-
     var falsy$1;
     var operators = {
         '||': falsy$1,
@@ -93594,49 +93594,42 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
 
     function initComputed(vm, computed) {
         var watchers = vm._computedWatchers = {};
-
         defineComputed(vm, computed);
-
         for (var key in computed) {
-            var userDef = computed[key],
-                context = vm.$$model ? vm.model : vm;
-            var getter = typeof userDef === "function" ? _.bind(userDef, context) : _.bind(userDef.get, context);
-
-            watchers[key] = new Watcher(vm.$$computed, getter || noop, noop, computedWatcherOptions);
+            watchers[key] = defineComputedWatcher(vm, computed[key]);
         }
+    }
+
+    function defineComputedWatcher(vm, userDef) {
+        var context = vm.$$model ? vm.model : vm;
+        var getter = typeof userDef === "function" ? userDef : userDef.get;
+
+        return new Watcher(context, getter || noop, noop, computedWatcherOptions);
+    }
+
+    function defineOneComputedGetter(vm, key, userDef) {
+        var shouldCache = true;
+        var sharedPropertyDefinition = {
+            enumerable: true,
+            configurable: true,
+            get: noop,
+            set: noop
+        };
+        if (typeof userDef === "function") {
+            sharedPropertyDefinition.get = createComputedGetter(vm, key);
+            sharedPropertyDefinition.set = noop;
+        } else {
+            sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(vm, key) : userDef.get : noop;
+            sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
+        }
+        return sharedPropertyDefinition;
     }
 
     function defineComputed(vm, computed) {
         var props = {};
-        // if (typeof Proxy === 'function') {
-        //     return vm.$$computed = new Proxy(props, {
-        //         has: function (target, key) {
-        //             return computed && key in computed
-        //         },
-        //         get: function (target, key) {
-        //             return createComputedGetter(vm, key)()
-        //         }
-        //     })
-        // }
-        var shouldCache = true;
         for (var key in computed) {
             if (!(key in vm)) {
-                var sharedPropertyDefinition = {
-                    enumerable: true,
-                    configurable: true,
-                    get: noop,
-                    set: noop
-                };
-                var userDef = computed[key];
-                if (typeof userDef === "function") {
-                    sharedPropertyDefinition.get = createComputedGetter(vm, key);
-                    sharedPropertyDefinition.set = noop;
-                } else {
-                    sharedPropertyDefinition.get = userDef.get ? shouldCache && userDef.cache !== false ? createComputedGetter(key) : userDef.get : noop;
-                    sharedPropertyDefinition.set = userDef.set ? userDef.set : noop;
-                }
-
-                props[key] = sharedPropertyDefinition;
+                props[key] = defineOneComputedGetter(vm, key, computed[key]);
             }
         }
         vm.$$computed = createViewModel$1({}, props);
@@ -93897,6 +93890,12 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         return Model;
     }();
 
+    function define(model) {
+        return REACTIVE ? new Observer(model).model : model;
+    }
+
+    var reactive = define;
+
     function config(options) {
         options || (options = {});
         if ("reactive" in options) {
@@ -93924,16 +93923,14 @@ BI.shortcut("bi.simple_tree", BI.SimpleTreeView);
         return result;
     }
 
-    function define(model) {
-        return new Observer(model).model;
-    }
     var version = '2.0';
 
-    exports.define = define;
     exports.version = version;
     exports.$$skipArray = $$skipArray;
     exports.mixin = mixin;
     exports.Model = Model;
+    exports.define = define;
+    exports.reactive = reactive;
     exports.config = config;
     exports.observerState = observerState;
     exports.Observer = Observer;
