@@ -92,7 +92,7 @@
         configFunctions[type].push(configFn);
     };
 
-    BI.getDOMNode = BI.getDOMNode || function (type, fn) {
+    BI.getReference = BI.getReference || function (type, fn) {
         return BI.Plugin.registerObject(type, fn);
     };
 
