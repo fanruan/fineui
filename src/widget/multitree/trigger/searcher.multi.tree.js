@@ -132,8 +132,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             this.editor.setState(BI.Selection.None);
         } else {
             var text = "";
-            BI.each(ob.value, function (name, children) {
-                var childNodes = getChildrenNode(children);
+            var value = ob.value;
+            var names = BI.Func.getSortedResult(BI.keys(value));
+            BI.each(names, function (idx, name) {
+                var childNodes = getChildrenNode(value[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
