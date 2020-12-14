@@ -13,6 +13,9 @@ export interface _IconChangeButtonStatic {
 }
 
 export declare class IconChangeButton extends Single {
+    static xtype: string;
+    static EVENT_CHANGE: string;
+
     isSelected(): boolean;
 
     setSelected(v: boolean): void;

@@ -17,6 +17,9 @@ export interface _TextButtonStatic {
 }
 
 export declare class TextButton extends BasicButton {
+    static xtype: string;
+    static EVENT_CHANGE: string;
+
     setStyle(style: any): void;
 
     doRedMark(...args: any[]): void;
