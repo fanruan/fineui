@@ -1,13 +1,13 @@
 import { _Combo, _ComboStatic } from "./base/combination/combo";
-import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base/combination/group.button";
-import { _Tab, _TabStatic } from "./base/combination/tab";
+import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup } from "./base/combination/group.button";
+import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
-import { _NodeButton } from "./base/single/button/button.node";
-import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
-import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
+import { _NodeButton, NodeButton } from "./base/single/button/button.node";
+import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
+import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
-import { _Editor, _EditorStatic } from "./base/single/editor/editor";
+import { _Editor, _EditorStatic, Editor } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
@@ -16,10 +16,10 @@ import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
 import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
-import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
-import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
+import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
+import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
-import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textvalue";
+import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
 import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
@@ -44,7 +44,7 @@ import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
 import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
-import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
+import { DownListCombo, _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
@@ -53,6 +53,17 @@ import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizonta
 import { InlineVerticalAdaptLayout } from "./core/wrapper/layout/adapt/inline.vertical";
 import { TableAdaptLayout } from "./core/wrapper/layout/adapt/adapt.table";
 import { IconButton } from "./base/single/button/buttons/button.icon";
+import { TextEditor } from "./widget/editor/editor.text";
+import { IconLabel } from "./base/single/label/icon.label";
+import { Popover, BarPopover } from "./base/layer/layer.popover";
+import { IconCombo } from "./case/combo/iconcombo/combo.icon";
+import { DynamicDateCombo } from "./widget/dynamicdate/dynamicdate.combo";
+import { CustomTree } from "./base/tree/customtree";
+import { ButtonTree } from "./base/combination/tree.button";
+import { IconArrowNode } from "./case/button/node/node.icon.arrow";
+import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
+import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
+import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -118,6 +129,18 @@ export interface BI extends _func, _i18n, _base, _inject {
     RightVerticalAdaptLayout: typeof RightVerticalAdaptLayout;
     TableAdaptLayout: typeof TableAdaptLayout;
     IconButton: typeof IconButton;
+    TextEditor: typeof TextEditor;
+    IconLabel: typeof IconLabel;
+    Popover: typeof Popover;
+    BarPopover: typeof BarPopover;
+    IconCombo: typeof IconCombo;
+    DynamicDateCombo: typeof DynamicDateCombo;
+    CustomTree: typeof CustomTree;
+    ButtonTree: typeof ButtonTree;
+    IconArrowNode: typeof IconArrowNode;
+    MidTreeLeafItem: typeof MidTreeLeafItem;
+    FirstTreeLeafItem: typeof FirstTreeLeafItem;
+    LastTreeLeafItem: typeof LastTreeLeafItem;
 }
 
 export default {
@@ -137,4 +160,26 @@ export {
     IconButton,
     AbstractLabel,
     Label,
+    TextButton,
+    DownListCombo,
+    IconChangeButton,
+    Button,
+    TextEditor,
+    TextValueCombo,
+    Editor,
+    IconLabel,
+    Popover,
+    BarPopover,
+    Tab,
+    IconCombo,
+    DynamicDateCombo,
+    MultiSelectItem,
+    CustomTree,
+    ButtonGroup,
+    ButtonTree,
+    NodeButton,
+    IconArrowNode,
+    MidTreeLeafItem,
+    FirstTreeLeafItem,
+    LastTreeLeafItem,
 };

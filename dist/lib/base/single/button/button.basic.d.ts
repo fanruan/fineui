@@ -22,6 +22,7 @@ export interface _BasicButtonStatic {
     EVENT_CHANGE: string;
 }
 export declare class BasicButton extends Single {
+    static EVENT_CHANGE: string;
     _createShadow(): void;
     bindEvent(): void;
     _trigger(e: Event): void;
