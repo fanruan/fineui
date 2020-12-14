@@ -26,7 +26,7 @@ BI.MultiTreeCheckSelectedButton = BI.inherit(BI.Single, {
 
         this.checkSelected = BI.createWidget({
             type: "bi.text_button",
-            cls: "trigger-check-selected",
+            cls: "bi-high-light-background trigger-check-text",
             invisible: true,
             hgap: 4,
             text: BI.i18nText("BI-Check_Selected"),
