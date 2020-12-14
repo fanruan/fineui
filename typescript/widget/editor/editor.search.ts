@@ -1,6 +1,6 @@
 import { Widget } from '../../core/widget';
 
-export declare class TextEditor extends Widget {
+export declare class SearchEditor extends Widget {
     static xtype: string;
 
     static EVENT_CHANGE: string;
@@ -10,6 +10,7 @@ export declare class TextEditor extends Widget {
     static EVENT_KEY_DOWN: string;
     static EVENT_SPACE: string;
     static EVENT_BACKSPACE: string;
+    static EVENT_CLEAR: string;
     static EVENT_START: string;
     static EVENT_PAUSE: string;
     static EVENT_STOP: string;
@@ -28,9 +29,13 @@ export declare class TextEditor extends Widget {
 
     blur(): void;
 
-    setErrorText(v: string): void;
+    getKeywords(): string[];
 
-    getErrorText(): string;
+    getLastValidValue(): string;
+
+    getLastChangedValue(): string;
+
+    isEditing(): boolean;
 
     isValid(): boolean;
 }
