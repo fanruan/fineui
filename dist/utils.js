@@ -1,4 +1,4 @@
-/*! time: 2020-12-14 11:30:24 */
+/*! time: 2020-12-14 13:50:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1106);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1116);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -112,7 +112,7 @@ if (_global.BI == null) {
 if(_global.BI.prepares == null) {
     _global.BI.prepares = [];
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
 
@@ -1473,120 +1473,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13), __webpack_require__(56).setImmediate))
-
-/***/ }),
-
-/***/ 1106:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(106);
-__webpack_require__(107);
-__webpack_require__(135);
-__webpack_require__(128);
-__webpack_require__(131);
-__webpack_require__(132);
-__webpack_require__(129);
-__webpack_require__(130);
-__webpack_require__(110);
-__webpack_require__(112);
-__webpack_require__(127);
-__webpack_require__(134);
-__webpack_require__(133);
-__webpack_require__(113);
-__webpack_require__(114);
-__webpack_require__(115);
-__webpack_require__(116);
-__webpack_require__(117);
-__webpack_require__(118);
-__webpack_require__(119);
-__webpack_require__(120);
-__webpack_require__(121);
-__webpack_require__(122);
-__webpack_require__(123);
-__webpack_require__(124);
-__webpack_require__(125);
-__webpack_require__(126);
-__webpack_require__(967);
-__webpack_require__(1107);
-__webpack_require__(136);
-__webpack_require__(137);
-module.exports = __webpack_require__(138);
-
-
-/***/ }),
-
-/***/ 1107:
-/***/ (function(module, exports) {
-
-/**
- * Created by astronaut007 on 2018/8/8
- */
-// 牵扯到国际化这些常量在页面加载后再生效
-// full day names
-BI.Date = BI.Date || {};
-BI.Date._DN = ["星期日",
-    "星期一",
-    "星期二",
-    "星期三",
-    "星期四",
-    "星期五",
-    "星期六",
-    "星期日"];
-
-// short day names
-BI.Date._SDN = ["日",
-    "一",
-    "二",
-    "三",
-    "四",
-    "五",
-    "六",
-    "日"];
-
-// Monday first, etc.
-BI.Date._FD = 1;
-
-// full month namesdat
-BI.Date._MN = [
-    "一月",
-    "二月",
-    "三月",
-    "四月",
-    "五月",
-    "六月",
-    "七月",
-    "八月",
-    "九月",
-    "十月",
-    "十一月",
-    "十二月"];
-
-// short month names
-BI.Date._SMN = [0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    11];
-
-BI.Date._QN = ["", "第1季度",
-    "第2季度",
-    "第3季度",
-    "第4季度"];
-
-/** Adds the number of days array to the Date object. */
-BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-// 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
-BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(56).setImmediate))
 
 /***/ }),
 
@@ -1797,7 +1684,120 @@ BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13), __webpack_require__(70)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14), __webpack_require__(70)))
+
+/***/ }),
+
+/***/ 1116:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(106);
+__webpack_require__(107);
+__webpack_require__(135);
+__webpack_require__(128);
+__webpack_require__(131);
+__webpack_require__(132);
+__webpack_require__(129);
+__webpack_require__(130);
+__webpack_require__(110);
+__webpack_require__(112);
+__webpack_require__(127);
+__webpack_require__(134);
+__webpack_require__(133);
+__webpack_require__(113);
+__webpack_require__(114);
+__webpack_require__(115);
+__webpack_require__(116);
+__webpack_require__(117);
+__webpack_require__(118);
+__webpack_require__(119);
+__webpack_require__(120);
+__webpack_require__(121);
+__webpack_require__(122);
+__webpack_require__(123);
+__webpack_require__(124);
+__webpack_require__(125);
+__webpack_require__(126);
+__webpack_require__(977);
+__webpack_require__(1117);
+__webpack_require__(136);
+__webpack_require__(137);
+module.exports = __webpack_require__(138);
+
+
+/***/ }),
+
+/***/ 1117:
+/***/ (function(module, exports) {
+
+/**
+ * Created by astronaut007 on 2018/8/8
+ */
+// 牵扯到国际化这些常量在页面加载后再生效
+// full day names
+BI.Date = BI.Date || {};
+BI.Date._DN = ["星期日",
+    "星期一",
+    "星期二",
+    "星期三",
+    "星期四",
+    "星期五",
+    "星期六",
+    "星期日"];
+
+// short day names
+BI.Date._SDN = ["日",
+    "一",
+    "二",
+    "三",
+    "四",
+    "五",
+    "六",
+    "日"];
+
+// Monday first, etc.
+BI.Date._FD = 1;
+
+// full month namesdat
+BI.Date._MN = [
+    "一月",
+    "二月",
+    "三月",
+    "四月",
+    "五月",
+    "六月",
+    "七月",
+    "八月",
+    "九月",
+    "十月",
+    "十一月",
+    "十二月"];
+
+// short month names
+BI.Date._SMN = [0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11];
+
+BI.Date._QN = ["", "第1季度",
+    "第2季度",
+    "第3季度",
+    "第4季度"];
+
+/** Adds the number of days array to the Date object. */
+BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+// 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
+BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
+
 
 /***/ }),
 
@@ -7562,7 +7562,7 @@ BI.Region.prototype = {
     };
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
 
@@ -7843,35 +7843,6 @@ _.extend(BI, {
     }
 });
 
-
-/***/ }),
-
-/***/ 13:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var g; // This works in non-strict mode
-
-g = function () {
-  return this;
-}();
-
-try {
-  // This works if eval is allowed (see CSP)
-  g = g || new Function("return this")();
-} catch (e) {
-  // This works if the window reference is available
-  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-} // g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-
-module.exports = g;
 
 /***/ }),
 
@@ -8891,6 +8862,35 @@ BI.Req = {
 
 /***/ }),
 
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var g; // This works in non-strict mode
+
+g = function () {
+  return this;
+}();
+
+try {
+  // This works if eval is allowed (see CSP)
+  g = g || new Function("return this")();
+} catch (e) {
+  // This works if the window reference is available
+  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+} // g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+
+module.exports = g;
+
+/***/ }),
+
 /***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8955,7 +8955,7 @@ __webpack_require__(111); // On some exotic environments, it's not clear which o
 
 exports.setImmediate = typeof self !== "undefined" && self.setImmediate || typeof global !== "undefined" && global.setImmediate || void 0 && (void 0).setImmediate;
 exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || typeof global !== "undefined" && global.clearImmediate || void 0 && (void 0).clearImmediate;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
 
 /***/ }),
 
@@ -9176,7 +9176,7 @@ process.umask = function () {
 
 /***/ }),
 
-/***/ 967:
+/***/ 977:
 /***/ (function(module, exports) {
 
 BI.i18n = {
