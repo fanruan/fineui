@@ -1,4 +1,4 @@
-/*! time: 2020-12-14 17:15:26 */
+/*! time: 2020-12-14 19:40:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -429,7 +429,7 @@ BI.i18n = {
     "BI-Summary_Values": "汇总",
     "BI-Basic_Clear": "清除",
     "BI-Upload_File_Size_Error": "文件大小不支持",
-    "BI-Upload_File_Count_Error": "超出上传数量上限，请重新上传",
+    "BI-Upload_File_Count_Error": "超出上传数量上限{R1}，请重新上传",
     "BI-Up_Page": "向上翻页",
     "BI-Basic_Simple_Sunday": "日",
     "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
