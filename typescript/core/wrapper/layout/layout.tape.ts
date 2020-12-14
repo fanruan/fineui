@@ -1,5 +1,4 @@
-import { Layout } from "typescript";
-import { _Layout } from "../layout";
+import { _Layout, Layout } from "../layout";
 
 export interface _HTapeLayout extends _Layout {
     resize(): void;
