@@ -64,6 +64,8 @@ import { IconArrowNode } from "./case/button/node/node.icon.arrow";
 import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
 import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
 import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
+import { SmallTextEditor } from "./widget/editor/editor.text.small";
+import { MultifileEditor } from "./widget/editor/editor.multifile";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -141,6 +143,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     MidTreeLeafItem: typeof MidTreeLeafItem;
     FirstTreeLeafItem: typeof FirstTreeLeafItem;
     LastTreeLeafItem: typeof LastTreeLeafItem;
+    SmallTextEditor: typeof SmallTextEditor;
+    MultifileEditor: typeof MultifileEditor;
 }
 
 export default {
@@ -182,4 +186,6 @@ export {
     MidTreeLeafItem,
     FirstTreeLeafItem,
     LastTreeLeafItem,
+    SmallTextEditor,
+    MultifileEditor,
 };
