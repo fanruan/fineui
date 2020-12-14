@@ -64,6 +64,7 @@ import { IconArrowNode } from "./case/button/node/node.icon.arrow";
 import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
 import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
 import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
+import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -128,6 +129,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     InlineVerticalAdaptLayout: typeof InlineVerticalAdaptLayout;
     RightVerticalAdaptLayout: typeof RightVerticalAdaptLayout;
     TableAdaptLayout: typeof TableAdaptLayout;
+    AbsoluteCenterLayout: typeof AbsoluteCenterLayout;
     IconButton: typeof IconButton;
     TextEditor: typeof TextEditor;
     IconLabel: typeof IconLabel;
@@ -157,6 +159,7 @@ export {
     InlineVerticalAdaptLayout,
     RightVerticalAdaptLayout,
     TableAdaptLayout,
+    AbsoluteCenterLayout,
     IconButton,
     AbstractLabel,
     Label,
