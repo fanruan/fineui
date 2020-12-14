@@ -1,5 +1,5 @@
 import { _Combo, _ComboStatic } from "./base/combination/combo";
-import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic } from "./base/combination/group.button";
+import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup } from "./base/combination/group.button";
 import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
@@ -58,6 +58,12 @@ import { IconLabel } from "./base/single/label/icon.label";
 import { Popover, BarPopover } from "./base/layer/layer.popover";
 import { IconCombo } from "./case/combo/iconcombo/combo.icon";
 import { DynamicDateCombo } from "./widget/dynamicdate/dynamicdate.combo";
+import { CustomTree } from "./base/tree/customtree";
+import { ButtonTree } from "./base/combination/tree.button";
+import { IconArrowNode } from "./case/button/node/node.icon.arrow";
+import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
+import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
+import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -129,6 +135,12 @@ export interface BI extends _func, _i18n, _base, _inject {
     BarPopover: typeof BarPopover;
     IconCombo: typeof IconCombo;
     DynamicDateCombo: typeof DynamicDateCombo;
+    CustomTree: typeof CustomTree;
+    ButtonTree: typeof ButtonTree;
+    IconArrowNode: typeof IconArrowNode;
+    MidTreeLeafItem: typeof MidTreeLeafItem;
+    FirstTreeLeafItem: typeof FirstTreeLeafItem;
+    LastTreeLeafItem: typeof LastTreeLeafItem;
 }
 
 export default {
@@ -162,4 +174,11 @@ export {
     IconCombo,
     DynamicDateCombo,
     MultiSelectItem,
+    CustomTree,
+    ButtonGroup,
+    ButtonTree,
+    IconArrowNode,
+    MidTreeLeafItem,
+    FirstTreeLeafItem,
+    LastTreeLeafItem,
 };
