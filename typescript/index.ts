@@ -5,7 +5,7 @@ import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
 import { _NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic } from "./base/single/button/buttons/button";
-import { _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
+import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic } from "./base/single/editor/editor";
 import { _Iframe } from "./base/single/iframe/iframe";
@@ -16,7 +16,7 @@ import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
 import { _Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
-import { _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
+import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic } from "./case/combo/combo.textvalue";
@@ -44,7 +44,7 @@ import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
 import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
 import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
 import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
-import { _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
+import { DownListCombo, _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
@@ -137,4 +137,7 @@ export {
     IconButton,
     AbstractLabel,
     Label,
+    TextButton,
+    DownListCombo,
+    IconChangeButton,
 };
