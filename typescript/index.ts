@@ -39,11 +39,11 @@ import { _Plugin } from "./core/plugin";
 import { _OB } from "./core/ob";
 import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
-import { _Layout } from "./core/wrapper/layout";
-import { _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
-import { _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
-import { _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
-import { _DefaultLayout } from "./core/wrapper/layout/layout.default";
+import { Layout, _Layout } from "./core/wrapper/layout";
+import { AbsoluteLayout, _AbsoluteLayout } from "./core/wrapper/layout/layout.absolute";
+import { HTapeLayout, VTapeLayout, _HTapeLayout, _VTapeLayout } from "./core/wrapper/layout/layout.tape";
+import { VerticalLayout, _VerticalLayout } from "./core/wrapper/layout/layout.vertical";
+import { DefaultLayout, _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo, _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
 import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
@@ -64,6 +64,11 @@ import { IconArrowNode } from "./case/button/node/node.icon.arrow";
 import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
 import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
 import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
+import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
+import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizontal";
+import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
+import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
+import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -128,6 +133,11 @@ export interface BI extends _func, _i18n, _base, _inject {
     InlineVerticalAdaptLayout: typeof InlineVerticalAdaptLayout;
     RightVerticalAdaptLayout: typeof RightVerticalAdaptLayout;
     TableAdaptLayout: typeof TableAdaptLayout;
+    AbsoluteCenterLayout: typeof AbsoluteCenterLayout;
+    HorizontalAdaptLayout: typeof HorizontalAdaptLayout;
+    FloatLeftLayout: typeof FloatLeftLayout;
+    CenterAdaptLayout: typeof CenterAdaptLayout;
+    VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
     TextEditor: typeof TextEditor;
     IconLabel: typeof IconLabel;
@@ -153,10 +163,21 @@ export {
     Icon,
     LeftRightVerticalAdaptLayout,
     IconTextIconItem,
+    Layout,
     HorizontalAutoLayout,
     InlineVerticalAdaptLayout,
     RightVerticalAdaptLayout,
     TableAdaptLayout,
+    AbsoluteCenterLayout,
+    HorizontalAdaptLayout,
+    FloatLeftLayout,
+    VerticalLayout,
+    AbsoluteLayout,
+    DefaultLayout,
+    HTapeLayout,
+    CenterAdaptLayout,
+    VTapeLayout,
+    VerticalAdaptLayout,
     IconButton,
     AbstractLabel,
     Label,
