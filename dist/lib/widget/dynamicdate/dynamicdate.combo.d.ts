@@ -1,8 +1,8 @@
 import { Single } from '../../base/single/single';
 export declare class DynamicDateCombo extends Single {
     static xtype: string;
-    static Dynamic: number;
-    static Static: number;
+    static Static: 1;
+    static Dynamic: 2;
     static EVENT_KEY_DOWN: string;
     static EVENT_CONFIRM: string;
     static EVENT_FOCUS: string;
