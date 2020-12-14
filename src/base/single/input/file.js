@@ -551,7 +551,6 @@
                 var input = wrap.dom.input.cloneNode(true);
                 var files = F(wrap.dom.input);
                 if (wrap.maxLength !== -1 && wrap.maxLength < files.length) {
-                    BI.Msg.toast(BI.i18nText("BI-Upload_File_Count_Error"), { level: "error" });
                     self.fireEvent(BI.File.EVENT_ERROR, {
                         errorType: 2
                     });
