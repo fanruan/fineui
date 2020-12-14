@@ -3,7 +3,7 @@ import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup }
 import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
 import { _Pane, _PaneStatic } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
-import { _NodeButton } from "./base/single/button/button.node";
+import { _NodeButton, NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
 import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
@@ -177,6 +177,7 @@ export {
     CustomTree,
     ButtonGroup,
     ButtonTree,
+    NodeButton,
     IconArrowNode,
     MidTreeLeafItem,
     FirstTreeLeafItem,
