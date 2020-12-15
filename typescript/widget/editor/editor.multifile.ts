@@ -9,12 +9,16 @@ export declare class MultifileEditor extends Widget {
     static EVENT_UPLOADED: string;
 
     _reset(): void;
+
     select(): void;
+
     getValue(): {
         attach_id: string;
         attach_type: string;
         filename: string;
     }[];
+
     upload(): void;
+    
     reset(): void;
 }

@@ -21,7 +21,7 @@ import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./cas
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
 import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
-import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
+import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
@@ -71,6 +71,8 @@ import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizon
 import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
 import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
+import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
+import { MultiSelectCombo } from "./widget/multiselect/multiselect.combo";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -155,6 +157,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     LastTreeLeafItem: typeof LastTreeLeafItem;
     SmallTextEditor: typeof SmallTextEditor;
     MultifileEditor: typeof MultifileEditor;
+    MultiSelectInsertCombo: typeof MultiSelectInsertCombo;
+    MultiSelectCombo: typeof MultiSelectCombo;
 }
 
 export default {
@@ -209,4 +213,7 @@ export {
     LastTreeLeafItem,
     SmallTextEditor,
     MultifileEditor,
+    SignEditor,
+    MultiSelectInsertCombo,
+    MultiSelectCombo,
 };
