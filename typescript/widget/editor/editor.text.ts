@@ -32,5 +32,5 @@ export declare class TextEditor extends Widget {
 
     getErrorText(): string;
 
-    isValid(): boolean
+    isValid(): boolean;
 }

@@ -1,4 +1,4 @@
-import { _Layout } from "../layout";
+import { Layout, _Layout } from "../layout";
 
 export interface _AbsoluteLayout extends _Layout {
     resize(): void;
@@ -6,4 +6,8 @@ export interface _AbsoluteLayout extends _Layout {
     stroke<T>(items: T[]): void;
 
     populate<T>(items?: T[]): void;
+}
+
+export declare class AbsoluteLayout extends Layout {
+    static xtype: string;
 }
