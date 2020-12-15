@@ -1,7 +1,7 @@
 import { _Combo, _ComboStatic } from "./base/combination/combo";
 import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup } from "./base/combination/group.button";
 import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
-import { _Pane, _PaneStatic } from "./base/pane";
+import { _Pane, _PaneStatic, Pane } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
 import { _NodeButton, NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
@@ -14,14 +14,14 @@ import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
-import { _Text } from "./base/single/text";
+import { _Text, Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
 import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
 import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
-import { _SignEditor, _SignEditorStatic } from "./case/editor/editor.sign";
+import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
@@ -64,11 +64,18 @@ import { IconArrowNode } from "./case/button/node/node.icon.arrow";
 import { MidTreeLeafItem } from "./case/button/treeitem/item.mid.treeleaf";
 import { FirstTreeLeafItem } from "./case/button/treeitem/item.first.treeleaf";
 import { LastTreeLeafItem } from "./case/button/treeitem/item.last.treeleaf";
+import { SmallTextEditor } from "./widget/editor/editor.text.small";
+import { MultifileEditor } from "./widget/editor/editor.multifile";
 import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
 import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizontal";
 import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
 import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
+import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
+import { MultiSelectCombo } from "./widget/multiselect/multiselect.combo";
+import { SearchEditor } from "./widget/editor/editor.search";
+import { MultiLayerSingleLevelTree } from "./widget/multilayersingletree/multilayersingletree.leveltree";
+import { SimpleColorChooser } from "./case/colorchooser/colorchooser.simple";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -151,6 +158,13 @@ export interface BI extends _func, _i18n, _base, _inject {
     MidTreeLeafItem: typeof MidTreeLeafItem;
     FirstTreeLeafItem: typeof FirstTreeLeafItem;
     LastTreeLeafItem: typeof LastTreeLeafItem;
+    SmallTextEditor: typeof SmallTextEditor;
+    MultifileEditor: typeof MultifileEditor;
+    MultiSelectInsertCombo: typeof MultiSelectInsertCombo;
+    MultiSelectCombo: typeof MultiSelectCombo;
+    SearchEditor: typeof SearchEditor;
+    MultiLayerSingleLevelTree: typeof MultiLayerSingleLevelTree;
+    SimpleColorChooser: typeof SimpleColorChooser;
 }
 
 export default {
@@ -203,4 +217,14 @@ export {
     MidTreeLeafItem,
     FirstTreeLeafItem,
     LastTreeLeafItem,
+    SmallTextEditor,
+    MultifileEditor,
+    SignEditor,
+    MultiSelectInsertCombo,
+    MultiSelectCombo,
+    SearchEditor,
+    Text,
+    Pane,
+    MultiLayerSingleLevelTree,
+    SimpleColorChooser,
 };

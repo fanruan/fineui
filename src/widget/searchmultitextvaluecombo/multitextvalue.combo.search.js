@@ -81,6 +81,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                     self._populate();
                     self._setStartValue("");
+                    self._dataChange = true;
                 });
             }
         });
@@ -98,6 +99,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                     }
+                    self._dataChange = true;
                 });
             }
         });
@@ -112,6 +114,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self._dataChange = true;
         });
         this.trigger.on(BI.MultiSelectTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             this.getCounter().setValue(self.storeValue);
@@ -137,6 +140,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -172,6 +176,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self._dataChange = false;// 标记数据是否发生变化
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -189,7 +194,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                  * 在存在标红的情况，如果popover没有发生改变就确认需要同步trigger的值，否则对外value值和trigger样式不统一
                  */
                 assertShowValue();
-                self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.SearchMultiTextValueCombo.EVENT_CONFIRM);
             }
         });
 

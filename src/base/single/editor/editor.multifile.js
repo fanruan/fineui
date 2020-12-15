@@ -71,6 +71,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
         this.file.reset();
     },
 
+    setMaxFileLength: function (v) {
+        this.file.setMaxFileLength(v);
+    },
+
     select: function () {
         this.file.select();
     },
