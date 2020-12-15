@@ -191,7 +191,7 @@ BI.Editor = BI.inherit(BI.Single, {
                 cls: "bi-water-mark",
                 text: this.options.watermark,
                 height: o.height - 2 * o.vgap - o.tgap,
-                hgap: o.hgap - 2,
+                hgap: 2,
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
