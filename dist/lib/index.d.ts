@@ -76,6 +76,12 @@ import { MultiSelectCombo } from "./widget/multiselect/multiselect.combo";
 import { SearchEditor } from "./widget/editor/editor.search";
 import { MultiLayerSingleLevelTree } from "./widget/multilayersingletree/multilayersingletree.leveltree";
 import { SimpleColorChooser } from "./case/colorchooser/colorchooser.simple";
+import { AbstractAllValueChooser } from "./component/allvaluechooser/abstract.allvaluechooser";
+import { AllValueChooserCombo } from "./component/allvaluechooser/combo.allvaluechooser";
+import { TextAreaEditor } from "./base/single/editor/editor.textarea";
+import { SingleSelectItem } from "./case/button/item.singleselect";
+import { DynamicDateTimeCombo } from "./widget/dynamicdatetime/dynamicdatetime.combo";
+import { MultiTreeCombo } from "./widget/multitree/multi.tree.combo";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -162,9 +168,15 @@ export interface BI extends _func, _i18n, _base, _inject {
     SearchEditor: typeof SearchEditor;
     MultiLayerSingleLevelTree: typeof MultiLayerSingleLevelTree;
     SimpleColorChooser: typeof SimpleColorChooser;
+    AbstractAllValueChooser: typeof AbstractAllValueChooser;
+    AllValueChooserCombo: typeof AllValueChooserCombo;
+    TextAreaEditor: typeof TextAreaEditor;
+    SingleSelectItem: typeof SingleSelectItem;
+    DynamicDateTimeCombo: typeof DynamicDateTimeCombo;
+    MultiTreeCombo: typeof MultiTreeCombo;
 }
 declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, IconCombo, DynamicDateCombo, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, };
+export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, IconCombo, DynamicDateCombo, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, };
