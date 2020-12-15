@@ -32,11 +32,11 @@ export declare class MultiSelectInsertCombo extends Single {
         type: string;
         value: string[];
         assist: string[];
-    }[]): void;
+    }): void;
     getValue(): {
         type: string;
         value: string[];
         assist: string[];
-    }[];
+    };
     populate(...args: any[]): void;
 }
