@@ -251,8 +251,8 @@ BI.Editor = BI.inherit(BI.Single, {
                 element: this.contentWrapper,
                 items: [{
                     el: this.watermark,
-                    left: 3,
-                    right: 3,
+                    left: this.options.hgap,
+                    right: this.options.hgap,
                     top: 0,
                     bottom: 0,
                 }],
