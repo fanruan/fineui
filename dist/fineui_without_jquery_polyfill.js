@@ -1,4 +1,4 @@
-/*! time: 2020-12-15 11:08:58 */
+/*! time: 2020-12-15 11:50:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -26309,6 +26309,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
 
     _reset: function () {
         this.file.reset();
+    },
+
+    setMaxFileLength: function (v) {
+        this.file.setMaxFileLength(v);
     },
 
     select: function () {

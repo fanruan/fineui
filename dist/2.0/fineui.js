@@ -1,4 +1,4 @@
-/*! time: 2020-12-15 11:08:58 */
+/*! time: 2020-12-15 11:50:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -30282,6 +30282,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
 
     _reset: function () {
         this.file.reset();
+    },
+
+    setMaxFileLength: function (v) {
+        this.file.setMaxFileLength(v);
     },
 
     select: function () {
@@ -87544,12 +87548,12 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
         },
 
         _events: function (wrap) {
-            var self = this;
+            var self = this, o = this.options;
             event.add(wrap.dom.input, "change", function () {
                 event.del(wrap.dom.input, "change", arguments.callee);
                 var input = wrap.dom.input.cloneNode(true);
                 var files = F(wrap.dom.input);
-                if (wrap.maxLength !== -1 && wrap.maxLength < files.length) {
+                if (o.maxLength !== -1 && o.maxLength < files.length) {
                     self.fireEvent(BI.File.EVENT_ERROR, {
                         errorType: 2
                     });
@@ -87651,6 +87655,13 @@ BI.shortcut("bi.list_part_tree", BI.ListPartTree);
                     }
                 }
             });
+        },
+
+        setMaxFileLength: function(v) {
+            this.options.maxLength = v;
+            if (this.wrap) {
+                this.wrap.maxLength = v;
+            }
         },
 
         select: function () {
