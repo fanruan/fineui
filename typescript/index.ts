@@ -1,7 +1,7 @@
 import { _Combo, _ComboStatic } from "./base/combination/combo";
 import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup } from "./base/combination/group.button";
 import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
-import { _Pane, _PaneStatic } from "./base/pane";
+import { _Pane, _PaneStatic, Pane } from "./base/pane";
 import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/button/button.basic";
 import { _NodeButton, NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
@@ -14,7 +14,7 @@ import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
-import { _Text } from "./base/single/text";
+import { _Text, Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
@@ -73,6 +73,9 @@ import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
 import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
 import { MultiSelectCombo } from "./widget/multiselect/multiselect.combo";
+import { SearchEditor } from "./widget/editor/editor.search";
+import { MultiLayerSingleLevelTree } from "./widget/multilayersingletree/multilayersingletree.leveltree";
+import { SimpleColorChooser } from "./case/colorchooser/colorchooser.simple";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -159,6 +162,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     MultifileEditor: typeof MultifileEditor;
     MultiSelectInsertCombo: typeof MultiSelectInsertCombo;
     MultiSelectCombo: typeof MultiSelectCombo;
+    SearchEditor: typeof SearchEditor;
+    MultiLayerSingleLevelTree: typeof MultiLayerSingleLevelTree;
+    SimpleColorChooser: typeof SimpleColorChooser;
 }
 
 export default {
@@ -216,4 +222,9 @@ export {
     SignEditor,
     MultiSelectInsertCombo,
     MultiSelectCombo,
+    SearchEditor,
+    Text,
+    Pane,
+    MultiLayerSingleLevelTree,
+    SimpleColorChooser,
 };
