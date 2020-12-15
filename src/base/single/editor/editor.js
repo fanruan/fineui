@@ -53,7 +53,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var items = [{
             el: {
                 type: "bi.absolute",
-                ref: function(_ref) {
+                ref: function (_ref) {
                     self.contentWrapper = _ref;
                 },
                 items: [{
@@ -183,14 +183,15 @@ BI.Editor = BI.inherit(BI.Single, {
         }
     },
 
-    _assertWaterMark: function() {
+    _assertWaterMark: function () {
         var self = this, o = this.options;
-        if(BI.isNull(this.watermark)) {
+        if (BI.isNull(this.watermark)) {
             this.watermark = BI.createWidget({
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
                 height: o.height - 2 * o.vgap - o.tgap,
+                hgap: o.hgap - 2,
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -237,7 +238,7 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.options.errorText;
     },
 
-    setWaterMark: function(v) {
+    setWaterMark: function (v) {
         if (!BI.isKey(v)) {
             return;
         }
@@ -251,8 +252,8 @@ BI.Editor = BI.inherit(BI.Single, {
                 element: this.contentWrapper,
                 items: [{
                     el: this.watermark,
-                    left: this.options.hgap,
-                    right: this.options.hgap,
+                    left: 0,
+                    right: 0,
                     top: 0,
                     bottom: 0,
                 }],
