@@ -1,4 +1,4 @@
-/*! time: 2020-12-15 22:40:22 */
+/*! time: 2020-12-16 10:50:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -47301,6 +47301,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -47775,6 +47776,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -48284,6 +48286,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -48778,6 +48781,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -55452,6 +55456,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
