@@ -1,4 +1,4 @@
-import { _Combo, _ComboStatic } from "./base/combination/combo";
+import { Combo, _Combo, _ComboStatic } from "./base/combination/combo";
 import { _ButtonGroup, _ButtonGroupChooseType, _ButtonGroupStatic, ButtonGroup } from "./base/combination/group.button";
 import { _Tab, _TabStatic, Tab } from "./base/combination/tab";
 import { _Pane, _PaneStatic, Pane } from "./base/pane";
@@ -24,8 +24,8 @@ import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo
 import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
-import { _AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
-import { _AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
+import { _AbstractTreeValueChooser, AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
+import { _AbstractListTreeValueChooser, AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { _Action, _ActionFactory } from "./core/action/action";
 import { _ShowAction } from "./core/action/action.show";
 import { _base } from "./core/base";
@@ -92,6 +92,12 @@ import { MultiTreeCombo } from "./widget/multitree/multi.tree.combo";
 import { CenterLayout } from "./core/wrapper/layout/middle/middle.center";
 import { VirtualGroup } from "./base/combination/group.virtual";
 import { GridLayout } from "./core/wrapper/layout/layout.grid";
+import { TriggerIconButton } from "./case/button/icon/icon.trigger";
+import { Searcher } from "./base/combination/searcher";
+import { ListTreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.listtreevaluechooser";
+import { TreeValueChooserCombo } from "./component/treevaluechooser/combo.treevaluechooser";
+import { TreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.treevaluechooser.insert";
+import { Radio } from "./base/single/input/radio/radio";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -140,6 +146,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     VTapeLayout: ClassConstructor<_VTapeLayout>;
     AbstractTreeValueChooser: ClassConstructor<_AbstractTreeValueChooser>;
     AbstractListTreeValueChooser: ClassConstructor<_AbstractListTreeValueChooser>;
+    ListTreeValueChooserInsertCombo: typeof ListTreeValueChooserInsertCombo;
+    TreeValueChooserCombo: typeof TreeValueChooserCombo;
+    TreeValueChooserInsertCombo: typeof TreeValueChooserInsertCombo;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -162,7 +171,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     CenterAdaptLayout: typeof CenterAdaptLayout;
     VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
+    TriggerIconButton: typeof TriggerIconButton;
+    Searcher: typeof Searcher;
     TextEditor: typeof TextEditor;
+    Radio: typeof Radio;
     A: typeof A;
     Html: typeof Html;
     Switcher: typeof Switcher;
@@ -225,6 +237,8 @@ export {
     VTapeLayout,
     VerticalAdaptLayout,
     IconButton,
+    TriggerIconButton,
+    Searcher,
     AbstractLabel,
     Label,
     TextButton,
@@ -246,8 +260,15 @@ export {
     Popover,
     BarPopover,
     Tab,
+    AbstractTreeValueChooser,
+    AbstractListTreeValueChooser,
+    ListTreeValueChooserInsertCombo,
+    TreeValueChooserCombo,
+    TreeValueChooserInsertCombo,
+    Combo,
     IconCombo,
     DynamicDateCombo,
+    Radio,
     MultiSelectItem,
     CustomTree,
     ButtonGroup,
