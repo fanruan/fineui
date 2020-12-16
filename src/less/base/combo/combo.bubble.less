@@ -3,10 +3,6 @@
 .bi-bubble-combo {
   & .button-combo-triangle-wrapper {
     position: fixed !important;
-    // -ms-device-fixed >= IE11
-    // 与fixed表现形式一致，区别在于浏览器缩放的时候，-ms-device-fixed的元素不受其影响，而fixed的元素受其影响
-    // 最重要的是-ms-device-fixed解决了IE11下的残影问题
-    position: -ms-device-fixed !important;
     // 消除祖先节点设置的line-height:normal对空白节点的行高影响
     line-height: 0;
     .z-index-layer(@zIndex-popup);
