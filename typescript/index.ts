@@ -83,6 +83,15 @@ import { Loader } from "./base/combination/loader";
 import { ListPane } from "./case/layer/pane.list";
 import { MultiSelectBar } from "./case/toolbar/toolbar.multiselect";
 import { SelectList } from "./case/list/list.select";
+import { AbstractAllValueChooser } from "./component/allvaluechooser/abstract.allvaluechooser";
+import { AllValueChooserCombo } from "./component/allvaluechooser/combo.allvaluechooser";
+import { TextAreaEditor } from "./base/single/editor/editor.textarea";
+import { SingleSelectItem } from "./case/button/item.singleselect";
+import { DynamicDateTimeCombo } from "./widget/dynamicdatetime/dynamicdatetime.combo";
+import { MultiTreeCombo } from "./widget/multitree/multi.tree.combo";
+import { CenterLayout } from "./core/wrapper/layout/middle/middle.center";
+import { VirtualGroup } from "./base/combination/group.virtual";
+import { GridLayout } from "./core/wrapper/layout/layout.grid";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -179,6 +188,15 @@ export interface BI extends _func, _i18n, _base, _inject {
     SearchEditor: typeof SearchEditor;
     MultiLayerSingleLevelTree: typeof MultiLayerSingleLevelTree;
     SimpleColorChooser: typeof SimpleColorChooser;
+    AbstractAllValueChooser: typeof AbstractAllValueChooser;
+    AllValueChooserCombo: typeof AllValueChooserCombo;
+    TextAreaEditor: typeof TextAreaEditor;
+    SingleSelectItem: typeof SingleSelectItem;
+    DynamicDateTimeCombo: typeof DynamicDateTimeCombo;
+    MultiTreeCombo: typeof MultiTreeCombo;
+    CenterLayout: typeof CenterLayout;
+    VirtualGroup: typeof VirtualGroup;
+    GridLayout: typeof GridLayout;
 }
 
 export default {
@@ -249,4 +267,13 @@ export {
     Pane,
     MultiLayerSingleLevelTree,
     SimpleColorChooser,
+    AbstractAllValueChooser,
+    AllValueChooserCombo,
+    TextAreaEditor,
+    SingleSelectItem,
+    DynamicDateTimeCombo,
+    MultiTreeCombo,
+    CenterLayout,
+    VirtualGroup,
+    GridLayout,
 };
