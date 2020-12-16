@@ -18,7 +18,7 @@ import { _Text, Text } from "./base/single/text";
 import { _Trigger } from "./base/single/trigger/trigger";
 import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
-import { _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
+import { BubbleCombo, _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
 import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
@@ -76,6 +76,13 @@ import { MultiSelectCombo } from "./widget/multiselect/multiselect.combo";
 import { SearchEditor } from "./widget/editor/editor.search";
 import { MultiLayerSingleLevelTree } from "./widget/multilayersingletree/multilayersingletree.leveltree";
 import { SimpleColorChooser } from "./case/colorchooser/colorchooser.simple";
+import { A } from "./base/a/a";
+import { Html } from "./base/single/html/html";
+import { Switcher } from "./base/combination/switcher";
+import { Loader } from "./base/combination/loader";
+import { ListPane } from "./case/layer/pane.list";
+import { MultiSelectBar } from "./case/toolbar/toolbar.multiselect";
+import { SelectList } from "./case/list/list.select";
 import { AbstractAllValueChooser } from "./component/allvaluechooser/abstract.allvaluechooser";
 import { AllValueChooserCombo } from "./component/allvaluechooser/combo.allvaluechooser";
 import { TextAreaEditor } from "./base/single/editor/editor.textarea";
@@ -156,6 +163,13 @@ export interface BI extends _func, _i18n, _base, _inject {
     VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
     TextEditor: typeof TextEditor;
+    A: typeof A;
+    Html: typeof Html;
+    Switcher: typeof Switcher;
+    Loader: typeof Loader;
+    ListPane: typeof ListPane;
+    MultiSelectBar: typeof MultiSelectBar;
+    SelectList: typeof SelectList;
     IconLabel: typeof IconLabel;
     Popover: typeof Popover;
     BarPopover: typeof BarPopover;
@@ -218,6 +232,14 @@ export {
     IconChangeButton,
     Button,
     TextEditor,
+    A,
+    Html,
+    Switcher,
+    BubbleCombo,
+    Loader,
+    ListPane,
+    MultiSelectBar,
+    SelectList,
     TextValueCombo,
     Editor,
     IconLabel,

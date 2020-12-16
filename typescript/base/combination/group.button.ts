@@ -52,7 +52,7 @@ export declare class ButtonGroup extends Widget {
     static CHOOSE_TYPE_MULTI: number;
     static CHOOSE_TYPE_ALL: number;
     static CHOOSE_TYPE_NONE: number;
-    static CHOOSE_TYPE_DEFAULT: number; 
+    static CHOOSE_TYPE_DEFAULT: number;
     static EVENT_CHANGE: string;
 
     prependItems<T>(items: T[]): void;
