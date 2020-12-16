@@ -1,6 +1,8 @@
 import { Single } from "../single";
 
 export declare class Html extends Single {
+    static xtype: string;
+
     doHighLight(): void;
 
     unHighLight(): void;
