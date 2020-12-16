@@ -154,6 +154,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
