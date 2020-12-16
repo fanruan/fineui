@@ -98,6 +98,10 @@ import { ListTreeValueChooserInsertCombo } from "./component/treevaluechooser/co
 import { TreeValueChooserCombo } from "./component/treevaluechooser/combo.treevaluechooser";
 import { TreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.treevaluechooser.insert";
 import { Radio } from "./base/single/input/radio/radio";
+import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
+import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
+import { SingleSelectInsertCombo } from "./widget/singleselect/singleselect.insert.combo";
+import { SingleSelectCombo } from "./widget/singleselect/singleselect.combo";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -209,6 +213,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     CenterLayout: typeof CenterLayout;
     VirtualGroup: typeof VirtualGroup;
     GridLayout: typeof GridLayout;
+    MultiTreePopup: typeof MultiTreePopup;
+    SingleSelectRadioItem: typeof SingleSelectRadioItem;
+    SingleSelectInsertCombo: typeof SingleSelectInsertCombo;
+    SingleSelectCombo: typeof SingleSelectCombo;
 }
 
 export default {
@@ -297,4 +305,8 @@ export {
     CenterLayout,
     VirtualGroup,
     GridLayout,
+    MultiTreePopup,
+    SingleSelectRadioItem,
+    SingleSelectInsertCombo,
+    SingleSelectCombo,
 };
