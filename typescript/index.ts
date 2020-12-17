@@ -105,6 +105,9 @@ import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
 import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
 import { SingleSelectInsertCombo } from "./widget/singleselect/singleselect.insert.combo";
 import { SingleSelectCombo } from "./widget/singleselect/singleselect.combo";
+import { ListTreeView } from "./base/tree/ztree/list/listtreeview";
+import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
+import { AsyncTree } from "./base/tree/ztree/asynctree";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -159,6 +162,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     MultiLayerSelectTreePopup: typeof MultiLayerSelectTreePopup;
     MultiLayerSingleTreePopup: typeof MultiLayerSingleTreePopup;
     TreeView: typeof TreeView;
+    ListTreeView: typeof ListTreeView;
+    ListAsyncTree: typeof ListAsyncTree;
+    AsyncTree: typeof AsyncTree;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -282,6 +288,9 @@ export {
     MultiLayerSelectTreePopup,
     MultiLayerSingleTreePopup,
     TreeView,
+    ListTreeView,
+    ListAsyncTree,
+    AsyncTree,
     Combo,
     IconCombo,
     DynamicDateCombo,
