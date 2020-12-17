@@ -46,17 +46,17 @@ export interface _base {
 
     reduceRight: <T, U>(collection: T[]|object|string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T)|object|string, initialValue?: U|T) => U extends T ? U : T;
 
-    find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any;
+    find: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T | undefined;
 
-    filter: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
+    filter: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T[];
 
-    reject: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => any[];
+    reject: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => T[];
 
-    every: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    every: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    all: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    all: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
-    some: <T>(collection: any[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
+    some: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
     any: <T>(collection: T[]|object|string, callback?: ((index: number, value: T) => boolean)|object|string, thisArg?: any) => boolean;
 
