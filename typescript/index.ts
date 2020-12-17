@@ -111,6 +111,10 @@ import { TimeCombo } from "./widget/time/time.combo";
 import { ListTreeView } from "./base/tree/ztree/list/listtreeview";
 import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
 import { AsyncTree } from "./base/tree/ztree/asynctree";
+import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multilayersingletree.combo";
+import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
+import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
+import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -168,6 +172,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     ListTreeView: typeof ListTreeView;
     ListAsyncTree: typeof ListAsyncTree;
     AsyncTree: typeof AsyncTree;
+    MultiLayerSingleTreeCombo: typeof MultiLayerSingleTreeCombo;
+    MultiLayerSelectTreeCombo: typeof MultiLayerSelectTreeCombo;
+    MultiTreeListCombo: typeof MultiTreeListCombo;
+    MultiTreeInsertCombo: typeof MultiTreeInsertCombo;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -297,6 +305,10 @@ export {
     ListTreeView,
     ListAsyncTree,
     AsyncTree,
+    MultiLayerSingleTreeCombo,
+    MultiLayerSelectTreeCombo,
+    MultiTreeListCombo,
+    MultiTreeInsertCombo,
     Combo,
     IconCombo,
     DynamicDateCombo,
