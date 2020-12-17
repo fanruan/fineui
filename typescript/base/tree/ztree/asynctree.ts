@@ -3,7 +3,7 @@ import { TreeView, TreeValue } from "./treeview";
 export declare class AsyncTree extends TreeView {
     static xtype: string;
 
-    nodes: any[];
+    nodes: any;
 
     _beforeExpandNode<T>(treeId: string, treeNode: T): void;
 
