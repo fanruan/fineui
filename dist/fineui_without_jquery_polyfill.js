@@ -1,4 +1,4 @@
-/*! time: 2020-12-17 18:10:25 */
+/*! time: 2020-12-17 18:35:05 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66980,10 +66980,10 @@ Object.defineProperty(exports, "Editor", {
     return _editor.Editor;
   }
 });
-Object.defineProperty(exports, "iframe", {
+Object.defineProperty(exports, "Iframe", {
   enumerable: true,
   get: function get() {
-    return _iframe.iframe;
+    return _iframe.Iframe;
   }
 });
 Object.defineProperty(exports, "AbstractLabel", {
