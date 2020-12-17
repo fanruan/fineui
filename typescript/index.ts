@@ -98,6 +98,9 @@ import { ListTreeValueChooserInsertCombo } from "./component/treevaluechooser/co
 import { TreeValueChooserCombo } from "./component/treevaluechooser/combo.treevaluechooser";
 import { TreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.treevaluechooser.insert";
 import { Radio } from "./base/single/input/radio/radio";
+import { MultiLayerSelectTreePopup } from "./widget/multilayerselecttree/multilayerselecttree.popup";
+import { MultiLayerSingleTreePopup } from "./widget/multilayersingletree/multilayersingletree.popup";
+import { TreeView } from "./base/tree/ztree/treeview";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -149,6 +152,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     ListTreeValueChooserInsertCombo: typeof ListTreeValueChooserInsertCombo;
     TreeValueChooserCombo: typeof TreeValueChooserCombo;
     TreeValueChooserInsertCombo: typeof TreeValueChooserInsertCombo;
+    MultiLayerSelectTreePopup: typeof MultiLayerSelectTreePopup;
+    MultiLayerSingleTreePopup: typeof MultiLayerSingleTreePopup;
+    TreeView: typeof TreeView;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -265,6 +271,9 @@ export {
     ListTreeValueChooserInsertCombo,
     TreeValueChooserCombo,
     TreeValueChooserInsertCombo,
+    MultiLayerSelectTreePopup,
+    MultiLayerSingleTreePopup,
+    TreeView,
     Combo,
     IconCombo,
     DynamicDateCombo,
