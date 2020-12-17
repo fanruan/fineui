@@ -5,7 +5,7 @@ export interface _Iframe extends _Single {
 
     getSrc(): string;
 
-    setNam(v: string): void;
+    setName(v: string): void;
 
     getName(): string;
 }
@@ -17,7 +17,7 @@ export declare class iframe extends Single {
 
     getSrc(): string;
 
-    setNam(v: string): void;
+    setName(v: string): void;
 
     getName(): string;
 }
