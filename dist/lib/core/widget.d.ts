@@ -33,6 +33,8 @@ export interface _Widget extends _OB {
     element: {
         width(): number;
         height(): number;
+        width(width: number): _Widget['element'];
+        height(height: number): _Widget['element'];
         [key: string]: any;
     };
     /**
@@ -356,6 +358,8 @@ export declare class Widget extends OB {
     element: {
         width(): number;
         height(): number;
+        width(width: number): Widget['element'];
+        height(height: number): Widget['element'];
         [key: string]: any;
     };
     /**
