@@ -40,8 +40,8 @@ export interface _Widget extends _OB {
      * 真实dom的类jQuery对象
      */
     element: {
-        width(): number;
-        height(): number;
+        width(width?: number): number;
+        height(height?: number): number;
         [key: string]: any;
     };
 
@@ -79,7 +79,7 @@ export interface _Widget extends _OB {
      * 初始化前
      */
     beforeInit?(cb: Function): void;
-    
+
     /**
      * 创建前
      */
@@ -479,7 +479,7 @@ export declare class Widget extends OB {
      * 初始化前
      */
     beforeInit?(cb: Function): void;
-    
+
     /**
      * 创建前
      */
