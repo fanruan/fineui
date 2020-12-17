@@ -98,10 +98,16 @@ import { ListTreeValueChooserInsertCombo } from "./component/treevaluechooser/co
 import { TreeValueChooserCombo } from "./component/treevaluechooser/combo.treevaluechooser";
 import { TreeValueChooserInsertCombo } from "./component/treevaluechooser/combo.treevaluechooser.insert";
 import { Radio } from "./base/single/input/radio/radio";
+import { MultiLayerSelectTreePopup } from "./widget/multilayerselecttree/multilayerselecttree.popup";
+import { MultiLayerSingleTreePopup } from "./widget/multilayersingletree/multilayersingletree.popup";
+import { TreeView } from "./base/tree/ztree/treeview";
 import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
 import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
 import { SingleSelectInsertCombo } from "./widget/singleselect/singleselect.insert.combo";
 import { SingleSelectCombo } from "./widget/singleselect/singleselect.combo";
+import { ListTreeView } from "./base/tree/ztree/list/listtreeview";
+import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
+import { AsyncTree } from "./base/tree/ztree/asynctree";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -150,6 +156,12 @@ export interface BI extends _func, _i18n, _base, _inject {
     ListTreeValueChooserInsertCombo: typeof ListTreeValueChooserInsertCombo;
     TreeValueChooserCombo: typeof TreeValueChooserCombo;
     TreeValueChooserInsertCombo: typeof TreeValueChooserInsertCombo;
+    MultiLayerSelectTreePopup: typeof MultiLayerSelectTreePopup;
+    MultiLayerSingleTreePopup: typeof MultiLayerSingleTreePopup;
+    TreeView: typeof TreeView;
+    ListTreeView: typeof ListTreeView;
+    ListAsyncTree: typeof ListAsyncTree;
+    AsyncTree: typeof AsyncTree;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -219,4 +231,4 @@ declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, TriggerIconButton, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, };
+export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, TriggerIconButton, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, };
