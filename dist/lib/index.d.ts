@@ -111,6 +111,10 @@ import { TimeCombo } from "./widget/time/time.combo";
 import { ListTreeView } from "./base/tree/ztree/list/listtreeview";
 import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
 import { AsyncTree } from "./base/tree/ztree/asynctree";
+import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multilayersingletree.combo";
+import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
+import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
+import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -165,6 +169,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     ListTreeView: typeof ListTreeView;
     ListAsyncTree: typeof ListAsyncTree;
     AsyncTree: typeof AsyncTree;
+    MultiLayerSingleTreeCombo: typeof MultiLayerSingleTreeCombo;
+    MultiLayerSelectTreeCombo: typeof MultiLayerSelectTreeCombo;
+    MultiTreeListCombo: typeof MultiTreeListCombo;
+    MultiTreeInsertCombo: typeof MultiTreeInsertCombo;
     Decorators: typeof decorator;
     DownListCombo: ClassConstructor<_DownListCombo> & _DownListComboStatic;
     Iframe: ClassConstructor<_Iframe>;
@@ -237,4 +245,4 @@ declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, TriggerIconButton, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, iframe, };
+export { Widget, Single, BasicButton, Icon, LeftRightVerticalAdaptLayout, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, TriggerIconButton, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, MultiLayerSingleTreeCombo, MultiLayerSelectTreeCombo, MultiTreeListCombo, MultiTreeInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, iframe, };
