@@ -62,7 +62,7 @@ export declare class TreeView extends Pane {
     getValue(): TreeValue;
 
     // @ts-ignore
-    populate(config: {[key: string]: any}): void;
+    populate(config?: {[key: string]: any}): void;
 }
 
 export interface TreeValue {
