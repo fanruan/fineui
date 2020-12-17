@@ -1,6 +1,7 @@
 import { Pane } from "../../pane";
 
 export declare class TreeView extends Pane {
+    static xtype: string;
     static REQ_TYPE_INIT_DATA: 1;
     static REQ_TYPE_ADJUST_DATA: 2;
     static REQ_TYPE_SELECT_DATA: 3;
