@@ -14,7 +14,7 @@ export declare class CardLayout extends Layout {
 
     addCardByName(cardName: string, cardItem: any): Widget
 
-    showCardByName(cardName: string, action: any, callback: () => void): void;
+    showCardByName(cardName: string, action?: any, callback?: () => void): void;
 
     showLastCard(): void;
 

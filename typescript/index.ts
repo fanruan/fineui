@@ -8,7 +8,7 @@ import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/but
 import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic, Editor } from "./base/single/editor/editor";
-import { iframe, _Iframe } from "./base/single/iframe/iframe";
+import { Iframe, _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
@@ -336,5 +336,5 @@ export {
     CardLayout,
     DynamicYearMonthCombo,
     TimeCombo,
-    iframe,
+    Iframe,
 };
