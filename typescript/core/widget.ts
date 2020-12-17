@@ -444,8 +444,8 @@ export declare class Widget extends OB {
     element: {
         width(): number;
         height(): number;
-        width(width: number): _Widget['element'];
-        height(height: number): _Widget['element'];
+        width(width: number): Widget['element'];
+        height(height: number): Widget['element'];
         [key: string]: any;
     };
 
