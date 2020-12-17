@@ -101,6 +101,10 @@ import { Radio } from "./base/single/input/radio/radio";
 import { MultiLayerSelectTreePopup } from "./widget/multilayerselecttree/multilayerselecttree.popup";
 import { MultiLayerSingleTreePopup } from "./widget/multilayersingletree/multilayersingletree.popup";
 import { TreeView } from "./base/tree/ztree/treeview";
+import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
+import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
+import { SingleSelectInsertCombo } from "./widget/singleselect/singleselect.insert.combo";
+import { SingleSelectCombo } from "./widget/singleselect/singleselect.combo";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -215,6 +219,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     CenterLayout: typeof CenterLayout;
     VirtualGroup: typeof VirtualGroup;
     GridLayout: typeof GridLayout;
+    MultiTreePopup: typeof MultiTreePopup;
+    SingleSelectRadioItem: typeof SingleSelectRadioItem;
+    SingleSelectInsertCombo: typeof SingleSelectInsertCombo;
+    SingleSelectCombo: typeof SingleSelectCombo;
 }
 
 export default {
@@ -306,4 +314,8 @@ export {
     CenterLayout,
     VirtualGroup,
     GridLayout,
+    MultiTreePopup,
+    SingleSelectRadioItem,
+    SingleSelectInsertCombo,
+    SingleSelectCombo,
 };
