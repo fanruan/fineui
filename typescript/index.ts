@@ -126,6 +126,8 @@ import { AllCountPager } from "./case/pager/pager.all.count";
 import { PopupView } from "./base/layer/layer.popup";
 import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
 import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberEditor } from "./widget/numbereditor/numbereditor";
+import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -402,4 +404,6 @@ export {
     BubblePopupBarView,
     TextBubblePopupBarView,
     ArrowTreeGroupNodeCheckbox,
+    TextValueCheckCombo,
+    NumberEditor
 };
