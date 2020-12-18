@@ -126,6 +126,12 @@ import { AllCountPager } from "./case/pager/pager.all.count";
 import { PopupView } from "./base/layer/layer.popup";
 import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
 import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberInterval } from "./widget/numberinterval/numberinterval";
+import { DynamicYearQuarterCombo } from "./widget/yearquarter/combo.yearquarter";
+import { DynamicYearCombo } from "./widget/year/combo.year";
+import { IntervalSlider } from "./widget/intervalslider/intervalslider";
+import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.insert";
+import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -267,6 +273,12 @@ export interface BI extends _func, _i18n, _base, _inject {
     BubblePopupBarView: typeof BubblePopupBarView;
     TextBubblePopupBarView: typeof TextBubblePopupBarView;
     ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    NumberInterval: typeof NumberInterval;
+    DynamicYearQuarterCombo: typeof DynamicYearQuarterCombo;
+    DynamicYearCombo: typeof DynamicYearCombo;
+    IntervalSlider: typeof IntervalSlider;
+    MultiSelectInsertList: typeof MultiSelectInsertList;
+    YearMonthInterval: typeof YearMonthInterval;
 }
 
 export default {
@@ -402,4 +414,10 @@ export {
     BubblePopupBarView,
     TextBubblePopupBarView,
     ArrowTreeGroupNodeCheckbox,
+    NumberInterval,
+    DynamicYearQuarterCombo,
+    DynamicYearCombo,
+    IntervalSlider,
+    MultiSelectInsertList,
+    YearMonthInterval,
 };
