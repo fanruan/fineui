@@ -4,5 +4,5 @@ export declare class TextValueDownListCombo extends Widget {
     static xtype: string;
     static EVENT_CHANGE: string;
 
-    getValue(): [any];
+    getValue<T>(): [T];
 }

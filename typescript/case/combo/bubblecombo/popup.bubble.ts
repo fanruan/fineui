@@ -4,15 +4,11 @@ import { Widget } from "../../../core/widget";
 export declare class BubblePopupView extends PopupView {
     static xtype: string;
     static EVENT_CLICK_TOOLBAR_BUTTON: string;
-
-    populate(v: string): void;
 }
 
 export declare class BubblePopupBarView extends BubblePopupView {
     static xtype: string;
     static EVENT_CLICK_TOOLBAR_BUTTON: string;
-
-    populate(v: string): void;
 }
 
 export declare class TextBubblePopupBarView extends Widget {
