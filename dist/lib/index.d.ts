@@ -115,6 +115,19 @@ import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multila
 import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
 import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
 import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
+import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.textvaluedownlist";
+import { Switch } from "./case/button/switch";
+import { HorizontalLayout } from "./core/wrapper/layout/layout.horizontal";
+import { ShelterEditor } from "./case/editor/editor.shelter";
+import { SelectTextTrigger } from "./case/trigger/trigger.text.select";
+import { DateInterval } from "./widget/timeinterval/dateinterval";
+import { DynamicDatePane } from "./widget/datepane/datepane";
+import { AllCountPager } from "./case/pager/pager.all.count";
+import { PopupView } from "./base/layer/layer.popup";
+import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
+import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberEditor } from "./widget/numbereditor/numbereditor";
+import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
@@ -240,9 +253,24 @@ export interface BI extends _func, _i18n, _base, _inject {
     CardLayout: typeof CardLayout;
     DynamicYearMonthCombo: typeof DynamicYearMonthCombo;
     TimeCombo: typeof TimeCombo;
+    TextValueDownListCombo: typeof TextValueDownListCombo;
+    Switch: typeof Switch;
+    HorizontalLayout: typeof HorizontalLayout;
+    ShelterEditor: typeof ShelterEditor;
+    SelectTextTrigger: typeof SelectTextTrigger;
+    DateInterval: typeof DateInterval;
+    DynamicDatePane: typeof DynamicDatePane;
+    AllCountPager: typeof AllCountPager;
+    PopupView: typeof PopupView;
+    BubblePopupView: typeof BubblePopupView;
+    BubblePopupBarView: typeof BubblePopupBarView;
+    TextBubblePopupBarView: typeof TextBubblePopupBarView;
+    ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    TextValueCheckCombo: typeof TextValueCheckCombo;
+    NumberEditor: typeof NumberEditor;
 }
 declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { OB, Widget, Single, BasicButton, Checkbox, Icon, LeftVerticalAdaptLayout, LeftRightVerticalAdaptLayout, SearchTextValueCombo, Input, IconTextItem, AllValueMultiTextValueCombo, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, Trigger, TriggerIconButton, Action, ActionFactory, ShowAction, Behavior, BehaviorFactory, RedMarkBehavior, HighlightBehavior, LoadingPane, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, MultiLayerSingleTreeCombo, MultiLayerSelectTreeCombo, MultiTreeListCombo, MultiTreeInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, Iframe, };
+export { OB, Widget, Single, BasicButton, Checkbox, Icon, LeftVerticalAdaptLayout, LeftRightVerticalAdaptLayout, SearchTextValueCombo, Input, IconTextItem, AllValueMultiTextValueCombo, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, Trigger, TriggerIconButton, Action, ActionFactory, ShowAction, Behavior, BehaviorFactory, RedMarkBehavior, HighlightBehavior, LoadingPane, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, MultiLayerSingleTreeCombo, MultiLayerSelectTreeCombo, MultiTreeListCombo, MultiTreeInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, Iframe, TextValueDownListCombo, Switch, HorizontalLayout, ShelterEditor, SelectTextTrigger, DateInterval, DynamicDatePane, AllCountPager, PopupView, BubblePopupView, BubblePopupBarView, TextBubblePopupBarView, ArrowTreeGroupNodeCheckbox, TextValueCheckCombo, NumberEditor, };

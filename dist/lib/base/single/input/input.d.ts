@@ -1,4 +1,4 @@
-import { Single, _Single } from "../single";
+import { _Single, Single } from "../single";
 export interface _Input extends _Single {
     onClick(): void;
     onKeyDown(keyCode: number): void;

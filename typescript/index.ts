@@ -132,6 +132,8 @@ import { DynamicYearCombo } from "./widget/year/combo.year";
 import { IntervalSlider } from "./widget/intervalslider/intervalslider";
 import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.insert";
 import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
+import { NumberEditor } from "./widget/numbereditor/numbereditor";
+import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -279,6 +281,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     IntervalSlider: typeof IntervalSlider;
     MultiSelectInsertList: typeof MultiSelectInsertList;
     YearMonthInterval: typeof YearMonthInterval;
+    TextValueCheckCombo: typeof TextValueCheckCombo;
+    NumberEditor: typeof NumberEditor;
 }
 
 export default {
@@ -420,4 +424,6 @@ export {
     IntervalSlider,
     MultiSelectInsertList,
     YearMonthInterval,
+    TextValueCheckCombo,
+    NumberEditor,
 };
