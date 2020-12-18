@@ -15,28 +15,28 @@ import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.labe
 import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
 import { _Text, Text } from "./base/single/text";
-import { _Trigger } from "./base/single/trigger/trigger";
+import { Trigger, _Trigger } from "./base/single/trigger/trigger";
 import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./case/button/icon/icon.change";
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
 import { BubbleCombo, _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
 import { SearchTextValueCombo, _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
-import { _LoadingPane } from "./case/loading/loading_pane";
-import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { LoadingPane, _LoadingPane } from "./case/loading/loading_pane";
+import { AllValueMultiTextValueCombo, _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { _AbstractTreeValueChooser, AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { _AbstractListTreeValueChooser, AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
-import { _Action, _ActionFactory } from "./core/action/action";
-import { _ShowAction } from "./core/action/action.show";
+import { Action, ActionFactory, _Action, _ActionFactory } from "./core/action/action";
+import { ShowAction, _ShowAction } from "./core/action/action.show";
 import { _base } from "./core/base";
-import { _Behavior, _BehaviorFactory } from "./core/behavior/behavior";
-import { _HighlightBehavior } from "./core/behavior/behavior.highlight";
-import { _RedMarkBehavior } from "./core/behavior/behavior.redmark";
+import { Behavior, BehaviorFactory, _Behavior, _BehaviorFactory } from "./core/behavior/behavior";
+import { HighlightBehavior, _HighlightBehavior } from "./core/behavior/behavior.highlight";
+import { RedMarkBehavior, _RedMarkBehavior } from "./core/behavior/behavior.redmark";
 import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
-import { _OB } from "./core/ob";
+import { OB, _OB } from "./core/ob";
 import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
 import { Layout, _Layout } from "./core/wrapper/layout";
@@ -46,7 +46,7 @@ import { VerticalLayout, _VerticalLayout } from "./core/wrapper/layout/layout.ve
 import { DefaultLayout, _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo, _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
-import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
+import { LeftVerticalAdaptLayout, _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
 import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizontal";
@@ -257,11 +257,18 @@ export default {
     Decorators: decorator,
 };
 export {
+    OB,
     Widget,
     Single,
     BasicButton,
+    Checkbox,
     Icon,
+    LeftVerticalAdaptLayout,
     LeftRightVerticalAdaptLayout,
+    SearchTextValueCombo,
+    Input,
+    IconTextItem,
+    AllValueMultiTextValueCombo,
     IconTextIconItem,
     Layout,
     HorizontalAutoLayout,
@@ -279,7 +286,16 @@ export {
     VTapeLayout,
     VerticalAdaptLayout,
     IconButton,
+    Trigger,
     TriggerIconButton,
+    Action,
+    ActionFactory,
+    ShowAction,
+    Behavior,
+    BehaviorFactory,
+    RedMarkBehavior,
+    HighlightBehavior,
+    LoadingPane,
     Searcher,
     AbstractLabel,
     Label,
@@ -358,10 +374,6 @@ export {
     TimeCombo,
     Iframe,
     TextValueDownListCombo,
-    SearchTextValueCombo,
-    IconTextItem,
-    Checkbox,
-    Input,
     Switch,
     HorizontalLayout,
     ShelterEditor,
