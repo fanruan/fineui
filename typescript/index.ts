@@ -269,6 +269,8 @@ export interface BI extends _func, _i18n, _base, _inject {
     BubblePopupBarView: typeof BubblePopupBarView;
     TextBubblePopupBarView: typeof TextBubblePopupBarView;
     ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    TextValueCheckCombo: typeof TextValueCheckCombo;
+    NumberEditor: typeof NumberEditor,
 }
 
 export default {
@@ -405,5 +407,5 @@ export {
     TextBubblePopupBarView,
     ArrowTreeGroupNodeCheckbox,
     TextValueCheckCombo,
-    NumberEditor
+    NumberEditor,
 };
