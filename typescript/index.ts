@@ -6,11 +6,11 @@ import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/but
 import { _NodeButton, NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
 import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
-import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
+import { IconTextItem, _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic, Editor } from "./base/single/editor/editor";
 import { Iframe, _Iframe } from "./base/single/iframe/iframe";
-import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
-import { _Input, _InputStatic } from "./base/single/input/input";
+import { Checkbox, _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
+import { Input, _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
@@ -20,7 +20,7 @@ import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
 import { BubbleCombo, _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
-import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
+import { SearchTextValueCombo, _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
 import { _LoadingPane } from "./case/loading/loading_pane";
 import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
@@ -115,6 +115,10 @@ import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multila
 import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
 import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
 import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
+import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.textvaluedownlist";
+import { Switch } from "./case/button/switch";
+import { HorizontalLayout } from "./core/wrapper/layout/layout.horizontal";
+import { ShelterEditor } from "./case/editor/editor.shelter";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -243,6 +247,10 @@ export interface BI extends _func, _i18n, _base, _inject {
     CardLayout: typeof CardLayout;
     DynamicYearMonthCombo: typeof DynamicYearMonthCombo;
     TimeCombo: typeof TimeCombo;
+    TextValueDownListCombo: typeof TextValueDownListCombo;
+    Switch: typeof Switch;
+    HorizontalLayout: typeof HorizontalLayout;
+    ShelterEditor: typeof ShelterEditor;
 }
 
 export default {
@@ -349,4 +357,12 @@ export {
     DynamicYearMonthCombo,
     TimeCombo,
     Iframe,
+    TextValueDownListCombo,
+    SearchTextValueCombo,
+    IconTextItem,
+    Checkbox,
+    Input,
+    Switch,
+    HorizontalLayout,
+    ShelterEditor,
 };
