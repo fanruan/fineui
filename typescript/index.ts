@@ -6,11 +6,11 @@ import { _BasicButton, _BasicButtonStatic, BasicButton } from "./base/single/but
 import { _NodeButton, NodeButton } from "./base/single/button/button.node";
 import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/button";
 import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
-import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
+import { IconTextItem, _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic, Editor } from "./base/single/editor/editor";
 import { Iframe, _Iframe } from "./base/single/iframe/iframe";
 import { Checkbox, _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
-import { _Input, _InputStatic } from "./base/single/input/input";
+import { Input, _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
 import { _Label, Label } from "./base/single/label/label";
 import { _Single, Single } from "./base/single/single";
@@ -20,10 +20,10 @@ import { IconChangeButton, _IconChangeButton, _IconChangeButtonStatic } from "./
 import { _MultiSelectItem, _MultiSelectItemStatic, MultiSelectItem } from "./case/button/item.multiselect";
 import { BubbleCombo, _BubbleCombo, _BubbleComboStatic } from "./case/combo/bubblecombo/combo.bubble";
 import { _TextValueCombo, _TextValueComboStatic, TextValueCombo } from "./case/combo/combo.textvalue";
-import { _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
+import { SearchTextValueCombo, _SearchTextValueCombo, _SearchTextValueComboStatic } from "./case/combo/searchtextvaluecombo/combo.searchtextvalue";
 import { _SignEditor, _SignEditorStatic, SignEditor } from "./case/editor/editor.sign";
 import { LoadingPane, _LoadingPane } from "./case/loading/loading_pane";
-import { _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
+import { AllValueMultiTextValueCombo, _AllValueMultiTextValueCombo, _AllValueMultiTextValueComboStatic } from "./component/allvaluemultitextvaluecombo/allvalue.multitextvalue.combo";
 import { _AbstractTreeValueChooser, AbstractTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser";
 import { _AbstractListTreeValueChooser, AbstractListTreeValueChooser } from "./component/treevaluechooser/abstract.treevaluechooser.list";
 import { Action, ActionFactory, _Action, _ActionFactory } from "./core/action/action";
@@ -46,7 +46,7 @@ import { VerticalLayout, _VerticalLayout } from "./core/wrapper/layout/layout.ve
 import { DefaultLayout, _DefaultLayout } from "./core/wrapper/layout/layout.default";
 import { DownListCombo, _DownListCombo, _DownListComboStatic } from "./widget/downlist/combo.downlist";
 import { Icon } from "./base/single/icon/icon";
-import { _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
+import { LeftVerticalAdaptLayout, _LeftVerticalAdapt } from "./core/wrapper/layout/adapt/adapt.leftvertical";
 import { LeftRightVerticalAdaptLayout, RightVerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.leftrightvertical";
 import { IconTextIconItem } from "./base/single/button/listitem/icontexticonitem";
 import { HorizontalAutoLayout } from "./core/wrapper/layout/adapt/auto.horizontal";
@@ -255,7 +255,12 @@ export {
     BasicButton,
     Checkbox,
     Icon,
+    LeftVerticalAdaptLayout,
     LeftRightVerticalAdaptLayout,
+    SearchTextValueCombo,
+    Input,
+    IconTextItem,
+    AllValueMultiTextValueCombo,
     IconTextIconItem,
     Layout,
     HorizontalAutoLayout,
