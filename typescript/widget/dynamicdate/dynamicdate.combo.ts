@@ -21,4 +21,15 @@ export declare class DynamicDateCombo extends Single {
     getKey(): string;
 
     hidePopupView(): void;
+
+    getValue(): DynamicDataComboValue;
+}
+
+export interface DynamicDataComboValue {
+    type: number;
+    value: {
+        year: number;
+        month: number;
+        day: number;
+    }
 }

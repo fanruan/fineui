@@ -16,7 +16,6 @@ export interface _IconTextItemStatic {
 
 export declare class IconTextItem extends BasicButton {
     static xtype: string;
-
     static EVENT_CHANGE: string;
 
     doRedMark(...args: any[]): void;
