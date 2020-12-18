@@ -7,8 +7,6 @@ export interface _Trigger extends _Single {
 }
 
 export declare class Trigger extends Single {
-    static xtype: string;
-
     setKey(..._args: any[]): void;
 
     getKey(): string;
