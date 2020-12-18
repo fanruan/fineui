@@ -119,6 +119,13 @@ import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.te
 import { Switch } from "./case/button/switch";
 import { HorizontalLayout } from "./core/wrapper/layout/layout.horizontal";
 import { ShelterEditor } from "./case/editor/editor.shelter";
+import { SelectTextTrigger } from "./case/trigger/trigger.text.select";
+import { DateInterval } from "./widget/timeinterval/dateinterval";
+import { DynamicDatePane } from "./widget/datepane/datepane";
+import { AllCountPager } from "./case/pager/pager.all.count";
+import { PopupView } from "./base/layer/layer.popup";
+import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
+import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -251,6 +258,15 @@ export interface BI extends _func, _i18n, _base, _inject {
     Switch: typeof Switch;
     HorizontalLayout: typeof HorizontalLayout;
     ShelterEditor: typeof ShelterEditor;
+    SelectTextTrigger: typeof SelectTextTrigger;
+    DateInterval: typeof DateInterval;
+    DynamicDatePane: typeof DynamicDatePane;
+    AllCountPager: typeof AllCountPager;
+    PopupView: typeof PopupView;
+    BubblePopupView: typeof BubblePopupView;
+    BubblePopupBarView: typeof BubblePopupBarView;
+    TextBubblePopupBarView: typeof TextBubblePopupBarView;
+    ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
 }
 
 export default {
@@ -377,4 +393,13 @@ export {
     Switch,
     HorizontalLayout,
     ShelterEditor,
+    SelectTextTrigger,
+    DateInterval,
+    DynamicDatePane,
+    AllCountPager,
+    PopupView,
+    BubblePopupView,
+    BubblePopupBarView,
+    TextBubblePopupBarView,
+    ArrowTreeGroupNodeCheckbox,
 };
