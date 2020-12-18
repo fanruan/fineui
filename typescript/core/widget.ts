@@ -42,6 +42,8 @@ export interface _Widget extends _OB {
     element: {
         width(): number;
         height(): number;
+        width(width: number | string): _Widget['element'];
+        height(height: number | string): _Widget['element'];
         [key: string]: any;
     };
 
@@ -79,7 +81,7 @@ export interface _Widget extends _OB {
      * 初始化前
      */
     beforeInit?(cb: Function): void;
-    
+
     /**
      * 创建前
      */
@@ -442,6 +444,8 @@ export declare class Widget extends OB {
     element: {
         width(): number;
         height(): number;
+        width(width: number | string): Widget['element'];
+        height(height: number | string): Widget['element'];
         [key: string]: any;
     };
 
@@ -479,7 +483,7 @@ export declare class Widget extends OB {
      * 初始化前
      */
     beforeInit?(cb: Function): void;
-    
+
     /**
      * 创建前
      */

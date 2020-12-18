@@ -8,7 +8,7 @@ import { _Button, _ButtonStatic, Button } from "./base/single/button/buttons/but
 import { TextButton, _TextButton, _TextButtonStatic } from "./base/single/button/buttons/button.text";
 import { _IconTextItem, _IconTextItemStatic } from "./base/single/button/listitem/icontextitem";
 import { _Editor, _EditorStatic, Editor } from "./base/single/editor/editor";
-import { _Iframe } from "./base/single/iframe/iframe";
+import { Iframe, _Iframe } from "./base/single/iframe/iframe";
 import { _Checkbox, _CheckboxStatic } from "./base/single/input/checkbox";
 import { _Input, _InputStatic } from "./base/single/input/input";
 import { _AbstractLabel, AbstractLabel } from "./base/single/label/abstract.label";
@@ -105,6 +105,9 @@ import { MultiTreePopup } from "./widget/multitree/multi.tree.popup";
 import { SingleSelectRadioItem } from "./case/button/item.singleselect.radio";
 import { SingleSelectInsertCombo } from "./widget/singleselect/singleselect.insert.combo";
 import { SingleSelectCombo } from "./widget/singleselect/singleselect.combo";
+import { CardLayout } from "./core/wrapper/layout/layout.card";
+import { DynamicYearMonthCombo } from "./widget/yearmonth/combo.yearmonth";
+import { TimeCombo } from "./widget/time/time.combo";
 import { ListTreeView } from "./base/tree/ztree/list/listtreeview";
 import { ListAsyncTree } from "./base/tree/ztree/list/listasynctree";
 import { AsyncTree } from "./base/tree/ztree/asynctree";
@@ -237,6 +240,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     SingleSelectRadioItem: typeof SingleSelectRadioItem;
     SingleSelectInsertCombo: typeof SingleSelectInsertCombo;
     SingleSelectCombo: typeof SingleSelectCombo;
+    CardLayout: typeof CardLayout;
+    DynamicYearMonthCombo: typeof DynamicYearMonthCombo;
+    TimeCombo: typeof TimeCombo;
 }
 
 export default {
@@ -339,4 +345,8 @@ export {
     SingleSelectRadioItem,
     SingleSelectInsertCombo,
     SingleSelectCombo,
+    CardLayout,
+    DynamicYearMonthCombo,
+    TimeCombo,
+    Iframe,
 };

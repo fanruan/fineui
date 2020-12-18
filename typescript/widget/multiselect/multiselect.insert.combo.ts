@@ -44,7 +44,7 @@ export declare class MultiSelectInsertCombo extends Single {
 
     hideView(): void;
 
-    setValue(value: {
+    setValue(value?: {
         type: string;
         value: string[];
         assist: string[];

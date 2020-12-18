@@ -45,7 +45,7 @@ export declare class TreeView extends Pane {
     }): void;
     refresh(): void;
     getValue(): TreeValue;
-    populate(config: {
+    populate(config?: {
         [key: string]: any;
     }): void;
 }
