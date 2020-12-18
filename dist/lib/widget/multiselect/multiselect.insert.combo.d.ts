@@ -28,7 +28,7 @@ export declare class MultiSelectInsertCombo extends Single {
     _populate(...args: any[]): void;
     showView(): void;
     hideView(): void;
-    setValue(value: {
+    setValue(value?: {
         type: string;
         value: string[];
         assist: string[];
