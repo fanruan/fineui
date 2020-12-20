@@ -126,6 +126,12 @@ import { AllCountPager } from "./case/pager/pager.all.count";
 import { PopupView } from "./base/layer/layer.popup";
 import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
 import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberInterval } from "./widget/numberinterval/numberinterval";
+import { DynamicYearQuarterCombo } from "./widget/yearquarter/combo.yearquarter";
+import { DynamicYearCombo } from "./widget/year/combo.year";
+import { IntervalSlider } from "./widget/intervalslider/intervalslider";
+import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.insert";
+import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
 
@@ -269,8 +275,14 @@ export interface BI extends _func, _i18n, _base, _inject {
     BubblePopupBarView: typeof BubblePopupBarView;
     TextBubblePopupBarView: typeof TextBubblePopupBarView;
     ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    NumberInterval: typeof NumberInterval;
+    DynamicYearQuarterCombo: typeof DynamicYearQuarterCombo;
+    DynamicYearCombo: typeof DynamicYearCombo;
+    IntervalSlider: typeof IntervalSlider;
+    MultiSelectInsertList: typeof MultiSelectInsertList;
+    YearMonthInterval: typeof YearMonthInterval;
     TextValueCheckCombo: typeof TextValueCheckCombo;
-    NumberEditor: typeof NumberEditor,
+    NumberEditor: typeof NumberEditor;
 }
 
 export default {
@@ -406,6 +418,12 @@ export {
     BubblePopupBarView,
     TextBubblePopupBarView,
     ArrowTreeGroupNodeCheckbox,
+    NumberInterval,
+    DynamicYearQuarterCombo,
+    DynamicYearCombo,
+    IntervalSlider,
+    MultiSelectInsertList,
+    YearMonthInterval,
     TextValueCheckCombo,
     NumberEditor,
 };
