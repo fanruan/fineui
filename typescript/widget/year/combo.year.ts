@@ -1,0 +1,7 @@
+import { Widget } from "../../core/widget";
+
+export declare class DynamicYearCombo extends Widget {
+    static xtype: string;
+    static EVENT_CONFIRM: string;
+    static EVENT_BEFORE_POPUPVIEW: string;
+}

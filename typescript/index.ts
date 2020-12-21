@@ -36,6 +36,7 @@ import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
+import { _var } from "./core/var";
 import { OB, _OB } from "./core/ob";
 import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
@@ -126,8 +127,20 @@ import { AllCountPager } from "./case/pager/pager.all.count";
 import { PopupView } from "./base/layer/layer.popup";
 import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
 import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberInterval } from "./widget/numberinterval/numberinterval";
+import { DynamicYearQuarterCombo } from "./widget/yearquarter/combo.yearquarter";
+import { DynamicYearCombo } from "./widget/year/combo.year";
+import { IntervalSlider } from "./widget/intervalslider/intervalslider";
+import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.insert";
+import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
+import { LinearSegment } from "./case/linersegment/linear.segment";
+import { Img } from "./base/single/img/img";
+import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
+import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
+import { ListView } from './base/list/listview';
+import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -137,7 +150,7 @@ type ClassConstructor<T extends {}> = T & {
     readonly xtype: string;
 }
 
-export interface BI extends _func, _i18n, _base, _inject {
+export interface BI extends _func, _i18n, _base, _inject, _var {
     OB: ClassConstructor<_OB>;
     Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
@@ -269,8 +282,20 @@ export interface BI extends _func, _i18n, _base, _inject {
     BubblePopupBarView: typeof BubblePopupBarView;
     TextBubblePopupBarView: typeof TextBubblePopupBarView;
     ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    NumberInterval: typeof NumberInterval;
+    DynamicYearQuarterCombo: typeof DynamicYearQuarterCombo;
+    DynamicYearCombo: typeof DynamicYearCombo;
+    IntervalSlider: typeof IntervalSlider;
+    MultiSelectInsertList: typeof MultiSelectInsertList;
+    YearMonthInterval: typeof YearMonthInterval;
     TextValueCheckCombo: typeof TextValueCheckCombo;
-    NumberEditor: typeof NumberEditor,
+    NumberEditor: typeof NumberEditor;
+    LinearSegment: typeof LinearSegment;
+    Img: typeof Img;
+    EditorIconCheckCombo: typeof EditorIconCheckCombo;
+    IconTextValueCombo: typeof IconTextValueCombo;
+    ListView: typeof ListView;
+    FloatCenterLayout: typeof FloatCenterLayout;
 }
 
 export default {
@@ -406,6 +431,18 @@ export {
     BubblePopupBarView,
     TextBubblePopupBarView,
     ArrowTreeGroupNodeCheckbox,
+    NumberInterval,
+    DynamicYearQuarterCombo,
+    DynamicYearCombo,
+    IntervalSlider,
+    MultiSelectInsertList,
+    YearMonthInterval,
     TextValueCheckCombo,
     NumberEditor,
+    LinearSegment,
+    Img,
+    EditorIconCheckCombo,
+    IconTextValueCombo,
+    ListView,
+    FloatCenterLayout,
 };

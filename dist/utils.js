@@ -1,4 +1,4 @@
-/*! time: 2020-12-18 17:30:23 */
+/*! time: 2020-12-21 15:50:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1213);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1225);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1074:
+/***/ 1086:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -286,7 +286,36 @@ BI.i18n = {
 
 /***/ }),
 
-/***/ 1213:
+/***/ 122:
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * Created by richie on 15/7/8.
+ */
+/**
+ * 初始化BI对象
+ */
+_global = undefined;
+if (typeof window !== "undefined") {
+    _global = window;
+} else if (typeof global !== "undefined") {
+    _global = global;
+} else if (typeof self !== "undefined") {
+    _global = self;
+} else {
+    _global = this;
+}
+if (_global.BI == null) {
+    _global.BI = {prepares: []};
+}
+if(_global.BI.prepares == null) {
+    _global.BI.prepares = [];
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
+
+/***/ }),
+
+/***/ 1225:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(122);
@@ -316,8 +345,8 @@ __webpack_require__(139);
 __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
-__webpack_require__(1074);
-__webpack_require__(1214);
+__webpack_require__(1086);
+__webpack_require__(1226);
 __webpack_require__(152);
 __webpack_require__(153);
 module.exports = __webpack_require__(154);
@@ -325,7 +354,7 @@ module.exports = __webpack_require__(154);
 
 /***/ }),
 
-/***/ 1214:
+/***/ 1226:
 /***/ (function(module, exports) {
 
 /**
@@ -396,35 +425,6 @@ BI.Date._MD = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // 实际上无论周几作为一周的第一天，周初周末都是在-6-0间做偏移，用一个数组就可以
 BI.Date._OFFSET = [0, -1, -2, -3, -4, -5, -6];
 
-
-/***/ }),
-
-/***/ 122:
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {/**
- * Created by richie on 15/7/8.
- */
-/**
- * 初始化BI对象
- */
-_global = undefined;
-if (typeof window !== "undefined") {
-    _global = window;
-} else if (typeof global !== "undefined") {
-    _global = global;
-} else if (typeof self !== "undefined") {
-    _global = self;
-} else {
-    _global = this;
-}
-if (_global.BI == null) {
-    _global.BI = {prepares: []};
-}
-if(_global.BI.prepares == null) {
-    _global.BI.prepares = [];
-}
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
 
