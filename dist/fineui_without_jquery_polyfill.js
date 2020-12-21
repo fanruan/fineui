@@ -1,4 +1,4 @@
-/*! time: 2020-12-21 17:30:21 */
+/*! time: 2020-12-21 21:00:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -37444,6 +37444,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
         // BI-22551 popup未初始化传入的behavior无效
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
             self.doBehavior();
+            self.fireEvent(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW);
         });
     },
 
@@ -37465,6 +37466,7 @@ BI.YearDateCombo = BI.inherit(BI.Trigger, {
     }
 });
 BI.YearDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
@@ -37554,6 +37556,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
+        this.year.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
         this.month = BI.createWidget({
             type: "bi.month_date_combo",
             behaviors: o.behaviors,
@@ -37565,6 +37570,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 month: self.month.getValue(),
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        });
+        this.month.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -37692,6 +37700,7 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     },
 });
 BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
@@ -37757,6 +37766,9 @@ BI.YearPicker = BI.inherit(BI.Widget, {
         this.year.on(BI.YearDateCombo.EVENT_CHANGE, function () {
             self.setValue(self.year.getValue());
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
+        });
+        this.year.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearPicker.EVENT_BEFORE_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -37827,6 +37839,7 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     }
 });
 BI.YearPicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearPicker.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
@@ -37912,6 +37925,10 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
         });
 
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
+
         this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
             self.selectedTime = self.calendar.getValue();
             self.setValue(self.selectedTime);
@@ -37980,6 +37997,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
     }
 });
 BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
@@ -38354,6 +38372,9 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
 
         this.calendar = BI.createWidget({
             direction: "custom",
@@ -38456,6 +38477,7 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
     }
 
 });
+BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW"
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
@@ -38532,6 +38554,11 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
                                         self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
+                                    }
+                                }, {
+                                    eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDatePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
                                     }
                                 }],
                                 ref: function () {
@@ -38612,6 +38639,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
 });
 
 BI.DynamicDatePane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDatePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_pane", BI.DynamicDatePane);
 
@@ -38997,6 +39025,10 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
+
         this.calendar = BI.createWidget({
             direction: "custom",
             // logic: {
@@ -39120,6 +39152,7 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
     }
 
 });
+BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
@@ -39195,6 +39228,11 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
                                         self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }, {
+                                    eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
+                                    action: function () {
+                                        self.fireEvent("EVENT_BEFORE_YEAR_MONTH_POPUPVIEW");
                                     }
                                 }],
                                 ref: function () {
@@ -40555,6 +40593,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                     }
+                                }, {
+                                    eventName: BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
                                 }]
                             },
                             stopPropagation: false
@@ -40683,6 +40726,7 @@ BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_combo", BI.DynamicDateCombo);
 
@@ -40938,6 +40982,11 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 action: function () {
                                     self.fireEvent(BI.DynamicDatePopup.EVENT_CHANGE);
                                 }
+                            }, {
+                                eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                }
                             }],
                             ref: function () {
                                 self.ymd = this;
@@ -41049,6 +41098,7 @@ BI.DynamicDatePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
@@ -41602,6 +41652,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateTimeCombo.EVENT_CONFIRM);
                                     }
+                                }, {
+                                    eventName: BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
                                 }]
                             },
                             stopPropagation: false
@@ -41730,6 +41785,7 @@ BI.DynamicDateTimeCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimeCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateTimeCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateTimeCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_time_combo", BI.DynamicDateTimeCombo);
 
@@ -41860,7 +41916,13 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 max: self.options.max,
                                 ref: function () {
                                     self.ymd = this;
-                                }
+                                },
+                                listeners: [{
+                                    eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
+                                }],
                             }, {
                                 el: {
                                     type: "bi.dynamic_date_time_select",
@@ -41986,6 +42048,7 @@ BI.DynamicDateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
