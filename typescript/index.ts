@@ -138,6 +138,9 @@ import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.text
 import { LinearSegment } from "./case/linersegment/linear.segment";
 import { Img } from "./base/single/img/img";
 import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
+import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
+import { ListView } from './base/list/listview';
+import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -290,6 +293,9 @@ export interface BI extends _func, _i18n, _base, _inject, _var {
     LinearSegment: typeof LinearSegment;
     Img: typeof Img;
     EditorIconCheckCombo: typeof EditorIconCheckCombo;
+    IconTextValueCombo: typeof IconTextValueCombo;
+    ListView: typeof ListView;
+    FloatCenterLayout: typeof FloatCenterLayout;
 }
 
 export default {
@@ -436,4 +442,7 @@ export {
     LinearSegment,
     Img,
     EditorIconCheckCombo,
+    IconTextValueCombo,
+    ListView,
+    FloatCenterLayout,
 };
