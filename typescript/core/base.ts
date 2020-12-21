@@ -223,7 +223,7 @@ export interface _base {
 
     zipObject: (props: any[], values?: any[]) => object;
 
-    cloneDeep: (value: any, customizer?: Function, thisArg?: any) => any;
+    cloneDeep: <T>(value: T) => T;
 
     findKey: (object: object, predicate?: Function|object|string, thisArg?: any) => any;
 
