@@ -76,6 +76,10 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.calendar.setSelect(BI.Calendar.getPageByDateJSON(self.selectedTime));
         });
 
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
+
         this.calendar.on(BI.Navigation.EVENT_CHANGE, function () {
             self.selectedTime = self.calendar.getValue();
             self.setValue(self.selectedTime);
@@ -144,4 +148,5 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
     }
 });
 BI.DateCalendarPopup.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);

@@ -68,6 +68,11 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                     action: function () {
                                         self.fireEvent("EVENT_CHANGE");
                                     }
+                                }, {
+                                    eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
+                                    action: function () {
+                                        self.fireEvent("EVENT_BEFORE_YEAR_MONTH_POPUPVIEW");
+                                    }
                                 }],
                                 ref: function () {
                                     self.ymd = this;

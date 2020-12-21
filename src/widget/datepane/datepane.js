@@ -69,6 +69,11 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                     action: function () {
                                         self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                     }
+                                }, {
+                                    eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDatePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
                                 }],
                                 ref: function () {
                                     self.ymd = this;
@@ -148,6 +153,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
 });
 
 BI.DynamicDatePane.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DynamicDatePane.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_pane", BI.DynamicDatePane);
 

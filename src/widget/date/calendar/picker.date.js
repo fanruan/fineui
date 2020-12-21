@@ -80,6 +80,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
         });
+        this.year.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
         this.month = BI.createWidget({
             type: "bi.month_date_combo",
             behaviors: o.behaviors,
@@ -91,6 +94,9 @@ BI.DatePicker = BI.inherit(BI.Widget, {
                 month: self.month.getValue(),
             });
             self.fireEvent(BI.DatePicker.EVENT_CHANGE);
+        });
+        this.month.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
         });
 
         BI.createWidget({
@@ -218,4 +224,5 @@ BI.DatePicker = BI.inherit(BI.Widget, {
     },
 });
 BI.DatePicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_picker", BI.DatePicker);

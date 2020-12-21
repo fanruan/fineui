@@ -179,6 +179,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                                         self.combo.hideView();
                                         self.fireEvent(BI.DynamicDateCombo.EVENT_CONFIRM);
                                     }
+                                }, {
+                                    eventName: BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
                                 }]
                             },
                             stopPropagation: false
@@ -307,6 +312,7 @@ BI.DynamicDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateCombo.EVENT_VALID = "EVENT_VALID";
 BI.DynamicDateCombo.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 
 BI.shortcut("bi.dynamic_date_combo", BI.DynamicDateCombo);
 
