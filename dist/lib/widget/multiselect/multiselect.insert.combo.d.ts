@@ -29,12 +29,12 @@ export declare class MultiSelectInsertCombo extends Single {
     showView(): void;
     hideView(): void;
     setValue(value?: {
-        type: string;
+        type: number;
         value: string[];
         assist: string[];
     }): void;
     getValue(): {
-        type: string;
+        type: number;
         value: string[];
         assist: string[];
     };

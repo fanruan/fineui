@@ -36,6 +36,7 @@ import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
+import { _var } from "./core/var";
 import { OB, _OB } from "./core/ob";
 import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
@@ -68,7 +69,7 @@ import { SmallTextEditor } from "./widget/editor/editor.text.small";
 import { MultifileEditor } from "./widget/editor/editor.multifile";
 import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
 import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizontal";
-import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
+import { FloatLeftLayout, FloatRightLayout } from "./core/wrapper/layout/layout.flow";
 import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
 import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
@@ -137,13 +138,16 @@ import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.text
 import { LinearSegment } from "./case/linersegment/linear.segment";
 import { Img } from "./base/single/img/img";
 import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
+import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
+import { ListView } from './base/list/listview';
+import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
 declare type ClassConstructor<T extends {}> = T & {
     new (config: any): T;
     (config: any): T;
     readonly prototype: T;
     readonly xtype: string;
 };
-export interface BI extends _func, _i18n, _base, _inject {
+export interface BI extends _func, _i18n, _base, _inject, _var {
     OB: ClassConstructor<_OB>;
     Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
@@ -214,6 +218,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     AbsoluteCenterLayout: typeof AbsoluteCenterLayout;
     HorizontalAdaptLayout: typeof HorizontalAdaptLayout;
     FloatLeftLayout: typeof FloatLeftLayout;
+    FloatRightLayout: typeof FloatRightLayout;
     CenterAdaptLayout: typeof CenterAdaptLayout;
     VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
@@ -286,9 +291,12 @@ export interface BI extends _func, _i18n, _base, _inject {
     LinearSegment: typeof LinearSegment;
     Img: typeof Img;
     EditorIconCheckCombo: typeof EditorIconCheckCombo;
+    IconTextValueCombo: typeof IconTextValueCombo;
+    ListView: typeof ListView;
+    FloatCenterLayout: typeof FloatCenterLayout;
 }
 declare const _default: {
     Decorators: typeof decorator;
 };
 export default _default;
-export { OB, Widget, Single, BasicButton, Checkbox, Icon, LeftVerticalAdaptLayout, LeftRightVerticalAdaptLayout, SearchTextValueCombo, Input, IconTextItem, AllValueMultiTextValueCombo, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, Trigger, TriggerIconButton, Action, ActionFactory, ShowAction, Behavior, BehaviorFactory, RedMarkBehavior, HighlightBehavior, LoadingPane, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, MultiLayerSingleTreeCombo, MultiLayerSelectTreeCombo, MultiTreeListCombo, MultiTreeInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, Iframe, TextValueDownListCombo, Switch, HorizontalLayout, ShelterEditor, SelectTextTrigger, DateInterval, DynamicDatePane, AllCountPager, PopupView, BubblePopupView, BubblePopupBarView, TextBubblePopupBarView, ArrowTreeGroupNodeCheckbox, NumberInterval, DynamicYearQuarterCombo, DynamicYearCombo, IntervalSlider, MultiSelectInsertList, YearMonthInterval, TextValueCheckCombo, NumberEditor, LinearSegment, Img, EditorIconCheckCombo, };
+export { OB, Widget, Single, BasicButton, Checkbox, Icon, LeftVerticalAdaptLayout, LeftRightVerticalAdaptLayout, SearchTextValueCombo, Input, IconTextItem, AllValueMultiTextValueCombo, IconTextIconItem, Layout, HorizontalAutoLayout, InlineVerticalAdaptLayout, RightVerticalAdaptLayout, TableAdaptLayout, AbsoluteCenterLayout, HorizontalAdaptLayout, FloatLeftLayout, FloatRightLayout, VerticalLayout, AbsoluteLayout, DefaultLayout, HTapeLayout, CenterAdaptLayout, VTapeLayout, VerticalAdaptLayout, IconButton, Trigger, TriggerIconButton, Action, ActionFactory, ShowAction, Behavior, BehaviorFactory, RedMarkBehavior, HighlightBehavior, LoadingPane, Searcher, AbstractLabel, Label, TextButton, DownListCombo, IconChangeButton, Button, TextEditor, A, Html, Switcher, BubbleCombo, Loader, ListPane, MultiSelectBar, SelectList, TextValueCombo, Editor, IconLabel, Popover, BarPopover, Tab, AbstractTreeValueChooser, AbstractListTreeValueChooser, ListTreeValueChooserInsertCombo, TreeValueChooserCombo, TreeValueChooserInsertCombo, MultiLayerSelectTreePopup, MultiLayerSingleTreePopup, TreeView, ListTreeView, ListAsyncTree, AsyncTree, MultiLayerSingleTreeCombo, MultiLayerSelectTreeCombo, MultiTreeListCombo, MultiTreeInsertCombo, Combo, IconCombo, DynamicDateCombo, Radio, MultiSelectItem, CustomTree, ButtonGroup, ButtonTree, NodeButton, IconArrowNode, MidTreeLeafItem, FirstTreeLeafItem, LastTreeLeafItem, SmallTextEditor, MultifileEditor, SignEditor, MultiSelectInsertCombo, MultiSelectCombo, SearchEditor, Text, Pane, MultiLayerSingleLevelTree, SimpleColorChooser, AbstractAllValueChooser, AllValueChooserCombo, TextAreaEditor, SingleSelectItem, DynamicDateTimeCombo, MultiTreeCombo, CenterLayout, VirtualGroup, GridLayout, MultiTreePopup, SingleSelectRadioItem, SingleSelectInsertCombo, SingleSelectCombo, CardLayout, DynamicYearMonthCombo, TimeCombo, Iframe, TextValueDownListCombo, Switch, HorizontalLayout, ShelterEditor, SelectTextTrigger, DateInterval, DynamicDatePane, AllCountPager, PopupView, BubblePopupView, BubblePopupBarView, TextBubblePopupBarView, ArrowTreeGroupNodeCheckbox, NumberInterval, DynamicYearQuarterCombo, DynamicYearCombo, IntervalSlider, MultiSelectInsertList, YearMonthInterval, TextValueCheckCombo, NumberEditor, LinearSegment, Img, EditorIconCheckCombo, IconTextValueCombo, ListView, FloatCenterLayout, };
