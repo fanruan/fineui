@@ -134,6 +134,9 @@ import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.
 import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
+import { LinearSegment } from "./case/linersegment/linear.segment";
+import { Img } from "./base/single/img/img";
+import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -283,6 +286,9 @@ export interface BI extends _func, _i18n, _base, _inject {
     YearMonthInterval: typeof YearMonthInterval;
     TextValueCheckCombo: typeof TextValueCheckCombo;
     NumberEditor: typeof NumberEditor;
+    LinearSegment: typeof LinearSegment;
+    Img: typeof Img;
+    EditorIconCheckCombo: typeof EditorIconCheckCombo;
 }
 
 export default {
@@ -426,4 +432,7 @@ export {
     YearMonthInterval,
     TextValueCheckCombo,
     NumberEditor,
+    LinearSegment,
+    Img,
+    EditorIconCheckCombo,
 };
