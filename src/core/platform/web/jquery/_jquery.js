@@ -4495,12 +4495,6 @@
 		div.innerHTML = "<textarea>x</textarea>";
 		support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 
-		// Support: IE <=9 only
-		// IE <=9 replaces <option> tags with their contents when inserted outside of
-		// the select element.
-		div.innerHTML = "<option></option>";
-		support.option = !!div.lastChild;
-
 		// #11217 - WebKit loses check when the name is after the checked attribute
 		fragment.appendChild( div );
 
@@ -4526,6 +4520,12 @@
 		// cleanData must set properties to undefined rather than use removeAttribute
 		div[ jQuery.expando ] = 1;
 		support.attributes = !div.getAttribute( jQuery.expando );
+
+		// Support: IE <=9 only
+		// IE <=9 replaces <option> tags with their contents when inserted outside of
+		// the select element.
+		div.innerHTML = "<option></option>";
+		support.option = !!div.lastChild;
 	} )();
 
 
