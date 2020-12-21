@@ -1,4 +1,4 @@
-/*! time: 2020-12-20 11:30:22 */
+/*! time: 2020-12-21 14:20:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1394);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1397);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -67791,6 +67791,24 @@ Object.defineProperty(exports, "TextValueCheckCombo", {
     return _combo14.TextValueCheckCombo;
   }
 });
+Object.defineProperty(exports, "LinearSegment", {
+  enumerable: true,
+  get: function get() {
+    return _linear.LinearSegment;
+  }
+});
+Object.defineProperty(exports, "Img", {
+  enumerable: true,
+  get: function get() {
+    return _img.Img;
+  }
+});
+Object.defineProperty(exports, "EditorIconCheckCombo", {
+  enumerable: true,
+  get: function get() {
+    return _combo15.EditorIconCheckCombo;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(712);
@@ -68054,6 +68072,12 @@ var _yearmonthinterval = __webpack_require__(819);
 var _numbereditor = __webpack_require__(820);
 
 var _combo14 = __webpack_require__(821);
+
+var _linear = __webpack_require__(822);
+
+var _img = __webpack_require__(823);
+
+var _combo15 = __webpack_require__(824);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -69259,9 +69283,33 @@ var _widget = __webpack_require__(1);
 var _widget = __webpack_require__(1);
 
 /***/ }),
-/* 822 */,
-/* 823 */,
-/* 824 */,
+/* 822 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 823 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _single = __webpack_require__(2);
+
+/***/ }),
+/* 824 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
 /* 825 */,
 /* 826 */,
 /* 827 */,
@@ -69309,7 +69357,10 @@ var _widget = __webpack_require__(1);
 /* 869 */,
 /* 870 */,
 /* 871 */,
-/* 872 */
+/* 872 */,
+/* 873 */,
+/* 874 */,
+/* 875 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -69472,17 +69523,17 @@ var _widget = __webpack_require__(1);
 
 
 /***/ }),
-/* 873 */,
-/* 874 */,
-/* 875 */,
-/* 876 */
+/* 876 */,
+/* 877 */,
+/* 878 */,
+/* 879 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(877);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(880);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 877 */
+/* 880 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70959,8 +71010,8 @@ var _widget = __webpack_require__(1);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(62).setImmediate))
 
 /***/ }),
-/* 878 */,
-/* 879 */
+/* 881 */,
+/* 882 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71256,9 +71307,6 @@ var _widget = __webpack_require__(1);
 
 
 /***/ }),
-/* 880 */,
-/* 881 */,
-/* 882 */,
 /* 883 */,
 /* 884 */,
 /* 885 */,
@@ -71473,15 +71521,15 @@ var _widget = __webpack_require__(1);
 /* 1094 */,
 /* 1095 */,
 /* 1096 */,
-/* 1097 */
+/* 1097 */,
+/* 1098 */,
+/* 1099 */,
+/* 1100 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1098 */,
-/* 1099 */,
-/* 1100 */,
 /* 1101 */,
 /* 1102 */,
 /* 1103 */,
@@ -71775,7 +71823,10 @@ var _widget = __webpack_require__(1);
 /* 1391 */,
 /* 1392 */,
 /* 1393 */,
-/* 1394 */
+/* 1394 */,
+/* 1395 */,
+/* 1396 */,
+/* 1397 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(122);
@@ -71879,7 +71930,7 @@ __webpack_require__(392);
 __webpack_require__(152);
 __webpack_require__(153);
 __webpack_require__(154);
-__webpack_require__(876);
+__webpack_require__(879);
 __webpack_require__(393);
 __webpack_require__(394);
 __webpack_require__(395);
@@ -72255,9 +72306,9 @@ __webpack_require__(706);
 __webpack_require__(707);
 __webpack_require__(708);
 __webpack_require__(709);
-__webpack_require__(879);
-__webpack_require__(872);
-__webpack_require__(1097);
+__webpack_require__(882);
+__webpack_require__(875);
+__webpack_require__(1100);
 module.exports = __webpack_require__(710);
 
 
