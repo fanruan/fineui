@@ -134,6 +134,8 @@ export interface _base {
     isEmptyObject: (obj: any) => boolean;
     isNotEmptyObject: (obj: any) => obj is object;
     isWindow: (obj: any) => obj is Window;
+    deepClone: <T>(obj: T) => T;
+    deepExtend: merge['deepExtend'];
     isDeepMatch: (object: any, attrs: any) => boolean;
     contains: (obj: any[], target: any, fromIndex?: number) => boolean;
     deepContains: (obj: any[], copy: any) => number;
@@ -191,3 +193,12 @@ export interface _base {
     getDate: (...args: (number | string)[]) => Date;
     getTime: (...args: any[]) => number;
 }
+declare type merge = {
+    deepExtend<TObject, TSource>(object: TObject, source: TSource): TObject & TSource;
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+    deepExtend<TObject, TSource1, TSource2, TSource3>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3): TObject & TSource1 & TSource2 & TSource3;
+    deepExtend<TObject, TSource1, TSource2, TSource3, TSource4>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3, source4: TSource4): TObject & TSource1 & TSource2 & TSource3 & TSource4;
+    deepExtend(object: any, ...otherArgs: any[]): any;
+};
+export {};
