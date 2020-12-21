@@ -135,6 +135,7 @@ import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval"
 import { NumberEditor } from "./widget/numbereditor/numbereditor";
 import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
 import { LinearSegment } from "./case/linersegment/linear.segment";
+import { Img } from "./base/single/img/img";
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -285,6 +286,7 @@ export interface BI extends _func, _i18n, _base, _inject {
     TextValueCheckCombo: typeof TextValueCheckCombo;
     NumberEditor: typeof NumberEditor;
     LinearSegment: typeof LinearSegment;
+    Img: typeof Img;
 }
 
 export default {
@@ -429,4 +431,5 @@ export {
     TextValueCheckCombo,
     NumberEditor,
     LinearSegment,
+    Img,
 };
