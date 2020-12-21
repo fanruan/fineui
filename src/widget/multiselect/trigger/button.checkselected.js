@@ -51,6 +51,14 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             o.itemsCreator({
                 type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
             }, function (res) {
+                if (BI.isNotEmptyString(res.count)) {
+                    BI.nextTick(function () {
+                        self.numberCounter.setText(res.count);
+                        self.setVisible(true);
+                    });
+
+                    return;
+                }
                 var length = res.count - ob.value.length;
                 BI.nextTick(function () {
                     self.numberCounter.setText(length);
