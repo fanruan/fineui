@@ -36,6 +36,7 @@ import * as decorator from "./core/decorator/decorator";
 import { _func } from "./core/func";
 import { _i18n } from "./core/i18n";
 import { _Plugin } from "./core/plugin";
+import { _var } from "./core/var";
 import { OB, _OB } from "./core/ob";
 import { _Widget, _WidgetStatic, Widget } from "./core/widget";
 import { _inject } from "./core/inject";
@@ -124,7 +125,7 @@ type ClassConstructor<T extends {}> = T & {
     readonly xtype: string;
 }
 
-export interface BI extends _func, _i18n, _base, _inject {
+export interface BI extends _func, _i18n, _base, _inject, _var {
     OB: ClassConstructor<_OB>;
     Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
