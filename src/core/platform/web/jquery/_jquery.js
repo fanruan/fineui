@@ -4495,6 +4495,12 @@
 		div.innerHTML = "<textarea>x</textarea>";
 		support.noCloneChecked = !!div.cloneNode( true ).lastChild.defaultValue;
 
+		// Support: IE <=9 only
+		// IE <=9 replaces <option> tags with their contents when inserted outside of
+		// the select element.
+		div.innerHTML = "<option></option>";
+		support.option = !!div.lastChild;
+
 		// #11217 - WebKit loses check when the name is after the checked attribute
 		fragment.appendChild( div );
 
@@ -4525,7 +4531,7 @@
 
 // We have to close these tags to support XHTML (#13200)
 	var wrapMap = {
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
+		// option: [ 1, "<select multiple='multiple'>", "</select>" ],
 		legend: [ 1, "<fieldset>", "</fieldset>" ],
 		area: [ 1, "<map>", "</map>" ],
 
@@ -4541,12 +4547,16 @@
 		_default: support.htmlSerialize ? [ 0, "", "" ] : [ 1, "X<div>", "</div>" ]
 	};
 
-// Support: IE8-IE9
-	wrapMap.optgroup = wrapMap.option;
+// // Support: IE8-IE9
+// 	wrapMap.optgroup = wrapMap.option;
 
 	wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 	wrapMap.th = wrapMap.td;
 
+	// Support: IE <=9 only
+	if ( !support.option ) {
+		wrapMap.optgroup = wrapMap.option = [ 1, "<select multiple='multiple'>", "</select>" ];
+	}
 
 	function getAll( context, tag ) {
 		var elems, elem,
