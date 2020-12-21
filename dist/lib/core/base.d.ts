@@ -113,7 +113,7 @@ export interface _base {
     isNaN: (value: any) => value is number;
     isUndefined: (value: any) => value is undefined;
     zipObject: (props: any[], values?: any[]) => object;
-    cloneDeep: (value: any, customizer?: Function, thisArg?: any) => any;
+    cloneDeep: <T>(value: T) => T;
     findKey: (object: object, predicate?: Function | object | string, thisArg?: any) => any;
     pick: (object: object, predicate?: Function | string | string[], thisArg?: any) => object;
     omit: (object: object, predicate?: Function | string | string[], thisArg?: any) => object;
