@@ -69,7 +69,7 @@ import { SmallTextEditor } from "./widget/editor/editor.text.small";
 import { MultifileEditor } from "./widget/editor/editor.multifile";
 import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
 import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizontal";
-import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
+import { FloatLeftLayout, FloatRightLayout } from "./core/wrapper/layout/layout.flow";
 import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
 import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
@@ -221,6 +221,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var {
     AbsoluteCenterLayout: typeof AbsoluteCenterLayout;
     HorizontalAdaptLayout: typeof HorizontalAdaptLayout;
     FloatLeftLayout: typeof FloatLeftLayout;
+    FloatRightLayout: typeof FloatRightLayout;
     CenterAdaptLayout: typeof CenterAdaptLayout;
     VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
@@ -323,6 +324,7 @@ export {
     AbsoluteCenterLayout,
     HorizontalAdaptLayout,
     FloatLeftLayout,
+    FloatRightLayout,
     VerticalLayout,
     AbsoluteLayout,
     DefaultLayout,
