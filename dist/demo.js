@@ -1,4 +1,4 @@
-/*! time: 2020-12-21 15:50:25 */
+/*! time: 2020-12-21 16:50:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -71362,6 +71362,12 @@ Object.defineProperty(exports, "FloatLeftLayout", {
     return _layout6.FloatLeftLayout;
   }
 });
+Object.defineProperty(exports, "FloatRightLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout6.FloatRightLayout;
+  }
+});
 Object.defineProperty(exports, "CenterAdaptLayout", {
   enumerable: true,
   get: function get() {
@@ -79432,12 +79438,18 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		// cleanData must set properties to undefined rather than use removeAttribute
 		div[ jQuery.expando ] = 1;
 		support.attributes = !div.getAttribute( jQuery.expando );
+
+		// Support: IE <=9 only
+		// IE <=9 replaces <option> tags with their contents when inserted outside of
+		// the select element.
+		div.innerHTML = "<option></option>";
+		support.option = !!div.lastChild;
 	} )();
 
 
 // We have to close these tags to support XHTML (#13200)
 	var wrapMap = {
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
+		// option: [ 1, "<select multiple='multiple'>", "</select>" ],
 		legend: [ 1, "<fieldset>", "</fieldset>" ],
 		area: [ 1, "<map>", "</map>" ],
 
@@ -79453,12 +79465,16 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		_default: support.htmlSerialize ? [ 0, "", "" ] : [ 1, "X<div>", "</div>" ]
 	};
 
-// Support: IE8-IE9
-	wrapMap.optgroup = wrapMap.option;
+// // Support: IE8-IE9
+// 	wrapMap.optgroup = wrapMap.option;
 
 	wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 	wrapMap.th = wrapMap.td;
 
+	// Support: IE <=9 only
+	if ( !support.option ) {
+		wrapMap.optgroup = wrapMap.option = [ 1, "<select multiple='multiple'>", "</select>" ];
+	}
 
 	function getAll( context, tag ) {
 		var elems, elem,
