@@ -44,6 +44,10 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
+
         this.calendar = BI.createWidget({
             direction: "custom",
             // logic: {
@@ -167,4 +171,5 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
     }
 
 });
+BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
