@@ -1,4 +1,4 @@
-/*! time: 2020-12-21 15:50:25 */
+/*! time: 2020-12-21 16:50:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -67387,6 +67387,12 @@ Object.defineProperty(exports, "FloatLeftLayout", {
   enumerable: true,
   get: function get() {
     return _layout6.FloatLeftLayout;
+  }
+});
+Object.defineProperty(exports, "FloatRightLayout", {
+  enumerable: true,
+  get: function get() {
+    return _layout6.FloatRightLayout;
   }
 });
 Object.defineProperty(exports, "CenterAdaptLayout", {
