@@ -1,4 +1,4 @@
-/*! time: 2020-12-21 21:00:22 */
+/*! time: 2020-12-22 11:30:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -50660,6 +50660,14 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
             o.itemsCreator({
                 type: BI.MultiSelectCombo.REQ_GET_DATA_LENGTH
             }, function (res) {
+                if (BI.isNotEmptyString(res.count)) {
+                    BI.nextTick(function () {
+                        self.numberCounter.setText(res.count);
+                        self.setVisible(true);
+                    });
+
+                    return;
+                }
                 var length = res.count - ob.value.length;
                 BI.nextTick(function () {
                     self.numberCounter.setText(length);
@@ -50698,6 +50706,7 @@ BI.MultiSelectCheckSelectedButton = BI.inherit(BI.Single, {
 
 BI.MultiSelectCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelectedButton);
+
 
 /***/ }),
 /* 617 */
@@ -61553,6 +61562,12 @@ BI.DateInterval = BI.inherit(BI.Single, {
             behaviors: o.behaviors,
             value: v,
             height: o.height,
+            listeners: [{
+                eventName: BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                action: function () {
+                    self.fireEvent(BI.DateInterval.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                }
+            }]
         });
         combo.on(BI.DynamicDateCombo.EVENT_ERROR, function () {
             self._clearTitle();
@@ -61662,7 +61677,9 @@ BI.DateInterval = BI.inherit(BI.Single, {
 BI.DateInterval.EVENT_VALID = "EVENT_VALID";
 BI.DateInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.DateInterval.EVENT_CHANGE = "EVENT_CHANGE";
+BI.DateInterval.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_interval", BI.DateInterval);
+
 
 /***/ }),
 /* 678 */
