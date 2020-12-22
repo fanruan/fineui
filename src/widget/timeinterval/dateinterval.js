@@ -72,9 +72,9 @@ BI.DateInterval = BI.inherit(BI.Single, {
             value: v,
             height: o.height,
             listeners: [{
-                eventName: BI.DynamicDateCombo.EVENT_BEFORE_POPUPVIEW,
+                eventName: BI.DynamicDateCombo.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
                 action: function () {
-                    self.fireEvent(BI.DateInterval.EVENT_BEFORE_POPUPVIEW);
+                    self.fireEvent(BI.DateInterval.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
                 }
             }]
         });
@@ -186,5 +186,5 @@ BI.DateInterval = BI.inherit(BI.Single, {
 BI.DateInterval.EVENT_VALID = "EVENT_VALID";
 BI.DateInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.DateInterval.EVENT_CHANGE = "EVENT_CHANGE";
-BI.DateInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DateInterval.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.date_interval", BI.DateInterval);
