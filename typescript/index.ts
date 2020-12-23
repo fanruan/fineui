@@ -141,7 +141,7 @@ import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.ed
 import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
 import { ListView } from './base/list/listview';
 import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
-import { _msg } from './base/foundation/message'
+import { _msg } from './base/foundation/message';
 
 
 type ClassConstructor<T extends {}> = T & {
