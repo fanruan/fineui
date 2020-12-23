@@ -298,7 +298,7 @@
             return _.map(params, function (param, i) {
                 // Don't decode the search params.
                 if (i === params.length - 1) return param || null;
-                var resultParam = null;
+                var resultParam = param;
                 if (param) {
                     try {
                         resultParam = decodeURIComponent(param);
