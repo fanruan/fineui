@@ -303,6 +303,7 @@
                     try {
                         resultParam = decodeURIComponent(param);
                     } catch (e) {
+                        resultParam = param;
                     }
                 }
                 return resultParam;
