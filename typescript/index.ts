@@ -69,7 +69,7 @@ import { SmallTextEditor } from "./widget/editor/editor.text.small";
 import { MultifileEditor } from "./widget/editor/editor.multifile";
 import { AbsoluteCenterLayout } from "./core/wrapper/layout/adapt/absolute.center";
 import { HorizontalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.horizontal";
-import { FloatLeftLayout } from "./core/wrapper/layout/layout.flow";
+import { FloatLeftLayout, FloatRightLayout } from "./core/wrapper/layout/layout.flow";
 import { CenterAdaptLayout } from "./core/wrapper/layout/adapt/adapt.center";
 import { VerticalAdaptLayout } from "./core/wrapper/layout/adapt/adapt.vertical";
 import { MultiSelectInsertCombo } from "./widget/multiselect/multiselect.insert.combo";
@@ -116,6 +116,31 @@ import { MultiLayerSingleTreeCombo } from "./widget/multilayersingletree/multila
 import { MultiLayerSelectTreeCombo } from "./widget/multilayerselecttree/multilayerselecttree.combo";
 import { MultiTreeListCombo } from "./widget/multitree/multi.tree.list.combo";
 import { MultiTreeInsertCombo } from "./widget/multitree/multi.tree.insert.combo";
+import { TextValueDownListCombo } from "./widget/textvaluedownlistcombo/combo.textvaluedownlist";
+import { Switch } from "./case/button/switch";
+import { HorizontalLayout } from "./core/wrapper/layout/layout.horizontal";
+import { ShelterEditor } from "./case/editor/editor.shelter";
+import { SelectTextTrigger } from "./case/trigger/trigger.text.select";
+import { DateInterval } from "./widget/timeinterval/dateinterval";
+import { DynamicDatePane } from "./widget/datepane/datepane";
+import { AllCountPager } from "./case/pager/pager.all.count";
+import { PopupView } from "./base/layer/layer.popup";
+import { BubblePopupView, BubblePopupBarView, TextBubblePopupBarView } from "./case/combo/bubblecombo/popup.bubble";
+import { ArrowTreeGroupNodeCheckbox } from "./case/checkbox/check.arrownode";
+import { NumberInterval } from "./widget/numberinterval/numberinterval";
+import { DynamicYearQuarterCombo } from "./widget/yearquarter/combo.yearquarter";
+import { DynamicYearCombo } from "./widget/year/combo.year";
+import { IntervalSlider } from "./widget/intervalslider/intervalslider";
+import { MultiSelectInsertList } from "./widget/multiselectlist/multiselectlist.insert";
+import { YearMonthInterval } from "./widget/yearmonthinterval/yearmonthinterval";
+import { NumberEditor } from "./widget/numbereditor/numbereditor";
+import { TextValueCheckCombo } from "./case/combo/textvaluecheckcombo/combo.textvaluecheck";
+import { LinearSegment } from "./case/linersegment/linear.segment";
+import { Img } from "./base/single/img/img";
+import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.editiconcheck";
+import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
+import { ListView } from './base/list/listview';
+import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -196,6 +221,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var {
     AbsoluteCenterLayout: typeof AbsoluteCenterLayout;
     HorizontalAdaptLayout: typeof HorizontalAdaptLayout;
     FloatLeftLayout: typeof FloatLeftLayout;
+    FloatRightLayout: typeof FloatRightLayout;
     CenterAdaptLayout: typeof CenterAdaptLayout;
     VerticalAdaptLayout: typeof VerticalAdaptLayout;
     IconButton: typeof IconButton;
@@ -244,6 +270,33 @@ export interface BI extends _func, _i18n, _base, _inject, _var {
     CardLayout: typeof CardLayout;
     DynamicYearMonthCombo: typeof DynamicYearMonthCombo;
     TimeCombo: typeof TimeCombo;
+    TextValueDownListCombo: typeof TextValueDownListCombo;
+    Switch: typeof Switch;
+    HorizontalLayout: typeof HorizontalLayout;
+    ShelterEditor: typeof ShelterEditor;
+    SelectTextTrigger: typeof SelectTextTrigger;
+    DateInterval: typeof DateInterval;
+    DynamicDatePane: typeof DynamicDatePane;
+    AllCountPager: typeof AllCountPager;
+    PopupView: typeof PopupView;
+    BubblePopupView: typeof BubblePopupView;
+    BubblePopupBarView: typeof BubblePopupBarView;
+    TextBubblePopupBarView: typeof TextBubblePopupBarView;
+    ArrowTreeGroupNodeCheckbox: typeof ArrowTreeGroupNodeCheckbox;
+    NumberInterval: typeof NumberInterval;
+    DynamicYearQuarterCombo: typeof DynamicYearQuarterCombo;
+    DynamicYearCombo: typeof DynamicYearCombo;
+    IntervalSlider: typeof IntervalSlider;
+    MultiSelectInsertList: typeof MultiSelectInsertList;
+    YearMonthInterval: typeof YearMonthInterval;
+    TextValueCheckCombo: typeof TextValueCheckCombo;
+    NumberEditor: typeof NumberEditor;
+    LinearSegment: typeof LinearSegment;
+    Img: typeof Img;
+    EditorIconCheckCombo: typeof EditorIconCheckCombo;
+    IconTextValueCombo: typeof IconTextValueCombo;
+    ListView: typeof ListView;
+    FloatCenterLayout: typeof FloatCenterLayout;
 }
 
 export default {
@@ -271,6 +324,7 @@ export {
     AbsoluteCenterLayout,
     HorizontalAdaptLayout,
     FloatLeftLayout,
+    FloatRightLayout,
     VerticalLayout,
     AbsoluteLayout,
     DefaultLayout,
@@ -366,4 +420,31 @@ export {
     DynamicYearMonthCombo,
     TimeCombo,
     Iframe,
+    TextValueDownListCombo,
+    Switch,
+    HorizontalLayout,
+    ShelterEditor,
+    SelectTextTrigger,
+    DateInterval,
+    DynamicDatePane,
+    AllCountPager,
+    PopupView,
+    BubblePopupView,
+    BubblePopupBarView,
+    TextBubblePopupBarView,
+    ArrowTreeGroupNodeCheckbox,
+    NumberInterval,
+    DynamicYearQuarterCombo,
+    DynamicYearCombo,
+    IntervalSlider,
+    MultiSelectInsertList,
+    YearMonthInterval,
+    TextValueCheckCombo,
+    NumberEditor,
+    LinearSegment,
+    Img,
+    EditorIconCheckCombo,
+    IconTextValueCombo,
+    ListView,
+    FloatCenterLayout,
 };

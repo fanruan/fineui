@@ -1,4 +1,4 @@
-import { Single, _Single } from "../single";
+import { _Single, Single } from "../single";
 
 export interface _Input extends _Single {
     onClick(): void;
@@ -8,7 +8,7 @@ export interface _Input extends _Single {
     focus(): void;
 
     blur(): void;
-    
+
     selectAll(): void;
 
     setValue(v: string): void;
@@ -73,7 +73,7 @@ export declare class Input extends Single {
     focus(): void;
 
     blur(): void;
-    
+
     selectAll(): void;
 
     setValue(v: string): void;

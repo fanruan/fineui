@@ -57,6 +57,9 @@ BI.YearPicker = BI.inherit(BI.Widget, {
             self.setValue(self.year.getValue());
             self.fireEvent(BI.YearPicker.EVENT_CHANGE);
         });
+        this.year.on(BI.YearDateCombo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.fireEvent(BI.YearPicker.EVENT_BEFORE_POPUPVIEW);
+        });
 
         BI.createWidget({
             type: "bi.htape",
@@ -126,4 +129,5 @@ BI.YearPicker = BI.inherit(BI.Widget, {
     }
 });
 BI.YearPicker.EVENT_CHANGE = "EVENT_CHANGE";
+BI.YearPicker.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_picker", BI.YearPicker);
