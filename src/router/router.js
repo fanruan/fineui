@@ -298,7 +298,14 @@
             return _.map(params, function (param, i) {
                 // Don't decode the search params.
                 if (i === params.length - 1) return param || null;
-                return param ? decodeURIComponent(param) : null;
+                var resultParam = null;
+                if (param) {
+                    try {
+                        resultParam = decodeURIComponent(param);
+                    } catch (e) {
+                    }
+                }
+                return resultParam;
             });
         }
 
@@ -364,7 +371,11 @@
 
         // Get the pathname and search params, without the root.
         getPath: function () {
-            var path = decodeURI(this.location.pathname + this.getSearch());
+            var path = this.location.pathname + this.getSearch();
+            try {
+                path = decodeURI(path);
+            } catch(e) {
+            }
             var root = this.root.slice(0, -1);
             if (!path.indexOf(root)) path = path.slice(root.length);
             return path.charAt(0) === "/" ? path.slice(1) : path;
@@ -552,7 +563,11 @@
             var url = root + fragment;
 
             // Strip the hash and decode for matching.
-            fragment = decodeURI(fragment.replace(pathStripper, ""));
+            fragment = fragment.replace(pathStripper, "")
+            try {
+                fragment = decodeURI(fragment);
+            } catch(e) {
+            }
 
             if (this.fragment === fragment) return;
             this.fragment = fragment;
