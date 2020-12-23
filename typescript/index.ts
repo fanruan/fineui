@@ -142,6 +142,7 @@ import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.iconte
 import { ListView } from './base/list/listview';
 import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
 import { _msg } from './base/foundation/message';
+import { _web } from './core/platform/web';
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -151,7 +152,7 @@ type ClassConstructor<T extends {}> = T & {
     readonly xtype: string;
 }
 
-export interface BI extends _func, _i18n, _base, _inject, _var {
+export interface BI extends _func, _i18n, _base, _inject, _var, _web {
     OB: ClassConstructor<_OB>;
     Plugin: _Plugin;
     Widget: ClassConstructor<_Widget> & _WidgetStatic;
