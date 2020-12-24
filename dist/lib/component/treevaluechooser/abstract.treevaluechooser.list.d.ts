@@ -1,5 +1,3 @@
-import { AbstractTreeValueChooser, _AbstractTreeValueChooser } from "./abstract.treevaluechooser";
-export interface _AbstractListTreeValueChooser extends _AbstractTreeValueChooser {
-}
+import { AbstractTreeValueChooser } from "./abstract.treevaluechooser";
 export declare class AbstractListTreeValueChooser extends AbstractTreeValueChooser {
 }

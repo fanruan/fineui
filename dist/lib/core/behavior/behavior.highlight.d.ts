@@ -1,5 +1,3 @@
-import { _Behavior, Behavior } from "./behavior";
-export interface _HighlightBehavior extends _Behavior {
-}
+import { Behavior } from "./behavior";
 export declare class HighlightBehavior extends Behavior {
 }
