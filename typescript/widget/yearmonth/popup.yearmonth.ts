@@ -7,7 +7,7 @@ export declare class DynamicYearMonthPopup extends Widget {
     static BUTTON_OK_EVENT_CHANGE: string;
     static EVENT_CHANGE: string;
 
-    setMinDate(minDate: string): void;
+    setMinDate(minDate?: string): void;
 
-    setMaxDate(maxDate: string): void;
+    setMaxDate(maxDate?: string): void;
 }
