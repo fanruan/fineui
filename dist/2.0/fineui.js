@@ -1,4 +1,4 @@
-/*! time: 2020-12-23 19:30:22 */
+/*! time: 2020-12-24 10:01:02 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75211,7 +75211,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 					copy = options[ name ];
 
 					// Prevent never-ending loop
-					if ( target === copy ) {
+					if ( name === "__proto__" || target === copy ) {
 						continue;
 					}
 
@@ -80882,7 +80882,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 	var rinlinejQuery = / jQuery\d+="(?:null|\d+)"/g,
 		rnoshimcache = new RegExp( "<(?:" + nodeNames + ")[\\s/>]", "i" ),
-		// rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:-]+)[^>]*)\/>/gi,
 
 		// Support: IE 10-11, Edge 10240+
 		// In IE/Edge using regex groups here causes severe slowdowns.
