@@ -8,5 +8,5 @@ export type _function = {
   isSafari: () => boolean;
   isMac: () => boolean;
   isWindows: () => boolean;
-  isSupportCss3: (style: string) => boolean;
+  isSupportCss3: (style: any) => boolean;
 }
