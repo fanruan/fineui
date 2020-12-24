@@ -1,4 +1,4 @@
-/*! time: 2020-12-23 13:50:23 */
+/*! time: 2020-12-24 10:43:10 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1400);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1401);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -23064,9 +23064,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big",
         },
-        MAX_HEIGHT: 600,
-        BODY_TGAP: 10,
-        BODY_HGAP: 20,
+        MAX_HEIGHT: 600
     },
 
     props: {
@@ -23081,6 +23079,8 @@ BI.Popover = BI.inherit(BI.Widget, {
         footer: null,
         footerHeight: 44,
         closable: true, // BI-40839 是否显示右上角的关闭按钮
+        bodyHgap: 20,
+        bodyTgap: 10
     },
 
     render: function () {
@@ -23153,23 +23153,23 @@ BI.Popover = BI.inherit(BI.Widget, {
                     self.body = this;
                 },
                 css: {
-                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP),
+                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
                     "min-height": this._getSuitableBodyHeight(size.height),
                 },
                 items: [{
                     el: o.body,
                 }],
             },
-            hgap: c.BODY_HGAP,
-            tgap: c.BODY_TGAP,
+            hgap: o.bodyHgap,
+            tgap: o.bodyTgap,
         } : {
             el: {
                 type: "bi.absolute",
                 items: [{
                     el: o.body,
-                    left: c.BODY_HGAP,
-                    top: c.BODY_TGAP,
-                    right: c.BODY_HGAP,
+                    left: o.bodyHgap,
+                    top: o.bodyTgap,
+                    right: o.bodyHgap,
                     bottom: 0,
                 }],
             },
@@ -23217,7 +23217,7 @@ BI.Popover = BI.inherit(BI.Widget, {
     _getSuitableBodyHeight: function (height) {
         var o = this.options;
         var c = this._constant;
-        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP);
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap);
     },
 
     _getSuitableHeight: function (height) {
@@ -67913,6 +67913,12 @@ Object.defineProperty(exports, "FloatCenterLayout", {
     return _middleFloat.FloatCenterLayout;
   }
 });
+Object.defineProperty(exports, "DynamicYearMonthPopup", {
+  enumerable: true,
+  get: function get() {
+    return _popup2.DynamicYearMonthPopup;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(712);
@@ -68188,6 +68194,8 @@ var _combo16 = __webpack_require__(825);
 var _listview = __webpack_require__(826);
 
 var _middleFloat = __webpack_require__(827);
+
+var _popup2 = __webpack_require__(828);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -69447,7 +69455,15 @@ var _widget = __webpack_require__(1);
 var _layout = __webpack_require__(3);
 
 /***/ }),
-/* 828 */,
+/* 828 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _widget = __webpack_require__(1);
+
+/***/ }),
 /* 829 */,
 /* 830 */,
 /* 831 */,
@@ -69497,7 +69513,8 @@ var _layout = __webpack_require__(3);
 /* 875 */,
 /* 876 */,
 /* 877 */,
-/* 878 */
+/* 878 */,
+/* 879 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -69660,17 +69677,17 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 879 */,
 /* 880 */,
 /* 881 */,
-/* 882 */
+/* 882 */,
+/* 883 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(883);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(884);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 883 */
+/* 884 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71147,8 +71164,8 @@ var _layout = __webpack_require__(3);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(62).setImmediate))
 
 /***/ }),
-/* 884 */,
-/* 885 */
+/* 885 */,
+/* 886 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71444,7 +71461,6 @@ var _layout = __webpack_require__(3);
 
 
 /***/ }),
-/* 886 */,
 /* 887 */,
 /* 888 */,
 /* 889 */,
@@ -71661,13 +71677,13 @@ var _layout = __webpack_require__(3);
 /* 1100 */,
 /* 1101 */,
 /* 1102 */,
-/* 1103 */
+/* 1103 */,
+/* 1104 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1104 */,
 /* 1105 */,
 /* 1106 */,
 /* 1107 */,
@@ -71963,7 +71979,8 @@ var _layout = __webpack_require__(3);
 /* 1397 */,
 /* 1398 */,
 /* 1399 */,
-/* 1400 */
+/* 1400 */,
+/* 1401 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(122);
@@ -72067,7 +72084,7 @@ __webpack_require__(392);
 __webpack_require__(152);
 __webpack_require__(153);
 __webpack_require__(154);
-__webpack_require__(882);
+__webpack_require__(883);
 __webpack_require__(393);
 __webpack_require__(394);
 __webpack_require__(395);
@@ -72443,9 +72460,9 @@ __webpack_require__(706);
 __webpack_require__(707);
 __webpack_require__(708);
 __webpack_require__(709);
-__webpack_require__(885);
-__webpack_require__(878);
-__webpack_require__(1103);
+__webpack_require__(886);
+__webpack_require__(879);
+__webpack_require__(1104);
 module.exports = __webpack_require__(710);
 
 
