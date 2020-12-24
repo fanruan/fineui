@@ -141,6 +141,7 @@ import { EditorIconCheckCombo } from "./case/combo/editoriconcheckcombo/combo.ed
 import { IconTextValueCombo } from './case/combo/icontextvaluecombo/combo.icontextvalue';
 import { ListView } from './base/list/listview';
 import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.center';
+import { DynamicYearMonthPopup } from './widget/yearmonth/popup.yearmonth';
 
 
 type ClassConstructor<T extends {}> = T & {
@@ -297,6 +298,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var {
     IconTextValueCombo: typeof IconTextValueCombo;
     ListView: typeof ListView;
     FloatCenterLayout: typeof FloatCenterLayout;
+    DynamicYearMonthPopup: typeof DynamicYearMonthPopup;
 }
 
 export default {
@@ -447,4 +449,5 @@ export {
     IconTextValueCombo,
     ListView,
     FloatCenterLayout,
+    DynamicYearMonthPopup,
 };
