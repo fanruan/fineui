@@ -213,7 +213,7 @@
 					copy = options[ name ];
 
 					// Prevent never-ending loop
-					if ( target === copy ) {
+					if ( name === "__proto__" || target === copy ) {
 						continue;
 					}
 
@@ -5884,7 +5884,6 @@
 
 	var rinlinejQuery = / jQuery\d+="(?:null|\d+)"/g,
 		rnoshimcache = new RegExp( "<(?:" + nodeNames + ")[\\s/>]", "i" ),
-		// rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:-]+)[^>]*)\/>/gi,
 
 		// Support: IE 10-11, Edge 10240+
 		// In IE/Edge using regex groups here causes severe slowdowns.
