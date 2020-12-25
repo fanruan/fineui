@@ -1,10 +1,4 @@
-import { _OB, OB } from "../ob";
-export interface _Behavior extends _OB {
-    doBehavior(items: any[]): void;
-}
-export interface _BehaviorFactory {
-    createBehavior(key: string, options: any): _Behavior;
-}
+import { OB } from "../ob";
 export declare class Behavior extends OB {
     doBehavior(items: any[]): void;
 }
