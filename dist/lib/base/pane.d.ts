@@ -6,5 +6,5 @@ export declare class Pane extends Widget {
     loaded(): void;
     check(): void;
     setTipVisible(b: boolean): void;
-    populate(items?: any[]): void;
+    populate(...args: any[]): void;
 }
