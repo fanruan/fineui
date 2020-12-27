@@ -38,7 +38,8 @@ BI.SearchTextValueTrigger = BI.inherit(BI.Trigger, {
                         popup: {
                             type: "bi.search_text_value_combo_popup",
                             cls: "bi-card",
-                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE
+                            chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
+                            tipText: BI.i18nText("BI-No_Select"),
                         },
                         onSearch: function (obj, callback) {
                             var keyword = obj.keyword;
