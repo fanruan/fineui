@@ -1,6 +1,6 @@
 import { Single } from "../../base/single/single";
 export declare class MultiTreeCombo extends Single {
-    static xytpe: string;
+    static xtype: string;
     static EVENT_FOCUS: string;
     static EVENT_BLUR: string;
     static EVENT_STOP: string;
