@@ -1,4 +1,4 @@
-/*! time: 2020-12-27 19:20:29 */
+/*! time: 2020-12-28 14:20:17 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -69080,10 +69080,19 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         if (!this.items) {
             o.itemsCreator({}, function (items) {
                 self._initData(items);
-                call();
+                join();
             });
         } else {
-            call();
+            join();
+        }
+
+        // 重新计算合并selectedValues
+        function join() {
+            self._reqAdjustTreeNode(options, function (joinedValue) {
+                options.selectedValues = joinedValue;
+
+                call();
+            });
         }
 
         function call() {
@@ -69801,7 +69810,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
             return true;
         });
-        
+
         return findParentNode;
     },
 
