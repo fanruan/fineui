@@ -598,7 +598,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         }
 
         function dealWithSelectedValue(parentValues, selectedValues) {
-            var valueMap = {}, parents = BI.deepClone(parentValues);
+            var valueMap = {}, parents = (parentValues || []).slice(0);
             BI.each(parentValues, function (i, v) {
                 parents.push(v);
 
