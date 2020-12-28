@@ -40,7 +40,12 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 call();
             });
         } else {
-            call();
+            // 同步状态下，重新计算合并selectedValues
+            self._reqAdjustTreeNode(options, function (joinedValue) {
+                options.selectedValues = joinedValue;
+
+                call();
+            });
         }
 
         function call() {
