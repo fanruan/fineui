@@ -37,10 +37,14 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         if (!this.items) {
             o.itemsCreator({}, function (items) {
                 self._initData(items);
-                call();
+                join();
             });
         } else {
-            // 同步状态下，重新计算合并selectedValues
+            join();
+        }
+
+        // 重新计算合并selectedValues
+        function join() {
             self._reqAdjustTreeNode(options, function (joinedValue) {
                 options.selectedValues = joinedValue;
 
@@ -763,7 +767,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
             return true;
         });
-        
+
         return findParentNode;
     },
 
