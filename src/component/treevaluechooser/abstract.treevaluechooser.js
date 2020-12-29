@@ -638,13 +638,9 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 return false;
             }
 
-            var can = true;
-
-            BI.each(selected, function (value) {
-               can = can && isAllSelected(selected[value], BI.concat(parents, value));
+            return BI.every(selected, function (value) {
+               return isAllSelected(selected[value], BI.concat(parents, value));
             });
-
-            return can;
         }
 
         function getCheckState(current, parentValues, valueMap, checkState) {
