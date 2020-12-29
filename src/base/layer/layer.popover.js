@@ -45,7 +45,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                 top: BI.clamp(self.startY, 0, H - self.element.height()) + "px",
             });
             // BI-12134 没有什么特别好的方法
-            BI.Resizers._resize();
+            BI.Resizers._resize({
+                target: self.element[0],
+            });
         }, function () {
             self.tracker.releaseMouseMoves();
         }, _global);
