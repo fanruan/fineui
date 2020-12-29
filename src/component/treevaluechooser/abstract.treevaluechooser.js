@@ -37,19 +37,10 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         if (!this.items) {
             o.itemsCreator({}, function (items) {
                 self._initData(items);
-                join();
-            });
-        } else {
-            join();
-        }
-
-        // 重新计算合并selectedValues
-        function join() {
-            self._reqAdjustTreeNode(options, function (joinedValue) {
-                options.selectedValues = joinedValue;
-
                 call();
             });
+        } else {
+            call();
         }
 
         function call() {
@@ -607,11 +598,15 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         }
 
         function dealWithSelectedValue(parentValues, selectedValues) {
-            var valueMap = {};
+            var valueMap = {}, parents = (parentValues || []).slice(0);
             BI.each(parentValues, function (i, v) {
+                parents.push(v);
+
                 selectedValues = selectedValues[v] || {};
             });
             BI.each(selectedValues, function (value, obj) {
+                var currentParents = BI.concat(parents, value);
+
                 if (BI.isNull(obj)) {
                     valueMap[value] = [0, 0];
                     return;
@@ -624,12 +619,28 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
                 BI.each(obj, function (t, o) {
                     if (BI.isNull(o) || BI.isEmpty(o)) {
                         nextNames[t] = true;
+                    } else {
+                        isAllSelected(o, BI.concat(currentParents, [t])) && (nextNames[t] = true);
                     }
                 });
                 // valueMap的数组第一个参数为不选: 0, 半选: 1, 全选：2， 第二个参数为改节点下选中的子节点个数(子节点全选或者不存在)
                 valueMap[value] = [1, BI.size(nextNames)];
             });
             return valueMap;
+        }
+
+        function isAllSelected(selected, parents) {
+            if (BI.isEmpty(selected)) {
+                return true;
+            }
+
+            if (self._getChildCount(parents) !== BI.size(selected)) {
+                return false;
+            }
+
+            return BI.every(selected, function (value) {
+               return isAllSelected(selected[value], BI.concat(parents, value));
+            });
         }
 
         function getCheckState(current, parentValues, valueMap, checkState) {
@@ -778,7 +789,8 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
         } else {
             var parent = this.tree.getRoot();
         }
-        return parent.getChildren();
+
+        return parent ? parent.getChildren() : [];
     },
 
     _getAllChildren: function(parentValues) {
