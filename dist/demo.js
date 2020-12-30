@@ -1,4 +1,4 @@
-/*! time: 2020-12-29 17:34:27 */
+/*! time: 2020-12-30 15:20:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42214,14 +42214,11 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
         if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
             v = BI.getDate().getFullYear();
-            this.selectedYear = "";
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue("");
-        } else {
-            this.selectedYear = v;
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue(v);
         }
+
+        this.selectedYear = v;
+        this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
+        this.navigation.setValue(v);
     }
 });
 BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
