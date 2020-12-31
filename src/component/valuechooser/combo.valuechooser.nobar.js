@@ -5,26 +5,23 @@
  */
 BI.ValueChooserNoBarCombo = BI.inherit(BI.AbstractValueChooser, {
 
-    _defaultConfig: function () {
-        return BI.extend(BI.ValueChooserNoBarCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-value-chooser-combo",
-            width: 200,
-            height: 24,
-            items: null,
-            itemsCreator: BI.emptyFn,
-            cache: true
-        });
+    props: {
+        baseCls: "bi-value-chooser-combo",
+        width: 200,
+        height: 24,
+        items: null,
+        itemsCreator: BI.emptyFn,
+        cache: true
     },
 
-    _init: function () {
-        BI.ValueChooserNoBarCombo.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this, o = this.options;
         if (BI.isNotNull(o.items)) {
             this.items = o.items;
         }
-        this.combo = BI.createWidget({
+
+        return {
             type: "bi.multi_select_no_bar_combo",
-            element: this,
             allowEdit: o.allowEdit,
             text: o.text,
             value: this._assertValue(o.value),
@@ -32,6 +29,9 @@ BI.ValueChooserNoBarCombo = BI.inherit(BI.AbstractValueChooser, {
             valueFormatter: BI.bind(this._valueFormatter, this),
             width: o.width,
             height: o.height,
+            ref: function(_ref) {
+                self.combo = _ref;
+            },
             listeners: [{
                 eventName: BI.MultiSelectCombo.EVENT_FOCUS,
                 action: function () {
@@ -63,7 +63,7 @@ BI.ValueChooserNoBarCombo = BI.inherit(BI.AbstractValueChooser, {
                     self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_CONFIRM);
                 }
             }]
-        });
+        }
     },
 
     setValue: function (v) {
