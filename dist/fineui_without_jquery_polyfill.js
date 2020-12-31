@@ -1,4 +1,4 @@
-/*! time: 2020-12-31 16:30:20 */
+/*! time: 2020-12-31 17:20:22 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1403);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1404);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -66985,6 +66985,108 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 /***/ (function(module, exports) {
 
 /**
+ * @author windy
+ * @version 2.0
+ * Created by windy on 2020/12/31
+ */
+BI.ValueChooserNoBarCombo = BI.inherit(BI.AbstractValueChooser, {
+
+    props: {
+        baseCls: "bi-value-chooser-combo",
+        width: 200,
+        height: 24,
+        items: null,
+        itemsCreator: BI.emptyFn,
+        cache: true
+    },
+
+    render: function () {
+        var self = this, o = this.options;
+        if (BI.isNotNull(o.items)) {
+            this.items = o.items;
+        }
+
+        return {
+            type: "bi.multi_select_no_bar_combo",
+            allowEdit: o.allowEdit,
+            text: o.text,
+            value: this._assertValue(o.value),
+            itemsCreator: BI.bind(this._itemsCreator, this),
+            valueFormatter: BI.bind(this._valueFormatter, this),
+            width: o.width,
+            height: o.height,
+            ref: function(_ref) {
+                self.combo = _ref;
+            },
+            listeners: [{
+                eventName: BI.MultiSelectCombo.EVENT_FOCUS,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_FOCUS);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_BLUR,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_BLUR);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_STOP,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_STOP);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CLICK_ITEM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_CLICK_ITEM);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_SEARCHING,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_SEARCHING);
+                }
+            }, {
+                eventName: BI.MultiSelectCombo.EVENT_CONFIRM,
+                action: function () {
+                    self.fireEvent(BI.ValueChooserNoBarCombo.EVENT_CONFIRM);
+                }
+            }]
+        }
+    },
+
+    setValue: function (v) {
+        this.combo.setValue(v);
+    },
+
+    getValue: function () {
+        return this.combo.getValue();
+    },
+
+    getAllValue: function() {
+        return this.getValue();
+    },
+
+    populate: function (items) {
+        // 直接用combo的populate不会作用到AbstractValueChooser上
+        if (BI.isNotNull(items)) {
+            this.items = items;
+        }
+        this.combo.populate();
+    }
+});
+
+BI.ValueChooserNoBarCombo.EVENT_BLUR = "EVENT_BLUR";
+BI.ValueChooserNoBarCombo.EVENT_FOCUS = "EVENT_FOCUS";
+BI.ValueChooserNoBarCombo.EVENT_STOP = "EVENT_STOP";
+BI.ValueChooserNoBarCombo.EVENT_SEARCHING = "EVENT_SEARCHING";
+BI.ValueChooserNoBarCombo.EVENT_CLICK_ITEM = "EVENT_CLICK_ITEM";
+BI.ValueChooserNoBarCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
+BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
+
+
+/***/ }),
+/* 711 */
+/***/ (function(module, exports) {
+
+/**
  * 简单的复选面板, 适用于数据量少的情况
  * 封装了字段处理逻辑
  *
@@ -67057,20 +67159,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 711 */
+/* 712 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(712));
+var _index = _interopRequireDefault(__webpack_require__(713));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 712 */
+/* 713 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67965,11 +68067,11 @@ Object.defineProperty(exports, "LayerController", {
 });
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(713);
+var _combo = __webpack_require__(714);
 
 var _group = __webpack_require__(79);
 
-var _tab = __webpack_require__(714);
+var _tab = __webpack_require__(715);
 
 var _pane = __webpack_require__(28);
 
@@ -67977,23 +68079,23 @@ var _button = __webpack_require__(8);
 
 var _button2 = __webpack_require__(80);
 
-var _button3 = __webpack_require__(715);
+var _button3 = __webpack_require__(716);
 
-var _button4 = __webpack_require__(716);
+var _button4 = __webpack_require__(717);
 
-var _icontextitem = __webpack_require__(717);
+var _icontextitem = __webpack_require__(718);
 
-var _editor = __webpack_require__(718);
+var _editor = __webpack_require__(719);
 
-var _iframe = __webpack_require__(719);
+var _iframe = __webpack_require__(720);
 
-var _checkbox = __webpack_require__(720);
+var _checkbox = __webpack_require__(721);
 
-var _input = __webpack_require__(721);
+var _input = __webpack_require__(722);
 
 var _abstract = __webpack_require__(81);
 
-var _label = __webpack_require__(722);
+var _label = __webpack_require__(723);
 
 var _single = __webpack_require__(2);
 
@@ -68001,21 +68103,21 @@ var _text = __webpack_require__(82);
 
 var _trigger = __webpack_require__(83);
 
-var _icon = __webpack_require__(723);
+var _icon = __webpack_require__(724);
 
-var _item = __webpack_require__(724);
+var _item = __webpack_require__(725);
 
-var _combo2 = __webpack_require__(725);
+var _combo2 = __webpack_require__(726);
 
-var _combo3 = __webpack_require__(726);
+var _combo3 = __webpack_require__(727);
 
-var _combo4 = __webpack_require__(727);
+var _combo4 = __webpack_require__(728);
 
-var _editor2 = __webpack_require__(728);
+var _editor2 = __webpack_require__(729);
 
-var _loading_pane = __webpack_require__(729);
+var _loading_pane = __webpack_require__(730);
 
-var _allvalueMultitextvalue = __webpack_require__(730);
+var _allvalueMultitextvalue = __webpack_require__(731);
 
 var _abstract2 = __webpack_require__(45);
 
@@ -68023,15 +68125,15 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 
 var _action = __webpack_require__(85);
 
-var _action2 = __webpack_require__(731);
+var _action2 = __webpack_require__(732);
 
 var _behavior = __webpack_require__(57);
 
-var _behavior2 = __webpack_require__(732);
+var _behavior2 = __webpack_require__(733);
 
-var _behavior3 = __webpack_require__(733);
+var _behavior3 = __webpack_require__(734);
 
-var decorator = _interopRequireWildcard(__webpack_require__(734));
+var decorator = _interopRequireWildcard(__webpack_require__(735));
 
 var _ob = __webpack_require__(34);
 
@@ -68039,211 +68141,211 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(735);
+var _layout2 = __webpack_require__(736);
 
-var _layout3 = __webpack_require__(736);
+var _layout3 = __webpack_require__(737);
 
-var _layout4 = __webpack_require__(737);
+var _layout4 = __webpack_require__(738);
 
-var _layout5 = __webpack_require__(738);
+var _layout5 = __webpack_require__(739);
 
-var _combo5 = __webpack_require__(739);
+var _combo5 = __webpack_require__(740);
 
-var _icon2 = __webpack_require__(740);
+var _icon2 = __webpack_require__(741);
 
-var _adapt = __webpack_require__(741);
+var _adapt = __webpack_require__(742);
 
-var _adapt2 = __webpack_require__(742);
+var _adapt2 = __webpack_require__(743);
 
-var _icontexticonitem = __webpack_require__(743);
+var _icontexticonitem = __webpack_require__(744);
 
-var _auto = __webpack_require__(744);
+var _auto = __webpack_require__(745);
 
-var _inline = __webpack_require__(745);
+var _inline = __webpack_require__(746);
 
-var _adapt3 = __webpack_require__(746);
+var _adapt3 = __webpack_require__(747);
 
 var _button5 = __webpack_require__(58);
 
 var _editor3 = __webpack_require__(86);
 
-var _icon3 = __webpack_require__(747);
+var _icon3 = __webpack_require__(748);
 
-var _layer = __webpack_require__(748);
+var _layer = __webpack_require__(749);
 
-var _combo6 = __webpack_require__(749);
+var _combo6 = __webpack_require__(750);
 
-var _dynamicdate = __webpack_require__(750);
+var _dynamicdate = __webpack_require__(751);
 
-var _customtree = __webpack_require__(751);
+var _customtree = __webpack_require__(752);
 
-var _tree = __webpack_require__(752);
+var _tree = __webpack_require__(753);
 
-var _nodeIcon = __webpack_require__(753);
+var _nodeIcon = __webpack_require__(754);
 
-var _itemMid = __webpack_require__(754);
+var _itemMid = __webpack_require__(755);
 
-var _itemFirst = __webpack_require__(755);
+var _itemFirst = __webpack_require__(756);
 
-var _itemLast = __webpack_require__(756);
+var _itemLast = __webpack_require__(757);
 
-var _editorText = __webpack_require__(757);
+var _editorText = __webpack_require__(758);
 
-var _editor4 = __webpack_require__(758);
+var _editor4 = __webpack_require__(759);
 
-var _absolute = __webpack_require__(759);
+var _absolute = __webpack_require__(760);
 
-var _adapt4 = __webpack_require__(760);
+var _adapt4 = __webpack_require__(761);
 
-var _layout6 = __webpack_require__(761);
+var _layout6 = __webpack_require__(762);
 
-var _adapt5 = __webpack_require__(762);
+var _adapt5 = __webpack_require__(763);
 
-var _adapt6 = __webpack_require__(763);
+var _adapt6 = __webpack_require__(764);
 
-var _multiselectInsert = __webpack_require__(764);
+var _multiselectInsert = __webpack_require__(765);
 
-var _multiselect = __webpack_require__(765);
+var _multiselect = __webpack_require__(766);
 
-var _editor5 = __webpack_require__(766);
+var _editor5 = __webpack_require__(767);
 
-var _multilayersingletree = __webpack_require__(767);
+var _multilayersingletree = __webpack_require__(768);
 
-var _colorchooser = __webpack_require__(768);
+var _colorchooser = __webpack_require__(769);
 
-var _a = __webpack_require__(769);
+var _a = __webpack_require__(770);
 
-var _html = __webpack_require__(770);
+var _html = __webpack_require__(771);
 
-var _switcher = __webpack_require__(771);
+var _switcher = __webpack_require__(772);
 
-var _loader = __webpack_require__(772);
+var _loader = __webpack_require__(773);
 
-var _pane2 = __webpack_require__(773);
+var _pane2 = __webpack_require__(774);
 
-var _toolbar = __webpack_require__(774);
+var _toolbar = __webpack_require__(775);
 
-var _list = __webpack_require__(775);
+var _list = __webpack_require__(776);
 
 var _abstract3 = __webpack_require__(87);
 
-var _combo7 = __webpack_require__(776);
+var _combo7 = __webpack_require__(777);
 
-var _editor6 = __webpack_require__(777);
+var _editor6 = __webpack_require__(778);
 
-var _item2 = __webpack_require__(778);
+var _item2 = __webpack_require__(779);
 
-var _dynamicdatetime = __webpack_require__(779);
+var _dynamicdatetime = __webpack_require__(780);
 
-var _multiTree = __webpack_require__(780);
+var _multiTree = __webpack_require__(781);
 
-var _middle = __webpack_require__(781);
+var _middle = __webpack_require__(782);
 
-var _group2 = __webpack_require__(782);
+var _group2 = __webpack_require__(783);
 
-var _layout7 = __webpack_require__(783);
+var _layout7 = __webpack_require__(784);
 
-var _icon4 = __webpack_require__(784);
+var _icon4 = __webpack_require__(785);
 
-var _searcher = __webpack_require__(785);
+var _searcher = __webpack_require__(786);
 
-var _combo8 = __webpack_require__(786);
+var _combo8 = __webpack_require__(787);
 
-var _combo9 = __webpack_require__(787);
+var _combo9 = __webpack_require__(788);
 
-var _comboTreevaluechooser = __webpack_require__(788);
+var _comboTreevaluechooser = __webpack_require__(789);
 
-var _radio = __webpack_require__(789);
+var _radio = __webpack_require__(790);
 
-var _multilayerselecttree = __webpack_require__(790);
+var _multilayerselecttree = __webpack_require__(791);
 
-var _multilayersingletree2 = __webpack_require__(791);
+var _multilayersingletree2 = __webpack_require__(792);
 
 var _treeview = __webpack_require__(59);
 
-var _multiTree2 = __webpack_require__(792);
+var _multiTree2 = __webpack_require__(793);
 
-var _itemSingleselect = __webpack_require__(793);
+var _itemSingleselect = __webpack_require__(794);
 
-var _singleselectInsert = __webpack_require__(794);
+var _singleselectInsert = __webpack_require__(795);
 
-var _singleselect = __webpack_require__(795);
+var _singleselect = __webpack_require__(796);
 
-var _layout8 = __webpack_require__(796);
+var _layout8 = __webpack_require__(797);
 
-var _combo10 = __webpack_require__(797);
+var _combo10 = __webpack_require__(798);
 
-var _time = __webpack_require__(798);
+var _time = __webpack_require__(799);
 
 var _listtreeview = __webpack_require__(88);
 
-var _listasynctree = __webpack_require__(799);
+var _listasynctree = __webpack_require__(800);
 
-var _asynctree = __webpack_require__(800);
+var _asynctree = __webpack_require__(801);
 
-var _multilayersingletree3 = __webpack_require__(801);
+var _multilayersingletree3 = __webpack_require__(802);
 
-var _multilayerselecttree2 = __webpack_require__(802);
+var _multilayerselecttree2 = __webpack_require__(803);
 
-var _multiTreeList = __webpack_require__(803);
+var _multiTreeList = __webpack_require__(804);
 
-var _multiTreeInsert = __webpack_require__(804);
+var _multiTreeInsert = __webpack_require__(805);
 
-var _combo11 = __webpack_require__(805);
+var _combo11 = __webpack_require__(806);
 
-var _switch = __webpack_require__(806);
+var _switch = __webpack_require__(807);
 
-var _layout9 = __webpack_require__(807);
+var _layout9 = __webpack_require__(808);
 
-var _editor7 = __webpack_require__(808);
+var _editor7 = __webpack_require__(809);
 
-var _triggerText = __webpack_require__(809);
+var _triggerText = __webpack_require__(810);
 
-var _dateinterval = __webpack_require__(810);
+var _dateinterval = __webpack_require__(811);
 
-var _datepane = __webpack_require__(811);
+var _datepane = __webpack_require__(812);
 
-var _pagerAll = __webpack_require__(812);
+var _pagerAll = __webpack_require__(813);
 
 var _layer2 = __webpack_require__(89);
 
-var _popup = __webpack_require__(813);
+var _popup = __webpack_require__(814);
 
-var _check = __webpack_require__(814);
+var _check = __webpack_require__(815);
 
-var _numberinterval = __webpack_require__(815);
+var _numberinterval = __webpack_require__(816);
 
-var _combo12 = __webpack_require__(816);
+var _combo12 = __webpack_require__(817);
 
-var _combo13 = __webpack_require__(817);
+var _combo13 = __webpack_require__(818);
 
-var _intervalslider = __webpack_require__(818);
+var _intervalslider = __webpack_require__(819);
 
-var _multiselectlist = __webpack_require__(819);
+var _multiselectlist = __webpack_require__(820);
 
-var _yearmonthinterval = __webpack_require__(820);
+var _yearmonthinterval = __webpack_require__(821);
 
-var _numbereditor = __webpack_require__(821);
+var _numbereditor = __webpack_require__(822);
 
-var _combo14 = __webpack_require__(822);
+var _combo14 = __webpack_require__(823);
 
-var _linear = __webpack_require__(823);
+var _linear = __webpack_require__(824);
 
-var _img = __webpack_require__(824);
+var _img = __webpack_require__(825);
 
-var _combo15 = __webpack_require__(825);
+var _combo15 = __webpack_require__(826);
 
-var _combo16 = __webpack_require__(826);
+var _combo16 = __webpack_require__(827);
 
-var _listview = __webpack_require__(827);
+var _listview = __webpack_require__(828);
 
-var _middleFloat = __webpack_require__(828);
+var _middleFloat = __webpack_require__(829);
 
-var _popup2 = __webpack_require__(829);
+var _popup2 = __webpack_require__(830);
 
 var _controller = __webpack_require__(90);
 
-var _controller2 = __webpack_require__(830);
+var _controller2 = __webpack_require__(831);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -68253,15 +68355,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 713 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 714 */
@@ -68279,7 +68372,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 716 */
@@ -68306,7 +68399,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 719 */
@@ -68324,7 +68417,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 721 */
@@ -68333,7 +68426,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 722 */
@@ -68342,7 +68435,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(81);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 723 */
@@ -68351,7 +68444,7 @@ var _abstract = __webpack_require__(81);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(81);
 
 /***/ }),
 /* 724 */
@@ -68360,7 +68453,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 725 */
@@ -68369,7 +68462,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 726 */
@@ -68405,7 +68498,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 730 */
@@ -68414,7 +68507,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(28);
 
 /***/ }),
 /* 731 */
@@ -68423,7 +68516,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(85);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 732 */
@@ -68432,7 +68525,7 @@ var _action = __webpack_require__(85);
 "use strict";
 
 
-var _behavior = __webpack_require__(57);
+var _action = __webpack_require__(85);
 
 /***/ }),
 /* 733 */
@@ -68445,6 +68538,15 @@ var _behavior = __webpack_require__(57);
 
 /***/ }),
 /* 734 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(57);
+
+/***/ }),
+/* 735 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68655,15 +68757,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 735 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 736 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -68697,7 +68790,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 740 */
@@ -68706,7 +68799,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 741 */
@@ -68715,7 +68808,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 742 */
@@ -68733,7 +68826,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 744 */
@@ -68742,7 +68835,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 745 */
@@ -68769,7 +68862,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 748 */
@@ -68778,7 +68871,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 749 */
@@ -68796,7 +68889,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 751 */
@@ -68805,7 +68898,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 752 */
@@ -68814,7 +68907,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(79);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 753 */
@@ -68823,7 +68916,7 @@ var _group = __webpack_require__(79);
 "use strict";
 
 
-var _button = __webpack_require__(80);
+var _group = __webpack_require__(79);
 
 /***/ }),
 /* 754 */
@@ -68832,7 +68925,7 @@ var _button = __webpack_require__(80);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _button = __webpack_require__(80);
 
 /***/ }),
 /* 755 */
@@ -68859,7 +68952,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _editor = __webpack_require__(86);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 758 */
@@ -68868,7 +68961,7 @@ var _editor = __webpack_require__(86);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _editor = __webpack_require__(86);
 
 /***/ }),
 /* 759 */
@@ -68877,7 +68970,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 760 */
@@ -68922,7 +69015,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 765 */
@@ -68940,7 +69033,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 767 */
@@ -68949,7 +69042,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 768 */
@@ -68958,7 +69051,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(28);
 
 /***/ }),
 /* 769 */
@@ -68967,7 +69060,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(82);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 770 */
@@ -68976,7 +69069,7 @@ var _text = __webpack_require__(82);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(82);
 
 /***/ }),
 /* 771 */
@@ -68985,7 +69078,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 772 */
@@ -69003,7 +69096,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 774 */
@@ -69012,7 +69105,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _pane = __webpack_require__(28);
 
 /***/ }),
 /* 775 */
@@ -69021,7 +69114,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 776 */
@@ -69030,7 +69123,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(87);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 777 */
@@ -69039,7 +69132,7 @@ var _abstract = __webpack_require__(87);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(87);
 
 /***/ }),
 /* 778 */
@@ -69048,7 +69141,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 779 */
@@ -69057,7 +69150,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 780 */
@@ -69075,7 +69168,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 782 */
@@ -69084,7 +69177,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 783 */
@@ -69093,7 +69186,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 784 */
@@ -69102,7 +69195,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(58);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 785 */
@@ -69111,7 +69204,7 @@ var _button = __webpack_require__(58);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(58);
 
 /***/ }),
 /* 786 */
@@ -69120,7 +69213,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(84);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 787 */
@@ -69129,7 +69222,7 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _abstractTreevaluechooser = __webpack_require__(84);
 
 /***/ }),
 /* 788 */
@@ -69147,7 +69240,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 790 */
@@ -69156,7 +69249,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 791 */
@@ -69174,7 +69267,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 793 */
@@ -69183,7 +69276,7 @@ var _pane = __webpack_require__(28);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _pane = __webpack_require__(28);
 
 /***/ }),
 /* 794 */
@@ -69192,7 +69285,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 795 */
@@ -69210,7 +69303,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 797 */
@@ -69219,7 +69312,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 798 */
@@ -69237,7 +69330,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(88);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 800 */
@@ -69246,7 +69339,7 @@ var _listtreeview = __webpack_require__(88);
 "use strict";
 
 
-var _treeview = __webpack_require__(59);
+var _listtreeview = __webpack_require__(88);
 
 /***/ }),
 /* 801 */
@@ -69255,7 +69348,7 @@ var _treeview = __webpack_require__(59);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(59);
 
 /***/ }),
 /* 802 */
@@ -69273,7 +69366,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 804 */
@@ -69291,7 +69384,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 806 */
@@ -69300,7 +69393,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 807 */
@@ -69309,7 +69402,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 808 */
@@ -69318,7 +69411,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 809 */
@@ -69327,7 +69420,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(83);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 810 */
@@ -69336,7 +69429,7 @@ var _trigger = __webpack_require__(83);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(83);
 
 /***/ }),
 /* 811 */
@@ -69345,7 +69438,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 812 */
@@ -69363,8 +69456,6 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(89);
-
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -69374,7 +69465,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(58);
+var _layer = __webpack_require__(89);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 815 */
@@ -69383,7 +69476,7 @@ var _button = __webpack_require__(58);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(58);
 
 /***/ }),
 /* 816 */
@@ -69392,7 +69485,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 817 */
@@ -69410,7 +69503,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 819 */
@@ -69437,7 +69530,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 822 */
@@ -69464,7 +69557,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 825 */
@@ -69473,7 +69566,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 826 */
@@ -69500,7 +69593,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 829 */
@@ -69509,7 +69602,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 830 */
@@ -69518,10 +69611,18 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
+/***/ }),
+/* 831 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _controller = __webpack_require__(90);
 
 /***/ }),
-/* 831 */,
 /* 832 */,
 /* 833 */,
 /* 834 */,
@@ -69571,7 +69672,8 @@ var _controller = __webpack_require__(90);
 /* 878 */,
 /* 879 */,
 /* 880 */,
-/* 881 */
+/* 881 */,
+/* 882 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -69734,17 +69836,17 @@ var _controller = __webpack_require__(90);
 
 
 /***/ }),
-/* 882 */,
 /* 883 */,
 /* 884 */,
-/* 885 */
+/* 885 */,
+/* 886 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(886);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(887);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 886 */
+/* 887 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71223,8 +71325,8 @@ var _controller = __webpack_require__(90);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(62).setImmediate))
 
 /***/ }),
-/* 887 */,
-/* 888 */
+/* 888 */,
+/* 889 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -71520,7 +71622,6 @@ var _controller = __webpack_require__(90);
 
 
 /***/ }),
-/* 889 */,
 /* 890 */,
 /* 891 */,
 /* 892 */,
@@ -71737,13 +71838,13 @@ var _controller = __webpack_require__(90);
 /* 1103 */,
 /* 1104 */,
 /* 1105 */,
-/* 1106 */
+/* 1106 */,
+/* 1107 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1107 */,
 /* 1108 */,
 /* 1109 */,
 /* 1110 */,
@@ -72039,7 +72140,8 @@ var _controller = __webpack_require__(90);
 /* 1400 */,
 /* 1401 */,
 /* 1402 */,
-/* 1403 */
+/* 1403 */,
+/* 1404 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -72143,7 +72245,7 @@ __webpack_require__(393);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(885);
+__webpack_require__(886);
 __webpack_require__(394);
 __webpack_require__(395);
 __webpack_require__(396);
@@ -72519,10 +72621,11 @@ __webpack_require__(707);
 __webpack_require__(708);
 __webpack_require__(709);
 __webpack_require__(710);
-__webpack_require__(888);
-__webpack_require__(881);
-__webpack_require__(1106);
-module.exports = __webpack_require__(711);
+__webpack_require__(711);
+__webpack_require__(889);
+__webpack_require__(882);
+__webpack_require__(1107);
+module.exports = __webpack_require__(712);
 
 
 /***/ })
