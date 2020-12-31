@@ -4,16 +4,10 @@ Demo.ValueChooserCombo = BI.inherit(BI.Widget, {
     },
     render: function () {
         var widget = BI.createWidget({
-            type: "bi.value_chooser_no_bar_combo",
+            type: "bi.value_chooser_combo",
             itemsCreator: function (op, callback) {
                 callback(BI.deepClone(Demo.CONSTANTS.ITEMS));
-            },
-            listeners: [{
-                eventName: "EVENT_CONFIRM",
-                action: function () {
-                    BI.Msg.toast(widget.getValue());
-                }
-            }]
+            }
         });
         return {
             type: "bi.vertical",
