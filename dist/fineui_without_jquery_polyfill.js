@@ -1,4 +1,4 @@
-/*! time: 2020-12-31 14:58:21 */
+/*! time: 2020-12-31 16:30:20 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70401,7 +70401,9 @@ var _controller = __webpack_require__(90);
                     args = inserted;
                     break;
                 case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    if (args.length > 2) {
+                        args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    }
                     break;
             }
             var result = original.apply(this, args);
