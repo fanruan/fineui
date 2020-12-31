@@ -144,8 +144,10 @@ import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.cen
 import { _msg } from './base/foundation/message';
 import { _web } from './core/platform/web';
 import { DynamicYearMonthPopup } from './widget/yearmonth/popup.yearmonth';
+import { _utils } from './core/utils';
 
-export interface BI extends _func, _i18n, _base, _inject, _var, _web {
+
+export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     OB: typeof OB;
     Plugin: _Plugin;
     Widget: typeof Widget;
