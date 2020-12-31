@@ -652,7 +652,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     args = inserted;
                     break;
                 case 'splice':
-                    args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    if (args.length > 2) {
+                        args = [args[0], args[1]].concat(inserted ? inserted : []);
+                    }
                     break;
             }
             var result = original.apply(this, args);
