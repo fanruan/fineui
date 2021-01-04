@@ -1,4 +1,5 @@
 export declare class MouseMoveTracker {
+    constructor(...args: any[]);
     captureMouseMoves(event: MouseEvent): void;
     releaseMouseMoves(): void;
     isDragging(): boolean;
