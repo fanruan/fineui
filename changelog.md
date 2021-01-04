@@ -1,5 +1,6 @@
 # 更新日志
 2.0(2020-12)
+- multi_layer_down_list_combo支持无限层级
 - 新增不带全选的同步复选下拉框
 - 日期选择控件为年月选择器子组件新增POPUP弹出前事件
 - 文件上传控件新增API(setMaxFileLength)以动态设置最大上传文件数量
