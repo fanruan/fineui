@@ -14,7 +14,7 @@ export declare class Node {
     setParent(parent: Node): void;
     getParent(): Node;
     getChild(index: number): Node;
-    getChildIndex(id: any): Node;
+    getChildIndex(id: any): number;
     removeChild(id: any): void;
     removeChildByIndex(index: number): void;
     removeAllChilds(): void;
@@ -29,9 +29,9 @@ export declare class Tree {
     getRoot(): Node;
     clear(): void;
     initTree(nodes: any[]): void;
-    toJSON(node: Node): object[];
-    toJSONWithNode(node: Node): object[];
-    search(root: Node, target: any, param?: any): boolean;
+    toJSON<T>(node?: Node): T[];
+    toJSONWithNode<T>(node: Node): T[];
+    search(root: Node, target?: any, param?: any): Node;
     traverse(callback: Function): void;
     recursion(callback: Function): void;
     inOrderTraverse(callback: Function): void;
@@ -42,7 +42,7 @@ export declare class Tree {
     nrPostOrderTraverse(callback: Function): void;
     static transformToArrayFormat(nodes: Node | Node[], pId: any): Node[];
     static arrayFormat(nodes: Node | Node[], pId: any): Node[];
-    static transformToTreeFormat(sNodes: Node | Node[]): Node[];
+    static transformToTreeFormat<T>(sNodes: T[]): Node[];
     static treeFormat(sNodes: Node | Node[]): Node[];
     static traversal(array: Node[], callback: Function, pNode: Node): void;
 }
