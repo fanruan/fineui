@@ -144,8 +144,12 @@ import { FloatCenterLayout } from './core/wrapper/layout/middle/middle.float.cen
 import { _msg } from './base/foundation/message';
 import { _web } from './core/platform/web';
 import { DynamicYearMonthPopup } from './widget/yearmonth/popup.yearmonth';
+import { _utils } from './core/utils';
+import { Controller } from "./core/controller/controller";
+import { LayerController } from "./core/controller/controller.layer";
 
-export interface BI extends _func, _i18n, _base, _inject, _var, _web {
+
+export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     OB: typeof OB;
     Plugin: _Plugin;
     Widget: typeof Widget;
@@ -160,6 +164,8 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web {
     Action: typeof Action;
     ActionFactory: typeof ActionFactory;
     ShowAction: typeof ShowAction;
+    Controller: typeof Controller;
+    LayerController: typeof LayerController;
     Behavior: typeof Behavior;
     BehaviorFactory: typeof BehaviorFactory;
     HighlightBehavior: typeof HighlightBehavior;
@@ -335,6 +341,8 @@ export {
     Action,
     ActionFactory,
     ShowAction,
+    Controller,
+    LayerController,
     Behavior,
     BehaviorFactory,
     RedMarkBehavior,
