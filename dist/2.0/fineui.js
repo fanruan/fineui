@@ -1,4 +1,4 @@
-/*! time: 2021-1-6 10:30:23 */
+/*! time: 2021-1-6 16:50:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -43635,11 +43635,17 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         });
     },
 
+    _getLevel: function () {
+        var child = BI.first(this.options.childValues);
+        return BI.isNotNull(child) ? (child + "").split("_").length : 0;
+    },
+
     _digest: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
+        var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, value);
+            return BI.contains(o.childValues, (value + "").split("_").slice(0, level).join("_"));
         });
     },
 
@@ -74560,18 +74566,30 @@ BI.prepares.push(function () {
             return windowBounds.height - combo.element.offset().top - combo.element.bounds().height >= combo.element.offset().top;
         },
 
-        getLeftAlignPosition: function (combo, popup, extraWidth) {
+        _getLeftAlignPosition: function (combo, popup, extraWidth) {
             var viewBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
             var left = combo.element.offset().left + extraWidth;
             if (left + viewBounds.width > windowBounds.width) {
                 left = windowBounds.width - viewBounds.width;
             }
+            return left;
+        },
+
+        getLeftAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getLeftAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用RightAlign, 如果RightAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getRightAlignPosition(combo, popup, extraWidth);
+                dir = "left";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "right"
             };
         },
 
@@ -74584,14 +74602,25 @@ BI.prepares.push(function () {
             };
         },
 
-        getRightAlignPosition: function (combo, popup, extraWidth) {
+        _getRightAlignPosition: function (combo, popup, extraWidth) {
             var comboBounds = combo.element.bounds(), viewBounds = popup.element.bounds();
-            var left = combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+            return combo.element.offset().left + comboBounds.width - viewBounds.width - extraWidth;
+        },
+
+        getRightAlignPosition: function (combo, popup, extraWidth) {
+            var left = this._getRightAlignPosition(combo, popup, extraWidth);
+            var dir = "";
+            // 如果放不下，优先使用LeftAlign, 如果LeftAlign也放不下, 再使用left=0
+            if (left < 0) {
+                left = this._getLeftAlignPosition(combo, popup, extraWidth);
+                dir = "right";
+            }
             if (left < 0) {
                 left = 0;
             }
             return {
-                left: left
+                left: left,
+                dir: dir || "left"
             };
         },
 
@@ -74608,12 +74637,16 @@ BI.prepares.push(function () {
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + extraHeight;
             } else if (needAdaptHeight) {
                 top = comboOffset.top + extraHeight;
                 adaptHeight = windowBounds.height - top;
+            } else if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 下方空间不足且不允许调整高度的情况下，优先使用上对齐
+                top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
+                dir = "top";
             } else {
                 top = windowBounds.height - popupBounds.height;
                 if (top < extraHeight) {
@@ -74625,9 +74658,11 @@ BI.prepares.push(function () {
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "bottom"
             } : {
-                top: top
+                top: top,
+                dir: dir || "bottom"
             };
         },
 
@@ -74658,12 +74693,16 @@ BI.prepares.push(function () {
             var comboOffset = combo.element.offset();
             var comboBounds = combo.element.bounds(), popupBounds = popup.element.bounds(),
                 windowBounds = BI.Widget._renderEngine.createElement("body").bounds();
-            var top, adaptHeight;
+            var top, adaptHeight, dir;
             if (BI.DOM.isTopSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
                 top = comboOffset.top + comboBounds.height - popupBounds.height - extraHeight;
             } else if (needAdaptHeight) {
                 top = 0;
                 adaptHeight = comboOffset.top + comboBounds.height - extraHeight;
+            } else if (BI.DOM.isBottomSpaceEnough(combo, popup, -1 * comboBounds.height + extraHeight)) {
+                // 上方空间不足且不允许调整高度的情况下，优先使用下对齐
+                top = comboOffset.top + extraHeight;
+                dir = "bottom";
             } else {
                 top = 0;
                 if (popupBounds.height + extraHeight > windowBounds.height) {
@@ -74675,9 +74714,11 @@ BI.prepares.push(function () {
             }
             return adaptHeight ? {
                 top: top,
-                adaptHeight: adaptHeight
+                adaptHeight: adaptHeight,
+                dir: dir || "top"
             } : {
-                top: top
+                top: top,
+                dir: dir || "top"
             };
         },
 
@@ -74781,11 +74822,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "left,top";
                                 }
+                                pos.dir = "left," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "left";
                                 }
@@ -74802,11 +74842,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "right,top";
                                 }
+                                pos.dir = "right" + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "right";
                                 }
@@ -74822,11 +74861,10 @@ BI.prepares.push(function () {
                             top = BI.DOM.getTopPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "top,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "top,left";
                             }
+                            pos.dir = "bottom," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
@@ -74844,11 +74882,10 @@ BI.prepares.push(function () {
                             top = BI.DOM.getBottomPosition(combo, popup, tH).top;
                             if (leftRight[0] === "right") {
                                 pos = BI.DOM.getLeftAlignPosition(combo, popup, tW, needAdaptHeight);
-                                pos.dir = "bottom,right";
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
-                                pos.dir = "bottom,left";
                             }
+                            pos.dir = "bottom," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "bottom";
                             }
@@ -74867,11 +74904,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getInnerLeftPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerLeft,top";
                                 }
+                                pos.dir = "innerLeft" + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerLeft";
                                 }
@@ -74888,11 +74924,10 @@ BI.prepares.push(function () {
                                 left = BI.DOM.getInnerRightPosition(combo, popup, tW).left;
                                 if (topBottom[0] === "bottom") {
                                     pos = BI.DOM.getTopAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,bottom";
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
-                                    pos.dir = "innerRight,top";
                                 }
+                                pos.dir = "innerLeft" + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerRight";
                                 }
@@ -74920,12 +74955,12 @@ BI.prepares.push(function () {
                     if (topBottom[0] === "bottom") {
                         pos = BI.DOM.getTopAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                         pos.left = left;
-                        pos.dir = firstDir + ",bottom";
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
                     pos = BI.DOM.getBottomAlignPosition(combo, popup, extraHeight, needAdaptHeight);
                     pos.left = left;
-                    pos.dir = firstDir + ",top";
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
                 default :
                     if (BI.DOM.isBottomSpaceLarger(combo)) {
@@ -74938,12 +74973,12 @@ BI.prepares.push(function () {
                     if (leftRight[0] === "right") {
                         left = BI.DOM.getLeftAlignPosition(combo, popup, extraWidth, needAdaptHeight).left;
                         pos.left = left;
-                        pos.dir = firstDir + ",right";
+                        pos.dir = firstDir + "," + pos.dir;
                         return pos;
                     }
                     left = BI.DOM.getRightAlignPosition(combo, popup, extraWidth).left;
                     pos.left = left;
-                    pos.dir = firstDir + ",left";
+                    pos.dir = firstDir + "," + pos.dir;
                     return pos;
             }
         },

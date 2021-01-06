@@ -1,4 +1,4 @@
-/*! time: 2021-1-6 10:30:23 */
+/*! time: 2021-1-6 16:50:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -39662,11 +39662,17 @@ BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
         });
     },
 
+    _getLevel: function () {
+        var child = BI.first(this.options.childValues);
+        return BI.isNotNull(child) ? (child + "").split("_").length : 0;
+    },
+
     _digest: function (v) {
         var self = this, o = this.options;
         v = BI.isArray(v) ? v : [v];
+        var level = this._getLevel();
         return BI.any(v, function (idx, value) {
-            return BI.contains(o.childValues, value);
+            return BI.contains(o.childValues, (value + "").split("_").slice(0, level).join("_"));
         });
     },
 
