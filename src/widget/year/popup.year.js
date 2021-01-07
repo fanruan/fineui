@@ -114,6 +114,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_card",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -168,6 +170,22 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                 }
             }]
         };
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
+        }
     },
 
     setValue: function (v) {

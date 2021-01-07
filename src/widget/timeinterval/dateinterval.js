@@ -68,6 +68,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             height: o.height,
@@ -174,6 +176,21 @@ BI.DateInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);

@@ -101,6 +101,8 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                     self._setInnerValue(self.year, v);
                                 }
                             }],
+                            min: self.options.min,
+                            max: self.options.max,
                             ref: function () {
                                 self.dynamicPane = this;
                             }
@@ -179,14 +181,16 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.ymd.setMinDate(minDate);
+            this.ymd && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.ymd.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.ymd.setMaxDate(maxDate);
+            this.ymd && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.ymd.setMaxDate(maxDate);
         }
     },
 

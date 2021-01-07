@@ -62,6 +62,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -115,6 +117,20 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 return true;
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
         }
     },
 

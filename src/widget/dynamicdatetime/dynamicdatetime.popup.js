@@ -103,7 +103,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }],
                             ref: function () {
                                 self.dynamicPane = this;
-                            }
+                            },
+                            min: self.options.min,
+                            max: self.options.max,
                         };
                     case BI.DynamicDateCombo.Static:
                     default:

@@ -71,7 +71,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -212,6 +212,18 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
             case 3:
             default:
                 return value.year + "-" + value.month;
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
         }
     },
 

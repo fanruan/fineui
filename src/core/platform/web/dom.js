@@ -659,7 +659,7 @@
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "right" + pos.dir;
+                                pos.dir = "right," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "right";
                                 }
@@ -721,7 +721,7 @@
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "innerLeft" + pos.dir;
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerLeft";
                                 }
@@ -741,7 +741,7 @@
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "innerLeft" + pos.dir;
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerRight";
                                 }
