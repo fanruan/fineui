@@ -155,6 +155,36 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         timeOb = timeOb || {};
         this._setDatePicker(timeOb);

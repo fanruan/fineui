@@ -134,6 +134,38 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMax();
+        }
+    },
+
     getValue: function () {
         return {
             year: this.selectedYear
