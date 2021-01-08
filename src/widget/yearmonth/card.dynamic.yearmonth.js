@@ -61,7 +61,7 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
             start.getFullYear(),
             start.getMonth() + 1,
             end.getFullYear(),
-            end.getMonth() + 1,
+            end.getMonth() + 1
         );
     },
 

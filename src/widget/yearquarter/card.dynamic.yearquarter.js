@@ -61,7 +61,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
             start.getFullYear(),
             BI.getQuarter(start),
             end.getFullYear(),
-            BI.getQuarter(end),
+            BI.getQuarter(end)
         );
     },
 

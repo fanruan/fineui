@@ -31,8 +31,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
                     var end = BI.parseDateTime(o.max, "%Y-%X-%d");
                     return BI.i18nText("BI-Basic_Year_Range_Error",
                         start.getFullYear(),
-                        end.getFullYear(),
-                    );
+                        end.getFullYear());
                 },
                 listeners: [{
                     eventName: "EVENT_CHANGE",
