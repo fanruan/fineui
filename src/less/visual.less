@@ -28,6 +28,12 @@
   -moz-box-shadow: @arguments;
 }
 
+.box-shadows(@shadow1, @shadow2, @shadow3) {
+  box-shadow: @shadow1, @shadow2, @shadow3;
+  -webkit-box-shadow: @shadow1, @shadow2, @shadow3;
+  -moz-box-shadow: @shadow1, @shadow2, @shadow3;
+}
+
 .background-color(@color, @alpha) {
   background-color: fade(@color, @alpha);
   @ieColor: argb(fade(@color, @alpha));
