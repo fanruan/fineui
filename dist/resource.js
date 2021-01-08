@@ -190,5 +190,9 @@ BI.i18n = {
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻",
-    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号",
+    "BI-Basic_Date_Range_Error": "请选择{R1}年{R2}月{R3}日-{R4}年{R5}月{R6}日的日期",
+    "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
+    "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
+    "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
 };

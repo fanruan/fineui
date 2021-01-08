@@ -1,4 +1,4 @@
-/*! time: 2021-1-6 16:50:23 */
+/*! time: 2021-1-8 09:50:25 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42451,6 +42451,36 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         this._setDatePicker(timeOb);
         this._setCalendar(timeOb);
@@ -42533,6 +42563,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDatePane.Static:
                             return {
                                 type: "bi.static_date_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -42588,6 +42620,21 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                 return true;
         }
     },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
+        }
+    },
+
 
     setValue: function (v) {
         v = v || {};
@@ -43120,6 +43167,36 @@ BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         timeOb = timeOb || {};
         this._setDatePicker(timeOb);
@@ -43207,6 +43284,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
@@ -43260,6 +43339,20 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 return true;
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
         }
     },
 
@@ -44188,11 +44281,24 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
     },
 
     _getParamJson: function (values, positionValue) {
-        var self = this;
+        var self = this, o = this.options;
         var items = BI.map(values, function (idx, value) {
             return {
                 el: {
                     type: "bi.dynamic_date_param_item",
+                    validationChecker: BI.bind(self._checkDate, self),
+                    errorText: function () {
+                        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                        return BI.i18nText("BI-Basic_Date_Range_Error",
+                            start.getFullYear(),
+                            start.getMonth() + 1,
+                            start.getDate(),
+                            end.getFullYear(),
+                            end.getMonth() + 1,
+                            end.getDate()
+                        );
+                    },
                     dateType: value.dateType,
                     value: value.value,
                     offset: value.offset,
@@ -44219,7 +44325,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: "EVENT_CHANGE",
                     action: function () {
-                        self.position = this.getValue()[0];
+                        this.setValue(self._checkPositionValue(this.getValue()[0]));
                         self.fireEvent("EVENT_CHANGE");
                     }
                 }]
@@ -44235,7 +44341,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
                     listeners: [{
                         eventName: "EVENT_CHANGE",
                         action: function () {
-                            self.position = this.getValue()[0];
+                            this.setValue(self._checkPositionValue(this.getValue()[0]));
                             self.fireEvent("EVENT_CHANGE");
                         }
                     }]
@@ -44245,6 +44351,22 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
 
         return items;
+    },
+
+    _checkPositionValue: function (v) {
+        var lastPosition = this.position;
+        this.position = v;
+        if (!this._checkDate({})) {
+            this.position = lastPosition;
+        }
+        return this.position;
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
     },
 
     _getText: function (lastValue) {
@@ -44305,6 +44427,45 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.QUARTER:
+                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.WEEK:
+                valueMap.week = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.DAY:
+                valueMap.day = (value.offset === 0 ? -value.value : value.value);
+                break;
+            default:
+                break;
+        }
+        if(BI.isNull(value.dateType)) {
+            valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        }
+        return valueMap;
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         v = v || {};
         this.position = v.position || BI.DynamicDateCard.OFFSET.CURRENT;
@@ -44347,28 +44508,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         if(selectValues.length !== 0) {
             BI.each(buttons, function (idx, button) {
                 var value = button.getValue();
-                switch (value.dateType) {
-                    case BI.DynamicDateCard.TYPE.YEAR:
-                        valueMap.year = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.QUARTER:
-                        valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.MONTH:
-                        valueMap.month = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.WEEK:
-                        valueMap.week = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    case BI.DynamicDateCard.TYPE.DAY:
-                        valueMap.day = (value.offset === 0 ? -value.value : value.value);
-                        break;
-                    default:
-                        break;
-                }
-                if(BI.isNull(value.dateType)) {
-                    valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
-                }
+                BI.extend(valueMap, self._digestDateTypeValue(value));
             });
         }
         if(this.workDayBox.isSelected()) {
@@ -44734,6 +44874,12 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-param-item",
         dateType: BI.DynamicDateCard.TYPE.YEAR,
+        validationChecker: function() {
+            return true;
+        },
+        errorText: function () {
+            return BI.i18nText("BI-Please_Input_Natural_Number");
+        },
         value: 0,
         offset: 0,
         height: 24
@@ -44749,17 +44895,23 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     cls: "bi-border",
                     height: 22,
                     validationChecker: function (v) {
-                        return BI.isNaturalNumber(v);
+                        return BI.isNaturalNumber(v) && o.validationChecker(BI.extend({}, self.getValue(), {
+                            value: v
+                        }));
                     },
                     value: o.value,
                     ref: function () {
                         self.editor = this;
                     },
                     errorText: function (v) {
-                        if(BI.isEmptyString(v)) {
+                        if (BI.isEmptyString(v)) {
                             return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
-                        return BI.i18nText("BI-Please_Input_Natural_Number");
+                        if (!BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Please_Input_Natural_Number");
+                        }
+
+                        return o.errorText(v);
                     },
                     allowBlank: false,
                     listeners: [{
@@ -44795,6 +44947,9 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
+                        if (!o.validationChecker(self.getValue())) {
+                            self.editor.setValue(0);
+                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]
@@ -44956,6 +45111,8 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                     self._setInnerValue(self.year, v);
                                 }
                             }],
+                            min: self.options.min,
+                            max: self.options.max,
                             ref: function () {
                                 self.dynamicPane = this;
                             }
@@ -45034,14 +45191,16 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.ymd.setMinDate(minDate);
+            this.ymd && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.ymd.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.ymd.setMaxDate(maxDate);
+            this.ymd && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.ymd.setMaxDate(maxDate);
         }
     },
 
@@ -45654,9 +45813,9 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         listeners: [{
                             eventName: BI.Combo.EVENT_BEFORE_POPUPVIEW,
                             action: function () {
-                                self.popup.setValue(self.storeValue);
                                 self.popup.setMinDate(opts.minDate);
                                 self.popup.setMaxDate(opts.maxDate);
+                                self.popup.setValue(self.storeValue);
                                 self.fireEvent(BI.DynamicDateTimeCombo.EVENT_BEFORE_POPUPVIEW);
                             }
                         }],
@@ -45893,7 +46052,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }],
                             ref: function () {
                                 self.dynamicPane = this;
-                            }
+                            },
+                            min: self.options.min,
+                            max: self.options.max,
                         };
                     case BI.DynamicDateCombo.Static:
                     default:
@@ -65542,6 +65703,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             height: o.height,
@@ -65648,6 +65811,21 @@ BI.DateInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -65738,6 +65916,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             height: o.height,
@@ -65839,6 +66019,21 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         this.right.setTitle("");
         this.label.setTitle("");
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -65996,7 +66191,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     },
 
     render: function () {
-        var self = this;
+        var self = this, o = this.options;
         return {
             type: "bi.vertical",
             items: [{
@@ -66008,6 +66203,14 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
                 type: "bi.dynamic_date_param_item",
                 ref: function () {
                     self.item = this;
+                },
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: function () {
+                    var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+                    var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+                    return BI.i18nText("BI-Basic_Year_Range_Error",
+                        start.getFullYear(),
+                        end.getFullYear());
                 },
                 listeners: [{
                     eventName: "EVENT_CHANGE",
@@ -66021,12 +66224,33 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation({
+            year: (obj.offset === 0 ? -obj.value : obj.value)
+        });
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -66184,6 +66408,38 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
         return valid;
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.navigation.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this._checkLeftValid();
+            this._checkRightValid();
+            this._checkMax();
+        }
+    },
+
     getValue: function () {
         return {
             year: this.selectedYear
@@ -66220,8 +66476,8 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-year-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
         height: 22
     },
 
@@ -66231,8 +66487,8 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         this.storeValue = o.value;
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -66313,13 +66569,15 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -66363,6 +66621,20 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                 this.changeIcon.setVisible(false);
                 break;
         }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
@@ -66505,6 +66777,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_card",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -66559,6 +66833,22 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                 }
             }]
         };
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
+        }
     },
 
     setValue: function (v) {
@@ -66760,6 +67050,18 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     getValue: function () {
         return this.storeValue;
     },
@@ -66804,6 +67106,8 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 height: 24
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 ref: function () {
                     self.year = this;
                 },
@@ -66815,6 +67119,8 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 dateType: BI.DynamicDateCard.TYPE.MONTH,
                 ref: function () {
                     self.month = this;
@@ -66831,12 +67137,58 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _errorTextGetter: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+        return BI.i18nText("BI-Basic_Year_Month_Range_Error",
+            start.getFullYear(),
+            start.getMonth() + 1,
+            end.getFullYear(),
+            end.getMonth() + 1
+        );
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.month = (value.offset === 0 ? -value.value : value.value);
+                break;
+            default:
+                break;
+        }
+        return valueMap;
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -67016,6 +67368,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
+        this._checkMonthStatus(this.selectedYear);
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -67135,6 +67488,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -67178,6 +67533,20 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 this.changeIcon.setVisible(false);
                 break;
         }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     hideView: function () {
@@ -67335,6 +67704,8 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_month_card",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -67394,14 +67765,16 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.year.setMinDate(minDate);
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.year.setMaxDate(maxDate);
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
         }
     },
 
@@ -67518,7 +67891,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -67662,6 +68035,18 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         }
     },
 
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
+    },
+
     setValue: function (v) {
         var type, value;
         var date = BI.getDate();
@@ -67777,6 +68162,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
+            minDate: o.minDate,
+            maxDate: o.maxDate,
             behaviors: o.behaviors,
             value: v,
             listeners: [{
@@ -67887,6 +68274,21 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self.element.removeClass(self.constants.timeErrorCls);
         }
     },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.left.setMinDate(minDate);
+        this.right.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.left.setMaxDate(maxDate);
+        this.right.setMaxDate(maxDate);
+    },
+
     setValue: function (date) {
         date = date || {};
         this.left.setValue(date.start);
@@ -67933,6 +68335,8 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                 height: 24
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 ref: function () {
                     self.year = this;
                 },
@@ -67944,6 +68348,8 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
                 }]
             }, {
                 type: "bi.dynamic_date_param_item",
+                validationChecker: BI.bind(self._checkDate, self),
+                errorText: BI.bind(this._errorTextGetter, this),
                 dateType: BI.DynamicDateCard.TYPE.QUARTER,
                 ref: function () {
                     self.quarter = this;
@@ -67960,12 +68366,58 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _errorTextGetter: function () {
+        var o = this.options;
+        var start = BI.parseDateTime(o.min, "%Y-%X-%d");
+        var end = BI.parseDateTime(o.max, "%Y-%X-%d");
+        return BI.i18nText("BI-Basic_Year_Quarter_Range_Error",
+            start.getFullYear(),
+            BI.getQuarter(start),
+            end.getFullYear(),
+            BI.getQuarter(end)
+        );
+    },
+
+    _checkDate: function (obj) {
+        var o = this.options;
+        var date = BI.DynamicDateHelper.getCalculation(BI.extend(this.getValue(), this._digestDateTypeValue(obj)));
+
+        return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
+    },
+
+    _digestDateTypeValue: function (value) {
+        var valueMap = {};
+        switch (value.dateType) {
+            case BI.DynamicDateCard.TYPE.YEAR:
+                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                break;
+            case BI.DynamicDateCard.TYPE.MONTH:
+                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                break;
+            default:
+                break;
+        }
+        return valueMap;
+    },
+
     _createValue: function (type, v) {
         return {
             dateType: type,
             value: Math.abs(v),
             offset: v > 0 ? 1 : 0
         };
+    },
+
+    setMinDate: function(minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -67998,7 +68450,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
     },
 
     _createQuarter: function () {
-
+        var self = this;
         var items = [{
             text: BI.Date._QN[1],
             value: 1
@@ -68020,13 +68472,17 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 whiteSpace: "nowrap",
                 once: false,
                 forceSelected: true,
-                height: 24
+                height: 24,
+                ref: function (_ref) {
+                    self.quarterMap[j + 1] = _ref;
+                }
             });
         });
     },
 
     render: function () {
         var self = this, o = this.options;
+        this.quarterMap = {};
         return {
             type: "bi.vertical",
             items: [{
@@ -68034,12 +68490,15 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                 ref: function () {
                     self.yearPicker = this;
                 },
+                min: o.min,
+                max: o.max,
                 behaviors: o.behaviors,
                 height: 30,
                 listeners: [{
                     eventName: BI.YearPicker.EVENT_CHANGE,
                     action: function () {
                         var value = this.getValue();
+                        self._checkQuarterStatus(value);
                         self.setValue({
                             year: value,
                             quarter: self.selectedQuarter
@@ -68070,6 +68529,36 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkQuarterStatus: function (year) {
+        var o = this.options;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d"), maxDate = BI.parseDateTime(o.max, "%Y-%X-%d");
+        var minYear = minDate.getFullYear(), maxYear = maxDate.getFullYear();
+        var minQuarter = 1; var maxQuarter = 4;
+        minYear === year && (minQuarter = BI.parseInt(BI.getQuarter(minDate)));
+        maxYear === year && (maxQuarter = BI.parseInt(BI.getQuarter(maxDate)));
+        var yearInvalid = year < minYear || year > maxYear;
+        BI.each(this.quarterMap, function (quarter, obj) {
+            var quarterInvalid = quarter < minQuarter || quarter > maxQuarter;
+            obj.setEnable(!yearInvalid && !quarterInvalid);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.yearPicker.setMinDate(minDate);
+            this._checkQuarterStatus(this.selectedYear);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.yearPicker.setMaxDate(maxDate);
+            this._checkQuarterStatus(this.selectedYear);
+        }
+    },
+
 
     getValue: function () {
         return {
@@ -68095,6 +68584,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.quarter.setValue(this.selectedQuarter);
         }
+        this._checkQuarterStatus(this.selectedYear);
     }
 });
 BI.StaticYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
@@ -68110,8 +68600,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-year-quarter-combo bi-border bi-border-radius bi-focus-shadow",
         behaviors: {},
-        min: "1900-01-01", // 最小日期
-        max: "2099-12-31", // 最大日期
+        minDate: "1900-01-01", // 最小日期
+        maxDate: "2099-12-31", // 最大日期
         height: 22
     },
 
@@ -68122,8 +68612,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         self.storeTriggerValue = "";
         this.trigger = BI.createWidget({
             type: "bi.dynamic_year_quarter_trigger",
-            min: o.min,
-            max: o.max,
+            min: o.minDate,
+            max: o.maxDate,
             height: o.height,
             value: o.value || ""
         });
@@ -68202,13 +68692,15 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                         }
                     }],
                     behaviors: o.behaviors,
-                    min: o.min,
-                    max: o.max
+                    min: o.minDate,
+                    max: o.maxDate
                 },
                 value: o.value || ""
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -68252,6 +68744,20 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 this.changeIcon.setVisible(false);
                 break;
         }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     setValue: function (v) {
@@ -68387,6 +68893,8 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearQuarterCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_quarter_card",
+                            min: self.options.min,
+                            max: self.options.max,
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -68441,6 +68949,22 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                 }
             }]
         };
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.min !== minDate) {
+            this.options.min = minDate;
+            this.year && this.year.setMinDate(minDate);
+            this.dynamicPane && this.dynamicPane.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.max !== maxDate) {
+            this.options.max = maxDate;
+            this.year && this.year.setMaxDate(maxDate);
+            this.dynamicPane && this.dynamicPane.setMaxDate(maxDate);
+        }
     },
 
     setValue: function (v) {
@@ -68552,7 +69076,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(self.yearEditor.getValue(), (v - 1) * 3 + 1, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -68668,6 +69192,18 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {
@@ -74845,7 +75381,7 @@ BI.prepares.push(function () {
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "right" + pos.dir;
+                                pos.dir = "right," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "right";
                                 }
@@ -74907,7 +75443,7 @@ BI.prepares.push(function () {
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "innerLeft" + pos.dir;
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerLeft";
                                 }
@@ -74927,7 +75463,7 @@ BI.prepares.push(function () {
                                 } else {
                                     pos = BI.DOM.getBottomAlignPosition(combo, popup, tH, needAdaptHeight);
                                 }
-                                pos.dir = "innerLeft" + pos.dir;
+                                pos.dir = "innerLeft," + pos.dir;
                                 if (tbFirst) {
                                     pos.change = "innerRight";
                                 }
@@ -103089,7 +103625,11 @@ BI.i18n = {
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻",
-    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号",
+    "BI-Basic_Date_Range_Error": "请选择{R1}年{R2}月{R3}日-{R4}年{R5}月{R6}日的日期",
+    "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
+    "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
+    "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
 };
 
 /***/ }),
