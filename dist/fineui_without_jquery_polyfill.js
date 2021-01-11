@@ -1,4 +1,4 @@
-/*! time: 2021-1-8 11:00:20 */
+/*! time: 2021-1-11 11:40:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38528,7 +38528,9 @@ BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
     },
 
     render: function () {
@@ -38612,6 +38614,8 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -39250,7 +39254,9 @@ BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
     },
 
     render: function () {
@@ -39333,6 +39339,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
