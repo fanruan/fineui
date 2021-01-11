@@ -1,7 +1,9 @@
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
     },
 
     render: function () {
