@@ -1,4 +1,4 @@
-/*! time: 2021-1-12 15:00:21 */
+/*! time: 2021-1-12 16:10:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75408,7 +75408,7 @@ BI.prepares.push(function () {
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
                             }
-                            pos.dir = "bottom," + pos.dir;
+                            pos.dir = "top," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
