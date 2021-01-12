@@ -678,7 +678,7 @@
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
                             }
-                            pos.dir = "bottom," + pos.dir;
+                            pos.dir = "top," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
