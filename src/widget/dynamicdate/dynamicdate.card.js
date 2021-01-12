@@ -301,8 +301,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             default:
                 break;
         }
-        if(BI.isNull(value.dateType)) {
-            valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        if (BI.isNull(value.dateType)) {
+            valueMap.position = this.position || BI.DynamicDateCard.OFFSET.CURRENT;
         }
         return valueMap;
     },
