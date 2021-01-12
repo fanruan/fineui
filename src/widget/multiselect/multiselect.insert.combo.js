@@ -104,6 +104,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                     }
+                    self._dataChange = true;
                 });
             }
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_SEARCHING);
@@ -119,6 +120,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self._dataChange = true;
             self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CLICK_ITEM);
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
@@ -148,6 +150,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -162,6 +165,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -186,6 +190,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self._dataChange = false;// 标记数据是否发生变化
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -199,7 +204,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
             }
         });
 
@@ -217,7 +222,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 self.combo.showView();
             }
         });
-
 
         this.numberCounter = BI.createWidget({
             type: "bi.multi_select_check_selected_switcher",
@@ -259,7 +263,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
                 self.numberCounter.hideView();
             }
         });
-
 
         BI.createWidget({
             type: "bi.absolute",
@@ -314,6 +317,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             assertShowValue();
             self.populate();
             self._setStartValue("");
+            self._dataChange = true;
         });
     },
 
@@ -407,7 +411,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         callback();
         function adjust () {
             if (self.wants2Quit === true) {
-                self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertCombo.EVENT_CONFIRM);
                 self.wants2Quit = false;
             }
             self.requesting = false;

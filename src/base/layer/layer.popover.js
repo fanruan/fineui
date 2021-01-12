@@ -10,9 +10,7 @@ BI.Popover = BI.inherit(BI.Widget, {
             NORMAL: "normal",
             BIG: "big",
         },
-        MAX_HEIGHT: 600,
-        BODY_TGAP: 10,
-        BODY_HGAP: 20,
+        MAX_HEIGHT: 600
     },
 
     props: {
@@ -27,6 +25,8 @@ BI.Popover = BI.inherit(BI.Widget, {
         footer: null,
         footerHeight: 44,
         closable: true, // BI-40839 是否显示右上角的关闭按钮
+        bodyHgap: 20,
+        bodyTgap: 10
     },
 
     render: function () {
@@ -45,7 +45,9 @@ BI.Popover = BI.inherit(BI.Widget, {
                 top: BI.clamp(self.startY, 0, H - self.element.height()) + "px",
             });
             // BI-12134 没有什么特别好的方法
-            BI.Resizers._resize();
+            BI.Resizers._resize({
+                target: self.element[0],
+            });
         }, function () {
             self.tracker.releaseMouseMoves();
         }, _global);
@@ -99,23 +101,23 @@ BI.Popover = BI.inherit(BI.Widget, {
                     self.body = this;
                 },
                 css: {
-                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP),
+                    "max-height": this._getSuitableBodyHeight(c.MAX_HEIGHT - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap),
                     "min-height": this._getSuitableBodyHeight(size.height),
                 },
                 items: [{
                     el: o.body,
                 }],
             },
-            hgap: c.BODY_HGAP,
-            tgap: c.BODY_TGAP,
+            hgap: o.bodyHgap,
+            tgap: o.bodyTgap,
         } : {
             el: {
                 type: "bi.absolute",
                 items: [{
                     el: o.body,
-                    left: c.BODY_HGAP,
-                    top: c.BODY_TGAP,
-                    right: c.BODY_HGAP,
+                    left: o.bodyHgap,
+                    top: o.bodyTgap,
+                    right: o.bodyHgap,
                     bottom: 0,
                 }],
             },
@@ -163,7 +165,7 @@ BI.Popover = BI.inherit(BI.Widget, {
     _getSuitableBodyHeight: function (height) {
         var o = this.options;
         var c = this._constant;
-        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - c.BODY_TGAP);
+        return BI.clamp(height, 0, BI.Widget._renderEngine.createElement("body")[0].clientHeight - o.headerHeight - (o.footer ? o.footerHeight : 0) - o.bodyTgap);
     },
 
     _getSuitableHeight: function (height) {

@@ -68,8 +68,7 @@ BI.YearPopup = BI.inherit(BI.Widget, {
                 items: [this.backBtn, this.preBtn]
             },
             cardCreator: BI.bind(this._createYearCalendar, this),
-
-            afterCardShow: function () {
+            afterCardCreated: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
                 calendar && self.backBtn.setEnable(!calendar.isFrontYear());
@@ -132,14 +131,11 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var endDate = BI.parseDateTime(o.max, "%Y-%X-%d");
         if (BI.checkDateVoid(v, 1, 1, BI.print(BI.getDate(startDate.getFullYear(), 0, 1), "%Y-%X-%d"), BI.print(BI.getDate(endDate.getFullYear(), 0, 1), "%Y-%X-%d"))[0]) {
             v = BI.getDate().getFullYear();
-            this.selectedYear = "";
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue("");
-        } else {
-            this.selectedYear = v;
-            this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
-            this.navigation.setValue(v);
         }
+
+        this.selectedYear = v;
+        this.navigation.setSelect(BI.YearCalendar.getPageByYear(v));
+        this.navigation.setValue(v);
     }
 });
 BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";

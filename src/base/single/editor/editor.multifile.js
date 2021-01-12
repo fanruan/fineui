@@ -31,6 +31,7 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
             multiple: o.multiple,
             accept: o.accept,
             maxSize: o.maxSize,
+            maxLength: o.maxLength,
             title: o.title
         });
         this.file.on(BI.File.EVENT_CHANGE, function () {
@@ -68,6 +69,10 @@ BI.MultifileEditor = BI.inherit(BI.Widget, {
 
     _reset: function () {
         this.file.reset();
+    },
+
+    setMaxFileLength: function (v) {
+        this.file.setMaxFileLength(v);
     },
 
     select: function () {

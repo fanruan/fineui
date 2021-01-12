@@ -3,6 +3,12 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-param-item",
         dateType: BI.DynamicDateCard.TYPE.YEAR,
+        validationChecker: function() {
+            return true;
+        },
+        errorText: function () {
+            return BI.i18nText("BI-Please_Input_Natural_Number");
+        },
         value: 0,
         offset: 0,
         height: 24
@@ -18,17 +24,23 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                     cls: "bi-border",
                     height: 22,
                     validationChecker: function (v) {
-                        return BI.isNaturalNumber(v);
+                        return BI.isNaturalNumber(v) && o.validationChecker(BI.extend({}, self.getValue(), {
+                            value: v
+                        }));
                     },
                     value: o.value,
                     ref: function () {
                         self.editor = this;
                     },
                     errorText: function (v) {
-                        if(BI.isEmptyString(v)) {
+                        if (BI.isEmptyString(v)) {
                             return BI.i18nText("BI-Basic_Please_Input_Content");
                         }
-                        return BI.i18nText("BI-Please_Input_Natural_Number");
+                        if (!BI.isNumeric(v)) {
+                            return BI.i18nText("BI-Please_Input_Natural_Number");
+                        }
+
+                        return o.errorText(v);
                     },
                     allowBlank: false,
                     listeners: [{
@@ -64,6 +76,9 @@ BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
                 listeners: [{
                     eventName: BI.TextValueCombo.EVENT_CHANGE,
                     action: function () {
+                        if (!o.validationChecker(self.getValue())) {
+                            self.editor.setValue(0);
+                        }
                         self.fireEvent(BI.DynamicDateParamItem.EVENT_CHANGE);
                     }
                 }]

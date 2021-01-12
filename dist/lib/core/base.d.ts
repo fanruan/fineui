@@ -26,12 +26,12 @@ export interface _base {
     map: <T, U>(collection: T[] | object | string | null | undefined, callback?: ((index: number, value: T) => U) | object | string, thisArg?: any) => U[];
     reduce: <T, U>(collection: T[] | object | string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T) | object | string, initialValue?: U | T) => U extends T ? U : T;
     reduceRight: <T, U>(collection: T[] | object | string, callback?: ((total: U extends T ? U : T, currentValue: T, currentIndex: number) => U extends T ? U : T) | object | string, initialValue?: U | T) => U extends T ? U : T;
-    find: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => any;
-    filter: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => any[];
-    reject: <T>(collection: any[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => any[];
-    every: <T>(collection: any[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
-    all: <T>(collection: any[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
-    some: <T>(collection: any[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
+    find: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => T | undefined;
+    filter: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => T[];
+    reject: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => T[];
+    every: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
+    all: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
+    some: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
     any: <T>(collection: T[] | object | string, callback?: ((index: number, value: T) => boolean) | object | string, thisArg?: any) => boolean;
     max: <T>(collection: T[]) => T;
     min: <T>(collection: T[]) => T;
@@ -113,7 +113,7 @@ export interface _base {
     isNaN: (value: any) => value is number;
     isUndefined: (value: any) => value is undefined;
     zipObject: (props: any[], values?: any[]) => object;
-    cloneDeep: (value: any, customizer?: Function, thisArg?: any) => any;
+    cloneDeep: <T>(value: T) => T;
     findKey: (object: object, predicate?: Function | object | string, thisArg?: any) => any;
     pick: (object: object, predicate?: Function | string | string[], thisArg?: any) => object;
     omit: (object: object, predicate?: Function | string | string[], thisArg?: any) => object;
@@ -134,6 +134,8 @@ export interface _base {
     isEmptyObject: (obj: any) => boolean;
     isNotEmptyObject: (obj: any) => obj is object;
     isWindow: (obj: any) => obj is Window;
+    deepClone: <T>(obj: T) => T;
+    deepExtend: merge['deepExtend'];
     isDeepMatch: (object: any, attrs: any) => boolean;
     contains: (obj: any[], target: any, fromIndex?: number) => boolean;
     deepContains: (obj: any[], copy: any) => number;
@@ -191,3 +193,12 @@ export interface _base {
     getDate: (...args: (number | string)[]) => Date;
     getTime: (...args: any[]) => number;
 }
+declare type merge = {
+    deepExtend<TObject, TSource>(object: TObject, source: TSource): TObject & TSource;
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+    deepExtend<TObject, TSource1, TSource2>(object: TObject, source1: TSource1, source2: TSource2): TObject & TSource1 & TSource2;
+    deepExtend<TObject, TSource1, TSource2, TSource3>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3): TObject & TSource1 & TSource2 & TSource3;
+    deepExtend<TObject, TSource1, TSource2, TSource3, TSource4>(object: TObject, source1: TSource1, source2: TSource2, source3: TSource3, source4: TSource4): TObject & TSource1 & TSource2 & TSource3 & TSource4;
+    deepExtend(object: any, ...otherArgs: any[]): any;
+};
+export {};

@@ -52,7 +52,7 @@ BI.ShelterEditor = BI.inherit(BI.Widget, {
             tipType: o.tipType,
             textAlign: o.textAlign,
             height: o.height,
-            hgap: o.hgap
+            hgap: o.hgap + 2
         });
         BI.createWidget({
             type: "bi.absolute",

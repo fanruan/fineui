@@ -1,5 +1,5 @@
-import { _Widget } from "../../core/widget";
-export interface _AbstractTreeValueChooser extends _Widget {
+import { Widget } from "../../core/widget";
+export declare class AbstractTreeValueChooser extends Widget {
     _valueFormatter: (v: string) => string;
     _initData: (items: any[]) => void;
     _itemsCreator: (options: any, callback: Function) => void;

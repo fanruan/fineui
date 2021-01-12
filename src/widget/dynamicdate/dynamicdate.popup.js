@@ -101,6 +101,8 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                     self._setInnerValue(self.year, v);
                                 }
                             }],
+                            min: self.options.min,
+                            max: self.options.max,
                             ref: function () {
                                 self.dynamicPane = this;
                             }
@@ -116,6 +118,11 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 eventName: BI.DateCalendarPopup.EVENT_CHANGE,
                                 action: function () {
                                     self.fireEvent(BI.DynamicDatePopup.EVENT_CHANGE);
+                                }
+                            }, {
+                                eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                action: function () {
+                                    self.fireEvent(BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
                                 }
                             }],
                             ref: function () {
@@ -174,14 +181,16 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
-            this.ymd.setMinDate(minDate);
+            this.ymd && this.ymd.setMinDate(minDate);
+            this.dynamicPane && this.ymd.setMinDate(minDate);
         }
     },
 
     setMaxDate: function (maxDate) {
         if (this.options.max !== maxDate) {
             this.options.max = maxDate;
-            this.ymd.setMaxDate(maxDate);
+            this.ymd && this.ymd.setMaxDate(maxDate);
+            this.dynamicPane && this.ymd.setMaxDate(maxDate);
         }
     },
 
@@ -228,4 +237,5 @@ BI.DynamicDatePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDatePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);

@@ -1,7 +1,7 @@
-import { _BasicButton } from "./button.basic";
+import { BasicButton } from "./button.basic";
 
-export interface _NodeButton extends _BasicButton {
-    isOpened(): void;
+export declare class NodeButton extends BasicButton {
+    isOpened(): boolean;
 
     setOpened(b: boolean): void;
 

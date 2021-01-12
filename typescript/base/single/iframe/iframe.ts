@@ -1,11 +1,13 @@
-import { _Single } from "../single";
+import { Single } from "../single";
 
-export interface _Iframe extends _Single {
+export declare class Iframe extends Single {
+    static xtype: string;
+
     setSrc(v: string): void;
 
     getSrc(): string;
 
-    setNam(v: string): void;
+    setName(v: string): void;
 
     getName(): string;
 }

@@ -29,9 +29,11 @@ BI.Editor = BI.inherit(BI.Single, {
     _init: function () {
         BI.Editor.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        // 密码输入框设置autocomplete="new-password"的情况下Firefox和chrome不会自动填充密码
+        var autocomplete = o.autocomplete ? " autocomplete=" + o.autocomplete : "";
         this.editor = this.addWidget(BI.createWidget({
             type: "bi.input",
-            element: "<input type='" + o.inputType + "'/>",
+            element: "<input type='" + o.inputType + "'" + autocomplete + " />",
             root: true,
             value: o.value,
             watermark: o.watermark,
@@ -51,7 +53,7 @@ BI.Editor = BI.inherit(BI.Single, {
         var items = [{
             el: {
                 type: "bi.absolute",
-                ref: function(_ref) {
+                ref: function (_ref) {
                     self.contentWrapper = _ref;
                 },
                 items: [{
@@ -181,14 +183,15 @@ BI.Editor = BI.inherit(BI.Single, {
         }
     },
 
-    _assertWaterMark: function() {
+    _assertWaterMark: function () {
         var self = this, o = this.options;
-        if(BI.isNull(this.watermark)) {
+        if (BI.isNull(this.watermark)) {
             this.watermark = BI.createWidget({
                 type: "bi.label",
                 cls: "bi-water-mark",
                 text: this.options.watermark,
                 height: o.height - 2 * o.vgap - o.tgap,
+                hgap: 2,
                 whiteSpace: "nowrap",
                 textAlign: "left"
             });
@@ -235,7 +238,7 @@ BI.Editor = BI.inherit(BI.Single, {
         return this.options.errorText;
     },
 
-    setWaterMark: function(v) {
+    setWaterMark: function (v) {
         if (!BI.isKey(v)) {
             return;
         }
@@ -249,8 +252,8 @@ BI.Editor = BI.inherit(BI.Single, {
                 element: this.contentWrapper,
                 items: [{
                     el: this.watermark,
-                    left: 3,
-                    right: 3,
+                    left: 0,
+                    right: 0,
                     top: 0,
                     bottom: 0,
                 }],

@@ -1,7 +1,9 @@
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-dynamic-date-pane"
+        baseCls: "bi-dynamic-date-pane",
+        minDate: "1900-01-01",
+        maxDate: "2099-12-31",
     },
 
     render: function () {
@@ -62,11 +64,18 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         case BI.DynamicDateTimePane.Static:
                             return {
                                 type: "bi.static_date_time_pane_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 behaviors: o.behaviors,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
                                         self.fireEvent("EVENT_CHANGE");
+                                    }
+                                }, {
+                                    eventName: "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW",
+                                    action: function () {
+                                        self.fireEvent("EVENT_BEFORE_YEAR_MONTH_POPUPVIEW");
                                     }
                                 }],
                                 ref: function () {
@@ -77,6 +86,8 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         default:
                             return {
                                 type: "bi.dynamic_date_card",
+                                min: o.minDate,
+                                max: o.maxDate,
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
@@ -110,6 +121,20 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 return true;
+        }
+    },
+
+    setMinDate: function (minDate) {
+        if (this.options.minDate !== minDate) {
+            this.options.minDate = minDate;
+            this.ymd.setMinDate(minDate);
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (this.options.maxDate !== maxDate) {
+            this.options.maxDate = maxDate;
+            this.ymd.setMaxDate(maxDate);
         }
     },
 

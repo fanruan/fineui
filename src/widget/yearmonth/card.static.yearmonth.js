@@ -153,6 +153,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             this.yearPicker.setValue(this.selectedYear);
             this.month.setValue(this.selectedMonth);
         }
+        this._checkMonthStatus(this.selectedYear);
     }
 });
 BI.StaticYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";

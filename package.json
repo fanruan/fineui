@@ -1,6 +1,6 @@
 {
   "name": "fineui",
-  "version": "2.0.20201126114159",
+  "version": "2.0.20210111114157",
   "description": "fineui",
   "main": "dist/fineui.min.js",
   "types": "dist/lib/index.d.ts",
@@ -15,6 +15,7 @@
     "babel-loader": "8.0.6",
     "chai": "4.2.0",
     "cnpm": "6.1.1",
+    "concat": "1.0.3",
     "core-js": "3.3.2",
     "cross-env": "6.0.0",
     "css-loader": "3.0.0",
@@ -54,7 +55,7 @@
   },
   "scripts": {
     "webpack:dev": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js -p --progress --host 0.0.0.0 --config=webpack/webpack.dev.js --mode development",
-    "webpack:prod": "webpack -p --progress --config=webpack/webpack.prod.js --mode production",
+    "webpack:prod": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack -p --progress --config=webpack/webpack.prod.js --mode production",
     "start": "node server.js",
     "build": "npm run webpack:prod && tsc",
     "postbuild": "node ./lib/postbuild/postbuild.js",

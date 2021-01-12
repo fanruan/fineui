@@ -18,7 +18,6 @@
             rgap: 0,
             tgap: 0,
             bgap: 0,
-            text: "",
             py: "",
             highLight: false
         },
@@ -78,7 +77,7 @@
             }
 
             var text = this._getShowText();
-            if (BI.isKey(text)) {
+            if (!BI.isUndefined(text)) {
                 this.setText(text);
             } else if (BI.isKey(o.value)) {
                 this.setText(o.value);
@@ -105,11 +104,8 @@
         _getShowText: function () {
             var o = this.options;
             var text = BI.isFunction(o.text) ? o.text() : o.text;
-            text = BI.isKey(text) ? text : o.value;
-            if (!BI.isKey(text)) {
-                return "";
-            }
-            return BI.Text.formatText(text + "");
+
+            return BI.isKey(text) ? BI.Text.formatText(text + "") : text;
         },
 
         _doRedMark: function (keyword) {

@@ -1,6 +1,10 @@
-import { _Widget } from "../../core/widget";
+import { Widget } from "../../core/widget";
 
-export interface _Single extends _Widget {
+interface SingleOpt {
+    container?: any, belowMouse?: boolean
+}
+
+export declare class Single extends Widget {
     _showToolTip(e: Event, opt?: SingleOpt): void;
 
     _hideTooltip(): void;
@@ -11,7 +15,7 @@ export interface _Single extends _Widget {
 
     disabledHover(): void;
 
-    setTitle(title: string, opt?: SingleOpt): void;
+    setTitle(title: string | Function, opt?: SingleOpt): void;
 
     setWarningTitle(title: string, opt?: SingleOpt): void;
 
@@ -26,8 +30,4 @@ export interface _Single extends _Widget {
     getWarningTitle(): string;
 
     populate(..._args: any[]): void;
-}
-
-interface SingleOpt {
-    container?: any, belowMouse?: boolean
 }

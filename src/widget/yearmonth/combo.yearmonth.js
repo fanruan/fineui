@@ -107,6 +107,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             }
         });
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self.popup.setMinDate(o.minDate);
+            self.popup.setMaxDate(o.maxDate);
             self.popup.setValue(self.storeValue);
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW);
         });
@@ -150,6 +152,20 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 this.changeIcon.setVisible(false);
                 break;
         }
+    },
+
+    setMinDate: function (minDate) {
+        var o = this.options;
+        o.minDate = minDate;
+        this.trigger.setMinDate(minDate);
+        this.popup && this.popup.setMinDate(minDate);
+    },
+
+    setMaxDate: function (maxDate) {
+        var o = this.options;
+        o.maxDate = maxDate;
+        this.trigger.setMaxDate(maxDate);
+        this.popup && this.popup.setMaxDate(maxDate);
     },
 
     hideView: function () {

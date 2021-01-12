@@ -67,7 +67,7 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
                 if(isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
                 }
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(BI.getDate().getFullYear(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(self.yearEditor.getValue(), (v - 1) * 3 + 1, 1, o.min, o.max)[0]);
             },
             quitChecker: function () {
                 return false;
@@ -183,6 +183,18 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         this.yearEditor.setValue(date.getFullYear());
         this.quarterEditor.setValue(BI.getQuarter(date));
         this.setTitle(BI.isEmptyString(text) ? dateStr : (text + ":" + dateStr));
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+        }
     },
 
     setValue: function (v) {

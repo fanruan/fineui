@@ -18,7 +18,6 @@ BI.TextButton = BI.inherit(BI.BasicButton, {
             lgap: 0,
             rgap: 0,
             vgap: 0,
-            text: "",
             py: ""
         });
     },

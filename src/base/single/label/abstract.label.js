@@ -17,7 +17,6 @@
                 rgap: 0,
                 tgap: 0,
                 bgap: 0,
-                text: "",
                 highLight: false,
                 handler: null
             });

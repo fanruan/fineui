@@ -85,9 +85,10 @@
                 ]
             }))));
             o.isDefaultInit && (this._assertPopupView());
-            BI.Resizers.add(this.getName(), BI.bind(function () {
+            BI.Resizers.add(this.getName(), BI.bind(function (e) {
+                // 如果resize对象是combo的子元素，则不应该收起，或交由hideChecker去处理
                 if (this.isViewVisible()) {
-                    this._hideView();
+                    BI.isNotNull(e) ? this._hideIf(e) : this._hideView();
                 }
             }, this));
         },
@@ -351,7 +352,8 @@
             var self = this;
             this._assertPopupViewRender();
             this.fireEvent(BI.Combo.EVENT_BEFORE_POPUPVIEW);
-
+            // popupVisible是为了获取其宽高, 放到可视范围之外以防止在IE下闪一下
+            this.popupView.css({left: -999999999, top: -99999999});
             this.popupView.visible();
             BI.each(needHideWhenAnotherComboOpen, function (i, combo) {
                 if (i !== self.getName()) {

@@ -11,7 +11,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
             paras: {
                 selectedValues: {}
             },
-            itemsCreator: BI.emptyFn
+            itemsCreator: BI.emptyFn,
+            showLine: true
         });
     },
     _init: function () {
@@ -69,6 +70,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
     _configSetting: function () {
         var paras = this.options.paras;
         var self = this;
+        var o = this.options;
         var setting = {
             async: {
                 enable: true,
@@ -92,7 +94,8 @@ BI.TreeView = BI.inherit(BI.Pane, {
                 showIcon: false,
                 expandSpeed: "",
                 nameIsHTML: true,   // 节点可以用html标签代替
-                dblClickExpand: false
+                dblClickExpand: false,
+                showLine: o.showLine,
             },
             callback: {
                 beforeExpand: beforeExpand,
@@ -333,7 +336,7 @@ BI.TreeView = BI.inherit(BI.Pane, {
         BI.each(ns, function (i, n) {
             n.title = n.title || n.text || n.value;
             n.isParent = n.isParent || n.parent;
-            n.value = n.value || n.text;
+            n.value = BI.isUndefined(n.value) ? n.text : n.value;
             // 处理标红
             if (BI.isKey(o.paras.keyword)) {
                 n.text = BI.$("<div>").__textKeywordMarked__(BI.Text.formatText(n.text + ""), o.paras.keyword, n.py).html();

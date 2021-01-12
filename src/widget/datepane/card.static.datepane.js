@@ -46,6 +46,9 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
             self.calendar.setValue(self.selectedTime);
             day !== 0 && self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
+        this.datePicker.on(BI.DatePicker.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW, function () {
+            self.fireEvent(BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+        });
 
         this.calendar = BI.createWidget({
             direction: "custom",
@@ -138,6 +141,36 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMin: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMinDate(o.min);
+        });
+    },
+
+    _checkMax: function () {
+        var o = this.options;
+        BI.each(this.calendar.getAllCard(), function (idx, calendar) {
+            calendar.setMaxDate(o.max);
+        });
+    },
+
+    setMinDate: function (minDate) {
+        if (BI.isNotEmptyString(this.options.min)) {
+            this.options.min = minDate;
+            this.datePicker.setMinDate(minDate);
+            this._checkMin();
+        }
+    },
+
+    setMaxDate: function (maxDate) {
+        if (BI.isNotEmptyString(this.options.max)) {
+            this.options.max = maxDate;
+            this.datePicker.setMaxDate(maxDate);
+            this._checkMax();
+        }
+    },
+
     setValue: function (timeOb) {
         this._setDatePicker(timeOb);
         this._setCalendar(timeOb);
@@ -148,4 +181,5 @@ BI.StaticDatePaneCard = BI.inherit(BI.Widget, {
     }
 
 });
+BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW"
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);

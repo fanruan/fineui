@@ -1,9 +1,5 @@
-export declare type _pushArray = (sArray: any[], array: any[]) => void;
-export declare type _pushDistinct = (sArray: any[], obj: any) => void;
-export declare type _pushDistinctArray = (sArray: any[], array: any[]) => void;
-declare type _array = {
-    pushArray: _pushArray;
-    pushDistinct: _pushDistinct;
-    pushDistinctArray: _pushDistinctArray;
+export declare type _array = {
+    pushArray: (sArray: any[], array: any[]) => void;
+    pushDistinct: (sArray: any[], obj: any) => void;
+    pushDistinctArray: (sArray: any[], array: any[]) => void;
 };
-export default _array;

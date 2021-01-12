@@ -130,8 +130,12 @@ BI.HexColorChooserPopup = BI.inherit(BI.Widget, {
                                                 self.more.hideView();
                                                 break;
                                             case 1:
-                                                self.setValue(self.customColorChooser.getValue());
-                                                self._dealStoreColors();
+                                                var color = self.customColorChooser.getValue();
+                                                // farbtastic选择器没有透明和自动选项，点击保存不应该设置透明
+                                                if (BI.isNotEmptyString(color)) {
+                                                    self.setValue(color);
+                                                    self._dealStoreColors();
+                                                }
                                                 self.more.hideView();
                                                 self.fireEvent(BI.ColorChooserPopup.EVENT_CHANGE, arguments);
                                                 break;

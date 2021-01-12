@@ -1,5 +1,27 @@
 # 更新日志
+2.0(2021-01)
+- 日期类型控件全系列可设置最大最小日期
+- 调整了combo的popup显示位置计算逻辑
+
+2.0(2020-12)
+- multi_layer_down_list_combo支持无限层级
+- 新增不带全选的同步复选下拉框
+- 日期选择控件为年月选择器子组件新增POPUP弹出前事件
+- 文件上传控件新增API(setMaxFileLength)以动态设置最大上传文件数量
+- 复选下拉树显示查看已选效果改成和复选下拉列表一致
+- Pane系列提供small和big两种大小的加载动画
+- 同步树列表系列支持不显示节点连接线和展开收起图标
+- 规范了下拉树trigger中显示值的显示顺序
+- bi.editor支持传入autocomplete
+- [视觉]editor水印间距统一与文本域水印不可选中
+- 修复bi.file的url参数拼接问题
+- 修复了colorChooser选择透明后, 打开更多选色面板, 直接点保存会选中自动的问题
+- bi.file支持限制上传文件数
+
 2.0(2020-11)
+- bi.file上传文件errorMsg默认调用国际化
+- 修复了文本标签text传递空字符串后显示value值的问题
+- 限制了title的最大高度
 - bi.textarea_editor添加setWatermark方法
 - 生命周期可以通过属性传递来操作
 - 修复了颜色选择器hex框不能输入为空的问题

@@ -103,7 +103,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                             }],
                             ref: function () {
                                 self.dynamicPane = this;
-                            }
+                            },
+                            min: self.options.min,
+                            max: self.options.max,
                         };
                     case BI.DynamicDateCombo.Static:
                     default:
@@ -116,7 +118,13 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 max: self.options.max,
                                 ref: function () {
                                     self.ymd = this;
-                                }
+                                },
+                                listeners: [{
+                                    eventName: BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW,
+                                    action: function () {
+                                        self.fireEvent(BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW);
+                                    }
+                                }],
                             }, {
                                 el: {
                                     type: "bi.dynamic_date_time_select",
@@ -242,4 +250,5 @@ BI.DynamicDateTimePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE = "BUTTON_OK_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_lABEL_EVENT_CHANGE = "BUTTON_lABEL_EVENT_CHANGE";
 BI.DynamicDateTimePopup.BUTTON_CLEAR_EVENT_CHANGE = "BUTTON_CLEAR_EVENT_CHANGE";
+BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH_POPUPVIEW";
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);

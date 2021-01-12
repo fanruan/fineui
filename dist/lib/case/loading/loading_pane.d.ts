@@ -1,4 +1,4 @@
-import { _Pane } from "../../base/pane";
-export interface _LoadingPane extends _Pane {
+import { Pane } from "../../base/pane";
+export declare class LoadingPane extends Pane {
     __loaded: (...args: any[]) => void;
 }

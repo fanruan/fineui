@@ -132,8 +132,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
             this.editor.setState(BI.Selection.None);
         } else {
             var text = "";
-            BI.each(ob.value, function (name, children) {
-                var childNodes = getChildrenNode(children);
+            var value = ob.value;
+            var names = BI.Func.getSortedResult(BI.keys(value));
+            BI.each(names, function (idx, name) {
+                var childNodes = getChildrenNode(value[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + "; ";
                 if (childNodes === "") {
                     count++;
@@ -150,9 +152,10 @@ BI.MultiTreeSearcher = BI.inherit(BI.Widget, {
         function getChildrenNode (ob) {
             var text = "";
             var index = 0, size = BI.size(ob);
-            BI.each(ob, function (name, children) {
+            var names = BI.Func.getSortedResult(BI.keys(ob));
+            BI.each(names, function (idx, name) {
                 index++;
-                var childNodes = getChildrenNode(children);
+                var childNodes = getChildrenNode(ob[name]);
                 text += (o.valueFormatter(name + "") || name) + (childNodes === "" ? "" : (":" + childNodes)) + (index === size ? "" : ",");
                 if (childNodes === "") {
                     count++;

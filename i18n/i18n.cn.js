@@ -91,7 +91,7 @@ BI.i18n = {
     "BI-Summary_Values": "汇总",
     "BI-Basic_Clear": "清除",
     "BI-Upload_File_Size_Error": "文件大小不支持",
-    "BI-Upload_File_Count_Error": "超出上传数量上限，请重新上传",
+    "BI-Upload_File_Count_Error": "超出上传数量上限{R1}，请重新上传",
     "BI-Up_Page": "向上翻页",
     "BI-Basic_Simple_Sunday": "日",
     "BI-Multi_Date_Relative_Current_Time": "相对当前时间",
@@ -189,5 +189,9 @@ BI.i18n = {
     "BI-Basic_Quarter": "季度",
     "BI-Basic_No_Select": "不选",
     "BI-Basic_Now": "此刻",
-    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号"
+    "BI-Color_Picker_Error_Text_Hex": "请输入6位16进制颜色编号",
+    "BI-Basic_Date_Range_Error": "请选择{R1}年{R2}月{R3}日-{R4}年{R5}月{R6}日的日期",
+    "BI-Basic_Year_Range_Error": "请选择{R1}年-{R2}年的日期",
+    "BI-Basic_Year_Month_Range_Error": "请选择{R1}年{R2}月-{R3}年{R4}月的日期",
+    "BI-Basic_Year_Quarter_Range_Error": "请选择{R1}年{R2}季度-{R3}年{R4}季度的日期",
 };

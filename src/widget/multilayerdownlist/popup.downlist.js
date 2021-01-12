@@ -109,33 +109,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                         },
                         innerVGap: 5
                     };
-                    item.el.childValues = [];
-                    BI.each(item.children, function (i, child) {
-                        child = child.el ? BI.extend(child.el, {children: child.children}) : child;
-                        var fatherValue = BI.deepClone(item.el.value);
-                        var childValue = BI.deepClone(child.value);
-                        self.singleValues.push(child.value);
-                        child.type = "bi.down_list_item";
-                        child.extraCls = " child-down-list-item";
-                        child.title = child.title || child.text;
-                        child.textRgap = 10;
-                        child.isNeedAdjustWidth = false;
-                        child.logic = {
-                            dynamic: true
-                        };
-                        child.father = fatherValue;
-                        self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
-                        self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
-                        child.value = self._createChildValue(fatherValue, childValue);
-                        item.el.childValues.push(child.value);
-                        if (BI.isNotEmptyArray(child.children)) {
-                            child.type = "bi.down_list_group_item";
-                            self._createChildren(child);
-                            child.height = self.constants.height;
-                            child.iconCls2 = self.constants.nextIcon;
-                            item.el.childValues = BI.concat(item.el.childValues, child.childValues);
-                        }
-                    });
+                    self._createChildren(item);
                 } else {
                     item.type = "bi.down_list_item";
                     item.title = item.title || item.text;
@@ -177,25 +151,44 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
         return result;
     },
 
-    _createChildren: function (child) {
+    _createChildren: function (item) {
         var self = this;
-        child.childValues = [];
-        BI.each(child.children, function (i, c) {
-            var fatherValue = BI.deepClone(child.value);
-            var childValue = BI.deepClone(c.value);
-            c.type = "bi.down_list_item";
-            c.title = c.title || c.text;
-            c.textRgap = 10;
-            c.isNeedAdjustWidth = false;
-            c.logic = {
+        this._formatEL(item).el.childValues = [];
+        BI.each(item.children, function (i, child) {
+            child = child.el ? BI.extend(child.el, {children: child.children}) : child;
+            var fatherValue = BI.deepClone(self._formatEL(item).el.value);
+            var childValue = BI.deepClone(child.value);
+            self.singleValues.push(child.value);
+            child.type = "bi.down_list_item";
+            child.extraCls = " child-down-list-item";
+            child.title = child.title || child.text;
+            child.textRgap = 10;
+            child.isNeedAdjustWidth = false;
+            child.logic = {
                 dynamic: true
             };
-            c.father = fatherValue;
+            child.father = fatherValue;
             self.fatherValueMap[self._createChildValue(fatherValue, childValue)] = fatherValue;
             self.childValueMap[self._createChildValue(fatherValue, childValue)] = childValue;
-            c.value = self._createChildValue(fatherValue, childValue);
-            child.childValues.push(c.value);
+            child.value = self._createChildValue(fatherValue, childValue);
+            self._formatEL(item).el.childValues.push(child.value);
+            if (BI.isNotEmptyArray(child.children)) {
+                child.type = "bi.down_list_group_item";
+                child.iconCls2 = self.constants.nextIcon;
+                child.height = self.constants.height;
+                self._createChildren(child);
+            }
         });
+    },
+
+    _formatEL: function(obj) {
+        if (obj && obj.el) {
+            return obj;
+        }
+
+        return {
+            el: obj
+        };
     },
 
     _isGroup: function (i) {

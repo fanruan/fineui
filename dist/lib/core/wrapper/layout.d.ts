@@ -1,5 +1,6 @@
-import { _Widget } from "../widget";
-export interface _Layout extends _Widget {
+import { Widget } from "../widget";
+export declare class Layout extends Widget {
+    static xtype: string;
     addItem(item: any): any;
     prependItem(item: any): any;
     addItemAt(index: string, item: any): any;

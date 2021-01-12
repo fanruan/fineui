@@ -99,6 +99,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                         self.combo.setValue(self.storeValue);
                         assertShowValue();
                     }
+                    self._dataChange = true;
                 });
             }
         });
@@ -113,6 +114,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                     assertShowValue();
                 });
             }
+            self._dataChange = true;
         });
         this.trigger.on(BI.MultiSelectInsertTrigger.EVENT_BEFORE_COUNTER_POPUPVIEW, function () {
             // counter的值随点击项的改变而改变, 点击counter的时候不需要setValue(counter会请求刷新计数)
@@ -141,6 +143,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 listeners: [{
                     eventName: BI.MultiSelectPopupView.EVENT_CHANGE,
                     action: function () {
+                        self._dataChange = true;
                         self.storeValue = this.getValue();
                         self._adjust(function () {
                             assertShowValue();
@@ -154,6 +157,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
                 }, {
                     eventName: BI.MultiSelectPopupView.EVENT_CLICK_CLEAR,
                     action: function () {
+                        self._dataChange = true;
                         self.setValue();
                         self._defaultState();
                     }
@@ -181,6 +185,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
+            self._dataChange = false;// 标记数据是否发生变化
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -194,7 +199,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             if (self.requesting === true) {
                 self.wants2Quit = true;
             } else {
-                self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
+                self._dataChange && self.fireEvent(BI.MultiSelectInsertNoBarCombo.EVENT_CONFIRM);
             }
         });
 
@@ -310,6 +315,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             assertShowValue();
             self.populate();
             self._setStartValue("");
+            self._dataChange = true;
         });
     },
 
