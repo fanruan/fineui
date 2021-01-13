@@ -117,7 +117,7 @@ BI.prepares.push(function () {
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
             return BI.extend(ob, {type: "bi.image_radio"});
         }
         return ob;
