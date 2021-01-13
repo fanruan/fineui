@@ -124,7 +124,7 @@ BI.prepares.push(function () {
     });
 
     BI.Plugin.configWidget("bi.checkbox", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
             return BI.extend(ob, {type: "bi.image_checkbox"});
         }
         return ob;
