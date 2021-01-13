@@ -1,4 +1,4 @@
-/*! time: 2021-1-11 11:40:26 */
+/*! time: 2021-1-12 19:00:21 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -44456,8 +44456,8 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             default:
                 break;
         }
-        if(BI.isNull(value.dateType)) {
-            valueMap.position = self.position || BI.DynamicDateCard.OFFSET.CURRENT;
+        if (BI.isNull(value.dateType)) {
+            valueMap.position = this.position || BI.DynamicDateCard.OFFSET.CURRENT;
         }
         return valueMap;
     },
@@ -75408,7 +75408,7 @@ BI.prepares.push(function () {
                             } else {
                                 pos = BI.DOM.getRightAlignPosition(combo, popup, tW);
                             }
-                            pos.dir = "bottom," + pos.dir;
+                            pos.dir = "top," + pos.dir;
                             if (lrFirst) {
                                 pos.change = "top";
                             }
