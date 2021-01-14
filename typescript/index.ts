@@ -147,6 +147,7 @@ import { DynamicYearMonthPopup } from './widget/yearmonth/popup.yearmonth';
 import { _utils } from './core/utils';
 import { Controller } from "./core/controller/controller";
 import { LayerController } from "./core/controller/controller.layer";
+import { DateCalendarPopup } from "./widget/date/calendar/popup.calendar.date";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -300,6 +301,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     FloatCenterLayout: typeof FloatCenterLayout;
     Msg: _msg;
     DynamicYearMonthPopup: typeof DynamicYearMonthPopup;
+    DateCalendarPopup: typeof DateCalendarPopup;
 }
 
 export default {
@@ -453,4 +455,5 @@ export {
     ListView,
     FloatCenterLayout,
     DynamicYearMonthPopup,
+    DateCalendarPopup,
 };
