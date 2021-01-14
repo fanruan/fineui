@@ -1,4 +1,4 @@
-/*! time: 2021-1-12 19:00:21 */
+/*! time: 2021-1-14 09:20:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -74535,14 +74535,14 @@ BI.prepares.push(function () {
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
             return BI.extend(ob, {type: "bi.image_radio"});
         }
         return ob;
     });
 
     BI.Plugin.configWidget("bi.checkbox", function (ob) {
-        if (BI.isIE() && BI.getIEVersion() < 9) {
+        if (BI.isIE() && BI.getIEVersion() <= 9) {
             return BI.extend(ob, {type: "bi.image_checkbox"});
         }
         return ob;
