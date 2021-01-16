@@ -1,4 +1,4 @@
-/*! time: 2021-1-14 20:00:29 */
+/*! time: 2021-1-16 23:00:18 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -47664,7 +47664,9 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -47759,12 +47761,12 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
                 },
                 right: o.height,
                 top: 0,
-                height: o.height,
+                height: o.height
             }]
         });
     },
 
-    _itemsCreator4Trigger: function(op, callback) {
+    _itemsCreator4Trigger: function (op, callback) {
         var self = this, o = this.options;
         o.itemsCreator(op, function (res) {
             if (op.times === 1 && BI.isNotNull(op.keywords)) {
@@ -47775,7 +47777,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         });
     },
 
-    _stopEditing: function() {
+    _stopEditing: function () {
         this.trigger.stopEditing();
         this.numberCounter.hideView();
     },
@@ -47863,6 +47865,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         adjust();
         callback();
+
         function adjust () {
             if (self.wants2Quit === true) {
                 self._dataChange && self.fireEvent(BI.MultiSelectCombo.EVENT_CONFIRM);
@@ -47909,11 +47912,11 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.combo.populate.apply(this.combo, arguments);
     },
 
-    showView:function (){
+    showView: function () {
         this.combo.showView();
     },
 
-    hideView:function (){
+    hideView: function () {
         this.combo.hideView();
     },
 
@@ -48143,7 +48146,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -48650,7 +48655,9 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -49148,7 +49155,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
@@ -55827,7 +55836,9 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         });
 
         this.combo.on(BI.Combo.EVENT_BEFORE_POPUPVIEW, function () {
-            self._dataChange = false;// 标记数据是否发生变化
+            if (!this.isViewVisible()) {
+                self._dataChange = false;// 标记数据是否发生变化
+            }
             this.setValue(self.storeValue);
             BI.nextTick(function () {
                 self._populate();
