@@ -184,6 +184,7 @@ BI.i18n = {
     "BI-Basic_Hour_Sin": "时",
     "BI-Basic_Seconds": "秒",
     "BI-Basic_Minute": "分",
+    "BI-Basic_Thousand": "千",
     "BI-Basic_Wan": "万",
     "BI-Basic_Million": "百万",
     "BI-Basic_Billion": "亿",
