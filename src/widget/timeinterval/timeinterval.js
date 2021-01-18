@@ -15,7 +15,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             extraCls: "bi-time-interval",
             minDate: "1900-01-01",
             maxDate: "2099-12-31",
-            height: 24
+            height: 24,
+            supportDynamic: true
         });
     },
     _init: function () {
@@ -68,6 +69,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,

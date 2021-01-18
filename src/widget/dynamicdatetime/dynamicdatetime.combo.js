@@ -12,7 +12,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true
     },
 
 
@@ -139,6 +140,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,

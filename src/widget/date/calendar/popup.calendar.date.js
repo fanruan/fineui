@@ -4,14 +4,12 @@
  * @extends BI.Widget
  */
 BI.DateCalendarPopup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-date-calendar-popup",
-            min: "1900-01-01", // 最小日期
-            max: "2099-12-31", // 最大日期
-            selectedTime: null
-        });
+
+    props: {
+        baseCls: "bi-date-calendar-popup",
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        selectedTime: null
     },
 
     _createNav: function (v) {
@@ -31,8 +29,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         return calendar;
     },
 
-    _init: function () {
-        BI.DateCalendarPopup.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this,
             o = this.options;
         this.today = BI.getDate();
@@ -86,14 +83,16 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
+        return [{
+            type: "bi.vertical",
             items: [{
                 el: this.calendar,
-                left: 5,
-                right: 5
-            }, {
+                hgap: 5,
+                bgap: 12
+            }]
+        }, {
+            type: "bi.absolute",
+            items: [{
                 el: {
                     type: "bi.layout",
                     cls: "bi-split-top"
@@ -103,7 +102,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        });
+        }]
     },
 
     _checkMin: function () {

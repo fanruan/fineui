@@ -7,7 +7,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-popup",
         width: 248,
-        height: 344
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -16,7 +16,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -61,9 +61,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         });
         this.setValue(opts.value);
@@ -73,11 +73,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -95,6 +99,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
