@@ -19,7 +19,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
             stopPropagation: false,
-            adjustLength: 5, // 调整的距离
+            adjustLength: 0, // 调整的距离
             // adjustXOffset: 0,
             // adjustYOffset: 10,
             hideChecker: BI.emptyFn,
