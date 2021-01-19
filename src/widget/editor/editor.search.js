@@ -183,6 +183,14 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    showClearIcon: function () {
+        this.clear.visible();
+    },
+
+    hideClearIcon: function () {
+        this.clear.invisible();
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
