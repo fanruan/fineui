@@ -1,4 +1,4 @@
-/*! time: 2021-1-19 09:30:24 */
+/*! time: 2021-1-19 14:30:27 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -43038,6 +43038,14 @@ BI.SearchEditor = BI.inherit(BI.Widget, {
 
     isValid: function () {
         return this.editor.isValid();
+    },
+
+    showClearIcon: function () {
+        this.clear.visible();
+    },
+
+    hideClearIcon: function () {
+        this.clear.invisible();
     }
 });
 BI.SearchEditor.EVENT_CHANGE = "EVENT_CHANGE";
