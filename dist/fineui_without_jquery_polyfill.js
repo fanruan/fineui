@@ -1,4 +1,4 @@
-/*! time: 2021-1-18 14:00:24 */
+/*! time: 2021-1-19 09:30:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -34562,7 +34562,7 @@ BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-split-bottom",
+        baseCls: "bi-linear-segment",
         items: [],
         layouts: [{
             type: "bi.center"
@@ -37867,14 +37867,12 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
  * @extends BI.Widget
  */
 BI.DateCalendarPopup = BI.inherit(BI.Widget, {
-    _defaultConfig: function () {
-        var conf = BI.DateCalendarPopup.superclass._defaultConfig.apply(this, arguments);
-        return BI.extend(conf, {
-            baseCls: "bi-date-calendar-popup",
-            min: "1900-01-01", // 最小日期
-            max: "2099-12-31", // 最大日期
-            selectedTime: null
-        });
+
+    props: {
+        baseCls: "bi-date-calendar-popup",
+        min: "1900-01-01", // 最小日期
+        max: "2099-12-31", // 最大日期
+        selectedTime: null
     },
 
     _createNav: function (v) {
@@ -37894,8 +37892,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
         return calendar;
     },
 
-    _init: function () {
-        BI.DateCalendarPopup.superclass._init.apply(this, arguments);
+    render: function () {
         var self = this,
             o = this.options;
         this.today = BI.getDate();
@@ -37949,14 +37946,16 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
             self.fireEvent(BI.DateCalendarPopup.EVENT_CHANGE);
         });
 
-        BI.createWidget({
-            type: "bi.absolute",
-            element: this,
+        return [{
+            type: "bi.vertical",
             items: [{
                 el: this.calendar,
-                left: 5,
-                right: 5
-            }, {
+                hgap: 5,
+                bgap: 12
+            }]
+        }, {
+            type: "bi.absolute",
+            items: [{
                 el: {
                     type: "bi.layout",
                     cls: "bi-split-top"
@@ -37966,7 +37965,7 @@ BI.DateCalendarPopup = BI.inherit(BI.Widget, {
                 left: 0,
                 right: 0
             }]
-        });
+        }]
     },
 
     _checkMin: function () {
@@ -40591,7 +40590,8 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true,
     },
 
 
@@ -40713,6 +40713,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
@@ -41052,7 +41053,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-popup",
         width: 248,
-        height: 344
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -41061,7 +41062,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -41106,9 +41107,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDatePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         });
         this.setValue(opts.value);
@@ -41118,11 +41119,15 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -41140,6 +41145,7 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -41661,7 +41667,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
-        allowEdit: true
+        allowEdit: true,
+        supportDynamic: true
     },
 
 
@@ -41788,6 +41795,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                         popup: {
                             el: {
                                 type: "bi.dynamic_date_time_popup",
+                                supportDynamic: opts.supportDynamic,
                                 behaviors: opts.behaviors,
                                 min: opts.minDate,
                                 max: opts.maxDate,
@@ -41991,7 +41999,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-time-popup",
         width: 248,
-        height: 385
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -42000,7 +42008,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -42045,9 +42053,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
-                },
-                height: 24
+                    }]],
+                    height: 24
+                }
             }]
         });
         this.setValue(opts.value);
@@ -42057,11 +42065,15 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -42079,6 +42091,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -42094,7 +42107,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Static:
                     default:
                         return {
-                            type: "bi.vtape",
+                            type: "bi.vertical",
                             items: [{
                                 type: "bi.date_calendar_popup",
                                 behaviors: o.behaviors,
@@ -42115,9 +42128,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                     cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    }
-                                },
-                                height: 40
+                                    },
+                                    height: 40
+                                }
                             }]
                         };
                 }
@@ -61696,7 +61709,8 @@ BI.DateInterval = BI.inherit(BI.Single, {
             extraCls: "bi-date-interval",
             minDate: "1900-01-01",
             maxDate: "2099-12-31",
-            height: 24
+            height: 24,
+            supportDynamic: true,
         });
     },
     _init: function () {
@@ -61749,6 +61763,7 @@ BI.DateInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_combo",
+            supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
@@ -61909,7 +61924,8 @@ BI.TimeInterval = BI.inherit(BI.Single, {
             extraCls: "bi-time-interval",
             minDate: "1900-01-01",
             maxDate: "2099-12-31",
-            height: 24
+            height: 24,
+            supportDynamic: true
         });
     },
     _init: function () {
@@ -61962,6 +61978,7 @@ BI.TimeInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_date_time_combo",
+            supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
@@ -62524,7 +62541,8 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 22,
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -62581,6 +62599,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -62726,14 +62745,14 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -62778,9 +62797,9 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -62801,12 +62820,15 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
-                cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Fen"),
@@ -62823,6 +62845,7 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_card",
+                            cls: "dynamic-year-pane",
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
@@ -63305,6 +63328,7 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 min: o.min,
                 max: o.max,
                 ref: function () {
@@ -63324,34 +63348,36 @@ BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                cls: "bi-split-top",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.month = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.month = this;
+                    },
+                    items: this._createMonths(),
+                    layouts: [BI.LogicFactory.createLogic("table", BI.extend({
+                        dynamic: true
+                    }, {
+                        columns: 2,
+                        rows: 6,
+                        columnSize: [1 / 2, 1 / 2],
+                        rowSize: 25
+                    })), {
+                        type: "bi.center_adapt",
+                        vgap: 1,
+                        hgap: 2
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedMonth = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createMonths(),
-                layouts: [BI.LogicFactory.createLogic("table", BI.extend({
-                    dynamic: true
-                }, {
-                    columns: 2,
-                    rows: 6,
-                    columnSize: [1 / 2, 1 / 2],
-                    rowSize: 25
-                })), {
-                    type: "bi.center_adapt",
-                    vgap: 1,
-                    hgap: 2
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedMonth = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearMonthCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
     },
@@ -63432,7 +63458,8 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 22,
+        supportDynamic: true
     },
 
     _init: function () {
@@ -63493,6 +63520,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_month_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -63653,14 +63681,14 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearMonthCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -63705,9 +63733,9 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearMonthPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -63728,12 +63756,16 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
                 cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Month"),
@@ -63750,6 +63782,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_month_card",
+                            cls: "dynamic-year-month-pane",
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
@@ -64154,7 +64187,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     props: {
         extraCls: "bi-year-month-interval",
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -64208,6 +64242,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
+            supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,
@@ -64533,6 +64568,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 ref: function () {
                     self.yearPicker = this;
                 },
@@ -64552,25 +64588,28 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.quarter = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.quarter = this;
+                    },
+                    items: this._createQuarter(),
+                    layouts: [{
+                        type: "bi.vertical",
+                        vgap: 10
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedQuarter = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createQuarter(),
-                layouts: [{
-                    type: "bi.vertical",
-                    vgap: 10
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedQuarter = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
     },
@@ -64648,7 +64687,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22
+        height: 22,
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -64704,6 +64744,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
                 stopPropagation: false,
                 el: {
                     type: "bi.dynamic_year_quarter_popup",
+                    supportDynamic: o.supportDynamic,
                     ref: function () {
                         self.popup = this;
                     },
@@ -64842,14 +64883,14 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -64894,9 +64935,9 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -64917,12 +64958,16 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
                 cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Quarter"),
@@ -64939,6 +64984,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearQuarterCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_quarter_card",
+                            cls: "dynamic-year-quarter-pane",
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{
