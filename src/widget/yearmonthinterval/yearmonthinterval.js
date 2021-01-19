@@ -10,7 +10,8 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
     props: {
         extraCls: "bi-year-month-interval",
         minDate: "1900-01-01",
-        maxDate: "2099-12-31"
+        maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -64,6 +65,7 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
         var self = this, o = this.options;
         var combo = BI.createWidget({
             type: "bi.dynamic_year_month_combo",
+            supportDynamic: o.supportDynamic,
             minDate: o.minDate,
             maxDate: o.maxDate,
             behaviors: o.behaviors,

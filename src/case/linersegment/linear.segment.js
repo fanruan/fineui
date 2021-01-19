@@ -1,7 +1,7 @@
 BI.LinearSegment = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-linear-segment bi-split-bottom",
+        baseCls: "bi-linear-segment",
         items: [],
         layouts: [{
             type: "bi.center"

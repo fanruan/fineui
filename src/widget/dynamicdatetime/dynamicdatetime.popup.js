@@ -7,7 +7,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
     props: {
         baseCls: "bi-dynamic-date-time-popup",
         width: 248,
-        height: 385
+        supportDynamic: true,
     },
 
     _init: function () {
@@ -16,7 +16,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         this.storeValue = {type: BI.DynamicDateCombo.Static};
         BI.createWidget({
             element: this,
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -61,9 +61,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicDateTimePopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
-                },
-                height: 24
+                    }]],
+                    height: 24
+                }
             }]
         });
         this.setValue(opts.value);
@@ -73,11 +73,15 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
+                invisible: !o.supportDynamic,
                 cls: "bi-split-bottom",
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
@@ -95,6 +99,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Dynamic:
                         return {
                             type: "bi.dynamic_date_card",
+                            cls: "dynamic-date-pane",
                             listeners: [{
                                 eventName: "EVENT_CHANGE",
                                 action: function () {
@@ -110,7 +115,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                     case BI.DynamicDateCombo.Static:
                     default:
                         return {
-                            type: "bi.vtape",
+                            type: "bi.vertical",
                             items: [{
                                 type: "bi.date_calendar_popup",
                                 behaviors: o.behaviors,
@@ -131,9 +136,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                                     cls: "bi-split-top",
                                     ref: function () {
                                         self.timeSelect = this;
-                                    }
-                                },
-                                height: 40
+                                    },
+                                    height: 40
+                                }
                             }]
                         };
                 }
