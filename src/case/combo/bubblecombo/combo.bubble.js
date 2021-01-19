@@ -6,7 +6,7 @@
  */
 BI.BubbleCombo = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 6
+        TRIANGLE_LENGTH: 9
     },
     _defaultConfig: function () {
         return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {
@@ -19,7 +19,7 @@ BI.BubbleCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: true, // 是否需要高度调整
             isNeedAdjustWidth: true,
             stopPropagation: false,
-            adjustLength: 0, // 调整的距离
+            adjustLength: 5, // 调整的距离
             // adjustXOffset: 0,
             // adjustYOffset: 10,
             hideChecker: BI.emptyFn,
