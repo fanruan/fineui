@@ -10,14 +10,14 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期,
         width: 180,
-        height: 240
+        supportDynamic: true,
     },
 
     render: function () {
         var self = this, opts = this.options, c = this.constants;
         this.storeValue = {type: BI.DynamicYearQuarterCombo.Static};
         return {
-            type: "bi.vtape",
+            type: "bi.vertical",
             items: [{
                 el: this._getTabJson()
             }, {
@@ -62,9 +62,9 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                                 self.fireEvent(BI.DynamicYearQuarterPopup.BUTTON_OK_EVENT_CHANGE);
                             }
                         }]
-                    }]]
+                    }]],
+                    height: 24
                 },
-                height: 24
             }]
         };
     },
@@ -85,12 +85,16 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.tab",
+            logic: {
+                dynamic: true
+            },
             ref: function () {
                 self.dateTab = this;
             },
             tab: {
                 type: "bi.linear_segment",
                 cls: "bi-split-bottom",
+                invisible: !o.supportDynamic,
                 height: this.constants.tabHeight,
                 items: BI.createItems([{
                     text: BI.i18nText("BI-Basic_Year_Quarter"),
@@ -107,6 +111,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                     case BI.DynamicYearQuarterCombo.Dynamic:
                         return {
                             type: "bi.dynamic_year_quarter_card",
+                            cls: "dynamic-year-quarter-pane",
                             min: self.options.min,
                             max: self.options.max,
                             listeners: [{

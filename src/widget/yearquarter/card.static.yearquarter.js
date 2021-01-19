@@ -43,6 +43,7 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
             type: "bi.vertical",
             items: [{
                 type: "bi.year_picker",
+                cls: "bi-split-bottom",
                 ref: function () {
                     self.yearPicker = this;
                 },
@@ -62,25 +63,28 @@ BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
                     }
                 }]
             }, {
-                type: "bi.button_group",
-                behaviors: o.behaviors,
-                ref: function () {
-                    self.quarter = this;
+                el: {
+                    type: "bi.button_group",
+                    behaviors: o.behaviors,
+                    ref: function () {
+                        self.quarter = this;
+                    },
+                    items: this._createQuarter(),
+                    layouts: [{
+                        type: "bi.vertical",
+                        vgap: 10
+                    }],
+                    value: o.value,
+                    listeners: [{
+                        eventName: BI.ButtonGroup.EVENT_CHANGE,
+                        action: function () {
+                            self.selectedYear = self.yearPicker.getValue();
+                            self.selectedQuarter = this.getValue()[0];
+                            self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
+                        }
+                    }]
                 },
-                items: this._createQuarter(),
-                layouts: [{
-                    type: "bi.vertical",
-                    vgap: 10
-                }],
-                value: o.value,
-                listeners: [{
-                    eventName: BI.ButtonGroup.EVENT_CHANGE,
-                    action: function () {
-                        self.selectedYear = self.yearPicker.getValue();
-                        self.selectedQuarter = this.getValue()[0];
-                        self.fireEvent(BI.StaticYearQuarterCard.EVENT_CHANGE);
-                    }
-                }]
+                vgap: 5
             }]
         };
     },
