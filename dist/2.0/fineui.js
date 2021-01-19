@@ -1,4 +1,4 @@
-/*! time: 2021-1-19 14:30:27 */
+/*! time: 2021-1-19 15:40:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -42162,8 +42162,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             afterCardCreated: function () {
                 this.setValue(self.selectedYear);
                 var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
-                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
+                calendar && self.backBtn.setEnable(self._checkMinYearValid());
+                calendar && self.preBtn.setEnable(self._checkMaxYearValid());
             }
         });
 
@@ -42178,12 +42178,22 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         }
     },
 
+    _checkMinYearValid: function () {
+        var o = this.options;
+        return this.selectedYear > BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear();
+    },
+
+    _checkMaxYearValid: function () {
+        var o = this.options;
+        return this.selectedYear < BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear();
+    },
+
     _checkMin: function () {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
+            this.backBtn.setEnable(this._checkMinYearValid());
+            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
@@ -42191,8 +42201,8 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
+            this.backBtn.setEnable(this._checkMinYearValid());
+            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
