@@ -1,4 +1,4 @@
-/*! time: 2021-1-20 11:30:23 */
+/*! time: 2021-1-20 14:20:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -31025,7 +31025,7 @@ BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
  */
 BI.BubbleCombo = BI.inherit(BI.Widget, {
     _const: {
-        TRIANGLE_LENGTH: 6
+        TRIANGLE_LENGTH: 9
     },
     _defaultConfig: function () {
         return BI.extend(BI.BubbleCombo.superclass._defaultConfig.apply(this, arguments), {
