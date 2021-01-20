@@ -1,4 +1,4 @@
-/*! time: 2021-1-19 15:40:28 */
+/*! time: 2021-1-20 11:30:23 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1405);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1406);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -38188,9 +38188,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             cardCreator: BI.bind(this._createYearCalendar, this),
             afterCardCreated: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(self._checkMinYearValid());
-                calendar && self.preBtn.setEnable(self._checkMaxYearValid());
             }
         });
 
@@ -38205,22 +38202,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         }
     },
 
-    _checkMinYearValid: function () {
-        var o = this.options;
-        return this.selectedYear > BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear();
-    },
-
-    _checkMaxYearValid: function () {
-        var o = this.options;
-        return this.selectedYear < BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear();
-    },
-
     _checkMin: function () {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(this._checkMinYearValid());
-            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
@@ -38228,8 +38213,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(this._checkMinYearValid());
-            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
@@ -68689,6 +68672,18 @@ Object.defineProperty(exports, "DateCalendarPopup", {
     return _popupCalendar.DateCalendarPopup;
   }
 });
+Object.defineProperty(exports, "Tree", {
+  enumerable: true,
+  get: function get() {
+    return _tree2.Tree;
+  }
+});
+Object.defineProperty(exports, "Node", {
+  enumerable: true,
+  get: function get() {
+    return _tree2.Node;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(714);
@@ -68972,6 +68967,8 @@ var _controller = __webpack_require__(90);
 var _controller2 = __webpack_require__(831);
 
 var _popupCalendar = __webpack_require__(832);
+
+var _tree2 = __webpack_require__(833);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70258,7 +70255,13 @@ var _controller = __webpack_require__(90);
 var _widget = __webpack_require__(1);
 
 /***/ }),
-/* 833 */,
+/* 833 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/***/ }),
 /* 834 */,
 /* 835 */,
 /* 836 */,
@@ -70308,7 +70311,8 @@ var _widget = __webpack_require__(1);
 /* 880 */,
 /* 881 */,
 /* 882 */,
-/* 883 */
+/* 883 */,
+/* 884 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -70471,17 +70475,17 @@ var _widget = __webpack_require__(1);
 
 
 /***/ }),
-/* 884 */,
 /* 885 */,
 /* 886 */,
-/* 887 */
+/* 887 */,
+/* 888 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(888);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(889);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 888 */
+/* 889 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71960,8 +71964,8 @@ var _widget = __webpack_require__(1);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(62).setImmediate))
 
 /***/ }),
-/* 889 */,
-/* 890 */
+/* 890 */,
+/* 891 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -72257,7 +72261,6 @@ var _widget = __webpack_require__(1);
 
 
 /***/ }),
-/* 891 */,
 /* 892 */,
 /* 893 */,
 /* 894 */,
@@ -72474,13 +72477,13 @@ var _widget = __webpack_require__(1);
 /* 1105 */,
 /* 1106 */,
 /* 1107 */,
-/* 1108 */
+/* 1108 */,
+/* 1109 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1109 */,
 /* 1110 */,
 /* 1111 */,
 /* 1112 */,
@@ -72776,7 +72779,8 @@ var _widget = __webpack_require__(1);
 /* 1402 */,
 /* 1403 */,
 /* 1404 */,
-/* 1405 */
+/* 1405 */,
+/* 1406 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -72880,7 +72884,7 @@ __webpack_require__(393);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(887);
+__webpack_require__(888);
 __webpack_require__(394);
 __webpack_require__(395);
 __webpack_require__(396);
@@ -73257,9 +73261,9 @@ __webpack_require__(708);
 __webpack_require__(709);
 __webpack_require__(710);
 __webpack_require__(711);
-__webpack_require__(890);
-__webpack_require__(883);
-__webpack_require__(1108);
+__webpack_require__(891);
+__webpack_require__(884);
+__webpack_require__(1109);
 module.exports = __webpack_require__(712);
 
 
