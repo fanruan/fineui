@@ -70,9 +70,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             cardCreator: BI.bind(this._createYearCalendar, this),
             afterCardCreated: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(self._checkMinYearValid());
-                calendar && self.preBtn.setEnable(self._checkMaxYearValid());
             }
         });
 
@@ -87,22 +84,10 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         }
     },
 
-    _checkMinYearValid: function () {
-        var o = this.options;
-        return this.selectedYear > BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear();
-    },
-
-    _checkMaxYearValid: function () {
-        var o = this.options;
-        return this.selectedYear < BI.parseDateTime(o.max, "%Y-%X-%d").getFullYear();
-    },
-
     _checkMin: function () {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(this._checkMinYearValid());
-            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
@@ -110,8 +95,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(this._checkMinYearValid());
-            this.preBtn.setEnable(this._checkMaxYearValid());
         }
     },
 
