@@ -298,6 +298,9 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
             case BI.DynamicDateCard.TYPE.DAY:
                 valueMap.day = (value.offset === 0 ? -value.value : value.value);
                 break;
+            case BI.DynamicDateCard.TYPE.WORK_DAY:
+                valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+                break;
             default:
                 break;
         }

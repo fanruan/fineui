@@ -188,7 +188,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
         return this.trigger.getKey();
     },
 
-    isValid: function () {
+    isStateValid: function () {
         return this.trigger.isValid();
     }
 
