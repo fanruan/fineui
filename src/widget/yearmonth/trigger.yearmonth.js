@@ -259,7 +259,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         return this.yearEditor.getValue() + "-" + this.monthEditor.getValue();
     },
 
-    isValid: function () {
+    isStateValid: function () {
         return this.yearEditor.isValid() && this.monthEditor.isValid();
     }
 });
