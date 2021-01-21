@@ -28,4 +28,6 @@ export declare class SearchEditor extends Widget {
     getLastChangedValue(): string;
     isEditing(): boolean;
     isValid(): boolean;
+    showClearIcon(): void;
+    hideClearIcon(): void;
 }

@@ -70,9 +70,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
             cardCreator: BI.bind(this._createYearCalendar, this),
             afterCardCreated: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                calendar && self.backBtn.setEnable(!calendar.isFrontYear());
-                calendar && self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
@@ -91,8 +88,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMinDate(this.options.min);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
@@ -100,8 +95,6 @@ BI.YearPopup = BI.inherit(BI.Widget, {
         var calendar = this.navigation.getSelectedCard();
         if (BI.isNotNull(calendar)) {
             calendar.setMaxDate(this.options.max);
-            this.backBtn.setEnable(!calendar.isFrontYear());
-            this.preBtn.setEnable(!calendar.isFinalYear());
         }
     },
 
