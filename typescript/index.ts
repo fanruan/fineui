@@ -149,6 +149,7 @@ import { Controller } from "./core/controller/controller";
 import { LayerController } from "./core/controller/controller.layer";
 import { DateCalendarPopup } from "./widget/date/calendar/popup.calendar.date";
 import { Tree, Node } from "./core/utils/tree";
+import { TextNode } from "./base/single/button/node/textnode";
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -303,6 +304,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     Msg: _msg;
     DynamicYearMonthPopup: typeof DynamicYearMonthPopup;
     DateCalendarPopup: typeof DateCalendarPopup;
+    TextNode: typeof TextNode;
 }
 
 export default {
@@ -459,4 +461,5 @@ export {
     DateCalendarPopup,
     Tree,
     Node,
+    TextNode,
 };
