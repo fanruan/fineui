@@ -5,7 +5,7 @@ export declare class Tab extends Widget {
     setSelect(v: string | number): void;
     removeTab(v: string | number): void;
     getSelect(): string | number;
-    getSelectedTab(): any;
-    getTab(v: string | number): any;
+    getSelectedTab<T>(): T;
+    getTab<T>(v: string | number): T;
     populate(): void;
 }
