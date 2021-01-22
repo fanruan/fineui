@@ -284,22 +284,22 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         var valueMap = {};
         switch (value.dateType) {
             case BI.DynamicDateCard.TYPE.YEAR:
-                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.QUARTER:
-                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
-                valueMap.month = (value.offset === 0 ? -value.value : value.value);
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.WEEK:
-                valueMap.week = (value.offset === 0 ? -value.value : value.value);
+                valueMap.week = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.DAY:
-                valueMap.day = (value.offset === 0 ? -value.value : value.value);
+                valueMap.day = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.WORK_DAY:
-                valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+                valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
                 break;
@@ -369,7 +369,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
         if(this.workDayBox.isSelected()) {
             var value = buttons[0].getValue();
-            valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+            valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
         return valueMap;
     }

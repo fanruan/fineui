@@ -76,10 +76,10 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         var valueMap = {};
         switch (value.dateType) {
             case BI.DynamicDateCard.TYPE.YEAR:
-                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
-                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
                 break;
