@@ -24,7 +24,7 @@ export declare class Node {
 }
 export declare class Tree {
     root: Node;
-    addNode(node: Node, newNode: Node, index: number): void;
+    addNode(node: Node, newNode: Node, index?: number): void;
     isRoot(node: Node): boolean;
     getRoot(): Node;
     clear(): void;
