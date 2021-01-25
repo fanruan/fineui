@@ -38,12 +38,11 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());

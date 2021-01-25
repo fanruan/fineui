@@ -114,11 +114,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());

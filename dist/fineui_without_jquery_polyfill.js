@@ -1,4 +1,4 @@
-/*! time: 2021-1-21 19:30:24 */
+/*! time: 2021-1-22 17:00:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40458,22 +40458,22 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         var valueMap = {};
         switch (value.dateType) {
             case BI.DynamicDateCard.TYPE.YEAR:
-                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.QUARTER:
-                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
-                valueMap.month = (value.offset === 0 ? -value.value : value.value);
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.WEEK:
-                valueMap.week = (value.offset === 0 ? -value.value : value.value);
+                valueMap.week = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.DAY:
-                valueMap.day = (value.offset === 0 ? -value.value : value.value);
+                valueMap.day = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.WORK_DAY:
-                valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+                valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
                 break;
@@ -40543,7 +40543,7 @@ BI.DynamicDateCard = BI.inherit(BI.Widget, {
         }
         if(this.workDayBox.isSelected()) {
             var value = buttons[0].getValue();
-            valueMap.workDay = (value.offset === 0 ? -value.value : value.value);
+            valueMap.workDay = (value.offset === 0 ? -value.value : +value.value);
         }
         return valueMap;
     }
@@ -40688,11 +40688,11 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -41770,11 +41770,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());
@@ -62294,7 +62294,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     _checkDate: function (obj) {
         var o = this.options;
         var date = BI.DynamicDateHelper.getCalculation({
-            year: (obj.offset === 0 ? -obj.value : obj.value)
+            year: (obj.offset === 0 ? -obj.value : +obj.value)
         });
 
         return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
@@ -62328,7 +62328,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     getValue: function () {
         var value = this.item.getValue();
         return {
-            year: (value.offset === 0 ? -value.value : value.value)
+            year: (value.offset === 0 ? -value.value : +value.value)
         };
     }
 });
@@ -63233,10 +63233,10 @@ BI.DynamicYearMonthCard = BI.inherit(BI.Widget, {
         var valueMap = {};
         switch (value.dateType) {
             case BI.DynamicDateCard.TYPE.YEAR:
-                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
-                valueMap.month = (value.offset === 0 ? -value.value : value.value);
+                valueMap.month = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
                 break;
@@ -63495,12 +63495,11 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearMonthTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -64474,10 +64473,10 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
         var valueMap = {};
         switch (value.dateType) {
             case BI.DynamicDateCard.TYPE.YEAR:
-                valueMap.year = (value.offset === 0 ? -value.value : value.value);
+                valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
             case BI.DynamicDateCard.TYPE.MONTH:
-                valueMap.quarter = (value.offset === 0 ? -value.value : value.value);
+                valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
                 break;
@@ -64720,12 +64719,11 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             self.combo.isViewVisible() && self.combo.hideView();
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
