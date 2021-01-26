@@ -46,6 +46,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
+                            self.fireEvent(BI.DynamicDateTimePane.EVENT_CHANGE);
                         }
                     }],
                     ref: function () {
@@ -170,6 +171,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     }
 });
+BI.DynamicDateTimePane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
 
 BI.extend(BI.DynamicDateTimePane, {
