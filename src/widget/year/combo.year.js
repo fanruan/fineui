@@ -27,6 +27,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = this.getKey();
+            self.fireEvent(BI.DynamicYearCombo.EVENT_FOCUS);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_START, function () {
             self.combo.isViewVisible() && self.combo.hideView();
@@ -36,6 +37,10 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearTrigger.EVENT_CONFIRM, function () {
             if (self.combo.isViewVisible()) {
@@ -166,6 +171,14 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
         this.popup && this.popup.setMaxDate(maxDate);
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getKey: function () {
+        return this.trigger.getKey() + "";
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -174,11 +187,18 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    isStateValid: function () {
+        return this.trigger.isValid();
     }
 
 });
 BI.DynamicYearCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicYearCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.dynamic_year_combo", BI.DynamicYearCombo);
 
 BI.extend(BI.DynamicYearCombo, {

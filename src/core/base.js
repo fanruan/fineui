@@ -1129,7 +1129,10 @@ if (!_global.BI) {
                             hr -= 12;
                         }
                         break;
-
+                    case "%Q":
+                    case "%q":
+                        m = (parseInt(a[i], 10) - 1) * 3;
+                        break;
                     case "%M":
                         min = parseInt(a[i], 10);
                         break;

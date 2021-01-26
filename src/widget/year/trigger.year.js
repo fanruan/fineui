@@ -75,6 +75,9 @@ BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
         this.editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearTrigger.EVENT_ERROR);
         });
+        this.editor.on(BI.SignEditor.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearTrigger.EVENT_VALID);
+        });
         BI.createWidget({
             element: this,
             type: "bi.htape",
@@ -183,4 +186,5 @@ BI.DynamicYearTrigger.EVENT_ERROR = "EVENT_ERROR";
 BI.DynamicYearTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearTrigger.EVENT_STOP = "EVENT_STOP";
+BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
