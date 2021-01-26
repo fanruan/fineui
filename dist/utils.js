@@ -1,4 +1,4 @@
-/*! time: 2021-1-22 17:00:30 */
+/*! time: 2021-1-26 09:30:24 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1232);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1236);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1093:
+/***/ 1097:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,7 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1232:
+/***/ 1236:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +350,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1093);
-__webpack_require__(1233);
+__webpack_require__(1097);
+__webpack_require__(1237);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,7 +359,7 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 1233:
+/***/ 1237:
 /***/ (function(module, exports) {
 
 /**
@@ -1615,7 +1615,10 @@ if (!_global.BI) {
                             hr -= 12;
                         }
                         break;
-
+                    case "%Q":
+                    case "%q":
+                        m = (parseInt(a[i], 10) - 1) * 3;
+                        break;
                     case "%M":
                         min = parseInt(a[i], 10);
                         break;
@@ -7997,6 +8000,7 @@ _.extend(BI, {
         s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
         s["%Y"] = yWith4number;		// year with the century
         s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
         s["%Q"] = qr;
 
         var re = /%./g;

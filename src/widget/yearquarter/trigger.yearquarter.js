@@ -60,12 +60,13 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
+        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if(isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
                 return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 4) && !BI.checkDateVoid(self.yearEditor.getValue(), (v - 1) * 3 + 1, 1, o.min, o.max)[0]);
             },
@@ -104,6 +105,15 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
         });
         editor.on(BI.SignEditor.EVENT_ERROR, function () {
             self.fireEvent(BI.DynamicYearQuarterTrigger.EVENT_ERROR);
+        });
+        editor.on(BI.SignEditor.EVENT_VALID, function () {
+            var year = self.yearEditor.getValue();
+            var quarter = self.quarterEditor.getValue();
+            if(BI.isNotEmptyString(year) && BI.isNotEmptyString(quarter)) {
+                if(BI.isPositiveInteger(year) && quarter >= 1 && quarter <= 4 && !BI.checkDateVoid(year, (quarter - 1) * 3 + 1, 1, o.min, o.max)[0]) {
+                    self.fireEvent(BI.DynamicYearMonthTrigger.EVENT_VALID);
+                }
+            }
         });
         editor.on(BI.SignEditor.EVENT_CHANGE, function () {
             if(isYear) {
@@ -230,6 +240,10 @@ BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
 
     getKey: function () {
         return this.yearEditor.getValue() + "-" + this.quarterEditor.getValue();
+    },
+
+    isStateValid: function () {
+        return this.yearEditor.isValid() && this.quarterEditor.isValid();
     }
 });
 BI.DynamicYearQuarterTrigger.EVENT_FOCUS = "EVENT_FOCUS";
@@ -238,4 +252,5 @@ BI.DynamicYearQuarterTrigger.EVENT_START = "EVENT_START";
 BI.DynamicYearQuarterTrigger.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterTrigger.EVENT_STOP = "EVENT_STOP";
 BI.DynamicYearQuarterTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
+BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
