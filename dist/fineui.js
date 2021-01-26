@@ -1,4 +1,4 @@
-/*! time: 2021-1-26 09:30:24 */
+/*! time: 2021-1-26 20:20:31 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -43280,6 +43280,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
+                            self.fireEvent(BI.DynamicDateTimePane.EVENT_CHANGE);
                         }
                     }],
                     ref: function () {
@@ -43404,6 +43405,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     }
 });
+BI.DynamicDateTimePane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
 
 BI.extend(BI.DynamicDateTimePane, {
