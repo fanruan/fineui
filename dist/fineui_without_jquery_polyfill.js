@@ -1,4 +1,4 @@
-/*! time: 2021-1-26 09:30:24 */
+/*! time: 2021-1-27 16:50:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -39307,6 +39307,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                                 default:
                                     break;
                             }
+                            self.fireEvent(BI.DynamicDateTimePane.EVENT_CHANGE);
                         }
                     }],
                     ref: function () {
@@ -39431,6 +39432,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         };
     }
 });
+BI.DynamicDateTimePane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_date_time_pane", BI.DynamicDateTimePane);
 
 BI.extend(BI.DynamicDateTimePane, {
@@ -64663,7 +64665,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
 
     props: {
-        baseCls: "bi-year-month-card"
+        baseCls: "bi-year-quarter-card"
     },
 
     render: function () {
@@ -64733,7 +64735,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
             case BI.DynamicDateCard.TYPE.YEAR:
                 valueMap.year = (value.offset === 0 ? -value.value : +value.value);
                 break;
-            case BI.DynamicDateCard.TYPE.MONTH:
+            case BI.DynamicDateCard.TYPE.QUARTER:
                 valueMap.quarter = (value.offset === 0 ? -value.value : +value.value);
                 break;
             default:
@@ -64763,7 +64765,7 @@ BI.DynamicYearQuarterCard = BI.inherit(BI.Widget, {
     },
 
     setValue: function (v) {
-        v = v || {year: 0, month: 0};
+        v = v || {year: 0, quarter: 0};
         this.year.setValue(this._createValue(BI.DynamicDateCard.TYPE.YEAR, v.year));
         this.quarter.setValue(this._createValue(BI.DynamicDateCard.TYPE.QUARTER, v.quarter));
     },
