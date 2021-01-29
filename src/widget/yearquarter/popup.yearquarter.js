@@ -41,6 +41,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
                             self.textButton = this;
                         },
@@ -72,13 +73,19 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicYearQuarterCombo.Static) {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-            this.textButton.setEnable(true);
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
@@ -203,7 +210,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
             default:
                 this.year.setValue(value);
                 this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-                this.textButton.setEnable(true);
+                this.textButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
