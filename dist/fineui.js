@@ -1,4 +1,4 @@
-/*! time: 2021-1-28 15:30:27 */
+/*! time: 2021-1-29 09:40:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -45073,8 +45073,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -45202,18 +45203,24 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     setMinDate: function (minDate) {
@@ -45254,12 +45261,12 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         month: date.getMonth() + 1,
                         day: date.getDate()
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -46019,8 +46026,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -46156,18 +46164,24 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.todayButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     setMinDate: function (minDate) {
@@ -46207,7 +46221,7 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         day: date.getDate()
                     });
                     this.timeSelect.setValue();
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
                     this.timeSelect.setValue({
@@ -46215,9 +46229,9 @@ BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
                         minute: value.minute,
                         second: value.second
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -66594,6 +66608,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
@@ -66791,8 +66806,9 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.yearButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -66821,14 +66837,20 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-            this.textButton.setEnable(true);
+            this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+            this.yearButton.setEnable(!this._checkYearValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.yearButton.setValue(date);
+            this.yearButton.setEnable(false);
         }
+    },
+
+    _checkYearValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
@@ -66919,6 +66941,12 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
@@ -66951,8 +66979,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 this.year.setValue(value);
-                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-                this.textButton.setEnable(true);
+                this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+                this.yearButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -67751,6 +67779,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
             popup: {
                 minWidth: 100,
                 stopPropagation: false,
@@ -67948,6 +67977,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Month"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
                             self.textButton = this;
                         },
@@ -67979,13 +68009,19 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
-            this.textButton.setEnable(true);
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%x");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
@@ -68110,7 +68146,7 @@ BI.DynamicYearMonthPopup = BI.inherit(BI.Widget, {
             default:
                 this.year.setValue(value);
                 this.textButton.setValue(BI.i18nText("BI-Basic_Current_Month"));
-                this.textButton.setEnable(true);
+                this.textButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
@@ -68978,6 +69014,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
@@ -69168,6 +69205,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
                         textHeight: c.buttonHeight - 1,
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Quarter"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
                             self.textButton = this;
                         },
@@ -69199,13 +69237,19 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicYearQuarterCombo.Static) {
             this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-            this.textButton.setEnable(true);
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%Q");
             this.textButton.setValue(date);
             this.textButton.setEnable(false);
         }
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
@@ -69330,7 +69374,7 @@ BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
             default:
                 this.year.setValue(value);
                 this.textButton.setValue(BI.i18nText("BI-Basic_Current_Quarter"));
-                this.textButton.setEnable(true);
+                this.textButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },
