@@ -1,4 +1,4 @@
-/*! time: 2021-2-1 10:40:28 */
+/*! time: 2021-2-1 17:10:30 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -64267,8 +64267,9 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
                 if (isYear) {
                     return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
+                var year = self.yearEditor.getValue();
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;
