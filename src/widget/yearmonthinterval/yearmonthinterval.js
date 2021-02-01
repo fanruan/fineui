@@ -92,11 +92,6 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
             self._checkValid();
         });
 
-        combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
-        });
-
         combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
