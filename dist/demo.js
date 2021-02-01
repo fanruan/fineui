@@ -1,4 +1,4 @@
-/*! time: 2021-1-29 09:40:28 */
+/*! time: 2021-2-1 10:40:28 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -68538,11 +68538,6 @@ BI.YearMonthInterval = BI.inherit(BI.Single, {
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_FOCUS, function () {
             self._checkValid();
-        });
-
-        combo.on(BI.DynamicYearMonthCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
         });
 
         combo.on(BI.DynamicYearMonthCombo.EVENT_CONFIRM, function () {
