@@ -1,4 +1,4 @@
-/*! time: 2021-2-1 17:10:30 */
+/*! time: 2021-2-1 18:50:33 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63321,11 +63321,6 @@ BI.YearInterval = BI.inherit(BI.Single, {
             self._checkValid();
         });
 
-        combo.on(BI.DynamicYearCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
-        });
-
         combo.on(BI.DynamicYearCombo.EVENT_CONFIRM, function () {
             BI.Bubbles.hide("error");
             var smallDate = self.left.getKey(), bigDate = self.right.getKey();
@@ -65774,11 +65769,6 @@ BI.YearQuarterInterval = BI.inherit(BI.Single, {
 
         combo.on(BI.DynamicYearQuarterCombo.EVENT_FOCUS, function () {
             self._checkValid();
-        });
-
-        combo.on(BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW, function () {
-            self.left.hideView();
-            self.right.hideView();
         });
 
         combo.on(BI.DynamicYearQuarterCombo.EVENT_CONFIRM, function () {
