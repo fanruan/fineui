@@ -103,9 +103,9 @@ BI.StaticYearCard = BI.inherit(BI.Widget, {
 
             afterCardShow: function () {
                 this.setValue(self.selectedYear);
-                var calendar = this.getSelectedCard();
-                self.backBtn.setEnable(!calendar.isFrontYear());
-                self.preBtn.setEnable(!calendar.isFinalYear());
+                // var calendar = this.getSelectedCard();
+                // self.backBtn.setEnable(!calendar.isFrontYear());
+                // self.preBtn.setEnable(!calendar.isFinalYear());
             }
         });
 
