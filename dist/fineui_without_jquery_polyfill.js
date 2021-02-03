@@ -1,4 +1,4 @@
-/*! time: 2021-2-2 10:30:26 */
+/*! time: 2021-2-3 15:50:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -10541,7 +10541,7 @@ BI.Req = {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -10552,7 +10552,7 @@ BI.Req = {
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;
