@@ -55,7 +55,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
                         self.switcher = this;
                     }
                 },
-                height: 30
+                height: o.supportDynamic ? 30 : 0
             }, {
                 type: "bi.tab",
                 ref: function () {

@@ -1,4 +1,4 @@
-/*! time: 2021-2-5 17:40:32 */
+/*! time: 2021-2-6 13:20:35 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -38541,6 +38541,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         baseCls: "bi-dynamic-date-pane",
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     render: function () {
@@ -38550,6 +38551,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
+                    invisible: !o.supportDynamic,
                     cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
@@ -38719,6 +38721,7 @@ BI.extend(BI.DynamicDatePane, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 555 */
@@ -39267,6 +39270,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
         baseCls: "bi-dynamic-date-pane",
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
+        supportDynamic: true,
     },
 
     render: function () {
@@ -39276,6 +39280,7 @@ BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.linear_segment",
+                    invisible: !o.supportDynamic,
                     cls: "bi-split-bottom",
                     height: 30,
                     items: BI.createItems([{
@@ -39441,6 +39446,7 @@ BI.extend(BI.DynamicDateTimePane, {
     Static: 1,
     Dynamic: 2
 });
+
 
 /***/ }),
 /* 560 */
