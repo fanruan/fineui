@@ -4,7 +4,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
         baseCls: "bi-dynamic-date-pane",
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
-        supportDynamic: true,
+        supportDynamic: true
     },
 
     render: function () {
@@ -55,7 +55,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                         self.switcher = this;
                     }
                 },
-                height: 30
+                height: o.supportDynamic ? 30 : 0
             }, {
                 type: "bi.tab",
                 ref: function () {
@@ -94,7 +94,7 @@ BI.DynamicDatePane = BI.inherit(BI.Widget, {
                                 listeners: [{
                                     eventName: "EVENT_CHANGE",
                                     action: function () {
-                                        if(self._checkValue(self.getValue())) {
+                                        if (self._checkValue(self.getValue())) {
                                             self.fireEvent(BI.DynamicDatePane.EVENT_CHANGE);
                                         }
                                     }
