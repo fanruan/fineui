@@ -45,11 +45,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
         BI.PopupView.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var fn = function (e) {
-                e.stopPropagation();
-            }, stop = function (e) {
-                e.stopEvent();
-                return false;
-            };
+            e.stopPropagation();
+        }, stop = function (e) {
+            e.stopEvent();
+            return false;
+        };
         this.element.css({
             "z-index": BI.zIndex_popup,
             "min-width": o.minWidth / BI.pixRatio + BI.pixUnit,
@@ -95,7 +95,11 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _createView: function () {
         var o = this.options;
         this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
-        this.button_group.element.css({"min-height": o.minHeight / BI.pixRatio + BI.pixUnit, "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit, "padding-bottom": o.innerVGap + "px"});
+        this.button_group.element.css({
+            "min-height": o.minHeight / BI.pixRatio + BI.pixUnit,
+            "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
+            "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
+        });
         return this.button_group;
     },
 
