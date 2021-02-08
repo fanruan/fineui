@@ -169,10 +169,10 @@ BI.CollectionView = BI.inherit(BI.Widget, {
                         this.renderedCells[index].el.setHeight(datum.height);
                     }
                     if (this.renderedCells[index]._left !== datum.x) {
-                        this.renderedCells[index].el.element.css("left", datum.x + "px");
+                        this.renderedCells[index].el.element.css("left", datum.x / BI.pixRatio + BI.pixUnit);
                     }
                     if (this.renderedCells[index]._top !== datum.y) {
-                        this.renderedCells[index].el.element.css("top", datum.y + "px");
+                        this.renderedCells[index].el.element.css("top", datum.y  / BI.pixRatio + BI.pixUnit);
                     }
                     renderedCells.push(child = this.renderedCells[index]);
                 } else {

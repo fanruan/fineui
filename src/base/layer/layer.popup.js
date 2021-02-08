@@ -52,8 +52,8 @@ BI.PopupView = BI.inherit(BI.Widget, {
             };
         this.element.css({
             "z-index": BI.zIndex_popup,
-            "min-width": o.minWidth + "px",
-            "max-width": o.maxWidth + "px"
+            "min-width": o.minWidth / BI.pixRatio + BI.pixUnit,
+            "max-width": o.maxWidth / BI.pixRatio + BI.pixUnit
         }).bind({click: fn});
 
         this.element.bind("mousewheel", fn);
@@ -95,7 +95,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
     _createView: function () {
         var o = this.options;
         this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
-        this.button_group.element.css({"min-height": o.minHeight + "px", "padding-top": o.innerVGap + "px", "padding-bottom": o.innerVGap + "px"});
+        this.button_group.element.css({"min-height": o.minHeight / BI.pixRatio + BI.pixUnit, "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit, "padding-bottom": o.innerVGap + "px"});
         return this.button_group;
     },
 
@@ -158,7 +158,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
-            this.view.element.css({"max-height": resetHeight + "px"});
+            this.view.element.css({"max-height": resetHeight / BI.pixRatio + BI.pixUnit});
     },
 
     setValue: function (selectedValues) {

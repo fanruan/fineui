@@ -26,32 +26,32 @@
             var self = this, o = this.options;
             if (o.hgap + o.lgap > 0) {
                 this.element.css({
-                    "padding-left": o.hgap + o.lgap + "px"
+                    "padding-left": (o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.hgap + o.rgap > 0) {
                 this.element.css({
-                    "padding-right": o.hgap + o.rgap + "px"
+                    "padding-right": (o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.vgap + o.tgap > 0) {
                 this.element.css({
-                    "padding-top": o.vgap + o.tgap + "px"
+                    "padding-top": (o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (o.vgap + o.bgap > 0) {
                 this.element.css({
-                    "padding-bottom": o.vgap + o.bgap + "px"
+                    "padding-bottom": (o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
                 });
             }
             if (BI.isNumber(o.height)) {
-                this.element.css({lineHeight: o.height + "px"});
+                this.element.css({lineHeight: o.height / BI.pixRatio + BI.pixUnit});
             }
             if (BI.isNumber(o.lineHeight)) {
-                this.element.css({lineHeight: o.lineHeight + "px"});
+                this.element.css({lineHeight: o.lineHeight / BI.pixRatio + BI.pixUnit});
             }
             if (BI.isWidthOrHeight(o.maxWidth)) {
-                this.element.css({maxWidth: o.maxWidth});
+                this.element.css({maxWidth: o.maxWidth / BI.pixRatio + BI.pixUnit});
             }
             this.element.css({
                 textAlign: o.textAlign,

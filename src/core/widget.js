@@ -148,14 +148,14 @@
         _initElementWidth: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.width)) {
-                this.element.css("width", o.width);
+                this.element.css("width", BI.isNumber(o.width) ? o.width / BI.pixRatio + BI.pixUnit : o.width);
             }
         },
 
         _initElementHeight: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css("height", o.height);
+                this.element.css("height", BI.isNumber(o.height) ? o.height / BI.pixRatio + BI.pixUnit : o.height);
             }
         },
 

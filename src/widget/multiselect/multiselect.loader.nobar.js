@@ -166,7 +166,7 @@ BI.MultiSelectNoBarLoader = BI.inherit(BI.Widget, {
     },
 
     resetHeight: function (h) {
-        this.button_group.element.css({"max-height": h + "px"});
+        this.button_group.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
     },
 
     resetWidth: function () {

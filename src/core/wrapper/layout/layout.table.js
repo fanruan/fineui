@@ -79,8 +79,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left,
-                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i]
+                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left / BI.pixRatio + BI.pixUnit,
+                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i] / BI.pixRatio + BI.pixUnit
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -93,8 +93,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
-                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
+                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right / BI.pixRatio + BI.pixUnit,
+                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -106,18 +106,18 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? left * 100 + "%" : left,
-                right: right <= 1 ? right * 100 + "%" : right
+                left: left <= 1 ? left * 100 + "%" : left / BI.pixRatio + BI.pixUnit,
+                right: right <= 1 ? right * 100 + "%" : right / BI.pixRatio + BI.pixUnit
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
             type: "bi.absolute",
-            height: BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize,
+            height: (BI.isArray(o.rowSize) ? o.rowSize[this.rows] : o.rowSize) / BI.pixRatio + BI.pixUnit,
             items: abs
         });
         if (this.rows > 0) {
             this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
-                "margin-bottom": o.vgap
+                "margin-bottom": o.vgap / BI.pixRatio + BI.pixUnit
             });
         }
         w.element.css({
