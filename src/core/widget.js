@@ -40,7 +40,8 @@
         _constructor: function () {
             if (this.setup) {
                 pushTarget(this);
-                this.render = this.setup();
+                this.service = this.setup();
+                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
                 popTarget();
             }
         },
