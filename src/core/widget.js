@@ -36,8 +36,12 @@
             });
         },
 
-        // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+
+        },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructed: function () {
             if (this.setup) {
                 pushTarget(this);
                 this.service = this.setup();
@@ -47,8 +51,8 @@
         },
 
         _lazyConstructor: function () {
-            if (!this._constructed) {
-                this._constructed = true;
+            if (!this.__constructed) {
+                this.__constructed = true;
                 this._init();
                 this._initRef();
             }

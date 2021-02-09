@@ -24,6 +24,7 @@
         }
         var widget = new cls();
         widget._initProps(config);
+        widget._constructed();
         widget._initRoot();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
