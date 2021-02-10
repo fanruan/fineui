@@ -44,7 +44,7 @@
         _constructed: function () {
             if (this.setup) {
                 pushTarget(this);
-                this.service = this.setup();
+                this.service = this.setup(this.options);
                 this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
                 popTarget();
             }
