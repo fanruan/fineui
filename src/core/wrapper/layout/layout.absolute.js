@@ -29,15 +29,15 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: BI.isNumber(item.left) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
+            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: BI.isNumber(item.left) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
+            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: BI.isNumber(item.left) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
             bottom += item.bottom;
         }
 

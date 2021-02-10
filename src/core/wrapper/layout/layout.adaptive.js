@@ -27,17 +27,17 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.left
+                right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.left
+                top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.left
+                bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom
             });
         }
 
