@@ -22,22 +22,22 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
             w.element.css({
-                left: item.left / BI.pixRatio + BI.pixUnit
+                left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left
             });
         }
         if (BI.isNotNull(item.right)) {
             w.element.css({
-                right: item.right / BI.pixRatio + BI.pixUnit
+                right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.left
             });
         }
         if (BI.isNotNull(item.top)) {
             w.element.css({
-                top: item.top / BI.pixRatio + BI.pixUnit
+                top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.left
             });
         }
         if (BI.isNotNull(item.bottom)) {
             w.element.css({
-                bottom: item.bottom / BI.pixRatio + BI.pixUnit
+                bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.left
             });
         }
 

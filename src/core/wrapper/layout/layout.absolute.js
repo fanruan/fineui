@@ -25,19 +25,19 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteLayout.superclass._addElement.apply(this, arguments);
         var left = 0, right = 0, top = 0, bottom = 0;
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: item.left / BI.pixRatio + BI.pixUnit});
+            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
             left += item.left;
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: item.right / BI.pixRatio + BI.pixUnit});
+            w.element.css({right: BI.isNumber(item.left) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
             right += item.right;
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: item.top / BI.pixRatio + BI.pixUnit});
+            w.element.css({top: BI.isNumber(item.left) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
             top += item.top;
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: item.bottom / BI.pixRatio + BI.pixUnit});
+            w.element.css({bottom: BI.isNumber(item.left) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
             bottom += item.bottom;
         }
 
@@ -70,7 +70,6 @@ BI.AbsoluteLayout = BI.inherit(BI.Layout, {
             bottom += o.bgap;
             w.element.css({bottom: bottom / BI.pixRatio + BI.pixUnit});
         }
-
 
         if (BI.isNotNull(item.width)) {
             w.element.css({width: item.width / BI.pixRatio + BI.pixUnit});
