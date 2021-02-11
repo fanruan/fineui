@@ -100,9 +100,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                attributes: {
-                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i] / BI.pixRatio + BI.pixUnit
-                },
+                width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
                 tagName: "td",
                 items: [w]
             });

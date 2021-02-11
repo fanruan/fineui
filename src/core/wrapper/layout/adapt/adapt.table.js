@@ -35,7 +35,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit);
+        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
