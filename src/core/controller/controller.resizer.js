@@ -18,8 +18,8 @@ BI.ResizeController = BI.inherit(BI.Controller, {
             self._resize(ev);
             // }
         }, 30);
-        if ("onorientationchange" in window) {
-            window.onorientationchange = fn;
+        if ("onorientationchange" in _global) {
+            _global.onorientationchange = fn;
         } else {
             BI.Widget._renderEngine.createElement(_global).resize(fn);
         }
