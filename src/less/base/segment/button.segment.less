@@ -2,6 +2,12 @@
 
 .bi-segment-button {
   color: @color-bi-text-highlight;
+  &.active {
+    &:active {
+      color: @color-bi-text;
+      background-color: @color-bi-background-highlight;
+    }
+  }
   &:active {
     color: @color-bi-text-highlight;
     .background-color(@color-bi-background-highlight, 10%);
