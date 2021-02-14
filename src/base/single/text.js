@@ -96,8 +96,9 @@
                 case "nowrap":
                     return "pre";
                 case "normal":
-                default:
                     return "pre-wrap";
+                default:
+                    return o.whiteSpace;
             }
         },
 
