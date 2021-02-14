@@ -72,10 +72,10 @@ BI.AdaptiveLayout = BI.inherit(BI.Layout, {
         }
 
         if (BI.isNotNull(item.width)) {
-            w.element.css({width: item.width / BI.pixRatio + BI.pixUnit});
+            w.element.css({width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : item.width});
         }
         if (BI.isNotNull(item.height)) {
-            w.element.css({height: item.height / BI.pixRatio + BI.pixUnit});
+            w.element.css({height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : item.height});
         }
         return w;
     },
