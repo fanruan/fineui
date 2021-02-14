@@ -105,16 +105,16 @@ BI.FloatRightLayout = BI.inherit(BI.Layout, {
         var w = BI.FloatRightLayout.superclass._addElement.apply(this, arguments);
         w.element.css({position: "relative", float: "right"});
         if (BI.isNotNull(item.left)) {
-            w.element.css({left: item.left});
+            w.element.css({left: BI.isNumber(item.left) ? item.left / BI.pixRatio + BI.pixUnit : item.left});
         }
         if (BI.isNotNull(item.right)) {
-            w.element.css({right: item.right});
+            w.element.css({right: BI.isNumber(item.right) ? item.right / BI.pixRatio + BI.pixUnit : item.right});
         }
         if (BI.isNotNull(item.top)) {
-            w.element.css({top: item.top});
+            w.element.css({top: BI.isNumber(item.top) ? item.top / BI.pixRatio + BI.pixUnit : item.top});
         }
         if (BI.isNotNull(item.bottom)) {
-            w.element.css({bottom: item.bottom});
+            w.element.css({bottom: BI.isNumber(item.bottom) ? item.bottom / BI.pixRatio + BI.pixUnit : item.bottom});
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
