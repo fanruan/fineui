@@ -1,17 +1,5 @@
 @import "../../index";
 
-input,
-textarea {
-  border: 1px solid @color-bi-border-line;
-}
-
-.bi-theme-dark {
-  input,
-  textarea {
-    border: 1px solid @color-bi-border-line-theme-dark;
-  }
-}
-
 .base-disabled {
   cursor: not-allowed !important;
   color: @color-bi-text-disabled !important;
@@ -41,6 +29,11 @@ textarea {
   }
 }
 
+.base-invalid {
+  cursor: default !important;
+}
+
+//focus时边框高亮
 .bi-focus-shadow {
   &:focus, &:hover {
     border-color: @color-bi-border-highlight;
@@ -66,15 +59,11 @@ textarea {
   }
 }
 
-.base-invalid {
-  cursor: default !important;
-}
-
 .clearfix {
   .clearfix();
 }
 
-//基本背景色
+//基本背景
 .bi-background {
   background-color: @color-bi-background-normal;
   color: @color-bi-text-normal;
@@ -148,6 +137,7 @@ textarea {
   }
 }
 
+//灰化
 .bi-disabled {
   color: @color-bi-text-disabled;
   & .bi-input {
