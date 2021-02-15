@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -197,9 +197,11 @@
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI._lazyCreateWidget(el, {
-                        element: self
-                    });
+                    if (el) {
+                        BI._lazyCreateWidget(el, {
+                            element: self
+                        });
+                    }
                 });
             }
             // if (this._isRoot === true || !(this instanceof BI.Layout)) {
@@ -532,12 +534,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 
