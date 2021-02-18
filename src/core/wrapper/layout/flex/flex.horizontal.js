@@ -34,7 +34,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch) {
+        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
             w.element.css({
                 "flex-shrink": "0"
             });

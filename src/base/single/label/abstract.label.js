@@ -59,6 +59,7 @@
                         BI.createWidget({
                             type: "bi.center_adapt",
                             height: o.height,
+                            columnSize: [""], // important让文字shrink为1
                             scrollable: o.whiteSpace === "normal",
                             element: this,
                             items: [
@@ -71,6 +72,7 @@
                     }
                     BI.createWidget({ // 1.2
                         type: "bi.center_adapt",
+                        columnSize: [""], // important让文字shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
@@ -93,6 +95,7 @@
                     this.text = BI.createWidget(json);
                     BI.createWidget({
                         type: "bi.center_adapt",
+                        columnSize: [""], // important让文字shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [this.text]
@@ -127,6 +130,7 @@
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [""], // important让文字shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
@@ -137,6 +141,7 @@
                 json.maxWidth = o.textWidth;
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [""], // important让文字shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [
@@ -159,6 +164,7 @@
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [""], // important让文字shrink为1
                     scrollable: true,
                     element: this,
                     items: [this.text]
@@ -195,6 +201,7 @@
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
+                columnSize: [""], // important让文字shrink为1
                 element: this,
                 items: [this.text]
             });
@@ -211,6 +218,7 @@
                         BI.createWidget({
                             type: adaptLayout,
                             horizontalAlign: o.textAlign,
+                            columnSize: [""], // important让文字shrink为1
                             height: o.height,
                             scrollable: o.whiteSpace === "normal",
                             element: this,
@@ -225,6 +233,7 @@
                     BI.createWidget({ // 2.2
                         type: adaptLayout,
                         horizontalAlign: o.textAlign,
+                        columnSize: [""], // important让文字shrink为1
                         scrollable: o.whiteSpace === "normal",
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -262,6 +271,7 @@
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: [""], // important让文字shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -281,6 +291,7 @@
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: [""], // important让文字shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -329,6 +340,7 @@
             BI.createWidget({
                 type: adaptLayout,
                 horizontalAlign: o.textAlign,
+                columnSize: [""], // important让文字shrink为1
                 element: this,
                 scrollable: o.whiteSpace === "normal",
                 items: [this.text]
