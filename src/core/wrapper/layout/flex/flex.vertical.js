@@ -33,7 +33,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
+        if (o.verticalAlign !== BI.VerticalAlign.Stretch) {
             w.element.css({
                 "flex-shrink": "0"
             });
