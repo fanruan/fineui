@@ -28,6 +28,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
