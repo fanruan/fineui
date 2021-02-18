@@ -1,4 +1,4 @@
-/*! time: 2021-2-18 09:50:39 */
+/*! time: 2021-2-18 17:00:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14992,7 +14992,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (BI.contains([BI.HorizontalAlign.Left, BI.HorizontalAlign.Right, BI.HorizontalAlign.Center], o.horizontalAlign)) {
+        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
             w.element.css({
                 "flex-shrink": "0"
             });
@@ -15139,7 +15139,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
+        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
             w.element.css({
                 "flex-shrink": "0"
             });
@@ -15344,7 +15344,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign === BI.HorizontalAlign.Left || o.horizontalAlign === BI.HorizontalAlign.Right) {
+        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
             w.element.css({
                 "flex-shrink": "0"
             });
@@ -15499,7 +15499,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign === BI.VerticalAlign.Top || o.verticalAlign === BI.VerticalAlign.Bottom) {
+        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
             w.element.css({
                 "flex-shrink": "0"
             });
@@ -27493,6 +27493,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: "bi.center_adapt",
                             height: o.height,
+                            columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                             scrollable: o.whiteSpace === "normal",
                             element: this,
                             items: [
@@ -27505,6 +27506,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     }
                     BI.createWidget({ // 1.2
                         type: "bi.center_adapt",
+                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
@@ -27527,6 +27529,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     this.text = BI.createWidget(json);
                     BI.createWidget({
                         type: "bi.center_adapt",
+                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [this.text]
@@ -27561,6 +27564,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
@@ -27571,6 +27575,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 json.maxWidth = o.textWidth;
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [
@@ -27593,6 +27598,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                     scrollable: true,
                     element: this,
                     items: [this.text]
@@ -27629,6 +27635,7 @@ BI.shortcut("bi.radio", BI.Radio);
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
+                columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                 element: this,
                 items: [this.text]
             });
@@ -27645,6 +27652,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: adaptLayout,
                             horizontalAlign: o.textAlign,
+                            columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                             height: o.height,
                             scrollable: o.whiteSpace === "normal",
                             element: this,
@@ -27659,6 +27667,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     BI.createWidget({ // 2.2
                         type: adaptLayout,
                         horizontalAlign: o.textAlign,
+                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -27696,6 +27705,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -27715,6 +27725,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -27763,6 +27774,7 @@ BI.shortcut("bi.radio", BI.Radio);
             BI.createWidget({
                 type: adaptLayout,
                 horizontalAlign: o.textAlign,
+                columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
                 element: this,
                 scrollable: o.whiteSpace === "normal",
                 items: [this.text]
