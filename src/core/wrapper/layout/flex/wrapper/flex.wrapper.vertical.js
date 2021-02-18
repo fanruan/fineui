@@ -35,7 +35,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
             w.element.css({
                 "flex-shrink": "0"
             });
