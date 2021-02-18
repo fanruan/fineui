@@ -23,7 +23,7 @@ BI.IconLabel = BI.inherit(BI.Single, {
             height: o.iconHeight
         });
         if (BI.isNumber(o.height) && o.height > 0 && BI.isNull(o.iconWidth) && BI.isNull(o.iconHeight)) {
-            this.element.css("lineHeight", o.height + "px");
+            this.element.css("lineHeight", o.height / BI.pixRatio + BI.pixUnit);
             BI.createWidget({
                 type: "bi.default",
                 element: this,

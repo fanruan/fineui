@@ -101,7 +101,7 @@
                 }
                 if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                     this.element.css({
-                        "line-height": o.height + "px"
+                        "line-height": o.height / BI.pixRatio + BI.pixUnit
                     });
                     json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
@@ -167,7 +167,7 @@
             }
             if (BI.isNumber(o.height) && o.height > 0) { // 1.8
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height / BI.pixRatio + BI.pixUnit
                 });
                 json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, {
@@ -253,7 +253,7 @@
                     }));
                     if (o.whiteSpace !== "normal") {
                         this.element.css({
-                            "line-height": o.height - (o.vgap * 2) + "px"
+                            "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                         });
                     }
                     return;
@@ -300,7 +300,7 @@
             if (BI.isNumber(o.height) && o.height > 0) {
                 if (o.whiteSpace !== "normal") {
                     this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
+                        "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
                 this.text = BI.createWidget(BI.extend(json, { // 2.6

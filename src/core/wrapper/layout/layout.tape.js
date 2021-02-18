@@ -52,7 +52,11 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
-            w.element.css({position: "absolute", top: (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px", bottom: (item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap + "px"});
+            w.element.css({
+                position: "absolute",
+                top: ((item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                bottom: ((item.bgap || 0) + (item.vgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit
+            });
         });
 
         var left = {}, right = {};
@@ -68,8 +72,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    left: left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px",
-                    width: BI.isNumber(item.width) ? item.width : ""
+                    left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
@@ -85,8 +89,8 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
             } else {
                 w.element.css({
-                    right: right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap + "px",
-                    width: BI.isNumber(item.width) ? item.width : ""
+                    right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
+                    width: BI.isNumber(item.width) ? item.width / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.width)) {
@@ -165,7 +169,11 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
             } else {
                 w = self.getWidgetByName(self._getChildName(i));
             }
-            w.element.css({position: "absolute", left: (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap + "px", right: + (item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap + "px"});
+            w.element.css({
+                position: "absolute",
+                left: ((item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
+                right: +((item.hgap || 0) + (item.rgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit
+            });
         });
 
         var top = {}, bottom = {};
@@ -181,8 +189,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    top: top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap + "px",
-                    height: BI.isNumber(item.height) ? item.height : ""
+                    top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
+                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.height)) {
@@ -198,8 +206,8 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
             } else {
                 w.element.css({
-                    bottom: bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap + "px",
-                    height: BI.isNumber(item.height) ? item.height : ""
+                    bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
+                    height: BI.isNumber(item.height) ? item.height / BI.pixRatio + BI.pixUnit : ""
                 });
             }
             if (!BI.isNumber(item.height)) {

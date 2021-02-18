@@ -62,6 +62,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
             isNeedAdjustWidth: false,
             el: this.trigger,
             destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 100,
                 stopPropagation: false,

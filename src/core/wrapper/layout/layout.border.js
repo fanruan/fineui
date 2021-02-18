@@ -39,12 +39,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("north"), w);
                     }
-                    this.getWidgetByName(this._getChildName("north")).element.height(item.height)
+                    this.getWidgetByName(this._getChildName("north")).element.height(item.height / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            top: (item.top || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            top: (item.top || 0) / BI.pixRatio + BI.pixUnit,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
                             bottom: "initial"
                         });
                 }
@@ -59,12 +59,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("south"), w);
                     }
-                    this.getWidgetByName(this._getChildName("south")).element.height(item.height)
+                    this.getWidgetByName(this._getChildName("south")).element.height(item.height / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            bottom: (item.bottom || 0),
-                            left: (item.left || 0),
-                            right: (item.right || 0),
+                            bottom: (item.bottom || 0) / BI.pixRatio + BI.pixUnit,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
                             top: "initial"
                         });
                 }
@@ -79,12 +79,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("west"), w);
                     }
-                    this.getWidgetByName(this._getChildName("west")).element.width(item.width)
+                    this.getWidgetByName(this._getChildName("west")).element.width(item.width / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            left: (item.left || 0),
-                            top: top,
-                            bottom: bottom,
+                            left: (item.left || 0) / BI.pixRatio + BI.pixUnit,
+                            top: top / BI.pixRatio + BI.pixUnit,
+                            bottom: bottom / BI.pixRatio + BI.pixUnit,
                             right: "initial"
                         });
                 }
@@ -99,12 +99,12 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                         var w = BI._lazyCreateWidget(item);
                         this.addWidget(this._getChildName("east"), w);
                     }
-                    this.getWidgetByName(this._getChildName("east")).element.width(item.width)
+                    this.getWidgetByName(this._getChildName("east")).element.width(item.width / BI.pixRatio + BI.pixUnit)
                         .css({
                             position: "absolute",
-                            right: (item.right || 0),
-                            top: top,
-                            bottom: bottom,
+                            right: (item.right || 0) / BI.pixRatio + BI.pixUnit,
+                            top: top / BI.pixRatio + BI.pixUnit,
+                            bottom: bottom / BI.pixRatio + BI.pixUnit,
                             left: "initial"
                         });
                 }
@@ -119,7 +119,13 @@ BI.BorderLayout = BI.inherit(BI.Layout, {
                     this.addWidget(this._getChildName("center"), w);
                 }
                 this.getWidgetByName(this._getChildName("center")).element
-                    .css({position: "absolute", top: top, bottom: bottom, left: left, right: right});
+                    .css({
+                        position: "absolute",
+                        top: top / BI.pixRatio + BI.pixUnit,
+                        bottom: bottom / BI.pixRatio + BI.pixUnit,
+                        left: left / BI.pixRatio + BI.pixUnit,
+                        right: right / BI.pixRatio + BI.pixUnit
+                    });
             }
         }
     },
