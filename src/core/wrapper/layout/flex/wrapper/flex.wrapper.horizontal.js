@@ -36,15 +36,13 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
