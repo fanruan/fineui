@@ -173,7 +173,7 @@ BI.SelectList = BI.inherit(BI.Widget, {
     resetHeight: function (h) {
         var toolHeight = ( this.toolbar.element.outerHeight() || 25) * ( this.toolbar.isVisible() ? 1 : 0);
         this.list.resetHeight ? this.list.resetHeight(h - toolHeight) :
-            this.list.element.css({"max-height": h - toolHeight + "px"});
+            this.list.element.css({"max-height": (h - toolHeight) / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {

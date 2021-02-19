@@ -62,16 +62,16 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
 
     _createEditor: function (isYear) {
         var self = this, o = this.options, c = this._const;
-        var minDate = BI.parseDateTime(o.min, "%Y-%X-%d");
         var editor = BI.createWidget({
             type: "bi.sign_editor",
             height: o.height,
             validationChecker: function (v) {
                 if (isYear) {
-                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === minDate.getFullYear() ? minDate.getMonth() + 1 : 1, 1, o.min, o.max)[0]);
+                    return v === "" || (BI.isPositiveInteger(v) && !BI.checkDateVoid(v, parseInt(v, 10) === BI.parseDateTime(o.min, "%Y-%X-%d").getFullYear() ? BI.parseDateTime(o.min, "%Y-%X-%d").getMonth() + 1 : 1, 1, o.min, o.max)[0]);
                 }
+                var year = self.yearEditor.getValue();
 
-                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]);
+                return v === "" || ((BI.isPositiveInteger(v) && v >= 1 && v <= 12) && (BI.isEmptyString(year) ? true : !BI.checkDateVoid(self.yearEditor.getValue(), v, 1, o.min, o.max)[0]));
             },
             quitChecker: function () {
                 return false;

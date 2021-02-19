@@ -116,7 +116,7 @@ BI.SingleSelectList = BI.inherit(BI.Widget, {
 
     resetHeight: function (h) {
         this.list.resetHeight ? this.list.resetHeight(h) :
-            this.list.element.css({"max-height": h + "px"});
+            this.list.element.css({"max-height": h / BI.pixRatio + BI.pixUnit});
     },
 
     setNotSelectedValue: function () {

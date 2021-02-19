@@ -40,8 +40,9 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         shadow: true,
                         textHeight: c.buttonHeight - 1,
                         text: BI.i18nText("BI-Multi_Date_Today"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.todayButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -169,18 +170,24 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
-            this.textButton.setEnable(true);
+            this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+            this.textButton.setEnable(!this._checkTodayValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y-%X-%d");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.todayButton.setValue(date);
+            this.todayButton.setEnable(false);
         }
     },
 
     _checkValueValid: function (value) {
         return BI.isNull(value) || BI.isEmptyObject(value) || BI.isEmptyString(value);
+    },
+
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     setMinDate: function (minDate) {
@@ -221,12 +228,12 @@ BI.DynamicDatePopup = BI.inherit(BI.Widget, {
                         month: date.getMonth() + 1,
                         day: date.getDate()
                     });
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 } else {
                     this.ymd.setValue(value);
-                    this.textButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
+                    this.todayButton.setValue(BI.i18nText("BI-Multi_Date_Today"));
                 }
-                this.textButton.setEnable(true);
+                this.todayButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },

@@ -10,7 +10,6 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             logic: {
                 dynamic: false
             },
-            hgap: 10,
             height: 24
         });
     },
@@ -18,8 +17,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
         BI.SingleSelectRadioItem.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.radio = BI.createWidget({
-            type: "bi.radio",
-            once: o.once
+            type: "bi.radio"
         });
         this.text = BI.createWidget({
             type: "bi.label",
@@ -41,7 +39,7 @@ BI.SingleSelectRadioItem = BI.inherit(BI.BasicButton, {
             items: BI.LogicFactory.createLogicItemsByDirection("left", {
                 type: "bi.center_adapt",
                 items: [this.radio],
-                width: 16
+                width: 26
             }, this.text)
         }))));
     },

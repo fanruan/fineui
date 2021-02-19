@@ -24,6 +24,7 @@
         }
         var widget = new cls();
         widget._initProps(config);
+        widget._constructed();
         widget._initRoot();
         // if (!lazy || config.element || config.root) {
         widget._lazyConstructor();
@@ -60,7 +61,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (item.el && (item.el.type || options.type)) {
             el = BI.extend({}, options, item.el);
@@ -71,7 +72,7 @@
                     BI.Plugin.getObject(el.type, this);
                 }
             }]);
-            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({}, item, {type: w.type}), options, context, lazy);
+            return w.type === el.type ? createWidget(w, context, lazy) : BI.createWidget(BI.extend({/**important**/}, el, {type: w.type}), options, context, lazy);
         }
         if (BI.isWidget(item.el)) {
             return item.el;

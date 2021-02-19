@@ -63,6 +63,8 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,

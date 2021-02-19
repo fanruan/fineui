@@ -21,10 +21,10 @@ BI.prepares.push(function () {
         // 在横向自适应场景下我们需要使用table的自适应撑出滚动条的特性（flex处理不了这种情况）
         // 主要出现在center_adapt或者horizontal_adapt的场景，或者主动设置horizontalAlign的场景
         if (ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch) {
-            return BI.extend(ob, {type: "bi.table_adapt"});
+            return BI.extend({}, ob, {type: "bi.table_adapt"});
         }
         if (!isIE && supportFlex) {
-            return BI.extend(ob, {type: "bi.flex_horizontal"});
+            return BI.extend({}, ob, {type: "bi.flex_horizontal"});
         }
         // 解决使用inline_vertical_adapt的顺序问题
         // 从右往左放置时，为了兼容，我们统一采用从右到左的放置方式
@@ -34,19 +34,19 @@ BI.prepares.push(function () {
                 items: ob.items && ob.items.reverse()
             });
         }
-        return BI.extend(ob, {type: "bi.table_adapt"});
+        return BI.extend({}, ob, {type: "bi.table_adapt"});
     });
     BI.Plugin.configWidget("bi.center_adapt", function (ob) {
         var isIE = BI.isIE(), supportFlex = isSupportFlex(), justOneItem = (ob.items && ob.items.length <= 1);
         var isAdapt = !ob.horizontalAlign || ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (!isIE && supportFlex) {
-                return BI.extend(ob, {type: "bi.flex_center_adapt"});
+                return BI.extend({}, ob, {type: "bi.flex_center_adapt"});
             }
             if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-                return BI.extend(ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
+                return BI.extend({}, ob, {type: "bi.inline_center_adapt", items: ob.items && ob.items.reverse()});
             }
-            return BI.extend(ob, {type: "bi.inline_center_adapt"});
+            return BI.extend({}, ob, {type: "bi.inline_center_adapt"});
         }
         return ob;
     });
@@ -55,12 +55,12 @@ BI.prepares.push(function () {
         var isAdapt = ob.horizontalAlign === BI.HorizontalAlign.Center || ob.horizontalAlign === BI.HorizontalAlign.Stretch;
         if (!isAdapt || justOneItem) {
             if (!isIE && supportFlex) {
-                return BI.extend(ob, {type: "bi.flex_vertical_center_adapt"});
+                return BI.extend({}, ob, {type: "bi.flex_vertical_center_adapt"});
             }
             if (ob.horizontalAlign === BI.HorizontalAlign.Right) {
-                return BI.extend(ob, {type: "bi.inline_vertical_adapt", items: ob.items && ob.items.reverse()});
+                return BI.extend({}, ob, {type: "bi.inline_vertical_adapt", items: ob.items && ob.items.reverse()});
             }
-            return BI.extend(ob, {type: "bi.inline_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.inline_vertical_adapt"});
         }
         return ob;
     });
@@ -68,64 +68,64 @@ BI.prepares.push(function () {
         var justOneItem = (ob.items && ob.items.length <= 1);
         if (!ob.verticalAlign || ob.verticalAlign === BI.VerticalAlign.TOP) {
             if (justOneItem) {
-                return BI.extend(ob, {type: "bi.horizontal_auto"});
+                return BI.extend({}, ob, {type: "bi.horizontal_auto"});
             }
         }
         return ob;
     });
     BI.Plugin.configWidget("bi.horizontal_float", function (ob) {
         if (!BI.isIE() && isSupportFlex()) {
-            return BI.extend(ob, {type: "bi.flex_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_horizontal_adapt"});
         }
-        return BI.extend(ob, {type: "bi.inline_horizontal_adapt"});
+        return BI.extend({}, ob, {type: "bi.inline_horizontal_adapt"});
     });
 
     BI.Plugin.configWidget("bi.flex_horizontal", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical"});
         }
     });
     BI.Plugin.configWidget("bi.flex_horizontal_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_horizontal_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_horizontal_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_horizontal_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_vertical_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_vertical_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_vertical_adapt"});
         }
     });
     BI.Plugin.configWidget("bi.flex_center_adapt", function (ob) {
         if (ob.scrollable === true || ob.scrolly === true || ob.scrollx === true) {
-            return BI.extend(ob, {type: "bi.flex_scrollable_center_adapt"});
+            return BI.extend({}, ob, {type: "bi.flex_scrollable_center_adapt"});
         }
     });
 
     BI.Plugin.configWidget("bi.radio", function (ob) {
         if (BI.isIE() && BI.getIEVersion() <= 9) {
-            return BI.extend(ob, {type: "bi.image_radio"});
+            return BI.extend({}, ob, {type: "bi.image_radio"});
         }
         return ob;
     });
 
     BI.Plugin.configWidget("bi.checkbox", function (ob) {
         if (BI.isIE() && BI.getIEVersion() <= 9) {
-            return BI.extend(ob, {type: "bi.image_checkbox"});
+            return BI.extend({}, ob, {type: "bi.image_checkbox"});
         }
         return ob;
     });
@@ -134,6 +134,6 @@ BI.prepares.push(function () {
         if (BI.isIE() && BI.getIEVersion() < 9) {
             return ob;
         }
-        return BI.extend(ob, {type: "bi.half_button"});
+        return BI.extend({}, ob, {type: "bi.half_button"});
     });
 });

@@ -26,10 +26,10 @@ BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
         var w = BI.AbsoluteCenterLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
             position: "absolute",
-            left: o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0),
-            right: o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0),
-            top: o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0),
-            bottom: o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0),
+            left: (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
+            right: (o.hgap + o.rgap + (item.rgap || 0) + (item.hgap || 0)) / BI.pixRatio + BI.pixUnit,
+            top: (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
+            bottom: (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit,
             margin: "auto"
         });
         return w;
