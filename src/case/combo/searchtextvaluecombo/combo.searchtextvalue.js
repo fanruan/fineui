@@ -10,9 +10,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         items: [],
         tipType: "",
         warningTitle: "",
-        attributes: {
-            tabIndex: 0
-        }
     },
 
     render: function () {
@@ -22,6 +19,7 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
             items: [{
                 el: {
                     type: "bi.combo",
+                    cls: "bi-border bi-focus-shadow",
                     container: o.container,
                     adjustLength: 2,
                     toggle: false,

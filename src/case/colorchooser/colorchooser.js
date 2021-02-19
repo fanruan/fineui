@@ -9,17 +9,17 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser",
+            baseCls: "bi-color-chooser bi-border bi-focus-shadow",
             value: "",
             height: 24,
-            el: {}
+            el: {},
         });
     },
 
     _init: function () {
-        BI.ColorChooser.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        o.height -= 2;
+        BI.ColorChooser.superclass._init.apply(this, arguments);
         o.value = o.value || "";
         this.combo = BI.createWidget({
             type: "bi.combo",
@@ -33,8 +33,8 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
                 ref: function (_ref) {
                     self.trigger = _ref;
                 },
-                width: o.el.type ? o.width : o.width - 2,
-                height: o.el.type ? o.height : o.height - 2
+                width: o.width,
+                height: o.height
             }, o.el),
             popup: {
                 el: BI.extend({

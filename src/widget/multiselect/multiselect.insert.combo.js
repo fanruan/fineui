@@ -12,17 +12,14 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             height: 24,
             itemHeight: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },
 
     _init: function () {
-        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        o.height -= 2;
+        BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if(self.storeValue.type === BI.Selection.All) {
@@ -136,6 +133,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: !o.allowEdit,
             el: this.trigger,
             adjustLength: 1,

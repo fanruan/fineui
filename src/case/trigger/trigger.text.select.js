@@ -9,13 +9,12 @@ BI.SelectTextTrigger = BI.inherit(BI.Trigger, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTextTrigger.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-text-trigger bi-border bi-focus-shadow",
+            baseCls: "bi-select-text-trigger",
             height: 24
         });
     },
 
     _init: function () {
-        this.options.height -= 2;
         BI.SelectTextTrigger.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         var obj = this._digest(o.value, o.items);
