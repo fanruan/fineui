@@ -7,7 +7,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
+        baseCls: "bi-dynamic-date-combo",
         height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
@@ -45,6 +45,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {

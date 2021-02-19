@@ -23,9 +23,6 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
             height: 24,
             allowEdit: true,
             isNeedAdjustWidth: true,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

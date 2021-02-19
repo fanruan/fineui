@@ -12,9 +12,6 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

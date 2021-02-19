@@ -12,9 +12,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemHeight: 24,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },

@@ -10,9 +10,6 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
             iconHeight: null,
             iconWidth: null,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

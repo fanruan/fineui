@@ -12,9 +12,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
             itemsCreator: BI.emptyFn,
             valueFormatter: BI.emptyFn,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: true
         });
     },

@@ -24,9 +24,6 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: true,
             allowInsertValue: true,
             isNeedAdjustWidth: true,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

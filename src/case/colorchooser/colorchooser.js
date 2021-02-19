@@ -13,9 +13,6 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
             value: "",
             height: 24,
             el: {},
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

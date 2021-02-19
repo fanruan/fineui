@@ -11,9 +11,6 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
             text: "",
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

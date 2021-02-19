@@ -11,9 +11,6 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             value: "",
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 

@@ -12,9 +12,6 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
             valueFormatter: BI.emptyFn,
             itemsHeight: 24,
             height: 24,
-            attributes: {
-                tabIndex: 0
-            }
         });
     },
 
