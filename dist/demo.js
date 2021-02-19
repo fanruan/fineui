@@ -1,4 +1,4 @@
-/*! time: 2021-2-19 18:30:37 */
+/*! time: 2021-2-19 21:30:35 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -18974,8 +18974,12 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
@@ -19121,8 +19125,12 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
@@ -19328,8 +19336,12 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
@@ -19483,8 +19495,12 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
