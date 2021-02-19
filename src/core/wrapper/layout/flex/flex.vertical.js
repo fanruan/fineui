@@ -34,15 +34,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
