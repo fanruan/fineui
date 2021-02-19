@@ -33,7 +33,9 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
+        if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+            w.element.addClass("fill");
+        } else {
             w.element.addClass("shrink-none");
         }
         if (o.rowSize[i] > 0) {
