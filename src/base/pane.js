@@ -86,6 +86,7 @@ BI.Pane = BI.inherit(BI.Widget, {
                 items: this._getLoadingTipItems(this._loading)
             });
         }
+        self.fireEvent(BI.Pane.EVENT_LOADING);
         this.element.addClass("loading-status");
     },
 
@@ -144,3 +145,4 @@ BI.Pane = BI.inherit(BI.Widget, {
     }
 });
 BI.Pane.EVENT_LOADED = "EVENT_LOADED";
+BI.Pane.EVENT_LOADING = "EVENT_LOADING";

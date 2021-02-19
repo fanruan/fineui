@@ -2,6 +2,7 @@ import { Widget } from "../core/widget";
 
 export declare class Pane extends Widget {
     static EVENT_LOADED: string;
+    static EVENT_LOADING: string;
 
     _assertTip(..._args: any[]): void;
     loading(): void;

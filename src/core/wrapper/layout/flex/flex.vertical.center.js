@@ -30,6 +30,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,

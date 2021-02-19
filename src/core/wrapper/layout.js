@@ -25,16 +25,16 @@ BI.Layout = BI.inherit(BI.Widget, {
 
     _init4Margin: function () {
         if (this.options.top) {
-            this.element.css("top", this.options.top);
+            this.element.css("top", BI.isNumber(this.options.top) ? this.options.top / BI.pixRatio + BI.pixUnit : this.options.top);
         }
         if (this.options.left) {
-            this.element.css("left", this.options.left);
+            this.element.css("left", BI.isNumber(this.options.left) ? this.options.left / BI.pixRatio + BI.pixUnit : this.options.left);
         }
         if (this.options.bottom) {
-            this.element.css("bottom", this.options.bottom);
+            this.element.css("bottom", BI.isNumber(this.options.bottom) ? this.options.bottom / BI.pixRatio + BI.pixUnit : this.options.bottom);
         }
         if (this.options.right) {
-            this.element.css("right", this.options.right);
+            this.element.css("right", BI.isNumber(this.options.right) ? this.options.right / BI.pixRatio + BI.pixUnit : this.options.right);
         }
     },
 

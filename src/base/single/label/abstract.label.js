@@ -59,6 +59,7 @@
                         BI.createWidget({
                             type: "bi.center_adapt",
                             height: o.height,
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             scrollable: o.whiteSpace === "normal",
                             element: this,
                             items: [
@@ -71,6 +72,7 @@
                     }
                     BI.createWidget({ // 1.2
                         type: "bi.center_adapt",
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
@@ -93,6 +95,7 @@
                     this.text = BI.createWidget(json);
                     BI.createWidget({
                         type: "bi.center_adapt",
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [this.text]
@@ -101,7 +104,7 @@
                 }
                 if (BI.isNumber(o.height) && o.height > 0) { // 1.4
                     this.element.css({
-                        "line-height": o.height + "px"
+                        "line-height": o.height / BI.pixRatio + BI.pixUnit
                     });
                     json.textAlign = o.textAlign;
                     this.text = BI.createWidget(BI.extend(json, {
@@ -127,6 +130,7 @@
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
@@ -137,6 +141,7 @@
                 json.maxWidth = o.textWidth;
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [
@@ -159,6 +164,7 @@
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: true,
                     element: this,
                     items: [this.text]
@@ -167,7 +173,7 @@
             }
             if (BI.isNumber(o.height) && o.height > 0) { // 1.8
                 this.element.css({
-                    "line-height": o.height + "px"
+                    "line-height": o.height / BI.pixRatio + BI.pixUnit
                 });
                 json.textAlign = o.textAlign;
                 this.text = BI.createWidget(BI.extend(json, {
@@ -195,6 +201,7 @@
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 items: [this.text]
             });
@@ -211,6 +218,7 @@
                         BI.createWidget({
                             type: adaptLayout,
                             horizontalAlign: o.textAlign,
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             height: o.height,
                             scrollable: o.whiteSpace === "normal",
                             element: this,
@@ -225,6 +233,7 @@
                     BI.createWidget({ // 2.2
                         type: adaptLayout,
                         horizontalAlign: o.textAlign,
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -253,7 +262,7 @@
                     }));
                     if (o.whiteSpace !== "normal") {
                         this.element.css({
-                            "line-height": o.height - (o.vgap * 2) + "px"
+                            "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                         });
                     }
                     return;
@@ -262,6 +271,7 @@
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -281,6 +291,7 @@
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -300,7 +311,7 @@
             if (BI.isNumber(o.height) && o.height > 0) {
                 if (o.whiteSpace !== "normal") {
                     this.element.css({
-                        "line-height": o.height - (o.vgap * 2) + "px"
+                        "line-height": (o.height - (o.vgap * 2)) / BI.pixRatio + BI.pixUnit
                     });
                 }
                 this.text = BI.createWidget(BI.extend(json, { // 2.6
@@ -329,6 +340,7 @@
             BI.createWidget({
                 type: adaptLayout,
                 horizontalAlign: o.textAlign,
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 scrollable: o.whiteSpace === "normal",
                 items: [this.text]
