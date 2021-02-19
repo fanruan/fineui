@@ -1,4 +1,4 @@
-/*! time: 2021-2-18 17:00:32 */
+/*! time: 2021-2-19 10:00:35 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -14865,6 +14865,8 @@ BI.FlexCenterLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -14925,6 +14927,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
             rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -14951,6 +14954,7 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
 BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
+
 
 /***/ }),
 /* 368 */
@@ -14993,15 +14997,13 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15074,6 +15076,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -15099,6 +15102,7 @@ BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.flex_vertical_adapt", BI.FlexVerticalCenter);
 BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
+
 
 /***/ }),
 /* 370 */
@@ -15140,15 +15144,13 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15222,6 +15224,8 @@ BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
             },
             horizontalAlign: o.horizontalAlign,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -15280,6 +15284,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
             },
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: o.verticalAlign,
+            columnSize: o.columnSize,
             rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
@@ -15302,6 +15307,7 @@ BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.flex_scrollable_horizontal_adapt", BI.FlexWrapperHorizontalCenter);
 BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizontalCenter);
+
 
 /***/ }),
 /* 373 */
@@ -15345,15 +15351,13 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -15436,6 +15440,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: o.horizontalAlign,
             columnSize: o.columnSize,
+            rowSize: o.rowSize,
             scrollx: o.scrollx,
             scrolly: o.scrolly,
             scrollable: o.scrollable,
@@ -15457,6 +15462,7 @@ BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.flex_scrollable_vertical_adapt", BI.FlexWrapperVerticalCenter);
 BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCenter);
+
 
 /***/ }),
 /* 375 */
@@ -15500,15 +15506,13 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             position: "relative"
         });
         if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.css({
-                "flex-shrink": "0"
-            });
+            w.element.addClass("shrink-none");
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
-            w.element.css("flex", "1");
+            w.element.addClass("fill");
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
@@ -27493,7 +27497,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: "bi.center_adapt",
                             height: o.height,
-                            columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             scrollable: o.whiteSpace === "normal",
                             element: this,
                             items: [
@@ -27506,7 +27510,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     }
                     BI.createWidget({ // 1.2
                         type: "bi.center_adapt",
-                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [
@@ -27529,7 +27533,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     this.text = BI.createWidget(json);
                     BI.createWidget({
                         type: "bi.center_adapt",
-                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         element: this,
                         items: [this.text]
@@ -27564,7 +27568,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
-                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [this.text]
@@ -27575,7 +27579,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 json.maxWidth = o.textWidth;
                 BI.createWidget({
                     type: "bi.center_adapt",
-                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     element: this,
                     items: [
@@ -27598,7 +27602,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 this.text = BI.createWidget(json);
                 BI.createWidget({
                     type: "bi.center_adapt",
-                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: true,
                     element: this,
                     items: [this.text]
@@ -27635,7 +27639,7 @@ BI.shortcut("bi.radio", BI.Radio);
             }));
             BI.createWidget({
                 type: "bi.center_adapt",
-                columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 items: [this.text]
             });
@@ -27652,7 +27656,7 @@ BI.shortcut("bi.radio", BI.Radio);
                         BI.createWidget({
                             type: adaptLayout,
                             horizontalAlign: o.textAlign,
-                            columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                            columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                             height: o.height,
                             scrollable: o.whiteSpace === "normal",
                             element: this,
@@ -27667,7 +27671,7 @@ BI.shortcut("bi.radio", BI.Radio);
                     BI.createWidget({ // 2.2
                         type: adaptLayout,
                         horizontalAlign: o.textAlign,
-                        columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                        columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                         scrollable: o.whiteSpace === "normal",
                         hgap: o.hgap,
                         vgap: o.vgap,
@@ -27705,7 +27709,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({ // 2.4
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
-                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -27725,7 +27729,7 @@ BI.shortcut("bi.radio", BI.Radio);
                 BI.createWidget({  // 2.5
                     type: adaptLayout,
                     horizontalAlign: o.textAlign,
-                    columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                    columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                     scrollable: o.whiteSpace === "normal",
                     hgap: o.hgap,
                     vgap: o.vgap,
@@ -27774,7 +27778,7 @@ BI.shortcut("bi.radio", BI.Radio);
             BI.createWidget({
                 type: adaptLayout,
                 horizontalAlign: o.textAlign,
-                columnSize: [o.whiteSpace === "normal" ? "auto" : ""], // important！ 让文字在normal下shrink为1
+                columnSize: ["auto"], // important！ 让文字在flex布局下shrink为1
                 element: this,
                 scrollable: o.whiteSpace === "normal",
                 items: [this.text]
