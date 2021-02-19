@@ -18,9 +18,9 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        this.options.height -= 2;
-        BI.SelectTreeCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.SelectTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget({
             type: "bi.single_tree_trigger",

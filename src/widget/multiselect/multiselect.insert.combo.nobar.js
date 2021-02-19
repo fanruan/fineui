@@ -19,11 +19,9 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
+        o.height -= 2;
+        BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {

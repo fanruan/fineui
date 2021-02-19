@@ -30,12 +30,9 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
     },
 
     _init: function () {
-        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
-
         var self = this, o = this.options;
-        if (o.height) {
-            this.setHeight(o.height - 2);
-        }
+        o.height -= 2;
+        BI.MultiTreeCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
 

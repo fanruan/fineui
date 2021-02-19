@@ -5,13 +5,14 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22,
+        height: 24,
         supportDynamic: true,
     },
 
     _init: function () {
-        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
         this.trigger = BI.createWidget({

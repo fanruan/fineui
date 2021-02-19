@@ -10,9 +10,6 @@ BI.SearchTextValueCombo = BI.inherit(BI.Widget, {
         items: [],
         tipType: "",
         warningTitle: "",
-        attributes: {
-            tabIndex: 0
-        }
     },
 
     render: function () {

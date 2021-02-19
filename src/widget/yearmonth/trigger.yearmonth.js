@@ -8,7 +8,7 @@ BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
         extraCls: "bi-year-month-trigger",
         min: "1900-01-01", // 最小日期
         max: "2099-12-31", // 最大日期
-        height: 22
+        height: 24
     },
 
     beforeInit: function (callback) {

@@ -6,7 +6,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
     _defaultConfig: function () {
         return BI.extend(BI.SelectIconTextTrigger.superclass._defaultConfig.apply(this, arguments), {
             baseCls: "bi-select-text-trigger",
-            height: 22,
+            height: 24,
             iconHeight: null,
             iconWidth: null,
             iconCls: ""
