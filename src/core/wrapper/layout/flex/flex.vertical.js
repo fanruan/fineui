@@ -33,8 +33,12 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
