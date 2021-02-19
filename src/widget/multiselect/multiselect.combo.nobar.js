@@ -21,7 +21,9 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
     _init: function () {
         BI.MultiSelectNoBarCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        if (o.height) {
+            this.setHeight(o.height - 2);
+        }
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
                 if (self.storeValue.type === BI.Selection.All) {
@@ -131,6 +133,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.combo = BI.createWidget({
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             toggle: false,
             container: o.container,
             el: this.trigger,

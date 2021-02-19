@@ -7,7 +7,7 @@
 BI.TextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-combo",
+            baseCls: "bi-text-value-combo bi-border bi-focus-shadow",
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
@@ -19,6 +19,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
+        this.options.height -= 2;
         BI.TextValueCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.trigger = BI.createWidget({

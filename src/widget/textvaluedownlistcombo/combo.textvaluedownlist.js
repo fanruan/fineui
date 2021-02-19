@@ -5,7 +5,7 @@
 BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-down-list-combo",
+            baseCls: "bi-text-value-down-list-combo bi-border bi-focus-shadow",
             height: 24,
             attributes: {
                 tabIndex: 0

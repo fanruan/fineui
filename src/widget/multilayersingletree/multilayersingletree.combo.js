@@ -9,7 +9,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-single-tree-combo",
+            baseCls: "bi-multilayer-single-tree-combo bi-border bi-focus-shadow bi-border-radius",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -26,6 +26,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         });
     },
 
+    _init: function () {
+        this.options.height -= 2;
+        BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
+    },
+
     render: function () {
         var self = this, o = this.options;
 
@@ -33,6 +38,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
             type: "bi.absolute",
+            height: o.height - 2,
             items: [{
                 el: combo,
                 left: 0,

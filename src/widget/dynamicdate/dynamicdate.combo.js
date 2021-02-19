@@ -14,6 +14,9 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         format: "",
         allowEdit: true,
         supportDynamic: true,
+        attributes: {
+            tabIndex: 0
+        }
     },
 
 

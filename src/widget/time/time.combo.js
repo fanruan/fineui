@@ -17,7 +17,10 @@
             // width: 78,
             // height: 22,
             format: "",
-            allowEdit: false
+            allowEdit: false,
+            attributes: {
+                tabIndex: 0
+            }
         },
 
         render: function () {
