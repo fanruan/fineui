@@ -34,10 +34,12 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
-            w.element.addClass("fill");
-        } else {
-            w.element.addClass("shrink-none");
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
