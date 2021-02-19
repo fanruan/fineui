@@ -16,7 +16,9 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _init: function () {
         BI.TextValueDownListCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
-
+        if (o.height) {
+            this.setHeight(o.height - 2);
+        }
         this._createValueMap();
 
         var value;
