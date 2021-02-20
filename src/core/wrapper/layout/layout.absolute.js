@@ -6,7 +6,7 @@
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-layout",
+            baseCls: "bi-abs",
             hgap: null,
             vgap: null,
             lgap: null,

@@ -10,7 +10,7 @@
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-right-vertical-adapt-layout",
+            baseCls: "bi-lr-v-a",
             items: {},
             llgap: 0,
             lrgap: 0,
@@ -78,7 +78,7 @@ BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-vertical-adapt-layout",
+            baseCls: "bi-l-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
@@ -124,7 +124,7 @@ BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right-vertical-adapt-layout",
+            baseCls: "bi-r-v-a",
             items: [],
             lgap: 0,
             rgap: 0,

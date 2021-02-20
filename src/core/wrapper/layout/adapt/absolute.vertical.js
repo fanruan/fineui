@@ -6,7 +6,7 @@
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,

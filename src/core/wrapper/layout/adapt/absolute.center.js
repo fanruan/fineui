@@ -6,7 +6,7 @@
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-center-layout",
+            baseCls: "bi-abs-c-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,

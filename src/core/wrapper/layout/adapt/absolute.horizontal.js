@@ -6,7 +6,7 @@
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-horizontal-layout",
+            baseCls: "bi-abs-h-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,

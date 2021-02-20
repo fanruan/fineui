@@ -7,7 +7,7 @@
 BI.GridLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-grid-layout",
+            baseCls: "bi-grid",
             columns: null,
             rows: null,
             items: []

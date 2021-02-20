@@ -6,7 +6,7 @@
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-adapt-layout",
+            baseCls: "bi-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,

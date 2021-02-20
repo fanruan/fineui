@@ -6,7 +6,7 @@
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizon-auto-layout",
+            baseCls: "bi-h-o",
             hgap: 0,
             lgap: 0,
             rgap: 0,
