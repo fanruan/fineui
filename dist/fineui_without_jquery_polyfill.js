@@ -1,4 +1,4 @@
-/*! time: 2021-2-19 18:30:37 */
+/*! time: 2021-2-20 09:40:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1412);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1413);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -167,13 +167,7 @@ module.exports = g;
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -182,6 +176,12 @@ module.exports = g;
 var _widget = __webpack_require__(1);
 
 /***/ }),
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
 /* 29 */,
 /* 30 */,
 /* 31 */,
@@ -257,7 +257,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 61 */,
@@ -14996,8 +14996,12 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
@@ -15143,8 +15147,12 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
@@ -15350,8 +15358,12 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.horizontalAlign !== BI.HorizontalAlign.Stretch && o.columnSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.columnSize[i] !== "auto") {
+            if (o.horizontalAlign === BI.HorizontalAlign.Stretch && o.columnSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.columnSize[i] > 0) {
             w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
@@ -15505,8 +15517,12 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         w.element.css({
             position: "relative"
         });
-        if (o.verticalAlign !== BI.VerticalAlign.Stretch && o.rowSize[i] !== "auto") {
-            w.element.addClass("shrink-none");
+        if (o.rowSize[i] !== "auto") {
+            if (o.verticalAlign === BI.VerticalAlign.Stretch && o.rowSize[i] !== "") {
+                w.element.addClass("fill");
+            } else {
+                w.element.addClass("shrink-none");
+            }
         }
         if (o.rowSize[i] > 0) {
             w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
@@ -69156,6 +69172,12 @@ Object.defineProperty(exports, "TextNode", {
     return _textnode.TextNode;
   }
 });
+Object.defineProperty(exports, "TextValueCheckComboPopup", {
+  enumerable: true,
+  get: function get() {
+    return _popup3.TextValueCheckComboPopup;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(717);
@@ -69164,7 +69186,7 @@ var _group = __webpack_require__(80);
 
 var _tab = __webpack_require__(718);
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 var _button = __webpack_require__(8);
 
@@ -69444,6 +69466,8 @@ var _tree2 = __webpack_require__(836);
 
 var _textnode = __webpack_require__(837);
 
+var _popup3 = __webpack_require__(838);
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -69604,7 +69628,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 734 */
@@ -70148,7 +70172,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 772 */
@@ -70202,7 +70226,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 778 */
@@ -70373,7 +70397,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(28);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 797 */
@@ -70745,7 +70769,15 @@ var _widget = __webpack_require__(1);
 var _button = __webpack_require__(57);
 
 /***/ }),
-/* 838 */,
+/* 838 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _pane = __webpack_require__(22);
+
+/***/ }),
 /* 839 */,
 /* 840 */,
 /* 841 */,
@@ -70795,7 +70827,8 @@ var _button = __webpack_require__(57);
 /* 885 */,
 /* 886 */,
 /* 887 */,
-/* 888 */
+/* 888 */,
+/* 889 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -70958,17 +70991,17 @@ var _button = __webpack_require__(57);
 
 
 /***/ }),
-/* 889 */,
 /* 890 */,
 /* 891 */,
-/* 892 */
+/* 892 */,
+/* 893 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(893);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(894);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 893 */
+/* 894 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72447,8 +72480,8 @@ var _button = __webpack_require__(57);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 894 */,
-/* 895 */
+/* 895 */,
+/* 896 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -72744,7 +72777,6 @@ var _button = __webpack_require__(57);
 
 
 /***/ }),
-/* 896 */,
 /* 897 */,
 /* 898 */,
 /* 899 */,
@@ -72961,13 +72993,13 @@ var _button = __webpack_require__(57);
 /* 1110 */,
 /* 1111 */,
 /* 1112 */,
-/* 1113 */
+/* 1113 */,
+/* 1114 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1114 */,
 /* 1115 */,
 /* 1116 */,
 /* 1117 */,
@@ -73265,7 +73297,8 @@ var _button = __webpack_require__(57);
 /* 1409 */,
 /* 1410 */,
 /* 1411 */,
-/* 1412 */
+/* 1412 */,
+/* 1413 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73368,7 +73401,7 @@ __webpack_require__(395);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(892);
+__webpack_require__(893);
 __webpack_require__(396);
 __webpack_require__(397);
 __webpack_require__(398);
@@ -73748,9 +73781,9 @@ __webpack_require__(711);
 __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
-__webpack_require__(895);
-__webpack_require__(888);
-__webpack_require__(1113);
+__webpack_require__(896);
+__webpack_require__(889);
+__webpack_require__(1114);
 module.exports = __webpack_require__(715);
 
 
