@@ -32,7 +32,7 @@ export declare class Tree {
   clear():void;
   initTree(nodes: any[]):void;
   toJSON<T>(node?: Node): T[];
-  toJSONWithNode<T>(node: Node): T[];
+  toJSONWithNode<T>(node?: Node): T[];
   search(root: Node, target?: any, param?: any): Node;
   traverse(callback: Function): void;
   recursion(callback: Function): void;

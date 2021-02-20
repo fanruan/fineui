@@ -1,4 +1,4 @@
-/*! time: 2021-2-20 09:40:43 */
+/*! time: 2021-2-20 16:50:36 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1413);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1414);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -13866,7 +13866,7 @@ BI.version = "2.0";
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-center-layout",
+            baseCls: "bi-abs-c-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -13919,7 +13919,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-horizontal-layout",
+            baseCls: "bi-abs-h-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -13976,7 +13976,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14035,7 +14035,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-adapt-layout",
+            baseCls: "bi-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
@@ -14094,7 +14094,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-adapt-layout",
+            baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: false,
@@ -14157,7 +14157,7 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-right-vertical-adapt-layout",
+            baseCls: "bi-lr-v-a",
             items: {},
             llgap: 0,
             lrgap: 0,
@@ -14225,7 +14225,7 @@ BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-vertical-adapt-layout",
+            baseCls: "bi-l-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
@@ -14271,7 +14271,7 @@ BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right-vertical-adapt-layout",
+            baseCls: "bi-r-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
@@ -14315,6 +14315,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 
+
 /***/ }),
 /* 360 */
 /***/ (function(module, exports) {
@@ -14327,7 +14328,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-adapt-layout",
+            baseCls: "bi-t-a",
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
@@ -14374,7 +14375,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -14437,7 +14438,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
-        baseCls: "bi-vertical-adapt-layout",
+        baseCls: "bi-v-a",
         horizontalAlign: BI.HorizontalAlign.Left,
         columnSize: [],
         scrollx: false,
@@ -14496,7 +14497,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizon-auto-layout",
+            baseCls: "bi-h-o",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14570,7 +14571,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
+            baseCls: "bi-i-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -14601,7 +14602,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-center-adapt-item");
+        w.element.addClass("i-c-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14667,7 +14668,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineHorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-horizontal-adapt-layout",
+            baseCls: "bi-i-h-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
@@ -14698,7 +14699,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-horizontal-adapt-item");
+        w.element.addClass("i-h-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14764,7 +14765,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
+            baseCls: "bi-i-v-a",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -14795,7 +14796,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-vertical-adapt-item");
+        w.element.addClass("i-v-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14845,7 +14846,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout",
+            baseCls: "bi-f-c",
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: BI.HorizontalAlign.Center,
             hgap: 0,
@@ -14906,7 +14907,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-center-adapt-layout",
+            baseCls: "bi-f-h-c",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrolly: false,
@@ -14970,7 +14971,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+            baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
@@ -15058,7 +15059,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
+            baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -15121,7 +15122,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-layout",
+            baseCls: "bi-f-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15209,7 +15210,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -15270,7 +15271,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrollable: true,
@@ -15331,7 +15332,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-horizontal-layout clearfix",
+            baseCls: "bi-f-s-h clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -15348,7 +15349,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-horizontal-layout-wrapper v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-h-w v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -15429,7 +15430,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -15490,7 +15491,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-layout clearfix",
+            baseCls: "bi-f-s-v clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15507,7 +15508,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -15586,7 +15587,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-layout",
+            baseCls: "bi-abs",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -15693,7 +15694,7 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-adaptive-layout",
+            baseCls: "bi-adaptive",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -15797,7 +15798,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border-layout",
+            baseCls: "bi-border",
             items: {}
         });
     },
@@ -15946,7 +15947,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 BI.CardLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CardLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-card-layout",
+            baseCls: "bi-card",
             items: []
         });
     },
@@ -16225,7 +16226,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 BI.DivisionLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-division-layout",
+            baseCls: "bi-division",
             columns: null,
             rows: null,
             items: []
@@ -16396,7 +16397,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-left-layout clearfix",
+            baseCls: "bi-left clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16472,7 +16473,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-right-layout clearfix",
+            baseCls: "bi-right clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16550,7 +16551,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 BI.GridLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-grid-layout",
+            baseCls: "bi-grid",
             columns: null,
             rows: null,
             items: []
@@ -16685,7 +16686,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-layout",
+            baseCls: "bi-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -16739,7 +16740,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -16874,7 +16875,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-layout",
+            baseCls: "bi-i",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16944,7 +16945,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-lattice-layout clearfix"
+            baseCls: "bi-lattice clearfix"
             // columnSize: [0.2, 0.2, 0.6],
         });
     },
@@ -16988,6 +16989,7 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.lattice", BI.LatticeLayout);
 
+
 /***/ }),
 /* 387 */
 /***/ (function(module, exports) {
@@ -17001,7 +17003,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-layout",
+            baseCls: "bi-t",
             scrolly: true,
             columnSize: [200, 200, "fill"],
             rowSize: 30,  // or [30,30,30]
@@ -17155,7 +17157,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 BI.HTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-tape-layout",
+            baseCls: "bi-h-tape",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17388,7 +17390,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td-layout",
+            baseCls: "bi-td",
             columnSize: [200, 200, 200],
             hgap: 0,
             vgap: 0,
@@ -17538,7 +17540,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-layout",
+            baseCls: "bi-v",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17606,7 +17608,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,
@@ -17804,7 +17806,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 BI.CenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-layout",
+            baseCls: "bi-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17886,7 +17888,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-center-layout",
+            baseCls: "bi-float-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17967,7 +17969,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-center-layout",
+            baseCls: "bi-h-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -18047,7 +18049,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-center-layout",
+            baseCls: "bi-v-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -23396,14 +23398,14 @@ BI.PopupView = BI.inherit(BI.Widget, {
         };
         this.element.css({
             "z-index": BI.zIndex_popup,
-            "min-width": o.minWidth / BI.pixRatio + BI.pixUnit,
-            "max-width": o.maxWidth / BI.pixRatio + BI.pixUnit
-        }).bind({click: fn});
+            "min-width": BI.isNumeric(o.minWidth) ? (o.minWidth / BI.pixRatio + BI.pixUnit) : o.minWidth,
+            "max-width": BI.isNumeric(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth
+        }).bind({ click: fn });
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
-        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
+        o.stopPropagation && this.element.bind({ mousedown: fn, mouseup: fn, mouseover: fn });
+        o.stopEvent && this.element.bind({ mousedown: stop, mouseup: stop, mouseover: stop });
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -23438,9 +23440,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
+        this.button_group = BI.createWidget(o.el, { type: "bi.button_group", value: o.value });
         this.button_group.element.css({
-            "min-height": o.minHeight / BI.pixRatio + BI.pixUnit,
+            "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
             "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
             "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
         });
@@ -23506,7 +23508,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
-            this.view.element.css({"max-height": resetHeight / BI.pixRatio + BI.pixUnit});
+            this.view.element.css({ "max-height": resetHeight / BI.pixRatio + BI.pixUnit });
     },
 
     setValue: function (selectedValues) {
@@ -69178,6 +69180,12 @@ Object.defineProperty(exports, "TextValueCheckComboPopup", {
     return _popup3.TextValueCheckComboPopup;
   }
 });
+Object.defineProperty(exports, "ImageButton", {
+  enumerable: true,
+  get: function get() {
+    return _button6.ImageButton;
+  }
+});
 exports["default"] = void 0;
 
 var _combo = __webpack_require__(717);
@@ -69467,6 +69475,8 @@ var _tree2 = __webpack_require__(836);
 var _textnode = __webpack_require__(837);
 
 var _popup3 = __webpack_require__(838);
+
+var _button6 = __webpack_require__(839);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -70778,7 +70788,15 @@ var _button = __webpack_require__(57);
 var _pane = __webpack_require__(22);
 
 /***/ }),
-/* 839 */,
+/* 839 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
 /* 840 */,
 /* 841 */,
 /* 842 */,
@@ -70828,7 +70846,8 @@ var _pane = __webpack_require__(22);
 /* 886 */,
 /* 887 */,
 /* 888 */,
-/* 889 */
+/* 889 */,
+/* 890 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -70991,17 +71010,17 @@ var _pane = __webpack_require__(22);
 
 
 /***/ }),
-/* 890 */,
 /* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(894);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(895);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 894 */
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -72480,8 +72499,8 @@ var _pane = __webpack_require__(22);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 895 */,
-/* 896 */
+/* 896 */,
+/* 897 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -72777,7 +72796,6 @@ var _pane = __webpack_require__(22);
 
 
 /***/ }),
-/* 897 */,
 /* 898 */,
 /* 899 */,
 /* 900 */,
@@ -72994,13 +73012,13 @@ var _pane = __webpack_require__(22);
 /* 1111 */,
 /* 1112 */,
 /* 1113 */,
-/* 1114 */
+/* 1114 */,
+/* 1115 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1115 */,
 /* 1116 */,
 /* 1117 */,
 /* 1118 */,
@@ -73298,7 +73316,8 @@ var _pane = __webpack_require__(22);
 /* 1410 */,
 /* 1411 */,
 /* 1412 */,
-/* 1413 */
+/* 1413 */,
+/* 1414 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73401,7 +73420,7 @@ __webpack_require__(395);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(893);
+__webpack_require__(894);
 __webpack_require__(396);
 __webpack_require__(397);
 __webpack_require__(398);
@@ -73781,9 +73800,9 @@ __webpack_require__(711);
 __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
-__webpack_require__(896);
-__webpack_require__(889);
-__webpack_require__(1114);
+__webpack_require__(897);
+__webpack_require__(890);
+__webpack_require__(1115);
 module.exports = __webpack_require__(715);
 
 
