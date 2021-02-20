@@ -7,7 +7,7 @@
 BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-layout",
+            baseCls: "bi-f-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],

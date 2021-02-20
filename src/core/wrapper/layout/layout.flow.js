@@ -10,7 +10,7 @@
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-left-layout clearfix",
+            baseCls: "bi-left clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -86,7 +86,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-right-layout clearfix",
+            baseCls: "bi-right clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,

@@ -8,7 +8,7 @@
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,

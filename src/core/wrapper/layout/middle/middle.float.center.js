@@ -6,7 +6,7 @@
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-center-layout",
+            baseCls: "bi-float-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,

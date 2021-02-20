@@ -6,7 +6,7 @@
 BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-adapt-layout",
+            baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: false,

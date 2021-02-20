@@ -6,7 +6,7 @@
 BI.HTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-tape-layout",
+            baseCls: "bi-h-tape",
             hgap: 0,
             vgap: 0,
             lgap: 0,

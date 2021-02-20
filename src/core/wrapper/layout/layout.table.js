@@ -7,7 +7,7 @@
 BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-layout",
+            baseCls: "bi-t",
             scrolly: true,
             columnSize: [200, 200, "fill"],
             rowSize: 30,  // or [30,30,30]

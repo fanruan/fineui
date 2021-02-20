@@ -11,7 +11,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineHorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-horizontal-adapt-layout",
+            baseCls: "bi-i-h-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
@@ -42,7 +42,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-horizontal-adapt-item");
+        w.element.addClass("i-h-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit

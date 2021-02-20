@@ -6,7 +6,7 @@
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,

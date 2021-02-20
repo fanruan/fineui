@@ -8,7 +8,7 @@
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-layout clearfix",
+            baseCls: "bi-f-s-v clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -25,7 +25,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 

@@ -6,7 +6,7 @@
 BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td-layout",
+            baseCls: "bi-td",
             columnSize: [200, 200, 200],
             hgap: 0,
             vgap: 0,
