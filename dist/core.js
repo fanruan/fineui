@@ -1,4 +1,4 @@
-/*! time: 2021-2-20 09:40:43 */
+/*! time: 2021-2-20 16:38:29 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -27374,14 +27374,14 @@ BI.PopupView = BI.inherit(BI.Widget, {
         };
         this.element.css({
             "z-index": BI.zIndex_popup,
-            "min-width": o.minWidth / BI.pixRatio + BI.pixUnit,
-            "max-width": o.maxWidth / BI.pixRatio + BI.pixUnit
-        }).bind({click: fn});
+            "min-width": BI.isNumeric(o.minWidth) ? (o.minWidth / BI.pixRatio + BI.pixUnit) : o.minWidth,
+            "max-width": BI.isNumeric(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth
+        }).bind({ click: fn });
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
-        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
+        o.stopPropagation && this.element.bind({ mousedown: fn, mouseup: fn, mouseover: fn });
+        o.stopEvent && this.element.bind({ mousedown: stop, mouseup: stop, mouseover: stop });
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -27416,9 +27416,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
+        this.button_group = BI.createWidget(o.el, { type: "bi.button_group", value: o.value });
         this.button_group.element.css({
-            "min-height": o.minHeight / BI.pixRatio + BI.pixUnit,
+            "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
             "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
             "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
         });
@@ -27484,7 +27484,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
-            this.view.element.css({"max-height": resetHeight / BI.pixRatio + BI.pixUnit});
+            this.view.element.css({ "max-height": resetHeight / BI.pixRatio + BI.pixUnit });
     },
 
     setValue: function (selectedValues) {
