@@ -48,7 +48,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     _checkDate: function (obj) {
         var o = this.options;
         var date = BI.DynamicDateHelper.getCalculation({
-            year: (obj.offset === 0 ? -obj.value : obj.value)
+            year: (obj.offset === 0 ? -obj.value : +obj.value)
         });
 
         return !BI.checkDateVoid(date.getFullYear(), date.getMonth() + 1, date.getDate(), o.min, o.max)[0];
@@ -82,7 +82,7 @@ BI.DynamicYearCard = BI.inherit(BI.Widget, {
     getValue: function () {
         var value = this.item.getValue();
         return {
-            year: (value.offset === 0 ? -value.value : value.value)
+            year: (value.offset === 0 ? -value.value : +value.value)
         };
     }
 });

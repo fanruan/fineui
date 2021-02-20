@@ -1,4 +1,4 @@
-/*! time: 2021-1-20 14:20:28 */
+/*! time: 2021-2-20 09:40:43 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1231);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1236);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1092:
+/***/ 1097:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,7 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1231:
+/***/ 1236:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +350,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1092);
-__webpack_require__(1232);
+__webpack_require__(1097);
+__webpack_require__(1237);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,7 +359,7 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 1232:
+/***/ 1237:
 /***/ (function(module, exports) {
 
 /**
@@ -1615,7 +1615,10 @@ if (!_global.BI) {
                             hr -= 12;
                         }
                         break;
-
+                    case "%Q":
+                    case "%q":
+                        m = (parseInt(a[i], 10) - 1) * 3;
+                        break;
                     case "%M":
                         min = parseInt(a[i], 10);
                         break;
@@ -1790,7 +1793,7 @@ if (!_global.BI) {
     });
 })();
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(62).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(63).setImmediate))
 
 /***/ }),
 
@@ -2001,7 +2004,7 @@ if (!_global.BI) {
   attachTo.setImmediate = setImmediate;
   attachTo.clearImmediate = clearImmediate;
 })(typeof self === "undefined" ? typeof global === "undefined" ? void 0 : global : self);
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(76)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17), __webpack_require__(77)))
 
 /***/ }),
 
@@ -7997,6 +8000,7 @@ _.extend(BI, {
         s["%y"] = yWith4number.substr(2, 2); // year without the century (range 00 to 99)
         s["%Y"] = yWith4number;		// year with the century
         s["%%"] = "%";		// a literal '%' character
+        s["%q"] = "0" + qr;
         s["%Q"] = qr;
 
         var re = /%./g;
@@ -8865,6 +8869,8 @@ _.extend(BI, {
     zIndex_masker: 1e8,
     zIndex_tip: 1e9,
     emptyStr: "",
+    pixUnit: "px",
+    pixRatio: 1,
     emptyFn: function () {
     },
     empty: null,
@@ -8989,6 +8995,7 @@ _.extend(BI, {
     StartOfWeek: 1
 });
 
+
 /***/ }),
 
 /***/ 153:
@@ -9095,7 +9102,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 62:
+/***/ 63:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9163,7 +9170,7 @@ exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || t
 
 /***/ }),
 
-/***/ 76:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -22,7 +22,7 @@ BI.Toast = BI.inherit(BI.Tip, {
         BI.Toast.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
         this.element.css({
-            minWidth: this._const.minWidth + "px"
+            minWidth: this._const.minWidth / BI.pixRatio + BI.pixUnit
         });
         this.element.addClass("toast-" + o.level);
         var fn = function (e) {

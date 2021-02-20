@@ -7,8 +7,8 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
     },
 
     props: {
-        baseCls: "bi-dynamic-date-combo bi-border bi-focus-shadow bi-border-radius",
-        height: 22,
+        baseCls: "bi-dynamic-date-combo",
+        height: 24,
         minDate: "1900-01-01",
         maxDate: "2099-12-31",
         format: "",
@@ -16,6 +16,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         supportDynamic: true
     },
 
+    _init: function () {
+        var o = this.options;
+        o.height -= 2;
+        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
+    },
 
     render: function () {
         var self = this, opts = this.options;
@@ -40,6 +45,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                 items: [{
                     el: {
                         type: "bi.combo",
+                        cls: "bi-border bi-focus-shadow bi-border-radius",
                         destroyWhenHide: true,
                         container: opts.container,
                         ref: function () {
@@ -119,11 +125,11 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             }, {
                                 eventName: BI.DynamicDateTimeTrigger.EVENT_CONFIRM,
                                 action: function () {
-                                    if (self.combo.isViewVisible()) {
-                                        return;
-                                    }
                                     var dateStore = self.storeTriggerValue;
                                     var dateObj = self.trigger.getKey();
+                                    if (self.combo.isViewVisible() || BI.isEqual(dateObj, dateStore)) {
+                                        return;
+                                    }
                                     if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                                         self.storeValue = self.trigger.getValue();
                                         self.setValue(self.trigger.getValue());

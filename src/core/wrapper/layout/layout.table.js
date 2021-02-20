@@ -117,7 +117,7 @@ BI.TableLayout = BI.inherit(BI.Layout, {
         });
         if (this.rows > 0) {
             this.getWidgetByName(this._getChildName(this.rows - 1)).element.css({
-                "margin-bottom": o.vgap
+                "margin-bottom": o.vgap / BI.pixRatio + BI.pixUnit
             });
         }
         w.element.css({

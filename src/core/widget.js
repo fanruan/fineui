@@ -7,7 +7,7 @@
  */
 
 !(function () {
-    function callLifeHook (self, life) {
+    function callLifeHook(self, life) {
         var hook = self.options[life] || self[life];
         if (hook) {
             var hooks = BI.isArray(hook) ? hook : [hook];
@@ -36,18 +36,23 @@
             });
         },
 
-        // 覆盖父类的_constructor方法，widget不走ob的生命周期
         _constructor: function () {
+
+        },
+
+        // 覆盖父类的_constructor方法，widget不走ob的生命周期
+        _constructed: function () {
             if (this.setup) {
                 pushTarget(this);
-                this.render = this.setup();
+                this.service = this.setup(this.options);
+                this.render = BI.isPlainObject(this.service) ? this.service.render : this.service;
                 popTarget();
             }
         },
 
         _lazyConstructor: function () {
-            if (!this._constructed) {
-                this._constructed = true;
+            if (!this.__constructed) {
+                this.__constructed = true;
                 this._init();
                 this._initRef();
             }
@@ -148,14 +153,14 @@
         _initElementWidth: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.width)) {
-                this.element.css("width", o.width);
+                this.element.css("width", BI.isNumber(o.width) ? o.width / BI.pixRatio + BI.pixUnit : o.width);
             }
         },
 
         _initElementHeight: function () {
             var o = this.options;
             if (BI.isWidthOrHeight(o.height)) {
-                this.element.css("height", o.height);
+                this.element.css("height", BI.isNumber(o.height) ? o.height / BI.pixRatio + BI.pixUnit : o.height);
             }
         },
 
@@ -192,9 +197,11 @@
             }
             if (BI.isArray(els)) {
                 BI.each(els, function (i, el) {
-                    BI._lazyCreateWidget(el, {
-                        element: self
-                    });
+                    if (el) {
+                        BI._lazyCreateWidget(el, {
+                            element: self
+                        });
+                    }
                 });
             }
             // if (this._isRoot === true || !(this instanceof BI.Layout)) {
@@ -527,12 +534,12 @@
         BI.Widget.context = context = contextStack.pop();
     };
 
-    function pushTarget (_current) {
+    function pushTarget(_current) {
         if (current) currentStack.push(current);
         BI.Widget.current = current = _current;
     }
 
-    function popTarget () {
+    function popTarget() {
         BI.Widget.current = current = currentStack.pop();
     }
 

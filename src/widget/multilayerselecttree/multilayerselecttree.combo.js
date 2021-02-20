@@ -6,21 +6,23 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-select-tree-combo",
+            baseCls: "bi-multilayer-select-tree-combo bi-border bi-focus-shadow bi-border-radius",
             isDefaultInit: false,
             height: 24,
             text: "",
             itemsCreator: BI.emptyFn,
             items: [],
             value: "",
-            attributes: {
-                tabIndex: 0
-            },
             allowEdit: false,
             allowSearchValue: false,
             allowInsertValue: false,
             isNeedAdjustWidth: true
         });
+    },
+
+    _init: function () {
+        this.options.height -= 2;
+        BI.MultiLayerSelectTreeCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {

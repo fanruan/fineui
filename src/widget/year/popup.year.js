@@ -48,8 +48,9 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
                         cls: "bi-split-left bi-split-right bi-high-light bi-split-top",
                         shadow: true,
                         text: BI.i18nText("BI-Basic_Current_Year"),
+                        disabled: this._checkTodayValid(),
                         ref: function () {
-                            self.textButton = this;
+                            self.yearButton = this;
                         },
                         listeners: [{
                             eventName: BI.TextButton.EVENT_CHANGE,
@@ -78,14 +79,20 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
 
     _setInnerValue: function () {
         if (this.dateTab.getSelect() === BI.DynamicDateCombo.Static) {
-            this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-            this.textButton.setEnable(true);
+            this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+            this.yearButton.setEnable(!this._checkYearValid());
         } else {
             var date = BI.DynamicDateHelper.getCalculation(this.dynamicPane.getValue());
             date = BI.print(date, "%Y");
-            this.textButton.setValue(date);
-            this.textButton.setEnable(false);
+            this.yearButton.setValue(date);
+            this.yearButton.setEnable(false);
         }
+    },
+
+    _checkYearValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
     },
 
     _getTabJson: function () {
@@ -176,6 +183,12 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
         };
     },
 
+    _checkTodayValid: function () {
+        var o = this.options;
+        var today = BI.getDate();
+        return !!BI.checkDateVoid(today.getFullYear(), today.getMonth() + 1, today.getDate(), o.min, o.max)[0];
+    },
+
     setMinDate: function (minDate) {
         if (this.options.min !== minDate) {
             this.options.min = minDate;
@@ -208,8 +221,8 @@ BI.DynamicYearPopup = BI.inherit(BI.Widget, {
             case BI.DynamicDateCombo.Static:
             default:
                 this.year.setValue(value);
-                this.textButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
-                this.textButton.setEnable(true);
+                this.yearButton.setValue(BI.i18nText("BI-Basic_Current_Year"));
+                this.yearButton.setEnable(!this._checkTodayValid());
                 break;
         }
     },

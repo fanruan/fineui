@@ -99,8 +99,8 @@ BI.TooltipsController = BI.inherit(BI.Controller, {
             !opt.belowMouse && (y = Math.max(y, top));
         }
         tooltip.element.css({
-            left: x < 0 ? 0 : x + "px",
-            top: y < 0 ? 0 : y + "px"
+            left: x < 0 ? 0 : x / BI.pixRatio + BI.pixUnit,
+            top: y < 0 ? 0 : y / BI.pixRatio + BI.pixUnit
         });
         tooltip.element.hover(function () {
             self.remove(name);

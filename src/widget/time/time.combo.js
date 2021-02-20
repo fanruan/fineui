@@ -13,11 +13,16 @@
             border: 1
         },
         props: {
-            baseCls: "bi-time-combo bi-border bi-border-radius bi-focus-shadow",
-            // width: 78,
-            // height: 22,
+            baseCls: "bi-time-combo",
+            height: 24,
             format: "",
-            allowEdit: false
+            allowEdit: false,
+        },
+
+        _init: function () {
+            var o = this.options;
+            o.height -= 2;
+            BI.TimeCombo.superclass._init.apply(this, arguments);
         },
 
         render: function () {
@@ -59,6 +64,7 @@
                     items: [{
                         el: {
                             type: "bi.combo",
+                            cls: "bi-border bi-border-radius bi-focus-shadow",
                             container: opts.container,
                             toggle: false,
                             isNeedAdjustHeight: false,
@@ -164,7 +170,7 @@
                         },
                         top: 0,
                         left: 0,
-                        right: 22,
+                        right: 0,
                         bottom: 0
                     }, {
                         el: {

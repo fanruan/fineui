@@ -5,13 +5,14 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         behaviors: {},
         minDate: "1900-01-01", // 最小日期
         maxDate: "2099-12-31", // 最大日期
-        height: 22,
+        height: 24,
         supportDynamic: true,
     },
 
     _init: function () {
-        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         var self = this, o = this.options;
+        o.height -= 2;
+        BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
         this.trigger = BI.createWidget({
@@ -32,14 +33,17 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_ERROR, function () {
             self.combo.isViewVisible() && self.combo.hideView();
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_ERROR);
+        });
+        this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_VALID, function () {
+            self.fireEvent(BI.DynamicYearMonthCombo.EVENT_VALID);
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_CONFIRM, function () {
-            // 没看出来干啥的，先去掉
-            // if (self.combo.isViewVisible()) {
-            //     return;
-            // }
             var dateStore = self.storeTriggerValue;
             var dateObj = self.trigger.getKey();
+            if (BI.isEqual(dateObj, dateStore)) {
+                return;
+            }
             if (BI.isNotEmptyString(dateObj) && !BI.isEqual(dateObj, dateStore)) {
                 self.storeValue = self.trigger.getValue();
                 self.setValue(self.trigger.getValue());
@@ -49,6 +53,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         });
         this.trigger.on(BI.DynamicYearQuarterTrigger.EVENT_FOCUS, function () {
             self.storeTriggerValue = self.trigger.getKey();
+            self.fireEvent(BI.DynamicYearQuarterCombo.EVENT_FOCUS);
         });
 
         this.combo = BI.createWidget({
@@ -57,6 +62,8 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
             isNeedAdjustHeight: false,
             isNeedAdjustWidth: false,
             el: this.trigger,
+            destroyWhenHide: true,
+            adjustLength: 1,
             popup: {
                 minWidth: 85,
                 stopPropagation: false,
@@ -165,6 +172,14 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
         this.popup && this.popup.setMaxDate(maxDate);
     },
 
+    hideView: function () {
+        this.combo.hideView();
+    },
+
+    getKey: function () {
+        return this.trigger.getKey();
+    },
+
     setValue: function (v) {
         this.storeValue = v;
         this.trigger.setValue(v);
@@ -173,11 +188,18 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
 
     getValue: function () {
         return this.storeValue;
+    },
+
+    isStateValid: function () {
+        return this.trigger.isStateValid();
     }
 
 });
 BI.DynamicYearQuarterCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.DynamicYearQuarterCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
+BI.DynamicYearQuarterCombo.EVENT_ERROR = "EVENT_ERROR";
+BI.DynamicYearQuarterCombo.EVENT_VALID = "EVENT_VALID";
+BI.DynamicYearQuarterCombo.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.dynamic_year_quarter_combo", BI.DynamicYearQuarterCombo);
 
 BI.extend(BI.DynamicYearQuarterCombo, {
