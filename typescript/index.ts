@@ -151,6 +151,7 @@ import { DateCalendarPopup } from "./widget/date/calendar/popup.calendar.date";
 import { Tree, Node } from "./core/utils/tree";
 import { TextNode } from "./base/single/button/node/textnode";
 import { TextValueCheckComboPopup } from "./case/combo/textvaluecheckcombo/popup.textvaluecheck";
+import { ImageButton } from './base/single/button/buttons/button.image';
 
 
 export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
@@ -307,6 +308,7 @@ export interface BI extends _func, _i18n, _base, _inject, _var, _web, _utils {
     DateCalendarPopup: typeof DateCalendarPopup;
     TextNode: typeof TextNode;
     TextValueCheckComboPopup: typeof TextValueCheckComboPopup;
+    ImageButton: typeof ImageButton;
 }
 
 export default {
@@ -465,4 +467,5 @@ export {
     Node,
     TextNode,
     TextValueCheckComboPopup,
+    ImageButton,
 };
