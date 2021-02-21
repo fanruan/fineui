@@ -163,7 +163,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 self.layout = _ref;
             },
             horizontalAlign: BI.HorizontalAlign.Right,
-            items: o.items.reverse(),
+            items: o.items,
             hgap: o.hgap,
             lgap: o.lgap,
             rgap: o.rgap,
@@ -186,7 +186,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate(items.reverse());
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
