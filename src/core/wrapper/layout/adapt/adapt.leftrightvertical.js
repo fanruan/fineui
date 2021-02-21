@@ -119,7 +119,10 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
-            vgap: o.vgap
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -166,7 +169,10 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             rgap: o.rgap,
             tgap: o.tgap,
             bgap: o.bgap,
-            vgap: o.vgap
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 

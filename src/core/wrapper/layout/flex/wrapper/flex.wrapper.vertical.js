@@ -50,7 +50,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         }
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-top": ((i === 0 ? o.vgap : 0) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-top": ((o.verticalAlign === BI.VerticalAlign.Bottom ? o.vgap : (i === 0 ? o.vgap : 0)) + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         if (o.hgap + o.lgap + (item.lgap || 0) + (item.hgap || 0) !== 0) {
@@ -65,7 +65,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
         }
         if (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
-                "margin-bottom": (o.vgap + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
+                "margin-bottom": ((o.verticalAlign === BI.VerticalAlign.Bottom ? (i === 0 ? o.vgap : 0) : o.vgap) + o.bgap + (item.bgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
             });
         }
         return w;
