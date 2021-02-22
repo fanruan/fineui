@@ -24,7 +24,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        this.options.height -= 2;
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
         BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -33,7 +37,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
             height: o.height - 2,
             items: [{
@@ -64,6 +68,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
                 top: 0
             }]
         };
+    },
+
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
     },
 
     _getBaseConfig: function () {
