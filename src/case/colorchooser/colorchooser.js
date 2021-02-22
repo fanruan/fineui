@@ -9,7 +9,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.ColorChooser.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-color-chooser bi-border bi-focus-shadow",
+            baseCls: "bi-color-chooser bi-border",
             value: "",
             height: 24,
             el: {},
@@ -19,6 +19,7 @@ BI.ColorChooser = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.ColorChooser.superclass._init.apply(this, arguments);
         o.value = o.value || "";
         this.combo = BI.createWidget({

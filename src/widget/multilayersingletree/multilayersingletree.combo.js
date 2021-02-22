@@ -9,7 +9,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-single-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-multilayer-single-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -24,7 +24,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        this.options.height -= 2;
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
         BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -33,7 +37,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
             height: o.height - 2,
             items: [{
@@ -66,10 +70,16 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,

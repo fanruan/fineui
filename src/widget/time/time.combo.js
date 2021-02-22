@@ -21,7 +21,6 @@
 
         _init: function () {
             var o = this.options;
-            o.height -= 2;
             BI.TimeCombo.superclass._init.apply(this, arguments);
         },
 
@@ -176,8 +175,8 @@
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button time-font icon-size-16",
-                            width: 22,
-                            height: 22,
+                            width: opts.height,
+                            height: opts.height,
                             listeners: [{
                                 eventName: BI.IconButton.EVENT_CHANGE,
                                 action: function () {

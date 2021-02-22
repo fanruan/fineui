@@ -5,7 +5,7 @@
 BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-down-list-combo bi-border bi-focus-shadow",
+            baseCls: "bi-text-value-down-list-combo bi-border",
             height: 24,
         });
     },
@@ -13,6 +13,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.TextValueDownListCombo.superclass._init.apply(this, arguments);
         this._createValueMap();
 
