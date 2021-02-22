@@ -55,3 +55,6 @@ BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.flex_horizontal_adapt", BI.FlexHorizontalCenter);
 BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
+
+// ts化兼容处理, bi.horizontal_float对应布局被删了
+BI.FloatHorizontalLayout = { xtype: 'bi.horizontal_float' };
