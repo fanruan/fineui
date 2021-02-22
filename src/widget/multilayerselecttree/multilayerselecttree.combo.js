@@ -6,7 +6,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-select-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-multilayer-select-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -66,6 +66,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
