@@ -9,7 +9,7 @@
 BI.CardLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CardLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-card",
+            baseCls: "bi-card-layout",
             items: []
         });
     },
