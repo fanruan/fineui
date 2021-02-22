@@ -15,9 +15,15 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             llgap: 0,
             lrgap: 0,
             lhgap: 0,
+            ltgap: 0,
+            lbgap: 0,
+            lvgap: 0,
             rlgap: 0,
             rrgap: 0,
-            rhgap: 0
+            rhgap: 0,
+            rtgap: 0,
+            rbgap: 0,
+            rvgap: 0
         });
     },
     render: function () {
@@ -30,11 +36,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.left = _ref;
+                        },
                         height: "100%",
                         items: o.items.left,
                         hgap: o.lhgap,
                         lgap: o.llgap,
-                        rgap: o.lrgap
+                        rgap: o.lrgap,
+                        tgap: o.ltgap,
+                        bgap: o.lbgap,
+                        vgap: o.lvgap
                     }
                 }]
             });
@@ -45,12 +57,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.right = _ref;
+                        },
                         height: "100%",
                         items: o.items.right,
-                        textAlign: "right",
                         hgap: o.rhgap,
                         lgap: o.rlgap,
-                        rgap: o.rrgap
+                        rgap: o.rrgap,
+                        tgap: o.rtgap,
+                        bgap: o.rbgap,
+                        vgap: o.rvgap
                     }
                 }]
             });
@@ -68,8 +85,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.left.populate(items.left);
+        this.right.populate(items.right);
     }
 });
 BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
@@ -82,27 +99,30 @@ BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.left",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -128,28 +148,31 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.right",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    textAlign: "right",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            horizontalAlign: BI.HorizontalAlign.Right,
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -163,7 +186,7 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
