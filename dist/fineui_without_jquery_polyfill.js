@@ -1,4 +1,4 @@
-/*! time: 2021-2-22 10:30:36 */
+/*! time: 2021-2-22 14:00:37 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -15970,7 +15970,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 BI.CardLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CardLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-card",
+            baseCls: "bi-card-layout",
             items: []
         });
     },
