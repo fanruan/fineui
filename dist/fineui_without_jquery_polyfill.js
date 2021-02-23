@@ -1,4 +1,4 @@
-/*! time: 2021-2-22 14:00:37 */
+/*! time: 2021-2-23 14:30:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1273,7 +1273,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -14380,7 +14380,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -14621,7 +14621,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineCenterAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
@@ -14718,7 +14718,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineHorizontalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
@@ -14815,7 +14815,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
@@ -15028,7 +15028,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15179,7 +15179,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15390,7 +15390,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15549,7 +15549,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("fill");
@@ -16742,7 +16742,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
@@ -17098,8 +17098,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left,
-                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i]
+                    left: o.columnSize[i] <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -17112,8 +17112,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
-                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
+                    right: o.columnSize[j] <= 1 ? (right * 100).toFixed(1) + "%" : right,
+                    width: o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -17125,8 +17125,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? left * 100 + "%" : left,
-                right: right <= 1 ? right * 100 + "%" : right
+                left: left <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                right: right <= 1 ? (right * 100).toFixed(1) + "%" : right
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
@@ -17243,7 +17243,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({left: (left[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
@@ -17260,7 +17260,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({right: (right[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
@@ -17360,7 +17360,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({top: (top[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
@@ -17377,7 +17377,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({bottom: (bottom[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
@@ -17507,7 +17507,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
                 tagName: "td",
                 items: [w]
             });
@@ -17739,9 +17739,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? top[i] * 100 + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var t = top[i] <= 1 ? (top[i] * 100).toFixed(1) + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -17757,9 +17757,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? bottom[i] * 100 + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var b = bottom[i] <= 1 ? (bottom[i] * 100).toFixed(1) + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -17775,9 +17775,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? left[j] * 100 + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var l = left[j] <= 1 ? (left[j] * 100).toFixed(1) + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -17793,9 +17793,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? right[j] * 100 + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var r = right[j] <= 1 ? (right[j] * 100).toFixed(1) + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);

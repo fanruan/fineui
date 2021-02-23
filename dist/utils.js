@@ -1,4 +1,4 @@
-/*! time: 2021-2-22 14:00:37 */
+/*! time: 2021-2-23 14:30:39 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -990,7 +990,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
