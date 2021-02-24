@@ -1,4 +1,4 @@
-/*! time: 2021-2-22 14:00:37 */
+/*! time: 2021-2-24 09:30:32 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,12 +82,12 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1237);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1238);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1098:
+/***/ 1099:
 /***/ (function(module, exports) {
 
 BI.i18n = {
@@ -320,7 +320,7 @@ if(_global.BI.prepares == null) {
 
 /***/ }),
 
-/***/ 1237:
+/***/ 1238:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -350,8 +350,8 @@ __webpack_require__(140);
 __webpack_require__(141);
 __webpack_require__(142);
 __webpack_require__(143);
-__webpack_require__(1098);
-__webpack_require__(1238);
+__webpack_require__(1099);
+__webpack_require__(1239);
 __webpack_require__(153);
 __webpack_require__(154);
 module.exports = __webpack_require__(155);
@@ -359,7 +359,7 @@ module.exports = __webpack_require__(155);
 
 /***/ }),
 
-/***/ 1238:
+/***/ 1239:
 /***/ (function(module, exports) {
 
 /**
@@ -990,7 +990,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
