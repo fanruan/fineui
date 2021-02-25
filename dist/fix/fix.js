@@ -1084,7 +1084,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         if (root._globalDeps[regStr].length === 0) {
                             delete root._globalDeps[regStr];
-                            _w.teardown()
+                            _w.teardown();
                         }
                     }
                 });
@@ -1132,9 +1132,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     if (_root._globalDeps) {
                         remove(_root._globalDeps[_regStr], _dep2);
 
-                        if (root._globalDeps[regStr].length === 0) {
-                            delete root._globalDeps[regStr];
-                            _w.teardown()
+                        if (_root._globalDeps[_regStr].length === 0) {
+                            delete _root._globalDeps[_regStr];
+                            _w2.teardown();
                         }
                     }
                 });
