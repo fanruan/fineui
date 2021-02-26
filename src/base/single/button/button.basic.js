@@ -414,3 +414,4 @@ BI.BasicButton = BI.inherit(BI.Single, {
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);
