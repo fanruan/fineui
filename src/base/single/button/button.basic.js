@@ -381,10 +381,16 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     setText: function (text) {
         this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     getText: function () {
         return this.options.text;
+    },
+
+    setValue: function (text) {
+        BI.BasicButton.superclass.setValue.apply(this, arguments);
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     _setEnable: function (enable) {
@@ -404,10 +410,6 @@ BI.BasicButton = BI.inherit(BI.Single, {
     empty: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
