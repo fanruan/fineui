@@ -1,4 +1,4 @@
-/*! time: 2021-2-26 15:02:26 */
+/*! time: 2021-2-26 20:10:38 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -19060,6 +19060,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (o.shadow && !o.isShadowShowingOnSelected) {
             this.$mask && this.$mask.setVisible(false);
         }
+        this.options.setSelected && this.options.setSelected.call(this, b);
     },
 
     isSelected: function () {
@@ -19084,10 +19085,16 @@ BI.BasicButton = BI.inherit(BI.Single, {
 
     setText: function (text) {
         this.options.text = text;
+        this.options.setText && this.options.setText.call(this, text);
     },
 
     getText: function () {
         return this.options.text;
+    },
+
+    setValue: function (value) {
+        BI.BasicButton.superclass.setValue.apply(this, arguments);
+        this.options.setValue && this.options.setValue.call(this, value);
     },
 
     _setEnable: function (enable) {
@@ -19107,13 +19114,10 @@ BI.BasicButton = BI.inherit(BI.Single, {
     empty: function () {
         BI.Widget._renderEngine.createElement(document).unbind("mouseup." + this.getName());
         BI.BasicButton.superclass.empty.apply(this, arguments);
-    },
-
-    destroy: function () {
-        BI.BasicButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
+BI.shortcut("bi.basic_button", BI.BasicButton);
 
 
 /***/ }),
@@ -36254,13 +36258,10 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
     setText: function (text) {
         BI.SegmentButton.superclass.setText.apply(this, arguments);
         this.text.setText(text);
-    },
-
-    destroy: function () {
-        BI.SegmentButton.superclass.destroy.apply(this, arguments);
     }
 });
 BI.shortcut("bi.segment_button", BI.SegmentButton);
+
 
 /***/ }),
 /* 533 */
