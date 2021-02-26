@@ -1,4 +1,4 @@
-/*! time: 2021-2-20 09:40:43 */
+/*! time: 2021-2-26 15:02:26 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1413);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1415);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1273,7 +1273,7 @@ if (!_global.BI) {
             if (typeof w === "number") {
                 return w >= 0;
             } else if (typeof w === "string") {
-                return /^\d{1,3}%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
+                return /^\d{1,3}(\.\d)?%$/.exec(w) || w == "auto" || /^\d+px$/.exec(w);
             }
         },
 
@@ -13866,7 +13866,7 @@ BI.version = "2.0";
 BI.AbsoluteCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-center-layout",
+            baseCls: "bi-abs-c-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -13919,7 +13919,7 @@ BI.shortcut("bi.absolute_center_adapt", BI.AbsoluteCenterLayout);
 BI.AbsoluteHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-horizontal-layout",
+            baseCls: "bi-abs-h-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -13976,7 +13976,7 @@ BI.shortcut("bi.absolute_horizontal_adapt", BI.AbsoluteHorizontalLayout);
 BI.AbsoluteVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-vertical-layout",
+            baseCls: "bi-abs-v-a",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14035,7 +14035,7 @@ BI.shortcut("bi.absolute_vertical_adapt", BI.AbsoluteVerticalLayout);
 BI.CenterAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-adapt-layout",
+            baseCls: "bi-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             columnSize: [],
             scrollx: false,
@@ -14094,7 +14094,7 @@ BI.shortcut("bi.center_adapt", BI.CenterAdaptLayout);
 BI.HorizontalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-adapt-layout",
+            baseCls: "bi-h-a",
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
             scrollx: false,
@@ -14157,14 +14157,20 @@ BI.shortcut("bi.horizontal_adapt", BI.HorizontalAdaptLayout);
 BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-right-vertical-adapt-layout",
+            baseCls: "bi-lr-v-a",
             items: {},
             llgap: 0,
             lrgap: 0,
             lhgap: 0,
+            ltgap: 0,
+            lbgap: 0,
+            lvgap: 0,
             rlgap: 0,
             rrgap: 0,
-            rhgap: 0
+            rhgap: 0,
+            rtgap: 0,
+            rbgap: 0,
+            rvgap: 0
         });
     },
     render: function () {
@@ -14177,11 +14183,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.left = _ref;
+                        },
                         height: "100%",
                         items: o.items.left,
                         hgap: o.lhgap,
                         lgap: o.llgap,
-                        rgap: o.lrgap
+                        rgap: o.lrgap,
+                        tgap: o.ltgap,
+                        bgap: o.lbgap,
+                        vgap: o.lvgap
                     }
                 }]
             });
@@ -14192,12 +14204,17 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
                 items: [{
                     el: {
                         type: "bi.vertical_adapt",
+                        ref: function (_ref) {
+                            self.right = _ref;
+                        },
                         height: "100%",
                         items: o.items.right,
-                        textAlign: "right",
                         hgap: o.rhgap,
                         lgap: o.rlgap,
-                        rgap: o.rrgap
+                        rgap: o.rrgap,
+                        tgap: o.rtgap,
+                        bgap: o.rbgap,
+                        vgap: o.rvgap
                     }
                 }]
             });
@@ -14215,8 +14232,8 @@ BI.LeftRightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        BI.LeftRightVerticalAdaptLayout.superclass.populate.apply(this, arguments);
-        this._mount();
+        this.left.populate(items.left);
+        this.right.populate(items.right);
     }
 });
 BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
@@ -14225,31 +14242,34 @@ BI.shortcut("bi.left_right_vertical_adapt", BI.LeftRightVerticalAdaptLayout);
 BI.LeftVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LeftRightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-left-vertical-adapt-layout",
+            baseCls: "bi-l-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.LeftVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.left",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -14271,32 +14291,35 @@ BI.shortcut("bi.left_vertical_adapt", BI.LeftVerticalAdaptLayout);
 BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.RightVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-right-vertical-adapt-layout",
+            baseCls: "bi-r-v-a",
             items: [],
             lgap: 0,
             rgap: 0,
-            hgap: 0
+            hgap: 0,
+            tgap: 0,
+            bgap: 0,
+            vgap: 0
         });
     },
     render: function () {
         var o = this.options, self = this;
         BI.RightVerticalAdaptLayout.superclass.render.apply(this, arguments);
         return {
-            type: "bi.right",
+            type: "bi.vertical_adapt",
             ref: function (_ref) {
                 self.layout = _ref;
             },
-            items: [{
-                el: {
-                    type: "bi.vertical_adapt",
-                    height: "100%",
-                    textAlign: "right",
-                    items: o.items,
-                    lgap: o.lgap,
-                    hgap: o.hgap,
-                    rgap: o.rgap
-                }
-            }]
+            horizontalAlign: BI.HorizontalAlign.Right,
+            items: o.items,
+            hgap: o.hgap,
+            lgap: o.lgap,
+            rgap: o.rgap,
+            tgap: o.tgap,
+            bgap: o.bgap,
+            vgap: o.vgap,
+            scrollx: o.scrollx,
+            scrolly: o.scrolly,
+            scrollable: o.scrollable
         };
     },
 
@@ -14310,10 +14333,11 @@ BI.RightVerticalAdaptLayout = BI.inherit(BI.Layout, {
     },
 
     populate: function (items) {
-        this.layout.populate.apply(this, arguments);
+        this.layout.populate(items);
     }
 });
 BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
+
 
 /***/ }),
 /* 360 */
@@ -14327,7 +14351,7 @@ BI.shortcut("bi.right_vertical_adapt", BI.RightVerticalAdaptLayout);
 BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-adapt-layout",
+            baseCls: "bi-t-a",
             columnSize: [],
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
@@ -14356,7 +14380,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", top: "0", left: "0", margin: "0px auto"});
@@ -14374,7 +14398,7 @@ BI.TableAdaptLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -14437,7 +14461,7 @@ BI.shortcut("bi.table_adapt", BI.TableAdaptLayout);
  */
 BI.VerticalAdaptLayout = BI.inherit(BI.Layout, {
     props: {
-        baseCls: "bi-vertical-adapt-layout",
+        baseCls: "bi-v-a",
         horizontalAlign: BI.HorizontalAlign.Left,
         columnSize: [],
         scrollx: false,
@@ -14496,7 +14520,7 @@ BI.shortcut("bi.vertical_adapt", BI.VerticalAdaptLayout);
 BI.HorizontalAutoLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalAutoLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizon-auto-layout",
+            baseCls: "bi-h-o",
             hgap: 0,
             lgap: 0,
             rgap: 0,
@@ -14558,6 +14582,17 @@ BI.shortcut("bi.horizontal_auto", BI.HorizontalAutoLayout);
 /***/ (function(module, exports) {
 
 /**
+ * 浮动的水平居中布局
+ */
+BI.FloatHorizontalLayout = BI.Layout;
+BI.shortcut("bi.horizontal_float", BI.FloatHorizontalLayout);
+
+
+/***/ }),
+/* 364 */
+/***/ (function(module, exports) {
+
+/**
  * 内联布局
  * @class BI.InlineCenterAdaptLayout
  * @extends BI.Layout
@@ -14570,7 +14605,7 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineCenterAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-center-adapt-layout",
+            baseCls: "bi-i-c-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -14597,11 +14632,11 @@ BI.InlineCenterAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineCenterAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-center-adapt-item");
+        w.element.addClass("i-c-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14651,7 +14686,7 @@ BI.shortcut("bi.inline_center_adapt", BI.InlineCenterAdaptLayout);
 
 
 /***/ }),
-/* 364 */
+/* 365 */
 /***/ (function(module, exports) {
 
 /**
@@ -14667,7 +14702,7 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineHorizontalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-horizontal-adapt-layout",
+            baseCls: "bi-i-h-a",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Top,
             columnSize: [],
@@ -14694,11 +14729,11 @@ BI.InlineHorizontalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineHorizontalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-horizontal-adapt-item");
+        w.element.addClass("i-h-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14748,7 +14783,7 @@ BI.shortcut("bi.inline_horizontal_adapt", BI.InlineHorizontalAdaptLayout);
 
 
 /***/ }),
-/* 365 */
+/* 366 */
 /***/ (function(module, exports) {
 
 /**
@@ -14764,7 +14799,7 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineVerticalAdaptLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-vertical-adapt-layout",
+            baseCls: "bi-i-v-a",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -14791,11 +14826,11 @@ BI.InlineVerticalAdaptLayout = BI.inherit(BI.Layout, {
         var o = this.options;
         var w = BI.InlineVerticalAdaptLayout.superclass._addElement.apply(this, arguments);
         w.element.css({
-            width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
+            width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit),
             position: "relative",
             "vertical-align": o.verticalAlign
         });
-        w.element.addClass("inline-vertical-adapt-item");
+        w.element.addClass("i-v-a-item");
         if (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0) !== 0) {
             w.element.css({
                 "margin-top": (o.vgap + o.tgap + (item.tgap || 0) + (item.vgap || 0)) / BI.pixRatio + BI.pixUnit
@@ -14832,7 +14867,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports) {
 
 /**
@@ -14845,7 +14880,7 @@ BI.shortcut("bi.inline_vertical_adapt", BI.InlineVerticalAdaptLayout);
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout",
+            baseCls: "bi-f-c",
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: BI.HorizontalAlign.Center,
             hgap: 0,
@@ -14894,7 +14929,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports) {
 
 /**
@@ -14906,7 +14941,7 @@ BI.shortcut("bi.flex_center_adapt", BI.FlexCenterLayout);
 BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-center-adapt-layout",
+            baseCls: "bi-f-h-c",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrolly: false,
@@ -14957,7 +14992,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports) {
 
 /**
@@ -14970,7 +15005,7 @@ BI.shortcut("bi.flex_horizontal_center_adapt", BI.FlexHorizontalCenter);
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+            baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
@@ -15004,7 +15039,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15045,7 +15080,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports) {
 
 /**
@@ -15058,7 +15093,7 @@ BI.shortcut("bi.flex_horizontal", BI.FlexHorizontalLayout);
 BI.FlexVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-center-adapt-layout",
+            baseCls: "bi-f-v-c",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -15109,7 +15144,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports) {
 
 /**
@@ -15121,7 +15156,7 @@ BI.shortcut("bi.flex_vertical_center_adapt", BI.FlexVerticalCenter);
 BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-layout",
+            baseCls: "bi-f-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15155,7 +15190,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15196,7 +15231,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports) {
 
 /**
@@ -15209,7 +15244,7 @@ BI.shortcut("bi.flex_vertical", BI.FlexVerticalLayout);
 BI.FlexWrapperCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Center,
             verticalAlign: BI.VerticalAlign.Middle,
             columnSize: [],
@@ -15257,7 +15292,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports) {
 
 /**
@@ -15270,7 +15305,7 @@ BI.shortcut("bi.flex_scrollable_center_adapt", BI.FlexWrapperCenterLayout);
 BI.FlexWrapperHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrollable: true,
@@ -15318,7 +15353,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports) {
 
 /**
@@ -15331,7 +15366,7 @@ BI.shortcut("bi.flex_scrollable_horizontal_center_adapt", BI.FlexWrapperHorizont
 BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-horizontal-layout clearfix",
+            baseCls: "bi-f-s-h clearfix",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -15348,7 +15383,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperHorizontalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-horizontal-layout-wrapper v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-h-w v-" + o.verticalAlign).addClass("h-" + o.horizontalAlign);
         this.populate(this.options.items);
     },
 
@@ -15366,7 +15401,7 @@ BI.FlexWrapperHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15416,7 +15451,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports) {
 
 /**
@@ -15429,7 +15464,7 @@ BI.shortcut("bi.flex_scrollable_horizontal", BI.FlexWrapperHorizontalLayout);
 BI.FlexWrapperVerticalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-center-adapt-layout clearfix",
+            baseCls: "bi-f-s-v-c clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
             scrollx: false,
@@ -15477,7 +15512,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports) {
 
 /**
@@ -15490,7 +15525,7 @@ BI.shortcut("bi.flex_scrollable_vertical_center_adapt", BI.FlexWrapperVerticalCe
 BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexWrapperVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-scrollable-vertical-layout clearfix",
+            baseCls: "bi-f-s-v clearfix",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -15507,7 +15542,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
     render: function () {
         BI.FlexWrapperVerticalLayout.superclass.render.apply(this, arguments);
         var o = this.options;
-        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("flex-scrollable-vertical-layout-wrapper h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
+        this.$wrapper = BI.Widget._renderEngine.createElement("<div>").addClass("f-s-v-w h-" + o.horizontalAlign).addClass("v-" + o.verticalAlign);
         this.populate(this.options.items);
     },
 
@@ -15525,7 +15560,7 @@ BI.FlexWrapperVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("fill");
@@ -15575,7 +15610,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports) {
 
 /**
@@ -15586,7 +15621,7 @@ BI.shortcut("bi.flex_scrollable_vertical", BI.FlexWrapperVerticalLayout);
 BI.AbsoluteLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AbsoluteLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-absolute-layout",
+            baseCls: "bi-abs",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -15687,13 +15722,13 @@ BI.shortcut("bi.absolute", BI.AbsoluteLayout);
 
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports) {
 
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-adaptive-layout",
+            baseCls: "bi-adaptive",
             hgap: null,
             vgap: null,
             lgap: null,
@@ -15785,7 +15820,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports) {
 
 /**
@@ -15797,7 +15832,7 @@ BI.shortcut("bi.adaptive", BI.AdaptiveLayout);
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border-layout",
+            baseCls: "bi-border",
             items: {}
         });
     },
@@ -15932,7 +15967,7 @@ BI.shortcut("bi.border", BI.BorderLayout);
 
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports) {
 
 /**
@@ -16148,7 +16183,7 @@ BI.shortcut("bi.card", BI.CardLayout);
 
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports) {
 
 /**
@@ -16213,7 +16248,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 
 
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports) {
 
 /**
@@ -16225,7 +16260,7 @@ BI.shortcut("bi.default", BI.DefaultLayout);
 BI.DivisionLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-division-layout",
+            baseCls: "bi-division",
             columns: null,
             rows: null,
             items: []
@@ -16381,7 +16416,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports) {
 
 /**
@@ -16396,7 +16431,7 @@ BI.shortcut("bi.division", BI.DivisionLayout);
 BI.FloatLeftLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatLeftLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-left-layout clearfix",
+            baseCls: "bi-left clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16472,7 +16507,7 @@ BI.shortcut("bi.left", BI.FloatLeftLayout);
 BI.FloatRightLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatRightLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-right-layout clearfix",
+            baseCls: "bi-right clearfix",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16538,7 +16573,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports) {
 
 /**
@@ -16550,7 +16585,7 @@ BI.shortcut("bi.right", BI.FloatRightLayout);
 BI.GridLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.GridLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-grid-layout",
+            baseCls: "bi-grid",
             columns: null,
             rows: null,
             items: []
@@ -16674,7 +16709,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports) {
 
 /**
@@ -16685,7 +16720,7 @@ BI.shortcut("bi.grid", BI.GridLayout);
 BI.HorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-layout",
+            baseCls: "bi-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,
             columnSize: [],
@@ -16718,7 +16753,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
     _addElement: function (i, item) {
         var o = this.options;
         var td;
-        var width = o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i];
+        var width = o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i];
         if (!this.hasWidget(this._getChildName(i))) {
             var w = BI._lazyCreateWidget(item);
             w.element.css({position: "relative", margin: "0px auto"});
@@ -16739,7 +16774,7 @@ BI.HorizontalLayout = BI.inherit(BI.Layout, {
         // 1、由于直接对td设置最大宽度是在规范中未定义的, 所以要使用类似td:firstChild来迂回实现
         // 2、不能给多个td设置最大宽度，这样只会平分宽度
         // 3、多百分比宽度就算了
-        td.element.css({"max-width": o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit});
+        td.element.css({"max-width": BI.isNumber(o.columnSize[i]) ? (o.columnSize[i] <= 1 ? width : width / BI.pixRatio + BI.pixUnit) : width});
         if (i === 0) {
             td.element.addClass("first-element");
         }
@@ -16858,7 +16893,7 @@ BI.shortcut("bi.horizontal_cell", BI.HorizontalCellLayout);
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports) {
 
 /**
@@ -16874,7 +16909,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-layout",
+            baseCls: "bi-i",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -16929,7 +16964,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports) {
 
 /**
@@ -16944,7 +16979,7 @@ BI.shortcut("bi.inline", BI.InlineLayout);
 BI.LatticeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.LatticeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-lattice-layout clearfix"
+            baseCls: "bi-lattice clearfix"
             // columnSize: [0.2, 0.2, 0.6],
         });
     },
@@ -16988,8 +17023,9 @@ BI.LatticeLayout = BI.inherit(BI.Layout, {
 });
 BI.shortcut("bi.lattice", BI.LatticeLayout);
 
+
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports) {
 
 /**
@@ -17001,7 +17037,7 @@ BI.shortcut("bi.lattice", BI.LatticeLayout);
 BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-layout",
+            baseCls: "bi-t",
             scrolly: true,
             columnSize: [200, 200, "fill"],
             rowSize: 30,  // or [30,30,30]
@@ -17073,8 +17109,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left,
-                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i]
+                    left: o.columnSize[i] <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -17087,8 +17123,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
-                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
+                    right: o.columnSize[j] <= 1 ? (right * 100).toFixed(1) + "%" : right,
+                    width: o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -17100,8 +17136,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? left * 100 + "%" : left,
-                right: right <= 1 ? right * 100 + "%" : right
+                left: left <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                right: right <= 1 ? (right * 100).toFixed(1) + "%" : right
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({
@@ -17144,7 +17180,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports) {
 
 /**
@@ -17155,7 +17191,7 @@ BI.shortcut("bi.table", BI.TableLayout);
 BI.HTapeLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HTapeLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-h-tape-layout",
+            baseCls: "bi-h-tape",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17218,7 +17254,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 left[i] = left[i - 1] + items[i - 1].width + (items[i - 1].lgap || 0) + 2 * (items[i - 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({left: left[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({left: (left[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     left: (left[i] + (item.lgap || 0) + (item.hgap || 0) + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit,
@@ -17235,7 +17271,7 @@ BI.HTapeLayout = BI.inherit(BI.Layout, {
                 right[i] = right[i + 1] + items[i + 1].width + (items[i + 1].rgap || 0) + 2 * (items[i + 1].hgap || 0) + o.hgap + o.lgap + o.rgap;
             }
             if (item.width < 1 && item.width >= 0) {
-                w.element.css({right: right[i] * 100 + "%", width: item.width * 100 + "%"});
+                w.element.css({right: (right[i] * 100).toFixed(1) + "%", width: (item.width * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     right: (right[i] + (item.rgap || 0) + (item.hgap || 0) + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit,
@@ -17335,7 +17371,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 top[i] = top[i - 1] + items[i - 1].height + (items[i - 1].tgap || 0) + 2 * (items[i - 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({top: top[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({top: (top[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     top: (top[i] + (item.vgap || 0) + (item.tgap || 0) + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit,
@@ -17352,7 +17388,7 @@ BI.VTapeLayout = BI.inherit(BI.Layout, {
                 bottom[i] = bottom[i + 1] + items[i + 1].height + (items[i + 1].bgap || 0) + 2 * (items[i + 1].vgap || 0) + o.vgap + o.tgap + o.bgap;
             }
             if (item.height < 1 && item.height >= 0) {
-                w.element.css({bottom: bottom[i] * 100 + "%", height: item.height * 100 + "%"});
+                w.element.css({bottom: (bottom[i] * 100).toFixed(1) + "%", height: (item.height * 100).toFixed(1) + "%"});
             } else {
                 w.element.css({
                     bottom: (bottom[i] + (item.vgap || 0) + (item.bgap || 0) + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit,
@@ -17377,7 +17413,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports) {
 
 /**
@@ -17388,7 +17424,7 @@ BI.shortcut("bi.vtape", BI.VTapeLayout);
 BI.TdLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TdLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-td-layout",
+            baseCls: "bi-td",
             columnSize: [200, 200, 200],
             hgap: 0,
             vgap: 0,
@@ -17482,7 +17518,7 @@ BI.TdLayout = BI.inherit(BI.Layout, {
             first(w, this.rows++, i);
             var td = BI._lazyCreateWidget({
                 type: "bi.default",
-                width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : o.columnSize[i],
+                width: o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : o.columnSize[i],
                 tagName: "td",
                 items: [w]
             });
@@ -17527,7 +17563,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports) {
 
 /**
@@ -17538,7 +17574,7 @@ BI.shortcut("bi.td", BI.TdLayout);
 BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-layout",
+            baseCls: "bi-v",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17595,7 +17631,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports) {
 
 /**
@@ -17606,7 +17642,7 @@ BI.shortcut("bi.vertical", BI.VerticalLayout);
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,
@@ -17714,9 +17750,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? top[i] * 100 + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var t = top[i] <= 1 ? (top[i] * 100).toFixed(1) + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -17732,9 +17768,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? bottom[i] * 100 + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var b = bottom[i] <= 1 ? (bottom[i] * 100).toFixed(1) + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -17750,9 +17786,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? left[j] * 100 + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var l = left[j] <= 1 ? (left[j] * 100).toFixed(1) + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -17768,9 +17804,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? right[j] * 100 + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var r = right[j] <= 1 ? (right[j] * 100).toFixed(1) + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);
@@ -17793,7 +17829,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports) {
 
 /**
@@ -17804,7 +17840,7 @@ BI.shortcut("bi.window", BI.WindowLayout);
 BI.CenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.CenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-center-layout",
+            baseCls: "bi-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17875,7 +17911,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports) {
 
 /**
@@ -17886,7 +17922,7 @@ BI.shortcut("bi.center", BI.CenterLayout);
 BI.FloatCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FloatCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-float-center-layout",
+            baseCls: "bi-float-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -17956,7 +17992,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports) {
 
 /**
@@ -17967,7 +18003,7 @@ BI.shortcut("bi.float_center", BI.FloatCenterLayout);
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-center-layout",
+            baseCls: "bi-h-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -18036,7 +18072,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports) {
 
 /**
@@ -18047,7 +18083,7 @@ BI.shortcut("bi.horizontal_center", BI.HorizontalCenterLayout);
 BI.VerticalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-center-layout",
+            baseCls: "bi-v-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,
@@ -18117,7 +18153,7 @@ BI.shortcut("bi.vertical_center", BI.VerticalCenterLayout);
 
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports) {
 
 /**
@@ -18270,7 +18306,7 @@ BI.Pane.EVENT_LOADED = "EVENT_LOADED";
 BI.Pane.EVENT_LOADING = "EVENT_LOADING";
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports) {
 
 /**
@@ -18485,7 +18521,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports) {
 
 /**
@@ -18662,7 +18698,7 @@ BI.Single = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports) {
 
 /**
@@ -19081,7 +19117,7 @@ BI.BasicButton.EVENT_CHANGE = "BasicButton.EVENT_CHANGE";
 
 
 /***/ }),
-/* 400 */
+/* 401 */
 /***/ (function(module, exports) {
 
 /**
@@ -19142,7 +19178,7 @@ BI.NodeButton = BI.inherit(BI.BasicButton, {
 });
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports) {
 
 /**
@@ -19169,7 +19205,7 @@ BI.Tip = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports) {
 
 /**
@@ -19504,7 +19540,7 @@ BI.ButtonGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_group", BI.ButtonGroup);
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports) {
 
 /**
@@ -19691,7 +19727,7 @@ BI.ButtonTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.button_tree", BI.ButtonTree);
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports) {
 
 BI.prepares.push(function () {
@@ -19707,7 +19743,7 @@ BI.prepares.push(function () {
 
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports) {
 
 /**
@@ -20093,7 +20129,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -20702,7 +20738,7 @@ BI.shortcut("bi.collection_view", BI.CollectionView);
 
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports) {
 
 /**
@@ -20989,7 +21025,7 @@ BI.Expander.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.expander", BI.Expander);
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports) {
 
 /**
@@ -21091,7 +21127,7 @@ BI.ComboGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.combo_group", BI.ComboGroup);
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports) {
 
 BI.VirtualGroup = BI.inherit(BI.Widget, {
@@ -21212,7 +21248,7 @@ BI.VirtualGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.virtual_group", BI.VirtualGroup);
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports) {
 
 /**
@@ -21477,7 +21513,7 @@ BI.Loader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.loader", BI.Loader);
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports) {
 
 /**
@@ -21644,7 +21680,7 @@ BI.Navigation.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.navigation", BI.Navigation);
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports) {
 
 /**
@@ -21968,7 +22004,7 @@ BI.Searcher.EVENT_AFTER_INIT = "EVENT_AFTER_INIT";
 BI.shortcut("bi.searcher", BI.Searcher);
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports) {
 
 /**
@@ -22261,7 +22297,7 @@ BI.Switcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.switcher", BI.Switcher);
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports) {
 
 /**
@@ -22419,7 +22455,7 @@ BI.Tab.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.tab", BI.Tab);
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports) {
 
 /**
@@ -22466,7 +22502,7 @@ BI.EL = BI.inherit(BI.Widget, {
 BI.shortcut("bi.el", BI.EL);
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports) {
 
 /**
@@ -22675,7 +22711,7 @@ BI.Msg = function () {
 
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports) {
 
 /**
@@ -23062,7 +23098,7 @@ BI.shortcut("bi.grid_view", BI.GridView);
 
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports) {
 
 /**
@@ -23339,7 +23375,7 @@ BI.Popover.EVENT_CONFIRM = "EVENT_CONFIRM";
 
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports) {
 
 /**
@@ -23396,14 +23432,14 @@ BI.PopupView = BI.inherit(BI.Widget, {
         };
         this.element.css({
             "z-index": BI.zIndex_popup,
-            "min-width": o.minWidth / BI.pixRatio + BI.pixUnit,
-            "max-width": o.maxWidth / BI.pixRatio + BI.pixUnit
-        }).bind({click: fn});
+            "min-width": BI.isNumeric(o.minWidth) ? (o.minWidth / BI.pixRatio + BI.pixUnit) : o.minWidth,
+            "max-width": BI.isNumeric(o.maxWidth) ? (o.maxWidth / BI.pixRatio + BI.pixUnit) : o.maxWidth
+        }).bind({ click: fn });
 
         this.element.bind("mousewheel", fn);
 
-        o.stopPropagation && this.element.bind({mousedown: fn, mouseup: fn, mouseover: fn});
-        o.stopEvent && this.element.bind({mousedown: stop, mouseup: stop, mouseover: stop});
+        o.stopPropagation && this.element.bind({ mousedown: fn, mouseup: fn, mouseover: fn });
+        o.stopEvent && this.element.bind({ mousedown: stop, mouseup: stop, mouseover: stop });
         this.tool = this._createTool();
         this.tab = this._createTab();
         this.view = this._createView();
@@ -23438,9 +23474,9 @@ BI.PopupView = BI.inherit(BI.Widget, {
 
     _createView: function () {
         var o = this.options;
-        this.button_group = BI.createWidget(o.el, {type: "bi.button_group", value: o.value});
+        this.button_group = BI.createWidget(o.el, { type: "bi.button_group", value: o.value });
         this.button_group.element.css({
-            "min-height": o.minHeight / BI.pixRatio + BI.pixUnit,
+            "min-height": BI.isNumeric(o.minHeight) ? (o.minHeight / BI.pixRatio + BI.pixUnit) : o.minHeight,
             "padding-top": o.innerVGap / BI.pixRatio + BI.pixUnit,
             "padding-bottom": o.innerVGap / BI.pixRatio + BI.pixUnit
         });
@@ -23506,7 +23542,7 @@ BI.PopupView = BI.inherit(BI.Widget, {
             toolHeight = ((this.tool && this.tool.attr("height")) || 24) * ((this.tool && this.tool.isVisible()) ? 1 : 0);
         var resetHeight = h - tbHeight - tabHeight - toolHeight - 2 * this.options.innerVGap;
         this.view.resetHeight ? this.view.resetHeight(resetHeight) :
-            this.view.element.css({"max-height": resetHeight / BI.pixRatio + BI.pixUnit});
+            this.view.element.css({ "max-height": resetHeight / BI.pixRatio + BI.pixUnit });
     },
 
     setValue: function (selectedValues) {
@@ -23523,7 +23559,7 @@ BI.shortcut("bi.popup_view", BI.PopupView);
 
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports) {
 
 /**
@@ -23669,7 +23705,7 @@ BI.SearcherView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.searcher_view", BI.SearcherView);
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports) {
 
 /**
@@ -23793,7 +23829,7 @@ BI.shortcut("bi.list_view", BI.ListView);
 
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports) {
 
 /**
@@ -23984,7 +24020,7 @@ BI.shortcut("bi.virtual_list", BI.VirtualList);
 
 
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports) {
 
 /**
@@ -24278,7 +24314,7 @@ BI.Pager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.pager", BI.Pager);
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports) {
 
 /**
@@ -24315,7 +24351,7 @@ BI.A = BI.inherit(BI.Text, {
 BI.shortcut("bi.a", BI.A);
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports) {
 
 /**
@@ -24400,7 +24436,7 @@ BI.LoadingBar = BI.inherit(BI.Single, {
 BI.shortcut("bi.loading_bar", BI.LoadingBar);
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports) {
 
 /**
@@ -24458,7 +24494,7 @@ BI.shortcut("bi.icon_button", BI.IconButton);
 
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports) {
 
 /**
@@ -24550,7 +24586,7 @@ BI.ImageButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.image_button", BI.ImageButton);
 
 /***/ }),
-/* 428 */
+/* 429 */
 /***/ (function(module, exports) {
 
 
@@ -24709,7 +24745,7 @@ BI.Button.EVENT_CHANGE = "EVENT_CHANGE";
 
 
 /***/ }),
-/* 429 */
+/* 430 */
 /***/ (function(module, exports) {
 
 /**
@@ -24804,7 +24840,7 @@ BI.TextButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_button", BI.TextButton);
 
 /***/ }),
-/* 430 */
+/* 431 */
 /***/ (function(module, exports) {
 
 /**
@@ -24928,7 +24964,7 @@ BI.BlankIconIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_icon_text_item", BI.BlankIconIconTextItem);
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports) {
 
 /**
@@ -25059,7 +25095,7 @@ BI.BlankIconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_icon_item", BI.BlankIconTextIconItem);
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports) {
 
 /**
@@ -25168,7 +25204,7 @@ BI.BlankIconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.blank_icon_text_item", BI.BlankIconTextItem);
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports) {
 
 /**
@@ -25296,7 +25332,7 @@ BI.IconTextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_item", BI.IconTextIconItem);
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports) {
 
 /**
@@ -25401,7 +25437,7 @@ BI.IconTextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_item", BI.IconTextItem);
 
 /***/ }),
-/* 435 */
+/* 436 */
 /***/ (function(module, exports) {
 
 /**
@@ -25506,7 +25542,7 @@ BI.TextIconItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_item", BI.TextIconItem);
 
 /***/ }),
-/* 436 */
+/* 437 */
 /***/ (function(module, exports) {
 
 /**
@@ -25597,7 +25633,7 @@ BI.TextItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_item", BI.TextItem);
 
 /***/ }),
-/* 437 */
+/* 438 */
 /***/ (function(module, exports) {
 
 /**
@@ -25715,7 +25751,7 @@ BI.IconTextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_icon_node", BI.IconTextIconNode);
 
 /***/ }),
-/* 438 */
+/* 439 */
 /***/ (function(module, exports) {
 
 /**
@@ -25810,7 +25846,7 @@ BI.IconTextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_text_node", BI.IconTextNode);
 
 /***/ }),
-/* 439 */
+/* 440 */
 /***/ (function(module, exports) {
 
 /**
@@ -25904,7 +25940,7 @@ BI.TextIconNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_icon_node", BI.TextIconNode);
 
 /***/ }),
-/* 440 */
+/* 441 */
 /***/ (function(module, exports) {
 
 /**
@@ -25986,7 +26022,7 @@ BI.TextNode.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_node", BI.TextNode);
 
 /***/ }),
-/* 441 */
+/* 442 */
 /***/ (function(module, exports) {
 
 /**
@@ -26364,7 +26400,7 @@ BI.shortcut("bi.editor", BI.Editor);
 
 
 /***/ }),
-/* 442 */
+/* 443 */
 /***/ (function(module, exports) {
 
 /**
@@ -26470,7 +26506,7 @@ BI.shortcut("bi.multifile_editor", BI.MultifileEditor);
 
 
 /***/ }),
-/* 443 */
+/* 444 */
 /***/ (function(module, exports) {
 
 /**
@@ -26485,6 +26521,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             baseCls: "bi-textarea-editor",
             value: "",
             errorText: "",
+            adjustYOffset: 2,
+            adjustXOffset: 0,
+            offsetStyle: "left",
             validationChecker: function () {
                 return true;
             },
@@ -26612,7 +26651,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.adjustYOffset,
+                adjustXOffset: o.adjustXOffset,
+                offsetStyle: o.offsetStyle,
             });
             return BI.Bubbles.get(this.getName());
         }
@@ -26673,7 +26714,7 @@ BI.shortcut("bi.textarea_editor", BI.TextAreaEditor);
 
 
 /***/ }),
-/* 444 */
+/* 445 */
 /***/ (function(module, exports) {
 
 /**
@@ -26793,7 +26834,7 @@ BI.shortcut("bi.html", BI.Html);
 
 
 /***/ }),
-/* 445 */
+/* 446 */
 /***/ (function(module, exports) {
 
 /**
@@ -26819,7 +26860,7 @@ BI.Icon = BI.inherit(BI.Single, {
 BI.shortcut("bi.icon", BI.Icon);
 
 /***/ }),
-/* 446 */
+/* 447 */
 /***/ (function(module, exports) {
 
 /**
@@ -26883,7 +26924,7 @@ BI.shortcut("bi.iframe", BI.Iframe);
 
 
 /***/ }),
-/* 447 */
+/* 448 */
 /***/ (function(module, exports) {
 
 /**
@@ -26929,7 +26970,7 @@ BI.shortcut("bi.img", BI.Img);
 
 
 /***/ }),
-/* 448 */
+/* 449 */
 /***/ (function(module, exports) {
 
 /**
@@ -26956,7 +26997,7 @@ BI.ImageCheckbox.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_checkbox", BI.ImageCheckbox);
 
 /***/ }),
-/* 449 */
+/* 450 */
 /***/ (function(module, exports) {
 
 /**
@@ -27022,7 +27063,7 @@ BI.Checkbox.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.checkbox", BI.Checkbox);
 
 /***/ }),
-/* 450 */
+/* 451 */
 /***/ (function(module, exports) {
 
 /**
@@ -27344,7 +27385,7 @@ BI.shortcut("bi.input", BI.Input);
 
 
 /***/ }),
-/* 451 */
+/* 452 */
 /***/ (function(module, exports) {
 
 /**
@@ -27382,7 +27423,7 @@ BI.ImageRadio.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.image_radio", BI.ImageRadio);
 
 /***/ }),
-/* 452 */
+/* 453 */
 /***/ (function(module, exports) {
 
 /**
@@ -27449,7 +27490,7 @@ BI.Radio.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.radio", BI.Radio);
 
 /***/ }),
-/* 453 */
+/* 454 */
 /***/ (function(module, exports) {
 
 /**
@@ -27845,7 +27886,7 @@ BI.shortcut("bi.radio", BI.Radio);
 
 
 /***/ }),
-/* 454 */
+/* 455 */
 /***/ (function(module, exports) {
 
 /**
@@ -27875,7 +27916,7 @@ BI.HtmlLabel = BI.inherit(BI.AbstractLabel, {
 BI.shortcut("bi.html_label", BI.HtmlLabel);
 
 /***/ }),
-/* 455 */
+/* 456 */
 /***/ (function(module, exports) {
 
 /**
@@ -27923,7 +27964,7 @@ BI.shortcut("bi.icon_label", BI.IconLabel);
 
 
 /***/ }),
-/* 456 */
+/* 457 */
 /***/ (function(module, exports) {
 
 /**
@@ -27951,7 +27992,7 @@ BI.shortcut("bi.label", BI.Label);
 
 
 /***/ }),
-/* 457 */
+/* 458 */
 /***/ (function(module, exports) {
 
 /**
@@ -27991,7 +28032,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 458 */
+/* 459 */
 /***/ (function(module, exports) {
 
 /**
@@ -28040,7 +28081,7 @@ BI.shortcut("bi.link", BI.Link);
 
 
 /***/ }),
-/* 459 */
+/* 460 */
 /***/ (function(module, exports) {
 
 /**
@@ -28258,7 +28299,7 @@ BI.shortcut("bi.bubble_view", BI.BubbleView);
 
 
 /***/ }),
-/* 460 */
+/* 461 */
 /***/ (function(module, exports) {
 
 /**
@@ -28362,7 +28403,7 @@ BI.shortcut("bi.toast", BI.Toast);
 
 
 /***/ }),
-/* 461 */
+/* 462 */
 /***/ (function(module, exports) {
 
 /**
@@ -28451,7 +28492,7 @@ BI.Tooltip = BI.inherit(BI.Tip, {
 BI.shortcut("bi.tooltip", BI.Tooltip);
 
 /***/ }),
-/* 462 */
+/* 463 */
 /***/ (function(module, exports) {
 
 /**
@@ -28483,7 +28524,7 @@ BI.Trigger = BI.inherit(BI.Single, {
 });
 
 /***/ }),
-/* 463 */
+/* 464 */
 /***/ (function(module, exports) {
 
 /**
@@ -28636,7 +28677,7 @@ BI.CustomTree.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.custom_tree", BI.CustomTree);
 
 /***/ }),
-/* 464 */
+/* 465 */
 /***/ (function(module, exports) {
 
 /**
@@ -28724,7 +28765,7 @@ BI.IconChangeButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_change_button", BI.IconChangeButton);
 
 /***/ }),
-/* 465 */
+/* 466 */
 /***/ (function(module, exports) {
 
 /**
@@ -28749,7 +28790,7 @@ BI.shortcut("bi.trigger_icon_button", BI.TriggerIconButton);
 
 
 /***/ }),
-/* 466 */
+/* 467 */
 /***/ (function(module, exports) {
 
 /**
@@ -28775,7 +28816,7 @@ BI.HalfIconButton.EVENT_CHANGE = BI.IconButton.EVENT_CHANGE;
 BI.shortcut("bi.half_icon_button", BI.HalfIconButton);
 
 /***/ }),
-/* 467 */
+/* 468 */
 /***/ (function(module, exports) {
 
 /**
@@ -28820,7 +28861,7 @@ BI.HalfButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.half_button", BI.HalfButton);
 
 /***/ }),
-/* 468 */
+/* 469 */
 /***/ (function(module, exports) {
 
 /**
@@ -28901,7 +28942,7 @@ BI.MultiSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_item", BI.MultiSelectItem);
 
 /***/ }),
-/* 469 */
+/* 470 */
 /***/ (function(module, exports) {
 
 /**
@@ -28965,7 +29006,7 @@ BI.SingleSelectIconTextItem = BI.inherit(BI.Single, {
 BI.shortcut("bi.single_select_icon_text_item", BI.SingleSelectIconTextItem);
 
 /***/ }),
-/* 470 */
+/* 471 */
 /***/ (function(module, exports) {
 
 BI.SingleSelectItem = BI.inherit(BI.BasicButton, {
@@ -29021,7 +29062,7 @@ BI.SingleSelectItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_item", BI.SingleSelectItem);
 
 /***/ }),
-/* 471 */
+/* 472 */
 /***/ (function(module, exports) {
 
 /**
@@ -29098,7 +29139,7 @@ BI.shortcut("bi.single_select_radio_item", BI.SingleSelectRadioItem);
 
 
 /***/ }),
-/* 472 */
+/* 473 */
 /***/ (function(module, exports) {
 
 /**
@@ -29186,7 +29227,7 @@ BI.shortcut("bi.arrow_group_node", BI.ArrowNode);
 
 
 /***/ }),
-/* 473 */
+/* 474 */
 /***/ (function(module, exports) {
 
 /**
@@ -29274,7 +29315,7 @@ BI.shortcut("bi.first_plus_group_node", BI.FirstPlusGroupNode);
 
 
 /***/ }),
-/* 474 */
+/* 475 */
 /***/ (function(module, exports) {
 
 /**
@@ -29382,7 +29423,7 @@ BI.shortcut("bi.icon_arrow_node", BI.IconArrowNode);
 
 
 /***/ }),
-/* 475 */
+/* 476 */
 /***/ (function(module, exports) {
 
 /**
@@ -29469,7 +29510,7 @@ BI.LastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.last_plus_group_node", BI.LastPlusGroupNode);
 
 /***/ }),
-/* 476 */
+/* 477 */
 /***/ (function(module, exports) {
 
 /**
@@ -29556,7 +29597,7 @@ BI.MidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.mid_plus_group_node", BI.MidPlusGroupNode);
 
 /***/ }),
-/* 477 */
+/* 478 */
 /***/ (function(module, exports) {
 
 BI.MultiLayerIconArrowNode = BI.inherit(BI.NodeButton, {
@@ -29651,7 +29692,7 @@ BI.shortcut("bi.multilayer_icon_arrow_node", BI.MultiLayerIconArrowNode);
 
 
 /***/ }),
-/* 478 */
+/* 479 */
 /***/ (function(module, exports) {
 
 /**
@@ -29734,7 +29775,7 @@ BI.PlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.plus_group_node", BI.PlusGroupNode);
 
 /***/ }),
-/* 479 */
+/* 480 */
 /***/ (function(module, exports) {
 
 /**
@@ -29786,7 +29827,7 @@ BI.Switch.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.switch", BI.Switch);
 
 /***/ }),
-/* 480 */
+/* 481 */
 /***/ (function(module, exports) {
 
 BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -29872,7 +29913,7 @@ BI.FirstTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.first_tree_leaf_item", BI.FirstTreeLeafItem);
 
 /***/ }),
-/* 481 */
+/* 482 */
 /***/ (function(module, exports) {
 
 BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -29958,7 +29999,7 @@ BI.IconTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.icon_tree_leaf_item", BI.IconTreeLeafItem);
 
 /***/ }),
-/* 482 */
+/* 483 */
 /***/ (function(module, exports) {
 
 BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30044,7 +30085,7 @@ BI.LastTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.last_tree_leaf_item", BI.LastTreeLeafItem);
 
 /***/ }),
-/* 483 */
+/* 484 */
 /***/ (function(module, exports) {
 
 BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30130,7 +30171,7 @@ BI.MidTreeLeafItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.mid_tree_leaf_item", BI.MidTreeLeafItem);
 
 /***/ }),
-/* 484 */
+/* 485 */
 /***/ (function(module, exports) {
 
 /**
@@ -30234,7 +30275,7 @@ BI.shortcut("bi.multilayer_icon_tree_leaf_item", BI.MultiLayerIconTreeLeafItem);
 
 
 /***/ }),
-/* 485 */
+/* 486 */
 /***/ (function(module, exports) {
 
 BI.RootTreeLeafItem = BI.inherit(BI.BasicButton, {
@@ -30314,7 +30355,7 @@ BI.shortcut("bi.root_tree_leaf_item", BI.RootTreeLeafItem);
 
 
 /***/ }),
-/* 486 */
+/* 487 */
 /***/ (function(module, exports) {
 
 /**
@@ -30390,7 +30431,7 @@ BI.shortcut("bi.tree_text_leaf_item", BI.TreeTextLeafItem);
 
 
 /***/ }),
-/* 487 */
+/* 488 */
 /***/ (function(module, exports) {
 
 /**
@@ -30448,7 +30489,7 @@ BI.CalendarDateItem = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.calendar_date_item", BI.CalendarDateItem);
 
 /***/ }),
-/* 488 */
+/* 489 */
 /***/ (function(module, exports) {
 
 /**
@@ -30687,7 +30728,7 @@ BI.extend(BI.Calendar, {
 BI.shortcut("bi.calendar", BI.Calendar);
 
 /***/ }),
-/* 489 */
+/* 490 */
 /***/ (function(module, exports) {
 
 /**
@@ -30863,7 +30904,7 @@ BI.extend(BI.YearCalendar, {
 BI.shortcut("bi.year_calendar", BI.YearCalendar);
 
 /***/ }),
-/* 490 */
+/* 491 */
 /***/ (function(module, exports) {
 
 /**
@@ -30889,7 +30930,7 @@ BI.ArrowTreeGroupNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.arrow_group_node_checkbox", BI.ArrowTreeGroupNodeCheckbox);
 
 /***/ }),
-/* 491 */
+/* 492 */
 /***/ (function(module, exports) {
 
 /**
@@ -30920,7 +30961,7 @@ BI.CheckingMarkNode = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.checking_mark_node", BI.CheckingMarkNode);
 
 /***/ }),
-/* 492 */
+/* 493 */
 /***/ (function(module, exports) {
 
 /**
@@ -30949,7 +30990,7 @@ BI.FirstTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.first_tree_node_checkbox", BI.FirstTreeNodeCheckbox);
 
 /***/ }),
-/* 493 */
+/* 494 */
 /***/ (function(module, exports) {
 
 /**
@@ -30978,7 +31019,7 @@ BI.LastTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.last_tree_node_checkbox", BI.LastTreeNodeCheckbox);
 
 /***/ }),
-/* 494 */
+/* 495 */
 /***/ (function(module, exports) {
 
 /**
@@ -31007,7 +31048,7 @@ BI.MidTreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.mid_tree_node_checkbox", BI.MidTreeNodeCheckbox);
 
 /***/ }),
-/* 495 */
+/* 496 */
 /***/ (function(module, exports) {
 
 /**
@@ -31036,7 +31077,7 @@ BI.TreeNodeCheckbox = BI.inherit(BI.IconButton, {
 BI.shortcut("bi.tree_node_checkbox", BI.TreeNodeCheckbox);
 
 /***/ }),
-/* 496 */
+/* 497 */
 /***/ (function(module, exports) {
 
 /**
@@ -31259,7 +31300,7 @@ BI.BubbleCombo.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW";
 BI.shortcut("bi.bubble_combo", BI.BubbleCombo);
 
 /***/ }),
-/* 497 */
+/* 498 */
 /***/ (function(module, exports) {
 
 /**
@@ -31429,7 +31470,7 @@ BI.shortcut("bi.text_bubble_bar_popup_view", BI.TextBubblePopupBarView);
 
 
 /***/ }),
-/* 498 */
+/* 499 */
 /***/ (function(module, exports) {
 
 /**
@@ -31530,7 +31571,7 @@ BI.shortcut("bi.editor_icon_check_combo", BI.EditorIconCheckCombo);
 
 
 /***/ }),
-/* 499 */
+/* 500 */
 /***/ (function(module, exports) {
 
 /**
@@ -31634,7 +31675,7 @@ BI.IconCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo", BI.IconCombo);
 
 /***/ }),
-/* 500 */
+/* 501 */
 /***/ (function(module, exports) {
 
 /**
@@ -31704,7 +31745,7 @@ BI.IconComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_popup", BI.IconComboPopup);
 
 /***/ }),
-/* 501 */
+/* 502 */
 /***/ (function(module, exports) {
 
 /**
@@ -31811,7 +31852,7 @@ BI.IconComboTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 
 /***/ }),
-/* 502 */
+/* 503 */
 /***/ (function(module, exports) {
 
 /**
@@ -31821,7 +31862,7 @@ BI.shortcut("bi.icon_combo_trigger", BI.IconComboTrigger);
 BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.IconTextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-icon-text-value-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-icon-text-value-combo bi-border bi-border-radius",
             height: 24,
             iconHeight: null,
             iconWidth: null,
@@ -31832,6 +31873,7 @@ BI.IconTextValueCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.IconTextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_icon_text_trigger",
@@ -31920,7 +31962,7 @@ BI.shortcut("bi.icon_text_value_combo", BI.IconTextValueCombo);
 
 
 /***/ }),
-/* 503 */
+/* 504 */
 /***/ (function(module, exports) {
 
 /**
@@ -32002,7 +32044,7 @@ BI.shortcut("bi.icon_text_value_combo_popup", BI.IconTextValueComboPopup);
 
 
 /***/ }),
-/* 504 */
+/* 505 */
 /***/ (function(module, exports) {
 
 /**
@@ -32169,7 +32211,7 @@ BI.shortcut("bi.search_text_value_combo", BI.SearchTextValueCombo);
 
 
 /***/ }),
-/* 505 */
+/* 506 */
 /***/ (function(module, exports) {
 
 /**
@@ -32246,7 +32288,7 @@ BI.SearchTextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_combo_popup", BI.SearchTextValueComboPopup);
 
 /***/ }),
-/* 506 */
+/* 507 */
 /***/ (function(module, exports) {
 
 /**
@@ -32365,7 +32407,7 @@ BI.SearchTextValueTrigger.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 
 /***/ }),
-/* 507 */
+/* 508 */
 /***/ (function(module, exports) {
 
 /**
@@ -32376,7 +32418,7 @@ BI.shortcut("bi.search_text_value_trigger", BI.SearchTextValueTrigger);
 BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCheckCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-check-combo bi-border bi-focus-shadow",
+            baseCls: "bi-text-value-check-combo bi-border",
             width: 100,
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
@@ -32387,6 +32429,7 @@ BI.TextValueCheckCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.TextValueCheckCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
@@ -32454,7 +32497,7 @@ BI.TextValueCheckCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_check_combo", BI.TextValueCheckCombo);
 
 /***/ }),
-/* 508 */
+/* 509 */
 /***/ (function(module, exports) {
 
 BI.TextValueCheckComboPopup = BI.inherit(BI.Pane, {
@@ -32522,7 +32565,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 
 
 /***/ }),
-/* 509 */
+/* 510 */
 /***/ (function(module, exports) {
 
 /**
@@ -32534,7 +32577,7 @@ BI.shortcut("bi.text_value_check_combo_popup", BI.TextValueCheckComboPopup);
 BI.TextValueCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-combo bi-border bi-focus-shadow",
+            baseCls: "bi-text-value-combo bi-border",
             height: 24,
             chooseType: BI.ButtonGroup.CHOOSE_TYPE_SINGLE,
             text: "",
@@ -32545,6 +32588,7 @@ BI.TextValueCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.TextValueCombo.superclass._init.apply(this, arguments);
         this.trigger = BI.createWidget({
             type: "bi.select_text_trigger",
@@ -32626,7 +32670,7 @@ BI.shortcut("bi.text_value_combo", BI.TextValueCombo);
 
 
 /***/ }),
-/* 510 */
+/* 511 */
 /***/ (function(module, exports) {
 
 /**
@@ -32700,7 +32744,7 @@ BI.SmallTextValueCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.small_text_value_combo", BI.SmallTextValueCombo);
 
 /***/ }),
-/* 511 */
+/* 512 */
 /***/ (function(module, exports) {
 
 BI.TextValueComboPopup = BI.inherit(BI.Pane, {
@@ -32766,7 +32810,7 @@ BI.TextValueComboPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_combo_popup", BI.TextValueComboPopup);
 
 /***/ }),
-/* 512 */
+/* 513 */
 /***/ (function(module, exports) {
 
 /**
@@ -32953,7 +32997,7 @@ BI.ClearEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.clear_editor", BI.ClearEditor);
 
 /***/ }),
-/* 513 */
+/* 514 */
 /***/ (function(module, exports) {
 
 /**
@@ -33235,7 +33279,7 @@ BI.shortcut("bi.shelter_editor", BI.ShelterEditor);
 
 
 /***/ }),
-/* 514 */
+/* 515 */
 /***/ (function(module, exports) {
 
 /**
@@ -33516,7 +33560,7 @@ BI.SignEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.sign_editor", BI.SignEditor);
 
 /***/ }),
-/* 515 */
+/* 516 */
 /***/ (function(module, exports) {
 
 /**
@@ -33832,7 +33876,7 @@ BI.shortcut("bi.state_editor", BI.StateEditor);
 
 
 /***/ }),
-/* 516 */
+/* 517 */
 /***/ (function(module, exports) {
 
 /**
@@ -34119,7 +34163,7 @@ BI.SimpleStateEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.simple_state_editor", BI.SimpleStateEditor);
 
 /***/ }),
-/* 517 */
+/* 518 */
 /***/ (function(module, exports) {
 
 /**
@@ -34185,7 +34229,7 @@ BI.shortcut("bi.multi_popup_view", BI.MultiPopupView);
 
 
 /***/ }),
-/* 518 */
+/* 519 */
 /***/ (function(module, exports) {
 
 /**
@@ -34244,7 +34288,7 @@ BI.shortcut("bi.popup_panel", BI.PopupPanel);
 
 
 /***/ }),
-/* 519 */
+/* 520 */
 /***/ (function(module, exports) {
 
 /**
@@ -34426,7 +34470,7 @@ BI.ListPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_pane", BI.ListPane);
 
 /***/ }),
-/* 520 */
+/* 521 */
 /***/ (function(module, exports) {
 
 /**
@@ -34511,7 +34555,7 @@ BI.shortcut("bi.panel", BI.Panel);
 
 
 /***/ }),
-/* 521 */
+/* 522 */
 /***/ (function(module, exports) {
 
 BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
@@ -34570,7 +34614,7 @@ BI.LinearSegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.linear_segment_button", BI.LinearSegmentButton);
 
 /***/ }),
-/* 522 */
+/* 523 */
 /***/ (function(module, exports) {
 
 BI.LinearSegment = BI.inherit(BI.Widget, {
@@ -34626,7 +34670,7 @@ BI.LinearSegment = BI.inherit(BI.Widget, {
 BI.shortcut("bi.linear_segment", BI.LinearSegment);
 
 /***/ }),
-/* 523 */
+/* 524 */
 /***/ (function(module, exports) {
 
 /**
@@ -34849,7 +34893,7 @@ BI.shortcut("bi.select_list", BI.SelectList);
 
 
 /***/ }),
-/* 524 */
+/* 525 */
 /***/ (function(module, exports) {
 
 /**
@@ -34957,7 +35001,7 @@ BI.LazyLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.lazy_loader", BI.LazyLoader);
 
 /***/ }),
-/* 525 */
+/* 526 */
 /***/ (function(module, exports) {
 
 /**
@@ -35158,7 +35202,7 @@ BI.ListLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.list_loader", BI.ListLoader);
 
 /***/ }),
-/* 526 */
+/* 527 */
 /***/ (function(module, exports) {
 
 /**
@@ -35340,7 +35384,7 @@ BI.shortcut("bi.sort_list", BI.SortList);
 
 
 /***/ }),
-/* 527 */
+/* 528 */
 /***/ (function(module, exports) {
 
 /**
@@ -35376,7 +35420,7 @@ BI.LoadingPane = BI.inherit(BI.Pane, {
 });
 
 /***/ }),
-/* 528 */
+/* 529 */
 /***/ (function(module, exports) {
 
 /**
@@ -35590,7 +35634,7 @@ BI.AllCountPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.all_count_pager", BI.AllCountPager);
 
 /***/ }),
-/* 529 */
+/* 530 */
 /***/ (function(module, exports) {
 
 /**
@@ -35871,7 +35915,7 @@ BI.DirectionPager.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.direction_pager", BI.DirectionPager);
 
 /***/ }),
-/* 530 */
+/* 531 */
 /***/ (function(module, exports) {
 
 /**
@@ -36164,7 +36208,7 @@ BI.DetailPager.EVENT_AFTER_POPULATE = "EVENT_AFTER_POPULATE";
 BI.shortcut("bi.detail_pager", BI.DetailPager);
 
 /***/ }),
-/* 531 */
+/* 532 */
 /***/ (function(module, exports) {
 
 /**
@@ -36219,7 +36263,7 @@ BI.SegmentButton = BI.inherit(BI.BasicButton, {
 BI.shortcut("bi.segment_button", BI.SegmentButton);
 
 /***/ }),
-/* 532 */
+/* 533 */
 /***/ (function(module, exports) {
 
 /**
@@ -36288,7 +36332,7 @@ BI.Segment.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.segment", BI.Segment);
 
 /***/ }),
-/* 533 */
+/* 534 */
 /***/ (function(module, exports) {
 
 /**
@@ -36433,7 +36477,7 @@ BI.shortcut("bi.multi_select_bar", BI.MultiSelectBar);
 
 
 /***/ }),
-/* 534 */
+/* 535 */
 /***/ (function(module, exports) {
 
 /**
@@ -36575,7 +36619,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 535 */
+/* 536 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36658,7 +36702,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 536 */
+/* 537 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -36717,7 +36761,7 @@ BI.shortcut("bi.level_tree", BI.LevelTree);
 
 
 /***/ }),
-/* 537 */
+/* 538 */
 /***/ (function(module, exports) {
 
 /**
@@ -36819,7 +36863,7 @@ BI.shortcut("bi.editor_trigger", BI.EditorTrigger);
 
 
 /***/ }),
-/* 538 */
+/* 539 */
 /***/ (function(module, exports) {
 
 /**
@@ -36854,7 +36898,7 @@ BI.IconTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_trigger", BI.IconTrigger);
 
 /***/ }),
-/* 539 */
+/* 540 */
 /***/ (function(module, exports) {
 
 /**
@@ -36964,7 +37008,7 @@ BI.IconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.icon_text_trigger", BI.IconTextTrigger);
 
 /***/ }),
-/* 540 */
+/* 541 */
 /***/ (function(module, exports) {
 
 /**
@@ -37043,7 +37087,7 @@ BI.SelectIconTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.select_icon_text_trigger", BI.SelectIconTextTrigger);
 
 /***/ }),
-/* 541 */
+/* 542 */
 /***/ (function(module, exports) {
 
 /**
@@ -37122,7 +37166,7 @@ BI.shortcut("bi.text_trigger", BI.TextTrigger);
 
 
 /***/ }),
-/* 542 */
+/* 543 */
 /***/ (function(module, exports) {
 
 /**
@@ -37199,7 +37243,7 @@ BI.shortcut("bi.select_text_trigger", BI.SelectTextTrigger);
 
 
 /***/ }),
-/* 543 */
+/* 544 */
 /***/ (function(module, exports) {
 
 /**
@@ -37268,7 +37312,7 @@ BI.SmallSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_select_text_trigger", BI.SmallSelectTextTrigger);
 
 /***/ }),
-/* 544 */
+/* 545 */
 /***/ (function(module, exports) {
 
 /**
@@ -37330,7 +37374,7 @@ BI.SmallTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.small_text_trigger", BI.SmallTextTrigger);
 
 /***/ }),
-/* 545 */
+/* 546 */
 /***/ (function(module, exports) {
 
 /**
@@ -37408,7 +37452,7 @@ BI.MonthDateCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_date_combo", BI.MonthDateCombo);
 
 /***/ }),
-/* 546 */
+/* 547 */
 /***/ (function(module, exports) {
 
 /**
@@ -37498,7 +37542,7 @@ BI.shortcut("bi.year_date_combo", BI.YearDateCombo);
 
 
 /***/ }),
-/* 547 */
+/* 548 */
 /***/ (function(module, exports) {
 
 /**
@@ -37732,7 +37776,7 @@ BI.shortcut("bi.date_picker", BI.DatePicker);
 
 
 /***/ }),
-/* 548 */
+/* 549 */
 /***/ (function(module, exports) {
 
 /**
@@ -37871,7 +37915,7 @@ BI.shortcut("bi.year_picker", BI.YearPicker);
 
 
 /***/ }),
-/* 549 */
+/* 550 */
 /***/ (function(module, exports) {
 
 /**
@@ -38027,7 +38071,7 @@ BI.DateCalendarPopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONT
 BI.shortcut("bi.date_calendar_popup", BI.DateCalendarPopup);
 
 /***/ }),
-/* 550 */
+/* 551 */
 /***/ (function(module, exports) {
 
 /**
@@ -38126,7 +38170,7 @@ BI.MonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.month_popup", BI.MonthPopup);
 
 /***/ }),
-/* 551 */
+/* 552 */
 /***/ (function(module, exports) {
 
 /**
@@ -38266,7 +38310,7 @@ BI.YearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.year_popup", BI.YearPopup);
 
 /***/ }),
-/* 552 */
+/* 553 */
 /***/ (function(module, exports) {
 
 /**
@@ -38337,7 +38381,7 @@ BI.DateTriangleTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.date_triangle_trigger", BI.DateTriangleTrigger);
 
 /***/ }),
-/* 553 */
+/* 554 */
 /***/ (function(module, exports) {
 
 /**
@@ -38527,7 +38571,7 @@ BI.StaticDatePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MON
 BI.shortcut("bi.static_date_pane_card", BI.StaticDatePaneCard);
 
 /***/ }),
-/* 554 */
+/* 555 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePane = BI.inherit(BI.Widget, {
@@ -38719,7 +38763,7 @@ BI.extend(BI.DynamicDatePane, {
 
 
 /***/ }),
-/* 555 */
+/* 556 */
 /***/ (function(module, exports) {
 
 /**
@@ -38859,7 +38903,7 @@ BI.shortcut("bi.date_time_combo", BI.DateTimeCombo);
 
 
 /***/ }),
-/* 556 */
+/* 557 */
 /***/ (function(module, exports) {
 
 /**
@@ -38978,7 +39022,7 @@ BI.shortcut("bi.date_time_popup", BI.DateTimePopup);
 
 
 /***/ }),
-/* 557 */
+/* 558 */
 /***/ (function(module, exports) {
 
 /**
@@ -39046,7 +39090,7 @@ BI.shortcut("bi.date_time_trigger", BI.DateTimeTrigger);
 
 
 /***/ }),
-/* 558 */
+/* 559 */
 /***/ (function(module, exports) {
 
 BI.StaticDateTimePaneCard = BI.inherit(BI.Widget, {
@@ -39256,7 +39300,7 @@ BI.StaticDateTimePaneCard.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR
 BI.shortcut("bi.static_date_time_pane_card", BI.StaticDateTimePaneCard);
 
 /***/ }),
-/* 559 */
+/* 560 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePane = BI.inherit(BI.Widget, {
@@ -39444,7 +39488,7 @@ BI.extend(BI.DynamicDateTimePane, {
 
 
 /***/ }),
-/* 560 */
+/* 561 */
 /***/ (function(module, exports) {
 
 /**
@@ -39541,7 +39585,7 @@ BI.DownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.down_list_combo", BI.DownListCombo);
 
 /***/ }),
-/* 561 */
+/* 562 */
 /***/ (function(module, exports) {
 
 /**
@@ -39597,7 +39641,7 @@ BI.DownListGroup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group", BI.DownListGroup);
 
 /***/ }),
-/* 562 */
+/* 563 */
 /***/ (function(module, exports) {
 
 BI.DownListItem = BI.inherit(BI.BasicButton, {
@@ -39700,7 +39744,7 @@ BI.DownListItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_item", BI.DownListItem);
 
 /***/ }),
-/* 563 */
+/* 564 */
 /***/ (function(module, exports) {
 
 BI.DownListGroupItem = BI.inherit(BI.BasicButton, {
@@ -39826,7 +39870,7 @@ BI.DownListGroupItem.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.down_list_group_item", BI.DownListGroupItem);
 
 /***/ }),
-/* 564 */
+/* 565 */
 /***/ (function(module, exports) {
 
 /**
@@ -40118,7 +40162,7 @@ BI.DownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 /***/ }),
-/* 565 */
+/* 566 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -40190,7 +40234,7 @@ BI.shortcut("bi.down_list_popup", BI.DownListPopup);
 
 
 /***/ }),
-/* 566 */
+/* 567 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCard = BI.inherit(BI.Widget, {
@@ -40590,7 +40634,7 @@ BI.extend(BI.DynamicDateCard, {
 });
 
 /***/ }),
-/* 567 */
+/* 568 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateCombo = BI.inherit(BI.Single, {
@@ -40609,12 +40653,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         format: "",
         allowEdit: true,
         supportDynamic: true,
-    },
-
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {
@@ -40656,7 +40694,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -40925,7 +40963,7 @@ BI.extend(BI.DynamicDateCombo, {
 });
 
 /***/ }),
-/* 568 */
+/* 569 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateParamItem = BI.inherit(BI.Widget, {
@@ -41064,7 +41102,7 @@ BI.shortcut("bi.dynamic_date_param_item", BI.DynamicDateParamItem);
 
 
 /***/ }),
-/* 569 */
+/* 570 */
 /***/ (function(module, exports) {
 
 BI.DynamicDatePopup = BI.inherit(BI.Widget, {
@@ -41322,7 +41360,7 @@ BI.DynamicDatePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_MONTH
 BI.shortcut("bi.dynamic_date_popup", BI.DynamicDatePopup);
 
 /***/ }),
-/* 570 */
+/* 571 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTrigger = BI.inherit(BI.Trigger, {
@@ -41680,7 +41718,7 @@ BI.shortcut("bi.dynamic_date_trigger", BI.DynamicDateTrigger);
 
 
 /***/ }),
-/* 571 */
+/* 572 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
@@ -41699,12 +41737,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         format: "",
         allowEdit: true,
         supportDynamic: true
-    },
-
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
     },
 
     render: function () {
@@ -41746,7 +41778,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -42023,7 +42055,7 @@ BI.extend(BI.DynamicDateTimeCombo, {
 });
 
 /***/ }),
-/* 572 */
+/* 573 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimePopup = BI.inherit(BI.Widget, {
@@ -42294,7 +42326,7 @@ BI.DynamicDateTimePopup.EVENT_BEFORE_YEAR_MONTH_POPUPVIEW = "EVENT_BEFORE_YEAR_M
 BI.shortcut("bi.dynamic_date_time_popup", BI.DynamicDateTimePopup);
 
 /***/ }),
-/* 573 */
+/* 574 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeSelect = BI.inherit(BI.Widget, {
@@ -42511,7 +42543,7 @@ BI.extend(BI.DynamicDateTimeSelect, {
 });
 
 /***/ }),
-/* 574 */
+/* 575 */
 /***/ (function(module, exports) {
 
 BI.DynamicDateTimeTrigger = BI.inherit(BI.Trigger, {
@@ -42893,7 +42925,7 @@ BI.DynamicDateTimeTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_date_time_trigger", BI.DynamicDateTimeTrigger);
 
 /***/ }),
-/* 575 */
+/* 576 */
 /***/ (function(module, exports) {
 
 /**
@@ -43114,7 +43146,7 @@ BI.SearchEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.search_editor", BI.SearchEditor);
 
 /***/ }),
-/* 576 */
+/* 577 */
 /***/ (function(module, exports) {
 
 /**
@@ -43139,7 +43171,7 @@ BI.SmallSearchEditor = BI.inherit(BI.SearchEditor, {
 BI.shortcut("bi.small_search_editor", BI.SmallSearchEditor);
 
 /***/ }),
-/* 577 */
+/* 578 */
 /***/ (function(module, exports) {
 
 /**
@@ -43318,7 +43350,7 @@ BI.TextEditor.EVENT_EMPTY = "EVENT_EMPTY";
 BI.shortcut("bi.text_editor", BI.TextEditor);
 
 /***/ }),
-/* 578 */
+/* 579 */
 /***/ (function(module, exports) {
 
 /**
@@ -43343,7 +43375,7 @@ BI.SmallTextEditor = BI.inherit(BI.TextEditor, {
 BI.shortcut("bi.small_text_editor", BI.SmallTextEditor);
 
 /***/ }),
-/* 579 */
+/* 580 */
 /***/ (function(module, exports) {
 
 /**
@@ -43888,7 +43920,7 @@ BI.IntervalSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.interval_slider", BI.IntervalSlider);
 
 /***/ }),
-/* 580 */
+/* 581 */
 /***/ (function(module, exports) {
 
 /**
@@ -44115,7 +44147,7 @@ BI.AccurateCalculationModel = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 581 */
+/* 582 */
 /***/ (function(module, exports) {
 
 /**
@@ -44210,7 +44242,7 @@ BI.MultiLayerDownListCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multi_layer_down_list_combo", BI.MultiLayerDownListCombo);
 
 /***/ }),
-/* 582 */
+/* 583 */
 /***/ (function(module, exports) {
 
 /**
@@ -44326,7 +44358,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
                     };
                     self._createChildren(item);
                 } else {
-                    item.type = "bi.down_list_item";
+                    item.type = item.type || "bi.down_list_item";
                     item.title = item.title || item.text;
                     item.textRgap = 10;
                     item.isNeedAdjustWidth = false;
@@ -44374,7 +44406,7 @@ BI.MultiLayerDownListPopup = BI.inherit(BI.Pane, {
             var fatherValue = BI.deepClone(self._formatEL(item).el.value);
             var childValue = BI.deepClone(child.value);
             self.singleValues.push(child.value);
-            child.type = "bi.down_list_item";
+            child.type = child.type || "bi.down_list_item";
             child.extraCls = " child-down-list-item";
             child.title = child.title || child.text;
             child.textRgap = 10;
@@ -44537,7 +44569,7 @@ BI.MultiLayerDownListPopup.EVENT_SON_VALUE_CHANGE = "EVENT_SON_VALUE_CHANGE";
 BI.shortcut("bi.multi_layer_down_list_popup", BI.MultiLayerDownListPopup);
 
 /***/ }),
-/* 583 */
+/* 584 */
 /***/ (function(module, exports) {
 
 /**
@@ -44548,7 +44580,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-select-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-multilayer-select-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -44563,7 +44595,11 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        this.options.height -= 2;
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
         BI.MultiLayerSelectTreeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -44572,7 +44608,7 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
             items: [{
                 el: combo,
@@ -44604,10 +44640,16 @@ BI.MultiLayerSelectTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -44771,7 +44813,7 @@ BI.MultiLayerSelectTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_select_tree_combo", BI.MultiLayerSelectTreeCombo);
 
 /***/ }),
-/* 584 */
+/* 585 */
 /***/ (function(module, exports) {
 
 /**
@@ -44868,7 +44910,7 @@ BI.MultiLayerSelectTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_insert_search_pane", BI.MultiLayerSelectTreeInsertSearchPane);
 
 /***/ }),
-/* 585 */
+/* 586 */
 /***/ (function(module, exports) {
 
 /**
@@ -45063,7 +45105,7 @@ BI.shortcut("bi.multilayer_select_level_tree", BI.MultiLayerSelectLevelTree);
 
 
 /***/ }),
-/* 586 */
+/* 587 */
 /***/ (function(module, exports) {
 
 /**
@@ -45145,7 +45187,7 @@ BI.MultiLayerSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_select_tree_popup", BI.MultiLayerSelectTreePopup);
 
 /***/ }),
-/* 587 */
+/* 588 */
 /***/ (function(module, exports) {
 
 /**
@@ -45155,7 +45197,7 @@ BI.MultiLayerSelectTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-select-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-select-tree-trigger",
             height: 24,
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -45400,7 +45442,7 @@ BI.MultiLayerSelectTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_select_tree_trigger", BI.MultiLayerSelectTreeTrigger);
 
 /***/ }),
-/* 588 */
+/* 589 */
 /***/ (function(module, exports) {
 
 /**
@@ -45505,7 +45547,7 @@ BI.shortcut("bi.multilayer_select_tree_first_plus_group_node", BI.MultiLayerSele
 
 
 /***/ }),
-/* 589 */
+/* 590 */
 /***/ (function(module, exports) {
 
 /**
@@ -45599,7 +45641,7 @@ BI.shortcut("bi.multilayer_select_tree_last_plus_group_node", BI.MultiLayerSelec
 
 
 /***/ }),
-/* 590 */
+/* 591 */
 /***/ (function(module, exports) {
 
 /**
@@ -45693,7 +45735,7 @@ BI.shortcut("bi.multilayer_select_tree_mid_plus_group_node", BI.MultiLayerSelect
 
 
 /***/ }),
-/* 591 */
+/* 592 */
 /***/ (function(module, exports) {
 
 /**
@@ -45791,7 +45833,7 @@ BI.shortcut("bi.multilayer_select_tree_plus_group_node", BI.MultiLayerSelectTree
 
 
 /***/ }),
-/* 592 */
+/* 593 */
 /***/ (function(module, exports) {
 
 /**
@@ -45805,7 +45847,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.MultiLayerSingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-multilayer-single-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-multilayer-single-tree-combo",
             isDefaultInit: false,
             height: 24,
             text: "",
@@ -45820,7 +45862,11 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
     },
 
     _init: function () {
-        this.options.height -= 2;
+        var o = this.options;
+        if (this._shouldWrapper()) {
+            o.height -= 2;
+            BI.isNumeric(o.width) && (o.width -= 2);
+        }
         BI.MultiLayerSingleTreeCombo.superclass._init.apply(this, arguments);
     },
 
@@ -45829,7 +45875,7 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
 
         var combo = (o.itemsCreator === BI.emptyFn) ? this._getSyncConfig() : this._getAsyncConfig();
 
-        return (!o.allowEdit && o.itemsCreator === BI.emptyFn) ? combo : {
+        return this._shouldWrapper() ? combo : {
             type: "bi.absolute",
             height: o.height - 2,
             items: [{
@@ -45862,10 +45908,16 @@ BI.MultiLayerSingleTreeCombo = BI.inherit(BI.Widget, {
         };
     },
 
+    _shouldWrapper: function () {
+        var o = this.options;
+        return !o.allowEdit && o.itemsCreator === BI.emptyFn;
+    },
+
     _getBaseConfig: function () {
         var self = this, o = this.options;
         return {
             type: "bi.combo",
+            cls: "bi-border bi-focus-shadow bi-border-radius",
             container: o.container,
             destroyWhenHide: o.destroyWhenHide,
             adjustLength: 2,
@@ -46028,7 +46080,7 @@ BI.MultiLayerSingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.multilayer_single_tree_combo", BI.MultiLayerSingleTreeCombo);
 
 /***/ }),
-/* 593 */
+/* 594 */
 /***/ (function(module, exports) {
 
 /**
@@ -46125,7 +46177,7 @@ BI.MultiLayerSingleTreeInsertSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_insert_search_pane", BI.MultiLayerSingleTreeInsertSearchPane);
 
 /***/ }),
-/* 594 */
+/* 595 */
 /***/ (function(module, exports) {
 
 /**
@@ -46319,7 +46371,7 @@ BI.shortcut("bi.multilayer_single_level_tree", BI.MultiLayerSingleLevelTree);
 
 
 /***/ }),
-/* 595 */
+/* 596 */
 /***/ (function(module, exports) {
 
 /**
@@ -46400,7 +46452,7 @@ BI.MultiLayerSingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multilayer_single_tree_popup", BI.MultiLayerSingleTreePopup);
 
 /***/ }),
-/* 596 */
+/* 597 */
 /***/ (function(module, exports) {
 
 /**
@@ -46410,7 +46462,7 @@ BI.MultiLayerSingleTreeTrigger = BI.inherit(BI.Trigger, {
 
     props: function() {
         return {
-            extraCls: "bi-multi-layer-single-tree-trigger bi-border bi-focus-shadow bi-border-radius",
+            extraCls: "bi-multi-layer-single-tree-trigger",
             height: 24,
             itemsCreator: BI.emptyFn,
             watermark: BI.i18nText("BI-Basic_Search"),
@@ -46656,7 +46708,7 @@ BI.MultiLayerSingleTreeTrigger.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multilayer_single_tree_trigger", BI.MultiLayerSingleTreeTrigger);
 
 /***/ }),
-/* 597 */
+/* 598 */
 /***/ (function(module, exports) {
 
 /**
@@ -46753,7 +46805,7 @@ BI.shortcut("bi.multilayer_single_tree_first_plus_group_node", BI.MultiLayerSing
 
 
 /***/ }),
-/* 598 */
+/* 599 */
 /***/ (function(module, exports) {
 
 /**
@@ -46849,7 +46901,7 @@ BI.shortcut("bi.multilayer_single_tree_last_plus_group_node", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 599 */
+/* 600 */
 /***/ (function(module, exports) {
 
 /**
@@ -46945,7 +46997,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_plus_group_node", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 600 */
+/* 601 */
 /***/ (function(module, exports) {
 
 /**
@@ -47052,7 +47104,7 @@ BI.MultiLayerSingleTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.multilayer_single_tree_plus_group_node", BI.MultiLayerSingleTreePlusGroupNode);
 
 /***/ }),
-/* 601 */
+/* 602 */
 /***/ (function(module, exports) {
 
 /**
@@ -47144,7 +47196,7 @@ BI.shortcut("bi.multilayer_single_tree_first_tree_leaf_item", BI.MultiLayerSingl
 
 
 /***/ }),
-/* 602 */
+/* 603 */
 /***/ (function(module, exports) {
 
 /**
@@ -47236,7 +47288,7 @@ BI.shortcut("bi.multilayer_single_tree_last_tree_leaf_item", BI.MultiLayerSingle
 
 
 /***/ }),
-/* 603 */
+/* 604 */
 /***/ (function(module, exports) {
 
 /**
@@ -47328,7 +47380,7 @@ BI.shortcut("bi.multilayer_single_tree_mid_tree_leaf_item", BI.MultiLayerSingleT
 
 
 /***/ }),
-/* 604 */
+/* 605 */
 /***/ (function(module, exports) {
 
 /**
@@ -47441,7 +47493,7 @@ BI.MultiSelectCheckPane = BI.inherit(BI.Widget, {
 BI.shortcut("bi.multi_select_check_pane", BI.MultiSelectCheckPane);
 
 /***/ }),
-/* 605 */
+/* 606 */
 /***/ (function(module, exports) {
 
 /**
@@ -47533,7 +47585,7 @@ BI.DisplaySelectedList = BI.inherit(BI.Pane, {
 BI.shortcut("bi.display_selected_list", BI.DisplaySelectedList);
 
 /***/ }),
-/* 606 */
+/* 607 */
 /***/ (function(module, exports) {
 
 /**
@@ -47556,7 +47608,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -47583,7 +47634,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48020,7 +48071,7 @@ BI.shortcut("bi.multi_select_combo", BI.MultiSelectCombo);
 
 
 /***/ }),
-/* 607 */
+/* 608 */
 /***/ (function(module, exports) {
 
 /**
@@ -48042,7 +48093,6 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiSelectNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -48067,7 +48117,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48525,7 +48575,7 @@ BI.shortcut("bi.multi_select_no_bar_combo", BI.MultiSelectNoBarCombo);
 
 
 /***/ }),
-/* 608 */
+/* 609 */
 /***/ (function(module, exports) {
 
 /**
@@ -48548,7 +48598,6 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -48571,7 +48620,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
@@ -49028,7 +49077,7 @@ BI.shortcut("bi.multi_select_insert_combo", BI.MultiSelectInsertCombo);
 
 
 /***/ }),
-/* 609 */
+/* 610 */
 /***/ (function(module, exports) {
 
 /**
@@ -49050,7 +49099,6 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiSelectInsertNoBarCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -49075,7 +49123,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -49525,7 +49573,7 @@ BI.shortcut("bi.multi_select_insert_no_bar_combo", BI.MultiSelectInsertNoBarComb
 
 
 /***/ }),
-/* 610 */
+/* 611 */
 /***/ (function(module, exports) {
 
 /**
@@ -49687,7 +49735,7 @@ BI.MultiSelectInsertTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_trigger", BI.MultiSelectInsertTrigger);
 
 /***/ }),
-/* 611 */
+/* 612 */
 /***/ (function(module, exports) {
 
 /**
@@ -49881,7 +49929,7 @@ BI.MultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_loader", BI.MultiSelectLoader);
 
 /***/ }),
-/* 612 */
+/* 613 */
 /***/ (function(module, exports) {
 
 /**
@@ -50065,7 +50113,7 @@ BI.shortcut("bi.multi_select_no_bar_loader", BI.MultiSelectNoBarLoader);
 
 
 /***/ }),
-/* 613 */
+/* 614 */
 /***/ (function(module, exports) {
 
 /**
@@ -50165,7 +50213,7 @@ BI.MultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_popup_view", BI.MultiSelectPopupView);
 
 /***/ }),
-/* 614 */
+/* 615 */
 /***/ (function(module, exports) {
 
 /**
@@ -50261,7 +50309,7 @@ BI.MultiSelectNoBarPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_select_no_bar_popup_view", BI.MultiSelectNoBarPopupView);
 
 /***/ }),
-/* 615 */
+/* 616 */
 /***/ (function(module, exports) {
 
 /**
@@ -50419,7 +50467,7 @@ BI.MultiSelectTrigger.EVENT_FOCUS = "EVENT_FOCUS";
 BI.shortcut("bi.multi_select_trigger", BI.MultiSelectTrigger);
 
 /***/ }),
-/* 616 */
+/* 617 */
 /***/ (function(module, exports) {
 
 /**
@@ -50557,7 +50605,7 @@ BI.MultiSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_select_search_insert_pane", BI.MultiSelectSearchInsertPane);
 
 /***/ }),
-/* 617 */
+/* 618 */
 /***/ (function(module, exports) {
 
 /**
@@ -50724,7 +50772,7 @@ BI.MultiSelectSearchLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_loader", BI.MultiSelectSearchLoader);
 
 /***/ }),
-/* 618 */
+/* 619 */
 /***/ (function(module, exports) {
 
 /**
@@ -50848,7 +50896,7 @@ BI.MultiSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_search_pane", BI.MultiSelectSearchPane);
 
 /***/ }),
-/* 619 */
+/* 620 */
 /***/ (function(module, exports) {
 
 /**
@@ -50953,7 +51001,7 @@ BI.shortcut("bi.multi_select_check_selected_button", BI.MultiSelectCheckSelected
 
 
 /***/ }),
-/* 620 */
+/* 621 */
 /***/ (function(module, exports) {
 
 /**
@@ -51057,7 +51105,7 @@ BI.shortcut("bi.multi_select_editor", BI.MultiSelectEditor);
 
 
 /***/ }),
-/* 621 */
+/* 622 */
 /***/ (function(module, exports) {
 
 /**
@@ -51269,7 +51317,7 @@ BI.MultiSelectInsertSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_insert_searcher", BI.MultiSelectInsertSearcher);
 
 /***/ }),
-/* 622 */
+/* 623 */
 /***/ (function(module, exports) {
 
 /**
@@ -51474,7 +51522,7 @@ BI.MultiSelectSearcher.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.multi_select_searcher", BI.MultiSelectSearcher);
 
 /***/ }),
-/* 623 */
+/* 624 */
 /***/ (function(module, exports) {
 
 /**
@@ -51591,7 +51639,7 @@ BI.MultiSelectCheckSelectedSwitcher.EVENT_AFTER_HIDEVIEW = "EVENT_AFTER_HIDEVIEW
 BI.shortcut("bi.multi_select_check_selected_switcher", BI.MultiSelectCheckSelectedSwitcher);
 
 /***/ }),
-/* 624 */
+/* 625 */
 /***/ (function(module, exports) {
 
 /**
@@ -51942,7 +51990,7 @@ BI.shortcut("bi.multi_select_insert_list", BI.MultiSelectInsertList);
 
 
 /***/ }),
-/* 625 */
+/* 626 */
 /***/ (function(module, exports) {
 
 /**
@@ -52299,7 +52347,7 @@ BI.MultiSelectInsertNoBarList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_insert_no_bar_list", BI.MultiSelectInsertNoBarList);
 
 /***/ }),
-/* 626 */
+/* 627 */
 /***/ (function(module, exports) {
 
 /**
@@ -52657,7 +52705,7 @@ BI.MultiSelectList.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_list", BI.MultiSelectList);
 
 /***/ }),
-/* 627 */
+/* 628 */
 /***/ (function(module, exports) {
 
 /**
@@ -52835,7 +52883,7 @@ BI.shortcut("bi.multi_select_tree", BI.MultiSelectTree);
 
 
 /***/ }),
-/* 628 */
+/* 629 */
 /***/ (function(module, exports) {
 
 /**
@@ -52898,7 +52946,7 @@ BI.MultiSelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_select_tree_popup", BI.MultiSelectTreePopup);
 
 /***/ }),
-/* 629 */
+/* 630 */
 /***/ (function(module, exports) {
 
 /**
@@ -53022,7 +53070,7 @@ BI.MultiTreeCheckPane.EVENT_CONTINUE_CLICK = "EVENT_CONTINUE_CLICK";
 BI.shortcut("bi.multi_tree_check_pane", BI.MultiTreeCheckPane);
 
 /***/ }),
-/* 630 */
+/* 631 */
 /***/ (function(module, exports) {
 
 /**
@@ -53055,7 +53103,6 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiTreeCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
@@ -53065,7 +53112,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             text: o.text,
             watermark: o.watermark,
@@ -53383,7 +53430,7 @@ BI.shortcut("bi.multi_tree_combo", BI.MultiTreeCombo);
 
 
 /***/ }),
-/* 631 */
+/* 632 */
 /***/ (function(module, exports) {
 
 /**
@@ -53416,7 +53463,6 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiTreeInsertCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
@@ -53426,7 +53472,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -53759,7 +53805,7 @@ BI.shortcut("bi.multi_tree_insert_combo", BI.MultiTreeInsertCombo);
 
 
 /***/ }),
-/* 632 */
+/* 633 */
 /***/ (function(module, exports) {
 
 /**
@@ -53793,7 +53839,6 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiTreeListCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
@@ -53805,7 +53850,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             text: o.text,
             watermark: o.watermark,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -54159,7 +54204,7 @@ BI.shortcut("bi.multi_tree_list_combo", BI.MultiTreeListCombo);
 
 
 /***/ }),
-/* 633 */
+/* 634 */
 /***/ (function(module, exports) {
 
 /**
@@ -54266,7 +54311,7 @@ BI.MultiTreePopup.EVENT_AFTERINIT = "EVENT_AFTERINIT";
 BI.shortcut("bi.multi_tree_popup_view", BI.MultiTreePopup);
 
 /***/ }),
-/* 634 */
+/* 635 */
 /***/ (function(module, exports) {
 
 /**
@@ -54339,7 +54384,7 @@ BI.MultiTreeCheckSelectedButton.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.multi_tree_check_selected_button", BI.MultiTreeCheckSelectedButton);
 
 /***/ }),
-/* 635 */
+/* 636 */
 /***/ (function(module, exports) {
 
 /**
@@ -54463,7 +54508,7 @@ BI.MultiTreeSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.multi_tree_search_insert_pane", BI.MultiTreeSearchInsertPane);
 
 /***/ }),
-/* 636 */
+/* 637 */
 /***/ (function(module, exports) {
 
 /**
@@ -54544,7 +54589,7 @@ BI.MultiTreeSearchPane.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.multi_tree_search_pane", BI.MultiTreeSearchPane);
 
 /***/ }),
-/* 637 */
+/* 638 */
 /***/ (function(module, exports) {
 
 /**
@@ -54713,7 +54758,7 @@ BI.MultiListTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_list_tree_searcher", BI.MultiListTreeSearcher);
 
 /***/ }),
-/* 638 */
+/* 639 */
 /***/ (function(module, exports) {
 
 /**
@@ -54914,7 +54959,7 @@ BI.MultiTreeSearcher.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.multi_tree_searcher", BI.MultiTreeSearcher);
 
 /***/ }),
-/* 639 */
+/* 640 */
 /***/ (function(module, exports) {
 
 /**
@@ -55073,7 +55118,7 @@ BI.NumberEditor.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.number_editor", BI.NumberEditor);
 
 /***/ }),
-/* 640 */
+/* 641 */
 /***/ (function(module, exports) {
 
 // 小于号的值为：0，小于等于号的值为:1
@@ -55621,7 +55666,7 @@ BI.NumberInterval.EVENT_ERROR = "EVENT_ERROR";
 BI.shortcut("bi.number_interval", BI.NumberInterval);
 
 /***/ }),
-/* 641 */
+/* 642 */
 /***/ (function(module, exports) {
 
 BI.NumberIntervalSingleEidtor = BI.inherit(BI.Single, {
@@ -55710,7 +55755,7 @@ BI.NumberIntervalSingleEidtor.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.number_interval_single_editor", BI.NumberIntervalSingleEidtor);
 
 /***/ }),
-/* 642 */
+/* 643 */
 /***/ (function(module, exports) {
 
 /**
@@ -55730,7 +55775,6 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
@@ -55751,7 +55795,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -56214,7 +56258,7 @@ BI.shortcut("bi.search_multi_text_value_combo", BI.SearchMultiTextValueCombo);
 
 
 /***/ }),
-/* 643 */
+/* 644 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectTrigger = BI.inherit(BI.Trigger, {
@@ -56374,7 +56418,7 @@ BI.shortcut("bi.search_multi_select_trigger", BI.SearchMultiSelectTrigger);
 
 
 /***/ }),
-/* 644 */
+/* 645 */
 /***/ (function(module, exports) {
 
 /**
@@ -56554,7 +56598,7 @@ BI.SearchMultiSelectLoader.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.search_multi_select_loader", BI.SearchMultiSelectLoader);
 
 /***/ }),
-/* 645 */
+/* 646 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectPopupView = BI.inherit(BI.Widget, {
@@ -56647,7 +56691,7 @@ BI.SearchMultiSelectPopupView.EVENT_CLICK_CLEAR = "EVENT_CLICK_CLEAR";
 BI.shortcut("bi.search_multi_select_popup_view", BI.SearchMultiSelectPopupView);
 
 /***/ }),
-/* 646 */
+/* 647 */
 /***/ (function(module, exports) {
 
 BI.SearchMultiSelectSearcher = BI.inherit(BI.Widget, {
@@ -56830,7 +56874,7 @@ BI.shortcut("bi.search_multi_select_searcher", BI.SearchMultiSelectSearcher);
 
 
 /***/ }),
-/* 647 */
+/* 648 */
 /***/ (function(module, exports) {
 
 /**
@@ -56921,7 +56965,7 @@ BI.SelectTreeFirstPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_first_plus_group_node", BI.SelectTreeFirstPlusGroupNode);
 
 /***/ }),
-/* 648 */
+/* 649 */
 /***/ (function(module, exports) {
 
 /**
@@ -57012,7 +57056,7 @@ BI.SelectTreeLastPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_last_plus_group_node", BI.SelectTreeLastPlusGroupNode);
 
 /***/ }),
-/* 649 */
+/* 650 */
 /***/ (function(module, exports) {
 
 /**
@@ -57103,7 +57147,7 @@ BI.SelectTreeMidPlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_mid_plus_group_node", BI.SelectTreeMidPlusGroupNode);
 
 /***/ }),
-/* 650 */
+/* 651 */
 /***/ (function(module, exports) {
 
 /**
@@ -57194,7 +57238,7 @@ BI.SelectTreePlusGroupNode = BI.inherit(BI.NodeButton, {
 BI.shortcut("bi.select_tree_plus_group_node", BI.SelectTreePlusGroupNode);
 
 /***/ }),
-/* 651 */
+/* 652 */
 /***/ (function(module, exports) {
 
 /**
@@ -57205,7 +57249,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-select-tree-combo bi-border bi-border-radius",
             height: 24,
             text: "",
             items: [],
@@ -57216,6 +57260,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.SelectTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget({
@@ -57272,7 +57317,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_combo", BI.SelectTreeCombo);
 
 /***/ }),
-/* 652 */
+/* 653 */
 /***/ (function(module, exports) {
 
 /**
@@ -57354,7 +57399,7 @@ BI.SelectTreeExpander = BI.inherit(BI.Widget, {
 BI.shortcut("bi.select_tree_expander", BI.SelectTreeExpander);
 
 /***/ }),
-/* 653 */
+/* 654 */
 /***/ (function(module, exports) {
 
 /**
@@ -57460,7 +57505,7 @@ BI.SelectTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.select_level_tree", BI.SelectTreePopup);
 
 /***/ }),
-/* 654 */
+/* 655 */
 /***/ (function(module, exports) {
 
 /**
@@ -57619,7 +57664,7 @@ BI.shortcut("bi.single_select_search_loader", BI.SingleSelectSearchLoader);
 
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports) {
 
 /**
@@ -57753,7 +57798,7 @@ BI.SingleSelectSearchInsertPane.EVENT_ADD_ITEM = "EVENT_ADD_ITEM";
 BI.shortcut("bi.single_select_search_insert_pane", BI.SingleSelectSearchInsertPane);
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports) {
 
 /**
@@ -57873,7 +57918,7 @@ BI.SingleSelectSearchPane.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_search_pane", BI.SingleSelectSearchPane);
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports) {
 
 /**
@@ -57896,7 +57941,6 @@ BI.SingleSelectCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.SingleSelectCombo.superclass._init.apply(this, arguments);
 
         var assertShowValue = function () {
@@ -58168,7 +58212,7 @@ BI.shortcut("bi.single_select_combo", BI.SingleSelectCombo);
 
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports) {
 
 /**
@@ -58191,7 +58235,6 @@ BI.SingleSelectInsertCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.SingleSelectInsertCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue = self._startValue);
@@ -58466,7 +58509,7 @@ BI.SingleSelectInsertCombo.EVENT_CONFIRM = "EVENT_CONFIRM";
 BI.shortcut("bi.single_select_insert_combo", BI.SingleSelectInsertCombo);
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports) {
 
 /**
@@ -58631,7 +58674,7 @@ BI.shortcut("bi.single_select_list", BI.SingleSelectList);
 
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports) {
 
 /**
@@ -58798,7 +58841,7 @@ BI.shortcut("bi.single_select_loader", BI.SingleSelectLoader);
 
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports) {
 
 /**
@@ -58881,7 +58924,7 @@ BI.SingleSelectPopupView.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_select_popup_view", BI.SingleSelectPopupView);
 
 /***/ }),
-/* 662 */
+/* 663 */
 /***/ (function(module, exports) {
 
 /**
@@ -59023,7 +59066,7 @@ BI.SingleSelectTrigger.EVENT_BLUR = "EVENT_BLUR";
 BI.shortcut("bi.single_select_trigger", BI.SingleSelectTrigger);
 
 /***/ }),
-/* 663 */
+/* 664 */
 /***/ (function(module, exports) {
 
 /**
@@ -59285,7 +59328,7 @@ BI.shortcut("bi.single_select_insert_list", BI.SingleSelectInsertList);
 
 
 /***/ }),
-/* 664 */
+/* 665 */
 /***/ (function(module, exports) {
 
 /**
@@ -59378,7 +59421,7 @@ BI.SingleSelectEditor.EVENT_PAUSE = "EVENT_PAUSE";
 BI.shortcut("bi.single_select_editor", BI.SingleSelectEditor);
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 /**
@@ -59549,7 +59592,7 @@ BI.shortcut("bi.single_select_searcher", BI.SingleSelectSearcher);
 
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports) {
 
 BI.SignTextEditor = BI.inherit(BI.Widget, {
@@ -59749,7 +59792,7 @@ BI.SignTextEditor.EVENT_CLICK_LABEL = "EVENT_CLICK_LABEL";
 BI.shortcut("bi.sign_text_editor", BI.SignTextEditor);
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports) {
 
 /**
@@ -59790,7 +59833,7 @@ BI.SliderIconButton = BI.inherit(BI.Widget, {
 BI.shortcut("bi.single_slider_button", BI.SliderIconButton);
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 /**
@@ -60137,7 +60180,7 @@ BI.SingleSlider.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider", BI.SingleSlider);
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports) {
 
 /**
@@ -60453,7 +60496,7 @@ BI.SingleSliderLabel.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_slider_label", BI.SingleSliderLabel);
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports) {
 
 /**
@@ -60743,7 +60786,7 @@ BI.SingleSliderNormal.EVENT_DRAG = "EVENT_DRAG";
 BI.shortcut("bi.single_slider_normal", BI.SingleSliderNormal);
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports) {
 
 /**
@@ -60754,7 +60797,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SingleTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-single-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-single-tree-combo bi-border bi-border-radius",
             trigger: {},
             height: 24,
             text: "",
@@ -60766,6 +60809,7 @@ BI.SingleTreeCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.SingleTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget(BI.extend({
@@ -60827,7 +60871,7 @@ BI.SingleTreeCombo.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.single_tree_combo", BI.SingleTreeCombo);
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports) {
 
 /**
@@ -60898,7 +60942,7 @@ BI.SingleTreePopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.single_level_tree", BI.SingleTreePopup);
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports) {
 
 /**
@@ -60964,7 +61008,7 @@ BI.SingleTreeTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports) {
 
 /**
@@ -60974,7 +61018,7 @@ BI.shortcut("bi.single_tree_trigger", BI.SingleTreeTrigger);
 BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _defaultConfig: function () {
         return BI.extend(BI.TextValueDownListCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-text-value-down-list-combo bi-border bi-focus-shadow",
+            baseCls: "bi-text-value-down-list-combo bi-border",
             height: 24,
         });
     },
@@ -60982,6 +61026,7 @@ BI.TextValueDownListCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.TextValueDownListCombo.superclass._init.apply(this, arguments);
         this._createValueMap();
 
@@ -61066,7 +61111,7 @@ BI.TextValueDownListCombo.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.text_value_down_list_combo", BI.TextValueDownListCombo);
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports) {
 
 /**
@@ -61126,7 +61171,7 @@ BI.DownListSelectTextTrigger = BI.inherit(BI.Trigger, {
 BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -61225,7 +61270,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports) {
 
 /**
@@ -61251,7 +61296,6 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 
         _init: function () {
             var o = this.options;
-            o.height -= 2;
             BI.TimeCombo.superclass._init.apply(this, arguments);
         },
 
@@ -61406,8 +61450,8 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
                         el: {
                             type: "bi.icon_button",
                             cls: "bi-trigger-icon-button time-font icon-size-16",
-                            width: 22,
-                            height: 22,
+                            width: opts.height,
+                            height: opts.height,
                             listeners: [{
                                 eventName: BI.IconButton.EVENT_CHANGE,
                                 action: function () {
@@ -61464,7 +61508,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports) {
 
 !(function () {
@@ -61656,7 +61700,7 @@ BI.shortcut("bi.down_list_select_text_trigger", BI.DownListSelectTextTrigger);
 })();
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports) {
 
 /**
@@ -61871,7 +61915,7 @@ BI.shortcut("bi.date_interval", BI.DateInterval);
 
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports) {
 
 /**
@@ -62079,7 +62123,7 @@ BI.TimeInterval.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.time_interval", BI.TimeInterval);
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports) {
 
 /**
@@ -62204,7 +62248,7 @@ BI.shortcut("bi.time_interval", BI.TimeInterval);
 })();
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports) {
 
 /**
@@ -62299,7 +62343,7 @@ BI.DynamicYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_card", BI.DynamicYearCard);
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports) {
 
 /**
@@ -62498,7 +62542,7 @@ BI.StaticYearCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.static_year_card", BI.StaticYearCard);
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearCombo = BI.inherit(BI.Widget, {
@@ -62515,6 +62559,7 @@ BI.DynamicYearCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.trigger = BI.createWidget({
@@ -62714,7 +62759,7 @@ BI.extend(BI.DynamicYearCombo, {
 
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports) {
 
 /**
@@ -62961,7 +63006,7 @@ BI.DynamicYearPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_popup", BI.DynamicYearPopup);
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearTrigger = BI.inherit(BI.Trigger, {
@@ -63156,7 +63201,7 @@ BI.DynamicYearTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_trigger", BI.DynamicYearTrigger);
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports) {
 
 /**
@@ -63369,7 +63414,7 @@ BI.YearInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_interval", BI.YearInterval);
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports) {
 
 /**
@@ -63500,7 +63545,7 @@ BI.DynamicYearMonthCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_card", BI.DynamicYearMonthCard);
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports) {
 
 BI.StaticYearMonthCard = BI.inherit(BI.Widget, {
@@ -63669,7 +63714,7 @@ BI.shortcut("bi.static_year_month_card", BI.StaticYearMonthCard);
 
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
@@ -63686,6 +63731,7 @@ BI.DynamicYearMonthCombo = BI.inherit(BI.Single, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearMonthCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         this.storeTriggerValue = "";
@@ -63883,7 +63929,7 @@ BI.extend(BI.DynamicYearMonthCombo, {
 
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports) {
 
 /**
@@ -64125,7 +64171,7 @@ BI.DynamicYearMonthPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_month_popup", BI.DynamicYearMonthPopup);
 
 /***/ }),
-/* 692 */
+/* 693 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearMonthTrigger = BI.inherit(BI.Trigger, {
@@ -64403,7 +64449,7 @@ BI.DynamicYearMonthTrigger.EVENT_KEY_DOWN = "EVENT_KEY_DOWN";
 BI.shortcut("bi.dynamic_year_month_trigger", BI.DynamicYearMonthTrigger);
 
 /***/ }),
-/* 693 */
+/* 694 */
 /***/ (function(module, exports) {
 
 BI.YearMonthInterval = BI.inherit(BI.Single, {
@@ -64615,7 +64661,7 @@ BI.shortcut("bi.year_month_interval", BI.YearMonthInterval);
 
 
 /***/ }),
-/* 694 */
+/* 695 */
 /***/ (function(module, exports) {
 
 /**
@@ -64746,7 +64792,7 @@ BI.DynamicYearQuarterCard.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_card", BI.DynamicYearQuarterCard);
 
 /***/ }),
-/* 695 */
+/* 696 */
 /***/ (function(module, exports) {
 
 BI.StaticYearQuarterCard = BI.inherit(BI.Widget, {
@@ -64903,7 +64949,7 @@ BI.shortcut("bi.static_year_quarter_card", BI.StaticYearQuarterCard);
 
 
 /***/ }),
-/* 696 */
+/* 697 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
@@ -64920,6 +64966,7 @@ BI.DynamicYearQuarterCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.DynamicYearQuarterCombo.superclass._init.apply(this, arguments);
         this.storeValue = o.value;
         self.storeTriggerValue = "";
@@ -65117,7 +65164,7 @@ BI.extend(BI.DynamicYearQuarterCombo, {
 
 
 /***/ }),
-/* 697 */
+/* 698 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterPopup = BI.inherit(BI.Widget, {
@@ -65352,7 +65399,7 @@ BI.DynamicYearQuarterPopup.EVENT_CHANGE = "EVENT_CHANGE";
 BI.shortcut("bi.dynamic_year_quarter_popup", BI.DynamicYearQuarterPopup);
 
 /***/ }),
-/* 698 */
+/* 699 */
 /***/ (function(module, exports) {
 
 BI.DynamicYearQuarterTrigger = BI.inherit(BI.Trigger, {
@@ -65614,7 +65661,7 @@ BI.DynamicYearQuarterTrigger.EVENT_VALID = "EVENT_VALID";
 BI.shortcut("bi.dynamic_year_quarter_trigger", BI.DynamicYearQuarterTrigger);
 
 /***/ }),
-/* 699 */
+/* 700 */
 /***/ (function(module, exports) {
 
 /**
@@ -65825,7 +65872,7 @@ BI.YearQuarterInterval.EVENT_BEFORE_POPUPVIEW = "EVENT_BEFORE_POPUPVIEW";
 BI.shortcut("bi.year_quarter_interval", BI.YearQuarterInterval);
 
 /***/ }),
-/* 700 */
+/* 701 */
 /***/ (function(module, exports) {
 
 /**
@@ -65931,7 +65978,7 @@ BI.AbstractAllValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 701 */
+/* 702 */
 /***/ (function(module, exports) {
 
 /**
@@ -66013,7 +66060,7 @@ BI.shortcut("bi.all_value_chooser_combo", BI.AllValueChooserCombo);
 
 
 /***/ }),
-/* 702 */
+/* 703 */
 /***/ (function(module, exports) {
 
 /**
@@ -66087,7 +66134,7 @@ BI.shortcut("bi.all_value_chooser_pane", BI.AllValueChooserPane);
 
 
 /***/ }),
-/* 703 */
+/* 704 */
 /***/ (function(module, exports) {
 
 BI.AllValueMultiTextValueCombo = BI.inherit(BI.Widget, {
@@ -66158,7 +66205,7 @@ BI.shortcut("bi.all_value_multi_text_value_combo", BI.AllValueMultiTextValueComb
 
 
 /***/ }),
-/* 704 */
+/* 705 */
 /***/ (function(module, exports) {
 
 BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
@@ -67018,7 +67065,7 @@ BI.AbstractTreeValueChooser = BI.inherit(BI.Widget, {
 
 
 /***/ }),
-/* 705 */
+/* 706 */
 /***/ (function(module, exports) {
 
 BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
@@ -67310,7 +67357,7 @@ BI.AbstractListTreeValueChooser = BI.inherit(BI.AbstractTreeValueChooser, {
 });
 
 /***/ }),
-/* 706 */
+/* 707 */
 /***/ (function(module, exports) {
 
 /**
@@ -67426,7 +67473,7 @@ BI.shortcut("bi.list_tree_value_chooser_insert_combo", BI.ListTreeValueChooserIn
 
 
 /***/ }),
-/* 707 */
+/* 708 */
 /***/ (function(module, exports) {
 
 /**
@@ -67541,7 +67588,7 @@ BI.shortcut("bi.tree_value_chooser_insert_combo", BI.TreeValueChooserInsertCombo
 
 
 /***/ }),
-/* 708 */
+/* 709 */
 /***/ (function(module, exports) {
 
 /**
@@ -67660,7 +67707,7 @@ BI.shortcut("bi.tree_value_chooser_combo", BI.TreeValueChooserCombo);
 
 
 /***/ }),
-/* 709 */
+/* 710 */
 /***/ (function(module, exports) {
 
 /**
@@ -67728,7 +67775,7 @@ BI.shortcut("bi.tree_value_chooser_pane", BI.TreeValueChooserPane);
 
 
 /***/ }),
-/* 710 */
+/* 711 */
 /***/ (function(module, exports) {
 
 /**
@@ -67840,7 +67887,7 @@ BI.AbstractValueChooser = BI.inherit(BI.Widget, {
 });
 
 /***/ }),
-/* 711 */
+/* 712 */
 /***/ (function(module, exports) {
 
 /**
@@ -67950,7 +67997,7 @@ BI.shortcut("bi.value_chooser_insert_combo", BI.ValueChooserInsertCombo);
 
 
 /***/ }),
-/* 712 */
+/* 713 */
 /***/ (function(module, exports) {
 
 /**
@@ -68064,7 +68111,7 @@ BI.shortcut("bi.value_chooser_combo", BI.ValueChooserCombo);
 
 
 /***/ }),
-/* 713 */
+/* 714 */
 /***/ (function(module, exports) {
 
 /**
@@ -68166,7 +68213,7 @@ BI.shortcut("bi.value_chooser_no_bar_combo", BI.ValueChooserNoBarCombo);
 
 
 /***/ }),
-/* 714 */
+/* 715 */
 /***/ (function(module, exports) {
 
 /**
@@ -68242,20 +68289,20 @@ BI.shortcut("bi.value_chooser_pane", BI.ValueChooserPane);
 
 
 /***/ }),
-/* 715 */
+/* 716 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = _interopRequireDefault(__webpack_require__(716));
+var _index = _interopRequireDefault(__webpack_require__(717));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 BI.extend(BI, _index["default"]);
 
 /***/ }),
-/* 716 */
+/* 717 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69178,13 +69225,19 @@ Object.defineProperty(exports, "TextValueCheckComboPopup", {
     return _popup3.TextValueCheckComboPopup;
   }
 });
+Object.defineProperty(exports, "ImageButton", {
+  enumerable: true,
+  get: function get() {
+    return _button6.ImageButton;
+  }
+});
 exports["default"] = void 0;
 
-var _combo = __webpack_require__(717);
+var _combo = __webpack_require__(718);
 
 var _group = __webpack_require__(80);
 
-var _tab = __webpack_require__(718);
+var _tab = __webpack_require__(719);
 
 var _pane = __webpack_require__(22);
 
@@ -69192,23 +69245,23 @@ var _button = __webpack_require__(8);
 
 var _button2 = __webpack_require__(57);
 
-var _button3 = __webpack_require__(719);
+var _button3 = __webpack_require__(720);
 
-var _button4 = __webpack_require__(720);
+var _button4 = __webpack_require__(721);
 
-var _icontextitem = __webpack_require__(721);
+var _icontextitem = __webpack_require__(722);
 
-var _editor = __webpack_require__(722);
+var _editor = __webpack_require__(723);
 
-var _iframe = __webpack_require__(723);
+var _iframe = __webpack_require__(724);
 
-var _checkbox = __webpack_require__(724);
+var _checkbox = __webpack_require__(725);
 
-var _input = __webpack_require__(725);
+var _input = __webpack_require__(726);
 
 var _abstract = __webpack_require__(81);
 
-var _label = __webpack_require__(726);
+var _label = __webpack_require__(727);
 
 var _single = __webpack_require__(2);
 
@@ -69216,21 +69269,21 @@ var _text = __webpack_require__(82);
 
 var _trigger = __webpack_require__(83);
 
-var _icon = __webpack_require__(727);
+var _icon = __webpack_require__(728);
 
-var _item = __webpack_require__(728);
+var _item = __webpack_require__(729);
 
-var _combo2 = __webpack_require__(729);
+var _combo2 = __webpack_require__(730);
 
-var _combo3 = __webpack_require__(730);
+var _combo3 = __webpack_require__(731);
 
-var _combo4 = __webpack_require__(731);
+var _combo4 = __webpack_require__(732);
 
-var _editor2 = __webpack_require__(732);
+var _editor2 = __webpack_require__(733);
 
-var _loading_pane = __webpack_require__(733);
+var _loading_pane = __webpack_require__(734);
 
-var _allvalueMultitextvalue = __webpack_require__(734);
+var _allvalueMultitextvalue = __webpack_require__(735);
 
 var _abstract2 = __webpack_require__(45);
 
@@ -69238,15 +69291,15 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 
 var _action = __webpack_require__(85);
 
-var _action2 = __webpack_require__(735);
+var _action2 = __webpack_require__(736);
 
 var _behavior = __webpack_require__(58);
 
-var _behavior2 = __webpack_require__(736);
+var _behavior2 = __webpack_require__(737);
 
-var _behavior3 = __webpack_require__(737);
+var _behavior3 = __webpack_require__(738);
 
-var decorator = _interopRequireWildcard(__webpack_require__(738));
+var decorator = _interopRequireWildcard(__webpack_require__(739));
 
 var _ob = __webpack_require__(34);
 
@@ -69254,219 +69307,221 @@ var _widget = __webpack_require__(1);
 
 var _layout = __webpack_require__(3);
 
-var _layout2 = __webpack_require__(739);
+var _layout2 = __webpack_require__(740);
 
-var _layout3 = __webpack_require__(740);
+var _layout3 = __webpack_require__(741);
 
-var _layout4 = __webpack_require__(741);
+var _layout4 = __webpack_require__(742);
 
-var _layout5 = __webpack_require__(742);
+var _layout5 = __webpack_require__(743);
 
-var _combo5 = __webpack_require__(743);
+var _combo5 = __webpack_require__(744);
 
-var _icon2 = __webpack_require__(744);
+var _icon2 = __webpack_require__(745);
 
-var _adapt = __webpack_require__(745);
+var _adapt = __webpack_require__(746);
 
-var _adapt2 = __webpack_require__(746);
+var _adapt2 = __webpack_require__(747);
 
-var _icontexticonitem = __webpack_require__(747);
+var _icontexticonitem = __webpack_require__(748);
 
-var _auto = __webpack_require__(748);
+var _auto = __webpack_require__(749);
 
-var _inline = __webpack_require__(749);
+var _inline = __webpack_require__(750);
 
-var _adapt3 = __webpack_require__(750);
+var _adapt3 = __webpack_require__(751);
 
 var _button5 = __webpack_require__(59);
 
 var _editor3 = __webpack_require__(86);
 
-var _icon3 = __webpack_require__(751);
+var _icon3 = __webpack_require__(752);
 
-var _layer = __webpack_require__(752);
+var _layer = __webpack_require__(753);
 
-var _combo6 = __webpack_require__(753);
+var _combo6 = __webpack_require__(754);
 
-var _dynamicdate = __webpack_require__(754);
+var _dynamicdate = __webpack_require__(755);
 
-var _customtree = __webpack_require__(755);
+var _customtree = __webpack_require__(756);
 
-var _tree = __webpack_require__(756);
+var _tree = __webpack_require__(757);
 
-var _nodeIcon = __webpack_require__(757);
+var _nodeIcon = __webpack_require__(758);
 
-var _itemMid = __webpack_require__(758);
+var _itemMid = __webpack_require__(759);
 
-var _itemFirst = __webpack_require__(759);
+var _itemFirst = __webpack_require__(760);
 
-var _itemLast = __webpack_require__(760);
+var _itemLast = __webpack_require__(761);
 
-var _editorText = __webpack_require__(761);
+var _editorText = __webpack_require__(762);
 
-var _editor4 = __webpack_require__(762);
+var _editor4 = __webpack_require__(763);
 
-var _absolute = __webpack_require__(763);
+var _absolute = __webpack_require__(764);
 
-var _adapt4 = __webpack_require__(764);
+var _adapt4 = __webpack_require__(765);
 
-var _layout6 = __webpack_require__(765);
+var _layout6 = __webpack_require__(766);
 
-var _adapt5 = __webpack_require__(766);
+var _adapt5 = __webpack_require__(767);
 
-var _adapt6 = __webpack_require__(767);
+var _adapt6 = __webpack_require__(768);
 
-var _multiselectInsert = __webpack_require__(768);
+var _multiselectInsert = __webpack_require__(769);
 
-var _multiselect = __webpack_require__(769);
+var _multiselect = __webpack_require__(770);
 
-var _editor5 = __webpack_require__(770);
+var _editor5 = __webpack_require__(771);
 
-var _multilayersingletree = __webpack_require__(771);
+var _multilayersingletree = __webpack_require__(772);
 
-var _colorchooser = __webpack_require__(772);
+var _colorchooser = __webpack_require__(773);
 
-var _a = __webpack_require__(773);
+var _a = __webpack_require__(774);
 
-var _html = __webpack_require__(774);
+var _html = __webpack_require__(775);
 
-var _switcher = __webpack_require__(775);
+var _switcher = __webpack_require__(776);
 
-var _loader = __webpack_require__(776);
+var _loader = __webpack_require__(777);
 
-var _pane2 = __webpack_require__(777);
+var _pane2 = __webpack_require__(778);
 
-var _toolbar = __webpack_require__(778);
+var _toolbar = __webpack_require__(779);
 
-var _list = __webpack_require__(779);
+var _list = __webpack_require__(780);
 
 var _abstract3 = __webpack_require__(87);
 
-var _combo7 = __webpack_require__(780);
+var _combo7 = __webpack_require__(781);
 
-var _editor6 = __webpack_require__(781);
+var _editor6 = __webpack_require__(782);
 
-var _item2 = __webpack_require__(782);
+var _item2 = __webpack_require__(783);
 
-var _dynamicdatetime = __webpack_require__(783);
+var _dynamicdatetime = __webpack_require__(784);
 
-var _multiTree = __webpack_require__(784);
+var _multiTree = __webpack_require__(785);
 
-var _middle = __webpack_require__(785);
+var _middle = __webpack_require__(786);
 
-var _group2 = __webpack_require__(786);
+var _group2 = __webpack_require__(787);
 
-var _layout7 = __webpack_require__(787);
+var _layout7 = __webpack_require__(788);
 
-var _icon4 = __webpack_require__(788);
+var _icon4 = __webpack_require__(789);
 
-var _searcher = __webpack_require__(789);
+var _searcher = __webpack_require__(790);
 
-var _combo8 = __webpack_require__(790);
+var _combo8 = __webpack_require__(791);
 
-var _combo9 = __webpack_require__(791);
+var _combo9 = __webpack_require__(792);
 
-var _comboTreevaluechooser = __webpack_require__(792);
+var _comboTreevaluechooser = __webpack_require__(793);
 
-var _radio = __webpack_require__(793);
+var _radio = __webpack_require__(794);
 
-var _multilayerselecttree = __webpack_require__(794);
+var _multilayerselecttree = __webpack_require__(795);
 
-var _multilayersingletree2 = __webpack_require__(795);
+var _multilayersingletree2 = __webpack_require__(796);
 
 var _treeview = __webpack_require__(60);
 
-var _multiTree2 = __webpack_require__(796);
+var _multiTree2 = __webpack_require__(797);
 
-var _itemSingleselect = __webpack_require__(797);
+var _itemSingleselect = __webpack_require__(798);
 
-var _singleselectInsert = __webpack_require__(798);
+var _singleselectInsert = __webpack_require__(799);
 
-var _singleselect = __webpack_require__(799);
+var _singleselect = __webpack_require__(800);
 
-var _layout8 = __webpack_require__(800);
+var _layout8 = __webpack_require__(801);
 
-var _combo10 = __webpack_require__(801);
+var _combo10 = __webpack_require__(802);
 
-var _time = __webpack_require__(802);
+var _time = __webpack_require__(803);
 
 var _listtreeview = __webpack_require__(88);
 
-var _listasynctree = __webpack_require__(803);
+var _listasynctree = __webpack_require__(804);
 
-var _asynctree = __webpack_require__(804);
+var _asynctree = __webpack_require__(805);
 
-var _multilayersingletree3 = __webpack_require__(805);
+var _multilayersingletree3 = __webpack_require__(806);
 
-var _multilayerselecttree2 = __webpack_require__(806);
+var _multilayerselecttree2 = __webpack_require__(807);
 
-var _multiTreeList = __webpack_require__(807);
+var _multiTreeList = __webpack_require__(808);
 
-var _multiTreeInsert = __webpack_require__(808);
+var _multiTreeInsert = __webpack_require__(809);
 
-var _combo11 = __webpack_require__(809);
+var _combo11 = __webpack_require__(810);
 
-var _switch = __webpack_require__(810);
+var _switch = __webpack_require__(811);
 
-var _layout9 = __webpack_require__(811);
+var _layout9 = __webpack_require__(812);
 
-var _editor7 = __webpack_require__(812);
+var _editor7 = __webpack_require__(813);
 
-var _triggerText = __webpack_require__(813);
+var _triggerText = __webpack_require__(814);
 
-var _dateinterval = __webpack_require__(814);
+var _dateinterval = __webpack_require__(815);
 
-var _datepane = __webpack_require__(815);
+var _datepane = __webpack_require__(816);
 
-var _pagerAll = __webpack_require__(816);
+var _pagerAll = __webpack_require__(817);
 
 var _layer2 = __webpack_require__(89);
 
-var _popup = __webpack_require__(817);
+var _popup = __webpack_require__(818);
 
-var _check = __webpack_require__(818);
+var _check = __webpack_require__(819);
 
-var _numberinterval = __webpack_require__(819);
+var _numberinterval = __webpack_require__(820);
 
-var _combo12 = __webpack_require__(820);
+var _combo12 = __webpack_require__(821);
 
-var _combo13 = __webpack_require__(821);
+var _combo13 = __webpack_require__(822);
 
-var _intervalslider = __webpack_require__(822);
+var _intervalslider = __webpack_require__(823);
 
-var _multiselectlist = __webpack_require__(823);
+var _multiselectlist = __webpack_require__(824);
 
-var _yearmonthinterval = __webpack_require__(824);
+var _yearmonthinterval = __webpack_require__(825);
 
-var _numbereditor = __webpack_require__(825);
+var _numbereditor = __webpack_require__(826);
 
-var _combo14 = __webpack_require__(826);
+var _combo14 = __webpack_require__(827);
 
-var _linear = __webpack_require__(827);
+var _linear = __webpack_require__(828);
 
-var _img = __webpack_require__(828);
+var _img = __webpack_require__(829);
 
-var _combo15 = __webpack_require__(829);
+var _combo15 = __webpack_require__(830);
 
-var _combo16 = __webpack_require__(830);
+var _combo16 = __webpack_require__(831);
 
-var _listview = __webpack_require__(831);
+var _listview = __webpack_require__(832);
 
-var _middleFloat = __webpack_require__(832);
+var _middleFloat = __webpack_require__(833);
 
-var _popup2 = __webpack_require__(833);
+var _popup2 = __webpack_require__(834);
 
 var _controller = __webpack_require__(90);
 
-var _controller2 = __webpack_require__(834);
+var _controller2 = __webpack_require__(835);
 
-var _popupCalendar = __webpack_require__(835);
+var _popupCalendar = __webpack_require__(836);
 
-var _tree2 = __webpack_require__(836);
+var _tree2 = __webpack_require__(837);
 
-var _textnode = __webpack_require__(837);
+var _textnode = __webpack_require__(838);
 
-var _popup3 = __webpack_require__(838);
+var _popup3 = __webpack_require__(839);
+
+var _button6 = __webpack_require__(840);
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -69476,15 +69531,6 @@ var _default = {
   Decorators: decorator
 };
 exports["default"] = _default;
-
-/***/ }),
-/* 717 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 718 */
@@ -69502,7 +69548,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 720 */
@@ -69529,7 +69575,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 723 */
@@ -69547,7 +69593,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 725 */
@@ -69556,7 +69602,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 726 */
@@ -69565,7 +69611,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _abstract = __webpack_require__(81);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 727 */
@@ -69574,7 +69620,7 @@ var _abstract = __webpack_require__(81);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(81);
 
 /***/ }),
 /* 728 */
@@ -69583,7 +69629,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 729 */
@@ -69592,7 +69638,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 730 */
@@ -69628,7 +69674,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 734 */
@@ -69637,7 +69683,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 735 */
@@ -69646,7 +69692,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _action = __webpack_require__(85);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 736 */
@@ -69655,7 +69701,7 @@ var _action = __webpack_require__(85);
 "use strict";
 
 
-var _behavior = __webpack_require__(58);
+var _action = __webpack_require__(85);
 
 /***/ }),
 /* 737 */
@@ -69668,6 +69714,15 @@ var _behavior = __webpack_require__(58);
 
 /***/ }),
 /* 738 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _behavior = __webpack_require__(58);
+
+/***/ }),
+/* 739 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69878,15 +69933,6 @@ type UnionToTuple<U> = UnionToTupleRecursively<U, []>;
 exports.Model = Model;
 
 /***/ }),
-/* 739 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _layout = __webpack_require__(3);
-
-/***/ }),
 /* 740 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -69920,7 +69966,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 744 */
@@ -69929,7 +69975,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 745 */
@@ -69938,7 +69984,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 746 */
@@ -69956,7 +70002,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 748 */
@@ -69965,7 +70011,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 749 */
@@ -69992,7 +70038,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 752 */
@@ -70001,7 +70047,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 753 */
@@ -70019,7 +70065,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 755 */
@@ -70028,7 +70074,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 756 */
@@ -70037,7 +70083,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _group = __webpack_require__(80);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 757 */
@@ -70046,7 +70092,7 @@ var _group = __webpack_require__(80);
 "use strict";
 
 
-var _button = __webpack_require__(57);
+var _group = __webpack_require__(80);
 
 /***/ }),
 /* 758 */
@@ -70055,7 +70101,7 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _button = __webpack_require__(57);
 
 /***/ }),
 /* 759 */
@@ -70082,7 +70128,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _editor = __webpack_require__(86);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 762 */
@@ -70091,7 +70137,7 @@ var _editor = __webpack_require__(86);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _editor = __webpack_require__(86);
 
 /***/ }),
 /* 763 */
@@ -70100,7 +70146,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 764 */
@@ -70145,7 +70191,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 769 */
@@ -70163,7 +70209,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 771 */
@@ -70172,7 +70218,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 772 */
@@ -70181,7 +70227,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 773 */
@@ -70190,7 +70236,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _text = __webpack_require__(82);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 774 */
@@ -70199,7 +70245,7 @@ var _text = __webpack_require__(82);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _text = __webpack_require__(82);
 
 /***/ }),
 /* 775 */
@@ -70208,7 +70254,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 776 */
@@ -70226,7 +70272,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 778 */
@@ -70235,7 +70281,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 779 */
@@ -70244,7 +70290,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 780 */
@@ -70253,7 +70299,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstract = __webpack_require__(87);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 781 */
@@ -70262,7 +70308,7 @@ var _abstract = __webpack_require__(87);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _abstract = __webpack_require__(87);
 
 /***/ }),
 /* 782 */
@@ -70271,7 +70317,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 783 */
@@ -70280,7 +70326,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 784 */
@@ -70298,7 +70344,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 786 */
@@ -70307,7 +70353,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 787 */
@@ -70316,7 +70362,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 788 */
@@ -70325,7 +70371,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _button = __webpack_require__(59);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 789 */
@@ -70334,7 +70380,7 @@ var _button = __webpack_require__(59);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 790 */
@@ -70343,7 +70389,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _abstractTreevaluechooser = __webpack_require__(84);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 791 */
@@ -70352,7 +70398,7 @@ var _abstractTreevaluechooser = __webpack_require__(84);
 "use strict";
 
 
-var _abstract = __webpack_require__(45);
+var _abstractTreevaluechooser = __webpack_require__(84);
 
 /***/ }),
 /* 792 */
@@ -70370,7 +70416,7 @@ var _abstract = __webpack_require__(45);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _abstract = __webpack_require__(45);
 
 /***/ }),
 /* 794 */
@@ -70379,7 +70425,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 795 */
@@ -70397,7 +70443,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _pane = __webpack_require__(22);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 797 */
@@ -70406,7 +70452,7 @@ var _pane = __webpack_require__(22);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _pane = __webpack_require__(22);
 
 /***/ }),
 /* 798 */
@@ -70415,7 +70461,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 799 */
@@ -70433,7 +70479,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 801 */
@@ -70442,7 +70488,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 802 */
@@ -70460,7 +70506,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _listtreeview = __webpack_require__(88);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 804 */
@@ -70469,7 +70515,7 @@ var _listtreeview = __webpack_require__(88);
 "use strict";
 
 
-var _treeview = __webpack_require__(60);
+var _listtreeview = __webpack_require__(88);
 
 /***/ }),
 /* 805 */
@@ -70478,7 +70524,7 @@ var _treeview = __webpack_require__(60);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _treeview = __webpack_require__(60);
 
 /***/ }),
 /* 806 */
@@ -70496,7 +70542,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 808 */
@@ -70514,7 +70560,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 810 */
@@ -70523,7 +70569,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(8);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 811 */
@@ -70532,7 +70578,7 @@ var _button = __webpack_require__(8);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _button = __webpack_require__(8);
 
 /***/ }),
 /* 812 */
@@ -70541,7 +70587,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 813 */
@@ -70550,7 +70596,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _trigger = __webpack_require__(83);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 814 */
@@ -70559,7 +70605,7 @@ var _trigger = __webpack_require__(83);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _trigger = __webpack_require__(83);
 
 /***/ }),
 /* 815 */
@@ -70568,7 +70614,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 816 */
@@ -70586,8 +70632,6 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layer = __webpack_require__(89);
-
 var _widget = __webpack_require__(1);
 
 /***/ }),
@@ -70597,7 +70641,9 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _button = __webpack_require__(59);
+var _layer = __webpack_require__(89);
+
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 819 */
@@ -70606,7 +70652,7 @@ var _button = __webpack_require__(59);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _button = __webpack_require__(59);
 
 /***/ }),
 /* 820 */
@@ -70615,7 +70661,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 821 */
@@ -70633,7 +70679,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 823 */
@@ -70660,7 +70706,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 826 */
@@ -70687,7 +70733,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _single = __webpack_require__(2);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 829 */
@@ -70696,7 +70742,7 @@ var _single = __webpack_require__(2);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _single = __webpack_require__(2);
 
 /***/ }),
 /* 830 */
@@ -70723,7 +70769,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _layout = __webpack_require__(3);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 833 */
@@ -70732,7 +70778,7 @@ var _layout = __webpack_require__(3);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _layout = __webpack_require__(3);
 
 /***/ }),
 /* 834 */
@@ -70741,7 +70787,7 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
-var _controller = __webpack_require__(90);
+var _widget = __webpack_require__(1);
 
 /***/ }),
 /* 835 */
@@ -70750,7 +70796,7 @@ var _controller = __webpack_require__(90);
 "use strict";
 
 
-var _widget = __webpack_require__(1);
+var _controller = __webpack_require__(90);
 
 /***/ }),
 /* 836 */
@@ -70759,14 +70805,14 @@ var _widget = __webpack_require__(1);
 "use strict";
 
 
+var _widget = __webpack_require__(1);
+
 /***/ }),
 /* 837 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-
-var _button = __webpack_require__(57);
 
 /***/ }),
 /* 838 */
@@ -70775,11 +70821,27 @@ var _button = __webpack_require__(57);
 "use strict";
 
 
+var _button = __webpack_require__(57);
+
+/***/ }),
+/* 839 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _pane = __webpack_require__(22);
 
 /***/ }),
-/* 839 */,
-/* 840 */,
+/* 840 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _button = __webpack_require__(8);
+
+/***/ }),
 /* 841 */,
 /* 842 */,
 /* 843 */,
@@ -70828,7 +70890,9 @@ var _pane = __webpack_require__(22);
 /* 886 */,
 /* 887 */,
 /* 888 */,
-/* 889 */
+/* 889 */,
+/* 890 */,
+/* 891 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -70991,17 +71055,17 @@ var _pane = __webpack_require__(22);
 
 
 /***/ }),
-/* 890 */,
-/* 891 */,
 /* 892 */,
-/* 893 */
+/* 893 */,
+/* 894 */,
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(894);
+/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Fix"] = __webpack_require__(896);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)))
 
 /***/ }),
-/* 894 */
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -71140,8 +71204,8 @@ var _pane = __webpack_require__(22);
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-        // PhantomJS
-        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            // PhantomJS
+            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -71150,18 +71214,18 @@ var _pane = __webpack_require__(22);
             };
         } else
             /* istanbul ignore next */
-            if (typeof Promise !== 'undefined' && isNative(Promise)) {
-                // use microtask in non-DOM environments, e.g. Weex
-                var p = Promise.resolve();
-                timerFunc = function timerFunc() {
-                    p.then(nextTickHandler);
-                };
-            } else {
-                // fallback to setTimeout
-                timerFunc = function timerFunc() {
-                    setTimeout(nextTickHandler, 0);
-                };
-            }
+        if (typeof Promise !== 'undefined' && isNative(Promise)) {
+            // use microtask in non-DOM environments, e.g. Weex
+            var p = Promise.resolve();
+            timerFunc = function timerFunc() {
+                p.then(nextTickHandler);
+            };
+        } else {
+            // fallback to setTimeout
+            timerFunc = function timerFunc() {
+                setTimeout(nextTickHandler, 0);
+            };
+        }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -71300,7 +71364,7 @@ var _pane = __webpack_require__(22);
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -71316,7 +71380,7 @@ var _pane = __webpack_require__(22);
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                '\tEnd Function');
+                    '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -71329,19 +71393,19 @@ var _pane = __webpack_require__(22);
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                    //由于不知对方会传入什么,因此set, let都用上
-                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                        //由于不知对方会传入什么,因此set, let都用上
+                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -71359,7 +71423,7 @@ var _pane = __webpack_require__(22);
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -71543,10 +71607,10 @@ var _pane = __webpack_require__(22);
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                // Deep watchers and watchers on Object/Arrays should fire even
-                // when the value is the same, because the value may
-                // have mutated.
-                _.isObject(value) && options && options.refresh || this.deep) {
+                    // Deep watchers and watchers on Object/Arrays should fire even
+                    // when the value is the same, because the value may
+                    // have mutated.
+                    _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -71636,8 +71700,8 @@ var _pane = __webpack_require__(22);
     _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
         var original = arrayProto[method];
         arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
+            for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                args[_key2] = arguments[_key2];
             }
 
             var ob = this.__ob__;
@@ -71779,10 +71843,12 @@ var _pane = __webpack_require__(22);
                 root = parent;
                 parent = parent.parent;
             }
-            for (var _key2 in root._globalDeps) {
-                var reg = new RegExp(_key2);
+            for (var _key in root._globalDeps) {
+                var reg = new RegExp(_key);
                 if (reg.test(route)) {
-                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
+                    for (var i = 0; i < root._globalDeps[_key].length; i++) {
+                        root._globalDeps[_key][i].notify({ observer: observer, key: _key });
+                    }
                 }
             }
         }
@@ -71964,7 +72030,7 @@ var _pane = __webpack_require__(22);
     }
 
     function routeToRegExp(route) {
-        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        route = route.replace(/\*\*/g, '[a-zA-Z0-9_]+').replace(/\*./g, '[a-zA-Z0-9_]+.');
         return '^' + route + '$';
     }
 
@@ -72053,21 +72119,12 @@ var _pane = __webpack_require__(22);
                 });
                 return;
             }
-            if (/\*\*$|\*$/.test(exp)) {
-                throw new Error('not support');
-            }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
-            if (/\*/.test(exp)) {
-                var currentModel = model;
+            // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
+            if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
                 //先获取到能获取到的对象
                 var paths = exp.split(".");
-                for (var _i = 0, len = paths.length; _i < len; _i++) {
-                    if (paths[_i] === "*") {
-                        break;
-                    }
-                    currentModel = model[paths[_i]];
-                }
-                exp = exp.substr(exp.indexOf("*"));
+                var currentModel = model[paths[1]];
+                exp = paths[1] + ".**";
                 //补全路径
                 var parent = currentModel.__ob__.parent,
                     root = currentModel.__ob__;
@@ -72079,7 +72136,11 @@ var _pane = __webpack_require__(22);
                 var regStr = routeToRegExp(exp);
                 var _dep = new Dep();
                 root._globalDeps || (root._globalDeps = {});
-                root._globalDeps[regStr] = _dep;
+                if (_.isArray(root._globalDeps[regStr])) {
+                    root._globalDeps[regStr].push(_dep);
+                } else {
+                    root._globalDeps[regStr] = [_dep];
+                }
 
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
@@ -72088,8 +72149,64 @@ var _pane = __webpack_require__(22);
                     callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
-                    _w.teardown();
-                    root._globalDeps && delete root._globalDeps[regStr];
+                    if (root._globalDeps) {
+                        remove(root._globalDeps[regStr], _dep);
+
+                        if (root._globalDeps[regStr].length === 0) {
+                            delete root._globalDeps[regStr];
+                            _w.teardown();
+                        }
+                    }
+                });
+                return;
+            }
+            if (/\*\*$|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
+            //其他含有*的情况，如*.a,*.*.a,a.*.a
+            if (/\*/.test(exp)) {
+                var _currentModel = model;
+                //先获取到能获取到的对象
+                var _paths = exp.split(".");
+                for (var _i = 0, len = _paths.length; _i < len; _i++) {
+                    if (_paths[_i] === "*") {
+                        break;
+                    }
+                    _currentModel = model[_paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
+                //补全路径
+                var _parent = _currentModel.__ob__.parent,
+                    _root = _currentModel.__ob__;
+                while (_parent) {
+                    exp = '*.' + exp;
+                    _root = _parent;
+                    _parent = _parent.parent;
+                }
+                var _regStr = routeToRegExp(exp);
+                var _dep2 = new Dep();
+                _root._globalDeps || (_root._globalDeps = {});
+                if (_.isArray(_root._globalDeps[_regStr])) {
+                    _root._globalDeps[_regStr].push(_dep2);
+                } else {
+                    _root._globalDeps[_regStr] = [_dep2];
+                }
+
+                var _w2 = new Watcher(_currentModel, function () {
+                    _dep2.depend();
+                    return NaN;
+                }, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                }, options);
+                watchers.push(function unwatchFn() {
+                    if (_root._globalDeps) {
+                        remove(_root._globalDeps[_regStr], _dep2);
+
+                        if (_root._globalDeps[_regStr].length === 0) {
+                            delete _root._globalDeps[_regStr];
+                            _w2.teardown();
+                        }
+                    }
                 });
                 return;
             }
@@ -72477,11 +72594,12 @@ var _pane = __webpack_require__(22);
 
     exports.__esModule = true;
 });
+
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),
-/* 895 */,
-/* 896 */
+/* 897 */,
+/* 898 */
 /***/ (function(module, exports) {
 
 ;(function () {
@@ -72777,8 +72895,6 @@ var _pane = __webpack_require__(22);
 
 
 /***/ }),
-/* 897 */,
-/* 898 */,
 /* 899 */,
 /* 900 */,
 /* 901 */,
@@ -72994,14 +73110,14 @@ var _pane = __webpack_require__(22);
 /* 1111 */,
 /* 1112 */,
 /* 1113 */,
-/* 1114 */
+/* 1114 */,
+/* 1115 */,
+/* 1116 */
 /***/ (function(module, exports) {
 
 
 
 /***/ }),
-/* 1115 */,
-/* 1116 */,
 /* 1117 */,
 /* 1118 */,
 /* 1119 */,
@@ -73298,7 +73414,9 @@ var _pane = __webpack_require__(22);
 /* 1410 */,
 /* 1411 */,
 /* 1412 */,
-/* 1413 */
+/* 1413 */,
+/* 1414 */,
+/* 1415 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(123);
@@ -73398,11 +73516,11 @@ __webpack_require__(392);
 __webpack_require__(393);
 __webpack_require__(394);
 __webpack_require__(395);
+__webpack_require__(396);
 __webpack_require__(153);
 __webpack_require__(154);
 __webpack_require__(155);
-__webpack_require__(893);
-__webpack_require__(396);
+__webpack_require__(895);
 __webpack_require__(397);
 __webpack_require__(398);
 __webpack_require__(399);
@@ -73551,6 +73669,7 @@ __webpack_require__(541);
 __webpack_require__(542);
 __webpack_require__(543);
 __webpack_require__(544);
+__webpack_require__(545);
 __webpack_require__(156);
 __webpack_require__(157);
 __webpack_require__(158);
@@ -73611,7 +73730,6 @@ __webpack_require__(212);
 __webpack_require__(213);
 __webpack_require__(214);
 __webpack_require__(215);
-__webpack_require__(545);
 __webpack_require__(546);
 __webpack_require__(547);
 __webpack_require__(548);
@@ -73781,10 +73899,11 @@ __webpack_require__(711);
 __webpack_require__(712);
 __webpack_require__(713);
 __webpack_require__(714);
-__webpack_require__(896);
-__webpack_require__(889);
-__webpack_require__(1114);
-module.exports = __webpack_require__(715);
+__webpack_require__(715);
+__webpack_require__(898);
+__webpack_require__(891);
+__webpack_require__(1116);
+module.exports = __webpack_require__(716);
 
 
 /***/ })

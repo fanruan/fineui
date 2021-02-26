@@ -6,7 +6,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
 
     _defaultConfig: function () {
         return BI.extend(BI.SelectTreeCombo.superclass._defaultConfig.apply(this, arguments), {
-            baseCls: "bi-select-tree-combo bi-border bi-focus-shadow bi-border-radius",
+            baseCls: "bi-select-tree-combo bi-border bi-border-radius",
             height: 24,
             text: "",
             items: [],
@@ -17,6 +17,7 @@ BI.SelectTreeCombo = BI.inherit(BI.Widget, {
     _init: function () {
         var self = this, o = this.options;
         o.height -= 2;
+        BI.isNumeric(o.width) && (o.width -= 2);
         BI.SelectTreeCombo.superclass._init.apply(this, arguments);
 
         this.trigger = BI.createWidget({

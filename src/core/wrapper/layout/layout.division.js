@@ -7,7 +7,7 @@
 BI.DivisionLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.DivisionLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-division-layout",
+            baseCls: "bi-division",
             columns: null,
             rows: null,
             items: []

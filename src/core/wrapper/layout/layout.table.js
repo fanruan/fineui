@@ -7,7 +7,7 @@
 BI.TableLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.TableLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-table-layout",
+            baseCls: "bi-t",
             scrolly: true,
             columnSize: [200, 200, "fill"],
             rowSize: 30,  // or [30,30,30]
@@ -79,8 +79,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    left: o.columnSize[i] <= 1 ? left * 100 + "%" : left,
-                    width: o.columnSize[i] <= 1 ? o.columnSize[i] * 100 + "%" : o.columnSize[i]
+                    left: o.columnSize[i] <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                    width: o.columnSize[i] <= 1 ? (o.columnSize[i] * 100).toFixed(1) + "%" : o.columnSize[i]
                 }, arr[i]));
                 left += o.columnSize[i] + (o.columnSize[i] < 1 ? 0 : o.hgap);
             } else {
@@ -93,8 +93,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
                 abs.push(BI.extend({
                     top: 0,
                     bottom: 0,
-                    right: o.columnSize[j] <= 1 ? right * 100 + "%" : right,
-                    width: o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j]
+                    right: o.columnSize[j] <= 1 ? (right * 100).toFixed(1) + "%" : right,
+                    width: o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j]
                 }, arr[j]));
                 right += o.columnSize[j] + (o.columnSize[j] < 1 ? 0 : o.hgap);
             } else {
@@ -106,8 +106,8 @@ BI.TableLayout = BI.inherit(BI.Layout, {
             abs.push(BI.extend({
                 top: 0,
                 bottom: 0,
-                left: left <= 1 ? left * 100 + "%" : left,
-                right: right <= 1 ? right * 100 + "%" : right
+                left: left <= 1 ? (left * 100).toFixed(1) + "%" : left,
+                right: right <= 1 ? (right * 100).toFixed(1) + "%" : right
             }, arr[i]));
         }
         var w = BI._lazyCreateWidget({

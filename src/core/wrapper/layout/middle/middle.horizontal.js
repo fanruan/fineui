@@ -6,7 +6,7 @@
 BI.HorizontalCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.HorizontalCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-horizontal-center-layout",
+            baseCls: "bi-h-center",
             hgap: 0,
             vgap: 0,
             lgap: 0,

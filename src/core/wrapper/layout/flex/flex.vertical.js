@@ -7,7 +7,7 @@
 BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexVerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-vertical-layout",
+            baseCls: "bi-f-v",
             horizontalAlign: BI.HorizontalAlign.Left,
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
@@ -41,7 +41,7 @@ BI.FlexVerticalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.rowSize[i] > 0) {
-            w.element.height(o.rowSize[i] <= 1 ? (o.rowSize[i] * 100 + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.height(o.rowSize[i] <= 1 ? ((o.rowSize[i] * 100).toFixed(1) + "%") : (o.rowSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.rowSize[i] === "fill") {
             w.element.addClass("fill");

@@ -15,7 +15,6 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.SearchMultiTextValueCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             BI.isKey(self._startValue) && (self.storeValue.type === BI.Selection.All ? BI.remove(self.storeValue.value, self._startValue) : BI.pushDistinct(self.storeValue.value, self._startValue));
@@ -36,7 +35,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {

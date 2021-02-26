@@ -1,7 +1,7 @@
 BI.AdaptiveLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.AdaptiveLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-adaptive-layout",
+            baseCls: "bi-adaptive",
             hgap: null,
             vgap: null,
             lgap: null,

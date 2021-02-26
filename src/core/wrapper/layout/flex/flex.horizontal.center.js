@@ -7,7 +7,7 @@
 BI.FlexHorizontalCenter = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalCenter.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-center-adapt-layout",
+            baseCls: "bi-f-h-c",
             verticalAlign: BI.VerticalAlign.Top,
             rowSize: [],
             scrolly: false,

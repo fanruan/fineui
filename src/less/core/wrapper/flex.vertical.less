@@ -28,7 +28,7 @@
   flex-direction: row;
 }
 
-.bi-flex-vertical-layout {
+.bi-f-v, .bi-flex-vertical-layout{
   .flex();
   .vertical();
 
@@ -104,18 +104,21 @@
     -webkit-justify-content: center;
     -moz-justify-content: center;
     -ms-justify-content: center;
-    -o-justify-content: center;
     -ms-flex-pack: center;
+    -o-justify-content: center;
     justify-content: center;
   }
 
   &.v-bottom {
+    /* 09版 */
+    -webkit-box-pack: flex-end;
     /* 12版 */
-    -webkit-flex-direction: column-reverse;
-    -moz-flex-direction: column-reverse;
-    -ms-flex-direction: column-reverse;
-    -o-flex-direction: column-reverse;
-    flex-direction: column-reverse;
+    -webkit-justify-content: flex-end;
+    -moz-justify-content: flex-end;
+    -ms-justify-content: flex-end;
+    -ms-flex-pack: end;
+    -o-justify-content: flex-end;
+    justify-content: flex-end;
   }
 
   > .shrink-none {

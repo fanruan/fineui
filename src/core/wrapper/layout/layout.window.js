@@ -6,7 +6,7 @@
 BI.WindowLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.WindowLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-window-layout",
+            baseCls: "bi-window",
             columns: 3,
             rows: 2,
             hgap: 0,
@@ -114,9 +114,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(top[i])) {
                     top[i] = top[i - 1] + (o.rowSize[i - 1] < 1 ? o.rowSize[i - 1] : o.rowSize[i - 1] + o.vgap + o.bgap);
                 }
-                var t = top[i] <= 1 ? top[i] * 100 + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var t = top[i] <= 1 ? (top[i] * 100).toFixed(1) + "%" : (top[i] + o.vgap + o.tgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({top: t, height: h});
                 first(wi, i, j);
@@ -132,9 +132,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(bottom[i])) {
                     bottom[i] = bottom[i + 1] + (o.rowSize[i + 1] < 1 ? o.rowSize[i + 1] : o.rowSize[i + 1] + o.vgap + o.tgap);
                 }
-                var b = bottom[i] <= 1 ? bottom[i] * 100 + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
+                var b = bottom[i] <= 1 ? (bottom[i] * 100).toFixed(1) + "%" : (bottom[i] + o.vgap + o.bgap) / BI.pixRatio + BI.pixUnit, h = "";
                 if (BI.isNumber(o.rowSize[i])) {
-                    h = o.rowSize[i] <= 1 ? o.rowSize[i] * 100 + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
+                    h = o.rowSize[i] <= 1 ? (o.rowSize[i] * 100).toFixed(1) + "%" : o.rowSize[i] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({bottom: b, height: h});
                 first(wi, i, j);
@@ -150,9 +150,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(left[j])) {
                     left[j] = left[j - 1] + (o.columnSize[j - 1] < 1 ? o.columnSize[j - 1] : o.columnSize[j - 1] + o.hgap + o.rgap);
                 }
-                var l = left[j] <= 1 ? left[j] * 100 + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var l = left[j] <= 1 ? (left[j] * 100).toFixed(1) + "%" : (left[j] + o.hgap + o.lgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({left: l, width: w});
                 first(wi, i, j);
@@ -168,9 +168,9 @@ BI.WindowLayout = BI.inherit(BI.Layout, {
                 if (BI.isNull(right[j])) {
                     right[j] = right[j + 1] + (o.columnSize[j + 1] < 1 ? o.columnSize[j + 1] : o.columnSize[j + 1] + o.hgap + o.lgap);
                 }
-                var r = right[j] <= 1 ? right[j] * 100 + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
+                var r = right[j] <= 1 ? (right[j] * 100).toFixed(1) + "%" : (right[j] + o.hgap + o.rgap) / BI.pixRatio + BI.pixUnit, w = "";
                 if (BI.isNumber(o.columnSize[j])) {
-                    w = o.columnSize[j] <= 1 ? o.columnSize[j] * 100 + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
+                    w = o.columnSize[j] <= 1 ? (o.columnSize[j] * 100).toFixed(1) + "%" : o.columnSize[j] / BI.pixRatio + BI.pixUnit;
                 }
                 wi.element.css({right: r, width: w});
                 first(wi, i, j);

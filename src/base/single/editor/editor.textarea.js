@@ -10,6 +10,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
             baseCls: "bi-textarea-editor",
             value: "",
             errorText: "",
+            adjustYOffset: 2,
+            adjustXOffset: 0,
+            offsetStyle: "left",
             validationChecker: function () {
                 return true;
             },
@@ -137,7 +140,9 @@ BI.TextAreaEditor = BI.inherit(BI.Single, {
         }
         if (!this.disabledError && BI.isKey(errorText)) {
             BI.Bubbles[b ? "show" : "hide"](this.getName(), errorText, this, {
-                adjustYOffset: 2
+                adjustYOffset: o.adjustYOffset,
+                adjustXOffset: o.adjustXOffset,
+                offsetStyle: o.offsetStyle,
             });
             return BI.Bubbles.get(this.getName());
         }

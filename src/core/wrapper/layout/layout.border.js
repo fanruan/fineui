@@ -7,7 +7,7 @@
 BI.BorderLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.BorderLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-border-layout",
+            baseCls: "bi-border",
             items: {}
         });
     },

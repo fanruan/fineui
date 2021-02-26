@@ -28,7 +28,6 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiTreeInsertCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
@@ -38,7 +37,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {

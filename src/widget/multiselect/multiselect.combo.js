@@ -18,7 +18,6 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiSelectCombo.superclass._init.apply(this, arguments);
         var assertShowValue = function () {
             if (BI.isKey(self._startValue)) {
@@ -45,7 +44,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {

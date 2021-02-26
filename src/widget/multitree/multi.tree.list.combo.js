@@ -29,7 +29,6 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
 
     _init: function () {
         var self = this, o = this.options;
-        o.height -= 2;
         BI.MultiTreeListCombo.superclass._init.apply(this, arguments);
         var isInit = false;
         var want2showCounter = false;
@@ -41,7 +40,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             text: o.text,
             watermark: o.watermark,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {

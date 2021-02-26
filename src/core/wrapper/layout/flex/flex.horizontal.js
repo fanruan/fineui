@@ -8,7 +8,7 @@
 BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexHorizontalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-horizontal-layout",
+            baseCls: "bi-f-h",
             verticalAlign: BI.VerticalAlign.Top,
             horizontalAlign: BI.HorizontalAlign.Left,// 如果只有一个子元素且想让该子元素横向撑满，设置成Stretch
             columnSize: [],
@@ -42,7 +42,7 @@ BI.FlexHorizontalLayout = BI.inherit(BI.Layout, {
             }
         }
         if (o.columnSize[i] > 0) {
-            w.element.width(o.columnSize[i] <= 1 ? (o.columnSize[i] * 100 + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
+            w.element.width(o.columnSize[i] <= 1 ? ((o.columnSize[i] * 100).toFixed(1) + "%") : (o.columnSize[i] / BI.pixRatio + BI.pixUnit));
         }
         if (o.columnSize[i] === "fill") {
             w.element.addClass("fill");

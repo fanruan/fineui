@@ -11,7 +11,7 @@ BI.InlineLayout = BI.inherit(BI.Layout, {
 
     props: function () {
         return BI.extend(BI.InlineLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-inline-layout",
+            baseCls: "bi-i",
             hgap: 0,
             vgap: 0,
             lgap: 0,

@@ -6,7 +6,7 @@
 BI.VerticalLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.VerticalLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-vertical-layout",
+            baseCls: "bi-v",
             hgap: 0,
             vgap: 0,
             lgap: 0,

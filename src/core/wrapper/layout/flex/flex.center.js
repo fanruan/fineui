@@ -8,7 +8,7 @@
 BI.FlexCenterLayout = BI.inherit(BI.Layout, {
     props: function () {
         return BI.extend(BI.FlexCenterLayout.superclass.props.apply(this, arguments), {
-            baseCls: "bi-flex-center-adapt-layout",
+            baseCls: "bi-f-c",
             verticalAlign: BI.VerticalAlign.Middle,
             horizontalAlign: BI.HorizontalAlign.Center,
             hgap: 0,
