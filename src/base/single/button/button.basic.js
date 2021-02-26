@@ -357,6 +357,7 @@ BI.BasicButton = BI.inherit(BI.Single, {
         if (o.shadow && !o.isShadowShowingOnSelected) {
             this.$mask && this.$mask.setVisible(false);
         }
+        this.options.setSelected && this.options.setSelected.call(this, b);
     },
 
     isSelected: function () {
