@@ -1,4 +1,4 @@
-/*! time: 2021-2-26 11:30:39 */
+/*! time: 2021-2-26 13:00:37 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40655,12 +40655,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
     },
 
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
-    },
-
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
@@ -40700,7 +40694,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -41745,12 +41739,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         supportDynamic: true
     },
 
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
-    },
-
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
@@ -41790,7 +41778,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -47646,7 +47634,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48129,7 +48117,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48632,7 +48620,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
@@ -49135,7 +49123,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -53124,7 +53112,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             text: o.text,
             watermark: o.watermark,
@@ -53484,7 +53472,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -53862,7 +53850,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             text: o.text,
             watermark: o.watermark,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -55807,7 +55795,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {
