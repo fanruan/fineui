@@ -1,4 +1,4 @@
-/*! time: 2021-2-24 14:40:42 */
+/*! time: 2021-2-26 13:00:37 */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40655,12 +40655,6 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
         supportDynamic: true,
     },
 
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateCombo.superclass._init.apply(this, arguments);
-    },
-
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
@@ -40700,7 +40694,7 @@ BI.DynamicDateCombo = BI.inherit(BI.Single, {
                             format: opts.format,
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -41745,12 +41739,6 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
         supportDynamic: true
     },
 
-    _init: function () {
-        var o = this.options;
-        o.height -= 2;
-        BI.DynamicDateTimeCombo.superclass._init.apply(this, arguments);
-    },
-
     render: function () {
         var self = this, opts = this.options;
         this.storeTriggerValue = "";
@@ -41790,7 +41778,7 @@ BI.DynamicDateTimeCombo = BI.inherit(BI.Single, {
                             allowEdit: opts.allowEdit,
                             watermark: opts.watermark,
                             format: opts.format,
-                            height: opts.height,
+                            height: opts.height - 2,
                             value: opts.value,
                             ref: function () {
                                 self.trigger = this;
@@ -47646,7 +47634,7 @@ BI.MultiSelectCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48129,7 +48117,7 @@ BI.MultiSelectNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -48632,7 +48620,7 @@ BI.MultiSelectInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             watermark: o.watermark,
             // adapter: this.popup,
@@ -49135,7 +49123,7 @@ BI.MultiSelectInsertNoBarCombo = BI.inherit(BI.Single, {
 
         this.trigger = BI.createWidget({
             type: "bi.multi_select_insert_trigger",
-            height: o.height,
+            height: o.height - 2,
             text: o.text,
             // adapter: this.popup,
             masker: {
@@ -53124,7 +53112,7 @@ BI.MultiTreeCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             text: o.text,
             watermark: o.watermark,
@@ -53484,7 +53472,7 @@ BI.MultiTreeInsertCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.multi_select_trigger",
             allowEdit: o.allowEdit,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -53862,7 +53850,7 @@ BI.MultiTreeListCombo = BI.inherit(BI.Single, {
             allowEdit: o.allowEdit,
             text: o.text,
             watermark: o.watermark,
-            height: o.height,
+            height: o.height - 2,
             valueFormatter: o.valueFormatter,
             // adapter: this.popup,
             masker: {
@@ -55807,7 +55795,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {
@@ -71216,8 +71204,8 @@ var _button = __webpack_require__(8);
                 setImmediate(nextTickHandler);
             };
         } else if (typeof MessageChannel !== 'undefined' && (isNative(MessageChannel) ||
-        // PhantomJS
-        MessageChannel.toString() === '[object MessageChannelConstructor]')) {
+            // PhantomJS
+            MessageChannel.toString() === '[object MessageChannelConstructor]')) {
             var channel = new MessageChannel();
             var port = channel.port2;
             channel.port1.onmessage = nextTickHandler;
@@ -71226,18 +71214,18 @@ var _button = __webpack_require__(8);
             };
         } else
             /* istanbul ignore next */
-            if (typeof Promise !== 'undefined' && isNative(Promise)) {
-                // use microtask in non-DOM environments, e.g. Weex
-                var p = Promise.resolve();
-                timerFunc = function timerFunc() {
-                    p.then(nextTickHandler);
-                };
-            } else {
-                // fallback to setTimeout
-                timerFunc = function timerFunc() {
-                    setTimeout(nextTickHandler, 0);
-                };
-            }
+        if (typeof Promise !== 'undefined' && isNative(Promise)) {
+            // use microtask in non-DOM environments, e.g. Weex
+            var p = Promise.resolve();
+            timerFunc = function timerFunc() {
+                p.then(nextTickHandler);
+            };
+        } else {
+            // fallback to setTimeout
+            timerFunc = function timerFunc() {
+                setTimeout(nextTickHandler, 0);
+            };
+        }
 
         return function queueNextTick(cb, ctx) {
             var _resolve = void 0;
@@ -71376,7 +71364,7 @@ var _button = __webpack_require__(8);
         if (isIE9Below) {
             var VBClassPool = {};
             window.execScript([// jshint ignore:line
-            'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
+                'Function parseVB(code)', '\tExecuteGlobal(code)', 'End Function' //转换一段文本为VB代码
             ].join('\n'), 'VBScript');
 
             var VBMediator = function VBMediator(instance, accessors, name, value) {
@@ -71392,7 +71380,7 @@ var _button = __webpack_require__(8);
                 // jshint ignore:line
                 var buffer = [];
                 buffer.push('\tPrivate [$vbsetter]', '\tPublic  [$accessors]', '\tPublic Default Function [$vbthis](ac' + timeBucket + ', s' + timeBucket + ')', '\t\tSet  [$accessors] = ac' + timeBucket + ': set [$vbsetter] = s' + timeBucket, '\t\tSet  [$vbthis]    = Me', //链式调用
-                '\tEnd Function');
+                    '\tEnd Function');
                 //添加普通属性,因为VBScript对象不能像JS那样随意增删属性，必须在这里预先定义好
                 var uniq = {
                     $vbthis: true,
@@ -71405,19 +71393,19 @@ var _button = __webpack_require__(8);
                         uniq[name] = true;
                     }
                 }
-                //添加访问器属性 
+                //添加访问器属性
                 for (name in accessors) {
                     if (uniq[name]) {
                         continue;
                     }
                     uniq[name] = true;
                     buffer.push(
-                    //由于不知对方会传入什么,因此set, let都用上
-                    '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
-                    '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
-                    '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
-                    '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
+                        //由于不知对方会传入什么,因此set, let都用上
+                        '\tPublic Property Let [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Set [' + name + '](val' + timeBucket + ')', //setter
+                        '\t\tCall [$vbsetter](Me, [$accessors], "' + name + '", val' + timeBucket + ')', '\tEnd Property', '\tPublic Property Get [' + name + ']', //getter
+                        '\tOn Error Resume Next', //必须优先使用set语句,否则它会误将数组当字符串返回
+                        '\t\tSet[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tIf Err.Number <> 0 Then', '\t\t[' + name + '] = [$vbsetter](Me, [$accessors],"' + name + '")', '\tEnd If', '\tOn Error Goto 0', '\tEnd Property');
                 }
 
                 for (name in properties) {
@@ -71435,7 +71423,7 @@ var _button = __webpack_require__(8);
                     className = makeHashCode('VBClass');
                     window.parseVB('Class ' + className + body);
                     window.parseVB(['Function ' + className + 'Factory(acc, vbm)', //创建实例并传入两个关键的参数
-                    '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
+                        '\tDim o', '\tSet o = (New ' + className + ')(acc, vbm)', '\tSet ' + className + 'Factory = o', 'End Function'].join('\r\n'));
                     VBClassPool[body] = className;
                 }
                 var ret = window[className + 'Factory'](accessors, VBMediator); //得到其产品
@@ -71619,10 +71607,10 @@ var _button = __webpack_require__(8);
             if (this.active) {
                 var value = this.get();
                 if (value !== this.value ||
-                // Deep watchers and watchers on Object/Arrays should fire even
-                // when the value is the same, because the value may
-                // have mutated.
-                _.isObject(value) && options && options.refresh || this.deep) {
+                    // Deep watchers and watchers on Object/Arrays should fire even
+                    // when the value is the same, because the value may
+                    // have mutated.
+                    _.isObject(value) && options && options.refresh || this.deep) {
                     // set new value
                     var oldValue = this.value;
                     this.value = value;
@@ -71712,8 +71700,8 @@ var _button = __webpack_require__(8);
     _.each(['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'], function (method) {
         var original = arrayProto[method];
         arrayMethods[method] = function mutator() {
-            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                args[_key] = arguments[_key];
+            for (var _len = arguments.length, args = Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                args[_key2] = arguments[_key2];
             }
 
             var ob = this.__ob__;
@@ -71855,10 +71843,12 @@ var _button = __webpack_require__(8);
                 root = parent;
                 parent = parent.parent;
             }
-            for (var _key2 in root._globalDeps) {
-                var reg = new RegExp(_key2);
+            for (var _key in root._globalDeps) {
+                var reg = new RegExp(_key);
                 if (reg.test(route)) {
-                    root._globalDeps[_key2].notify({ observer: observer, key: _key2 });
+                    for (var i = 0; i < root._globalDeps[_key].length; i++) {
+                        root._globalDeps[_key][i].notify({ observer: observer, key: _key });
+                    }
                 }
             }
         }
@@ -72040,7 +72030,7 @@ var _button = __webpack_require__(8);
     }
 
     function routeToRegExp(route) {
-        route = route.replace(/\*./g, '[a-zA-Z0-9_]+.');
+        route = route.replace(/\*\*/g, '[a-zA-Z0-9_]+').replace(/\*./g, '[a-zA-Z0-9_]+.');
         return '^' + route + '$';
     }
 
@@ -72129,21 +72119,12 @@ var _button = __webpack_require__(8);
                 });
                 return;
             }
-            if (/\*\*$|\*$/.test(exp)) {
-                throw new Error('not support');
-            }
-            //其他含有*的情况，如*.a,*.*.a,a.*.a
-            if (/\*/.test(exp)) {
-                var currentModel = model;
+            // **.a.**的情况，场景：a.b.c, 如果用b.**监听, a被重新赋值b上的_scopeDes就不存在了
+            if (/^(\*\*\.)+[1-9a-zA-Z]+(\.\*\*$)/.test(exp)) {
                 //先获取到能获取到的对象
                 var paths = exp.split(".");
-                for (var _i = 0, len = paths.length; _i < len; _i++) {
-                    if (paths[_i] === "*") {
-                        break;
-                    }
-                    currentModel = model[paths[_i]];
-                }
-                exp = exp.substr(exp.indexOf("*"));
+                var currentModel = model[paths[1]];
+                exp = paths[1] + ".**";
                 //补全路径
                 var parent = currentModel.__ob__.parent,
                     root = currentModel.__ob__;
@@ -72155,7 +72136,11 @@ var _button = __webpack_require__(8);
                 var regStr = routeToRegExp(exp);
                 var _dep = new Dep();
                 root._globalDeps || (root._globalDeps = {});
-                root._globalDeps[regStr] = _dep;
+                if (_.isArray(root._globalDeps[regStr])) {
+                    root._globalDeps[regStr].push(_dep);
+                } else {
+                    root._globalDeps[regStr] = [_dep];
+                }
 
                 var _w = new Watcher(currentModel, function () {
                     _dep.depend();
@@ -72164,8 +72149,64 @@ var _button = __webpack_require__(8);
                     callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
                 }, options);
                 watchers.push(function unwatchFn() {
-                    _w.teardown();
-                    root._globalDeps && delete root._globalDeps[regStr];
+                    if (root._globalDeps) {
+                        remove(root._globalDeps[regStr], _dep);
+
+                        if (root._globalDeps[regStr].length === 0) {
+                            delete root._globalDeps[regStr];
+                            _w.teardown();
+                        }
+                    }
+                });
+                return;
+            }
+            if (/\*\*$|\*$/.test(exp)) {
+                throw new Error('not support');
+            }
+            //其他含有*的情况，如*.a,*.*.a,a.*.a
+            if (/\*/.test(exp)) {
+                var _currentModel = model;
+                //先获取到能获取到的对象
+                var _paths = exp.split(".");
+                for (var _i = 0, len = _paths.length; _i < len; _i++) {
+                    if (_paths[_i] === "*") {
+                        break;
+                    }
+                    _currentModel = model[_paths[_i]];
+                }
+                exp = exp.substr(exp.indexOf("*"));
+                //补全路径
+                var _parent = _currentModel.__ob__.parent,
+                    _root = _currentModel.__ob__;
+                while (_parent) {
+                    exp = '*.' + exp;
+                    _root = _parent;
+                    _parent = _parent.parent;
+                }
+                var _regStr = routeToRegExp(exp);
+                var _dep2 = new Dep();
+                _root._globalDeps || (_root._globalDeps = {});
+                if (_.isArray(_root._globalDeps[_regStr])) {
+                    _root._globalDeps[_regStr].push(_dep2);
+                } else {
+                    _root._globalDeps[_regStr] = [_dep2];
+                }
+
+                var _w2 = new Watcher(_currentModel, function () {
+                    _dep2.depend();
+                    return NaN;
+                }, function (newValue, oldValue, attrs) {
+                    callback(i, newValue, oldValue, _.extend({ index: i }, attrs));
+                }, options);
+                watchers.push(function unwatchFn() {
+                    if (_root._globalDeps) {
+                        remove(_root._globalDeps[_regStr], _dep2);
+
+                        if (_root._globalDeps[_regStr].length === 0) {
+                            delete _root._globalDeps[_regStr];
+                            _w2.teardown();
+                        }
+                    }
                 });
                 return;
             }
@@ -72553,6 +72594,7 @@ var _button = __webpack_require__(8);
 
     exports.__esModule = true;
 });
+
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(63).setImmediate))
 
 /***/ }),

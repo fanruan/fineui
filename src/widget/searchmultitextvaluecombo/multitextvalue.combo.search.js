@@ -35,7 +35,7 @@ BI.SearchMultiTextValueCombo = BI.inherit(BI.Single, {
         this.trigger = BI.createWidget({
             type: "bi.search_multi_select_trigger",
             text: o.text,
-            height: o.height,
+            height: o.height - 2,
             // adapter: this.popup,
             masker: {
                 offset: {
